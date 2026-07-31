@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/justb-pm100",
+  "title": "JUSTB! PM100",
+  "importedAt": "2026-07-29T07:49:29.857Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/justb-pm100/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm100/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_sofa-justb-pm100-stoff-wei%C3%9F-musterring_173aaf6220.jpg",
+      "bytes": 27012,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm100/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/7/c/csm_MR11783_A_PM100_Print.tif_8c62416407.jpg",
+      "bytes": 9551,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm100/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/e/f/csm_MR11783_001_PM100_Print.tif_76070f692b.jpg",
+      "bytes": 11679,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm100/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/9/5/csm_MR11783_002_PM100_Print.tif_ee02660cbe.jpg",
+      "bytes": 16088,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm100/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/0/9/csm_MR11783_004_PM100_Print.tif_a08c6cc3a5.jpg",
+      "bytes": 6937,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm100/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/e/csm_sofa-justb-pm100-stoff-cremewei%C3%9F-musterring_d3b01bc940.jpg",
+      "bytes": 9384,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm100/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_sofa-justb-pm100-stoff-cremewei%C3%9F-musterring-03_3a9d664e62.jpg",
+      "bytes": 12395,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

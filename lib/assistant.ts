@@ -1,0 +1,291 @@
+import { materials, products } from "./data";
+import { validateConfiguration } from "./configurator";
+import type { Configuration, Material, Product } from "./types";
+import {
+  advisorAnswerSchema, alternativeRequestSchema, alternativeResponseSchema, materialAdviceSchema,
+  voiceCommandSchema, type AdvisorAnswer, type AlternativeRequest, type AlternativeResponse,
+  type ConversationContext, type MaterialAdvice, type VoiceCommand
+} from "./ai/assistant-schemas";
+
+const colors = ["beige", "ivory", "taupe", "stone", "charcoal", "brown", "cream", "green", "grey", "graphite", "red", "burgundy", "purple"];
+
+function requestedAlternative(input: AlternativeRequest, source: Product) {
+  const text = input.requestText?.toLowerCase() ?? "";
+  const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
+  const under = text.match(/(?:under|below|maximum|max)\s*(\d{2,3})\s*cm/);
+  const price = text.match(/(?:under|below|maximum|max)\s*[€]?\s*(\d{3,5})/);
+  return alternativeRequestSchema.parse({
+    ...input,
+    maxWidthMm: input.maxWidthMm ?? (narrower ? source.widthMm - Number(narrower[1]) * 10 : under ? Number(under[1]) * 10 : undefined),
+    minSeatHeightMm: input.minSeatHeightMm ?? (/higher seat|high[- ]seat|tall/.test(text) ? source.seatHeightMm + 10 : undefined),
+    maxIndicativePrice: input.maxIndicativePrice ?? (/lower (?:indicative )?price|cheaper/.test(text) ? source.indicativePriceCents - 1 : price ? Number(price[1]) * 100 : undefined),
+    requiredFunctions: [...new Set([...(input.requiredFunctions ?? []), ...(/relax/.test(text) ? ["relax"] : []), ...(/modular/.test(text) ? ["modular"] : [])])],
+    excludedFunctions: [...new Set([...(input.excludedFunctions ?? []), ...(/without electric|non-electric|no electric/.test(text) ? ["electric"] : [])])],
+    materialTags: [...new Set([...(input.materialTags ?? []), ...(/easy[- ]care|children|family|pets?|dog/.test(text) ? ["easy-care"] : [])])],
+    preserveStyle: input.preserveStyle ?? /same style|similar style/.test(text),
+    preserveComfort: input.preserveComfort ?? /same comfort/.test(text)
+  });
+}
+
+function hasFunction(product: Product, value: string) {
+  if (value === "electric") return product.electricFunctions.length > 0;
+  if (value === "modular") return product.modular;
+  return product.functions.some((item) => item.toLowerCase().includes(value.toLowerCase()));
+}
+
+function hasMaterialTag(product: Product, tag: string) {
+  const compatible = materials.filter((material) => product.materials.includes(material.id));
+  if (tag === "easy-care") return compatible.some((material) => material.easyCare);
+  if (tag === "family") return compatible.some((material) => material.familyFriendly);
+  if (tag === "pet") return compatible.some((material) => material.petFriendly);
+  return compatible.some((material) => material.type === tag || material.name.toLowerCase().includes(tag.toLowerCase()));
+}
+
+export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeResponse {
+  const source = products.find((product) => product.id === raw.sourceProductId && product.active);
+  if (!source) throw new Error("Unknown source Product ID.");
+  const request = requestedAlternative(raw, source);
+  const candidates = products.filter((product) => product.active && product.id !== source.id && product.category === source.category);
+  const ranked = candidates.map((product) => {
+    const checks: Array<{ ok: boolean; label: string }> = [];
+    if (request.maxWidthMm) checks.push({ ok: product.widthMm <= request.maxWidthMm, label: `width must be at most ${request.maxWidthMm} mm` });
+    if (request.minSeatHeightMm) checks.push({ ok: product.seatHeightMm >= request.minSeatHeightMm, label: `seat height must be at least ${request.minSeatHeightMm} mm` });
+    if (request.maxIndicativePrice) checks.push({ ok: product.indicativePriceCents <= request.maxIndicativePrice, label: "indicative price must be below the requested limit" });
+    for (const value of request.requiredFunctions ?? []) checks.push({ ok: hasFunction(product, value), label: `requires ${value}` });
+    for (const value of request.excludedFunctions ?? []) checks.push({ ok: !hasFunction(product, value), label: `must not include ${value}` });
+    for (const value of request.materialTags ?? []) checks.push({ ok: hasMaterialTag(product, value), label: `requires ${value} material metadata` });
+    if (request.preserveStyle) checks.push({ ok: source.styles.some((style) => product.styles.includes(style)), label: "preserve style" });
+    if (request.preserveComfort) checks.push({ ok: source.comfortOptions.some((option) => product.comfortOptions.includes(option)), label: "preserve comfort options" });
+    const unmet = checks.filter((check) => !check.ok).map((check) => check.label);
+    const benefits = [
+      ...(product.widthMm < source.widthMm ? [`${Math.round((source.widthMm - product.widthMm) / 10)} cm narrower`] : []),
+      ...(product.seatHeightMm > source.seatHeightMm ? [`${Math.round((product.seatHeightMm - source.seatHeightMm) / 10)} cm higher seat`] : []),
+      ...(product.indicativePriceCents < source.indicativePriceCents ? ["lower indicative concept price"] : [])
+    ];
+    const tradeOffs = [
+      ...(product.numberOfSeats < source.numberOfSeats ? [`one fewer seat than ${source.modelCode}`] : []),
+      ...(product.widthMm > source.widthMm ? ["requires more floor width"] : []),
+      ...(!product.modular && source.modular ? ["less modular flexibility"] : [])
+    ];
+    const differences = [
+      `${product.widthMm} mm wide versus ${source.widthMm} mm`,
+      `${product.seatHeightMm} mm seat height versus ${source.seatHeightMm} mm`
+    ];
+    return {
+      product,
+      exact: unmet.length === 0,
+      unmet,
+      score: checks.filter((check) => check.ok).length * 20 - unmet.length * 25 - Math.abs(product.widthMm - source.widthMm) / 100,
+      differences,
+      benefits,
+      tradeOffs
+    };
+  }).sort((left, right) => right.score - left.score);
+  const toMatch = (item: typeof ranked[number]) => ({
+    productId: item.product.id,
+    exact: item.exact,
+    differences: item.differences,
+    benefits: item.benefits.length ? item.benefits : ["similar catalogue category and product character"],
+    tradeOffs: item.tradeOffs.length ? item.tradeOffs : ["No additional trade-off is established in the connected data."],
+    unmetRequirements: item.unmet,
+    explanation: item.exact
+      ? `${item.product.modelCode} satisfies all selected requirements using available catalogue and material data.`
+      : `${item.product.modelCode} is a close alternative, but ${item.unmet.join("; ")}.`
+  });
+  const exactMatches = ranked.filter((item) => item.exact).slice(0, 6).map(toMatch);
+  const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 6).map(toMatch);
+  return alternativeResponseSchema.parse({
+    sourceProductId: source.id,
+    exactMatches,
+    closestAlternatives,
+    message: exactMatches.length ? `${exactMatches.length} catalogue alternative${exactMatches.length === 1 ? "" : "s"} satisfy all requirements.` : "No exact alternative was found. The closest catalogue alternatives are labelled with every unmet condition."
+  });
+}
+
+export function parseMaterialNeeds(textValue: string): MaterialAdvice {
+  const text = textValue.toLowerCase();
+  const preferredColors = colors.filter((color) => text.includes(color));
+  const preferredMaterialGroups = ["leather", "fabric"].filter((group) => text.includes(group));
+  const avoidMaterialGroups = (text.match(/(?:avoid|without|no)\s+(leather|fabric)/)?.[1] ? [text.match(/(?:avoid|without|no)\s+(leather|fabric)/)![1]] : []);
+  const needs = {
+    children: /children|child|kids?|kinder|family/.test(text),
+    pets: /pets?|dog|cat|hund|katze/.test(text),
+    highUse: /high use|everyday|daily|busy|frequent/.test(text),
+    strongSunlight: /strong (?:afternoon )?sunlight|direct sun|sunny/.test(text),
+    easyCareRequired: /easy[- ]care|easy clean|cleaning|children|pets?|dog|stain/.test(text),
+    preferredColors: preferredColors.length ? preferredColors : undefined,
+    preferredMaterialGroups: preferredMaterialGroups.length ? preferredMaterialGroups : undefined,
+    avoidMaterialGroups: avoidMaterialGroups.length ? avoidMaterialGroups : undefined
+  };
+  const scored = materials.map((material) => {
+    let score = 0;
+    if (needs.children) score += material.familyFriendly ? 4 : -4;
+    if (needs.pets) score += material.petFriendly ? 4 : -4;
+    if (needs.highUse) score += material.durability;
+    if (needs.easyCareRequired) score += material.easyCare ? 4 : -3;
+    if (needs.strongSunlight) score += material.lightSensitivity === "low" ? 4 : material.lightSensitivity === "medium" ? 0 : -5;
+    if (preferredColors.includes(material.colorFamily)) score += 3;
+    if (preferredMaterialGroups.includes(material.type)) score += 3;
+    if (avoidMaterialGroups.includes(material.type)) score -= 20;
+    return { material, score };
+  }).sort((left, right) => right.score - left.score);
+  const recommendedMaterialIds = scored.filter(({ score }) => score >= 3).slice(0, 5).map(({ material }) => material.id);
+  const materialsToAvoid = scored.filter(({ score }) => score < 0).slice(-4).map(({ material }) => material.id);
+  const explanationKeys = [
+    ...(needs.children ? ["family-suitability"] : []),
+    ...(needs.pets ? ["pet-suitability"] : []),
+    ...(needs.easyCareRequired ? ["easy-care"] : []),
+    ...(needs.strongSunlight ? ["light-sensitivity"] : []),
+    "validated-care-instructions"
+  ];
+  return materialAdviceSchema.parse({ needs, recommendedMaterialIds, materialsToAvoid, explanationKeys });
+}
+
+export function materialReasons(material: Material, advice: MaterialAdvice) {
+  const suitable = [
+    ...(advice.needs.children && material.familyFriendly ? ["family-suitable metadata"] : []),
+    ...(advice.needs.pets && material.petFriendly ? ["pet-suitable metadata"] : []),
+    ...(advice.needs.easyCareRequired && material.easyCare ? ["easy-care metadata"] : []),
+    ...(advice.needs.strongSunlight && material.lightSensitivity === "low" ? ["low light sensitivity"] : []),
+    `durability ${material.durability}/5`
+  ];
+  const cautions = [
+    ...(advice.needs.strongSunlight && material.lightSensitivity !== "low" ? [`${material.lightSensitivity} light sensitivity`] : []),
+    ...(advice.needs.pets && !material.petFriendly ? ["not marked pet-suitable"] : []),
+    ...(advice.needs.children && !material.familyFriendly ? ["not marked family-suitable"] : []),
+    ...(!material.easyCare ? ["more involved care"] : [])
+  ];
+  return { suitable, cautions };
+}
+
+export function parseVoiceCommandDeterministic(transcript: string): VoiceCommand {
+  const text = transcript.toLowerCase();
+  let intent: VoiceCommand["intent"] = "ASK_PRODUCT_QUESTION";
+  if (/book|consultation/.test(text)) intent = "BOOK_CONSULTATION";
+  else if (/retailer|dealer|near me/.test(text)) intent = "FIND_RETAILER";
+  else if (/fit|door|through/.test(text)) intent = "OPEN_FIT_CHECK";
+  else if (/show .* in .*room|room composer|my room/.test(text)) intent = "OPEN_ROOM_COMPOSER";
+  else if (/add .*table|matching table|complementary/.test(text)) intent = "ADD_COMPLEMENTARY_PRODUCT";
+  else if (/save .*configuration/.test(text)) intent = "SAVE_TO_PROJECT";
+  else if (/save|add .*project/.test(text)) intent = "SAVE_TO_PROJECT";
+  else if (/change .*material|fabric|leather/.test(text) && /change|easy-care|grey|beige/.test(text)) intent = "CHANGE_MATERIAL";
+  else if (/compare/.test(text)) intent = "COMPARE_PRODUCTS";
+  else if (/configur/.test(text)) intent = "CONFIGURE_PRODUCT";
+  else if (/show me|find|search|under \d+/.test(text)) intent = "SEARCH_PRODUCTS";
+  const modelCodes = [...transcript.matchAll(/\bMR\s*-?\s*\d{3,4}\b/gi)].map((match) => match[0].replace(/[\s-]+/g, " ").toUpperCase());
+  const width = text.match(/(?:under|below|max(?:imum)?)\s*(\d{2,3})\s*(?:cm|centimet)/);
+  return voiceCommandSchema.parse({
+    intent,
+    parameters: { query: transcript, modelCodes, maxWidthMm: width ? Number(width[1]) * 10 : undefined },
+    requiresConfirmation: ["SAVE_TO_PROJECT", "ADD_COMPLEMENTARY_PRODUCT", "CHANGE_MATERIAL", "BOOK_CONSULTATION"].includes(intent)
+  });
+}
+
+function groundedProductIds(ids: string[]) {
+  const active = new Set(products.filter((product) => product.active).map((product) => product.id));
+  return [...new Set(ids)].filter((id) => active.has(id));
+}
+
+export function answerGroundedQuestion(question: string, context: ConversationContext): AdvisorAnswer {
+  const text = question.toLowerCase();
+  const referenced = groundedProductIds(context.referencedProductIds);
+  const code = question.match(/\bMR\s*-?\s*\d{3,4}\b/i)?.[0].replace(/[\s-]+/g, " ").toUpperCase();
+  const current = products.find((product) => product.id === context.currentProductId) ?? products.find((product) => product.modelCode === code);
+  if (/second one/.test(text) && referenced[1]) {
+    const product = products.find((item) => item.id === referenced[1])!;
+    return advisorAnswerSchema.parse({
+      answer: `The second referenced product is ${product.modelCode}, ${product.name}.`,
+      answerType: "fact", productIds: [product.id], materialIds: [], sources: ["Musterring product catalogue"],
+      proposedAction: /save/.test(text) ? { type: "SAVE_PRODUCT", label: `Save ${product.modelCode} to My Musterring`, parameters: { productId: product.id }, requiresConfirmation: true } : null,
+      suggestedQuestions: ["Compare it with the first product", "Show its materials"]
+    });
+  }
+  if (/missing|prepare .*retailer|contact a retailer/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "Before retailer handover, review the selected retailer, requested action, contact details, room measurements, material choice, configuration validity and unresolved fit warnings. I can prepare this context, but I will not submit it.",
+      answerType: "dealer", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["My Musterring project data", "Saved fit reports"],
+      proposedAction: { type: "PREPARE_HANDOVER", label: "Review retailer handover checklist", parameters: {}, requiresConfirmation: true },
+      suggestedQuestions: ["Summarize my decisions", "Which room measurements are missing?"]
+    });
+  }
+  if (/material|dog|pet|children|care/.test(text) && !/sofa|armchair|sectional|compare|find|show me|i need/.test(text)) {
+    const advice = parseMaterialNeeds(question);
+    return advisorAnswerSchema.parse({
+      answer: "These recommendations use only recorded material durability, easy-care, family, pet and light-sensitivity attributes. No material is described as stain-proof, scratch-proof or allergy-safe.",
+      answerType: "materials", productIds: current ? [current.id] : [], materialIds: advice.recommendedMaterialIds, sources: ["Musterring concept material metadata"],
+      proposedAction: { type: "SHOW_MATERIALS", label: "Open Material & Care Advisor", parameters: { query: question }, requiresConfirmation: false },
+      suggestedQuestions: ["Why should I avoid another material?", "Show the care plan"]
+    });
+  }
+  if (/fit|door|through/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: current ? `Available product data lists ${current.modelCode} package guidance, but physical fit cannot be confirmed here. Use Will It Fit? with your measured route and retailer verification.` : "Select a product and use Will It Fit? with measured room and delivery-route data.",
+      answerType: "fit", productIds: current ? [current.id] : referenced, materialIds: [], sources: ["Product package data", "Will It Fit? deterministic service"],
+      proposedAction: current ? { type: "OPEN_FIT_CHECK", label: `Check ${current.modelCode}`, parameters: { slug: current.slug }, requiresConfirmation: false } : null,
+      suggestedQuestions: ["Which measurements do I need?", "Prepare a technical fit request"]
+    });
+  }
+  if (/smaller|alternative|same style|better match/.test(text) && current) {
+    return advisorAnswerSchema.parse({
+      answer: `I can compare ${current.modelCode} with catalogue alternatives and show every unmet requirement rather than silently ignoring it.`,
+      answerType: "products", productIds: [current.id], materialIds: [], sources: ["Musterring product catalogue"],
+      proposedAction: { type: "SHOW_ALTERNATIVES", label: `Find alternatives to ${current.modelCode}`, parameters: { productId: current.id, requestText: question }, requiresConfirmation: false },
+      suggestedQuestions: ["Make it 30 cm narrower", "Require a higher seat"]
+    });
+  }
+  if (/highest seat|difference|compare/.test(text) && referenced.length >= 2) {
+    const selected = products.filter((product) => referenced.includes(product.id));
+    const highest = [...selected].sort((a, b) => b.seatHeightMm - a.seatHeightMm)[0];
+    return advisorAnswerSchema.parse({
+      answer: `${highest.modelCode} has the highest recorded seat height among these products at ${highest.seatHeightMm / 10} cm. Final options must be confirmed against validated product data.`,
+      answerType: "comparison", productIds: selected.map((product) => product.id), materialIds: [], sources: ["Musterring product catalogue"],
+      proposedAction: { type: "COMPARE_PRODUCTS", label: "Open comparison", parameters: { productIds: selected.map((product) => product.id) }, requiresConfirmation: false },
+      suggestedQuestions: ["Which is most compact?", "Find a higher-seat alternative"]
+    });
+  }
+  if (current && /seat|dimension|width|price|electric|relax|modular/.test(text)) {
+    const facts = `${current.modelCode} is recorded at ${current.widthMm / 10} cm wide with a ${current.seatHeightMm / 10} cm seat height. ${current.modular ? "It is marked modular." : "It is not marked modular."}`;
+    return advisorAnswerSchema.parse({
+      answer: `${facts} Final pricing and availability are confirmed by the selected Musterring retailer.`,
+      answerType: "fact", productIds: [current.id], materialIds: [], sources: ["Musterring product catalogue"],
+      proposedAction: /electric|relax|configur/.test(text) ? { type: "CONFIGURE_PRODUCT", label: `Validate options for ${current.modelCode}`, parameters: { slug: current.slug }, requiresConfirmation: false } : null,
+      suggestedQuestions: ["Find a better match", "Explain compatible materials"]
+    });
+  }
+  if (/sofa|armchair|sectional|find|show me|i need/.test(text)) {
+    const category = /armchair/.test(text) ? "armchair" : /sectional|corner/.test(text) ? "sectional" : "sofa";
+    const width = text.match(/(?:under|below|max(?:imum)?|must be under)\s*(\d{2,3})\s*cm/);
+    const requestedColors = colors.filter((color) => text.includes(color));
+    const wantsEasyCare = /easy[- ]care|family|children|pets?|dog/.test(text);
+    const ranked = products.filter((product) =>
+      product.active &&
+      product.category === category &&
+      (!width || product.widthMm <= Number(width[1]) * 10) &&
+      (!requestedColors.length || requestedColors.some((color) => product.colors.includes(color))) &&
+      (!wantsEasyCare || product.materials.some((id) => materials.find((material) => material.id === id)?.easyCare))
+    ).sort((left, right) => left.widthMm - right.widthMm).slice(0, 4);
+    if (ranked.length) {
+      const ids = ranked.map((product) => product.id);
+      return advisorAnswerSchema.parse({
+        answer: `I found ${ranked.length} catalogue product${ranked.length === 1 ? "" : "s"} that satisfy the stated hard filters. Recommendations are based on available Musterring product data.`,
+        answerType: "products", productIds: ids, materialIds: [], sources: ["Musterring product catalogue", ...(wantsEasyCare ? ["Musterring concept material metadata"] : [])],
+        proposedAction: /compare/.test(text) && ids.length > 1 ? { type: "COMPARE_PRODUCTS", label: "Compare the strongest matches", parameters: { productIds: ids.slice(0, 3) }, requiresConfirmation: false } : null,
+        suggestedQuestions: ["Which one has the highest seat?", "Save the second one", "Find a smaller alternative"]
+      });
+    }
+    return advisorAnswerSchema.parse({
+      answer: "No catalogue product satisfies every stated hard filter. I can help relax one condition or show clearly labelled alternatives.",
+      answerType: "missing-data", productIds: [], materialIds: [], sources: ["Musterring product catalogue"],
+      proposedAction: null, suggestedQuestions: ["Increase the maximum width", "Show closest alternatives"]
+    });
+  }
+  return advisorAnswerSchema.parse({
+    answer: "Information is not currently available in the connected product data. Ask about Musterring products, materials, configuration, room planning, fit guidance, saved projects or retailer preparation.",
+    answerType: "missing-data", productIds: current ? [current.id] : referenced, materialIds: [], sources: [],
+    proposedAction: null, suggestedQuestions: ["Help me find the right sofa", "Choose a material", "Prepare my project for a retailer"]
+  });
+}
+
+export function validateProposedConfiguration(configuration: Configuration) {
+  return validateConfiguration(configuration);
+}

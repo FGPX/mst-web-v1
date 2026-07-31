@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/beds/justb-sc100",
+  "title": "JUSTB! SC100",
+  "importedAt": "2026-07-29T07:51:15.166Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/justb-sc100/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc100/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/e/csm_justb-bett-sc100-musterring_67783535e2.jpg",
+      "bytes": 20497,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc100/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/7/csm_justb-boxspringbett-sc100-stoff-beige-musterring-01_6b59742300.jpg",
+      "bytes": 6935,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc100/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/e/csm_justb-boxspringbett-sc100-stoff-beige-musterring-02_2d4a2a8782.jpg",
+      "bytes": 14405,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc100/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_justb-boxspringbett-sc100-stoff-beige-musterring-03_c2bb03b15e.jpg",
+      "bytes": 12451,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc100/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_justb-boxspringbett-sc100-stoff-beige-musterring_dec22e3cf1.jpg",
+      "bytes": 7988,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc100/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_justb-polsterbett-sc100-stoff-grau-musterring_631418b760.jpg",
+      "bytes": 7206,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc100/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/5/csm_justb-polsterbett-sc100-stoff-grau-musterring-01_6a31dbe19c.jpg",
+      "bytes": 12473,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

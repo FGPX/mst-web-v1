@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/portland",
+  "title": "Portland",
+  "importedAt": "2026-07-29T07:50:52.230Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/portland/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/2/9/csm_MR11774_A_Portland_Print.tif_ae7b5f3299.jpg",
+      "bytes": 22033,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/portland/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/d/0/csm_MR11774_001_Portland_Print.tif_ecc0289fda.jpg",
+      "bytes": 13772,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/portland/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/2/a/csm_MR11774_007_Portland_Print.tif_d7cabeff83.jpg",
+      "bytes": 12889,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/portland/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/f/f/csm_MR11774_003_Portland_Print.tif_05a07650f0.jpg",
+      "bytes": 7267,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/portland/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/3/csm_wohnmoebel_portland_eiche_musterring_15_afdb8929e1.jpg",
+      "bytes": 10806,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/portland/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/c/csm_wohnmoebel_portland_eiche_musterring_14_bd78931b68.jpg",
+      "bytes": 10769,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/portland/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/a/csm_wohnmoebel_portland_eiche_musterring_13_1d1f9609ea.jpg",
+      "bytes": 8596,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/portland/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/3/csm_wohnmoebel_portland_eiche_musterring_16_ca400bab1b.jpg",
+      "bytes": 8130,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

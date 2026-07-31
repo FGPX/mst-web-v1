@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9440",
+  "title": "MR 9440",
+  "importedAt": "2026-07-29T07:50:35.493Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-9440/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/4/csm_MR11675_A_MR9440_MR9445_Print_-_15_f5771339b3.jpg",
+      "bytes": 25655,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9440/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_MR11675_C_MR9440_MR9445_Print_-_15_01e06ad26a.jpg",
+      "bytes": 9854,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9440/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/4/csm_MR11675_006_MR9440_MR9445_Print_-_15_c4d3e7665e.jpg",
+      "bytes": 12016,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9440/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_MR11675_004_MR9440_MR9445_Print_-_15_c03f210962.jpg",
+      "bytes": 10546,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9440/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/3/csm_MR11675_007_MR9440_MR9445_Print_-_15_1a06b5161e.jpg",
+      "bytes": 8055,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-700",
+  "title": "MR 700",
+  "importedAt": "2026-07-29T07:50:23.996Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-700/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/6/csm_schlafsofa-mr700-stoff-bologna-braun-musterring_5804b73c32.jpg",
+      "bytes": 27000,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-700/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/a/csm_schlafsofa-mr700-stoff-bologna-braun-kaltschaum-matratze-musterring_c5d594ef6a.jpg",
+      "bytes": 10730,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-700/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/f/csm_schlafsofa-mr700-longchair-bettkasten-musterring_fbad87c7e2.jpg",
+      "bytes": 17152,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-700/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/7/csm_schlafsofa-mr700-premium-ausziehfunktion-musterring_46aba6f4ee.jpg",
+      "bytes": 16641,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-700/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/6/csm_schlafsofa-mr700-emotionsbild-models-musterring_7fdfa41005.jpg",
+      "bytes": 10847,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-700/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/6/csm_schlafsofa-mr700-stoff-atlantis-grau-kaltschaummatratze-musterring_5175228e8c.jpg",
+      "bytes": 10211,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-700/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/4/csm_schlafsofa-mr700-ausklappfunktion-stoff-atlantis-grau-musterring_9bcb78d5a4.jpg",
+      "bytes": 12115,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-700/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/8/csm_schlafsofa-mr700-stoff-atlantis-grau-detailbild-musterring_c19218cdb9.jpg",
+      "bytes": 13151,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

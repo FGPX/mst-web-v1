@@ -1,0 +1,16 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/coffee-tables-side-tables/nara",
+  "title": "Nara",
+  "importedAt": "2026-07-29T07:50:57.230Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/nara/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/e/csm_couchtisch-nara-musterring_815b11e60d.jpg",
+      "bytes": 25264,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

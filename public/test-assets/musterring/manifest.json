@@ -1,0 +1,472 @@
+{
+  "importedAt": "2026-07-27T14:08:55.159Z",
+  "demoData": true,
+  "notLicensedForProduction": true,
+  "source": "https://www.musterring.com/",
+  "pages": [
+    {
+      "page": "https://www.musterring.com/en/furniture",
+      "title": "Musterring furniture overview",
+      "importedAt": "2026-07-27T14:08:52.130Z",
+      "demoData": true,
+      "notLicensedForProduction": true,
+      "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+      "assets": [
+        {
+          "file": "/test-assets/musterring/furniture/image-01.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+          "bytes": 22984,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/furniture/image-02.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+          "bytes": 27745,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/furniture/image-03.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/6/csm_MR11148_E_MR2490_-_15_274ba63ef0.jpg",
+          "bytes": 46273,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/furniture/image-04.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/9/csm_MR11126_09_Epos_Mood_-_15_3582a882ae.jpg",
+          "bytes": 28449,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/furniture/image-05.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_MR11172_02_Tiama_Mood_-_15_dfa733bca2.jpg",
+          "bytes": 43746,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/furniture/image-06.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/4/csm_MR11038_02_Revento_Line_-_15_0ff86827b1.jpg",
+          "bytes": 31776,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/furniture/image-07.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/a/csm_MR11190_A_Jovanna_-_15_5ba5888598.jpg",
+          "bytes": 25779,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/furniture/image-08.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/7/csm_MR11153_01_Cerina110_Mod_66_-_15_b1613d1876.jpg",
+          "bytes": 36455,
+          "contentType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs",
+      "title": "Sofas and armchairs",
+      "importedAt": "2026-07-27T14:08:52.606Z",
+      "demoData": true,
+      "notLicensedForProduction": true,
+      "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+      "assets": [
+        {
+          "file": "/test-assets/musterring/sofas-armchairs/image-01.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+          "bytes": 22984,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/sofas-armchairs/image-02.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+          "bytes": 27745,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/sofas-armchairs/image-03.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_sofa-justb-pm100-stoff-wei%C3%9F-musterring_b0b9a62ef5.jpg",
+          "bytes": 43438,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/sofas-armchairs/image-04.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/0/csm_sofa-justb-pm200-stoff-creme-musterring_f20c6b3169.jpg",
+          "bytes": 31369,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/sofas-armchairs/image-05.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_sofas-sessel-mr-kleo-stoff-gelb-metallfu%C3%9F-schwarz-musterring_9c48314471.jpg",
+          "bytes": 35664,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/sofas-armchairs/image-06.png",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/3/csm_MR11781_A01_MRAlena_Online_Grauer_Hintergrund_433c228ea9.png",
+          "bytes": 59305,
+          "contentType": "image/png"
+        },
+        {
+          "file": "/test-assets/musterring/sofas-armchairs/image-07.png",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_Vorlage_Freisteller_Grauer_Hintergrund_9edbce7671.png",
+          "bytes": 54015,
+          "contentType": "image/png"
+        },
+        {
+          "file": "/test-assets/musterring/sofas-armchairs/image-08.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/5/csm_MR11648_C_MRLucia_Print_-_15_dfa7193f99.jpg",
+          "bytes": 37458,
+          "contentType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "page": "https://www.musterring.com/en/",
+      "title": "Musterring homepage",
+      "importedAt": "2026-07-27T14:08:53.084Z",
+      "demoData": true,
+      "notLicensedForProduction": true,
+      "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+      "assets": [
+        {
+          "file": "/test-assets/musterring/homepage/image-01.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+          "bytes": 22984,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/homepage/image-02.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+          "bytes": 27745,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/homepage/image-03.png",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/5/csm_MR11614_F_JustB_KM100_fac80c175b.png",
+          "bytes": 146598,
+          "contentType": "image/png"
+        },
+        {
+          "file": "/test-assets/musterring/homepage/image-04.png",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/8/csm_musterring-bettina-zimmermann-kai-wiesinger-du-bist-zuhause_af7f4d5a6d.png",
+          "bytes": 267503,
+          "contentType": "image/png"
+        },
+        {
+          "file": "/test-assets/musterring/homepage/image-05.png",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/5/csm_MR11648_Teaser_Startseite_EN_c81fbed933.png",
+          "bytes": 258043,
+          "contentType": "image/png"
+        },
+        {
+          "file": "/test-assets/musterring/homepage/image-06.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_unsere-qualitaet-musterring-neu-062025_a38dfcd75e.jpg",
+          "bytes": 16132,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/homepage/image-07.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/d/csm_unsere-nachhaltigkeit-musterring-neu-062025_b4426b7aa4.jpg",
+          "bytes": 9184,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/homepage/image-08.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_unser-service-musterring-neu-062025_72edbde2f6.jpg",
+          "bytes": 11091,
+          "contentType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-270",
+      "title": "MR 270",
+      "importedAt": "2026-07-27T14:08:53.725Z",
+      "demoData": true,
+      "notLicensedForProduction": true,
+      "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+      "assets": [
+        {
+          "file": "/test-assets/musterring/mr-270/image-01.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+          "bytes": 22984,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-270/image-02.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+          "bytes": 27745,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-270/image-03.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/9/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_009a5315f2.jpg",
+          "bytes": 22436,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-270/image-04.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_02_301b4929b1.jpg",
+          "bytes": 11120,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-270/image-05.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_02_2c37e9b9cd.jpg",
+          "bytes": 28136,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-270/image-06.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/9/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_01_4c255c5987.jpg",
+          "bytes": 8635,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-270/image-07.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/9/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_01_2dc664da73.jpg",
+          "bytes": 12863,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-270/image-08.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/0/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_f0225fcb20.jpg",
+          "bytes": 13623,
+          "contentType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1370",
+      "title": "MR 1370",
+      "importedAt": "2026-07-27T14:08:54.110Z",
+      "demoData": true,
+      "notLicensedForProduction": true,
+      "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+      "assets": [
+        {
+          "file": "/test-assets/musterring/mr-1370/image-01.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+          "bytes": 22984,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-1370/image-02.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+          "bytes": 27745,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-1370/image-03.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/b/5/csm_MR11788_A_MR1370_Print.tif_9332ca6010.jpg",
+          "bytes": 23311,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-1370/image-04.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/b/5/csm_MR11788_A_MR1370_Print.tif_ad1568fc1b.jpg",
+          "bytes": 9197,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-1370/image-05.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/b/5/csm_MR11788_A_MR1370_Print.tif_9eefcf6d01.jpg",
+          "bytes": 23415,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-1370/image-06.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/7/e/csm_MR11788_006_MR1370_Print.tif_a30215c1bb.jpg",
+          "bytes": 10840,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-1370/image-07.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/7/e/csm_MR11788_006_MR1370_Print.tif_e4c495428e.jpg",
+          "bytes": 17529,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-1370/image-08.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/3/3/csm_MR11788_008_MR1370_Print.tif_d22d23108b.jpg",
+          "bytes": 13718,
+          "contentType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2490",
+      "title": "MR 2490",
+      "importedAt": "2026-07-27T14:08:54.462Z",
+      "demoData": true,
+      "notLicensedForProduction": true,
+      "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+      "assets": [
+        {
+          "file": "/test-assets/musterring/mr-2490/image-01.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+          "bytes": 22984,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2490/image-02.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+          "bytes": 27745,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2490/image-03.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/a/csm_MR11486_A_MR2490_Online_-_15_10961064ea.jpg",
+          "bytes": 24405,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2490/image-04.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_Sofa-Sessel-MR_2490-Konfigurator-Echtleder-kurkuma-grau-freigestellt-Musterring_322f0c49d3.jpg",
+          "bytes": 8388,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2490/image-05.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_sofa-mr2490-beige-musterring_6c88a542d4.jpg",
+          "bytes": 9519,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2490/image-06.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_sofa-mr2490-beige-musterring_90a79568ad.jpg",
+          "bytes": 24794,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2490/image-07.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_sofa-mr2490-beige-gestell-bronze-musterring_c03a9190fc.jpg",
+          "bytes": 12986,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2490/image-08.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_sofa-mr2490-beige-gestell-bronze-musterring_c5a4b80c60.jpg",
+          "bytes": 21876,
+          "contentType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2875",
+      "title": "MR 2875",
+      "importedAt": "2026-07-27T14:08:54.808Z",
+      "demoData": true,
+      "notLicensedForProduction": true,
+      "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+      "assets": [
+        {
+          "file": "/test-assets/musterring/mr-2875/image-01.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+          "bytes": 22984,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2875/image-02.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+          "bytes": 27745,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2875/image-03.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_Sofa-Sessel-MR_2875-Eckgruppe-Anreihsofa-N70L-Armlehne_links-Ecksofa-mit_festem_Hocker-EG70R-Stoff-dolphin-Musterring_672e93c902.jpg",
+          "bytes": 27821,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2875/image-04.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/a/csm_Sofa-Sessel-MR_2875-Explosionsgrafik-Leder-Schwarz-Stoff-grau-freigestellt-Musterring_2a7d328788.jpg",
+          "bytes": 7222,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2875/image-05.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_Sofa-Sessel-MR_2875-Sofa_N90-Seitenteil_SA-Echtleder-Schwarz-Musterring_96553bc343.jpg",
+          "bytes": 8567,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2875/image-06.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_Sofa-Sessel-MR_2875-Sofa_N90-Seitenteil_SA-Echtleder-Schwarz-Musterring_8254dd46c2.jpg",
+          "bytes": 9640,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2875/image-07.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/5/csm_MR8952_A_MR2875_-_15_1eb57169c3.jpg",
+          "bytes": 13188,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-2875/image-08.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/5/csm_MR8952_A_MR2875_-_15_8758c4905e.jpg",
+          "bytes": 10793,
+          "contentType": "image/jpeg"
+        }
+      ]
+    },
+    {
+      "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9420",
+      "title": "MR 9420",
+      "importedAt": "2026-07-27T14:08:55.159Z",
+      "demoData": true,
+      "notLicensedForProduction": true,
+      "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+      "assets": [
+        {
+          "file": "/test-assets/musterring/mr-9420/image-01.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+          "bytes": 22984,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-9420/image-02.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+          "bytes": 27745,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-9420/image-03.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/6/csm_Sofa-Sessel-MR_9420-Eckgruppe-315BT330-Beistelltisch-BAR-Einzelsessel-Stoff-Gr%C3%BCn-Escana_Anthrazit-Metall-schwarz-Musterring_38368ed9a8.jpg",
+          "bytes": 24902,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-9420/image-04.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-offener_Abschluss_links-Modul-Free-Corner-Pure-Longchair-Stoff-Rivano_Denim-Sambia_Stone-Ravenna_Perle-Diva_Stone-Rivano_Perle-Rivoli_Perle-Musterring_0a3ecae4b3.jpg",
+          "bytes": 9870,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-9420/image-05.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-offener_Abschluss_links-Modul-Free-Corner-Pure-Longchair-Stoff-Rivano_Denim-Sambia_Stone-Ravenna_Perle-Diva_Stone-Rivano_Perle-Rivoli_Perle-Musterring_db8377fad6.jpg",
+          "bytes": 25063,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-9420/image-06.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_Fu%C3%9Fst%C3%BCtze-R%C3%BCckenlehne-Musterring_e207891f05.jpg",
+          "bytes": 8291,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-9420/image-07.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_Fu%C3%9Fst%C3%BCtze-R%C3%BCckenlehne-Musterring_1a9769e565.jpg",
+          "bytes": 13517,
+          "contentType": "image/jpeg"
+        },
+        {
+          "file": "/test-assets/musterring/mr-9420/image-08.jpg",
+          "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-R%C3%BCckenlehne-Musterring_ea98280794.jpg",
+          "bytes": 13037,
+          "contentType": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}

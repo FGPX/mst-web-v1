@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2795",
+  "title": "MR 2795",
+  "importedAt": "2026-07-29T07:50:10.991Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-2795/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/9/csm_ecksofa-mr2795-stoff-ivory-musterring_c516a3b613.jpg",
+      "bytes": 29211,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2795/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/1/csm_ecksofa-mr2795-stoff-ivory-metallkufe-schwarz-musterring_6f4d97365a.jpg",
+      "bytes": 11532,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2795/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/8/csm_ecksofa-mr2795-detailbild-r%C3%BCckenlehne-musterring_1fd95df617.jpg",
+      "bytes": 13208,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2795/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/6/csm_ecksofa-mr2795-detailbild-armlehne-musterring_c35bd9f33d.jpg",
+      "bytes": 10765,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2795/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/4/csm_ecksofa-mr2795-detailbild-musterring_cfde5e0c41.jpg",
+      "bytes": 8887,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

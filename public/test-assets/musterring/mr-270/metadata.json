@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-270",
+  "title": "MR 270",
+  "importedAt": "2026-07-27T14:08:53.725Z",
+  "demoData": true,
+  "notLicensedForProduction": true,
+  "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+  "assets": [
+    {
+      "file": "/test-assets/musterring/mr-270/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-270/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-270/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/9/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_009a5315f2.jpg",
+      "bytes": 22436,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-270/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_02_301b4929b1.jpg",
+      "bytes": 11120,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-270/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_02_2c37e9b9cd.jpg",
+      "bytes": 28136,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-270/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/9/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_01_4c255c5987.jpg",
+      "bytes": 8635,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-270/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/9/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_01_2dc664da73.jpg",
+      "bytes": 12863,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-270/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/0/csm_sofa_mr270_echtleder_cloudy_kurkuma_musterring_f0225fcb20.jpg",
+      "bytes": 13623,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

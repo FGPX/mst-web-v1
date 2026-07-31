@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/beds/justb-sc200",
+  "title": "JUSTB! SC200",
+  "importedAt": "2026-07-29T07:51:16.137Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/justb-sc200/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/0/csm_polsterbett-justb-sc200-bettkasten-stoff-beige_d6ed2ce92c.jpg",
+      "bytes": 18053,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc200/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/3/csm_polsterbett-justb-sc200-stoff-beige-millieu-musterring-01_9f03c5e982.jpg",
+      "bytes": 7416,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc200/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/2/csm_polsterbett-justb-sc200-detailbild-stoff-beige-musterring_e489774ed4.jpg",
+      "bytes": 9447,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc200/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/e/csm_polsterbett-justb-sc200-detailbild-kopfteil-stoff-beige-musterring_05b6d01cfc.jpg",
+      "bytes": 10018,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sc200/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/1/csm_polsterbett-justb-sc200-stoff-beige-millieu-musterring_e749bc14f0.jpg",
+      "bytes": 7790,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

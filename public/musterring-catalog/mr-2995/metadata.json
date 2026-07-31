@@ -1,0 +1,46 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2995",
+  "title": "MR 2995",
+  "importedAt": "2026-07-29T07:50:15.324Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-2995/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2995/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2995/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_19150_Z73-43_N148-N222_PK_U69_EKS_O58-95_SA_C08-35_O58-95_RK_C08-35_ME17860_O58-35_12-03-09-MTA5_ed0a253160.jpeg",
+      "bytes": 23540,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2995/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_19150_12-03-01-FFA6a_Z62-54_N185_N222_Q111_U69_EK_PK_SA_O58-26_U62_RK_Z74-55_C08-26_Kissen_im_Eck_2177a39e07.jpeg",
+      "bytes": 9858,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2995/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/0/csm_19150_Z73-43_EKS_CloseUp_19150maxx_MG_0209_f6c57631b5.jpeg",
+      "bytes": 6371,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2995/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/1/csm_Gro%C3%9F__19150_12-02-14-FFA1_Z73-43_N148_N222_SA_O58-95_RK_D56-21_EK_PK_U69_U59_D56-21__219b600b2d.jpeg",
+      "bytes": 12181,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

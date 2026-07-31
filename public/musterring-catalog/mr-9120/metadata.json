@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9120",
+  "title": "MR 9120",
+  "importedAt": "2026-07-29T07:50:31.546Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-9120/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_MR10840_A_MR9120_-_15_22455afcfe.jpg",
+      "bytes": 30319,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9120/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/2/csm_sofa-mr9120-ecksofa-leder-kenia-grau-relaxfunktion-musterring_fb3737f15c.jpg",
+      "bytes": 11138,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9120/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/8/csm_sofa-mr9120-ecksofa-leder-kenia-grau-elektrische-funktion-musterring_21cb005294.jpg",
+      "bytes": 4821,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9120/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/0/csm_sofa-mr9120-ecksofa-leder-kenia-grau-rueckenansicht-musterring_969b771579.jpg",
+      "bytes": 12553,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9120/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/9/csm_sofa-mr9120-ecksofa-leder-kenia-grau-kopfteil-musterring_4fbd37530f.jpg",
+      "bytes": 8453,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9120/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/b/csm_sofa-mr9120-stoff-blau-musterring_415f02fb4e.jpg",
+      "bytes": 10264,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9120/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/3/csm_sofa-mr9120-stoff-blau-ladestation-musterring_95833c8531.jpg",
+      "bytes": 16679,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9120/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_sofa-mr9120-stoff-blau-kopfst%C3%BCtze-musterring_e3d8d62e53.jpg",
+      "bytes": 13476,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

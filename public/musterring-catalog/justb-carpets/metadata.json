@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/home-accessories/carpets/justb-carpets",
+  "title": "JUSTB! CARPETS",
+  "importedAt": "2026-07-29T07:52:05.048Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/justb-carpets/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-carpets/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-carpets/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_justb-teppiche-heimtextilien-musterring_2d7165ccd5.jpg",
+      "bytes": 26407,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-carpets/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/b/csm_justb-te100-teppich-grau-musterring-02_73a153cf8d.jpg",
+      "bytes": 10793,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-carpets/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/6/csm_justb-te100-teppich-grau-musterring_28ff472eb5.jpg",
+      "bytes": 12470,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-carpets/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/0/csm_justb-te100-teppich-grau-musterring-03_f1b65a953c.jpg",
+      "bytes": 9275,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-carpets/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/2/csm_justb-te100-teppich-grau-musterring-01_47a5a91c2c.jpg",
+      "bytes": 8251,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-carpets/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/c/csm_justb-te150-teppich-musterring-02_028dcc87b2.jpg",
+      "bytes": 9967,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

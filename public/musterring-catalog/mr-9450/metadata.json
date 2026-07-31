@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9450",
+  "title": "MR 9450",
+  "importedAt": "2026-07-29T07:50:37.359Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-9450/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/7/csm_ecksofa-mr9450-stoff-beige-musterring_4d11540089.jpg",
+      "bytes": 25882,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9450/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_ecksofa-mr9450-relaxfunktion-stoff-beige-musterring_528fb32c4b.jpg",
+      "bytes": 9002,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9450/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_ecksofa-mr9450-verstellbare-kopfstuetze-musterring_1ef591c452.jpg",
+      "bytes": 11106,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9450/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/f/csm_ecksofa-mr9450-verstellbare-kopfstuetze-musterring-01_1880c98bc5.jpg",
+      "bytes": 6237,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9450/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/3/csm_ecksofa-mr9450-kufenfu%C3%9F-gebuerstet-musterring_9bb40ad354.jpg",
+      "bytes": 5148,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

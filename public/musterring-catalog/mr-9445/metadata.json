@@ -1,0 +1,22 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9445",
+  "title": "MR 9445",
+  "importedAt": "2026-07-29T07:50:36.355Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-9445/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/4/csm_MR11675_D_MR9440_MR9445_Print_-_15_a22ae61d73.jpg",
+      "bytes": 26369,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-9445/image-02.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/5/csm_MR11675_F_002_MR9440_MR9445_Print_451dfe620b.png",
+      "bytes": 1072217,
+      "contentType": "image/png"
+    }
+  ]
+}

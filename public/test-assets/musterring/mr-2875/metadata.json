@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2875",
+  "title": "MR 2875",
+  "importedAt": "2026-07-27T14:08:54.808Z",
+  "demoData": true,
+  "notLicensedForProduction": true,
+  "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+  "assets": [
+    {
+      "file": "/test-assets/musterring/mr-2875/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2875/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2875/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_Sofa-Sessel-MR_2875-Eckgruppe-Anreihsofa-N70L-Armlehne_links-Ecksofa-mit_festem_Hocker-EG70R-Stoff-dolphin-Musterring_672e93c902.jpg",
+      "bytes": 27821,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2875/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/a/csm_Sofa-Sessel-MR_2875-Explosionsgrafik-Leder-Schwarz-Stoff-grau-freigestellt-Musterring_2a7d328788.jpg",
+      "bytes": 7222,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2875/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_Sofa-Sessel-MR_2875-Sofa_N90-Seitenteil_SA-Echtleder-Schwarz-Musterring_96553bc343.jpg",
+      "bytes": 8567,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2875/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_Sofa-Sessel-MR_2875-Sofa_N90-Seitenteil_SA-Echtleder-Schwarz-Musterring_8254dd46c2.jpg",
+      "bytes": 9640,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2875/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/5/csm_MR8952_A_MR2875_-_15_1eb57169c3.jpg",
+      "bytes": 13188,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2875/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/5/csm_MR8952_A_MR2875_-_15_8758c4905e.jpg",
+      "bytes": 10793,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

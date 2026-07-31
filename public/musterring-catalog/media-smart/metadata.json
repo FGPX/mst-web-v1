@@ -1,0 +1,16 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/media-smart",
+  "title": "Media Smart",
+  "importedAt": "2026-07-29T07:50:50.735Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/media-smart/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/b/csm_MR10018_A_MediaSmart_-_15_49a250f550.jpg",
+      "bytes": 27512,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

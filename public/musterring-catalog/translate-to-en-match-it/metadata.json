@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-match-it",
+  "title": "Translate To En Match It",
+  "importedAt": "2026-07-29T07:49:39.144Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/translate-to-en-match-it/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-match-it/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-match-it/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/d/csm_sessel_mit_kopfst%C3%BCtze_matchit_rot_beige_dad971229b.jpg",
+      "bytes": 23644,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-match-it/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/0/csm_sessel_matchit_stoff_curry_musterring_02_32797a2045.jpg",
+      "bytes": 11788,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-match-it/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/6/csm_sessel_matchit_stoff_curry_musterring_b8e6f67654.jpg",
+      "bytes": 8243,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-match-it/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/3/csm_sessel_matchit_stoff_curry_musterring_01_aa942124c9.jpg",
+      "bytes": 10454,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-match-it/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/1/csm_sessel_matchit_stoff_grau_musterring_9922098ac4.jpg",
+      "bytes": 4858,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-match-it/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/5/csm_sessel_matchit_leder_taupe_musterring_6215fd02e2.jpg",
+      "bytes": 4782,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

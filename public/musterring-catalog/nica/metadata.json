@@ -1,0 +1,22 @@
+{
+  "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nica",
+  "title": "Nica",
+  "importedAt": "2026-07-29T07:51:39.286Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/nica/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/b/csm_esszimmer-nica-nevio-milieu-musterring-02_4bde1b35c8.jpg",
+      "bytes": 22872,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/nica/image-02.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_MR11419_D02_Nica_Print_9ab0c5a452.png",
+      "bytes": 204556,
+      "contentType": "image/png"
+    }
+  ]
+}

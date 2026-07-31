@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/beds/bari",
+  "title": "Bari",
+  "importedAt": "2026-07-29T07:51:23.950Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/bari/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/2/csm_MR11656_B_Bari_-_15_6c27537518.jpg",
+      "bytes": 25806,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/bari/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/7/csm_MR11657_A_Bari_-_15_ff54022ec3.jpg",
+      "bytes": 8854,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/bari/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_MR11657_4_Bari_-_15_453795a168.jpg",
+      "bytes": 11333,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/bari/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/c/csm_MR11657_2_Bari_-_15_08812e0889.jpg",
+      "bytes": 11221,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/bari/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_MR11657_1_Bari_-_15_476772d607.jpg",
+      "bytes": 8701,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/bari/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_MR11655_A_Bari_-_15_798c6a6dfb.jpg",
+      "bytes": 8884,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/bari/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/a/csm_MR11655_3_Bari_-_15_82266e700f.jpg",
+      "bytes": 13658,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/bari/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/7/csm_MR11655_1_Bari_-_15_f2020db376.jpg",
+      "bytes": 13050,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

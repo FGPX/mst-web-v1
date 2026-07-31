@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/san-diego",
+  "title": "San Diego",
+  "importedAt": "2026-07-29T07:51:11.234Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/san-diego/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/f/csm_schlafzimmer-san-diego-glas-grau-glas-braun-dekor-grau-leder-braun-musterring-01_09c85e4edc.jpg",
+      "bytes": 22341,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/san-diego/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/5/csm_schlafzimmer-san-diego-dekor-grau-leder-braun-musterring-01_416f42b86e.jpg",
+      "bytes": 9278,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/san-diego/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/e/csm_schlafzimmer-san-diego-dekor-grau-musterring-01_5722bbb081.jpg",
+      "bytes": 16825,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/san-diego/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/4/csm_schlafzimmer-san-diego-leder-grau-musterring-01_00a54cc00a.jpg",
+      "bytes": 7543,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/san-diego/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/1/csm_schlafzimmer-san-diego-glas-grau-leder-braun-musterring-01_dfbe79f26c.jpg",
+      "bytes": 7363,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/san-diego/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/b/csm_schlafzimmer-san-diego-glas-wei%C3%9F-glas-grau-leder-grau-musterring-01_e61ab27808.jpg",
+      "bytes": 7638,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/san-diego/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/7/csm_schlafzimmer-san-diego-glas-kieselgrau-musterring-01_e3a259b883.jpg",
+      "bytes": 3651,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/san-diego/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/2/csm_schlafzimmer-san-diego-glas-wei%C3%9F-glas-grau-musterring-02_50deef52be.jpg",
+      "bytes": 6410,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

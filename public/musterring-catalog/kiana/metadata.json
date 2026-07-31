@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kiana",
+  "title": "Kiana",
+  "importedAt": "2026-07-29T07:50:46.437Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/kiana/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/5/csm_wohnmoebel-kiana-eiche-sand-musterring-01_508696789a.jpg",
+      "bytes": 24532,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kiana/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_wohnmoebel-kiana-stuhl-picara-musterring_2f6821a97c.jpg",
+      "bytes": 12383,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kiana/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/f/csm_regal-kiana-musterring_86019494ca.jpg",
+      "bytes": 19811,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kiana/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/e/csm_wohnm%C3%B6bel-kiana-detailbild-musterring_87cd861400.jpg",
+      "bytes": 17009,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kiana/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_wohnmoebel-kiana-moodbild-musterring_138fc56823.jpg",
+      "bytes": 12846,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kiana/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/0/csm_MR11583_12_Kiana_Mood_Print_-_15_b406e5e4dc.jpg",
+      "bytes": 10623,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kiana/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/4/csm_MR11583_02_Kiana_Print_-_15_be23aa7621.jpg",
+      "bytes": 6928,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kiana/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/c/csm_MR11583_05_Kiana_Print_-_15_97b779e168.jpg",
+      "bytes": 7823,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

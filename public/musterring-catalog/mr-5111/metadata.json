@@ -1,0 +1,22 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-5111",
+  "title": "MR 5111",
+  "importedAt": "2026-07-29T07:50:22.757Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-5111/image-01.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/e/csm_MR5111_PT_V4_34cf71894e.png",
+      "bytes": 635595,
+      "contentType": "image/png"
+    },
+    {
+      "file": "/musterring-catalog/mr-5111/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/3/f/csm_MR11807_A_MR5111_online.tif_3ea5c04b63.jpg",
+      "bytes": 399026,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

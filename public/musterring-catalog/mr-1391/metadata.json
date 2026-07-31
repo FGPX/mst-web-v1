@@ -1,0 +1,34 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1391",
+  "title": "MR 1391",
+  "importedAt": "2026-07-29T07:50:06.004Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-1391/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/7/csm_sessel-mr1391-stoff-dunkelgrau-milieu-musterring_6cedfa03f3.jpg",
+      "bytes": 23852,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1391/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/4/csm_sessel-mr1391-stoff-grau-musterring_7811fbdd13.jpg",
+      "bytes": 2980,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1391/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/6/csm_sessel-mr1391-stoff-grau-musterring-01_95b68af743.jpg",
+      "bytes": 5987,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1391/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_sessel-mr1391-stoff-dunkelgrau-relaxfunktion-musterring-01_c875ceb417.jpg",
+      "bytes": 2872,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2490",
+  "title": "MR 2490",
+  "importedAt": "2026-07-27T14:08:54.462Z",
+  "demoData": true,
+  "notLicensedForProduction": true,
+  "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+  "assets": [
+    {
+      "file": "/test-assets/musterring/mr-2490/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2490/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2490/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/a/csm_MR11486_A_MR2490_Online_-_15_10961064ea.jpg",
+      "bytes": 24405,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2490/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_Sofa-Sessel-MR_2490-Konfigurator-Echtleder-kurkuma-grau-freigestellt-Musterring_322f0c49d3.jpg",
+      "bytes": 8388,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2490/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_sofa-mr2490-beige-musterring_6c88a542d4.jpg",
+      "bytes": 9519,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2490/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_sofa-mr2490-beige-musterring_90a79568ad.jpg",
+      "bytes": 24794,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2490/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_sofa-mr2490-beige-gestell-bronze-musterring_c03a9190fc.jpg",
+      "bytes": 12986,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-2490/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_sofa-mr2490-beige-gestell-bronze-musterring_c5a4b80c60.jpg",
+      "bytes": 21876,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

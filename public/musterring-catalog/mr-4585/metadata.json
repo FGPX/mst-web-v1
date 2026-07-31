@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4585",
+  "title": "MR 4585",
+  "importedAt": "2026-07-29T07:50:18.370Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-4585/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/c/csm_Sofa-Sessel-MR_4585-Sofa_3002-3_sitzig-Candy-Einzelsessel_5996-drehbar-R%C3%BCcken_hoch-Metallfu%C3%9F-schwarz-matt-Chrom-Stoff-goldgelb-Stoff_25040-Musterring_85d0fe4ab8.jpg",
+      "bytes": 25356,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4585/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/5/csm_Sofa-Sessel-MR_4585-Einzelsessel_5995-drehbar-4_Sternfu%C3%9F-schwarz-matt-Stoff_25040-Senfgelb-Musterring_9d880572bc.jpg",
+      "bytes": 1021362,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4585/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/a/csm_Sofa-Sessel-MR_4585-Einzelsessel_5997-drehbar-niedriger_R%C3%BCcken-Stoff-braun_t%C3%BCrkis_wei%C3%9F-gemustert-Sternfu%C3%9F-Metall-schwarz-matt-Musterring_0d47b97ea7.jpg",
+      "bytes": 1417144,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4585/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/2/csm_Sofa-Sessel-MR_4585-Boxspringbett-Stoff-creme-Candy-Sessel-Hocker-Fabia-Beistelltisch-OCI-Teppich-Musterring_69ce4f1063.jpg",
+      "bytes": 891089,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4585/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_Sofa-Sessel-MR_4585-Einzelsessel_5997-Sternfu%C3%9F-schwarz-matt-Stoff-goldgelb-Musterring_487804b614.jpg",
+      "bytes": 6093,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4585/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/f/csm_Sofa-Sessel-MR_4585-Einzelsessel_5997-drehbar-Sternfu%C3%9F-chrom-gl%C3%A4nzend-Stoff-Mono-light_grey-freigestellt-Schr%C3%A4gansicht-Musterring_f36003b85f.jpg",
+      "bytes": 4618,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4585/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/c/csm_Sofa-Sessel-MR_4585-Hocker_1056-Sternfu%C3%9F-chrom-gl%C3%A4nzend-Stoff-Mono-light_grey-freigestellt-Musterring_93a0ead711.jpg",
+      "bytes": 4029,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4585/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/1/csm_Sofa-Sessel-MR_4585-Einzelsessel_5997-drehbar-4_Sternfu%C3%9F-schwarz-matt-Stoff-Rot-freigestellt-Musterring_430818e96d.jpg",
+      "bytes": 6036,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

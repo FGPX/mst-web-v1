@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1390",
+  "title": "MR 1390",
+  "importedAt": "2026-07-29T07:50:05.015Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-1390/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1390/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/b/csm_sofa-mr1390-stoff-grau-milieu-musterring_50a4540632.jpg",
+      "bytes": 21524,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1390/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/3/csm_sofa-mr1390-stoff-grau-querschlaeferfunktion-musterring_25fe3339df.jpg",
+      "bytes": 9882,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1390/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/d/csm_sofa-mr1390-stoff-grau-armlehne-detail-musterring_22784ec91f.jpg",
+      "bytes": 9911,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1390/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/c/csm_sofa-mr1390-stoff-grau-kopfteilverstellung-musterring_5493859fea.jpg",
+      "bytes": 12780,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1390/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/d/csm_sofa-mr1390-stoff-grau-musterring_1b4ad65e06.jpg",
+      "bytes": 3230,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1390/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_sofa-mr1390-stoff-grau-liegefunktion-musterring_441aba6cf4.jpg",
+      "bytes": 8808,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1390/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_sofa-mr1390-stoff-grau-mood-musterring-01_050446267f.jpg",
+      "bytes": 4946,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

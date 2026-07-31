@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kara-system",
+  "title": "Kara System",
+  "importedAt": "2026-07-29T07:50:43.603Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/kara-system/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/d/csm_wohnmoebel_kara_system_wohnzimmer_musterring_15_885cc3321c.jpg",
+      "bytes": 26496,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kara-system/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/c/csm_wohnzimmer-kara-system-wohnwand-regal-lack-wei%C3%9F-musterring_f248ed5e4e.jpg",
+      "bytes": 14985,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kara-system/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/9/csm_homeoffice_kara-system_lack_graphit_asteiche_musterring_03_2b1a83be2d.jpg",
+      "bytes": 12066,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kara-system/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/f/csm_homeoffice_kara-system_lack_graphit_asteiche_musterring_01_d3760b4f31.jpg",
+      "bytes": 8304,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kara-system/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/9/csm_homeoffice_kara-system_lack_graphit_asteiche_musterring_02_63559f4bc9.jpg",
+      "bytes": 9632,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kara-system/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/9/csm_homeoffice_kara-system_lack_graphit_asteiche_musterring_04_3539001a02.jpg",
+      "bytes": 11304,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kara-system/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_wohnmoebel_kara-system_lack_grau_eiche_musterring_01_a97b306eae.jpg",
+      "bytes": 10243,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kara-system/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/8/csm_wohnmoebel_kara-system_eiche_musterring_eaa88bd14a.jpg",
+      "bytes": 11336,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

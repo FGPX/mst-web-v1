@@ -1,0 +1,52 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/joern",
+  "title": "Joern",
+  "importedAt": "2026-07-29T07:51:05.949Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/joern/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/joern/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/joern/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_MR11726_A_J%C3%B6rn_-_15_a2c21a6d4b.jpg",
+      "bytes": 21892,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/joern/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_MR11726_B_J%C3%B6rn_-_15_7f1f86ffff.jpg",
+      "bytes": 9085,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/joern/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/a/csm_MR11726_C_J%C3%B6rn_-_15_0e39f2b43c.jpg",
+      "bytes": 10485,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/joern/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_MR11726_3_J%C3%B6rn_-_15_bb657461ec.jpg",
+      "bytes": 6355,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/joern/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/0/csm_MR11726_2_J%C3%B6rn_-_15_bd73c3727f.jpg",
+      "bytes": 7840,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

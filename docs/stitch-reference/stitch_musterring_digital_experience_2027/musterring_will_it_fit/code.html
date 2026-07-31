@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Musterring | Will It Fit Checker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fbf9f4",
+                        "surface-container": "#f0eee9",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f5f3ee",
+                        "tertiary-fixed": "#ece1d3",
+                        "surface-variant": "#e4e2dd",
+                        "on-tertiary-fixed": "#201b13",
+                        "outline-variant": "#c7c6ca",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#331101",
+                        "surface-dim": "#dbdad5",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#858384",
+                        "on-background": "#1b1c19",
+                        "secondary-fixed-dim": "#f9b897",
+                        "outline": "#76777b",
+                        "on-tertiary-fixed-variant": "#4c463c",
+                        "secondary-fixed": "#ffdbcb",
+                        "tertiary-fixed-dim": "#cfc5b8",
+                        "tertiary-container": "#201b13",
+                        "surface": "#fbf9f4",
+                        "surface-container-highest": "#e4e2dd",
+                        "surface-container-high": "#eae8e3",
+                        "on-surface-variant": "#46474a",
+                        "inverse-primary": "#c8c6c7",
+                        "on-tertiary-container": "#8b8377",
+                        "inverse-surface": "#30312e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c19",
+                        "background": "#fbf9f4",
+                        "primary-fixed-dim": "#c8c6c7",
+                        "secondary-container": "#ffbd9d",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5f5e5f",
+                        "on-primary-fixed": "#1b1b1c",
+                        "primary-container": "#1b1b1c",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000000",
+                        "secondary": "#845238",
+                        "on-secondary-container": "#7a4a31",
+                        "on-primary-fixed-variant": "#474647",
+                        "on-secondary-fixed-variant": "#683b23",
+                        "primary": "#000000",
+                        "primary-fixed": "#e5e2e3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "section-gap": "120px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "button": ["Manrope"],
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "body-md": ["Manrope"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "headline-sm": ["Libre Caslon Text"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "label-caps": ["Manrope"],
+                        "body-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "button": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #fbf9f4; color: #1b1c19; -webkit-font-smoothing: antialiased; }
+        .glass-nav { background: rgba(251, 249, 244, 0.85); backdrop-filter: blur(20px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .blueprint-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, #e4e2dd 1px, transparent 1px), linear-gradient(to bottom, #e4e2dd 1px, transparent 1px);
+        }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .product-shadow { filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1)); }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Navigation -->
+<header class="fixed top-0 w-full z-50 glass-nav flex justify-between items-center px-margin-desktop h-20 w-full mx-auto">
+<div class="flex items-center gap-4">
+<img alt="Musterring Logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKQMhcep-PlJY6SX5iEQmUb73HXkFzcVWf36otTZP0Qek2MaX8P8EMDLibko1xC1_wSmfk6xEbGjyYYzn9fnELts-LV7lxuzAjR1NabpFJqnBSpxNcKuwmH4o5p5hbv5SiDDP9tIJprxg2Tk-3l9pZP4PMTO4QGf8xBgZ2W6-nBaUYObkq6tv4WsI3GTOVHJ8yBi4ELvbi90wBE3-T9luCA6iB6XGbdSa_UALu9y-94CkPSqgrrNsqZ-vSWKBzHllsQodMIP4Jnng"/>
+<span class="font-display-lg text-headline-sm font-bold tracking-tighter text-primary">Musterring</span>
+</div>
+<nav class="hidden md:flex gap-10 items-center">
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Furniture</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Rooms</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Collections</a>
+<a class="font-button text-button uppercase tracking-widest text-primary border-b border-primary pb-1" href="#">Inspiration</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Design Services</a>
+</nav>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-primary cursor-pointer">search</span>
+<span class="material-symbols-outlined text-primary cursor-pointer">favorite</span>
+<button class="bg-primary text-on-primary font-button text-button uppercase px-6 py-3 tracking-widest hover:opacity-90 transition-all">Find a Retailer</button>
+</div>
+</header>
+<main class="pt-32 pb-section-gap px-margin-desktop max-w-container-max mx-auto">
+<!-- Hero Section -->
+<section class="mb-20">
+<div class="max-w-3xl">
+<span class="font-label-caps text-label-caps text-secondary tracking-[0.2em] mb-4 block">PLANNING TOOLS</span>
+<h1 class="font-display-lg text-display-lg mb-6 leading-tight">Will It Fit? <br/>Engineering Accuracy.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Ensure your selected Musterring MR 2875 collection fits seamlessly into your home. Our dimensional checker calculates path clearances, elevator volumes, and final spatial placement.</p>
+</div>
+</section>
+<!-- Tool Interface -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left Sidebar: Inputs -->
+<aside class="col-span-12 lg:col-span-4 space-y-10">
+<div class="bg-surface-container p-10 space-y-8 border-l-4 border-secondary">
+<div>
+<h3 class="font-label-caps text-label-caps mb-8 text-on-surface opacity-60">SELECTED PRODUCT</h3>
+<div class="flex items-start gap-4">
+<div class="w-24 h-24 bg-surface-bright border border-outline-variant flex items-center justify-center p-2">
+<img class="w-full h-full object-contain" data-alt="A minimalist modular sofa in a charcoal grey high-end textured fabric. The furniture sits against a clean ivory wall in a bright, professionally lit architectural photography style. The design emphasizes German engineering and premium structural integrity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCux43pSo3wucNGO_PAdl-JojEWNH8aUrzqOAKeO8qsi3uDCC63msI9FYcHrMmEeo4G9XBoqLB53wuC271Arr4oZCQblUx-ClwX4jfwsEpbKmHUhmian9R4ecEwk-Lb5lW8x5-piHQ33banUQw_j3S5qIhSvnOXcbY1-EHTltUwxYptdEG2KMiacO7rt-MpFjBtKJ8HJDxzEh2pLdTPc7uzpAwZ34yXNA43tNMhDCEqg2M9oaVol2Q2RsPzZKm9hv7IctKCkb_ON5I"/>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm leading-none mb-1">MR 2875</p>
+<p class="text-on-surface-variant text-sm mb-2">3-Seater Premium Modular</p>
+<div class="flex gap-4 text-[10px] font-bold text-on-surface-variant/70">
+<span>W: 242cm</span>
+<span>D: 104cm</span>
+<span>H: 82cm</span>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-6 pt-6 border-t border-outline-variant/30">
+<h3 class="font-label-caps text-label-caps text-on-surface opacity-60">ACCESS DIMENSIONS (CM)</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="group">
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Door Width</label>
+<input class="w-full bg-transparent border-b border-outline hover:border-primary focus:border-primary focus:ring-0 transition-colors py-2 text-headline-sm font-light" id="door-width" type="number" value="85"/>
+</div>
+<div class="group">
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Hallway Width</label>
+<input class="w-full bg-transparent border-b border-outline hover:border-primary focus:border-primary focus:ring-0 transition-colors py-2 text-headline-sm font-light" id="hallway-width" type="number" value="110"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="group">
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Room Length</label>
+<input class="w-full bg-transparent border-b border-outline hover:border-primary focus:border-primary focus:ring-0 transition-colors py-2 text-headline-sm font-light" id="room-length" type="number" value="550"/>
+</div>
+<div class="group">
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-2">Room Width</label>
+<input class="w-full bg-transparent border-b border-outline hover:border-primary focus:border-primary focus:ring-0 transition-colors py-2 text-headline-sm font-light" id="room-width" type="number" value="400"/>
+</div>
+</div>
+<div class="flex items-center gap-4 pt-4">
+<input class="w-5 h-5 rounded-none border-outline text-primary focus:ring-0" id="elevator" type="checkbox"/>
+<label class="font-body-md text-on-surface-variant" for="elevator">Elevator transport required</label>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-button text-button uppercase py-5 tracking-widest hover:bg-on-surface-variant transition-all active:scale-[0.98]" onclick="calculateFit()">
+                        Update Analysis
+                    </button>
+</div>
+<div class="bg-surface-container-low p-8 border border-outline-variant/30">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary">info</span>
+<h4 class="font-button text-button uppercase">Why it matters</h4>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                        Precision engineering isn't just about the furniture; it's about the journey to your home. We recommend a 5cm clearance on all sides for safe installation.
+                    </p>
+</div>
+</aside>
+<!-- Right Canvas: Visual Representation -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+<!-- Visualization Canvas -->
+<div class="relative bg-surface-bright blueprint-grid border border-outline-variant/50 h-[600px] w-full overflow-hidden flex items-center justify-center p-12">
+<!-- Dynamic Wall Representation -->
+<div class="relative border-4 border-primary transition-all duration-700 ease-in-out bg-white/40 flex items-center justify-center" id="visual-room" style="width: 80%; height: 80%;">
+<!-- Measurement Lines (Room) -->
+<div class="absolute -top-8 left-0 right-0 flex justify-between items-center px-4">
+<div class="h-px bg-outline-variant flex-grow"></div>
+<span class="mx-4 font-label-caps text-[10px]" id="room-w-label">400 CM</span>
+<div class="h-px bg-outline-variant flex-grow"></div>
+</div>
+<div class="absolute top-0 bottom-0 -right-8 flex flex-col justify-between items-center py-4">
+<div class="w-px bg-outline-variant flex-grow"></div>
+<span class="my-4 font-label-caps text-[10px] rotate-90 origin-center" id="room-l-label">550 CM</span>
+<div class="w-px bg-outline-variant flex-grow"></div>
+</div>
+<!-- Sofa Object -->
+<div class="product-shadow transition-all duration-1000 bg-surface-dim/40 border border-secondary flex flex-col items-center justify-center p-4 relative" id="visual-sofa" style="width: 242px; height: 104px;">
+<span class="font-label-caps text-[10px] text-secondary">MR 2875</span>
+<div class="absolute -bottom-6 w-full text-center">
+<span class="font-label-caps text-[8px] opacity-40">242 X 104 CM</span>
+</div>
+</div>
+<!-- Door Opening Visualization -->
+<div class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-20 h-2 bg-surface-bright flex justify-center" id="visual-door">
+<div class="w-full h-[2px] bg-secondary animate-pulse mt-[2px]"></div>
+</div>
+</div>
+<!-- Watermark -->
+<div class="absolute bottom-6 right-6 opacity-20 pointer-events-none">
+<img alt="" class="h-12 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKQMhcep-PlJY6SX5iEQmUb73HXkFzcVWf36otTZP0Qek2MaX8P8EMDLibko1xC1_wSmfk6xEbGjyYYzn9fnELts-LV7lxuzAjR1NabpFJqnBSpxNcKuwmH4o5p5hbv5SiDDP9tIJprxg2Tk-3l9pZP4PMTO4QGf8xBgZ2W6-nBaUYObkq6tv4WsI3GTOVHJ8yBi4ELvbi90wBE3-T9luCA6iB6XGbdSa_UALu9y-94CkPSqgrrNsqZ-vSWKBzHllsQodMIP4Jnng"/>
+</div>
+</div>
+<!-- Result Panel -->
+<div class="bg-surface-container-high p-8 flex flex-col md:flex-row gap-8 items-center transition-all duration-500" id="result-panel">
+<div class="w-16 h-16 rounded-full flex items-center justify-center bg-secondary/10" id="status-icon">
+<span class="material-symbols-outlined text-secondary text-3xl">check_circle</span>
+</div>
+<div class="flex-grow">
+<h2 class="font-headline-md text-headline-md mb-2" id="status-title">Fits Perfectly</h2>
+<p class="text-on-surface-variant max-w-xl" id="status-desc">Based on your provided dimensions, the MR 2875 collection can be navigated through your home with a comfortable clearance margin of 3cm at the tightest point.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-transparent border border-outline px-8 py-3 font-button text-button uppercase hover:bg-surface transition-colors">Download Specs</button>
+<button class="bg-secondary text-on-secondary px-8 py-3 font-button text-button uppercase shadow-lg hover:brightness-110 transition-all">Book Delivery</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-high mt-section-gap w-full">
+<div class="py-section-gap px-margin-desktop grid grid-cols-12 gap-gutter w-full mx-auto">
+<div class="col-span-12 lg:col-span-4">
+<span class="font-display-lg text-headline-md text-primary mb-8 block">Musterring</span>
+<p class="text-on-surface-variant max-w-xs mb-8">Quality since 1938. Discover furniture that blends heritage engineering with contemporary lifestyle.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary">public</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary">share</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary">contact_support</span>
+</div>
+</div>
+<div class="col-span-6 lg:col-span-2 space-y-4">
+<h5 class="font-label-caps text-label-caps text-primary">COMPANY</h5>
+<ul class="space-y-3 text-on-surface-variant">
+<li class="hover:text-secondary transition-colors cursor-pointer">Brand Story</li>
+<li class="hover:text-secondary transition-colors cursor-pointer">Retailer Finder</li>
+<li class="hover:text-secondary transition-colors cursor-pointer font-bold text-primary">Newsletter</li>
+</ul>
+</div>
+<div class="col-span-6 lg:col-span-2 space-y-4">
+<h5 class="font-label-caps text-label-caps text-primary">PROMISE</h5>
+<ul class="space-y-3 text-on-surface-variant">
+<li class="hover:text-secondary transition-colors cursor-pointer">Sustainability</li>
+<li class="hover:text-secondary transition-colors cursor-pointer">5-Year Guarantee</li>
+<li class="hover:text-secondary transition-colors cursor-pointer">Press</li>
+</ul>
+</div>
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<h5 class="font-label-caps text-label-caps text-primary">SUBSCRIBE</h5>
+<div class="relative">
+<input class="w-full bg-transparent border-b border-outline focus:border-primary focus:ring-0 py-2" placeholder="Your Email Address" type="email"/>
+<button class="absolute right-0 bottom-2 text-primary hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<p class="text-[10px] text-on-surface-variant/60 uppercase tracking-tighter">© 2027 Musterring. German Engineering for Living.</p>
+</div>
+</div>
+</footer>
+<script>
+        function calculateFit() {
+            const door = parseFloat(document.getElementById('door-width').value);
+            const hallway = parseFloat(document.getElementById('hallway-width').value);
+            const roomW = parseFloat(document.getElementById('room-width').value);
+            const roomL = parseFloat(document.getElementById('room-length').value);
+            const elevator = document.getElementById('elevator').checked;
+
+            // Product Constants: MR 2875 - Width: 242, Depth: 104, Height: 82
+            const sofaW = 242;
+            const sofaD = 104;
+            const sofaH = 82;
+
+            const title = document.getElementById('status-title');
+            const desc = document.getElementById('status-desc');
+            const iconWrap = document.getElementById('status-icon');
+            const icon = iconWrap.querySelector('span');
+            const visualRoom = document.getElementById('visual-room');
+            const visualSofa = document.getElementById('visual-sofa');
+            const visualDoor = document.getElementById('visual-door');
+
+            // Update Labels
+            document.getElementById('room-w-label').innerText = `${roomW} CM`;
+            document.getElementById('room-l-label').innerText = `${roomL} CM`;
+
+            // Logic Check
+            // Simplistic rule: Needs depth < door width OR height < door width (to go in sideways)
+            const minEntrySize = Math.min(sofaD, sofaH);
+            const canFitDoor = door >= (minEntrySize + 5); // 5cm clearance
+            const canFitHallway = hallway >= (sofaD + 5);
+            const canFitRoom = (roomW >= sofaW + 40) && (roomL >= sofaD + 40);
+
+            // Visual Scale Calculation
+            const baseScale = 0.5;
+            visualRoom.style.width = `${Math.min(roomW * baseScale, 90)}%`;
+            visualRoom.style.height = `${Math.min(roomL * baseScale, 90)}%`;
+            visualSofa.style.width = `${(sofaW / roomW) * 100}%`;
+            visualSofa.style.height = `${(sofaD / roomL) * 100}%`;
+            visualDoor.style.width = `${(door / roomW) * 100}%`;
+
+            if (!canFitDoor) {
+                title.innerText = "Warning: Entry Conflict";
+                desc.innerText = `The door width (${door}cm) is insufficient for the MR 2875 modular block. This model requires a minimum clear passage of ${minEntrySize + 5}cm for safe handling.`;
+                iconWrap.className = "w-16 h-16 rounded-full flex items-center justify-center bg-error/10";
+                icon.innerText = "warning";
+                icon.className = "material-symbols-outlined text-error text-3xl";
+                visualDoor.querySelector('div').className = "w-full h-[2px] bg-error animate-pulse mt-[2px]";
+            } else if (!canFitHallway) {
+                title.innerText = "Access Obstacle";
+                desc.innerText = `The hallway width (${hallway}cm) will make turning the modules extremely difficult. Professional assembly team recommended for this installation.`;
+                iconWrap.className = "w-16 h-16 rounded-full flex items-center justify-center bg-secondary/10";
+                icon.innerText = "help_center";
+                icon.className = "material-symbols-outlined text-secondary text-3xl";
+                visualDoor.querySelector('div').className = "w-full h-[2px] bg-secondary animate-pulse mt-[2px]";
+            } else if (!canFitRoom) {
+                title.innerText = "Room Saturation";
+                desc.innerText = "The sofa fits the access points, but will significantly occupy the floor plan, leaving less than the recommended 40cm perimeter for movement.";
+                iconWrap.className = "w-16 h-16 rounded-full flex items-center justify-center bg-secondary/10";
+                icon.innerText = "space_dashboard";
+                icon.className = "material-symbols-outlined text-secondary text-3xl";
+            } else {
+                title.innerText = "Fits Perfectly";
+                desc.innerText = `All dimensions cleared. Clearance of ${door - minEntrySize}cm at the entrance and ample volume in the room designated. Delivery ready.`;
+                iconWrap.className = "w-16 h-16 rounded-full flex items-center justify-center bg-secondary/10";
+                icon.innerText = "check_circle";
+                icon.className = "material-symbols-outlined text-secondary text-3xl";
+                visualDoor.querySelector('div').className = "w-full h-[2px] bg-secondary animate-pulse mt-[2px]";
+            }
+        }
+
+        // Initialize view
+        window.onload = calculateFit;
+    </script>
+</body></html>

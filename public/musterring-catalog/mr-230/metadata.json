@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-230",
+  "title": "MR 230",
+  "importedAt": "2026-07-29T07:49:40.316Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-230/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/0/csm_MR11716_A_MR230_Print_-_15_1164b256c7.jpg",
+      "bytes": 25577,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-230/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/d/csm_MR11716_B_MR230_Print_-_15_9fb9a63eb3.jpg",
+      "bytes": 8084,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-230/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/9/csm_MR11716_009_MR230_Print_-_15_5b34472768.jpg",
+      "bytes": 12919,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-230/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/c/csm_MR11716_001_MR230_Print_-_15_4b2cf0908a.jpg",
+      "bytes": 13519,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-230/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/f/csm_MR11716_005_MR230_Print_-_15_c0465c7bf9.jpg",
+      "bytes": 7874,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

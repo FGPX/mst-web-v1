@@ -1,0 +1,28 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2986",
+  "title": "MR 2986",
+  "importedAt": "2026-07-29T07:50:14.234Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-2986/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2986/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-2986/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_sofa-mr2985-stoff-blush-musterring_08327be01f.jpg",
+      "bytes": 27997,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

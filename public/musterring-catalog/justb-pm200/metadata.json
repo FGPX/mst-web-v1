@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/justb-pm200",
+  "title": "JUSTB! PM200",
+  "importedAt": "2026-07-29T07:49:31.115Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/justb-pm200/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/0/csm_sofa-justb-pm200-stoff-creme-musterring_a9f0dd2830.jpg",
+      "bytes": 19346,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm200/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/5/csm_sofa-justb-pm200-stoff-cord-beige-musterring_58e6165917.jpg",
+      "bytes": 9137,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm200/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/2/csm_sofa-justb-pm200-stoff-cord-beige-detail-armlehne-musterring_73f83a6e3b.jpg",
+      "bytes": 5251,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm200/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/f/csm_sofa-justb-pm200-stoff-cord-beige-detail-sitztiefe-musterring_85e5c58471.jpg",
+      "bytes": 8833,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm200/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/f/csm_sofa-justb-pm200-leder-wei%C3%9F-musterring_a120d56adb.jpg",
+      "bytes": 11519,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm200/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/f/csm_sofa-justb-pm200-leder-wei%C3%9F-detail-armlehne-musterring_e8adad3d19.jpg",
+      "bytes": 16032,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm200/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_sofa-justb-pm200-leder-wei%C3%9F-detail-musterring_dff56bd4fa.jpg",
+      "bytes": 13617,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-pm200/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/2/csm_sofa-justb-pm200-leder-wei%C3%9F-details-musterring_561c4b4fbe.jpg",
+      "bytes": 9363,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

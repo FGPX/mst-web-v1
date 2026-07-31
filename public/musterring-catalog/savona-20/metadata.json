@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/savona-20",
+  "title": "Savona 20",
+  "importedAt": "2026-07-29T07:51:12.623Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/savona-20/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/7/csm_schlafzimmer_savona_2.0_eiche_glas_beige_leder_beige_musterring_02_4da2c9be9c.jpg",
+      "bytes": 26146,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/savona-20/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/0/csm_schlafzimmer_savona_2.0_eiche_musterring_03_dd1c4ae65a.jpg",
+      "bytes": 10512,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/savona-20/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/c/csm_schlafzimmer_savona_2.0_eiche_musterring_02_4a151acdfc.jpg",
+      "bytes": 8801,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/savona-20/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/5/csm_schlafzimmer_savona_2.0_eiche_glas_beige_musterring_03_43ca4a9a7a.jpg",
+      "bytes": 9592,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/savona-20/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_schlafzimmer_savona_2.0_eiche_musterring_01_ac103c766a.jpg",
+      "bytes": 8458,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/savona-20/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_schlafzimmer_savona_2.0_eiche_glas_beige_leder_beige_musterring_01_dcd49496dd.jpg",
+      "bytes": 9056,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/savona-20/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/4/csm_schlafzimmer_savona_2.0_eiche_leder_beige_musterring_01_b8426eb546.jpg",
+      "bytes": 8922,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/savona-20/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/2/csm_schlafzimmer_savona_2.0_eiche_glas_beige_musterring_01_b8d3889eac.jpg",
+      "bytes": 10125,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

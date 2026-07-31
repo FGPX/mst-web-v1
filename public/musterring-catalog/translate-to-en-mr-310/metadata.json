@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-mr-310",
+  "title": "Translate To En Mr 310",
+  "importedAt": "2026-07-29T07:49:54.255Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-310/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/4/9/csm_MR11323_A_MR310_Print.tif_e806ac75cd.jpg",
+      "bytes": 22955,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-310/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/b/csm_sofa-mr310-leder-beige-motorische-funktion-musterring_b9f1997cc7.jpg",
+      "bytes": 8406,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-310/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/2/csm_sofa-mr310-leder-beige-kopfteil-musterring_03c6fa1f36.jpg",
+      "bytes": 8986,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-310/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/9/csm_sofa-mr310-leder-beige-armteil-musterring_897b873af7.jpg",
+      "bytes": 9555,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-310/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_sofa-mr310-leder-beige-motorische-funktionen-musterring_4a6679e3ae.jpg",
+      "bytes": 5770,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

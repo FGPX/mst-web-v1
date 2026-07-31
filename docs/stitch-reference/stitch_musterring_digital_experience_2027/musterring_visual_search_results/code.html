@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Musterring | Visual Search Results</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fbf9f4",
+                        "surface-container": "#f0eee9",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f5f3ee",
+                        "tertiary-fixed": "#ece1d3",
+                        "surface-variant": "#e4e2dd",
+                        "on-tertiary-fixed": "#201b13",
+                        "outline-variant": "#c7c6ca",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#331101",
+                        "surface-dim": "#dbdad5",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#858384",
+                        "on-background": "#1b1c19",
+                        "secondary-fixed-dim": "#f9b897",
+                        "outline": "#76777b",
+                        "on-tertiary-fixed-variant": "#4c463c",
+                        "secondary-fixed": "#ffdbcb",
+                        "tertiary-fixed-dim": "#cfc5b8",
+                        "tertiary-container": "#201b13",
+                        "surface": "#fbf9f4",
+                        "surface-container-highest": "#e4e2dd",
+                        "surface-container-high": "#eae8e3",
+                        "on-surface-variant": "#46474a",
+                        "inverse-primary": "#c8c6c7",
+                        "on-tertiary-container": "#8b8377",
+                        "inverse-surface": "#30312e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c19",
+                        "background": "#fbf9f4",
+                        "primary-fixed-dim": "#c8c6c7",
+                        "secondary-container": "#ffbd9d",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5f5e5f",
+                        "on-primary-fixed": "#1b1b1c",
+                        "primary-container": "#1b1b1c",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000000",
+                        "secondary": "#845238",
+                        "on-secondary-container": "#7a4a31",
+                        "on-primary-fixed-variant": "#474647",
+                        "on-secondary-fixed-variant": "#683b23",
+                        "primary": "#000000",
+                        "primary-fixed": "#e5e2e3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "section-gap": "120px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "button": ["Manrope"],
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "body-md": ["Manrope"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "headline-sm": ["Libre Caslon Text"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "label-caps": ["Manrope"],
+                        "body-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "button": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            background: rgba(251, 249, 244, 0.85);
+            backdrop-filter: blur(20px);
+        }
+        .ai-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.2); }
+        }
+        .furniture-dot {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .furniture-dot:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 20px rgba(132, 82, 56, 0.4);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f0eee9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #76777b;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 glass-nav">
+<nav class="flex justify-between items-center px-margin-desktop h-20 w-full mx-auto">
+<div class="flex items-center gap-12">
+<a class="flex items-center" href="#">
+<img alt="Musterring Logo" class="h-10 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKQMhcep-PlJY6SX5iEQmUb73HXkFzcVWf36otTZP0Qek2MaX8P8EMDLibko1xC1_wSmfk6xEbGjyYYzn9fnELts-LV7lxuzAjR1NabpFJqnBSpxNcKuwmH4o5p5hbv5SiDDP9tIJprxg2Tk-3l9pZP4PMTO4QGf8xBgZ2W6-nBaUYObkq6tv4WsI3GTOVHJ8yBi4ELvbi90wBE3-T9luCA6iB6XGbdSa_UALu9y-94CkPSqgrrNsqZ-vSWKBzHllsQodMIP4Jnng"/>
+</a>
+<div class="hidden md:flex gap-8">
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Furniture</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Rooms</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Collections</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Inspiration</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 mr-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">search</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">favorite</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">language</span>
+</div>
+<button class="bg-secondary text-on-secondary px-6 py-2 font-button text-button uppercase tracking-widest hover:opacity-90 transition-all duration-200">
+                    Find a Retailer
+                </button>
+</div>
+</nav>
+</header>
+<main class="pt-24 min-h-screen">
+<!-- Visual Search Interface -->
+<section class="px-margin-desktop py-12 grid grid-cols-12 gap-gutter">
+<!-- Left: Uploaded Photo Analysis -->
+<div class="col-span-12 lg:col-span-7 space-y-8">
+<div class="relative aspect-[4/3] rounded-lg overflow-hidden group">
+<div class="absolute inset-0 bg-black/5 pointer-events-none"></div>
+<div class="w-full h-full bg-cover bg-center" data-alt="A bright, airy, modern residential living room interior with tall windows and soft natural light. The room features a minimalist mid-century modern aesthetic with light oak wood floors and ivory walls. A primary focus is a large, low-profile sand-colored fabric sofa with clean lines, positioned centrally against a neutral backdrop. The overall atmosphere is premium, calm, and expertly curated for an interior design publication." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBsCUv4Lq5w7gpyqdBNz_m6O-7Hc7h3DYkpqoe2CC7alXhc_FE-DDBGL85hBdgH0yK_Zbhgoz0DdnJbJFPcIwRN_Yof7FyjNwSaLdg8fxkEkjXMG0B9PFzjwYeaV0cZNlIuXdtnvFgqwiXwRlhWccH-_8fGLxSLPShYK6kx2SEGuPlnNtNc_4E_ScEfq0JxfQs8yrUxuM9vMZwqU1FjGo0R0RgLl_cb24s8wWCtiN-27fU2nIzM16KoPi-PWv0zAu8Jvp0Zeqe1w0Y')"></div>
+<!-- AI Detection Dots -->
+<div class="absolute top-[45%] left-[40%] group-hover:scale-110 transition-transform duration-500">
+<div class="relative flex items-center justify-center">
+<div class="ai-pulse absolute w-12 h-12 bg-secondary/30 rounded-full"></div>
+<button class="furniture-dot w-6 h-6 bg-secondary border-4 border-white rounded-full cursor-pointer z-10" onclick="focusMatch('sofa')"></button>
+<div class="absolute left-8 bg-surface-bright/90 backdrop-blur-md px-3 py-1 rounded shadow-sm border border-outline-variant/30 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="font-label-caps text-label-caps text-secondary">SOFA DETECTED</span>
+</div>
+</div>
+</div>
+<div class="absolute top-[60%] left-[75%] group-hover:scale-110 transition-transform duration-500 delay-100">
+<div class="relative flex items-center justify-center">
+<div class="ai-pulse absolute w-10 h-10 bg-secondary/20 rounded-full"></div>
+<button class="furniture-dot w-5 h-5 bg-secondary border-4 border-white rounded-full cursor-pointer z-10" onclick="focusMatch('side-table')"></button>
+<div class="absolute left-8 bg-surface-bright/90 backdrop-blur-md px-3 py-1 rounded shadow-sm border border-outline-variant/30 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="font-label-caps text-label-caps text-secondary">ACCENT TABLE</span>
+</div>
+</div>
+</div>
+<!-- Scan Overlay -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden">
+<div class="w-full h-1 bg-secondary/40 blur-sm absolute top-0 transition-all duration-[3000ms] ease-in-out" id="scanline"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-6 bg-surface-container rounded-lg border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">auto_awesome</span>
+</div>
+<div>
+<h3 class="font-label-caps text-label-caps text-primary">AI ANALYSIS COMPLETE</h3>
+<p class="font-body-md text-on-surface-variant italic">"Mid-century silhouette, textured textile, muted earth tones."</p>
+</div>
+</div>
+<button class="font-button text-button border-b border-primary pb-0.5 hover:opacity-70 transition-opacity">Change Photo</button>
+</div>
+</div>
+<!-- Right: Results & Matches -->
+<div class="col-span-12 lg:col-span-5 space-y-12">
+<header>
+<h1 class="font-headline-md text-headline-md text-primary mb-2">Visual Match Results</h1>
+<p class="font-body-lg text-on-surface-variant">We've identified pieces from our collection that align with the architectural DNA of your space.</p>
+</header>
+<!-- Best Match Hero -->
+<div class="p-8 bg-surface-bright border border-outline-variant/50 relative overflow-hidden group">
+<div class="absolute top-0 right-0 bg-secondary text-on-secondary px-4 py-1 font-label-caps text-label-caps">98% MATCH</div>
+<div class="flex flex-col gap-6">
+<div class="aspect-[16/9] bg-surface-container-high relative overflow-hidden">
+<div class="w-full h-full bg-cover bg-center hover:scale-105 transition-transform duration-700" data-alt="A professional studio product shot of the Musterring MR 2875 sofa in a refined sand fabric. The sofa features elegant tapered dark wood legs and a sleek, low-profile silhouette typical of premium German engineering and mid-century design. Lighting is soft and directional, highlighting the rich texture of the textile against a neutral studio backdrop." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCsksZy_bJKGmN_A51_77UPrJTu-4l2Sinb9Aaj1qLmHuBfUKrUW0Zd8xUkReWtx6DGp3jrsH8PF4wPt2UFYS262GqKPjyNMcyjZDdCtrVIX2iSf-fO3D6zDmxsZTG1ZjBqDcIfn-2jo8OFfkShKZSNnvw_goV_eH6Ugv5D5T9TPlO2TJ0V9j3zFIy83UFHAJvf7P1cB5MV6VY6t-vrIZUQanZWnQBdR8OQkVSxofMEc1Oz-yd3XlMm8hsssWUYWh2Azja8SHO-xR0')"></div>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">VISUALLY SIMILAR TO YOUR UPLOAD</span>
+<h2 class="font-headline-sm text-headline-sm text-primary mt-2">MR 2875 in Sand Fabric</h2>
+<p class="font-body-md text-on-surface-variant mt-4 leading-relaxed">
+<strong class="text-primary">Why it matches:</strong> Strong match for the material and mid-century silhouette in your photo. The tapered legs and low-profile backrest mirror the structural proportions detected in your interior.
+                            </p>
+<div class="mt-8 flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-3 font-button text-button uppercase tracking-widest hover:shadow-xl transition-all">Configure Piece</button>
+<button class="border border-outline-variant text-primary px-8 py-3 font-button text-button uppercase tracking-widest hover:bg-surface-container transition-colors">Book Consultation</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Filters -->
+<div class="space-y-4">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">REFINE RESULTS</h4>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 bg-primary text-on-primary rounded-full font-button text-button">All Matches</button>
+<button class="px-4 py-2 bg-surface-container text-on-surface rounded-full font-button text-button hover:bg-surface-container-high transition-colors">Sand &amp; Beige</button>
+<button class="px-4 py-2 bg-surface-container text-on-surface rounded-full font-button text-button hover:bg-surface-container-high transition-colors">Sofas</button>
+<button class="px-4 py-2 bg-surface-container text-on-surface rounded-full font-button text-button hover:bg-surface-container-high transition-colors">Side Tables</button>
+<button class="px-4 py-2 bg-surface-container text-on-surface rounded-full font-button text-button hover:bg-surface-container-high transition-colors">Mid-Century</button>
+</div>
+</div>
+</div>
+</section>
+<!-- More Similar Items Bento Grid -->
+<section class="px-margin-desktop py-section-gap">
+<div class="flex justify-between items-end mb-12">
+<h2 class="font-headline-md text-headline-md text-primary">Other Intelligent Suggestions</h2>
+<a class="font-button text-button uppercase tracking-widest border-b border-primary" href="#">Explore All Furniture</a>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Card 1 -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant/30 group cursor-pointer overflow-hidden">
+<div class="aspect-square relative overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-700" data-alt="High-end minimalist armchair with architectural metal frame and plush charcoal grey upholstery. This product shot focuses on clean geometric lines and premium material quality, presented in a bright gallery-style environment consistent with Musterring's corporate aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCYbEZi7OVcXYxYYaUs5sqVqwazHw8kObOTDs6qQIFOo-MK42Xk5x3AT2iJJ7pcbveNaCKZV0IRwSpwsObSTBO31rhN1MzXyq5pj-TEIOWhUMbmBST-ban95nQpN1bO4BTWK8a99EAQToXgtR1s7gPlPlQoKJmQd6hY5k_kZZiuLRuzodRRBN0tII-OVTXKj9_gyFv6D46R0lOhvl_r3BxswIpYYbeduLfLq309fPfbsAtmjvooWUI_aW_ejzA3XbT4Z3xbjHHsesU')"></div>
+<div class="absolute inset-0 bg-surface/85 backdrop-blur-xl flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-8 text-center">
+<span class="font-label-caps text-label-caps text-secondary mb-2">92% MATCH</span>
+<h4 class="font-headline-sm text-headline-sm text-primary">MR 1920 Armchair</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Matches the industrial accent lines in your windows.</p>
+<button class="mt-6 bg-primary text-on-primary px-6 py-2 font-button text-button uppercase tracking-widest">Details</button>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">ACCENT CHAIR</h4>
+<p class="font-body-lg text-primary mt-1">MR 1920 Collection</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant/30 group cursor-pointer overflow-hidden">
+<div class="aspect-square relative overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-700" data-alt="Modern sculptural coffee table made from solid walnut wood with an organic, rounded triangular shape. The lighting highlights the natural wood grain and precision joinery. A luxury home accessory item displayed in a minimalist setting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCIA8gyC70vGTzhuXHTz6jxoMhaHPAYkWB-3K5B1-kJRbdSK1MS2rrygvHg20aX-5ZY8hPRSWqX2iNZGSG7MWIiR3i8VWAHfOQ9BV4yvRGRBNfzQ_M1bPxUFGyurxj95rTp6QXEiOrwK97xDiL0IEwVx1SQ7JHfYaCdt77rKj2tjALxZVNpBeGr9sCmncIbP5_Xubp3sbb3B5ZBEZqb4efDIDHYe96S9GchwVuRAAXtzCZESy08b9Z_oTwVSCMXCEf9L6V02xjaeyE')"></div>
+<div class="absolute inset-0 bg-surface/85 backdrop-blur-xl flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-8 text-center">
+<span class="font-label-caps text-label-caps text-secondary mb-2">85% MATCH</span>
+<h4 class="font-headline-sm text-headline-sm text-primary">Tavola Walnut</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Harmonizes with your flooring's wood grain.</p>
+<button class="mt-6 bg-primary text-on-primary px-6 py-2 font-button text-button uppercase tracking-widest">Details</button>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">LIVING ACCESSORY</h4>
+<p class="font-body-lg text-primary mt-1">Tavola Series</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-low border border-outline-variant/30 group cursor-pointer overflow-hidden">
+<div class="aspect-square relative overflow-hidden">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-110 transition-transform duration-700" data-alt="Minimalist floor lamp with a slender black matte metal stand and a large, textured linen drum shade in ivory. It emits a soft, warm ambient glow against a clean architectural interior wall, showcasing a blend of functionality and high-end design." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbBF7rvVu-XPNaMy90BccDQGaaoRMx3o4ODjXRqnYnnF8U7EOATGauBnORw0oTaNo8AxTsocFcpZmTBkDiBV0ewkPAR1IL0l261fy1KwtDUiEhae04kEYrpH5sbAHYwCAKfTG8Q5fU6X-cnrxoeHL-mJwNWpVCt9zO97vUElsfF4EZp-XqpCap12EIy59srUCL0_hyEDZEKTUBnRIWPTpIScxqv_jP82iqEQQm_k3733q2voN9PhVn1mXQMfLKX9EuUl9GflhoQ24')"></div>
+<div class="absolute inset-0 bg-surface/85 backdrop-blur-xl flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-8 text-center">
+<span class="font-label-caps text-label-caps text-secondary mb-2">MATCHING AESTHETIC</span>
+<h4 class="font-headline-sm text-headline-sm text-primary">Luxor Floor Lamp</h4>
+<p class="font-body-md text-on-surface-variant mt-2">Completes the lighting atmosphere of your room.</p>
+<button class="mt-6 bg-primary text-on-primary px-6 py-2 font-button text-button uppercase tracking-widest">Details</button>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">LIGHTING</h4>
+<p class="font-body-lg text-primary mt-1">Luxor Series</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Technical Specs Drawer (Hidden by default) -->
+<div class="fixed inset-y-0 right-0 w-full max-w-md bg-surface-bright/95 backdrop-blur-2xl shadow-2xl z-[100] translate-x-full transition-transform duration-500 ease-in-out border-l border-outline-variant/30" id="lead-drawer">
+<div class="h-full flex flex-col p-12 custom-scrollbar overflow-y-auto">
+<button class="self-end mb-8 hover:rotate-90 transition-transform" onclick="toggleDrawer()">
+<span class="material-symbols-outlined text-3xl">close</span>
+</button>
+<h2 class="font-headline-md text-headline-md mb-8">Technical Engineering</h2>
+<div class="space-y-6">
+<div class="border-b border-surface-container pb-4">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-1">MATERIAL</h4>
+<p class="font-body-lg text-primary">Premium Grade-A Sand Textile</p>
+</div>
+<div class="border-b border-surface-container pb-4">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-1">CONSTRUCTION</h4>
+<p class="font-body-lg text-primary">Solid Oak Internal Frame, Mortise &amp; Tenon Joinery</p>
+</div>
+<div class="border-b border-surface-container pb-4">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-1">DIMENSIONS</h4>
+<p class="font-body-lg text-primary">W: 240cm | D: 95cm | H: 72cm</p>
+</div>
+<div class="border-b border-surface-container pb-4">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-1">WARRANTY</h4>
+<p class="font-body-lg text-primary">5-Year Musterring Quality Guarantee</p>
+</div>
+</div>
+<div class="mt-auto pt-12">
+<h3 class="font-headline-sm text-headline-sm mb-4">Request a Consultation</h3>
+<div class="space-y-4">
+<div class="relative">
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-1">YOUR EMAIL</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline-variant focus:border-primary focus:ring-0 px-0 py-2 placeholder:text-outline-variant" placeholder="Enter your email address" type="email"/>
+</div>
+<button class="w-full bg-secondary text-on-secondary py-4 font-button text-button uppercase tracking-widest mt-4">Schedule Showroom Visit</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-high w-full">
+<div class="py-section-gap px-margin-desktop grid grid-cols-12 gap-gutter w-full mx-auto">
+<div class="col-span-12 lg:col-span-4">
+<a class="font-display-lg text-headline-md text-primary mb-8 block" href="#">Musterring</a>
+<p class="font-body-md text-on-surface-variant max-w-xs mb-8">Engineering excellence since 1938. Premium furniture designed for life.</p>
+</div>
+<div class="col-span-12 lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="space-y-4">
+<h4 class="font-label-caps text-label-caps text-primary">COMPANY</h4>
+<ul class="space-y-2">
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Brand Story</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Retailer Finder</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Sustainability</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-caps text-label-caps text-primary">SERVICES</h4>
+<ul class="space-y-2">
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Newsletter</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">5-Year Guarantee</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Press</a></li>
+</ul>
+</div>
+</div>
+<div class="col-span-12 mt-section-gap border-t border-outline-variant/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-body-md text-on-surface-variant">© 2027 Musterring. German Engineering for Living.</p>
+<div class="flex gap-6">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary" href="#">Legal Notice</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary" href="#">Cookie Settings</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Scanline animation trigger
+        window.onload = () => {
+            const scanline = document.getElementById('scanline');
+            setInterval(() => {
+                scanline.style.top = scanline.style.top === '100%' ? '0%' : '100%';
+            }, 3000);
+        };
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('lead-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        function focusMatch(type) {
+            // Smoothly open the drawer with relevant info (Simulated)
+            toggleDrawer();
+            console.log(`Focusing details for ${type}`);
+        }
+    </script>
+</body></html>

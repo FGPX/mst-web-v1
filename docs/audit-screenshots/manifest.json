@@ -1,0 +1,4741 @@
+[
+  {
+    "route": "/",
+    "slug": "home",
+    "viewport": "375x812",
+    "status": 0,
+    "url": "http://127.0.0.1:3000/",
+    "screenshot": "docs/audit-screenshots/home-375.png",
+    "navigationError": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:3000/\", waiting until \"networkidle\"\u001b[22m\n",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 48,
+    "overflowElements": []
+  },
+  {
+    "route": "/presentation",
+    "slug": "presentation",
+    "viewport": "375x812",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/presentation",
+    "screenshot": "docs/audit-screenshots/presentation-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/presentation"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "slug": "search",
+    "viewport": "375x812",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "screenshot": "docs/audit-screenshots/search-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture",
+    "slug": "furniture",
+    "viewport": "375x812",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/furniture",
+    "screenshot": "docs/audit-screenshots/furniture-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/furniture"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture/mr-2875",
+    "slug": "product-mr-2875",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture/mr-2875",
+    "screenshot": "docs/audit-screenshots/product-mr-2875-375.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MR 2875",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3490,
+    "overflowElements": []
+  },
+  {
+    "route": "/configurator/mr-2875",
+    "slug": "configurator-mr-2875",
+    "viewport": "375x812",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/configurator/mr-2875",
+    "screenshot": "docs/audit-screenshots/configurator-mr-2875-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/configurator/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/compare?ids=p1,p2,p4",
+    "slug": "compare",
+    "viewport": "375x812",
+    "status": 0,
+    "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4",
+    "screenshot": "docs/audit-screenshots/compare-375.png",
+    "navigationError": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:3000/compare?ids=p1,p2,p4\", waiting until \"networkidle\"\u001b[22m\n",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 48,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring",
+    "slug": "my-musterring",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring",
+    "screenshot": "docs/audit-screenshots/my-musterring-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/my-musterring/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1588,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring/projects/project-living",
+    "slug": "project-detail",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring/projects/project-living",
+    "screenshot": "docs/audit-screenshots/project-detail-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1103,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer",
+    "slug": "room-composer",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer",
+    "screenshot": "docs/audit-screenshots/room-composer-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2182,
+    "overflowElements": [
+      {
+        "tag": "button",
+        "className": "",
+        "left": 375,
+        "right": 446,
+        "width": 71
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 381,
+        "right": 396,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 390,
+        "right": 394,
+        "width": 3
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 384,
+        "right": 394,
+        "width": 10
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 462,
+        "right": 517,
+        "width": 55
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 533,
+        "right": 609,
+        "width": 76
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 539,
+        "right": 554,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 540,
+        "right": 552,
+        "width": 13
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 542,
+        "right": 550,
+        "width": 8
+      },
+      {
+        "tag": "rect",
+        "className": "",
+        "left": 542,
+        "right": 550,
+        "width": 8
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 625,
+        "right": 704,
+        "width": 79
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 631,
+        "right": 646,
+        "width": 15
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 640,
+        "right": 644,
+        "width": 4
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 633,
+        "right": 637,
+        "width": 4
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 640,
+        "right": 644,
+        "width": 4
+      },
+      {
+        "tag": "line",
+        "className": "",
+        "left": 636,
+        "right": 641,
+        "width": 4
+      },
+      {
+        "tag": "line",
+        "className": "",
+        "left": 636,
+        "right": 641,
+        "width": 4
+      }
+    ]
+  },
+  {
+    "route": "/room-composer/upload",
+    "slug": "room-composer-upload",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer/upload",
+    "screenshot": "docs/audit-screenshots/room-composer-upload-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/upload/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2480,
+    "overflowElements": [
+      {
+        "tag": "button",
+        "className": "",
+        "left": 375,
+        "right": 446,
+        "width": 71
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 381,
+        "right": 396,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 390,
+        "right": 394,
+        "width": 3
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 384,
+        "right": 394,
+        "width": 10
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 462,
+        "right": 517,
+        "width": 55
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 533,
+        "right": 609,
+        "width": 76
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 539,
+        "right": 554,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 540,
+        "right": 552,
+        "width": 13
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 542,
+        "right": 550,
+        "width": 8
+      },
+      {
+        "tag": "rect",
+        "className": "",
+        "left": 542,
+        "right": 550,
+        "width": 8
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 625,
+        "right": 704,
+        "width": 79
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 631,
+        "right": 646,
+        "width": 15
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 640,
+        "right": 644,
+        "width": 4
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 633,
+        "right": 637,
+        "width": 4
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 640,
+        "right": 644,
+        "width": 4
+      },
+      {
+        "tag": "line",
+        "className": "",
+        "left": 636,
+        "right": 641,
+        "width": 4
+      },
+      {
+        "tag": "line",
+        "className": "",
+        "left": 636,
+        "right": 641,
+        "width": 4
+      }
+    ]
+  },
+  {
+    "route": "/inspiration/rooms",
+    "slug": "inspiration-rooms",
+    "viewport": "375x812",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/inspiration/rooms",
+    "screenshot": "docs/audit-screenshots/inspiration-rooms-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/inspiration/rooms"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/visual-search",
+    "slug": "visual-search",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/visual-search",
+    "screenshot": "docs/audit-screenshots/visual-search-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/visual-search/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Visual Match Results",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1055,
+    "overflowElements": []
+  },
+  {
+    "route": "/will-it-fit/mr-2875",
+    "slug": "will-it-fit",
+    "viewport": "375x812",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/will-it-fit/mr-2875",
+    "screenshot": "docs/audit-screenshots/will-it-fit-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/will-it-fit/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/materials",
+    "slug": "materials",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/materials",
+    "screenshot": "docs/audit-screenshots/materials-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/materials/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Compare textures, care and compatibility.",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4012,
+    "overflowElements": []
+  },
+  {
+    "route": "/comfort-match",
+    "slug": "comfort-match",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/comfort-match",
+    "screenshot": "docs/audit-screenshots/comfort-match-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/comfort-match/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Guided Selling",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2942,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers",
+    "slug": "dealers",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers",
+    "screenshot": "docs/audit-screenshots/dealers-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Select a Musterring retailer.",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3359,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers/d1",
+    "slug": "dealer-detail",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers/d1",
+    "screenshot": "docs/audit-screenshots/dealer-detail-375.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Musterring Partner Hannover",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1910,
+    "overflowElements": []
+  },
+  {
+    "route": "/handover",
+    "slug": "handover",
+    "viewport": "375x812",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/handover",
+    "screenshot": "docs/audit-screenshots/handover-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/handover"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/booking/confirmation",
+    "slug": "booking-confirmation",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/booking/confirmation",
+    "screenshot": "docs/audit-screenshots/booking-confirmation-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Your project request is ready for Musterring Partner Hannover.",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1331,
+    "overflowElements": []
+  },
+  {
+    "route": "/privacy",
+    "slug": "privacy",
+    "viewport": "375x812",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/privacy",
+    "screenshot": "docs/audit-screenshots/privacy-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Privacy information for the local concept.",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1135,
+    "overflowElements": []
+  },
+  {
+    "route": "/route-that-does-not-exist",
+    "slug": "not-found",
+    "viewport": "375x812",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/route-that-does-not-exist",
+    "screenshot": "docs/audit-screenshots/not-found-375.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/route-that-does-not-exist"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 375,
+    "viewportWidth": 375,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/",
+    "slug": "home",
+    "viewport": "390x844",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/",
+    "screenshot": "docs/audit-screenshots/home-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/presentation",
+    "slug": "presentation",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/presentation",
+    "screenshot": "docs/audit-screenshots/presentation-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/presentation/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MusterringOnline Product World",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4126,
+    "overflowElements": []
+  },
+  {
+    "route": "/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "slug": "search",
+    "viewport": "390x844",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "screenshot": "docs/audit-screenshots/search-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture",
+    "slug": "furniture",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture",
+    "screenshot": "docs/audit-screenshots/furniture-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/furniture/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Furniture Collections —Designed for every room.",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1685,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture/mr-2875",
+    "slug": "product-mr-2875",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture/mr-2875",
+    "screenshot": "docs/audit-screenshots/product-mr-2875-390.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MR 2875",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3490,
+    "overflowElements": []
+  },
+  {
+    "route": "/configurator/mr-2875",
+    "slug": "configurator-mr-2875",
+    "viewport": "390x844",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/configurator/mr-2875",
+    "screenshot": "docs/audit-screenshots/configurator-mr-2875-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/configurator/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/compare?ids=p1,p2,p4",
+    "slug": "compare",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4",
+    "screenshot": "docs/audit-screenshots/compare-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/compare/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Product Comparison",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2608,
+    "overflowElements": [
+      {
+        "tag": "div",
+        "className": "stitch-compare-products",
+        "left": 20,
+        "right": 800,
+        "width": 780
+      },
+      {
+        "tag": "article",
+        "className": "",
+        "left": 374,
+        "right": 569,
+        "width": 195
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 523,
+        "right": 561,
+        "width": 38
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 534,
+        "right": 550,
+        "width": 16
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 538,
+        "right": 546,
+        "width": 8
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 538,
+        "right": 546,
+        "width": 8
+      },
+      {
+        "tag": "img",
+        "className": "",
+        "left": 374,
+        "right": 569,
+        "width": 195
+      },
+      {
+        "tag": "h2",
+        "className": "",
+        "left": 374,
+        "right": 569,
+        "width": 195
+      },
+      {
+        "tag": "p",
+        "className": "",
+        "left": 374,
+        "right": 569,
+        "width": 195
+      },
+      {
+        "tag": "div",
+        "className": "chips",
+        "left": 374,
+        "right": 569,
+        "width": 195
+      },
+      {
+        "tag": "span",
+        "className": "chip",
+        "left": 374,
+        "right": 522,
+        "width": 148
+      },
+      {
+        "tag": "span",
+        "className": "chip",
+        "left": 374,
+        "right": 495,
+        "width": 121
+      },
+      {
+        "tag": "span",
+        "className": "chip",
+        "left": 374,
+        "right": 513,
+        "width": 139
+      },
+      {
+        "tag": "a",
+        "className": "",
+        "left": 374,
+        "right": 569,
+        "width": 195
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 374,
+        "right": 549,
+        "width": 175
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 382,
+        "right": 398,
+        "width": 16
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 383,
+        "right": 397,
+        "width": 13
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 395,
+        "right": 395,
+        "width": 0
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 394,
+        "right": 397,
+        "width": 3
+      },
+      {
+        "tag": "button",
+        "className": "stitch-save-compare",
+        "left": 374,
+        "right": 569,
+        "width": 195
+      }
+    ]
+  },
+  {
+    "route": "/my-musterring",
+    "slug": "my-musterring",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring",
+    "screenshot": "docs/audit-screenshots/my-musterring-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/my-musterring/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1588,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring/projects/project-living",
+    "slug": "project-detail",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring/projects/project-living",
+    "screenshot": "docs/audit-screenshots/project-detail-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1103,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer",
+    "slug": "room-composer",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer",
+    "screenshot": "docs/audit-screenshots/room-composer-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2182,
+    "overflowElements": [
+      {
+        "tag": "button",
+        "className": "",
+        "left": 375,
+        "right": 446,
+        "width": 71
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 381,
+        "right": 396,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 390,
+        "right": 394,
+        "width": 3
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 384,
+        "right": 394,
+        "width": 10
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 462,
+        "right": 517,
+        "width": 55
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 533,
+        "right": 609,
+        "width": 76
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 539,
+        "right": 554,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 540,
+        "right": 552,
+        "width": 13
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 542,
+        "right": 550,
+        "width": 8
+      },
+      {
+        "tag": "rect",
+        "className": "",
+        "left": 542,
+        "right": 550,
+        "width": 8
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 625,
+        "right": 704,
+        "width": 79
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 631,
+        "right": 646,
+        "width": 15
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 640,
+        "right": 644,
+        "width": 4
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 633,
+        "right": 637,
+        "width": 4
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 640,
+        "right": 644,
+        "width": 4
+      },
+      {
+        "tag": "line",
+        "className": "",
+        "left": 636,
+        "right": 641,
+        "width": 4
+      },
+      {
+        "tag": "line",
+        "className": "",
+        "left": 636,
+        "right": 641,
+        "width": 4
+      }
+    ]
+  },
+  {
+    "route": "/room-composer/upload",
+    "slug": "room-composer-upload",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer/upload",
+    "screenshot": "docs/audit-screenshots/room-composer-upload-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/upload/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2480,
+    "overflowElements": [
+      {
+        "tag": "button",
+        "className": "",
+        "left": 375,
+        "right": 446,
+        "width": 71
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 381,
+        "right": 396,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 390,
+        "right": 394,
+        "width": 3
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 384,
+        "right": 394,
+        "width": 10
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 462,
+        "right": 517,
+        "width": 55
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 533,
+        "right": 609,
+        "width": 76
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 539,
+        "right": 554,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 540,
+        "right": 552,
+        "width": 13
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 542,
+        "right": 550,
+        "width": 8
+      },
+      {
+        "tag": "rect",
+        "className": "",
+        "left": 542,
+        "right": 550,
+        "width": 8
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 625,
+        "right": 704,
+        "width": 79
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 631,
+        "right": 646,
+        "width": 15
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 640,
+        "right": 644,
+        "width": 4
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 633,
+        "right": 637,
+        "width": 4
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "left": 640,
+        "right": 644,
+        "width": 4
+      },
+      {
+        "tag": "line",
+        "className": "",
+        "left": 636,
+        "right": 641,
+        "width": 4
+      },
+      {
+        "tag": "line",
+        "className": "",
+        "left": 636,
+        "right": 641,
+        "width": 4
+      }
+    ]
+  },
+  {
+    "route": "/inspiration/rooms",
+    "slug": "inspiration-rooms",
+    "viewport": "390x844",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/inspiration/rooms",
+    "screenshot": "docs/audit-screenshots/inspiration-rooms-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/inspiration/rooms"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/visual-search",
+    "slug": "visual-search",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/visual-search",
+    "screenshot": "docs/audit-screenshots/visual-search-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/visual-search/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Visual Match Results",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1055,
+    "overflowElements": []
+  },
+  {
+    "route": "/will-it-fit/mr-2875",
+    "slug": "will-it-fit",
+    "viewport": "390x844",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/will-it-fit/mr-2875",
+    "screenshot": "docs/audit-screenshots/will-it-fit-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/will-it-fit/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/materials",
+    "slug": "materials",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/materials",
+    "screenshot": "docs/audit-screenshots/materials-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/materials/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Compare textures, care and compatibility.",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4012,
+    "overflowElements": []
+  },
+  {
+    "route": "/comfort-match",
+    "slug": "comfort-match",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/comfort-match",
+    "screenshot": "docs/audit-screenshots/comfort-match-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/comfort-match/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Guided Selling",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2942,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers",
+    "slug": "dealers",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers",
+    "screenshot": "docs/audit-screenshots/dealers-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Select a Musterring retailer.",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3359,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers/d1",
+    "slug": "dealer-detail",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers/d1",
+    "screenshot": "docs/audit-screenshots/dealer-detail-390.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Musterring Partner Hannover",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1910,
+    "overflowElements": []
+  },
+  {
+    "route": "/handover",
+    "slug": "handover",
+    "viewport": "390x844",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/handover",
+    "screenshot": "docs/audit-screenshots/handover-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/handover"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/booking/confirmation",
+    "slug": "booking-confirmation",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/booking/confirmation",
+    "screenshot": "docs/audit-screenshots/booking-confirmation-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Your project request is ready for Musterring Partner Hannover.",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1331,
+    "overflowElements": []
+  },
+  {
+    "route": "/privacy",
+    "slug": "privacy",
+    "viewport": "390x844",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/privacy",
+    "screenshot": "docs/audit-screenshots/privacy-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Privacy information for the local concept.",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1135,
+    "overflowElements": []
+  },
+  {
+    "route": "/route-that-does-not-exist",
+    "slug": "not-found",
+    "viewport": "390x844",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/route-that-does-not-exist",
+    "screenshot": "docs/audit-screenshots/not-found-390.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/route-that-does-not-exist"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 390,
+    "viewportWidth": 390,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/",
+    "slug": "home",
+    "viewport": "768x1024",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/",
+    "screenshot": "docs/audit-screenshots/home-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/presentation",
+    "slug": "presentation",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/presentation",
+    "screenshot": "docs/audit-screenshots/presentation-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/presentation/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MusterringOnline Product World",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4241,
+    "overflowElements": []
+  },
+  {
+    "route": "/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "slug": "search",
+    "viewport": "768x1024",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "screenshot": "docs/audit-screenshots/search-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture",
+    "slug": "furniture",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture",
+    "screenshot": "docs/audit-screenshots/furniture-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/furniture/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Furniture Collections —Designed for every room.",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2028,
+    "overflowElements": [
+      {
+        "tag": "div",
+        "className": "stitch-category-menu-popover",
+        "left": 540,
+        "right": 810,
+        "width": 270
+      },
+      {
+        "tag": "p",
+        "className": "",
+        "left": 560,
+        "right": 790,
+        "width": 230
+      },
+      {
+        "tag": "a",
+        "className": "",
+        "left": 560,
+        "right": 790,
+        "width": 230
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 775,
+        "right": 790,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 780,
+        "right": 784,
+        "width": 4
+      },
+      {
+        "tag": "div",
+        "className": "stitch-category-menu-popover",
+        "left": 664,
+        "right": 934,
+        "width": 270
+      },
+      {
+        "tag": "p",
+        "className": "",
+        "left": 684,
+        "right": 914,
+        "width": 230
+      },
+      {
+        "tag": "a",
+        "className": "",
+        "left": 684,
+        "right": 914,
+        "width": 230
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 899,
+        "right": 914,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 904,
+        "right": 908,
+        "width": 4
+      },
+      {
+        "tag": "details",
+        "className": "stitch-category-menu",
+        "left": 771,
+        "right": 877,
+        "width": 106
+      },
+      {
+        "tag": "summary",
+        "className": "",
+        "left": 771,
+        "right": 877,
+        "width": 106
+      },
+      {
+        "tag": "span",
+        "className": "",
+        "left": 784,
+        "right": 841,
+        "width": 57
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 849,
+        "right": 864,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 853,
+        "right": 860,
+        "width": 8
+      },
+      {
+        "tag": "div",
+        "className": "stitch-category-menu-popover",
+        "left": 771,
+        "right": 1041,
+        "width": 270
+      },
+      {
+        "tag": "p",
+        "className": "",
+        "left": 791,
+        "right": 1021,
+        "width": 230
+      },
+      {
+        "tag": "a",
+        "className": "",
+        "left": 791,
+        "right": 1021,
+        "width": 230
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 1006,
+        "right": 1021,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 1012,
+        "right": 1015,
+        "width": 4
+      }
+    ]
+  },
+  {
+    "route": "/furniture/mr-2875",
+    "slug": "product-mr-2875",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture/mr-2875",
+    "screenshot": "docs/audit-screenshots/product-mr-2875-768.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MR 2875",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3521,
+    "overflowElements": []
+  },
+  {
+    "route": "/configurator/mr-2875",
+    "slug": "configurator-mr-2875",
+    "viewport": "768x1024",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/configurator/mr-2875",
+    "screenshot": "docs/audit-screenshots/configurator-mr-2875-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/configurator/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/compare?ids=p1,p2,p4",
+    "slug": "compare",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4",
+    "screenshot": "docs/audit-screenshots/compare-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/compare/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Product Comparison",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2639,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring",
+    "slug": "my-musterring",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring",
+    "screenshot": "docs/audit-screenshots/my-musterring-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/my-musterring/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1619,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring/projects/project-living",
+    "slug": "project-detail",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring/projects/project-living",
+    "screenshot": "docs/audit-screenshots/project-detail-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1134,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer",
+    "slug": "room-composer",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer",
+    "screenshot": "docs/audit-screenshots/room-composer-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2213,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer/upload",
+    "slug": "room-composer-upload",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer/upload",
+    "screenshot": "docs/audit-screenshots/room-composer-upload-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/upload/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2511,
+    "overflowElements": []
+  },
+  {
+    "route": "/inspiration/rooms",
+    "slug": "inspiration-rooms",
+    "viewport": "768x1024",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/inspiration/rooms",
+    "screenshot": "docs/audit-screenshots/inspiration-rooms-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/inspiration/rooms"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/visual-search",
+    "slug": "visual-search",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/visual-search",
+    "screenshot": "docs/audit-screenshots/visual-search-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/visual-search/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Visual Match Results",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1086,
+    "overflowElements": []
+  },
+  {
+    "route": "/will-it-fit/mr-2875",
+    "slug": "will-it-fit",
+    "viewport": "768x1024",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/will-it-fit/mr-2875",
+    "screenshot": "docs/audit-screenshots/will-it-fit-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/will-it-fit/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/materials",
+    "slug": "materials",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/materials",
+    "screenshot": "docs/audit-screenshots/materials-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/materials/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Compare textures, care and compatibility.",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4043,
+    "overflowElements": []
+  },
+  {
+    "route": "/comfort-match",
+    "slug": "comfort-match",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/comfort-match",
+    "screenshot": "docs/audit-screenshots/comfort-match-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/comfort-match/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Guided Selling",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2973,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers",
+    "slug": "dealers",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers",
+    "screenshot": "docs/audit-screenshots/dealers-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Select a Musterring retailer.",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3390,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers/d1",
+    "slug": "dealer-detail",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers/d1",
+    "screenshot": "docs/audit-screenshots/dealer-detail-768.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Musterring Partner Hannover",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1941,
+    "overflowElements": []
+  },
+  {
+    "route": "/handover",
+    "slug": "handover",
+    "viewport": "768x1024",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/handover",
+    "screenshot": "docs/audit-screenshots/handover-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/handover"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/booking/confirmation",
+    "slug": "booking-confirmation",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/booking/confirmation",
+    "screenshot": "docs/audit-screenshots/booking-confirmation-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Your project request is ready for Musterring Partner Hannover.",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1362,
+    "overflowElements": []
+  },
+  {
+    "route": "/privacy",
+    "slug": "privacy",
+    "viewport": "768x1024",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/privacy",
+    "screenshot": "docs/audit-screenshots/privacy-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Privacy information for the local concept.",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1166,
+    "overflowElements": []
+  },
+  {
+    "route": "/route-that-does-not-exist",
+    "slug": "not-found",
+    "viewport": "768x1024",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/route-that-does-not-exist",
+    "screenshot": "docs/audit-screenshots/not-found-768.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/route-that-does-not-exist"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 768,
+    "viewportWidth": 768,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/",
+    "slug": "home",
+    "viewport": "1024x900",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/presentation",
+    "slug": "presentation",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/presentation",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/presentation/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MusterringOnline Product World",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4241,
+    "overflowElements": []
+  },
+  {
+    "route": "/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "slug": "search",
+    "viewport": "1024x900",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture",
+    "slug": "furniture",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/furniture/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Furniture Collections —Designed for every room.",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2028,
+    "overflowElements": [
+      {
+        "tag": "div",
+        "className": "stitch-category-menu-popover",
+        "left": 771,
+        "right": 1041,
+        "width": 270
+      },
+      {
+        "tag": "details",
+        "className": "stitch-category-menu",
+        "left": 885,
+        "right": 1047,
+        "width": 162
+      },
+      {
+        "tag": "summary",
+        "className": "",
+        "left": 885,
+        "right": 1047,
+        "width": 162
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 1019,
+        "right": 1034,
+        "width": 15
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "left": 1022,
+        "right": 1030,
+        "width": 8
+      },
+      {
+        "tag": "div",
+        "className": "stitch-category-menu-popover",
+        "left": 777,
+        "right": 1047,
+        "width": 270
+      },
+      {
+        "tag": "p",
+        "className": "",
+        "left": 797,
+        "right": 1027,
+        "width": 230
+      },
+      {
+        "tag": "a",
+        "className": "",
+        "left": 797,
+        "right": 1027,
+        "width": 230
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 1012,
+        "right": 1027,
+        "width": 15
+      },
+      {
+        "tag": "a",
+        "className": "",
+        "left": 797,
+        "right": 1027,
+        "width": 230
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 1012,
+        "right": 1027,
+        "width": 15
+      },
+      {
+        "tag": "a",
+        "className": "",
+        "left": 797,
+        "right": 1027,
+        "width": 230
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 1012,
+        "right": 1027,
+        "width": 15
+      },
+      {
+        "tag": "a",
+        "className": "",
+        "left": 797,
+        "right": 1027,
+        "width": 230
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "left": 1012,
+        "right": 1027,
+        "width": 15
+      },
+      {
+        "tag": "div",
+        "className": "stitch-filter-status",
+        "left": 804,
+        "right": 1164,
+        "width": 359
+      },
+      {
+        "tag": "label",
+        "className": "",
+        "left": 957,
+        "right": 1099,
+        "width": 141
+      },
+      {
+        "tag": "select",
+        "className": "",
+        "left": 983,
+        "right": 1099,
+        "width": 116
+      },
+      {
+        "tag": "button",
+        "className": "",
+        "left": 1115,
+        "right": 1164,
+        "width": 49
+      }
+    ]
+  },
+  {
+    "route": "/furniture/mr-2875",
+    "slug": "product-mr-2875",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture/mr-2875",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MR 2875",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3521,
+    "overflowElements": []
+  },
+  {
+    "route": "/configurator/mr-2875",
+    "slug": "configurator-mr-2875",
+    "viewport": "1024x900",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/configurator/mr-2875",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/configurator/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/compare?ids=p1,p2,p4",
+    "slug": "compare",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/compare/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Product Comparison",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2639,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring",
+    "slug": "my-musterring",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/my-musterring/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1619,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring/projects/project-living",
+    "slug": "project-detail",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring/projects/project-living",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1134,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer",
+    "slug": "room-composer",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2213,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer/upload",
+    "slug": "room-composer-upload",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer/upload",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/upload/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2511,
+    "overflowElements": []
+  },
+  {
+    "route": "/inspiration/rooms",
+    "slug": "inspiration-rooms",
+    "viewport": "1024x900",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/inspiration/rooms",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/inspiration/rooms"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/visual-search",
+    "slug": "visual-search",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/visual-search",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/visual-search/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Visual Match Results",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1086,
+    "overflowElements": []
+  },
+  {
+    "route": "/will-it-fit/mr-2875",
+    "slug": "will-it-fit",
+    "viewport": "1024x900",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/will-it-fit/mr-2875",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/will-it-fit/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/materials",
+    "slug": "materials",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/materials",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/materials/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Compare textures, care and compatibility.",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4043,
+    "overflowElements": []
+  },
+  {
+    "route": "/comfort-match",
+    "slug": "comfort-match",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/comfort-match",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/comfort-match/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Guided Selling",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2973,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers",
+    "slug": "dealers",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Select a Musterring retailer.",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3390,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers/d1",
+    "slug": "dealer-detail",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers/d1",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Musterring Partner Hannover",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1941,
+    "overflowElements": []
+  },
+  {
+    "route": "/handover",
+    "slug": "handover",
+    "viewport": "1024x900",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/handover",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/handover"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/booking/confirmation",
+    "slug": "booking-confirmation",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/booking/confirmation",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Your project request is ready for Musterring Partner Hannover.",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1362,
+    "overflowElements": []
+  },
+  {
+    "route": "/privacy",
+    "slug": "privacy",
+    "viewport": "1024x900",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/privacy",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Privacy information for the local concept.",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1166,
+    "overflowElements": []
+  },
+  {
+    "route": "/route-that-does-not-exist",
+    "slug": "not-found",
+    "viewport": "1024x900",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/route-that-does-not-exist",
+    "screenshot": "",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/route-that-does-not-exist"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1024,
+    "viewportWidth": 1024,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/",
+    "slug": "home",
+    "viewport": "1440x1000",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/",
+    "screenshot": "docs/audit-screenshots/home-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/presentation",
+    "slug": "presentation",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/presentation",
+    "screenshot": "docs/audit-screenshots/presentation-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/presentation/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MusterringOnline Product World",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4297,
+    "overflowElements": []
+  },
+  {
+    "route": "/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "slug": "search",
+    "viewport": "1440x1000",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "screenshot": "docs/audit-screenshots/search-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture",
+    "slug": "furniture",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture",
+    "screenshot": "docs/audit-screenshots/furniture-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/furniture/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Furniture Collections —Designed for every room.",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2084,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture/mr-2875",
+    "slug": "product-mr-2875",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture/mr-2875",
+    "screenshot": "docs/audit-screenshots/product-mr-2875-1440.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MR 2875",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3577,
+    "overflowElements": []
+  },
+  {
+    "route": "/configurator/mr-2875",
+    "slug": "configurator-mr-2875",
+    "viewport": "1440x1000",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/configurator/mr-2875",
+    "screenshot": "docs/audit-screenshots/configurator-mr-2875-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/configurator/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/compare?ids=p1,p2,p4",
+    "slug": "compare",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4",
+    "screenshot": "docs/audit-screenshots/compare-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/compare/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Product Comparison",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2695,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring",
+    "slug": "my-musterring",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring",
+    "screenshot": "docs/audit-screenshots/my-musterring-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/my-musterring/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1675,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring/projects/project-living",
+    "slug": "project-detail",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring/projects/project-living",
+    "screenshot": "docs/audit-screenshots/project-detail-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1190,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer",
+    "slug": "room-composer",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer",
+    "screenshot": "docs/audit-screenshots/room-composer-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2269,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer/upload",
+    "slug": "room-composer-upload",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer/upload",
+    "screenshot": "docs/audit-screenshots/room-composer-upload-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/upload/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2567,
+    "overflowElements": []
+  },
+  {
+    "route": "/inspiration/rooms",
+    "slug": "inspiration-rooms",
+    "viewport": "1440x1000",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/inspiration/rooms",
+    "screenshot": "docs/audit-screenshots/inspiration-rooms-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/inspiration/rooms"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/visual-search",
+    "slug": "visual-search",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/visual-search",
+    "screenshot": "docs/audit-screenshots/visual-search-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/visual-search/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Visual Match Results",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1142,
+    "overflowElements": []
+  },
+  {
+    "route": "/will-it-fit/mr-2875",
+    "slug": "will-it-fit",
+    "viewport": "1440x1000",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/will-it-fit/mr-2875",
+    "screenshot": "docs/audit-screenshots/will-it-fit-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/will-it-fit/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/materials",
+    "slug": "materials",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/materials",
+    "screenshot": "docs/audit-screenshots/materials-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/materials/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Compare textures, care and compatibility.",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4099,
+    "overflowElements": []
+  },
+  {
+    "route": "/comfort-match",
+    "slug": "comfort-match",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/comfort-match",
+    "screenshot": "docs/audit-screenshots/comfort-match-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/comfort-match/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Guided Selling",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3029,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers",
+    "slug": "dealers",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers",
+    "screenshot": "docs/audit-screenshots/dealers-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Select a Musterring retailer.",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3446,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers/d1",
+    "slug": "dealer-detail",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers/d1",
+    "screenshot": "docs/audit-screenshots/dealer-detail-1440.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Musterring Partner Hannover",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1997,
+    "overflowElements": []
+  },
+  {
+    "route": "/handover",
+    "slug": "handover",
+    "viewport": "1440x1000",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/handover",
+    "screenshot": "docs/audit-screenshots/handover-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/handover"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/booking/confirmation",
+    "slug": "booking-confirmation",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/booking/confirmation",
+    "screenshot": "docs/audit-screenshots/booking-confirmation-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Your project request is ready for Musterring Partner Hannover.",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1418,
+    "overflowElements": []
+  },
+  {
+    "route": "/privacy",
+    "slug": "privacy",
+    "viewport": "1440x1000",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/privacy",
+    "screenshot": "docs/audit-screenshots/privacy-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Privacy information for the local concept.",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1222,
+    "overflowElements": []
+  },
+  {
+    "route": "/route-that-does-not-exist",
+    "slug": "not-found",
+    "viewport": "1440x1000",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/route-that-does-not-exist",
+    "screenshot": "docs/audit-screenshots/not-found-1440.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/route-that-does-not-exist"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1440,
+    "viewportWidth": 1440,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/",
+    "slug": "home",
+    "viewport": "1920x1080",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/",
+    "screenshot": "docs/audit-screenshots/home-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/presentation",
+    "slug": "presentation",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/presentation",
+    "screenshot": "docs/audit-screenshots/presentation-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/presentation/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MusterringOnline Product World",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4297,
+    "overflowElements": []
+  },
+  {
+    "route": "/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "slug": "search",
+    "viewport": "1920x1080",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm",
+    "screenshot": "docs/audit-screenshots/search-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/search?q=compact%20beige%20modular%20sofa%20maximum%20width%20240%20cm"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture",
+    "slug": "furniture",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture",
+    "screenshot": "docs/audit-screenshots/furniture-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/furniture/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Furniture Collections —Designed for every room.",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2084,
+    "overflowElements": []
+  },
+  {
+    "route": "/furniture/mr-2875",
+    "slug": "product-mr-2875",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/furniture/mr-2875",
+    "screenshot": "docs/audit-screenshots/product-mr-2875-1920.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "MR 2875",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3577,
+    "overflowElements": []
+  },
+  {
+    "route": "/configurator/mr-2875",
+    "slug": "configurator-mr-2875",
+    "viewport": "1920x1080",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/configurator/mr-2875",
+    "screenshot": "docs/audit-screenshots/configurator-mr-2875-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/configurator/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/compare?ids=p1,p2,p4",
+    "slug": "compare",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/compare?ids=p1,p2,p4",
+    "screenshot": "docs/audit-screenshots/compare-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/compare/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Product Comparison",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2695,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring",
+    "slug": "my-musterring",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring",
+    "screenshot": "docs/audit-screenshots/my-musterring-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/my-musterring/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1675,
+    "overflowElements": []
+  },
+  {
+    "route": "/my-musterring/projects/project-living",
+    "slug": "project-detail",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/my-musterring/projects/project-living",
+    "screenshot": "docs/audit-screenshots/project-detail-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Living Room Project",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1190,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer",
+    "slug": "room-composer",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer",
+    "screenshot": "docs/audit-screenshots/room-composer-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2269,
+    "overflowElements": []
+  },
+  {
+    "route": "/room-composer/upload",
+    "slug": "room-composer-upload",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/room-composer/upload",
+    "screenshot": "docs/audit-screenshots/room-composer-upload-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/room-composer/upload/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Room Composer",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 2567,
+    "overflowElements": []
+  },
+  {
+    "route": "/inspiration/rooms",
+    "slug": "inspiration-rooms",
+    "viewport": "1920x1080",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/inspiration/rooms",
+    "screenshot": "docs/audit-screenshots/inspiration-rooms-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/inspiration/rooms"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/visual-search",
+    "slug": "visual-search",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/visual-search",
+    "screenshot": "docs/audit-screenshots/visual-search-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/visual-search/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Visual Match Results",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1142,
+    "overflowElements": []
+  },
+  {
+    "route": "/will-it-fit/mr-2875",
+    "slug": "will-it-fit",
+    "viewport": "1920x1080",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/will-it-fit/mr-2875",
+    "screenshot": "docs/audit-screenshots/will-it-fit-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/will-it-fit/mr-2875"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/materials",
+    "slug": "materials",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/materials",
+    "screenshot": "docs/audit-screenshots/materials-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/materials/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Compare textures, care and compatibility.",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 4099,
+    "overflowElements": []
+  },
+  {
+    "route": "/comfort-match",
+    "slug": "comfort-match",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/comfort-match",
+    "screenshot": "docs/audit-screenshots/comfort-match-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      },
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/comfort-match/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Guided Selling",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3029,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers",
+    "slug": "dealers",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers",
+    "screenshot": "docs/audit-screenshots/dealers-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Select a Musterring retailer.",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 3446,
+    "overflowElements": []
+  },
+  {
+    "route": "/dealers/d1",
+    "slug": "dealer-detail",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/dealers/d1",
+    "screenshot": "docs/audit-screenshots/dealer-detail-1920.png",
+    "navigationError": "",
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResources": [],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Musterring Partner Hannover",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1997,
+    "overflowElements": []
+  },
+  {
+    "route": "/handover",
+    "slug": "handover",
+    "viewport": "1920x1080",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/handover",
+    "screenshot": "docs/audit-screenshots/handover-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/handover"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  },
+  {
+    "route": "/booking/confirmation",
+    "slug": "booking-confirmation",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/booking/confirmation",
+    "screenshot": "docs/audit-screenshots/booking-confirmation-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Your project request is ready for Musterring Partner Hannover.",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1418,
+    "overflowElements": []
+  },
+  {
+    "route": "/privacy",
+    "slug": "privacy",
+    "viewport": "1920x1080",
+    "status": 200,
+    "url": "http://127.0.0.1:3000/privacy",
+    "screenshot": "docs/audit-screenshots/privacy-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 404,
+        "url": "http://127.0.0.1:3000/_next/static/chunks/app/page.js"
+      }
+    ],
+    "title": "Musterring Digital Experience 2027",
+    "heading": "Privacy information for the local concept.",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 1222,
+    "overflowElements": []
+  },
+  {
+    "route": "/route-that-does-not-exist",
+    "slug": "not-found",
+    "viewport": "1920x1080",
+    "status": 500,
+    "url": "http://127.0.0.1:3000/route-that-does-not-exist",
+    "screenshot": "docs/audit-screenshots/not-found-1920.png",
+    "navigationError": "",
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "pageErrors": [],
+    "failedResources": [
+      {
+        "status": 500,
+        "url": "http://127.0.0.1:3000/route-that-does-not-exist"
+      }
+    ],
+    "title": "",
+    "heading": "",
+    "documentWidth": 1920,
+    "viewportWidth": 1920,
+    "horizontalOverflow": false,
+    "bodyTextLength": 21,
+    "overflowElements": []
+  }
+]

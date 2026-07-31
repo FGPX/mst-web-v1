@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Musterring | 2027 Room Visualization</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .canvas-shadow {
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+        .drag-handle:hover {
+            cursor: grab;
+        }
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+        .module-card:hover .module-overlay {
+            opacity: 1;
+        }
+        /* Custom scrollbar for editorial spec lists */
+        .spec-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .spec-scroll::-webkit-scrollbar-track {
+            background: #E5DED1;
+        }
+        .spec-scroll::-webkit-scrollbar-thumb {
+            background: #76777b;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fbf9f4",
+                        "surface-container": "#f0eee9",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f5f3ee",
+                        "tertiary-fixed": "#ece1d3",
+                        "surface-variant": "#e4e2dd",
+                        "on-tertiary-fixed": "#201b13",
+                        "outline-variant": "#c7c6ca",
+                        "inverse-on-surface": "#f2f1ec",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#331101",
+                        "surface-dim": "#dbdad5",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#858384",
+                        "on-background": "#1b1c19",
+                        "secondary-fixed-dim": "#f9b897",
+                        "outline": "#76777b",
+                        "on-tertiary-fixed-variant": "#4c463c",
+                        "secondary-fixed": "#ffdbcb",
+                        "tertiary-fixed-dim": "#cfc5b8",
+                        "tertiary-container": "#201b13",
+                        "surface": "#fbf9f4",
+                        "surface-container-highest": "#e4e2dd",
+                        "surface-container-high": "#eae8e3",
+                        "on-surface-variant": "#46474a",
+                        "inverse-primary": "#c8c6c7",
+                        "on-tertiary-container": "#8b8377",
+                        "inverse-surface": "#30312e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c19",
+                        "background": "#fbf9f4",
+                        "primary-fixed-dim": "#c8c6c7",
+                        "secondary-container": "#ffbd9d",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5f5e5f",
+                        "on-primary-fixed": "#1b1b1c",
+                        "primary-container": "#1b1b1c",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000000",
+                        "secondary": "#845238",
+                        "on-secondary-container": "#7a4a31",
+                        "on-primary-fixed-variant": "#474647",
+                        "on-secondary-fixed-variant": "#683b23",
+                        "primary": "#000000",
+                        "primary-fixed": "#e5e2e3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "section-gap": "120px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "button": ["Manrope"],
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "body-md": ["Manrope"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "headline-sm": ["Libre Caslon Text"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "label-caps": ["Manrope"],
+                        "body-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "button": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl dark:bg-inverse-surface/85 flex justify-between items-center px-margin-desktop h-20 w-full mx-auto">
+<div class="flex items-center gap-12">
+<a class="flex items-center" href="#">
+<img alt="Musterring Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKQMhcep-PlJY6SX5iEQmUb73HXkFzcVWf36otTZP0Qek2MaX8P8EMDLibko1xC1_wSmfk6xEbGjyYYzn9fnELts-LV7lxuzAjR1NabpFJqnBSpxNcKuwmH4o5p5hbv5SiDDP9tIJprxg2Tk-3l9pZP4PMTO4QGf8xBgZ2W6-nBaUYObkq6tv4WsI3GTOVHJ8yBi4ELvbi90wBE3-T9luCA6iB6XGbdSa_UALu9y-94CkPSqgrrNsqZ-vSWKBzHllsQodMIP4Jnng"/>
+</a>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Furniture</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Rooms</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Collections</a>
+<a class="font-button text-button uppercase tracking-widest text-primary border-b border-primary pb-1 transition-colors duration-300" href="#">Inspiration</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Design Services</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">search</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">favorite</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">language</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 font-button text-button uppercase tracking-widest hover:opacity-90 transition-all">
+                Find a Retailer
+            </button>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Visualization Header -->
+<section class="px-margin-desktop py-16 max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-end">
+<div class="md:col-span-7">
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest mb-4 block">Musterring Studio 2027</span>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-6">Room Composer</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        Experience precision German engineering in your own space. Use our high-fidelity composer to visualize furniture modules with architectural accuracy.
+                    </p>
+</div>
+<div class="md:col-span-5 flex justify-end gap-4">
+<button class="flex items-center gap-2 border border-outline-variant px-8 py-4 font-button text-button uppercase tracking-widest hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">photo_library</span>
+                        Shoppable Scenes
+                    </button>
+<button class="flex items-center gap-2 bg-secondary text-on-secondary px-8 py-4 font-button text-button uppercase tracking-widest hover:brightness-110 transition-all">
+<span class="material-symbols-outlined">upload</span>
+                        Upload Room Photo
+                    </button>
+</div>
+</div>
+</section>
+<!-- Composition Workspace -->
+<section class="px-margin-desktop pb-section-gap max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter h-[800px]">
+<!-- Asset Library Sidebar -->
+<aside class="md:col-span-3 bg-surface-container-low border-r border-surface-variant p-6 flex flex-col gap-8 overflow-y-auto spec-scroll">
+<div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase">Module Categories</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 bg-secondary text-on-secondary text-label-caps font-label-caps cursor-pointer">Seating</span>
+<span class="px-4 py-2 bg-surface-variant text-on-surface-variant text-label-caps font-label-caps cursor-pointer hover:bg-tertiary-fixed transition-colors">Storage</span>
+<span class="px-4 py-2 bg-surface-variant text-on-surface-variant text-label-caps font-label-caps cursor-pointer hover:bg-tertiary-fixed transition-colors">Lighting</span>
+<span class="px-4 py-2 bg-surface-variant text-on-surface-variant text-label-caps font-label-caps cursor-pointer hover:bg-tertiary-fixed transition-colors">Dining</span>
+</div>
+</div>
+<div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase">Musterring Q-Media Modules</h3>
+<div class="grid grid-cols-1 gap-4">
+<!-- Draggable Module 1 -->
+<div class="module-card bg-surface border border-surface-variant p-4 cursor-grab active:cursor-grabbing transition-transform hover:scale-[1.02]">
+<div class="aspect-square bg-surface-container mb-3 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="High-end minimalist charcoal grey leather modular sofa section from Musterring, isolated on a neutral studio background, 8k resolution architectural visualization." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6e0-c8dr3vMUERcxLlp02UzQBhh71NbMKHn1D2a-smhtmOYl6usZYp8jbgl58lZl-dV2nfDcHL2exEl64mDRGW5Ro4t3qvS4GZ7tHfExbLFDxhsM7DkqLLBvf9PzCfURWiyOS5AYb3taibA17XylWQdrsjmFFIHJ26PTOYfk-GST4d9vLYyKyO112_PqNyVWedHGqiA-lBI69fcTCcHp1ggyvH8BL-1VUZCoEu9KV_BRLRqEX1ASW2b7IbLMxqFkrSE_koQGr_QU"/>
+<div class="module-overlay absolute inset-0 bg-primary/5 opacity-0 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">drag_indicator</span>
+</div>
+</div>
+<p class="font-label-caps text-[10px] text-secondary mb-1">Q-MEDIA SYSTEM</p>
+<p class="font-button text-[12px] uppercase tracking-tight">Modular Sideboard Oak</p>
+<p class="font-body-md text-xs text-on-surface-variant mt-2">W: 120cm | D: 45cm</p>
+</div>
+<!-- Draggable Module 2 -->
+<div class="module-card bg-surface border border-surface-variant p-4 cursor-grab transition-transform hover:scale-[1.02]">
+<div class="aspect-square bg-surface-container mb-3 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Modern sculptural lounge chair by Musterring, featuring dark oak legs and light sand-colored fabric upholstery, high-end interior design product shot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHZVwneSHYbaK-Pw_2ftP9l4B21CaJLd_qNzuiC00H0GNjzxCI9fsGtv8SQpb4LW5WUS6CYK__CAhuabC-HZDTpsJ_2QnP2EjaF8FgPonGMKQ6JcWxgwTe8o_7JQVbMfy8vIN-oXS5I2cAMpPftf-kP3aung7LmUrwSExQmZ0QXvsEWI78Pul5ei9IHUsmq_bfTkrYasaOnUCGye9RbsWqWnP_pOAkv6wEGIda4ndZmcam-ouTxBcRSGASOnmfV8qBGiVJZO1vZL4"/>
+<div class="module-overlay absolute inset-0 bg-primary/5 opacity-0 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">drag_indicator</span>
+</div>
+</div>
+<p class="font-label-caps text-[10px] text-secondary mb-1">MR 2027 COLLECTION</p>
+<p class="font-button text-[12px] uppercase tracking-tight">Armchair Elements</p>
+<p class="font-body-md text-xs text-on-surface-variant mt-2">W: 85cm | D: 90cm</p>
+</div>
+<!-- Draggable Module 3 -->
+<div class="module-card bg-surface border border-surface-variant p-4 cursor-grab transition-transform hover:scale-[1.02]">
+<div class="aspect-square bg-surface-container mb-3 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Minimalist floating wall shelf unit from Musterring furniture collection, matte black finish with integrated LED warm lighting, luxury German home engineering aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBscvD3jwVfjGY64_PLQjPz7gv4vYfcjUok0yjta8-I8pifpDKJxtX_mUbVsbOf7AGseGTefr1ulJpxn1-gtEvJEpFCbrLURTvi44FSRHC56V_ebBI36aJP5gcobNbLvXfnJXIpFib8Au1n1aLP_veBu0Wq09JVUKkf6EfysAGEV6ha7FUJQKapxM97P9pj_I2oVnxTvT9x1a50vYZUxXUg8wbRspv5R-rOyV7GP2qIJWvGThUR6Nz6dpxb-U77IERUbOMulsKhXO8"/>
+<div class="module-overlay absolute inset-0 bg-primary/5 opacity-0 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">drag_indicator</span>
+</div>
+</div>
+<p class="font-label-caps text-[10px] text-secondary mb-1">WALL SYSTEMS</p>
+<p class="font-button text-[12px] uppercase tracking-tight">Floating Console</p>
+<p class="font-body-md text-xs text-on-surface-variant mt-2">W: 180cm | D: 30cm</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Canvas Area -->
+<div class="md:col-span-9 bg-surface-container relative overflow-hidden group">
+<!-- Background Canvas Image -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-90 transition-opacity duration-700 group-hover:opacity-100" data-alt="Spacious high-end modern living room with large floor-to-ceiling windows, polished concrete floors, and soft evening sunlight. The room is empty and minimalist, ready for virtual furniture placement, wide angle architectural lens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTonK_sueEIN--LSqB67pxDTX1P08hwlTjUyPUh733w70i50QBVy4aVNH5ES-7djG9jSF3pTPD3xWkxwcJ93DAZSwQixTRq_ZjEiQAWIsnwRoKdgodJ9awb8ohrM3Q0j66PQEvHXOszMCHr1AOK4R71Q87sJcTCjcIQchD4iGuOw73T_ZvKzNxUcH1oAbUFpOlzPKVKIXJyL3upnmoCOL3ctW0CiLpNkOs8IJc13e6cZGtOOVoccz5imx9JymU9bPz-izPHeza0AE"/>
+</div>
+<!-- Canvas Controls -->
+<div class="absolute top-6 left-6 right-6 flex justify-between items-start z-20">
+<div class="glass-panel bg-surface/85 px-4 py-2 flex items-center gap-4">
+<div class="flex items-center gap-2 border-r border-outline-variant pr-4">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">grid_on</span>
+<span class="text-label-caps font-label-caps uppercase text-[10px]">Grid: On</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">square_foot</span>
+<span class="text-label-caps font-label-caps uppercase text-[10px]">Snap: 10cm</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="glass-panel bg-surface/85 p-2 flex flex-col gap-4">
+<button class="p-2 hover:bg-surface-variant transition-colors group/btn" title="View in 3D">
+<span class="material-symbols-outlined text-on-surface group-hover/btn:scale-110 transition-transform">3d_rotation</span>
+</button>
+<button class="p-2 hover:bg-surface-variant transition-colors group/btn" title="AR Placement">
+<span class="material-symbols-outlined text-on-surface group-hover/btn:scale-110 transition-transform">view_in_ar</span>
+</button>
+<hr class="border-outline-variant"/>
+<button class="p-2 hover:bg-surface-variant transition-colors group/btn" title="Reset Canvas">
+<span class="material-symbols-outlined text-on-surface group-hover/btn:scale-110 transition-transform">refresh</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Draggable Elements Placeholder (Simulated) -->
+<div class="absolute bottom-32 left-1/2 -translate-x-1/2 z-10 w-[400px] group/module">
+<div class="relative canvas-shadow border-2 border-transparent hover:border-secondary transition-all cursor-move p-2 bg-transparent">
+<img class="w-full h-auto drop-shadow-2xl" data-alt="A premium Musterring modular sofa in deep charcoal textile, perfectly angled for a corner placement in a living room, photorealistic 3D render with soft shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFb5srn0vK5u8mNUZRCMEGoRpSC6JWS1c48MXgX8TnAdEZL1MdUYApVEbU6pOZ2BFc9J5X_ExfCLm7QKGKfetSgSWg3OOonPc9hJyYhv_MH1QT2ggDtW6lloGGR3aTeWnu_S-nv3W4p56pjrrWSknJJVZsNWtNFVRbje-KpcWOWoN2IIqbpV9Y2s_wQTlCMmsNmS5GFyR7zt5R-QtsJlxgZ7JiXbNBt5y6KhbUOvYLpiJtgxn4b71jfOIFgervFqCk-Ho2iMWJNKw"/>
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover/module:opacity-100 transition-opacity bg-primary text-on-primary px-3 py-1 text-[10px] font-label-caps uppercase whitespace-nowrap">
+                                MR-9000 Modular Element
+                            </div>
+</div>
+</div>
+<!-- Action Bar -->
+<div class="absolute bottom-6 left-6 right-6 z-20 flex justify-between items-center">
+<div class="glass-panel bg-surface/85 px-6 py-4 flex items-center gap-8">
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-secondary uppercase tracking-tighter">Total Items</span>
+<span class="text-headline-sm font-headline-sm">03 Modules</span>
+</div>
+<div class="w-px h-8 bg-outline-variant"></div>
+<div class="flex flex-col">
+<span class="text-[10px] font-label-caps text-secondary uppercase tracking-tighter">Current Est.</span>
+<span class="text-headline-sm font-headline-sm">€ 5.420,00</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-10 py-5 font-button text-button uppercase tracking-widest flex items-center gap-3 hover:bg-on-primary-container transition-all shadow-xl" onclick="toggleDrawer()">
+<span class="material-symbols-outlined">send</span>
+                            Send Concept to Retailer
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Specs / Tech Detail -->
+<section class="bg-surface-container-high py-section-gap px-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="md:col-span-4">
+<h2 class="font-display-lg text-headline-md mb-8">Engineering Specs</h2>
+<p class="font-body-md text-on-surface-variant mb-12">Every Musterring component is built with millimeter precision and a 5-year guarantee as standard. Our modules are designed for longevity and environmental responsibility.</p>
+</div>
+<div class="md:col-span-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+<div class="border-b border-outline-variant pb-4 flex justify-between items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Material Grade</span>
+<span class="font-body-md font-bold">FSC Solid Oak / Aniline Leather</span>
+</div>
+<div class="border-b border-outline-variant pb-4 flex justify-between items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Load Capacity</span>
+<span class="font-body-md font-bold">Up to 80kg per Module</span>
+</div>
+<div class="border-b border-outline-variant pb-4 flex justify-between items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Manufacturing</span>
+<span class="font-body-md font-bold">Wiedenbrück, Germany</span>
+</div>
+<div class="border-b border-outline-variant pb-4 flex justify-between items-end">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Emission Class</span>
+<span class="font-body-md font-bold">Golden M Certification</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- The "Lead" Drawer (Hidden by Default) -->
+<div class="fixed inset-0 z-[100] pointer-events-none overflow-hidden" id="retailer-drawer">
+<div class="absolute inset-0 bg-primary/20 opacity-0 transition-opacity duration-500 pointer-events-none" id="drawer-overlay" onclick="toggleDrawer()"></div>
+<div class="absolute right-0 top-0 h-full w-full max-w-lg glass-panel bg-surface/95 border-l border-surface-variant translate-x-full transition-transform duration-500 ease-in-out pointer-events-auto p-12 flex flex-col" id="drawer-panel">
+<div class="flex justify-between items-center mb-12">
+<h2 class="font-display-lg text-headline-md">Retailer Consultation</h2>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" onclick="toggleDrawer()">close</button>
+</div>
+<p class="font-body-md text-on-surface-variant mb-8">Complete your room concept. Your visualization, module list, and technical requirements will be shared with your local authorized Musterring partner for a final quote and logistics planning.</p>
+<form class="space-y-8">
+<div>
+<label class="font-label-caps text-label-caps uppercase block mb-2">Full Name</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all" placeholder="ALEXANDER VON SCHMIDT" type="text"/>
+</div>
+<div>
+<label class="font-label-caps text-label-caps uppercase block mb-2">Email Address</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all" placeholder="ALEXANDER@DESIGN.DE" type="email"/>
+</div>
+<div>
+<label class="font-label-caps text-label-caps uppercase block mb-2">Project Zip Code</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline-variant focus:ring-0 focus:border-primary px-0 py-2 transition-all" placeholder="33378" type="text"/>
+</div>
+<div class="pt-8">
+<button class="w-full bg-secondary text-on-secondary px-8 py-5 font-button text-button uppercase tracking-widest hover:brightness-110 transition-all flex justify-center items-center gap-3 shadow-xl" type="submit">
+                        Schedule Design Consultation
+                    </button>
+</div>
+</form>
+<div class="mt-auto pt-12 text-center">
+<span class="text-label-caps font-label-caps text-on-surface-variant uppercase block mb-4">Secured by</span>
+<img alt="Musterring Logo" class="h-6 mx-auto opacity-50 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKQMhcep-PlJY6SX5iEQmUb73HXkFzcVWf36otTZP0Qek2MaX8P8EMDLibko1xC1_wSmfk6xEbGjyYYzn9fnELts-LV7lxuzAjR1NabpFJqnBSpxNcKuwmH4o5p5hbv5SiDDP9tIJprxg2Tk-3l9pZP4PMTO4QGf8xBgZ2W6-nBaUYObkq6tv4WsI3GTOVHJ8yBi4ELvbi90wBE3-T9luCA6iB6XGbdSa_UALu9y-94CkPSqgrrNsqZ-vSWKBzHllsQodMIP4Jnng"/>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-high dark:bg-inverse-surface py-section-gap px-margin-desktop grid grid-cols-12 gap-gutter w-full mx-auto">
+<div class="col-span-12 md:col-span-4">
+<span class="font-display-lg text-headline-md text-primary dark:text-inverse-primary mb-8 block">Musterring</span>
+<p class="font-body-md text-on-surface-variant dark:text-surface-variant max-w-xs mb-8">
+                Defining the standard of German interior engineering since 1938. Quality you can live with.
+            </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">qr_code_2</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">photo_camera</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">movie</span>
+</div>
+</div>
+<div class="col-span-6 md:col-span-2">
+<h4 class="font-label-caps text-label-caps text-primary uppercase mb-6">Explore</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Brand Story</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Retailer Finder</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Sustainability</a></li>
+</ul>
+</div>
+<div class="col-span-6 md:col-span-2">
+<h4 class="font-label-caps text-label-caps text-primary uppercase mb-6">Service</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">5-Year Guarantee</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Care Instructions</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Newsletter</a></li>
+</ul>
+</div>
+<div class="col-span-12 md:col-span-4">
+<h4 class="font-label-caps text-label-caps text-primary uppercase mb-6">Stay Inspired</h4>
+<div class="flex">
+<input class="bg-surface px-4 py-3 border border-outline-variant flex-1 focus:ring-0 focus:border-secondary" placeholder="Your Email" type="email"/>
+<button class="bg-primary text-on-primary px-6 py-3 font-button text-button uppercase">Join</button>
+</div>
+<p class="text-[10px] mt-4 text-on-surface-variant">By subscribing, you agree to our Privacy Policy and Terms of Service.</p>
+</div>
+<div class="col-span-12 pt-24 border-t border-surface-variant flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="font-body-md text-xs text-on-surface-variant">© 2027 Musterring. German Engineering for Living.</p>
+<div class="flex gap-8">
+<a class="text-xs font-label-caps text-on-surface-variant uppercase hover:text-primary transition-colors" href="#">Legal Notice</a>
+<a class="text-xs font-label-caps text-on-surface-variant uppercase hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="text-xs font-label-caps text-on-surface-variant uppercase hover:text-primary transition-colors" href="#">Cookies</a>
+</div>
+</div>
+</footer>
+<script>
+        function toggleDrawer() {
+            const panel = document.getElementById('drawer-panel');
+            const overlay = document.getElementById('drawer-overlay');
+            const drawer = document.getElementById('retailer-drawer');
+
+            if (panel.classList.contains('translate-x-full')) {
+                // Open
+                drawer.classList.remove('pointer-events-none');
+                panel.classList.remove('translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100');
+            } else {
+                // Close
+                panel.classList.add('translate-x-full');
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    drawer.classList.add('pointer-events-none');
+                    overlay.classList.add('pointer-events-none');
+                }, 500);
+            }
+        }
+    </script>
+</body></html>

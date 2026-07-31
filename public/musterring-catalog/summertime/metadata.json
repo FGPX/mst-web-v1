@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/summertime",
+  "title": "Summertime",
+  "importedAt": "2026-07-29T07:51:55.707Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/summertime/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/9/csm_gartenmoebel-summertime-gartentisch-beige-stuhl-beige-musterring_23cb2b9fd1.jpg",
+      "bytes": 36179,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/summertime/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/2/csm_gartenmoebel-summertime-gartentisch-grau-stuehle-grau-musterring_0aae620924.jpg",
+      "bytes": 12400,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/summertime/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/a/csm_gartenmoebel-summertime-beistelltisch-schwarz-musterring_f716178e1a.jpg",
+      "bytes": 3776,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/summertime/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/4/csm_gartenmoebel-summertime-stuhl-grau-musterring_e6f631063b.jpg",
+      "bytes": 6747,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/summertime/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/0/csm_gartenmoebel-summertime-loungesessel-grau-beistelltisch-grau-musterring_5187e2ca1f.jpg",
+      "bytes": 14262,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/summertime/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/0/csm_gartenmoebel-summertime-esstisch-grau-stuehle-musterring_c0d1363d0c.jpg",
+      "bytes": 13223,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/summertime/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/1/csm_gartenmoebel-summertime-stuhl-gelb-gruen-musterring_cb764a3d67.jpg",
+      "bytes": 12005,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/summertime/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/5/csm_gartenmoebel-summertime-stuhl-gelb-musterring_190201856e.jpg",
+      "bytes": 4398,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

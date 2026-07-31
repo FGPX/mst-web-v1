@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kanto",
+  "title": "Kanto",
+  "importedAt": "2026-07-29T07:50:40.548Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/kanto/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/5/csm_wohnmoebel-kanto-asteiche-musterring_01_06dc7855c8.jpg",
+      "bytes": 27214,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kanto/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/7/csm_wohnzimmer-kanto-highboard-asteiche-lack-graphit-musterring_0f552be085.jpg",
+      "bytes": 22573,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kanto/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/8/csm_wohnmoebel-kanto-asteiche-musterring_49c61e8dca.jpg",
+      "bytes": 11398,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kanto/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/1/csm_wohnmoebel-kanto-asteiche-musterring-03_2b8b39a6ce.jpg",
+      "bytes": 14841,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kanto/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_wohnmoebel-kanto-asteiche-musterring-02_5116868345.jpg",
+      "bytes": 15549,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kanto/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/c/csm_wohnmoebel-kanto-asteiche-musterring-04_50fadd39a6.jpg",
+      "bytes": 7054,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kanto/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/5/csm_vitrine-kanto-asteiche-musterring-01_9758c8c4bb.jpg",
+      "bytes": 15144,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/kanto/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_wohnmoebel-kanto-lack-mint-eiche-musterring_26f6bd1c14.jpg",
+      "bytes": 11657,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

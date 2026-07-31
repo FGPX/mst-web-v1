@@ -1,0 +1,46 @@
+{
+  "page": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/justb-od100",
+  "title": "JUSTB! OD100",
+  "importedAt": "2026-07-29T07:51:58.135Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/justb-od100/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-od100/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_justb-outdoorm%C3%B6bel-od100-tisch-stuhl-musterring-01_3560205695.jpg",
+      "bytes": 32428,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-od100/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/6/csm_justb-outdoorm%C3%B6bel-od100-tisch-stuhl-musterring_89953a8e69.jpg",
+      "bytes": 11729,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-od100/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/1/csm_justb-outdoorm%C3%B6bel-od100-ivory-musterring_64994667ae.jpg",
+      "bytes": 22718,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-od100/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/4/csm_justb-outdoorm%C3%B6bel-od100-stuhl-ivory-musterring_06e31bb0b7.jpg",
+      "bytes": 6430,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-od100/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/f/csm_justb-outdoorm%C3%B6bel-od100-teakholz-musterring_acdfe82fbe.jpg",
+      "bytes": 11499,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

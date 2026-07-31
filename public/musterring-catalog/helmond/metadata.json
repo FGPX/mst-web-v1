@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/helmond",
+  "title": "Helmond",
+  "importedAt": "2026-07-29T07:51:32.733Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/helmond/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/d/csm_esszimmer-helmond-leder-stoff-wildeiche-musterring_1b4e51330f.jpg",
+      "bytes": 23553,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/helmond/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/8/csm_esszimmer-helmond-leder-lemon-wildeiche-moor-musterring_6e31447f79.jpg",
+      "bytes": 10179,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/helmond/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/d/csm_esszimmer-helmond-esstisch-wildeiche-moor-musterring_03f9613322.jpg",
+      "bytes": 8812,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/helmond/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_esszimmer-helmond-echtleder-stuhl-lemon-musterring_8418a008fc.jpg",
+      "bytes": 6695,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/helmond/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/e/csm_esszimmer-helmond-esstisch-wildeiche-musterring_84efe6b4a8.jpg",
+      "bytes": 6439,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/helmond/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/5/csm_esszimmer-helmond-esstisch-stuhl-eiche-leder-musterring_12edc603d3.jpg",
+      "bytes": 10522,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/helmond/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/c/csm_esszimmer-helmond-stuhl-leder-smog-musterring_0bb2fa1cb2.jpg",
+      "bytes": 6295,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/helmond/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_esszimmer-helmond-stuhl-leder-smog-dreh-moover-musterring_5b4474f863.jpg",
+      "bytes": 6257,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

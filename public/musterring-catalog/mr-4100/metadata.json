@@ -1,0 +1,16 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4100",
+  "title": "MR 4100",
+  "importedAt": "2026-07-29T07:50:16.414Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-4100/image-01.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/8/csm_MR11780_A03_MR4100_Online_Freisteller_54bba9b701.png",
+      "bytes": 1067694,
+      "contentType": "image/png"
+    }
+  ]
+}

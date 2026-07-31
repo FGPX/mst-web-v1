@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-mr-300",
+  "title": "Translate To En Mr 300",
+  "importedAt": "2026-07-29T07:49:53.236Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-300/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_sofa-mr300-leder-beige-relaxfunktion-musterring_7f23190090.jpg",
+      "bytes": 24759,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-300/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/4/csm_sofa_mr300_stoff_grau_relaxfunktion_musterring_90b8ee128f.jpg",
+      "bytes": 9945,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-300/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/2/csm_sofa_mr300_stoff_grau_handschalter_musterring_6f1e3f1fce.jpg",
+      "bytes": 9121,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-300/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/0/csm_sofa_mr300_stoff_grau_tischelement_musterring_4314171141.jpg",
+      "bytes": 13804,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/translate-to-en-mr-300/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/0/csm_sofa_mr300_stoff_grau_fu%C3%9Fteil_musterring_e779e3a881.jpg",
+      "bytes": 5667,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

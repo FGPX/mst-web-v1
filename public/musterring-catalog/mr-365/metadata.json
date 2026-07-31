@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-365",
+  "title": "MR 365",
+  "importedAt": "2026-07-29T07:49:57.250Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-365/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/c/csm_MR11507_B_MR365_Famous_nature_-_15_3f3b2bdd18.jpg",
+      "bytes": 27274,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-365/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/6/csm_MR11507_07_MR365_Famous_nature_-_15_2ef9eb3b95.jpg",
+      "bytes": 8624,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-365/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/0/csm_Sofa-Sessel-MR_365-Eckgruppe_4797-manuelle_Relaxfunktion-Stauraum-Relaxsessel-MR_367-Stoff-Yelda_natur-Echtleder-Soft_Line-light_grey-Metallfu%C3%9F-chrom-beschichtet-frontal-Musterring_ae5675b849.jpg",
+      "bytes": 12399,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-365/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/d/csm_Sofa-Sessel-MR_365-Eckgruppe_4797-manuelle-Relaxfunktion-Stauraum-Relaxsessel_MR_367-Stoff-Yelda_natur-Echtleder-Soft_Line-light_grey-Metallfu%C3%9F-chrom-beschichtet-frontal-Musterring_468a3780e9.jpg",
+      "bytes": 6205,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-365/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/f/csm_Sofa-Sessel-MR_365-Eckgruppe_4797-Stauraum-Echtleder-Soft_line-light_grey-Detail-Musterring_73c179e544.jpg",
+      "bytes": 8993,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-365/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/8/csm_Sofa-Sessel-MR_365-Eckgruppe_4797-manuelle_Relaxfunktion-Stauraum-Relaxsessel-MR_367-Stoff-Yelda_natur-Echtleder-Soft_Line-light_grey-Metallfu%C3%9F-chrom-beschichtet-Musterring_145ea407d3.jpg",
+      "bytes": 9180,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-365/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_365-Sofa_3002-3_sitzig-Armlehne-Metallfu%C3%9F-chrom-beschichtet-Stoff-hellbeige-freigestellt-Musterring_98fcd6f5e2.jpg",
+      "bytes": 3931,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-365/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/0/csm_Sofa-Sessel-MR_365-Sofa_3002-3_sitzig-Armlehne-Metallfu%C3%9F-chrom-beschichtet-Stoff-hellbeige-seitlich-Musterring_7c526f8224.jpg",
+      "bytes": 13539,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

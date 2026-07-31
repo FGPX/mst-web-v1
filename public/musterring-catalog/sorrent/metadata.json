@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/sorrent",
+  "title": "Sorrent",
+  "importedAt": "2026-07-29T07:51:14.001Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/sorrent/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/4/csm_schlafzimmer_sorrent_eiche_leder_anthrazit_musterring_02_d12a64f63a.jpg",
+      "bytes": 24615,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/sorrent/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/a/csm_schlafzimmer_sorrent_eiche_leder_anthrazit_musterring_03_67f8102049.jpg",
+      "bytes": 9248,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/sorrent/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/e/csm_schlafzimmer_sorrent_eiche_musterring_02_f4c5210176.jpg",
+      "bytes": 8374,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/sorrent/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/1/csm_schlafzimmer_sorrent_eiche_musterring_01_1c95ed46ad.jpg",
+      "bytes": 9008,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/sorrent/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/8/csm_schlafzimmer_sorrent_eiche_leder_anthrazit_musterring_01_10a24fb614.jpg",
+      "bytes": 10843,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/sorrent/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/1/csm_schlafzimmer_sorrent_eiche_leder_anthrazit_musterring_06_9ce4b84d13.jpg",
+      "bytes": 9851,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/sorrent/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/2/csm_schlafzimmer_sorrent_eiche_musterring_03_63eaf1c657.jpg",
+      "bytes": 10539,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/sorrent/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/5/csm_schlafzimmer_sorrent_eiche_leder_anthrazit_musterring_05_ab34828e79.jpg",
+      "bytes": 10009,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

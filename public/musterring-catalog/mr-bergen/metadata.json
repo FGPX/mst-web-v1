@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/home-accessories/carpets/mr-bergen",
+  "title": "MR BERGEN",
+  "importedAt": "2026-07-29T07:52:03.559Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-bergen/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/9/csm_teppich-mr-bergen-joris-stoff-wei%C3%9F-musterring-02_e933cb0978.jpg",
+      "bytes": 24028,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-bergen/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/8/csm_MR11646_A_MRBergen_Donna_Print_-_15_6d1772df9d.jpg",
+      "bytes": 10086,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-bergen/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/9/csm_MR11646_005_MRBergen_Donna_Print_-_15_6cf673c6b8.jpg",
+      "bytes": 16560,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-bergen/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/e/csm_teppich-mr-bergen-donna-schwarz-beige-musterring_959b73477a.jpg",
+      "bytes": 22167,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-bergen/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/1/csm_MR11646_B_MRBergen_Donna_Print_-_15_d4440e4244.jpg",
+      "bytes": 11015,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-bergen/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/2/csm_teppich-mr-bergen-livina-stoff-silber-musterring-02_cd1e8c1b5c.jpg",
+      "bytes": 9049,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-bergen/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/4/csm_teppich-mr-bergen-livina-stoff-silber-musterring-01_ceab2065d4.jpg",
+      "bytes": 9105,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-bergen/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/9/csm_teppich-mr-bergen-livina-stoff-silber-musterring-03_c6b3ac11cc.jpg",
+      "bytes": 8160,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

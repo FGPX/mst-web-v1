@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9420",
+  "title": "MR 9420",
+  "importedAt": "2026-07-27T14:08:55.159Z",
+  "demoData": true,
+  "notLicensedForProduction": true,
+  "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+  "assets": [
+    {
+      "file": "/test-assets/musterring/mr-9420/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-9420/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-9420/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/6/csm_Sofa-Sessel-MR_9420-Eckgruppe-315BT330-Beistelltisch-BAR-Einzelsessel-Stoff-Gr%C3%BCn-Escana_Anthrazit-Metall-schwarz-Musterring_38368ed9a8.jpg",
+      "bytes": 24902,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-9420/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-offener_Abschluss_links-Modul-Free-Corner-Pure-Longchair-Stoff-Rivano_Denim-Sambia_Stone-Ravenna_Perle-Diva_Stone-Rivano_Perle-Rivoli_Perle-Musterring_0a3ecae4b3.jpg",
+      "bytes": 9870,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-9420/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-offener_Abschluss_links-Modul-Free-Corner-Pure-Longchair-Stoff-Rivano_Denim-Sambia_Stone-Ravenna_Perle-Diva_Stone-Rivano_Perle-Rivoli_Perle-Musterring_db8377fad6.jpg",
+      "bytes": 25063,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-9420/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_Fu%C3%9Fst%C3%BCtze-R%C3%BCckenlehne-Musterring_e207891f05.jpg",
+      "bytes": 8291,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-9420/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_Fu%C3%9Fst%C3%BCtze-R%C3%BCckenlehne-Musterring_1a9769e565.jpg",
+      "bytes": 13517,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/mr-9420/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-R%C3%BCckenlehne-Musterring_ea98280794.jpg",
+      "bytes": 13037,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bathroom/bathroom-series/riana",
+  "title": "Riana",
+  "importedAt": "2026-07-29T07:51:52.636Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/riana/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/b/csm_badezimmer-riana-eiche-nachbildung-griffe-schwarz-matt-musterring_76faea7ec6.jpg",
+      "bytes": 26770,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/riana/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/f/csm_badezimmer-riana-eiche-nachbildung-griffe-schwarz-matt-musterring-01_c59301c509.jpg",
+      "bytes": 9152,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/riana/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_badezimmer-riana-waschtisch-duratek-granit-schwarz-matt-musterring_864a3befc1.jpg",
+      "bytes": 10188,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/riana/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/e/csm_badezimmer_riana-innenleben-eiche-nachbildung-musterring_67d0aa9b50.jpg",
+      "bytes": 15706,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/riana/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_badezimmer-riana-spiegelschrank-eiche-nachbildung-musterring_c2bd1a5f0a.jpg",
+      "bytes": 8879,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/riana/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/e/csm_badezimmer-riana-schwarz-matt-eiche-nachbildung-musterring_1294b7487e.jpg",
+      "bytes": 7435,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/riana/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/8/csm_badezimmer-riana-waschtisch-schwarz-matt-eiche-nachbildung-musterring_258ce80dbf.jpg",
+      "bytes": 10335,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/riana/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/6/csm_badezimmer-riana-h%C3%A4ngebeim%C3%B6bel-korpus-schwarz-matt-front-eiche-nachbildung-musterring_97ca7fc71b.jpg",
+      "bytes": 10714,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

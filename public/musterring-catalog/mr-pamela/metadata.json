@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-pamela",
+  "title": "MR PAMELA",
+  "importedAt": "2026-07-29T07:49:37.677Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-pamela/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/3/5/csm_MR11787_A_Pamela_Print.tif_09258cf9ee.jpg",
+      "bytes": 21490,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-pamela/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/d/csm_sofa-sitzsack-mr-pamela-stoff-cord-beige-musterring_f46bde5c22.jpg",
+      "bytes": 8679,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-pamela/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_sofa-hocker-mr-pamela-stoff-cord-sand-musterring-01_7b72440b10.jpg",
+      "bytes": 4114,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-pamela/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/2/csm_sofa-hocker-mr-pamela-leder-hellbraun-beige-gelb-musterring_085f375e5b.jpg",
+      "bytes": 11102,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-pamela/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/8/csm_sofa-sitzsack-mr-pamela-stoff-cord-sand-musterring_1f85e9d726.jpg",
+      "bytes": 3518,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/picara",
+  "title": "Picara",
+  "importedAt": "2026-07-29T07:51:43.159Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/picara/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/c/csm_esszimmer-picara-esstisch-wildeiche-stuhl-stoff-leder-leger-musterring_f572044561.jpg",
+      "bytes": 28792,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/picara/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/b/csm_esszimmer-picara-esstisch-wildeiche-musterring_fd1c953955.jpg",
+      "bytes": 16522,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/picara/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_esszimmer-picara-stoff-hugo-mustard-musterring_11f09c4cd7.jpg",
+      "bytes": 12415,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/picara/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/e/csm_esszimmer-picara-esstisch-wildeiche-stuhl-stoff-musterring_5dc6f79f12.jpg",
+      "bytes": 11948,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/picara/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_esszimmer-picara-stuhl-tisch-stoff-eiche-grey-taupe-musterring_22a5d436b1.jpg",
+      "bytes": 11786,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/picara/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/a/csm_esszimmer-picara-eiche-mosaik-musterring_db5371c408.jpg",
+      "bytes": 17787,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/picara/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/3/csm_esszimmer-picara-eiche-mosaik-gestellauszug-musterring_a8ab38f598.jpg",
+      "bytes": 12456,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/picara/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_esszimmer-picara-stuhl-polster-legere-taupe-musterring_497d986b7c.jpg",
+      "bytes": 17512,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4820",
+  "title": "MR 4820",
+  "importedAt": "2026-07-29T07:50:20.667Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-4820/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_MR11679_A_MR4820_Online_-_15_a99c1eb5c8.jpg",
+      "bytes": 21725,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4820/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/5/csm_ecksofa-mr4820-stoff-matrix-oliv-hockerbank-musterring_5dcf743c83.jpg",
+      "bytes": 8748,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4820/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/a/csm_ecksofa-mr4820-stoff-matrix-olive-detailbild-fu%C3%9Fvariante-musterring_4a5a459d15.jpg",
+      "bytes": 8344,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4820/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/4/csm_ecksofa-mr4820-stoff-matrix-oliv-fu%C3%9Fvariante-musterring_9bcb900185.jpg",
+      "bytes": 11482,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-4820/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/7/csm_ecksofa-mr4820-stoff-matrix-oliv-detailbild-musterring_e36d9917b6.jpg",
+      "bytes": 6296,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

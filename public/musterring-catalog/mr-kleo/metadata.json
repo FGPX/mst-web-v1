@@ -1,0 +1,22 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-kleo",
+  "title": "MR KLEO",
+  "importedAt": "2026-07-29T07:49:32.220Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-kleo/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_sofas-sessel-mr-kleo-stoff-gelb-metallfu%C3%9F-schwarz-musterring_95ad5b80b6.jpg",
+      "bytes": 23459,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-kleo/image-02.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/6/csm_sofas-sessel-mr-kleo-stoff-gr%C3%BCn-metallfu%C3%9F-schwarz-musterring_9f44233a3a.png",
+      "bytes": 1046620,
+      "contentType": "image/png"
+    }
+  ]
+}

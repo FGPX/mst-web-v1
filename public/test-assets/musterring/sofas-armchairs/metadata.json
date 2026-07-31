@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs",
+  "title": "Sofas and armchairs",
+  "importedAt": "2026-07-27T14:08:52.606Z",
+  "demoData": true,
+  "notLicensedForProduction": true,
+  "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+  "assets": [
+    {
+      "file": "/test-assets/musterring/sofas-armchairs/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/sofas-armchairs/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/sofas-armchairs/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_sofa-justb-pm100-stoff-wei%C3%9F-musterring_b0b9a62ef5.jpg",
+      "bytes": 43438,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/sofas-armchairs/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/0/csm_sofa-justb-pm200-stoff-creme-musterring_f20c6b3169.jpg",
+      "bytes": 31369,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/sofas-armchairs/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_sofas-sessel-mr-kleo-stoff-gelb-metallfu%C3%9F-schwarz-musterring_9c48314471.jpg",
+      "bytes": 35664,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/sofas-armchairs/image-06.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/3/csm_MR11781_A01_MRAlena_Online_Grauer_Hintergrund_433c228ea9.png",
+      "bytes": 59305,
+      "contentType": "image/png"
+    },
+    {
+      "file": "/test-assets/musterring/sofas-armchairs/image-07.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_Vorlage_Freisteller_Grauer_Hintergrund_9edbce7671.png",
+      "bytes": 54015,
+      "contentType": "image/png"
+    },
+    {
+      "file": "/test-assets/musterring/sofas-armchairs/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/5/csm_MR11648_C_MRLucia_Print_-_15_dfa7193f99.jpg",
+      "bytes": 37458,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

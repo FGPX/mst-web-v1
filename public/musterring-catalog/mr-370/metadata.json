@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-370",
+  "title": "MR 370",
+  "importedAt": "2026-07-29T07:49:58.809Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-370/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/4/csm_sofa-mr370-stoff-grau-musterring_b676213da5.jpg",
+      "bytes": 26908,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-370/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/0/csm_sofa-mr370-stoff-grau-ecksofa-musterring_3a77cadf08.jpg",
+      "bytes": 9047,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-370/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_sofa-mr370-stoff-grau-fu%C3%9Fstuetze-musterring_2e0830c385.jpg",
+      "bytes": 9894,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-370/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_sofa-mr370-stoff-grau-ecksofa-musterring-01_8c580ec7f7.jpg",
+      "bytes": 12531,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-370/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/3/csm_sofa-mr370-stoff-grau-armlehne-musterring_f6d254c40d.jpg",
+      "bytes": 7764,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-370/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/6/csm_sofa-mr370-stoff-gelb-ecksofa-musterring_6645ae9517.jpg",
+      "bytes": 10802,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-370/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/3/csm_sofa-mr370-stoff-gelb-ecksofa-musterring-01_63a7c78d0c.jpg",
+      "bytes": 11659,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-370/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/0/csm_sofa-mr370-stoff-gelb-kopfstuetze-musterring_003b1119d4.jpg",
+      "bytes": 13642,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

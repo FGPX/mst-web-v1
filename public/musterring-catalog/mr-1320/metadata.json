@@ -1,0 +1,40 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1320",
+  "title": "MR 1320",
+  "importedAt": "2026-07-29T07:50:02.452Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-1320/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/9/csm_ecksofa-mr1320-leder-blaugrau-musterring_9b283d93aa.jpg",
+      "bytes": 24426,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1320/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/e/csm_ecksofa-mr1320-leder-blaugrau-fu%C3%9Fablage-detailbild-musterring_669402d5d1.jpg",
+      "bytes": 8225,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1320/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/e/csm_ecksofa-mr1320-leder-blaugrau-musterring-01_4ef1d591d3.jpg",
+      "bytes": 13469,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1320/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/5/csm_ecksofa-mr1320-leder-blaugrau-fu%C3%9Fvariante-detailbild-musterring_393efc6c1c.jpg",
+      "bytes": 10990,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-1320/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/5/csm_ecksofa-mr1320-leder-blaugrau-rueckenlehne-detailbild-musterring_8363542dcf.jpg",
+      "bytes": 7750,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

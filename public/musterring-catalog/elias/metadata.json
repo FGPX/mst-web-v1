@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/beds/elias",
+  "title": "Elias",
+  "importedAt": "2026-07-29T07:51:21.520Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/elias/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/f/csm_schlafzimmer-elias-boxspringbett-stoff-creme-kissen-stoff-hellgrau-musterring_f1212a8845.jpg",
+      "bytes": 23547,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/elias/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/d/csm_schlafzimmer-elias-boxspringbett-stoff-creme-freigestellt-musterring_f70e3eccca.jpg",
+      "bytes": 11066,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/elias/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/7/csm_MR11552_A_001_Elias_Print_-_15_4f12add644.jpg",
+      "bytes": 8939,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/elias/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/6/csm_MR11552_003_Elias_Mood_Print_-_15_92d4eabf96.jpg",
+      "bytes": 11380,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/elias/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_MR11552_014_Elias_Mood_Print_-_15_878df8c544.jpg",
+      "bytes": 13374,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/elias/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_MR11552_001_Elias_Print_-_15_a2c331f804.jpg",
+      "bytes": 7627,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/elias/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/c/csm_schlafzimmer-elias-boxspringbett-mit-aliga-kommode-S4247-lack-kristall-grau-matt-musterring_78c73dd451.jpg",
+      "bytes": 8678,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/elias/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/c/csm_schlafzimmer-elias-boxspringbett-detail-bettkopfteil-musterring_a2603150c0.jpg",
+      "bytes": 7732,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

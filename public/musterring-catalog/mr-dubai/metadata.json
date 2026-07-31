@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/beds/mr-dubai",
+  "title": "MR DUBAI",
+  "importedAt": "2026-07-29T07:51:18.872Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-dubai/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_schlafzimmer-dubai-boxspringbett-stoff-dunkelgrau-musterring_5f31ce18bb.jpg",
+      "bytes": 24282,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-dubai/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_schlafzimmer-dubai-polsterbett-stoff-beige-musterring_b514a2ebd0.jpg",
+      "bytes": 8999,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-dubai/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/7/csm_schlafzimmer-dubai-polsterbett-stoff-beige-fu%C3%9Fgestell-musterring_3ec22e90df.jpg",
+      "bytes": 6074,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-dubai/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/d/csm_schlafzimmer-dubai-polsterbett-stoff-beige-usb-anschluss-musterring_d01563354b.jpg",
+      "bytes": 4106,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-dubai/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/2/csm_schlafzimmer-dubai-polsterbett-stoff-beige-kopfteil-musterring_010d563ef7.jpg",
+      "bytes": 5184,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-dubai/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/c/csm_schlafzimmer-dubai-boxspringbett-stoff-rot-kopfteil-musterring_2043fbe3e7.jpg",
+      "bytes": 8775,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-dubai/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/4/csm_schlafzimmer-dubai-stoff-rot-fu%C3%9Fteil-musterring_233ee0bc01.jpg",
+      "bytes": 6756,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-dubai/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/a/csm_schlafzimmer-dubai-boxspringbett-stoff-rot-lampe-musterring_f365111ccd.jpg",
+      "bytes": 8094,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

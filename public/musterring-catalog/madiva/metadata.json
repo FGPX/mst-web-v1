@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/madiva",
+  "title": "Madiva",
+  "importedAt": "2026-07-29T07:51:08.762Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/madiva/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/f/csm_schlafzimmer-madiva-vorschlag-balkeneiche-furniert-absetzung-lack-wei%C3%9F-musterring_f9d21cd7b4.jpg",
+      "bytes": 25476,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/madiva/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_schlafzimmer-madiva-kopfteil-doppelbett-mit-lisenen-anthrazit-led-beleuchtung-balkeneiche-furniert-detail-musterring_59656d1a25.jpg",
+      "bytes": 8880,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/madiva/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/6/csm_schlafzimmer-madiva-kopfteil-doppelbett-mit-lisenen-anthrazit-led-beleuchtung-balkeneiche-furniert-musterring_ce21f9c855.jpg",
+      "bytes": 13134,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/madiva/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/d/csm_schlafzimmer-madiva-dreht%C3%BCrenschrank-bauchbinde-mit-lisenen-anthrazit-balkeneiche-furniert-absetzung-lack-wei%C3%9F-detail-musterring_e9f70d8f20.jpg",
+      "bytes": 7412,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/madiva/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/b/csm_schlafzimmer-madiva-bett-fu%C3%9Fteil-mit-kufe-mit-lisenen-anthrazit-detail-musterring_255dd35086.jpg",
+      "bytes": 9870,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/madiva/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/2/csm_schlafzimmer-madiva-kopfteil-doppelbett-mit-lisenen-anthrazit-led-beleuchtung-balkeneiche-furniert-aufsatzpaneel-mit-glasboden-h%C3%A4ngekonsole-detail-musterring_801e32460f.jpg",
+      "bytes": 12356,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/madiva/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/f/csm_schlafzimmer-madiva-kommode-balkeneiche-furniert-absetzung-lack-manhattan-frontal-musterring_cf35ffcc7b.jpg",
+      "bytes": 11318,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/madiva/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/f/csm_schlafzimmer-madiva-aufsatzpaneel-mit-glasboden-led-beleuchtung-detail-musterring_1fe83c5878.jpg",
+      "bytes": 18625,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

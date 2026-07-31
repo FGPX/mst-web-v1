@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture",
+  "title": "Musterring furniture overview",
+  "importedAt": "2026-07-29T07:49:26.889Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/furniture/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/furniture/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/furniture/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/6/csm_MR11148_E_MR2490_-_15_274ba63ef0.jpg",
+      "bytes": 46273,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/furniture/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/9/csm_MR11126_09_Epos_Mood_-_15_3582a882ae.jpg",
+      "bytes": 28449,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/furniture/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_MR11172_02_Tiama_Mood_-_15_dfa733bca2.jpg",
+      "bytes": 43746,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/furniture/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/4/csm_MR11038_02_Revento_Line_-_15_0ff86827b1.jpg",
+      "bytes": 31776,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/furniture/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/a/csm_MR11190_A_Jovanna_-_15_5ba5888598.jpg",
+      "bytes": 25779,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/furniture/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/7/csm_MR11153_01_Cerina110_Mod_66_-_15_b1613d1876.jpg",
+      "bytes": 36455,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

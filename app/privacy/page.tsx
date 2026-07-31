@@ -1,0 +1,3 @@
+export default function PrivacyPage() {
+  return <section className="section"><div className="container"><p className="eyebrow">Privacy</p><h1 className="h2">Privacy information for the local concept.</h1><div className="grid grid-2"><p className="lead">Demo mode stores saved products, projects, fit reports, room scenes, consent and analytics events in localStorage. Uploaded images remain local to the browser flow and can be deleted immediately.</p><div className="card card-body"><h2>External services</h2><p>No AI, email, map or analytics provider is contacted unless a production adapter is configured and consent rules allow it.</p></div></div></div></section>;
+}

@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bathroom/bathroom-series/revento-line",
+  "title": "Revento Line",
+  "importedAt": "2026-07-29T07:51:51.486Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/revento-line/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_MR11451_A01_Revento_Line_-_15_4a8742e328.jpg",
+      "bytes": 20466,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/revento-line/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/6/csm_MR11451_5_Revento_Line_-_15_5e80fc2d14.jpg",
+      "bytes": 15286,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/revento-line/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_MR11451_6_Revento_Line_-_15_c4ab569be0.jpg",
+      "bytes": 6357,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/revento-line/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/2/csm_MR11451_4_Revento_Line_-_15_da9179d9ec.jpg",
+      "bytes": 7293,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/revento-line/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_badezimmermoebel_revento_line_schneewei%C3%9F_glanz_waschtisch_musterring_6ff08d3486.jpg",
+      "bytes": 8900,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/revento-line/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_badezimmermoebel_revento_line_schneewei%C3%9F_glanz_milieu_01_musterring_dfa79dd167.jpg",
+      "bytes": 14351,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/revento-line/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/e/csm_badezimmermoebel_revento_line_schneewei%C3%9F_glanz_waschtisch_detail_kosmetikeinsatz_musterring_57916678b2.jpg",
+      "bytes": 11820,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/revento-line/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/0/csm_badezimmermoebel_revento_line_schneewei%C3%9F_glanz_waschtisch_detail_griffmulde_musterring_508ccde44a.jpg",
+      "bytes": 4992,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

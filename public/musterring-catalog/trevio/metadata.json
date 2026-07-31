@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/trevio",
+  "title": "Trevio",
+  "importedAt": "2026-07-29T07:50:55.027Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/trevio/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/9/csm_wohnmoebel_trevio_eiche_lack_anthrazit_16_5c266a7def.jpg",
+      "bytes": 27107,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/trevio/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_wohnmoebel_trevio_eiche_lack_anthrazit_08_4eb8415eea.jpg",
+      "bytes": 10318,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/trevio/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_wohnmoebel_trevio_eiche_lack_anthrazit_09_2436f15bd9.jpg",
+      "bytes": 14215,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/trevio/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/d/csm_wohnmoebel_trevio_eiche_lack_anthrazit_06_16e84df5c9.jpg",
+      "bytes": 9233,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/trevio/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/6/csm_MR10665_F_Trevio_-_15_bea6f67bbd.jpg",
+      "bytes": 8902,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/trevio/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/f/csm_wohnmoebel_trevio_eiche_lack_anthrazit_03_edbf377269.jpg",
+      "bytes": 9236,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/trevio/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_wohnmoebel_trevio_eiche_lack_anthrazit_04_46c31e3a46.jpg",
+      "bytes": 8123,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/trevio/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/5/csm_wohnmoebel_trevio_eiche_lack_anthrazit_02_ddde581bb9.jpg",
+      "bytes": 8936,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

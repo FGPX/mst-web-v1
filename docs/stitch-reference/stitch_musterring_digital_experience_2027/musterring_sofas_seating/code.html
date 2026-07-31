@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Musterring | Sofa Systems</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fbf9f4",
+                      "surface-container": "#f0eee9",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f5f3ee",
+                      "tertiary-fixed": "#ece1d3",
+                      "surface-variant": "#e4e2dd",
+                      "on-tertiary-fixed": "#201b13",
+                      "outline-variant": "#c7c6ca",
+                      "inverse-on-surface": "#f2f1ec",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed": "#331101",
+                      "surface-dim": "#dbdad5",
+                      "error": "#ba1a1a",
+                      "on-primary-container": "#858384",
+                      "on-background": "#1b1c19",
+                      "secondary-fixed-dim": "#f9b897",
+                      "outline": "#76777b",
+                      "on-tertiary-fixed-variant": "#4c463c",
+                      "secondary-fixed": "#ffdbcb",
+                      "tertiary-fixed-dim": "#cfc5b8",
+                      "tertiary-container": "#201b13",
+                      "surface": "#fbf9f4",
+                      "surface-container-highest": "#e4e2dd",
+                      "surface-container-high": "#eae8e3",
+                      "on-surface-variant": "#46474a",
+                      "inverse-primary": "#c8c6c7",
+                      "on-tertiary-container": "#8b8377",
+                      "inverse-surface": "#30312e",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1b1c19",
+                      "background": "#fbf9f4",
+                      "primary-fixed-dim": "#c8c6c7",
+                      "secondary-container": "#ffbd9d",
+                      "error-container": "#ffdad6",
+                      "surface-tint": "#5f5e5f",
+                      "on-primary-fixed": "#1b1b1c",
+                      "primary-container": "#1b1b1c",
+                      "on-primary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#000000",
+                      "secondary": "#845238",
+                      "on-secondary-container": "#7a4a31",
+                      "on-primary-fixed-variant": "#474647",
+                      "on-secondary-fixed-variant": "#683b23",
+                      "primary": "#000000",
+                      "primary-fixed": "#e5e2e3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "container-max": "1440px",
+                      "margin-desktop": "64px",
+                      "section-gap": "120px",
+                      "gutter": "24px",
+                      "margin-mobile": "20px"
+              },
+              "fontFamily": {
+                      "button": ["Manrope"],
+                      "display-lg-mobile": ["Libre Caslon Text"],
+                      "body-md": ["Manrope"],
+                      "display-lg": ["Libre Caslon Text"],
+                      "headline-sm": ["Libre Caslon Text"],
+                      "headline-md": ["Libre Caslon Text"],
+                      "label-caps": ["Manrope"],
+                      "body-lg": ["Manrope"]
+              },
+              "fontSize": {
+                      "button": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                      "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                      "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                      "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-nav {
+            background: rgba(251, 249, 244, 0.85);
+            backdrop-filter: blur(20px);
+        }
+        .product-card-overlay {
+            background: rgba(251, 249, 244, 0.85);
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .group:hover .product-card-overlay {
+            opacity: 1;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e5ded1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #845238;
+        }
+        @media (max-width: 768px) {
+            .mobile-hide { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased">
+<!-- Top Navigation Shell -->
+<nav class="fixed top-0 w-full z-50 glass-nav">
+<div class="flex justify-between items-center px-margin-desktop h-20 w-full mx-auto">
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-3" href="#">
+<img alt="Musterring Logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKQMhcep-PlJY6SX5iEQmUb73HXkFzcVWf36otTZP0Qek2MaX8P8EMDLibko1xC1_wSmfk6xEbGjyYYzn9fnELts-LV7lxuzAjR1NabpFJqnBSpxNcKuwmH4o5p5hbv5SiDDP9tIJprxg2Tk-3l9pZP4PMTO4QGf8xBgZ2W6-nBaUYObkq6tv4WsI3GTOVHJ8yBi4ELvbi90wBE3-T9luCA6iB6XGbdSa_UALu9y-94CkPSqgrrNsqZ-vSWKBzHllsQodMIP4Jnng"/>
+<span class="font-display-lg text-headline-sm font-bold tracking-tighter text-primary">Musterring</span>
+</a>
+<div class="hidden md:flex gap-6">
+<a class="font-button text-button uppercase tracking-widest text-primary border-b border-primary pb-1" href="#">Furniture</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Rooms</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Collections</a>
+<a class="font-button text-button uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors" href="#">Inspiration</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] cursor-pointer hover:text-primary transition-colors">search</span>
+<span class="material-symbols-outlined text-[20px] cursor-pointer hover:text-primary transition-colors">favorite</span>
+<span class="material-symbols-outlined text-[20px] cursor-pointer hover:text-primary transition-colors">language</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 font-button text-button uppercase tracking-widest hover:opacity-90 transition-all">
+                    Find a Retailer
+                </button>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Editorial Hero Intro -->
+<section class="px-margin-desktop py-section-gap max-w-container-max mx-auto">
+<div class="grid grid-cols-12 gap-gutter items-end">
+<div class="col-span-12 md:col-span-8">
+<nav class="flex items-center gap-2 mb-6 text-label-caps text-on-surface-variant font-label-caps uppercase">
+<a class="hover:text-primary" href="#">Home</a>
+<span>/</span>
+<a class="hover:text-primary" href="#">Furniture</a>
+<span>/</span>
+<span class="text-primary">Sofas</span>
+</nav>
+<h1 class="font-display-lg text-display-lg md:text-display-lg mb-8 leading-none">
+                        Sofa Systems — <br/>
+<span class="italic text-on-surface-variant font-light">The heart of the room.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        Discover the synthesis of German engineering and aesthetic refinement. Our modular sofa collections offer bespoke comfort solutions, engineered to adapt to your architectural environment and personal ritual of relaxation.
+                    </p>
+</div>
+<div class="col-span-12 md:col-span-4 flex justify-end gap-4 pb-2">
+<div class="flex items-center gap-4 bg-surface-container p-1 rounded-full">
+<button class="p-2 rounded-full bg-surface-bright shadow-sm text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-2 rounded-full text-on-surface-variant hover:text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">view_list</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Sticky Filter Bar -->
+<section class="sticky top-20 z-40 bg-surface border-y border-surface-variant/50">
+<div class="px-margin-desktop py-4 flex items-center justify-between overflow-x-auto no-scrollbar max-w-container-max mx-auto">
+<div class="flex items-center gap-4 min-w-max">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant mr-2">Filter by</span>
+<button class="px-5 py-2 rounded-full bg-surface-container text-on-surface font-button text-[12px] border border-transparent hover:border-outline-variant transition-colors flex items-center gap-2">
+                        Width <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button class="px-5 py-2 rounded-full bg-surface-container text-on-surface font-button text-[12px] border border-transparent hover:border-outline-variant transition-colors flex items-center gap-2">
+                        Material <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button class="px-5 py-2 rounded-full bg-surface-container text-on-surface font-button text-[12px] border border-transparent hover:border-outline-variant transition-colors flex items-center gap-2">
+                        Relax function <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<button class="px-5 py-2 rounded-full bg-surface-container text-on-surface font-button text-[12px] border border-transparent hover:border-outline-variant transition-colors flex items-center gap-2">
+                        Modular <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+<div class="flex items-center gap-4 ml-8 min-w-max">
+<span class="font-body-md text-[14px] text-on-surface-variant">24 Collections Found</span>
+<button class="text-primary font-button text-[14px] border-b border-primary">Clear all</button>
+</div>
+</div>
+</section>
+<!-- Product Grid -->
+<section class="px-margin-desktop py-16 max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-gutter gap-y-16">
+<!-- Product 1 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden aspect-[16/9] mb-6 bg-surface-container-low border-[0.5px] border-outline-variant/30">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="High-end minimalist modular sofa in a soft grey boucle fabric, situated in a sun-drenched architectural living room with floor-to-ceiling windows and light oak floors. The lighting is soft and airy, emphasizing the clean lines and German engineering of the furniture. Modern ivory and sand color palette with a premium editorial feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEbcoO6vrNBqTlChEoeid0IJ5ZYKDg33B73QcxDQmXfdgSe2ZYI3b8UvVCvCxlcgUn7QCN0UBKyQ1nYNS_x4Vk66YVRcXaHr57pq5w0ZYbK-5s2mYAIP1oMB4UCbLQQUVMEGyN2wAWUHR-ZauRiNv-wTW70CXILGgNj_5Abk6Ztb7ymlQz0QKprm1QLWPRXMiGgb-n618p1xruO1H20mZaAgnq2lndDPAlbaHSfr3FECDmVenkcJOg_upzLh1rIvHSKyp6pcerJ-4"/>
+<!-- Configuration Preview Hover -->
+<div class="product-card-overlay absolute inset-0 flex flex-col justify-end p-8">
+<div class="bg-surface-bright p-6 rounded shadow-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<p class="font-label-caps text-label-caps uppercase text-secondary mb-3">Quick Configuration</p>
+<div class="flex gap-3 mb-4">
+<div class="w-8 h-8 rounded-full bg-[#E2D2BD] border border-white"></div>
+<div class="w-8 h-8 rounded-full bg-[#46474A] border border-white"></div>
+<div class="w-8 h-8 rounded-full bg-[#845238] border border-white"></div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-[10px] font-bold">+12</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant text-[14px]">Starting from €3.450</span>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded font-button text-[12px] uppercase">Configure</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-sm text-headline-sm mb-1">MR 2875</h3>
+<p class="font-body-md text-on-surface-variant">Flexible modular sofa with multiple comfort heights</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-button text-[14px] hover:translate-x-1 transition-transform">
+                            Find near you <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden aspect-[16/9] mb-6 bg-surface-container-low border-[0.5px] border-outline-variant/30">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A luxurious deep charcoal leather sofa with adjustable headrests and hidden relax functions, showcased in a modern industrial loft with concrete walls and warm mood lighting. The scene focuses on the premium materials and structural integrity of the sofa. Rich textures and a sophisticated moody but clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6WbTNn-sEwG2Kw6bv_bFaGvs7d6QImp0mce6Cdqjvq2WMEAjnGSP_WBuYRRfr5efslLY6R9U7FpHYoBw9Pv1CMaoli82EhbyOVBa71O8vfxAT7hHExv4QVF_G7bYDzFGAImHr329I5qz4CR96IZt2im1UQiA16kgZ9UrzQbw7gXmgTMV8YBznQyywnjKNH6KDHalINWVl8SLHcivaHXP8Pnphn_T0KciX8cuXpjKTD1faHO9BI-oh8b1kye1pxrkvBq8zVkBWbEE"/>
+<div class="product-card-overlay absolute inset-0 flex flex-col justify-end p-8">
+<div class="bg-surface-bright p-6 rounded shadow-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<p class="font-label-caps text-label-caps uppercase text-secondary mb-3">Quick Configuration</p>
+<div class="flex gap-3 mb-4">
+<div class="w-8 h-8 rounded-full bg-[#1B1C19] border border-white"></div>
+<div class="w-8 h-8 rounded-full bg-[#76777B] border border-white"></div>
+<div class="w-8 h-8 rounded-full bg-[#D1C7B7] border border-white"></div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-[10px] font-bold">+5</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant text-[14px]">Starting from €4.120</span>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded font-button text-[12px] uppercase">Configure</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-sm text-headline-sm mb-1">M-LUX 500</h3>
+<p class="font-body-md text-on-surface-variant">The pinnacle of ergonomic engineering with wall-free relax function</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-button text-[14px] hover:translate-x-1 transition-transform">
+                            Find near you <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden aspect-[16/9] mb-6 bg-surface-container-low border-[0.5px] border-outline-variant/30">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A large U-shaped modular sofa in a warm sand-colored linen fabric, perfect for family living. The furniture is placed in an airy, minimalist home with plenty of natural light and green plants. The focus is on the scale and invitation of the furniture, highlighting its role as the center of the home." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClFy_R4r-LYzghIxUYLLIGgb8FL6rW0_WemXUc211F6mvxo9h8FGndIYHz1V66vxE6dwyvzSKYzVu7AfhuXM4WjE9t53cCNcdZo3MR8lFy-0PLl_4NkhYGwuIfmCrt8biW2aOvRvEJr_91p4Nese5hSJ0JyocqqDoivVc-TNZ85_hkBiKVd-xtRJRkde-vzf4skT4MmiIBwYLZXM4bVN8tTBgpb5g9nTOaMA7JduEtJXrVQngOCFouZsLKtUnQmH519FJQzZy4KW0"/>
+<div class="product-card-overlay absolute inset-0 flex flex-col justify-end p-8">
+<div class="bg-surface-bright p-6 rounded shadow-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<p class="font-label-caps text-label-caps uppercase text-secondary mb-3">Quick Configuration</p>
+<div class="flex gap-3 mb-4">
+<div class="w-8 h-8 rounded-full bg-[#F5F3EE] border border-white"></div>
+<div class="w-8 h-8 rounded-full bg-[#C8C6C7] border border-white"></div>
+<div class="w-8 h-8 rounded-full bg-[#858384] border border-white"></div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-[10px] font-bold">+18</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant text-[14px]">Starting from €2.890</span>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded font-button text-[12px] uppercase">Configure</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-sm text-headline-sm mb-1">MR 2950</h3>
+<p class="font-body-md text-on-surface-variant">Endless configurations for generous space planning</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-button text-[14px] hover:translate-x-1 transition-transform">
+                            Find near you <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden aspect-[16/9] mb-6 bg-surface-container-low border-[0.5px] border-outline-variant/30">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Sleek, low-profile modern sofa with metallic feet in a dark navy velvet fabric. Photographed in an elegant gallery-like setting with high ceilings and abstract art on the walls. The lighting creates subtle highlights on the velvet texture, emphasizing its luxury and modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYRNKaCTxaB5Cp1dg5ssl4tGGVb1OaigFNcKdPNeG2IVYyi37aOMDZnM0j_I2--QcodysMe4FludhriDh0Vp7uD4Wr93vSyOmSlzWT7vurhlTf_6x4BTh2lZ_JrUD82cZvE0sVgg53QCee-muufpXAXRi6rdvMm7cjbR5HYNFUFNrGg7ODlvenSy48sJMd5fSi-1wIpUkC2sHjuhT37SgJz80qY5oDO9uuz6s2xpeQBfrtfhGyonxkMmHmTPsWsGjeQF2LT-2uuH0"/>
+<div class="product-card-overlay absolute inset-0 flex flex-col justify-end p-8">
+<div class="bg-surface-bright p-6 rounded shadow-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+<p class="font-label-caps text-label-caps uppercase text-secondary mb-3">Quick Configuration</p>
+<div class="flex gap-3 mb-4">
+<div class="w-8 h-8 rounded-full bg-[#1B1B1C] border border-white"></div>
+<div class="w-8 h-8 rounded-full bg-[#474647] border border-white"></div>
+<div class="w-8 h-8 rounded-full bg-[#683B23] border border-white"></div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container text-[10px] font-bold">+8</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-on-surface-variant text-[14px]">Starting from €3.150</span>
+<button class="bg-secondary text-on-secondary px-4 py-2 rounded font-button text-[12px] uppercase">Configure</button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-sm text-headline-sm mb-1">DESIGNER XL</h3>
+<p class="font-body-md text-on-surface-variant">Uncompromising aesthetics meets ultimate lounging depth</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-button text-[14px] hover:translate-x-1 transition-transform">
+                            Find near you <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-20 flex justify-center">
+<button class="border border-outline px-12 py-4 font-button text-button uppercase tracking-widest hover:bg-surface-container transition-colors">
+                    Load More Collections
+                </button>
+</div>
+</section>
+<!-- Service Consultation Section -->
+<section class="bg-surface-container-low py-section-gap px-margin-desktop">
+<div class="max-w-container-max mx-auto grid grid-cols-12 gap-gutter items-center">
+<div class="col-span-12 lg:col-span-6">
+<h2 class="font-headline-md text-headline-md mb-6">Expert planning for your interior.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-md">
+                        Our furniture is as unique as your home. Let our interior design experts help you configure the perfect sofa system for your space.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-secondary text-on-secondary px-8 py-4 font-button text-button uppercase tracking-widest rounded-lg flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">event</span>
+                            Book a Consultation
+                        </button>
+<button class="border border-outline text-primary px-8 py-4 font-button text-button uppercase tracking-widest flex items-center justify-center">
+                            Virtual Showroom
+                        </button>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="aspect-square bg-surface-bright p-8 border border-outline-variant/30 flex flex-col justify-center text-center">
+<span class="material-symbols-outlined text-secondary text-[40px] mb-4">verified</span>
+<h4 class="font-button text-button uppercase mb-2">5-Year Guarantee</h4>
+<p class="text-[12px] text-on-surface-variant font-body-md uppercase">Quality Assurance</p>
+</div>
+<div class="aspect-square bg-surface-bright p-8 border border-outline-variant/30 flex flex-col justify-center text-center">
+<span class="material-symbols-outlined text-secondary text-[40px] mb-4">architecture</span>
+<h4 class="font-button text-button uppercase mb-2">3D Planning</h4>
+<p class="text-[12px] text-on-surface-variant font-body-md uppercase">Millimeter Precise</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="bg-surface-container-high dark:bg-inverse-surface w-full">
+<div class="py-section-gap px-margin-desktop grid grid-cols-12 gap-gutter w-full mx-auto max-w-container-max">
+<div class="col-span-12 lg:col-span-4">
+<span class="font-display-lg text-headline-md text-primary mb-8 block">Musterring</span>
+<p class="font-body-md text-on-surface-variant max-w-xs mb-8">
+                    German engineering for living. Since 1938, we have defined the standards for premium furniture through uncompromising quality and visionary design.
+                </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary transition-colors">qr_code_2</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary transition-colors">camera</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary transition-colors">smart_display</span>
+</div>
+</div>
+<div class="col-span-6 lg:col-span-2">
+<h5 class="font-label-caps text-label-caps uppercase text-primary mb-6">Collections</h5>
+<ul class="space-y-4">
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Sofa Systems</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Dining Tables</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Bedroom Units</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Wall Units</a></li>
+</ul>
+</div>
+<div class="col-span-6 lg:col-span-2">
+<h5 class="font-label-caps text-label-caps uppercase text-primary mb-6">Company</h5>
+<ul class="space-y-4">
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Brand Story</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Sustainability</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Press</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Retailer Finder</a></li>
+</ul>
+</div>
+<div class="col-span-12 lg:col-span-4">
+<h5 class="font-label-caps text-label-caps uppercase text-primary mb-6">Join our Newsletter</h5>
+<p class="font-body-md text-on-surface-variant mb-6">Receive exclusive interior inspiration and collection reveals.</p>
+<div class="flex border-b border-outline focus-within:border-primary transition-colors pb-2">
+<input class="bg-transparent border-none focus:ring-0 w-full font-body-md" placeholder="Email address" type="email"/>
+<button class="material-symbols-outlined text-primary">arrow_forward</button>
+</div>
+</div>
+<div class="col-span-12 pt-16 border-t border-outline-variant/30 flex flex-col md:row-start-auto md:flex-row justify-between items-center gap-4">
+<span class="font-body-md text-[14px] text-on-surface-variant">© 2027 Musterring. German Engineering for Living.</span>
+<div class="flex gap-8">
+<a class="font-body-md text-[14px] text-on-surface-variant hover:text-primary" href="#">Legal Notice</a>
+<a class="font-body-md text-[14px] text-on-surface-variant hover:text-primary" href="#">Privacy Policy</a>
+<a class="font-body-md text-[14px] text-on-surface-variant hover:text-primary" href="#">Cookie Settings</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- Lead Drawer Contextual Element (Retailer Contact) -->
+<div class="fixed inset-y-0 right-0 w-full max-w-md glass-nav z-[60] translate-x-full transition-transform duration-500 shadow-2xl" id="retailer-drawer">
+<div class="p-margin-desktop h-full flex flex-col">
+<div class="flex justify-between items-center mb-12">
+<h2 class="font-headline-sm text-headline-sm">Consultation</h2>
+<button class="material-symbols-outlined hover:rotate-90 transition-transform" onclick="toggleDrawer()">close</button>
+</div>
+<div class="space-y-8 flex-grow">
+<div>
+<label class="block font-label-caps text-label-caps uppercase text-on-surface-variant mb-2">Location</label>
+<input class="w-full bg-transparent border-t-0 border-x-0 border-b border-outline focus:border-primary focus:ring-0 font-body-md py-3 px-0" placeholder="Enter zip code or city" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps uppercase text-on-surface-variant mb-2">Interests</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 bg-secondary text-on-secondary rounded-full text-[12px] font-bold">Sofas</span>
+<span class="px-4 py-2 bg-surface-container rounded-full text-[12px] font-bold">Planning</span>
+<span class="px-4 py-2 bg-surface-container rounded-full text-[12px] font-bold">Financing</span>
+</div>
+</div>
+<div class="p-6 bg-surface-bright border border-outline-variant/30 rounded-lg">
+<p class="font-body-md text-[14px] text-on-surface-variant italic mb-4">"Finding the right retailer is the first step toward a lifetime of comfort."</p>
+<button class="w-full bg-primary text-on-primary py-4 font-button text-button uppercase tracking-widest">Search Showrooms</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('retailer-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        // Hook up the primary action to the drawer for demo purposes
+        document.querySelector('button.bg-primary').addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleDrawer();
+        });
+
+        // Simple scroll effect for nav
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-sm');
+            } else {
+                nav.classList.remove('shadow-sm');
+            }
+        });
+    </script>
+</body></html>

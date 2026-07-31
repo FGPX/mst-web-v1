@@ -1,0 +1,16 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-lia",
+  "title": "MR LIA",
+  "importedAt": "2026-07-29T07:49:33.959Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-lia/image-01.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/0/csm_MR11785_A05_MRLia_Online_84189f532f.png",
+      "bytes": 906845,
+      "contentType": "image/png"
+    }
+  ]
+}

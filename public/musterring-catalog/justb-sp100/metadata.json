@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp100",
+  "title": "JUSTB! SP100",
+  "importedAt": "2026-07-29T07:51:27.646Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/justb-sp100/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sp100/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_MR11045_6_JustB_SP100_SP500_-_15_6f04e27d97.jpg",
+      "bytes": 19538,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sp100/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/6/csm_justb-esszimmerserie-sp100-musterring-01_3d3e776831.jpg",
+      "bytes": 9001,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sp100/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/5/csm_justb-esszimmerserie-sp100-bettina-zimmermann-musterring-01_4d99441477.jpg",
+      "bytes": 6754,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sp100/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/0/csm_justb-esszimmerserie-sp100-bettina-zimmermann-musterring_41af0eda72.jpg",
+      "bytes": 15555,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sp100/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/4/csm_justb-esszimmerserie-sp100-freisteller-musterring_71c552a0e9.jpg",
+      "bytes": 2257,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sp100/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/8/csm_justb-esszimmertisch-sp100-bettina-zimmermann-musterring_c2ae48a903.jpg",
+      "bytes": 11712,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/justb-sp100/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/5/csm_justB-esszimmertisch-sp100-zement-design-musterring_7099f818f3.jpg",
+      "bytes": 15602,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

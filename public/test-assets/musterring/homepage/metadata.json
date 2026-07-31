@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/",
+  "title": "Musterring homepage",
+  "importedAt": "2026-07-27T14:08:53.084Z",
+  "demoData": true,
+  "notLicensedForProduction": true,
+  "usageNote": "Downloaded from public Musterring pages for internal visual testing only. Do not deploy publicly without permission from Musterring.",
+  "assets": [
+    {
+      "file": "/test-assets/musterring/homepage/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/homepage/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/homepage/image-03.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/5/csm_MR11614_F_JustB_KM100_fac80c175b.png",
+      "bytes": 146598,
+      "contentType": "image/png"
+    },
+    {
+      "file": "/test-assets/musterring/homepage/image-04.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/8/csm_musterring-bettina-zimmermann-kai-wiesinger-du-bist-zuhause_af7f4d5a6d.png",
+      "bytes": 267503,
+      "contentType": "image/png"
+    },
+    {
+      "file": "/test-assets/musterring/homepage/image-05.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/5/csm_MR11648_Teaser_Startseite_EN_c81fbed933.png",
+      "bytes": 258043,
+      "contentType": "image/png"
+    },
+    {
+      "file": "/test-assets/musterring/homepage/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_unsere-qualitaet-musterring-neu-062025_a38dfcd75e.jpg",
+      "bytes": 16132,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/homepage/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/d/csm_unsere-nachhaltigkeit-musterring-neu-062025_b4426b7aa4.jpg",
+      "bytes": 9184,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/test-assets/musterring/homepage/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_unser-service-musterring-neu-062025_72edbde2f6.jpg",
+      "bytes": 11091,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

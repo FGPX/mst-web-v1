@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-280",
+  "title": "MR 280",
+  "importedAt": "2026-07-29T07:49:49.201Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-280/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/8/csm_MR11677_A_MR280_Print_-_15_ff2843122d.jpg",
+      "bytes": 24110,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-280/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_sofa_mr280_leder_cloudy_pearl_musterring_04_1d45cab4ab.jpg",
+      "bytes": 8026,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-280/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/5/csm_sofa_mr280_leder_cloudy_pearl_musterring_08f8167eb0.jpg",
+      "bytes": 8660,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-280/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/e/csm_sofa_mr280_leder_cloudy_pearl_musterring_01_a671de62c9.jpg",
+      "bytes": 11897,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-280/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/2/csm_sofa_mr280_leder_cloudy_pearl_musterring_02_d75c1650a2.jpg",
+      "bytes": 6615,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-280/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/3/csm_sofa_mr280_leder_rodeo_charcoal_musterring_06_5ab5e842a9.jpg",
+      "bytes": 9918,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-280/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/9/csm_sofa_mr280_leder_rodeo_charcoal_musterring_03_89d4d10f8e.jpg",
+      "bytes": 10125,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/mr-280/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/4/csm_sofa_mr280_leder_rodeo_charcoal_musterring_04_f8b679966d.jpg",
+      "bytes": 11574,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

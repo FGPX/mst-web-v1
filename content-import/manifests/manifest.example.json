@@ -1,0 +1,8 @@
+{
+  "jobId": "authorized-import-example",
+  "authorizedHosts": ["www.musterring.com"],
+  "rateLimitMs": 750,
+  "resume": true,
+  "dryRun": true,
+  "assets": []
+}

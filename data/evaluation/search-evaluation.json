@@ -1,0 +1,110 @@
+[
+  {
+    "id": "product-code-en",
+    "language": "en",
+    "query": "Show me MR 2875",
+    "expectedIntent": { "category": null, "modelCode": "MR 2875" },
+    "expectedProductIds": ["p1"],
+    "allowedAlternatives": [],
+    "mustNotAppear": []
+  },
+  {
+    "id": "product-code-de",
+    "language": "de",
+    "query": "Zeig mir MR 2490",
+    "expectedIntent": { "category": null, "modelCode": "MR 2490" },
+    "expectedProductIds": ["p4"],
+    "allowedAlternatives": [],
+    "mustNotAppear": []
+  },
+  {
+    "id": "presentation-search",
+    "language": "en",
+    "query": "I need a compact beige modular sofa for a small apartment, maximum width 240 cm, with relax function.",
+    "expectedIntent": { "category": "sofa", "colors": ["beige"], "maxWidthMm": 2400, "modular": true, "relaxFunction": true, "smallSpaceSuitable": true },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p1", "p2", "p6"],
+    "mustNotAppear": ["musterring-mr-kleo"]
+  },
+  {
+    "id": "negative-red",
+    "language": "en",
+    "query": "I need a red sofa under 220 cm.",
+    "expectedIntent": { "category": "sofa", "colors": ["red"], "maxWidthMm": 2200 },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["musterring-mr-260", "p4"],
+    "mustNotAppear": ["musterring-mr-kleo"]
+  },
+  {
+    "id": "modular-de",
+    "language": "de",
+    "query": "Ich suche ein modulares Sofa für eine kleine Wohnung bis 240 cm.",
+    "expectedIntent": { "category": "sofa", "maxWidthMm": 2400, "modular": true, "smallSpaceSuitable": true },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p1", "p2", "p6"],
+    "mustNotAppear": []
+  },
+  {
+    "id": "relax-en",
+    "language": "en",
+    "query": "Three-seat sofa with relax function",
+    "expectedIntent": { "category": "sofa", "numberOfSeats": 3, "relaxFunction": true },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p1", "p2"],
+    "mustNotAppear": []
+  },
+  {
+    "id": "family-easy-care",
+    "language": "en",
+    "query": "Easy-care family sofa for children and a dog",
+    "expectedIntent": { "category": "sofa", "easyCare": true },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p8", "p1"],
+    "mustNotAppear": []
+  },
+  {
+    "id": "tall-person",
+    "language": "en",
+    "query": "High-seat armchair for a tall person",
+    "expectedIntent": { "category": "armchair", "minSeatHeightMm": 470 },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p4", "p7"],
+    "mustNotAppear": ["p1"]
+  },
+  {
+    "id": "tall-person-de",
+    "language": "de",
+    "query": "Sessel mit hoher Sitzhöhe für eine große Person",
+    "expectedIntent": { "category": "armchair", "minSeatHeightMm": 470 },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p4", "p7"],
+    "mustNotAppear": ["p1"]
+  },
+  {
+    "id": "easy-care-de",
+    "language": "de",
+    "query": "Pflegeleichtes beiges Sofa mit Relaxfunktion",
+    "expectedIntent": { "category": "sofa", "colors": ["beige"], "easyCare": true, "relaxFunction": true },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p1", "p8"],
+    "mustNotAppear": []
+  },
+  {
+    "id": "leather-armchair",
+    "language": "en",
+    "query": "Brown leather armchair with electric function",
+    "expectedIntent": { "category": "armchair", "colors": ["brown"], "materials": ["leather"], "electricFunctions": true },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p7", "p4"],
+    "mustNotAppear": ["p1"]
+  },
+  {
+    "id": "no-exact-match",
+    "language": "en",
+    "query": "Purple sofa under 180 cm",
+    "expectedIntent": { "category": "sofa", "colors": ["purple"], "maxWidthMm": 1800 },
+    "expectedProductIds": [],
+    "allowedAlternatives": ["p6"],
+    "mustNotAppear": ["musterring-mr-260"]
+  }
+]
