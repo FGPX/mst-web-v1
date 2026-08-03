@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/beds/mr-dubai",
   "title": "MR DUBAI",
-  "importedAt": "2026-07-29T07:51:18.872Z",
+  "importedAt": "2026-08-03T08:02:25.943Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-dubai/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_schlafzimmer-dubai-boxspringbett-stoff-dunkelgrau-musterring_5f31ce18bb.jpg",
-      "bytes": 24282,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_schlafzimmer-dubai-polsterbett-stoff-beige-musterring_3b430a724d.jpg",
+      "bytes": 549618,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-dubai/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_schlafzimmer-dubai-polsterbett-stoff-beige-musterring_b514a2ebd0.jpg",
-      "bytes": 8999,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/7/csm_schlafzimmer-dubai-polsterbett-stoff-beige-fu%C3%9Fgestell-musterring_208b113bc2.jpg",
+      "bytes": 540744,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-dubai/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/7/csm_schlafzimmer-dubai-polsterbett-stoff-beige-fu%C3%9Fgestell-musterring_3ec22e90df.jpg",
-      "bytes": 6074,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/d/csm_schlafzimmer-dubai-polsterbett-stoff-beige-usb-anschluss-musterring_9859c3ac0a.jpg",
+      "bytes": 612629,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-dubai/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/d/csm_schlafzimmer-dubai-polsterbett-stoff-beige-usb-anschluss-musterring_d01563354b.jpg",
-      "bytes": 4106,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/2/csm_schlafzimmer-dubai-polsterbett-stoff-beige-kopfteil-musterring_e1e78b6cc7.jpg",
+      "bytes": 369368,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-dubai/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/2/csm_schlafzimmer-dubai-polsterbett-stoff-beige-kopfteil-musterring_010d563ef7.jpg",
-      "bytes": 5184,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/c/csm_schlafzimmer-dubai-boxspringbett-stoff-rot-kopfteil-musterring_a4b4a60f2f.jpg",
+      "bytes": 441540,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-dubai/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/c/csm_schlafzimmer-dubai-boxspringbett-stoff-rot-kopfteil-musterring_2043fbe3e7.jpg",
-      "bytes": 8775,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/4/csm_schlafzimmer-dubai-stoff-rot-fu%C3%9Fteil-musterring_4de4b3b8bd.jpg",
+      "bytes": 589156,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-dubai/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/4/csm_schlafzimmer-dubai-stoff-rot-fu%C3%9Fteil-musterring_233ee0bc01.jpg",
-      "bytes": 6756,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/a/csm_schlafzimmer-dubai-boxspringbett-stoff-rot-lampe-musterring_3fc04d9f72.jpg",
+      "bytes": 305839,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-dubai/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/a/csm_schlafzimmer-dubai-boxspringbett-stoff-rot-lampe-musterring_f365111ccd.jpg",
-      "bytes": 8094,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/6/csm_schlafzimmer-dubai-boxspringbett-stoff-rot-lichtschalter-musterring_02bdd1cfa2.jpg",
+      "bytes": 347513,
       "contentType": "image/jpeg"
     }
   ]

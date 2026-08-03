@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-385",
   "title": "MR 385",
-  "importedAt": "2026-07-29T07:50:01.380Z",
+  "importedAt": "2026-08-03T08:01:37.119Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-385/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/0/csm_sofa-mr385-ecksofa-stoff-schwarz-musterring_87d3b807e3.jpg",
-      "bytes": 24456,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/9/csm_sofa-sessel-mr385-stoff-grau-musterring_3a0805b946.jpg",
+      "bytes": 770991,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-385/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/9/csm_sofa-sessel-mr385-stoff-grau-musterring_ca4f0696f7.jpg",
-      "bytes": 9359,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/f/csm_sofa-mr385-stoff-grau-3-sitzig-motorisch-musterring_98aa5699d3.jpg",
+      "bytes": 731729,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-385/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/f/csm_sofa-mr385-stoff-grau-3-sitzig-motorisch-musterring_4179c1b52c.jpg",
-      "bytes": 10268,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/6/csm_sofa-mr385-stoff-grau-metallfuss-schwarz-matt-musterring_b034992e31.jpg",
+      "bytes": 954142,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-385/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/6/csm_sofa-mr385-stoff-grau-metallfuss-schwarz-matt-musterring_4a97acb4fe.jpg",
-      "bytes": 12168,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_sofa-mr385-stoff-grau-kissen-musterring_82739813f0.jpg",
+      "bytes": 728482,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-385/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_sofa-mr385-stoff-grau-kissen-musterring_699123740b.jpg",
-      "bytes": 7681,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/1/csm_sofa-sessel-hocker-mr385-leder-schwarz-musterring_30821036fa.jpg",
+      "bytes": 629069,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-385/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/1/csm_sofa-sessel-hocker-mr385-leder-schwarz-musterring_0ba5d05c60.jpg",
-      "bytes": 9869,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/3/csm_sofa-mr385-leder-schwarz-multifunktionskopfst%C3%BCtze-musterring_28135718d4.jpg",
+      "bytes": 398257,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-385/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/3/csm_sofa-mr385-leder-schwarz-multifunktionskopfst%C3%BCtze-musterring_0a13e5ea6b.jpg",
-      "bytes": 6653,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/d/csm_sofa-mr385-leder-schwarzmatt-metallkufe-musterring_5c05f8f4b0.jpg",
+      "bytes": 585031,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-385/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/d/csm_sofa-mr385-leder-schwarzmatt-metallkufe-musterring_a1d429e1a0.jpg",
-      "bytes": 10833,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/4/csm_sessel-mr385-einzelsessel-leder-schwarz-metallkufe-hocker-musterring_47b3d72f97.jpg",
+      "bytes": 662112,
       "contentType": "image/jpeg"
     }
   ]

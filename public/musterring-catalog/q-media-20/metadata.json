@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/q-media-20",
   "title": "Q Media 20",
-  "importedAt": "2026-07-29T07:50:53.755Z",
+  "importedAt": "2026-08-03T08:02:07.435Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/q-media-20/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/8/csm_MR11685_A_Q_Media2.0_Print_-_15_33a4457ced.jpg",
-      "bytes": 19410,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/6/csm_MR11571_B_Q_Media_2.0_Print_-_15_fd4298fb0a.jpg",
+      "bytes": 348405,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/q-media-20/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/6/csm_MR11571_B_Q_Media_2.0_Print_-_15_c067ad46f0.jpg",
-      "bytes": 7567,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/4/csm_MR11571_006_Q_Media_2.0_Mood_Print_-_15_2c3824c367.jpg",
+      "bytes": 480777,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/q-media-20/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/4/csm_MR11571_006_Q_Media_2.0_Mood_Print_-_15_999bddcc6f.jpg",
-      "bytes": 11258,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_MR11571_001_Q_Media_2.0_Print_-_15_389f6acab2.jpg",
+      "bytes": 284116,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/q-media-20/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_MR11571_001_Q_Media_2.0_Print_-_15_109298db93.jpg",
-      "bytes": 9999,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/b/csm_MR11571_003_Q_Media_2.0_Print_-_15_fcaed73230.jpg",
+      "bytes": 217668,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/q-media-20/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/b/csm_MR11571_003_Q_Media_2.0_Print_-_15_766958eb46.jpg",
-      "bytes": 6117,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/b/csm_MR11572_D_QMedia2.0_Print_-_15_bfde32ad2b.jpg",
+      "bytes": 254433,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/q-media-20/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/b/csm_MR11572_D_QMedia2.0_Print_-_15_c7104b4697.jpg",
-      "bytes": 10446,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_MR11572_030_QMedia2.0_Mood_Print_-_15_e8d3cb765d.jpg",
+      "bytes": 185309,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/q-media-20/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_MR11572_030_QMedia2.0_Mood_Print_-_15_153b4bddbe.jpg",
-      "bytes": 9138,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/d/csm_MR11572_002_QMedia2.0_Print_-_15_b6f5f593f5.jpg",
+      "bytes": 249106,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/q-media-20/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/d/csm_MR11572_002_QMedia2.0_Print_-_15_325cf9cb04.jpg",
-      "bytes": 10367,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_MR11572_013_QMedia2.0_Mood_Print_-_15_0458a1e6aa.jpg",
+      "bytes": 187147,
       "contentType": "image/jpeg"
     }
   ]

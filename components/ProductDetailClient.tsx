@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { ChevronDown, Download, Eye, FileText, MapPin, Star } from "lucide-react";
 import { useEffect, useState } from "react";

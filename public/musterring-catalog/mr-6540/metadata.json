@@ -1,39 +1,39 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-6540",
   "title": "MR 6540",
-  "importedAt": "2026-07-29T07:50:29.109Z",
+  "importedAt": "2026-08-03T08:01:49.274Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-6540/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/1/csm_sessel-mr6540-stoff-schwarz-leder-dunkelgr%C3%BCn-milieu-musterring_ed91306156.jpg",
-      "bytes": 23626,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/0/csm_MR11628_A_MR6540_Print_-_15_de18580638.jpg",
+      "bytes": 711164,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-6540/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/0/csm_MR11628_A_MR6540_Print_-_15_5d12b3520a.jpg",
-      "bytes": 9650,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/1/csm_MR11628_003_MR6540_Print_-_15_ed42bf274b.jpg",
+      "bytes": 183237,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-6540/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/1/csm_MR11628_003_MR6540_Print_-_15_a55113ee99.jpg",
-      "bytes": 10602,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/8/csm_MR11628_002_MR6540_Print_-_15_dd79a0b93c.jpg",
+      "bytes": 415876,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-6540/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/8/csm_MR11628_002_MR6540_Print_-_15_6e567fbabb.jpg",
-      "bytes": 16204,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_MR11628_D_04_MR6540_Print_-_15_6b5ddb0377.jpg",
+      "bytes": 431393,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-6540/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_MR11628_D_04_MR6540_Print_-_15_9404438443.jpg",
-      "bytes": 3782,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/1/csm_sessel-mr6540-stoff-schwarz-leder-dunkelgr%C3%BCn-milieu-musterring_49a9fd8306.jpg",
+      "bytes": 396423,
       "contentType": "image/jpeg"
     }
   ]

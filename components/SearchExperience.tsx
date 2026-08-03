@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { ArrowRight, Camera, Search, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";

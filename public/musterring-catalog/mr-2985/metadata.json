@@ -1,15 +1,15 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2985",
   "title": "MR 2985",
-  "importedAt": "2026-07-29T07:50:13.397Z",
+  "importedAt": "2026-08-03T08:01:42.919Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-2985/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_sofa-mr2985-stoff-blush-musterring_6b1af6fff3.jpg",
-      "bytes": 26211,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_sofa-mr2985-stoff-blush-musterring_8eef3d194c.jpg",
+      "bytes": 535572,
       "contentType": "image/jpeg"
     }
   ]

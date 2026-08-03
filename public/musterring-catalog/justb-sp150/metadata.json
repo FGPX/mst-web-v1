@@ -1,45 +1,45 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp150",
   "title": "JUSTB! SP150",
-  "importedAt": "2026-07-29T07:51:28.667Z",
+  "importedAt": "2026-08-03T08:02:32.261Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/justb-sp150/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/6/csm_esszimmer-justb-sp150-esstisch-seidengrau-stuhl-beige-musterring_5b384fd0e7.jpg",
-      "bytes": 25218,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/e/csm_esszimmermoebel-justb-sp150-musterring_cb26031050.jpg",
+      "bytes": 418514,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/justb-sp150/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/e/csm_esszimmermoebel-justb-sp150-musterring_fdea917296.jpg",
-      "bytes": 9288,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/e/csm_esszimmertisch-justb-sp150-eiche-musterring_7b52e2813b.jpg",
+      "bytes": 457205,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/justb-sp150/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/e/csm_esszimmertisch-justb-sp150-eiche-musterring_d6605f36a0.jpg",
-      "bytes": 8382,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/a/csm_esszimmermoebel-justb-sp150-detailbild-tisch-musterring_2d39548972.jpg",
+      "bytes": 292683,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/justb-sp150/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/a/csm_esszimmermoebel-justb-sp150-detailbild-tisch-musterring_b321473d05.jpg",
-      "bytes": 7990,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/d/csm_esszimmerstuhl-justb-sp150--detailbild-boucl%C3%A9-champagner-musterring_832a68ee34.jpg",
+      "bytes": 143877,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/justb-sp150/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/d/csm_esszimmerstuhl-justb-sp150--detailbild-boucl%C3%A9-champagner-musterring_373b716067.jpg",
-      "bytes": 6130,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/8/csm_esszimmerstuhl-justb-sp150-boucl%C3%A9-champagner-musterring_5f0976d2c0.jpg",
+      "bytes": 357766,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/justb-sp150/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/8/csm_esszimmerstuhl-justb-sp150-boucl%C3%A9-champagner-musterring_704d7d28cf.jpg",
-      "bytes": 8233,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/6/csm_esszimmer-justb-sp150-esstisch-seidengrau-stuhl-beige-musterring_fc990ca279.jpg",
+      "bytes": 463158,
       "contentType": "image/jpeg"
     }
   ]

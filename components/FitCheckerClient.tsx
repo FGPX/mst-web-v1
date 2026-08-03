@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent, type TouchEvent, type WheelEvent } from "react";
 import {

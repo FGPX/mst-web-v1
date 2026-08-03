@@ -1,39 +1,39 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-285",
   "title": "MR 285",
-  "importedAt": "2026-07-29T07:49:51.019Z",
+  "importedAt": "2026-08-03T08:01:29.310Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-285/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/1/csm_MR11053_A_MR285_-_15_fab3f82905.jpg",
-      "bytes": 23441,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_MR11054_A_MR285_-_15_94b8175e1b.jpg",
+      "bytes": 783079,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-285/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_MR11054_A_MR285_-_15_95f02a29ed.jpg",
-      "bytes": 10022,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_MR11054_6_MR285_-_15_3b95061baf.jpg",
+      "bytes": 1482713,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-285/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_MR11054_6_MR285_-_15_21c1a045e3.jpg",
-      "bytes": 13635,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/a/csm_MR11054_10_MR285_-_15_08455a99ef.jpg",
+      "bytes": 1636418,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-285/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/a/csm_MR11054_10_MR285_-_15_917ee57367.jpg",
-      "bytes": 14843,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/b/csm_MR11054_1_MR285_-_15_562502d197.jpg",
+      "bytes": 925274,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-285/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/b/csm_MR11054_1_MR285_-_15_5e385f638b.jpg",
-      "bytes": 10691,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/1/csm_MR11053_A_MR285_-_15_7ec3fb9265.jpg",
+      "bytes": 449642,
       "contentType": "image/jpeg"
     }
   ]

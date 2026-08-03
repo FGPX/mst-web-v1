@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/kara-frame-schlafen",
   "title": "Kara Frame Schlafen",
-  "importedAt": "2026-07-29T07:51:07.228Z",
+  "importedAt": "2026-08-03T08:02:15.756Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/kara-frame-schlafen/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/9/csm_kleiderschrank-kara-frame-schlafen-musterring_45e0a6213e.jpg",
-      "bytes": 24977,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/5/csm_kleiderschrank-begehbar-kara-frame-schlafen-musterring-01_004c86a834.jpg",
+      "bytes": 464230,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/kara-frame-schlafen/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/5/csm_kleiderschrank-begehbar-kara-frame-schlafen-musterring-01_bd9b10d734.jpg",
-      "bytes": 9930,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/a/csm_kleiderschrank-begehbar-kara-frame-schlafen-musterring_abdada7704.jpg",
+      "bytes": 584912,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/kara-frame-schlafen/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/a/csm_kleiderschrank-begehbar-kara-frame-schlafen-musterring_f05dc39d95.jpg",
-      "bytes": 16078,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/5/csm_kleiderschrank-kara-frame-schlafen-hosenauszug-musterring_0767c5fe9d.jpg",
+      "bytes": 458787,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/kara-frame-schlafen/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/5/csm_kleiderschrank-kara-frame-schlafen-hosenauszug-musterring_49f2d3ddad.jpg",
-      "bytes": 16521,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/f/csm_kleiderschrank-kara-frame-schlafen-auszug-musterring_85246e3266.jpg",
+      "bytes": 668671,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/kara-frame-schlafen/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/f/csm_kleiderschrank-kara-frame-schlafen-auszug-musterring_ed79530939.jpg",
-      "bytes": 9320,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/e/csm_kleiderschrank-kara-frame-schlafen-musterring_d98bb0c858.jpg",
+      "bytes": 574769,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/kara-frame-schlafen/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_kleiderschrank-kara-frame-schlafen-inneneinteilung-musterring-01_be7430f09b.jpg",
-      "bytes": 10079,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_kleiderschrank-kara-frame-schlafen-inneneinteilung-musterring-01_d9f00c2de7.jpg",
+      "bytes": 443484,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/kara-frame-schlafen/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/0/csm_kleiderschrank-kara-frame-schlafen-inneneinteilung-musterring_fa93082df1.jpg",
-      "bytes": 11356,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/0/csm_kleiderschrank-kara-frame-schlafen-inneneinteilung-musterring_39f49a0fc1.jpg",
+      "bytes": 714133,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/kara-frame-schlafen/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/7/csm_schlafzimmer-kara-frame-schlafen-musterring_9fff43987d.jpg",
-      "bytes": 13493,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/7/csm_schlafzimmer-kara-frame-schlafen-musterring_8fdd23b984.jpg",
+      "bytes": 451478,
       "contentType": "image/jpeg"
     }
   ]

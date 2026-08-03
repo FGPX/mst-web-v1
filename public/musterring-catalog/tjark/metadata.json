@@ -1,0 +1,58 @@
+{
+  "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tjark",
+  "title": "Tjark",
+  "importedAt": "2026-08-03T08:02:54.062Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/tjark/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/e/0/csm_MR11763_A_Tjark_Print.tif_d4c01c535a.jpg",
+      "bytes": 759001,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/tjark/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/9/csm_MR11763_005_Tjark_Mood_Print_853f649c2c.jpg",
+      "bytes": 1025460,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/tjark/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_MR11763_E01_Tjark_Print_f0bd413928.jpg",
+      "bytes": 276138,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/tjark/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_MR11763_001_Tjark_Print_4f7b4e573d.jpg",
+      "bytes": 937270,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/tjark/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/c/d/csm_MR11762_A_Tjark_Print.tif_4a13a30793.jpg",
+      "bytes": 567001,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/tjark/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_MR11762_017_Tjark_Print_b336228a2b.jpg",
+      "bytes": 874485,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/tjark/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_MR11762_018_Tjark_Print_eba0dd2194.jpg",
+      "bytes": 1361363,
+      "contentType": "image/jpeg"
+    },
+    {
+      "file": "/musterring-catalog/tjark/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/9/2/csm_MR11761_D_Tjark_Print.tif_89ed5d84a6.jpg",
+      "bytes": 376310,
+      "contentType": "image/jpeg"
+    }
+  ]
+}

@@ -1,39 +1,39 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-6500",
   "title": "MR 6500",
-  "importedAt": "2026-07-29T07:50:26.958Z",
+  "importedAt": "2026-08-03T08:01:48.514Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-6500/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_sofa-mr6500-leder-grau-milieu-musterring_654ad4833b.jpg",
-      "bytes": 24077,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/c/csm_sofa-mr6500-leder-grau-musterring-01_026ea9f4b4.jpg",
+      "bytes": 170725,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-6500/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/c/csm_sofa-mr6500-leder-grau-musterring-01_ce4ed38576.jpg",
-      "bytes": 2863,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_sofa-mr6500-leder-grau-musterring-03_06fa0a6220.jpg",
+      "bytes": 131454,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-6500/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_sofa-mr6500-leder-grau-musterring-03_4fe2b7ee70.jpg",
-      "bytes": 2241,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/9/csm_sofa-mr6500-leder-grau-musterring-02_ff0532b6af.jpg",
+      "bytes": 149987,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-6500/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/9/csm_sofa-mr6500-leder-grau-musterring-02_9aeca10a37.jpg",
-      "bytes": 2698,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/3/csm_sofa-mr6500-leder-grau-kopfst%C3%BCtze-musterring_1f568a0cec.jpg",
+      "bytes": 161676,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-6500/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/3/csm_sofa-mr6500-leder-grau-kopfst%C3%BCtze-musterring_6d676f0663.jpg",
-      "bytes": 3119,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/c/csm_sofa-mr6500-leder-grau-milieu-musterring_09d553b69f.jpg",
+      "bytes": 368461,
       "contentType": "image/jpeg"
     }
   ]

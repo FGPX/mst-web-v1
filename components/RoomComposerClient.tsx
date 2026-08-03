@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { Box, Copy, Grid3X3, Layers, Lock, Minus, Plus, Printer, Redo2, RotateCw, Save, Send, Share2, Trash2, Unlock, Upload } from "lucide-react";
 import { PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from "react";

@@ -1,39 +1,39 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/simea",
   "title": "Simea",
-  "importedAt": "2026-07-29T07:50:49.958Z",
+  "importedAt": "2026-08-03T08:02:03.883Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/simea/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/3/csm_MR11717_A_SIMEA_Print_-_15_5be25aef58.jpg",
-      "bytes": 23933,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/1/csm_MR11717_B_SIMEA_Print_-_15_569899702d.jpg",
+      "bytes": 169729,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/simea/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/1/csm_MR11717_B_SIMEA_Print_-_15_b9ae7d3195.jpg",
-      "bytes": 7333,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/7/csm_MR11717_C_SIMEA_Print_-_15_10966c5eaa.jpg",
+      "bytes": 530478,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/simea/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/7/csm_MR11717_C_SIMEA_Print_-_15_daad36b5a6.jpg",
-      "bytes": 13347,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_MR11717_003_SIMEA_Print_-_15_88dedae6ed.jpg",
+      "bytes": 238510,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/simea/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_MR11717_003_SIMEA_Print_-_15_5866c98362.jpg",
-      "bytes": 9544,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/b/csm_MR11717_005_SIMEA_Print_-_15_52a4c85c2d.jpg",
+      "bytes": 588566,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/simea/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/b/csm_MR11717_005_SIMEA_Print_-_15_98ae7e0bd5.jpg",
-      "bytes": 9691,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/3/csm_MR11717_A_SIMEA_Print_-_15_973ad453b0.jpg",
+      "bytes": 307292,
       "contentType": "image/jpeg"
     }
   ]

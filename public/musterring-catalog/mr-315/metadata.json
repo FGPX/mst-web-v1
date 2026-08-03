@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-315",
   "title": "MR 315",
-  "importedAt": "2026-07-29T07:49:55.625Z",
+  "importedAt": "2026-08-03T08:01:32.576Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-315/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/2/csm_MR11727_D_MR315_-_15_fcc88e8349.jpg",
-      "bytes": 21641,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/4/5/csm_MR11794_A_MR315_Print.tif_737c7cbd93.jpg",
+      "bytes": 653863,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-315/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/4/5/csm_MR11794_A_MR315_Print.tif_2c7a5496f8.jpg",
-      "bytes": 10002,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/0/e/csm_MR11794_007_MR315_Print.tif_f7c45e9355.jpg",
+      "bytes": 1071963,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-315/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/0/e/csm_MR11794_007_MR315_Print.tif_e429383f01.jpg",
-      "bytes": 10215,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/6/5/csm_MR11794_003_MR315_Print.tif_4a099c1cd9.jpg",
+      "bytes": 567472,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-315/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/6/5/csm_MR11794_003_MR315_Print.tif_01f107fe47.jpg",
-      "bytes": 12341,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/f/c/csm_MR11794_008_MR315_Print.tif_4d0162c717.jpg",
+      "bytes": 1048298,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-315/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/f/c/csm_MR11794_008_MR315_Print.tif_bb400a6737.jpg",
-      "bytes": 8649,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/2/csm_MR11727_D_MR315_-_15_96a4b2a512.jpg",
+      "bytes": 591296,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-315/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_ecksofa-mr315-beige-gestell-schwarz-musterring_09ab706c5d.jpg",
-      "bytes": 10257,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_ecksofa-mr315-beige-gestell-schwarz-musterring_fd572e89f1.jpg",
+      "bytes": 553831,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-315/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/5/csm_MR11727_1_MR315_-_15_60dbc147b0.jpg",
-      "bytes": 10415,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/5/csm_MR11727_1_MR315_-_15_66c5fe4a1e.jpg",
+      "bytes": 496095,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-315/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/9/csm_ecksofa-mr315-beige-detail-musterring_a6ce409984.jpg",
-      "bytes": 18009,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/a/csm_MR11727_5_MR315_-_15_a074cd411b.jpg",
+      "bytes": 964350,
       "contentType": "image/jpeg"
     }
   ]

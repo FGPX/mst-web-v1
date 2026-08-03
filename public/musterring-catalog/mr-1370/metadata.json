@@ -1,33 +1,33 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1370",
   "title": "MR 1370",
-  "importedAt": "2026-07-29T07:50:03.465Z",
+  "importedAt": "2026-08-03T08:01:38.839Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-1370/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/b/5/csm_MR11788_A_MR1370_Print.tif_9332ca6010.jpg",
-      "bytes": 23311,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/b/5/csm_MR11788_A_MR1370_Print.tif_316b6871e4.jpg",
+      "bytes": 656056,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-1370/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/7/e/csm_MR11788_006_MR1370_Print.tif_a30215c1bb.jpg",
-      "bytes": 10840,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/7/e/csm_MR11788_006_MR1370_Print.tif_9d24af27fc.jpg",
+      "bytes": 1107963,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-1370/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/3/3/csm_MR11788_008_MR1370_Print.tif_d22d23108b.jpg",
-      "bytes": 13718,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/3/3/csm_MR11788_008_MR1370_Print.tif_c2f2b350bc.jpg",
+      "bytes": 516615,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-1370/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/d/c/csm_MR11788_011_MR1370_Print.tif_577b475d08.jpg",
-      "bytes": 6712,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/d/c/csm_MR11788_011_MR1370_Print.tif_148a7d3508.jpg",
+      "bytes": 1271578,
       "contentType": "image/jpeg"
     }
   ]

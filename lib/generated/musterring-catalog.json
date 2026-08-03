@@ -1,5 +1,5 @@
 {
-  "importedAt": "2026-07-29T07:52:06.706Z",
+  "importedAt": "2026-08-03T08:03:05.835Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "products": [
@@ -1410,7 +1410,8 @@
         "/musterring-catalog/joern/image-04.jpg",
         "/musterring-catalog/joern/image-05.jpg",
         "/musterring-catalog/joern/image-06.jpg",
-        "/musterring-catalog/joern/image-07.jpg"
+        "/musterring-catalog/joern/image-07.jpg",
+        "/musterring-catalog/joern/image-08.jpg"
       ]
     },
     {
@@ -1760,25 +1761,6 @@
       ]
     },
     {
-      "appProductId": "musterring-justb-sp500",
-      "slug": "justb-sp500",
-      "modelCode": "JUSTB! SP500",
-      "name": "JUSTB! SP500",
-      "tagline": "whets the appetite for more",
-      "description": "Tasteful design: our dining chairs and benches bring the JustB! flair to your home. Discover more.",
-      "category": "dining-chair",
-      "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp500",
-      "images": [
-        "/musterring-catalog/justb-sp500/image-01.jpg",
-        "/musterring-catalog/justb-sp500/image-02.jpg",
-        "/musterring-catalog/justb-sp500/image-03.jpg",
-        "/musterring-catalog/justb-sp500/image-04.jpg",
-        "/musterring-catalog/justb-sp500/image-05.jpg",
-        "/musterring-catalog/justb-sp500/image-06.jpg",
-        "/musterring-catalog/justb-sp500/image-07.jpg"
-      ]
-    },
-    {
       "appProductId": "musterring-helana",
       "slug": "helana",
       "modelCode": "HELANA",
@@ -2062,6 +2044,26 @@
         "/musterring-catalog/tiama/image-06.jpg",
         "/musterring-catalog/tiama/image-07.jpg",
         "/musterring-catalog/tiama/image-08.jpg"
+      ]
+    },
+    {
+      "appProductId": "musterring-tjark",
+      "slug": "tjark",
+      "modelCode": "TJARK",
+      "name": "TJARK",
+      "tagline": "Scandinavian simplicity for your dining room",
+      "description": "Musterring: With TJARK, you can bring a touch of Nordic style into your home and enjoy the natural beauty of delicate dining room furniture.",
+      "category": "dining-table",
+      "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tjark",
+      "images": [
+        "/musterring-catalog/tjark/image-01.jpg",
+        "/musterring-catalog/tjark/image-02.jpg",
+        "/musterring-catalog/tjark/image-03.jpg",
+        "/musterring-catalog/tjark/image-04.jpg",
+        "/musterring-catalog/tjark/image-05.jpg",
+        "/musterring-catalog/tjark/image-06.jpg",
+        "/musterring-catalog/tjark/image-07.jpg",
+        "/musterring-catalog/tjark/image-08.jpg"
       ]
     },
     {

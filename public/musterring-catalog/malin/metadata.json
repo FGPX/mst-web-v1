@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/malin",
   "title": "Malin",
-  "importedAt": "2026-07-29T07:51:03.517Z",
+  "importedAt": "2026-08-03T08:02:13.100Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/malin/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/e/csm_schlafzimmer-malin-eiche-beige-musterring_7b30a14fff.jpg",
-      "bytes": 18463,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/8/csm_schlafzimmer-malin-lack-gruen-holz-balkeneiche-musterring_232fd8dfd4.jpg",
+      "bytes": 462510,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/malin/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/8/csm_schlafzimmer-malin-lack-gruen-holz-balkeneiche-musterring_bc3970d27d.jpg",
-      "bytes": 7109,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_schlafzimmer-malin-stoff-gruen-holz-eiche-musterring_66b455efda.jpg",
+      "bytes": 441806,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/malin/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_schlafzimmer-malin-stoff-gruen-holz-eiche-musterring_737cf97fea.jpg",
-      "bytes": 6269,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/3/csm_schlafzimmer-malin-kufe-holz-eiche-musterring_d37f0af9ea.jpg",
+      "bytes": 507984,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/malin/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/3/csm_schlafzimmer-malin-kufe-holz-eiche-musterring_1025c218c0.jpg",
-      "bytes": 7196,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/0/csm_kleiderschrank-malin-lack-gruen-holz-eiche-musterring_2b62f2146e.jpg",
+      "bytes": 178617,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/malin/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/0/csm_kleiderschrank-malin-lack-gruen-holz-eiche-musterring_8c7b6e07e9.jpg",
-      "bytes": 4128,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_schlafzimmer-malin-lack-blau-holz-balkeneiche-musterring_b319ca8091.jpg",
+      "bytes": 206686,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/malin/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_schlafzimmer-malin-lack-blau-holz-balkeneiche-musterring_d67ebfd72c.jpg",
-      "bytes": 8514,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/2/csm_schlafzimmer-malin-lack-blau-holz-balkeneiche-musterring_02_bae4d72e0c.jpg",
+      "bytes": 651442,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/malin/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/2/csm_schlafzimmer-malin-lack-blau-holz-balkeneiche-musterring_02_06fa506bfa.jpg",
-      "bytes": 8338,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/7/csm_schlafzimmer-malin-stoff-blau-holz-balkeneiche-musterring_c51dcfd14d.jpg",
+      "bytes": 155028,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/malin/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/7/csm_schlafzimmer-malin-stoff-blau-holz-balkeneiche-musterring_7129315ad5.jpg",
-      "bytes": 7252,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_schlafzimmer-malin-lack-blau-holz-balkeneiche-musterring_01_5495c6b1f3.jpg",
+      "bytes": 320229,
       "contentType": "image/jpeg"
     }
   ]

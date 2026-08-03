@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
+  ArrowUpDown,
   Award,
   CalendarDays,
   ChevronDown,
@@ -98,7 +99,7 @@ export function FilterableListing() {
             <span>{selectedCategory?.label ?? "All Furniture"}</span>
           </nav>
           <h1>
-            {selectedCategory?.label ?? "Furniture Collections"} —
+            {selectedCategory?.label ?? "Furniture Collections"} -
             <span>{selectedCategory?.headline ?? "Designed for every room."}</span>
           </h1>
           <p>
@@ -124,31 +125,6 @@ export function FilterableListing() {
           </button>
         </div>
       </section>
-
-      <nav className="stitch-category-browser" aria-label="Furniture categories">
-        <div className="stitch-category-browser-inner">
-          <Link className={!filters.category ? "is-active" : ""} href="/furniture">All Furniture</Link>
-          {categoryGroups.map((group) => (
-            <details className="stitch-category-menu" key={group.name}>
-              <summary className={filters.category && group.categories.includes(filters.category) ? "is-active" : ""}>
-                <span>{group.name}</span>
-                {filters.category && group.categories.includes(filters.category)
-                  ? <small>{categoryDetails[filters.category].label}</small>
-                  : null}
-                <ChevronDown size={15} />
-              </summary>
-              <div className="stitch-category-menu-popover">
-                <p>{group.name}</p>
-                {group.categories.map((category) => (
-                  <Link className={filters.category === category ? "is-active" : ""} href={`/furniture?category=${category}`} key={category}>
-                    {categoryDetails[category].label}<ChevronRight size={15} />
-                  </Link>
-                ))}
-              </div>
-            </details>
-          ))}
-        </div>
-      </nav>
 
       <section className="stitch-filter-bar" aria-label="Product filters">
         <button className="stitch-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="catalog-filter-controls" onClick={() => setFilterOpen(true)}>Open filters</button>
@@ -232,9 +208,17 @@ export function FilterableListing() {
             </details>
           </div>
           <div className="stitch-filter-status">
-            <span>{results.length} Collections Found</span>
-            <label>Sort<select aria-label="Sort products" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)}><option value="recommended">Recommended</option><option value="width">Narrowest first</option><option value="name">Model name</option></select></label>
-            <button onClick={clear}>Clear all</button>
+            <span className="stitch-results-count"><strong>{results.length}</strong> collections</span>
+            <label className="stitch-sort-control">
+              <ArrowUpDown size={15} aria-hidden="true" />
+              <span>Sort by</span>
+              <select aria-label="Sort products" value={sort} onChange={(event) => setSort(event.target.value as typeof sort)}>
+                <option value="recommended">Recommended</option>
+                <option value="width">Narrowest first</option>
+                <option value="name">Model name</option>
+              </select>
+            </label>
+            <button className="stitch-clear-filters" onClick={clear}>Clear all</button>
           </div>
         </div>
       </section>

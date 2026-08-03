@@ -347,29 +347,43 @@ function extractProductContent(html, page) {
 }
 
 function extractImageUrls(html, pageUrl) {
-  const urls = new Set();
+  const rankedUrls = new Map();
   const decoded = decodeHtml(html);
-  const patterns = [
-    /(?:src|href|content)=["']([^"']+\.(?:avif|webp|jpe?g|png)(?:\?[^"']*)?)["']/gi,
-    /(?:srcSet|srcset)=["']([^"']+)["']/gi,
-    /https:\\?\/\\?\/[^"' <>)]+\.(?:avif|webp|jpe?g|png)(?:\?[^"' <>)\\]*)?/gi
-  ];
+  const directPattern = /(?:src|href|content)=["']([^"']+\.(?:avif|webp|jpe?g|png)(?:\?[^"']*)?)["']/gi;
+  const srcsetPattern = /(data-)?srcset=["']([^"']+)["']/gi;
+  const inlinePattern = /https:\\?\/\\?\/[^"' <>)]+\.(?:avif|webp|jpe?g|png)(?:\?[^"' <>)\\]*)?/gi;
 
-  for (const match of decoded.matchAll(patterns[0])) {
-    addUrl(urls, match[1], pageUrl);
+  const addRankedUrl = (value, score = 0) => {
+    if (!value || value.startsWith("data:")) return;
+    try {
+      const url = new URL(value, pageUrl).toString();
+      const currentScore = rankedUrls.get(url) ?? Number.NEGATIVE_INFINITY;
+      if (score > currentScore) rankedUrls.set(url, score);
+    } catch {
+      // Ignore malformed candidates from inline scripts.
+    }
+  };
+
+  for (const match of decoded.matchAll(directPattern)) {
+    addRankedUrl(match[1]);
   }
 
-  for (const match of decoded.matchAll(patterns[1])) {
-    for (const candidate of match[1].split(",")) {
-      addUrl(urls, candidate.trim().split(/\s+/)[0], pageUrl);
+  for (const match of decoded.matchAll(srcsetPattern)) {
+    const galleryBonus = match[1] ? 1_000_000 : 0;
+    for (const candidate of match[2].split(",")) {
+      const parts = candidate.trim().split(/\s+/);
+      const width = Number(parts.find((part) => /^\d+w$/i.test(part))?.slice(0, -1) ?? 0);
+      addRankedUrl(parts[0], galleryBonus + width);
     }
   }
 
-  for (const match of decoded.matchAll(patterns[2])) {
-    addUrl(urls, match[0].replaceAll("\\/", "/"), pageUrl);
+  for (const match of decoded.matchAll(inlinePattern)) {
+    addRankedUrl(match[0].replaceAll("\\/", "/"));
   }
 
-  return [...urls]
+  return [...rankedUrls.entries()]
+    .sort((left, right) => right[1] - left[1])
+    .map(([url]) => url)
     .filter(isAllowedAssetUrl)
     .filter((url) => !/logo|icon|favicon|sprite/i.test(url));
 }
@@ -409,15 +423,6 @@ function deduplicateImageVariants(urls) {
     if (!unique.has(fileName)) unique.set(fileName, url);
   }
   return [...unique.values()];
-}
-
-function addUrl(urls, value, pageUrl) {
-  if (!value || value.startsWith("data:")) return;
-  try {
-    urls.add(new URL(value, pageUrl).toString());
-  } catch {
-    // Ignore malformed candidates from inline scripts.
-  }
 }
 
 function extensionFrom(contentType, url) {

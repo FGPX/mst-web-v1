@@ -1,39 +1,39 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-710",
   "title": "MR 710",
-  "importedAt": "2026-07-29T07:50:24.964Z",
+  "importedAt": "2026-08-03T08:01:47.678Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-710/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_schlafsofa-mr710-mit-frontauszug-stoff-astoria-jade-musterring_ce30465ceb.jpg",
-      "bytes": 27092,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/6/csm_schlafsofa-mr710-mit-frontauszug-stoff-astoria-jade-musterring-01_2d57e00fec.jpg",
+      "bytes": 636487,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-710/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/6/csm_schlafsofa-mr710-mit-frontauszug-stoff-astoria-jade-musterring-01_5b8747db7d.jpg",
-      "bytes": 10565,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_schlafsofa-mr710-detailbild-armlehne-musterring_8bc4d5610b.jpg",
+      "bytes": 451234,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-710/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_schlafsofa-mr710-detailbild-armlehne-musterring_fe51670d6f.jpg",
-      "bytes": 13693,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/2/csm_schlafsofa-mr710-detailbild-fu%C3%9Fteiil-musterring_e35ece2f20.jpg",
+      "bytes": 427188,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-710/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/2/csm_schlafsofa-mr710-detailbild-fu%C3%9Fteiil-musterring_8fef92e58f.jpg",
-      "bytes": 12398,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/e/csm_schlafsofa-mr710-mit-frontauszug-und-kaltschaummatratze-musterring_c39d4d3961.jpg",
+      "bytes": 849132,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-710/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/e/csm_schlafsofa-mr710-mit-frontauszug-und-kaltschaummatratze-musterring_1bff39a1a9.jpg",
-      "bytes": 8477,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_schlafsofa-mr710-mit-frontauszug-stoff-astoria-jade-musterring_5294979fda.jpg",
+      "bytes": 414002,
       "contentType": "image/jpeg"
     }
   ]

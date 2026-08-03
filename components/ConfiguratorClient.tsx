@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { Check, Copy, Info, Printer, Redo2, RotateCw, Save, Share2, Sparkles, Undo2, ZoomIn } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";

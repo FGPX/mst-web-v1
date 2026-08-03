@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import { Eye, GitCompare, MapPin, Settings, Star } from "lucide-react";
 import type { Product } from "@/lib/types";
 import { dimensions, formatEuro } from "@/lib/format";

@@ -1,9 +1,10 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { Lightbulb, Send, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import type { CSSProperties } from "react";
 import { products } from "@/lib/data";
 import { dimensions } from "@/lib/format";
 import { productImages } from "@/lib/musterring-assets";
@@ -47,20 +48,30 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
         <aside><Lightbulb size={20} /><span><b>Expert insight</b><em>“Compare dimensions, comfort functions and modularity before consolidating your selection.”</em></span></aside>
       </section>
 
-      <section className="container stitch-compare-matrix">
+      <section className="container stitch-compare-matrix" style={{ "--stitch-compare-count": Math.max(selected.length, 1) } as CSSProperties}>
         <label className="stitch-difference-toggle"><input type="checkbox" checked={diffOnly} onChange={(event) => setDiffOnly(event.target.checked)} /> Only show meaningful differences</label>
         <div className="stitch-compare-products">
           <div className="stitch-compare-spacer" />
           {selected.map((product) => (
             <article key={product.id}>
-              <button aria-label={`Remove ${product.modelCode}`} onClick={() => setIds((current) => current.filter((id) => id !== product.id))}><X size={16} /></button>
-              <Image src={productImages(product.id)[0]} alt={product.name} width={520} height={480} />
-              <h2>{product.modelCode}</h2>
-              <p>{product.subtitle}</p>
-              <div className="chips">{awards.find((award) => award.productId === product.id)?.labels.map((award) => <span className="chip" key={award}>{award}</span>)}</div>
-              <Link href={`/configurator/${product.slug}`}>Configure</Link>
-              <AlternativeFinderButton productId={product.id} label="Find a Better Match" className="" />
-              <button className="stitch-save-compare" onClick={() => { storage.setComparison(ids); setSaved(true); }}>{saved ? "Comparison saved" : "Save comparison"}</button>
+              <button className="stitch-compare-remove" aria-label={`Remove ${product.modelCode}`} onClick={() => setIds((current) => current.filter((id) => id !== product.id))}><X size={16} /></button>
+              <div className="stitch-compare-card-media">
+                <Image src={productImages(product.id)[0]} alt={product.name} width={520} height={480} />
+              </div>
+              <div className="stitch-compare-card-content">
+                <div className="stitch-compare-card-heading">
+                  <h2>{product.modelCode}</h2>
+                  <p>{product.subtitle}</p>
+                </div>
+                <div className="stitch-compare-awards" aria-label={`${product.modelCode} highlights`}>
+                  {awards.find((award) => award.productId === product.id)?.labels.map((award) => <span key={award}>{award}</span>)}
+                </div>
+                <div className="stitch-compare-actions">
+                  <Link href={`/configurator/${product.slug}`}>Configure</Link>
+                  <AlternativeFinderButton productId={product.id} label="Find a Better Match" className="stitch-alternative-compare" />
+                  <button className="stitch-save-compare" onClick={() => { storage.setComparison(ids); setSaved(true); }}>{saved ? "Comparison saved" : "Save comparison"}</button>
+                </div>
+              </div>
             </article>
           ))}
         </div>

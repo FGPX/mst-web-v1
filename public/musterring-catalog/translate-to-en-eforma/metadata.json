@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/beds/translate-to-en-eforma",
   "title": "Translate To En Eforma",
-  "importedAt": "2026-07-29T07:51:20.094Z",
+  "importedAt": "2026-08-03T08:02:26.757Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/translate-to-en-eforma/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
-      "bytes": 22984,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/5/csm_MR11553_A_Eforma_Print_-_15_9ae1576305.jpg",
+      "bytes": 610014,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/translate-to-en-eforma/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
-      "bytes": 27745,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/f/csm_MR11553_B_Eforma_Print_-_15_ad28eb283a.jpg",
+      "bytes": 401773,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/translate-to-en-eforma/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/a/csm_boxspringbett-eforma-stoff-mint-musterring_7488e25c33.jpg",
-      "bytes": 21421,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/d/csm_MR11553_02_Eforma_Print_-_15_27af3119d9.jpg",
+      "bytes": 504592,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/translate-to-en-eforma/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/5/csm_MR11553_A_Eforma_Print_-_15_eccd5196ee.jpg",
-      "bytes": 9122,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/c/csm_MR11553_C01_Eforma_Print_-_15_601e9153f1.jpg",
+      "bytes": 760963,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/translate-to-en-eforma/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/f/csm_MR11553_B_Eforma_Print_-_15_0f2215d68e.jpg",
-      "bytes": 13037,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_MR11347_B_Eforma_-_15_83371aab5d.jpg",
+      "bytes": 248038,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/translate-to-en-eforma/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/d/csm_MR11553_02_Eforma_Print_-_15_2f53344fae.jpg",
-      "bytes": 14208,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/0/csm_MR11347_10_Eforma_-_15_464d3a0bb9.jpg",
+      "bytes": 337227,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/translate-to-en-eforma/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/c/csm_MR11553_C01_Eforma_Print_-_15_053c001ca6.jpg",
-      "bytes": 9089,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/4/csm_MR11347_11_MusterringLeuchten_-_15_908b8dbb05.jpg",
+      "bytes": 269566,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/translate-to-en-eforma/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_MR11347_B_Eforma_-_15_40fb312a2a.jpg",
-      "bytes": 11009,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/7/csm_MR11347_08_Eforma_-_15_3c9b4f0277.jpg",
+      "bytes": 241766,
       "contentType": "image/jpeg"
     }
   ]

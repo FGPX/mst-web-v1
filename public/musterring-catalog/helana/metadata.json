@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/helana",
   "title": "Helana",
-  "importedAt": "2026-07-29T07:51:31.302Z",
+  "importedAt": "2026-08-03T08:02:34.639Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/helana/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/3/csm_esszimmer_helana_echtleder_hellgrau_anthrazit_musterring_01_8c1c54abce.jpg",
-      "bytes": 32242,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_esszimmer_helana_echtleder_braun_eiche_musterring_02_511c3ed240.jpg",
+      "bytes": 969163,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helana/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_esszimmer_helana_echtleder_braun_eiche_musterring_02_05fd0f3b2c.jpg",
-      "bytes": 16140,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/f/csm_esszimmer_helana_eiche_musterring_01_6bf7f81dab.jpg",
+      "bytes": 363550,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helana/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/f/csm_esszimmer_helana_eiche_musterring_01_3997e01ab5.jpg",
-      "bytes": 7601,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/9/csm_esszimmer_helana_echtleder_braun_eiche_musterring_01_31e6697229.jpg",
+      "bytes": 1240519,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helana/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/9/csm_esszimmer_helana_echtleder_braun_eiche_musterring_01_bb5f7f6ba2.jpg",
-      "bytes": 12301,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/3/csm_esszimmer_helana_echtleder_braun_musterring_01_1915088eca.jpg",
+      "bytes": 328860,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helana/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/3/csm_esszimmer_helana_echtleder_braun_musterring_01_842724f61d.jpg",
-      "bytes": 9294,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/7/csm_esszimmer_helana_eiche_bianco_musterring_5e3340cf60.jpg",
+      "bytes": 171104,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helana/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/7/csm_esszimmer_helana_eiche_bianco_musterring_47ff17b93d.jpg",
-      "bytes": 3879,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/d/csm_esszimmer_helana_eiche_detail_musterring_4d20e0b17e.jpg",
+      "bytes": 540639,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helana/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/d/csm_esszimmer_helana_eiche_detail_musterring_77809bbf36.jpg",
-      "bytes": 13851,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_esszimmer_helana_leder_perle_musterring_d3b1372620.jpg",
+      "bytes": 158817,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helana/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_esszimmer_helana_leder_perle_musterring_bd5759f36c.jpg",
-      "bytes": 4191,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/8/csm_esszimmer_helana_mood_deko_musterring_74f978f81b.jpg",
+      "bytes": 560904,
       "contentType": "image/jpeg"
     }
   ]

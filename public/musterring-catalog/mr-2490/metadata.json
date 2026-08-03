@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2490",
   "title": "MR 2490",
-  "importedAt": "2026-07-29T07:50:08.940Z",
+  "importedAt": "2026-08-03T08:01:41.536Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-2490/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/a/csm_MR11486_A_MR2490_Online_-_15_10961064ea.jpg",
-      "bytes": 24405,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_sofa-mr2490-beige-musterring_3923b3b526.jpg",
+      "bytes": 810141,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_Sofa-Sessel-MR_2490-Konfigurator-Echtleder-kurkuma-grau-freigestellt-Musterring_322f0c49d3.jpg",
-      "bytes": 8388,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_sofa-mr2490-beige-gestell-bronze-musterring_b9a55f1edb.jpg",
+      "bytes": 577670,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_sofa-mr2490-beige-musterring_6c88a542d4.jpg",
-      "bytes": 9519,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_sofa-mr2490-beige-musterring-01_77c438c52f.jpg",
+      "bytes": 455234,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_sofa-mr2490-beige-gestell-bronze-musterring_c03a9190fc.jpg",
-      "bytes": 12986,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_sofa-mr2490-beige-gestell-schwarz-musterring_b6ecdec2c3.jpg",
+      "bytes": 209965,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_sofa-mr2490-beige-musterring-01_a489a4e559.jpg",
-      "bytes": 13887,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/d/csm_sofa-sessel-mr-2490-eckgruppe-anreihsofa-armlehne-links-n80L-longchair-armlehne-rechts-K105R-echtleder-kurkuma-musterring_03700a4fd8.jpg",
+      "bytes": 752405,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_sofa-mr2490-beige-gestell-schwarz-musterring_081de57235.jpg",
-      "bytes": 2204,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/b/csm_sofa-sessel-mr-2490-eckgruppe-echtleder-kurkuma-detail-kopfteilverstellung-musterring_c4a635a4c2.jpg",
+      "bytes": 587922,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/d/csm_sofa-sessel-mr-2490-eckgruppe-anreihsofa-armlehne-links-n80L-longchair-armlehne-rechts-K105R-echtleder-kurkuma-musterring_3fae3d76d9.jpg",
-      "bytes": 11704,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/2/csm_sofa-sessel--mr-2490-eckgruppe-echtleder-kurkuma-detail-metallfu%C3%9F-bronze-musterring_12190bcf6d.jpg",
+      "bytes": 365649,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/b/csm_sofa-sessel-mr-2490-eckgruppe-echtleder-kurkuma-detail-kopfteilverstellung-musterring_5d8e816f6b.jpg",
-      "bytes": 6821,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/5/csm_sofa-sessel-mr-2490-eckgruppe-echtleder-kurkuma-detail-musterring-produktkennzeichen-musterring_6e6b585f2f.jpg",
+      "bytes": 652422,
       "contentType": "image/jpeg"
     }
   ]

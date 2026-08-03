@@ -1,15 +1,15 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/wardrobes/mr-imola",
   "title": "MR IMOLA",
-  "importedAt": "2026-07-29T07:51:25.025Z",
+  "importedAt": "2026-08-03T08:02:30.250Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-imola/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/b/csm_kleiderschrank-imola-wei%C3%9Fglas-polarwei%C3%9F-musterring_45f6f0e71c.jpg",
-      "bytes": 23310,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/b/csm_kleiderschrank-imola-wei%C3%9Fglas-polarwei%C3%9F-musterring_f2f903bcfc.jpg",
+      "bytes": 275242,
       "contentType": "image/jpeg"
     },
     {

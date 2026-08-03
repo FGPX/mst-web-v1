@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-276",
   "title": "MR 276",
-  "importedAt": "2026-07-29T07:49:47.585Z",
+  "importedAt": "2026-08-03T08:01:27.757Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-276/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/2/csm_sessel_mr276_leder_rot_musterring_06_68fad890ed.jpg",
-      "bytes": 34608,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/7/csm_sessel_mr276_leder_anthrazit_grau_musterring_03_4d4c61fe01.jpg",
+      "bytes": 645288,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-276/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/7/csm_sessel_mr276_leder_anthrazit_grau_musterring_03_1681443d98.jpg",
-      "bytes": 9920,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/6/csm_sessel_mr276_leder_anthrazit_grau_musterring_02_47ed5bcf3e.jpg",
+      "bytes": 471713,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-276/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/6/csm_sessel_mr276_leder_anthrazit_grau_musterring_02_d4db496735.jpg",
-      "bytes": 8345,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/1/csm_sessel_mr276_leder_rodeo_anthrazit_grau_musterring_01_108473fdf5.jpg",
+      "bytes": 901163,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-276/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/1/csm_sessel_mr276_leder_rodeo_anthrazit_grau_musterring_01_014ffb8490.jpg",
-      "bytes": 8771,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/4/csm_sessel_mr276_leder_anthrazit_grau_nussbaum_musterring_01_77777435e5.jpg",
+      "bytes": 491423,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-276/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/4/csm_sessel_mr276_leder_anthrazit_grau_nussbaum_musterring_01_8921146089.jpg",
-      "bytes": 10735,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/e/csm_sessel_mr276_echtleder_gruen_beige_musterring_05_23707875e0.jpg",
+      "bytes": 845278,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-276/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/e/csm_sessel_mr276_echtleder_gruen_beige_musterring_05_dac7cc76bd.jpg",
-      "bytes": 11531,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/6/csm_sessel_mr276_echtleder_gruen_beige_musterring_04_f773d52b9e.jpg",
+      "bytes": 571365,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-276/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/6/csm_sessel_mr276_echtleder_gruen_beige_musterring_04_97076bc63b.jpg",
-      "bytes": 6018,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/2/csm_sessel_mr276_echtleder_gruen_beige_musterring_06_b04d1edfb2.jpg",
+      "bytes": 226453,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-276/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/2/csm_sessel_mr276_echtleder_gruen_beige_musterring_06_57403afc5b.jpg",
-      "bytes": 8165,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/2/csm_sessel_mr276_echtleder_gruen_beige_musterring_02_da37cb2d5f.jpg",
+      "bytes": 958877,
       "contentType": "image/jpeg"
     }
   ]

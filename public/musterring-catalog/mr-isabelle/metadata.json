@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/wardrobes/mr-isabelle",
   "title": "MR ISABELLE",
-  "importedAt": "2026-07-29T07:51:26.438Z",
+  "importedAt": "2026-08-03T08:02:31.233Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-isabelle/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/0/csm_kleiderschrank-isabelle-dekor-graphit-eiche-bianco-musterring-02_a6169576ee.jpg",
-      "bytes": 25500,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/0/csm_MR11218_F2_MRIsabelle_-_15_457880c8a0.jpg",
+      "bytes": 392084,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/0/csm_MR11218_F2_MRIsabelle_-_15_3ffab2272b.jpg",
-      "bytes": 7274,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/b/csm_kleiderschrank-isabelle-dekor-graphit-eiche-bianco-musterring_1d24b1a8ac.jpg",
+      "bytes": 491039,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/b/csm_kleiderschrank-isabelle-dekor-graphit-eiche-bianco-musterring_71b62a4d37.jpg",
-      "bytes": 7479,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_kommode-isabelle-dekor-graphit-eiche-bianco-musterring_9aacdeec95.jpg",
+      "bytes": 625870,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_kommode-isabelle-dekor-graphit-eiche-bianco-musterring_57a1e3f19b.jpg",
-      "bytes": 7872,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/f/csm_kleiderschrank-isabelle-dekor-graphit-eiche-bianco-musterring-01_0db4b6fd45.jpg",
+      "bytes": 312856,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/f/csm_kleiderschrank-isabelle-dekor-graphit-eiche-bianco-musterring-01_ea0f05d784.jpg",
-      "bytes": 9830,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/4/csm_nachtkonsole-isabelle-dekor-graphit-eiche-bianco-musterring_2a7e01c067.jpg",
+      "bytes": 412004,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/4/csm_nachtkonsole-isabelle-dekor-graphit-eiche-bianco-musterring_657ff07168.jpg",
-      "bytes": 15586,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/b/csm_kommode-isabelle-dekor-graphit-eiche-bianco-musterring-01_440c8e5c19.jpg",
+      "bytes": 233030,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/b/csm_kommode-isabelle-dekor-graphit-eiche-bianco-musterring-01_d8fb0616da.jpg",
-      "bytes": 9874,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/3/csm_kleiderschrank-isabelle-dekor-champagner-eiche-bianco-musterring_02_41ee6a7260.jpg",
+      "bytes": 447744,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/3/csm_kleiderschrank-isabelle-dekor-champagner-eiche-bianco-musterring_02_b5740d2878.jpg",
-      "bytes": 8105,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/a/csm_kleiderschrank-isabelle-innenausstattung-dekor-champagner-eiche-bianco-musterring_ca2ef63e9a.jpg",
+      "bytes": 650133,
       "contentType": "image/jpeg"
     }
   ]

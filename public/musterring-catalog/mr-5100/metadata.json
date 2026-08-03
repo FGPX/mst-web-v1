@@ -1,15 +1,15 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-5100",
   "title": "MR 5100",
-  "importedAt": "2026-07-29T07:50:21.552Z",
+  "importedAt": "2026-08-03T08:01:46.226Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-5100/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/e/1/csm_MR11626_A_MR5100_Print.tif_156a3cd327.jpg",
-      "bytes": 28763,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/e/1/csm_MR11626_A_MR5100_Print.tif_fea6bf0fd2.jpg",
+      "bytes": 612570,
       "contentType": "image/jpeg"
     },
     {

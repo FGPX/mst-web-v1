@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import { usePathname, useRouter } from "next/navigation";
 import { Check, ChevronDown, Mic, MicOff, Send, Sparkles, Trash2, Volume2, VolumeX, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";

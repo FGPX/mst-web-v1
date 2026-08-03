@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -63,7 +63,7 @@ export default function HomePage() {
           </div>
           <div className="simple-hero-visual">
             <Image
-              src="/test-assets/musterring/sofas-armchairs/image-04.jpg"
+              src="/musterring-catalog/justb-pm100/image-01.jpg"
               alt="Bright living room furnished with a Musterring sofa"
               fill
               priority

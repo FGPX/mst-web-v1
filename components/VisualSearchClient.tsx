@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { Camera, Check, LoaderCircle, Sparkles, Upload, X } from "lucide-react";
 import { useMemo, useRef, useState } from "react";

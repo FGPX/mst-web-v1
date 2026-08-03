@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/coffee-tables-side-tables/nara-new-kopie-1",
   "title": "Nara New Kopie 1",
-  "importedAt": "2026-07-29T07:50:58.382Z",
+  "importedAt": "2026-08-03T08:02:10.387Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/nara-new-kopie-1/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
-      "bytes": 22984,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/f/csm_GM9789_L_Lucia_Ret_-_15_3e3176e0ca.jpg",
+      "bytes": 441469,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nara-new-kopie-1/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
-      "bytes": 27745,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/3/csm_GM9921.2_01_Toscana_Mood_-_15_bb59297ca0.jpg",
+      "bytes": 379844,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nara-new-kopie-1/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/f/csm_MR11413_H_MRToscana_-_15_60d7f92f5b.jpg",
-      "bytes": 26947,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_GM10420_Toscana_20_RET_-_15_c3afb700d9.jpg",
+      "bytes": 99909,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nara-new-kopie-1/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/f/csm_GM9789_L_Lucia_Ret_-_15_374434ecab.jpg",
-      "bytes": 9484,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/6/csm_GM9921.2_02_Toscana_Mood_-_15_da0f73826c.jpg",
+      "bytes": 805088,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nara-new-kopie-1/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/3/csm_GM9921.2_01_Toscana_Mood_-_15_ff19f7c4ec.jpg",
-      "bytes": 12776,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_GM11413_E_Toscana_-_15_6553aeea99.jpg",
+      "bytes": 741905,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nara-new-kopie-1/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_GM10420_Toscana_20_RET_-_15_0436223f36.jpg",
-      "bytes": 3031,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/3/csm_regal-toscana-wildeiche-metall-schwarz-musterring_11b303a8dc.jpg",
+      "bytes": 457845,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nara-new-kopie-1/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/6/csm_GM9921.2_02_Toscana_Mood_-_15_963bb94b18.jpg",
-      "bytes": 14549,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/2/csm_couchtisch-mr-toscana-regal-wildeiche-gestell-schwarz-musterring-01_2e42ceea00.jpg",
+      "bytes": 226120,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nara-new-kopie-1/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_GM11413_E_Toscana_-_15_ba6015f10e.jpg",
-      "bytes": 10104,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/8/csm_MR11413_R_MRToscana_-_15_a32228dd9c.jpg",
+      "bytes": 794598,
       "contentType": "image/jpeg"
     }
   ]

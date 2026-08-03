@@ -1,33 +1,33 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2342",
   "title": "MR 2342",
-  "importedAt": "2026-07-29T07:50:06.928Z",
+  "importedAt": "2026-08-03T08:01:40.580Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-2342/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/0/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-musterring_bb1861c1f5.jpg",
-      "bytes": 24839,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/1/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-musterring-01_7e890ad388.jpg",
+      "bytes": 652042,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2342/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/1/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-musterring-01_6b21c847a1.jpg",
-      "bytes": 9698,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/a/csm_sessel-mr2342-leder-dunkelgruen-kopfteilverstellung-musterring_b33faf0314.jpg",
+      "bytes": 872186,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2342/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/a/csm_sessel-mr2342-leder-dunkelgruen-kopfteilverstellung-musterring_78da66cab5.jpg",
-      "bytes": 11197,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-detail-musterring_2c8b0877b1.jpg",
+      "bytes": 688166,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-2342/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-detail-musterring_90f21f2877.jpg",
-      "bytes": 10209,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/0/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-musterring_c195a092ed.jpg",
+      "bytes": 402013,
       "contentType": "image/jpeg"
     }
   ]

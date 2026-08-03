@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nova",
   "title": "Nova",
-  "importedAt": "2026-07-29T07:51:41.654Z",
+  "importedAt": "2026-08-03T08:02:44.234Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/nova/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/4/csm_esszimmer-nova-esstisch-platte-keramik-mooreiche-stuhl-leder-tendens-light-coral-stoff-taft-coral-musterring_8cf5e18f1b.jpg",
-      "bytes": 27329,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/4/csm_esszimmer-nova-esstisch-platte-keramik-mooreiche-stuhl-leder-tendens-light-coral-stoff-taft-coral-musterring_486489663b.jpg",
+      "bytes": 762167,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nova/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_esszimmer-nova-esstisch-holzoptik-stuhl-rot-Detail-Musterring_c58fa4935b.jpg",
-      "bytes": 10670,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_esszimmer-nova-esstisch-holzoptik-stuhl-rot-Detail-Musterring_40f5872a66.jpg",
+      "bytes": 579244,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nova/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_esszimmer-nova-esstisch-holzoptik-gestell-schwarz-musterring_7546786412.jpg",
-      "bytes": 9505,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_esszimmer-nova-esstisch-holzoptik-gestell-schwarz-musterring_3b5f584cce.jpg",
+      "bytes": 271319,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nova/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_esszimmer-nova-esstisch-holzoptik-stuhl-rot-musterring_0581bcd606.jpg",
-      "bytes": 11109,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_esszimmer-nova-esstisch-holzoptik-stuhl-rot-musterring_53f939fbe8.jpg",
+      "bytes": 592708,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nova/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/9/csm_esszimmer-nova-esstisch-platte-asteiche-ge%C3%B6lt-stuhl-echtleder-tendens-musterring_5f0a41f5d0.jpg",
-      "bytes": 11135,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/9/csm_esszimmer-nova-esstisch-platte-asteiche-ge%C3%B6lt-stuhl-echtleder-tendens-musterring_b722b56ecc.jpg",
+      "bytes": 854239,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nova/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/f/csm_esszimmer-nova-esstisch-massivholzplatte-musterring_da73108a5f.jpg",
-      "bytes": 7959,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/f/csm_esszimmer-nova-esstisch-massivholzplatte-musterring_e3f769a4e4.jpg",
+      "bytes": 435179,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nova/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_esszimmer-nova-freischwinger-echtleder-tendens-lava-gestell-edelstahl-musterring_5c3dc38ce7.jpg",
-      "bytes": 4098,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_esszimmer-nova-freischwinger-echtleder-tendens-lava-gestell-edelstahl-musterring_8a5e3999e1.jpg",
+      "bytes": 149051,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/nova/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_esszimmer-nova-armlehnstuhl-echtleder-tendens-lava-gestell-edelstahl-musterring_177cb9903a.jpg",
-      "bytes": 4761,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_esszimmer-nova-armlehnstuhl-echtleder-tendens-lava-gestell-edelstahl-musterring_ccda47dbf5.jpg",
+      "bytes": 138877,
       "contentType": "image/jpeg"
     }
   ]

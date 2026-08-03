@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9420",
   "title": "MR 9420",
-  "importedAt": "2026-07-29T07:50:33.044Z",
+  "importedAt": "2026-08-03T08:01:54.580Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-9420/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/6/csm_Sofa-Sessel-MR_9420-Eckgruppe-315BT330-Beistelltisch-BAR-Einzelsessel-Stoff-Gr%C3%BCn-Escana_Anthrazit-Metall-schwarz-Musterring_38368ed9a8.jpg",
-      "bytes": 24902,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-offener_Abschluss_links-Modul-Free-Corner-Pure-Longchair-Stoff-Rivano_Denim-Sambia_Stone-Ravenna_Perle-Diva_Stone-Rivano_Perle-Rivoli_Perle-Musterring_cb36f8ffb7.jpg",
+      "bytes": 731582,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-offener_Abschluss_links-Modul-Free-Corner-Pure-Longchair-Stoff-Rivano_Denim-Sambia_Stone-Ravenna_Perle-Diva_Stone-Rivano_Perle-Rivoli_Perle-Musterring_0a3ecae4b3.jpg",
-      "bytes": 9870,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_Fu%C3%9Fst%C3%BCtze-R%C3%BCckenlehne-Musterring_a40728b7c5.jpg",
+      "bytes": 1122075,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_Fu%C3%9Fst%C3%BCtze-R%C3%BCckenlehne-Musterring_e207891f05.jpg",
-      "bytes": 8291,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-R%C3%BCckenlehne-Musterring_06ca976ed3.jpg",
+      "bytes": 1082387,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-R%C3%BCckenlehne-Musterring_ea98280794.jpg",
-      "bytes": 13037,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_R%C3%BCckenverstellung-Musterring_db1b09b644.jpg",
+      "bytes": 1085627,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_R%C3%BCckenverstellung-Musterring_74f58dc6cd.jpg",
-      "bytes": 10459,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_Sofa-Sessel-MR_9420-Gruppe-Modul_Free-Armlehne_links-manuelle_R%C3%BCckenverstellung-Modul_Pure-ohne_R%C3%BCcken-ohne_Armlehne-Modul_Free-Armlehne_rechts-Fu%C3%9Fauflage_motorisch-Stoff-Vivique_Offwhite-Leder-Togo_Grege-Musterring_65fa21df2c.jpg",
+      "bytes": 685556,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_Sofa-Sessel-MR_9420-Gruppe-Modul_Free-Armlehne_links-manuelle_R%C3%BCckenverstellung-Modul_Pure-ohne_R%C3%BCcken-ohne_Armlehne-Modul_Free-Armlehne_rechts-Fu%C3%9Fauflage_motorisch-Stoff-Vivique_Offwhite-Leder-Togo_Grege-Musterring_7e9b352c79.jpg",
-      "bytes": 9985,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sessel-Sofa-MR_9420-Modul_Free-mit_R%C3%BCcken-Armlehne_rechts-Leder-Togo_Grege-Detail-motorische_Fu%C3%9Fauflage-Musterring_4010a965bb.jpg",
+      "bytes": 581399,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sessel-Sofa-MR_9420-Modul_Free-mit_R%C3%BCcken-Armlehne_rechts-Leder-Togo_Grege-Detail-motorische_Fu%C3%9Fauflage-Musterring_b0ef6dc3e3.jpg",
-      "bytes": 9478,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_Sofa-Sessel-MR_9420-Leder-Togo_Grege-Stoff-Vivique_Offwhite-Ziernaht-Ton_in_Ton-Detail-Musterring_288f661e96.jpg",
+      "bytes": 979853,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_Sofa-Sessel-MR_9420-Leder-Togo_Grege-Stoff-Vivique_Offwhite-Ziernaht-Ton_in_Ton-Detail-Musterring_e3bbdc8785.jpg",
-      "bytes": 11076,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_Sessel-Sofa-MR_9420-Modul_Free-mit_R%C3%BCcken-Armlehne_links-Leder-Togo_Grege-Detail-manuelle_R%C3%BCckenverstellung-Musterring_804b9fc74a.jpg",
+      "bytes": 905776,
       "contentType": "image/jpeg"
     }
   ]

@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/picara",
   "title": "Picara",
-  "importedAt": "2026-07-29T07:51:43.159Z",
+  "importedAt": "2026-08-03T08:02:45.617Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/picara/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/c/csm_esszimmer-picara-esstisch-wildeiche-stuhl-stoff-leder-leger-musterring_f572044561.jpg",
-      "bytes": 28792,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/c/csm_esszimmer-picara-esstisch-wildeiche-stuhl-stoff-leder-leger-musterring_c6c5c878f7.jpg",
+      "bytes": 617068,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/picara/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/b/csm_esszimmer-picara-esstisch-wildeiche-musterring_fd1c953955.jpg",
-      "bytes": 16522,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/b/csm_esszimmer-picara-esstisch-wildeiche-musterring_719530a81a.jpg",
+      "bytes": 666022,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/picara/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_esszimmer-picara-stoff-hugo-mustard-musterring_11f09c4cd7.jpg",
-      "bytes": 12415,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_esszimmer-picara-stoff-hugo-mustard-musterring_d86c675f5b.jpg",
+      "bytes": 629368,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/picara/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/e/csm_esszimmer-picara-esstisch-wildeiche-stuhl-stoff-musterring_5dc6f79f12.jpg",
-      "bytes": 11948,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/e/csm_esszimmer-picara-esstisch-wildeiche-stuhl-stoff-musterring_d94453c06e.jpg",
+      "bytes": 392554,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/picara/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_esszimmer-picara-stuhl-tisch-stoff-eiche-grey-taupe-musterring_22a5d436b1.jpg",
-      "bytes": 11786,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_esszimmer-picara-stuhl-tisch-stoff-eiche-grey-taupe-musterring_ed94860687.jpg",
+      "bytes": 832342,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/picara/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/a/csm_esszimmer-picara-eiche-mosaik-musterring_db5371c408.jpg",
-      "bytes": 17787,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/a/csm_esszimmer-picara-eiche-mosaik-musterring_0b064b10da.jpg",
+      "bytes": 1902606,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/picara/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/3/csm_esszimmer-picara-eiche-mosaik-gestellauszug-musterring_a8ab38f598.jpg",
-      "bytes": 12456,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/3/csm_esszimmer-picara-eiche-mosaik-gestellauszug-musterring_928c098953.jpg",
+      "bytes": 565995,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/picara/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_esszimmer-picara-stuhl-polster-legere-taupe-musterring_497d986b7c.jpg",
-      "bytes": 17512,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_esszimmer-picara-stuhl-polster-legere-taupe-musterring_fe7df617a0.jpg",
+      "bytes": 1430104,
       "contentType": "image/jpeg"
     }
   ]

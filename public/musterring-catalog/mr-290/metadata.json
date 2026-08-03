@@ -1,39 +1,39 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-290",
   "title": "MR 290",
-  "importedAt": "2026-07-29T07:49:52.069Z",
+  "importedAt": "2026-08-03T08:01:29.671Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-290/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/0/csm_MR11574_A_MR290_MR261_Print_-_15_84ce186060.jpg",
-      "bytes": 25481,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/c/csm_sofa-mr290-leder-vivre-alu-musterring_c92e4fc3f2.jpg",
+      "bytes": 548333,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-290/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/c/csm_sofa-mr290-leder-vivre-alu-musterring_9e39c42c4b.jpg",
-      "bytes": 8721,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_sofa-mr290-leder-vivre-alu-modelaufnahme-musterring_80ea54b584.jpg",
+      "bytes": 349333,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-290/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_sofa-mr290-leder-vivre-alu-modelaufnahme-musterring_5fd818acfb.jpg",
-      "bytes": 16125,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_sofa-mr290-leder-vivre-alu-detail-sitztiefenverstellung-musterring_8ce5a87b9d.jpg",
+      "bytes": 246430,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-290/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_sofa-mr290-leder-vivre-alu-detail-sitztiefenverstellung-musterring_36721abeef.jpg",
-      "bytes": 12982,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/0/csm_sofa-mr290-leder-vivre-alu-kopfst%C3%BCtze-musterring_ec1e645a0a.jpg",
+      "bytes": 289622,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-290/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/0/csm_sofa-mr290-leder-vivre-alu-kopfst%C3%BCtze-musterring_f7a7909ef8.jpg",
-      "bytes": 8111,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/0/csm_MR11574_A_MR290_MR261_Print_-_15_9c38368dc8.jpg",
+      "bytes": 473560,
       "contentType": "image/jpeg"
     }
   ]

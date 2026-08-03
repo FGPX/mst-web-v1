@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9425",
   "title": "MR 9425",
-  "importedAt": "2026-07-29T07:50:34.517Z",
+  "importedAt": "2026-08-03T08:01:55.361Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/mr-9425/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_Musterring-Sesse-MR9425-offwhite-Header_8b6bac15cd.jpg",
-      "bytes": 30002,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/1/csm_Sofa-Sessel-MR_9425-Einzelsessel-MR_9420-Hocker-Model-Pure-Beistelltisch-BAR-Stoff-Diva_Ocean-Ravenna_Marine-Metall-schwarz-Musterring_6057182804.jpg",
+      "bytes": 781649,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/1/csm_Sofa-Sessel-MR_9425-Einzelsessel-MR_9420-Hocker-Model-Pure-Beistelltisch-BAR-Stoff-Diva_Ocean-Ravenna_Marine-Metall-schwarz-Musterring_8a6f201ffb.jpg",
-      "bytes": 8197,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Detail-Zierband-Musterring_b892b4eb1a.jpg",
+      "bytes": 304866,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Detail-Zierband-Musterring_ccbf10614c.jpg",
-      "bytes": 6109,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/6/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Vogelperspektive-Musterring_fcd096ade4.jpg",
+      "bytes": 537414,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/6/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Vogelperspektive-Musterring_b43a0d8d32.jpg",
-      "bytes": 11074,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Musterring_af70269d2e.jpg",
+      "bytes": 221033,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Musterring_97b3215354.jpg",
-      "bytes": 6751,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/0/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Gelb-Fu%C3%9F-Black-freigestellt-Musterring_65be978258.jpg",
+      "bytes": 926333,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/0/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Gelb-Fu%C3%9F-Black-freigestellt-Musterring_f3bb7022a6.jpg",
-      "bytes": 7970,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/b/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Gelb-Fu%C3%9F-Black-freigestellt-seitlich-Musterring_cf1a7996d0.jpg",
+      "bytes": 774510,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/b/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Gelb-Fu%C3%9F-Black-freigestellt-seitlich-Musterring_582657a26e.jpg",
-      "bytes": 6935,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Velluti_Whiskey-Fu%C3%9F-Black-Musterring_7d88c2c2cd.jpg",
+      "bytes": 1183022,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Velluti_Whiskey-Fu%C3%9F-Black-Musterring_99d2e81162.jpg",
-      "bytes": 15147,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Velluti_Whiskey-Fu%C3%9F-Black-freigestellt-Musterring_237b47af7d.jpg",
+      "bytes": 382568,
       "contentType": "image/jpeg"
     }
   ]

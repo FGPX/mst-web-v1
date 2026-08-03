@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/HighQualityImage";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Database, Network, RefreshCcw, Route, Sparkles, Store } from "lucide-react";
 import { useState } from "react";

@@ -1,57 +1,57 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/korsika",
   "title": "Korsika",
-  "importedAt": "2026-07-29T07:50:47.733Z",
+  "importedAt": "2026-08-03T08:02:01.255Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/korsika/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/5/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_03_03af1e1fc4.jpg",
-      "bytes": 24022,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_01_229ee6dad2.jpg",
+      "bytes": 293348,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/korsika/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/2/csm_wohnzimmer-korsika-wohnmoebel-lack-crema-musterring_8f98d969df.jpg",
-      "bytes": 17655,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/b/csm_wohnmoebel_korsika_eiche_musterring_05_8481f2bf1a.jpg",
+      "bytes": 276007,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/korsika/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_01_c6d6f62b0b.jpg",
-      "bytes": 7871,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_wohnmoebel_korsika_lack_creme_musterring_01_c6e53b20c4.jpg",
+      "bytes": 133904,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/korsika/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/b/csm_wohnmoebel_korsika_eiche_musterring_05_bfb6591d7a.jpg",
-      "bytes": 8879,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/1/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_02_860e426e6c.jpg",
+      "bytes": 285416,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/korsika/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_wohnmoebel_korsika_lack_creme_musterring_01_7d0195bb8a.jpg",
-      "bytes": 4849,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_06_8e0049cea2.jpg",
+      "bytes": 699903,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/korsika/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/1/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_02_69195766e8.jpg",
-      "bytes": 8015,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_04_4d09085769.jpg",
+      "bytes": 199520,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/korsika/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_06_2a850b82f1.jpg",
-      "bytes": 10726,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/0/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_05_76fac72703.jpg",
+      "bytes": 455742,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/korsika/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_04_80b0d04b7f.jpg",
-      "bytes": 5813,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/9/csm_wohnmoebel_korsika_lack_creme_eiche_musterring_07_8403436c31.jpg",
+      "bytes": 552709,
       "contentType": "image/jpeg"
     }
   ]

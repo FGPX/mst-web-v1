@@ -1,33 +1,33 @@
 {
   "page": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/helmond-outdoor",
   "title": "Helmond Outdoor",
-  "importedAt": "2026-07-29T07:51:57.086Z",
+  "importedAt": "2026-08-03T08:02:58.539Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
       "file": "/musterring-catalog/helmond-outdoor/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/4/csm_gartentisch-belgien-helmond-outdoor-edelstahl-geb%C3%BCrstet-zementoptik-musterring_9b45761a10.jpg",
-      "bytes": 33548,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/6/csm_gartentisch-schweden-helmond-outdoor-teak-massiv-aluminium-pulverbeschichtet-natur-anthrazit-musterring-02_8fa23ad613.jpg",
+      "bytes": 983227,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helmond-outdoor/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/6/csm_gartentisch-schweden-helmond-outdoor-teak-massiv-aluminium-pulverbeschichtet-natur-anthrazit-musterring-02_fca4982344.jpg",
-      "bytes": 12020,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/6/csm_gartenstuhl-helmond-outdoor-pulverbeschichtet-schwarz-kunstgeflecht-onyxschwarz-musterring_4044f65787.jpg",
+      "bytes": 636541,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helmond-outdoor/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/6/csm_gartenstuhl-helmond-outdoor-pulverbeschichtet-schwarz-kunstgeflecht-onyxschwarz-musterring_61bc8819a3.jpg",
-      "bytes": 7766,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_gartentisch-schweden-helmond-outdoor-teak-massiv-aluminium-pulverbeschichtet-natur-anthrazit-musterring-01_af10f50668.jpg",
+      "bytes": 518654,
       "contentType": "image/jpeg"
     },
     {
       "file": "/musterring-catalog/helmond-outdoor/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_gartentisch-schweden-helmond-outdoor-teak-massiv-aluminium-pulverbeschichtet-natur-anthrazit-musterring-01_4a7556bc0f.jpg",
-      "bytes": 11360,
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/4/csm_gartentisch-belgien-helmond-outdoor-edelstahl-geb%C3%BCrstet-zementoptik-musterring_c7be540f2f.jpg",
+      "bytes": 645001,
       "contentType": "image/jpeg"
     }
   ]
