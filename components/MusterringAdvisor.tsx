@@ -3,7 +3,7 @@
 import Image from "@/components/HighQualityImage";
 import { usePathname, useRouter } from "next/navigation";
 import { Check, ChevronDown, Mic, MicOff, Send, Sparkles, Trash2, Volume2, VolumeX, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { materials, products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
@@ -76,7 +76,6 @@ export function MusterringAdvisor() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [open]);
-  const sourceProducts = useMemo(() => products.filter((product) => context.referencedProductIds.includes(product.id)), [context.referencedProductIds]);
   const speak = (text: string) => {
     if (muted || !voiceEnabled || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
@@ -182,7 +181,7 @@ export function MusterringAdvisor() {
     setContext(next); window.sessionStorage.removeItem(memoryKey);
   };
   if (!open) return <div className="assistant-dock" aria-label="Musterring assistance">
-    <button className="advisor-launcher" aria-label="Open Musterring Product Advisor" onClick={() => { setOpen(true); setMinimized(false); storage.track({ name: "chatbot_opened" }); }}><Sparkles /><span>Ask Musterring</span></button>
+    <button className="advisor-launcher" aria-label="Open Musterring Product Advisor" onClick={() => { setOpen(true); setMinimized(false); storage.track({ name: "chatbot_opened" }); }}><Sparkles /><span><small>AI Product Advisor</small><strong>Ask Musterring</strong></span></button>
     <button className="voice-launcher" aria-label="Start Voice Interior Assistant" title="Use voice assistant" onClick={() => { setOpen(true); setMinimized(false); window.setTimeout(() => void startVoice(), 50); }}><Mic /></button>
   </div>;
   return <aside className={`advisor-panel ${minimized ? "is-minimized" : ""}`} role="dialog" aria-modal="true" aria-labelledby="advisor-title">

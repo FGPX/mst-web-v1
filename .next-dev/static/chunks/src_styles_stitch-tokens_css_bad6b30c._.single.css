@@ -1,0 +1,37 @@
+/* [project]/src/styles/stitch-tokens.css [app-client] (css) */
+:root {
+  --stitch-bg-primary: #fbf9f4;
+  --stitch-bg-secondary: #f0eee9;
+  --stitch-bg-low: #f5f3ee;
+  --stitch-bg-high: #e4e2dd;
+  --stitch-bg-inverse: #30312e;
+  --stitch-text-primary: #1b1c19;
+  --stitch-text-secondary: #46474a;
+  --stitch-text-inverse: #f2f1ec;
+  --stitch-accent: #845238;
+  --stitch-border: #76777b;
+  --stitch-border-soft: #c7c6ca;
+  --stitch-font-display: "Libre Caslon Text", Georgia, "Times New Roman", serif;
+  --stitch-font-ui: Manrope, "Segoe UI", Arial, sans-serif;
+  --stitch-display-size: 64px;
+  --stitch-display-mobile: 40px;
+  --stitch-headline-size: 32px;
+  --stitch-body-lg: 18px;
+  --stitch-body-md: 16px;
+  --stitch-label: 12px;
+  --stitch-content-width: 1440px;
+  --stitch-gutter: 24px;
+  --stitch-margin-desktop: 64px;
+  --stitch-margin-mobile: 20px;
+  --stitch-section-space: 120px;
+  --stitch-radius-sm: 4px;
+  --stitch-radius: 8px;
+  --stitch-radius-lg: 16px;
+  --stitch-button-height: 56px;
+  --stitch-button-padding-x: 40px;
+  --stitch-shadow-soft: 0 30px 80px rgba(27, 28, 25, .1);
+  --stitch-transition: .3s ease;
+  --stitch-nav-z: 50;
+}
+
+/*# sourceMappingURL=src_styles_stitch-tokens_css_bad6b30c._.single.css.map*/

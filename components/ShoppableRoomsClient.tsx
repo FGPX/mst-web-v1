@@ -2,53 +2,135 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { Plus, Star } from "lucide-react";
+import { ArrowRight, Check, Layers3, Plus } from "lucide-react";
 import { useState } from "react";
 import { products, roomScenes } from "@/lib/data";
 import { storage } from "@/lib/persistence";
 
+const sceneCopy: Record<string, { eyebrow: string; description: string }> = {
+  "scene-1": {
+    eyebrow: "Warm and natural",
+    description: "A calm living room built around soft neutrals, warm timber and comfortable everyday seating."
+  },
+  "scene-2": {
+    eyebrow: "Graphic city living",
+    description: "A confident urban look with clean lines, strong contrast and flexible seating choices."
+  },
+  "scene-3": {
+    eyebrow: "Soft modular comfort",
+    description: "A light, relaxed setting with generous comfort and a layout that can adapt to the room."
+  }
+};
+
+const hotspotPositions: Record<string, Array<{ left: string; top: string }>> = {
+  "scene-1": [{ left: "77%", top: "63%" }, { left: "25%", top: "68%" }, { left: "54%", top: "57%" }],
+  "scene-2": [{ left: "51%", top: "66%" }, { left: "72%", top: "69%" }],
+  "scene-3": [{ left: "53%", top: "62%" }, { left: "20%", top: "58%" }]
+};
+
 export function ShoppableRoomsClient() {
-  const [sceneProducts, setSceneProducts] = useState<Record<string, string[]>>(() => Object.fromEntries(roomScenes.map((scene) => [scene.id, scene.productIds])));
   const [notice, setNotice] = useState("");
-  const replace = (sceneId: string, index: number, productId: string) => setSceneProducts((current) => ({
-    ...current,
-    [sceneId]: current[sceneId].map((id, itemIndex) => itemIndex === index ? productId : id)
-  }));
-  return <section className="section"><div className="container">
-    <p className="eyebrow">Shoppable Rooms</p><h1 className="h2">Curated editorial room scenes.</h1>
-    <p className="lead">Open hotspots, save individual pieces, replace a selection, or create a complete local project from the room.</p>
-    {notice ? <p role="status" className="card card-body">{notice}</p> : null}
-    <div className="grid grid-3">{roomScenes.map((scene) => {
-      const ids = sceneProducts[scene.id];
-      return <article className="card" key={scene.id}>
-        <div className="shoppable-room-image">
-          <Image src={scene.image} alt={`${scene.name} room scene`} width={900} height={560} />
-          {ids.map((id, index) => {
-            const product = products.find((item) => item.id === id);
-            return product ? <Link className={`room-hotspot hotspot-${index + 1}`} aria-label={`View ${product.modelCode} in ${scene.name}`} href={`/furniture/${product.slug}`} key={`${id}-${index}`}>{index + 1}</Link> : null;
-          })}
-        </div>
-        <div className="card-body"><h2>{scene.name}</h2>
-          {ids.map((id, index) => {
-            const product = products.find((item) => item.id === id);
-            if (!product) return null;
-            return <div className="shoppable-room-product" key={`${id}-${index}`}>
-              <strong>{index + 1}. {product.modelCode}</strong><span>{product.subtitle}</span>
-              <div className="chips"><button onClick={() => { storage.toggleProduct(product.id); setNotice(`${product.modelCode} saved to project.`); }}><Star size={14} /> Save</button><Link href={`/configurator/${product.slug}`}>Configure</Link><Link href="/materials">Materials</Link></div>
-              <label>Replace<select value={id} onChange={(event) => replace(scene.id, index, event.target.value)}>{products.filter((item) => item.active && item.category === product.category).slice(0, 8).map((item) => <option value={item.id} key={item.id}>{item.modelCode}</option>)}</select></label>
-            </div>;
-          })}
-          <div className="chips" style={{ marginTop: 14 }}>
-            <button className="button ghost" onClick={() => {
-              storage.saveRoomScene({ id: `curated-${scene.id}-${Date.now()}`, name: scene.name, productIds: ids, sourceSceneId: scene.id, createdAt: new Date().toISOString() });
-              ids.forEach((id) => { if (!storage.savedProducts().includes(id)) storage.toggleProduct(id); });
-              setNotice(`${scene.name} saved as a room project.`);
-            }}><Plus size={15} /> Save complete room</button>
-            <Link className="button primary" href="/my-musterring">Create project from scene</Link>
-            <Link className="button consult" href="/handover">Continue with retailer</Link>
+  const [selectedSlot, setSelectedSlot] = useState("");
+
+  const saveRoom = (sceneId: string, sceneName: string, ids: string[]) => {
+    if (!window.confirm(`Save the complete ${sceneName} selection as a room project?`)) return;
+    storage.saveRoomScene({
+      id: `curated-${sceneId}-${Date.now()}`,
+      name: sceneName,
+      productIds: ids,
+      sourceSceneId: sceneId,
+      createdAt: new Date().toISOString()
+    });
+    ids.forEach((id) => {
+      if (!storage.savedProducts().includes(id)) storage.toggleProduct(id);
+    });
+    setNotice(`${sceneName} was saved as a room project.`);
+  };
+
+  return (
+    <section className="shoppable-showcase" aria-labelledby="shoppable-heading">
+      <div className="simple-container">
+        <header className="shoppable-heading">
+          <div>
+            <span className="simple-kicker">Shoppable rooms</span>
+            <h2 id="shoppable-heading">Start with a complete room.</h2>
           </div>
+          <p>Choose a completed room, use the numbered markers to identify each product, then save the complete room to your project.</p>
+        </header>
+
+        {notice ? <p role="status" className="shoppable-notice"><Check size={17} /> {notice}</p> : null}
+
+        <div className="shoppable-scene-grid">
+          {roomScenes.map((scene) => {
+            const ids = scene.productIds;
+            const copy = sceneCopy[scene.id];
+            return (
+              <article className="shoppable-scene" key={scene.id}>
+                <div className="shoppable-room-image">
+                  <Image
+                    src={scene.image}
+                    alt={`${scene.name} interior inspiration`}
+                    fill
+                    sizes="(max-width: 820px) 100vw, 50vw"
+                    style={{ objectFit: "contain" }}
+                  />
+                  <div className="shoppable-image-shade" />
+                  <span className="shoppable-scene-count"><Layers3 size={15} /> {ids.length} suggestions</span>
+                  <div className="shoppable-image-title">
+                    <small>{copy?.eyebrow ?? "Room inspiration"}</small>
+                    <h3>{scene.name}</h3>
+                  </div>
+                  {ids.map((id, index) => {
+                    const product = products.find((item) => item.id === id);
+                    const position = hotspotPositions[scene.id]?.[index];
+                    return product && position ? (
+                      <button
+                        className={`shoppable-room-hotspot ${selectedSlot === `${scene.id}-${index}` ? "is-selected" : ""}`}
+                        style={position}
+                        aria-label={`Show product ${index + 1}`}
+                        onClick={() => setSelectedSlot(`${scene.id}-${index}`)}
+                        key={`${scene.id}-${index}-${id}`}
+                      >
+                        {index + 1}
+                        {selectedSlot === `${scene.id}-${index}` ? <span>{product.modelCode}<small>{product.name}</small></span> : null}
+                      </button>
+                    ) : null;
+                  })}
+                </div>
+
+                <div className="shoppable-scene-body">
+                  <p className="shoppable-scene-description">{copy?.description}</p>
+                  <div className="shoppable-product-list">
+                    {ids.map((id, index) => {
+                      const product = products.find((item) => item.id === id);
+                      if (!product) return null;
+                      return (
+                        <article id={`${scene.id}-product-${index}`} className={`shoppable-room-product ${selectedSlot === `${scene.id}-${index}` ? "is-selected" : ""}`} key={`${id}-${index}`} onClick={() => setSelectedSlot(`${scene.id}-${index}`)}>
+                          <span className="shoppable-product-number">{String(index + 1).padStart(2, "0")}</span>
+                          <div className="shoppable-product-copy">
+                            <small>{product.category.replace("-", " ")}</small>
+                            <strong>{product.modelCode} — {product.name}</strong>
+                            <span>{product.subtitle}</span>
+                          </div>
+                          <Link className="shoppable-view-product" href={`/furniture/${product.slug}`}>View product <ArrowRight size={14} /></Link>
+                        </article>
+                      );
+                    })}
+                  </div>
+
+                  <div className="shoppable-scene-actions">
+                    <button className="shoppable-save-room" onClick={() => saveRoom(scene.id, scene.name, ids)}>
+                      <Plus size={16} /> Save complete room
+                    </button>
+                    <Link href="/my-musterring">Open My Project <ArrowRight size={16} /></Link>
+                    <Link href="/handover">Continue with retailer</Link>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
         </div>
-      </article>;
-    })}</div>
-  </div></section>;
+      </div>
+    </section>
+  );
 }

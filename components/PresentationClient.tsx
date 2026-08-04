@@ -24,7 +24,7 @@ export function PresentationClient({ realAiActive }: { realAiActive: boolean }) 
   return (
     <div className="presentation-page">
       <section className="presentation-hero">
-        <Image src="/stitch-assets/original/room-living.jpg" alt="" fill priority sizes="100vw" />
+        <Image src="/stitch-assets/original/room-living-clean.jpg" alt="" fill priority sizes="100vw" />
         <div className="stitch-container presentation-hero-inner">
           <div>
             <p className="stitch-eyebrow">Executive presentation · 2027</p>

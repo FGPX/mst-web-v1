@@ -193,7 +193,7 @@ export function FilterableListing() {
             </label>
             <details className="stitch-filter-menu">
               <summary>More filters <ChevronDown size={15} /></summary>
-              <div className="stitch-filter-popover stitch-filter-options">
+              <div className="stitch-filter-popover stitch-filter-options stitch-advanced-filters">
                 <label>Category<select value={filters.category ?? ""} onChange={(event) => set({ category: event.target.value ? event.target.value as Category : undefined })}><option value="">All furniture</option>{categoryGroups.flatMap((group) => group.categories).map((item) => <option value={item} key={item}>{categoryDetails[item].label}</option>)}</select></label>
                 <label>Maximum depth cm<input type="number" value={filters.maxDepthMm ? filters.maxDepthMm / 10 : ""} onChange={(event) => set({ maxDepthMm: event.target.value ? Number(event.target.value) * 10 : undefined })} /></label>
                 <label>Minimum seat height cm<input type="number" value={filters.minSeatHeightMm ? filters.minSeatHeightMm / 10 : ""} onChange={(event) => set({ minSeatHeightMm: event.target.value ? Number(event.target.value) * 10 : undefined })} /></label>
@@ -285,6 +285,20 @@ export function FilterableListing() {
 function CatalogProductCard({ product, compareSelected, onCompare }: { product: Product; compareSelected: boolean; onCompare: () => void }) {
   const image = productImages(product.id)[0];
   const configurable = ["sofa", "armchair", "sectional"].includes(product.category);
+  const availableColors = product.colors.length ? product.colors : ["Product options"];
+  const [selectedColor, setSelectedColor] = useState(availableColors[0]);
+  const [showAllColors, setShowAllColors] = useState(false);
+  const colorStyle = (color: string) => {
+    const value = color.toLowerCase();
+    if (value.includes("beige") || value.includes("sand")) return "#dfceb7";
+    if (value.includes("grey") || value.includes("gray") || value.includes("graphite")) return "#55575b";
+    if (value.includes("cognac") || value.includes("brown")) return "#8b553b";
+    if (value.includes("green") || value.includes("olive")) return "#74745a";
+    if (value.includes("blue")) return "#667784";
+    if (value.includes("black")) return "#252525";
+    if (value.includes("white") || value.includes("cream")) return "#eee9df";
+    return "#b9afa2";
+  };
   return (
     <article className="stitch-catalog-card">
       <div className="stitch-catalog-image">
@@ -296,15 +310,15 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
             sizes="(max-width: 760px) 100vw, 50vw"
           />
         </Link>
-        <div className="stitch-config-preview">
+        <div className="stitch-config-preview stitch-config-preview-compact">
           <div>
             <p>Quick Configuration</p>
             <div className="stitch-config-swatches" aria-label="Available material colours">
-              <span className="is-sand" />
-              <span className="is-charcoal" />
-              <span className="is-cognac" />
-              <span className="is-more">+12</span>
+              {availableColors.slice(0, 3).map((color) => <button type="button" key={color} className={selectedColor === color ? "is-selected" : ""} style={{ background: colorStyle(color) }} title={color} aria-label={`Select ${color}`} onClick={() => setSelectedColor(color)} />)}
+              {availableColors.length > 3 ? <button type="button" className="is-more" aria-expanded={showAllColors} onClick={() => setShowAllColors((value) => !value)}>+{availableColors.length - 3}</button> : null}
             </div>
+            {showAllColors ? <div className="stitch-config-color-menu">{availableColors.map((color) => <button type="button" key={color} onClick={() => { setSelectedColor(color); setShowAllColors(false); }}><i style={{ background: colorStyle(color) }} />{color}</button>)}</div> : null}
+            <small className="stitch-selected-color">Selected: {selectedColor}</small>
             <div className="stitch-config-action">
               <span>{product.authorizedContent ? "Price available from retailer" : "Planning estimate available"}</span>
               <div>
@@ -332,6 +346,16 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
           <Link href="/dealers">Find near you <ChevronRight size={18} /></Link>
         </div>
       </div>
+      <details className="stitch-catalog-more">
+        <summary>More details <ChevronDown size={15} /></summary>
+        <dl>
+          <div><dt>Collection</dt><dd>{product.collection}</dd></div>
+          <div><dt>Dimensions</dt><dd>{product.widthMm && product.depthMm && product.heightMm ? `${Math.round(product.widthMm / 10)} × ${Math.round(product.depthMm / 10)} × ${Math.round(product.heightMm / 10)} cm` : "Available from retailer"}</dd></div>
+          <div><dt>Seats</dt><dd>{product.numberOfSeats || "Model dependent"}</dd></div>
+          <div><dt>Materials</dt><dd>{product.materials.length ? `${product.materials.length} available` : "See product details"}</dd></div>
+          <div><dt>Configuration</dt><dd>{product.modular ? "Modular" : product.functions[0] ?? "Standard"}</dd></div>
+        </dl>
+      </details>
     </article>
   );
 }

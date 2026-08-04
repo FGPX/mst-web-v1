@@ -11,12 +11,14 @@ import type { Product } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
 
 const suggestions = [
-  "compact beige modular sofa under 240 cm",
-  "red sofa",
-  "high-seat armchair for a tall person",
-  "easy-care family sofa with relax function",
-  "MR 2875"
+  "beige modular sofa under 300 cm",
+  "black modern sofa with relax function",
+  "taupe swivel armchair",
+  "brown oak storage cabinet",
+  "black minimal coffee table"
 ];
+
+const cutoutSlugs = new Set(["justb-pm100", "justb-pm200", "mr-lucia", "mr-230", "mr-260", "mr-270", "mr-280", "mr-285", "mr-nils", "mr-pamela", "mr-231", "jana", "kanto", "justb-ct100", "nara", "mr-kleo", "mr-281", "mr-5111", "mr-9445"]);
 
 type SearchResponse = {
   intent: Record<string, unknown>;
@@ -38,7 +40,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const requestedRed = Array.isArray(response?.intent.colorFamilies) &&
     response.intent.colorFamilies.some((color) => ["red", "burgundy", "barolo"].includes(String(color)));
   const resultImage = (slug: string, productId: string) =>
-    requestedRed && slug === "mr-260" ? "/musterring-catalog/mr-260/image-08.jpg" : productImages(productId)[0];
+    cutoutSlugs.has(slug) ? `/generated-product-views/${slug}/official-front.png?v=3` : requestedRed && slug === "mr-260" ? "/musterring-catalog/mr-260/image-08-hq.jpg" : productImages(productId)[0];
 
   const submit = async (value = query) => {
     const next = value.trim();
@@ -73,12 +75,12 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const autocomplete = useMemo(() => {
     const value = query.trim().toLowerCase();
     if (value.length < 2 || value === submitted.toLowerCase()) return [];
-    return products.filter((product) => `${product.modelCode} ${product.name} ${product.category}`.toLowerCase().includes(value)).slice(0, 5);
+    return products.filter((product) => `${product.modelCode} ${product.name} ${product.category} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm wide ${Math.round(product.depthMm / 10)} cm deep ${Math.round(product.heightMm / 10)} cm high`.toLowerCase().includes(value)).slice(0, 5);
   }, [query, submitted]);
 
   const removeFilter = (key: string) => {
     const replacements: Record<string, RegExp> = {
-      category: /\b(sofa|couch|armchair|chair|sectional|corner|storage|cabinet)\b/gi,
+      category: /\b(sofa|couch|armchair|chair|sectional|corner|storage|cabinet|coffee table|side table|dining table)\b/gi,
       colorFamilies: /\b(beige|ivory|taupe|stone|charcoal|brown|cream|green|grey|graphite|red|burgundy|barolo)\b/gi,
       modular: /\b(modular|module|flexible)\b/gi,
       smallSpaceSuitable: /\b(small|compact|apartment)\b/gi,

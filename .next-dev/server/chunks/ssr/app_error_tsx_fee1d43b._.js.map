@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Pc/ClaimsIkonAI/mst-web-v1/app/error.tsx"],"sourcesContent":["\"use client\";\r\n\r\nimport Link from \"next/link\";\r\n\r\nexport default function ErrorPage({ reset }: { error: Error & { digest?: string }; reset: () => void }) {\r\n  return <section className=\"section\" role=\"alert\"><div className=\"container\"><p className=\"eyebrow\">Unable to load this view</p><h1 className=\"h2\">Your saved browser data is safe.</h1><p>Retry the page. If the problem continues, return to the furniture catalog.</p><div className=\"chips\"><button className=\"button primary\" onClick={reset}>Try again</button><Link className=\"button ghost\" href=\"/furniture\">Open furniture</Link></div></div></section>;\r\n}\r\n"],"names":[],"mappings":";;;;;AAEA;AAFA;;;AAIe,SAAS,UAAU,EAAE,KAAK,EAA6D;IACpG,qBAAO,8OAAC;QAAQ,WAAU;QAAU,MAAK;kBAAQ,cAAA,8OAAC;YAAI,WAAU;;8BAAY,8OAAC;oBAAE,WAAU;8BAAU;;;;;;8BAA4B,8OAAC;oBAAG,WAAU;8BAAK;;;;;;8BAAqC,8OAAC;8BAAE;;;;;;8BAA8E,8OAAC;oBAAI,WAAU;;sCAAQ,8OAAC;4BAAO,WAAU;4BAAiB,SAAS;sCAAO;;;;;;sCAAkB,8OAAC,uKAAI;4BAAC,WAAU;4BAAe,MAAK;sCAAa;;;;;;;;;;;;;;;;;;;;;;;AACvZ","debugId":null}}]
+}

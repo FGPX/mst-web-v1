@@ -7,7 +7,7 @@ const nullableStrings = z.array(z.string()).nullable();
 
 export const searchIntentSchema = z.object({
   queryText: z.string().trim().min(1).max(1000),
-  category: z.enum(["sofa", "armchair", "sectional", "storage"]).nullable(),
+  category: z.enum(["sofa", "armchair", "sectional", "storage", "coffee-table", "dining-table", "small-furniture"]).nullable(),
   colorFamilies: nullableStrings,
   materials: nullableStrings,
   maxWidthMm: nullableNumber,

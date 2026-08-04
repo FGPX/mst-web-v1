@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { Check, Copy, Info, Printer, Redo2, RotateCw, Save, Share2, Sparkles, Undo2, ZoomIn } from "lucide-react";
+import { Armchair, Check, Copy, Info, Printer, Redo2, RotateCw, Save, Share2, Sparkles, Undo2, Zap, ZoomIn } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import type { Configuration, Product } from "@/lib/types";
 import { createConfiguration, priceConfiguration, validateConfiguration } from "@/lib/configurator";
@@ -214,12 +214,12 @@ export function ConfiguratorClient({ product, configurationId, initialAssistantR
         <div className="stitch-config-section">
           <p><span>03</span> Functions</p>
           <label className="stitch-config-toggle">
-            <Sparkles />
+            <Armchair />
             <span><strong>Relax function</strong><small>Adjustable comfort position</small></span>
             <input type="checkbox" checked={config.relax} onChange={(event) => update({ relax: event.target.checked })} />
           </label>
           <label className="stitch-config-toggle">
-            <Sparkles />
+            <Zap />
             <span><strong>Electric function</strong><small>Motor-assisted extension</small></span>
             <input type="checkbox" checked={config.electric} disabled={!config.modules.some((module) => module.includes("power"))} aria-describedby="electric-rule" onChange={(event) => update({ electric: event.target.checked })} />
           </label>

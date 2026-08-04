@@ -1,7 +1,7 @@
 import { products } from "./data";
 import type { Product, SearchFilters } from "./types";
 
-const colorTerms = ["beige", "ivory", "taupe", "stone", "charcoal", "brown", "cream", "green", "grey", "graphite", "red", "burgundy", "barolo", "purple"];
+const colorTerms = ["beige", "ivory", "taupe", "stone", "charcoal", "black", "white", "brown", "oak", "natural", "cream", "green", "grey", "graphite", "red", "burgundy", "barolo", "purple", "yellow", "mustard", "cognac", "sand"];
 const stopWords = new Set(["want", "something", "like", "this", "that", "with", "from", "have", "need", "looking", "product", "piece", "please", "show", "find", "furniture", "maximum", "about"]);
 const corrections: Record<string, string> = {
   wnat: "want",
@@ -58,6 +58,8 @@ export function parseSearchQuery(query: string): SearchFilters {
     .replace(/\bweiÃŸ(?:es|er|e)?\b|\bweiß(?:es|er|e)?\b/g, "white");
   const filters: SearchFilters = { q };
   if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
+  if (/coffee table|side table|couchtisch/.test(text)) filters.category = "coffee-table";
+  if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
   if (/armchair|chair|sessel/.test(text)) filters.category = "armchair";
   if (/sectional|corner|chaise|eck|wohnlandschaft/.test(text)) filters.category = "sectional";
   if (/sofa|couch/.test(text)) filters.category = "sofa";
@@ -96,7 +98,7 @@ export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.styles?.length && !filters.styles.some((style) => product.styles.includes(style))) return false;
   if (filters.collections?.length && !filters.collections.includes(product.collection)) return false;
   if (filters.q && !filters.modelCode) {
-    const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${product.category} ${product.colors.join(" ")}`.toLowerCase();
+    const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${product.category} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
     const usefulTerms = filters.q.toLowerCase().split(/\W+/).filter((term) => term.length > 2 && !["need", "with", "for", "the", "and", "maximum"].includes(term));
     return usefulTerms.length === 0 || usefulTerms.some((term) => haystack.includes(term));
   }

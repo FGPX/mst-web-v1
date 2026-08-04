@@ -18,7 +18,7 @@ export default async function PartnerLoginPage({ searchParams }: { searchParams:
       <section className="partner-login-story">
         <Link href="/"><ArrowLeft size={17} /> Back to public website</Link>
         <div>
-          <span className="partner-login-mark" aria-hidden="true">M</span>
+          <span className="partner-login-mark" aria-label="Musterring" role="img" />
           <p>Musterring Partner Workspace</p>
           <h1>Everything for a better customer consultation.</h1>
           <ul>

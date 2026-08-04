@@ -42,9 +42,9 @@ const quickStarts = [
 ];
 
 const rooms = [
-  { name: "Living room", href: "/inspiration/rooms#living-room", image: "/stitch-assets/original/room-living.jpg" },
-  { name: "Dining room", href: "/inspiration/rooms#dining-room", image: "/stitch-assets/original/room-dining.jpg" },
-  { name: "Bedroom", href: "/inspiration/rooms#bedroom", image: "/stitch-assets/original/room-bedroom.jpg" }
+  { name: "Living room", href: "/inspiration/rooms#living-room", image: "/stitch-assets/original/room-living-clean.jpg" },
+  { name: "Dining room", href: "/inspiration/rooms#dining-room", image: "/stitch-assets/original/room-dining-hq.jpg" },
+  { name: "Bedroom", href: "/inspiration/rooms#bedroom", image: "/stitch-assets/original/room-bedroom-hq.jpg" }
 ];
 
 export default function HomePage() {
@@ -69,10 +69,6 @@ export default function HomePage() {
               priority
               sizes="(max-width: 760px) 100vw, 58vw"
             />
-            <div className="simple-hero-note">
-              <span>Not sure where to begin?</span>
-              <Link href="/comfort-match">Get personal guidance <ArrowRight size={17} /></Link>
-            </div>
           </div>
         </div>
         <div className="simple-hero-benefits">
@@ -145,7 +141,7 @@ export default function HomePage() {
       <section className="simple-process" aria-labelledby="process-heading">
         <div className="simple-container simple-process-grid">
           <div className="simple-process-image">
-            <Image src="/stitch-assets/original/room-living.jpg" alt="Digitally planned living room" fill sizes="(max-width: 760px) 100vw, 50vw" />
+            <Image src="/stitch-assets/original/room-living-clean.jpg" alt="Digitally planned living room" fill sizes="(max-width: 760px) 100vw, 50vw" />
           </div>
           <div className="simple-process-copy">
             <span className="simple-kicker">From idea to consultation</span>

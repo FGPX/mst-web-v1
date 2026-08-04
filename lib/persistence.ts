@@ -116,7 +116,7 @@ export const storage = {
     if (!storage.consent()) return false;
     const sessionId = read("musterring.session", crypto.randomUUID());
     write("musterring.session", sessionId);
-    const next = [...storage.events(), { ...event, id: crypto.randomUUID(), timestamp: new Date().toISOString(), sessionId, locale: navigator.language || "en", consent: true }];
+    const next = [...storage.events(), { ...event, id: crypto.randomUUID(), timestamp: new Date().toISOString(), sessionId, locale: navigator.language || "en", consent: true }].slice(-5000);
     write(keys.events, next);
     return true;
   },
@@ -173,7 +173,7 @@ export const storage = {
       id: "project-living",
       name: "Living Room Project",
       status: "Ready for Consultation",
-      coverImage: "/stitch-assets/original/room-living.jpg",
+      coverImage: "/stitch-assets/original/room-living-clean.jpg",
       savedProductIds: selectedProducts.map((product) => product.id),
       savedConfigurationIds: [configuration.id],
       savedComparisonIds: [],

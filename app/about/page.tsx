@@ -56,7 +56,7 @@ export default function AboutPage() {
       <section className="about-brand-hero" aria-labelledby="about-title">
         <div className="about-brand-image">
           <Image
-            src="/stitch-assets/original/room-living.jpg"
+            src="/stitch-assets/original/room-living-clean.jpg"
             alt="Contemporary living room furnished in a calm, natural style"
             fill
             priority

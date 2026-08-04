@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
+    {"offset": {"line": 19, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Pc/ClaimsIkonAI/mst-web-v1/app/privacy/page.tsx"],"sourcesContent":["export default function PrivacyPage() {\r\n  return <section className=\"section\"><div className=\"container\"><p className=\"eyebrow\">Privacy</p><h1 className=\"h2\">Privacy information for the local concept.</h1><div className=\"grid grid-2\"><p className=\"lead\">Demo mode stores saved products, projects, fit reports, room scenes, consent and analytics events in localStorage. Uploaded images remain local to the browser flow and can be deleted immediately.</p><div className=\"card card-body\"><h2>External services</h2><p>No AI, email, map or analytics provider is contacted unless a production adapter is configured and consent rules allow it.</p></div></div></div></section>;\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBAAO,8OAAC;QAAQ,WAAU;kBAAU,cAAA,8OAAC;YAAI,WAAU;;8BAAY,8OAAC;oBAAE,WAAU;8BAAU;;;;;;8BAAW,8OAAC;oBAAG,WAAU;8BAAK;;;;;;8BAA+C,8OAAC;oBAAI,WAAU;;sCAAc,8OAAC;4BAAE,WAAU;sCAAO;;;;;;sCAAuM,8OAAC;4BAAI,WAAU;;8CAAiB,8OAAC;8CAAG;;;;;;8CAAsB,8OAAC;8CAAE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAC1d","debugId":null}}]
+}

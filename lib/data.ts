@@ -70,6 +70,23 @@ const conceptProductsById = new Map(conceptProducts.map((product) => [product.id
 const sofaTemplates = conceptProducts.filter((product) => product.category !== "armchair");
 const armchairTemplates = conceptProducts.filter((product) => product.category === "armchair");
 const verifiedRedUpholstery = new Set(["mr-260", "mr-365", "mr-370", "mr-385", "mr-2875"]);
+const catalogueSearchOverrides: Record<string, Partial<Product>> = {
+  "justb-pm100": { colors: ["beige", "cream", "ivory"], styles: ["modern", "minimal", "modular"], functions: ["modular"], modular: true },
+  "justb-pm200": { colors: ["beige", "cream", "sand"], styles: ["modern", "soft modern", "modular"], functions: ["modular", "relax"], modular: true },
+  "mr-lucia": { colors: ["light grey", "grey", "cream"], styles: ["soft modern", "casual", "minimal"], functions: ["modular"], modular: true },
+  "mr-230": { colors: ["light grey", "grey", "beige"], styles: ["modern", "comfort"], functions: ["relax"], modular: false },
+  "mr-260": { colors: ["light grey", "grey", "beige", "red", "burgundy"], styles: ["modern", "family"], functions: ["modular", "relax"], modular: true },
+  "mr-270": { colors: ["yellow", "mustard", "cognac"], styles: ["modern", "contemporary"], functions: ["relax"], modular: false },
+  "mr-280": { colors: ["beige", "taupe", "cream"], styles: ["classic modern", "comfort"], functions: ["relax"], modular: false },
+  "mr-285": { colors: ["black", "charcoal"], styles: ["modern", "minimal"], functions: ["relax"], modular: false },
+  "mr-nils": { colors: ["taupe", "beige"], styles: ["modern", "ergonomic"], functions: ["relax", "swivel"], modular: false },
+  "mr-pamela": { colors: ["cream", "ivory", "beige"], styles: ["soft modern", "lounge"], functions: ["relax"], modular: false },
+  "mr-231": { colors: ["light grey", "grey"], styles: ["modern", "ergonomic"], functions: ["relax", "swivel"], modular: false },
+  "jana": { colors: ["charcoal", "brown", "oak"], styles: ["modern", "industrial", "wood"], functions: ["storage"], modular: false },
+  "kanto": { colors: ["brown", "oak", "natural"], styles: ["natural", "modern", "wood"], functions: ["storage"], modular: false },
+  "justb-ct100": { colors: ["brown", "oak", "natural"], styles: ["modern", "minimal", "wood"], functions: [], modular: false },
+  "nara": { colors: ["black", "charcoal"], styles: ["modern", "minimal", "metal"], functions: [], modular: false }
+};
 
 export const products: Product[] = [
   ...authorizedCatalog.products.map((official, index) => {
@@ -81,6 +98,7 @@ export const products: Product[] = [
     const isSeating = ["sofa", "armchair", "sectional"].includes(category);
     const isStorage = ["storage", "wardrobe", "bedroom-series", "bathroom", "kitchen"].includes(category);
 
+    const searchOverride = catalogueSearchOverrides[official.slug] ?? {};
     return {
       ...template,
       id: official.appProductId,
@@ -116,6 +134,7 @@ export const products: Product[] = [
       collection: categoryDetails[category]?.room ?? "Musterring",
       modular: isStorage || (isSeating && /modular|module|configur|system|programme|flexib/.test(searchableCopy)),
       smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy)
+      , ...searchOverride
     } satisfies Product;
   }),
   ...conceptProducts
@@ -139,9 +158,9 @@ export const dealers: Dealer[] = [
 } as Dealer));
 
 export const roomScenes: RoomScene[] = [
-  { id: "scene-1", name: "Ivory City Apartment", image: image("musterring_room_visualization"), productIds: ["p2", "p4", "p12"], demoData: true },
-  { id: "scene-2", name: "Taupe Family Lounge", image: image("musterring_homepage"), productIds: ["p8", "p11"], demoData: true },
-  { id: "scene-3", name: "Charcoal Studio Calm", image: image("musterring_visual_search_results"), productIds: ["p1", "p7"], demoData: true }
+  { id: "scene-1", name: "Natural Living Room", image: "/stitch-assets/original/room-living-clean.jpg", productIds: ["p2", "p4", "p12"], demoData: true },
+  { id: "scene-2", name: "City Contrast Lounge", image: "/musterring-catalog/mr-2875/image-01.jpg", productIds: ["p8", "p11"], demoData: true },
+  { id: "scene-3", name: "Soft Modular Retreat", image: "/musterring-catalog/mr-1370/image-01.jpg", productIds: ["p1", "p7"], demoData: true }
 ];
 
 export const projects: Project[] = [

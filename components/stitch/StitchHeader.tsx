@@ -159,6 +159,7 @@ export function StitchHeader() {
         <Link href="/search" onClick={close}>Search</Link>
         <Link href="/dealers" onClick={close}>Find a Retailer</Link>
         <Link href="/partner/login" onClick={close}>Partner Portal</Link>
+        <Link href="/analytics" onClick={close}>Website Analytics</Link>
       </div>
     </header>
   );
