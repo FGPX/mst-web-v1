@@ -160,24 +160,153 @@
   letter-spacing: 0.1em;
 }
 
+.stitch-ai-recent a > small {
+  color: var(--stitch-text-secondary);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+
 .stitch-ai-recent img {
   width: 100%;
   aspect-ratio: 16 / 8;
   object-fit: cover;
-  filter: grayscale(1);
-  transition: filter 180ms ease;
+  filter: none;
+  transition: transform 180ms ease;
 }
 
-.stitch-ai-search.is-colour-search .stitch-ai-recent img {
-  filter: none;
-}
-
-.stitch-ai-recent a:hover img {
-  filter: none;
-}
+.stitch-ai-recent a:hover img { transform: scale(1.02); }
 
 .stitch-ai-results {
   border-top: 1px solid var(--stitch-border);
+}
+
+.stitch-ai-results .grid-3 {
+  align-items: stretch;
+  gap: 28px;
+}
+
+.stitch-ai-results .stitch-product-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #d8d3c9;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(31, 29, 25, .06);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.stitch-ai-results .stitch-product-card:hover {
+  transform: translateY(-3px);
+  border-color: #b7afa2;
+  box-shadow: 0 20px 44px rgba(31, 29, 25, .1);
+}
+
+.stitch-ai-results .stitch-product-image {
+  aspect-ratio: 16 / 10;
+  border-bottom: 1px solid #e1ddd5;
+}
+
+.stitch-product-image .stitch-product-image-note {
+  position: absolute;
+  z-index: 2;
+  left: 12px;
+  bottom: 12px;
+  max-width: calc(100% - 24px);
+  padding: 7px 9px;
+  background: rgba(24, 24, 21, .88);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  line-height: 1.3;
+}
+
+.stitch-ai-results .stitch-product-copy {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 24px 24px;
+  text-align: left;
+}
+
+.stitch-ai-results .stitch-product-copy h3 {
+  margin-top: 8px;
+  font-size: 28px;
+}
+
+.stitch-ai-results .stitch-product-copy p {
+  margin-inline: 0;
+}
+
+.stitch-ai-results .stitch-product-meta {
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid #e5e1d9;
+  font-size: 12px;
+}
+
+.stitch-ai-results .stitch-product-explanation {
+  min-height: 0;
+  margin: 6px 0 16px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--stitch-accent);
+  background: #f4f0e9;
+  color: #403d37;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.stitch-ai-results .stitch-product-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: auto;
+}
+
+.stitch-ai-results .stitch-product-actions a,
+.stitch-ai-results .stitch-product-actions button {
+  width: 100%;
+  min-height: 44px;
+  justify-content: center;
+  border-color: #d1cbc1;
+  background: #faf8f4;
+  padding: 9px 10px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.2;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.stitch-ai-results .stitch-product-actions > :first-child,
+.stitch-ai-results .stitch-product-actions > :last-child {
+  grid-column: 1 / -1;
+}
+
+.stitch-ai-results .stitch-product-actions > :first-child {
+  border-color: var(--stitch-text-primary);
+  background: var(--stitch-text-primary);
+  color: #fff;
+}
+
+.stitch-ai-results .stitch-product-actions a:hover,
+.stitch-ai-results .stitch-product-actions button:hover {
+  border-color: var(--stitch-accent);
+  background: #efe8de;
+  color: var(--stitch-accent);
+}
+
+.stitch-ai-results .stitch-product-actions > :first-child:hover {
+  background: var(--stitch-accent);
+  color: #fff;
+}
+
+@media (min-width: 901px) and (max-width: 1200px) {
+  .stitch-ai-results .grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .stitch-ai-results-head {
@@ -544,6 +673,51 @@
   color: var(--stitch-accent);
 }
 
+.stitch-composer-global-scale {
+  min-width: 240px;
+  display: grid;
+  grid-template-columns: auto minmax(90px, 1fr) 42px;
+  align-items: center;
+  gap: 9px;
+  margin-left: auto;
+}
+
+.stitch-composer-global-scale input {
+  width: 100%;
+  accent-color: var(--stitch-accent);
+}
+
+.stitch-composer-global-scale strong {
+  font-size: 11px;
+  text-align: right;
+}
+
+.stitch-composer-relative-size {
+  min-width: 220px;
+  display: grid;
+  gap: 4px;
+  padding: 9px 12px;
+  border: 1px solid var(--stitch-border);
+  background: #f4f1eb;
+}
+
+.stitch-composer-relative-size span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.stitch-composer-relative-size strong {
+  font-size: 12px;
+}
+
+.stitch-composer-keyboard-hint {
+  color: var(--stitch-text-secondary);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
 .stitch-composer-stage {
   position: relative;
   min-height: 760px;
@@ -561,15 +735,29 @@
 }
 .stitch-composer-feedback { margin: 0; min-height: 44px; display: flex; align-items: center; gap: 9px; border: 1px solid #9ca88f; border-bottom: 0; padding: 10px 14px; background: #eef1ea; color: #283020; font-size: 12px; font-weight: 700; }
 
-.stitch-composer-neutral-room { position: absolute; inset: 0; background: linear-gradient(180deg,#f2f0ea 0 61%,#c9c3b9 61.2%,#b8b1a7 100%); }
-.stitch-composer-neutral-room::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 54% 36%,rgba(255,255,255,.96),transparent 48%); }
+.stitch-composer-neutral-room { position: absolute; inset: 0; background: linear-gradient(180deg,#f5f3ee 0 61%,#d3cec5 61.2%,#ada69c 100%); }
+.stitch-composer-neutral-room::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 54% 34%,rgba(255,255,255,.98),transparent 50%); }
 .stitch-composer-neutral-room span { position: absolute; left: 8%; top: 8%; width: 24%; height: 47%; border: 12px solid #ded9d0; background: linear-gradient(160deg,#faf9f6,#dbe2e2); box-shadow: 0 12px 30px rgba(0,0,0,.08); }
-.stitch-composer-neutral-room i { position: absolute; left: 0; right: 0; top: 61%; bottom: 0; height: auto; border-top: 2px solid rgba(65,58,50,.24); background: linear-gradient(165deg,rgba(255,255,255,.22),transparent 55%); }
+.stitch-composer-neutral-room i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 61%;
+  bottom: 0;
+  height: auto;
+  border-top: 1px solid rgba(65,58,50,.2);
+  background:
+    radial-gradient(ellipse at 52% -10%,rgba(255,255,255,.48),transparent 58%),
+    radial-gradient(ellipse at 12% 78%,rgba(91,82,71,.08),transparent 38%),
+    radial-gradient(ellipse at 86% 46%,rgba(255,255,255,.1),transparent 42%),
+    linear-gradient(180deg,#d4cfc6 0%,#b4ada3 100%);
+  box-shadow: inset 0 18px 30px rgba(70,62,53,.08);
+}
 
 .stitch-composer-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(20, 18, 15, 0.32), transparent 50%);
+  background: linear-gradient(to top, rgba(20,18,15,.17), transparent 45%);
   pointer-events: none;
 }
 
@@ -581,11 +769,9 @@
   bottom: -62%;
   left: -32%;
   pointer-events: none;
-  opacity: 0.2;
-  background-image:
-    linear-gradient(rgba(255,255,255,.7) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.7) 1px, transparent 1px);
-  background-size: 76px 76px;
+  opacity: .18;
+  background-image: radial-gradient(circle, rgba(54,49,43,.5) 1px, transparent 1.6px);
+  background-size: 58px 58px;
   transform: perspective(520px) rotateX(58deg);
   transform-origin: center top;
 }
@@ -599,7 +785,7 @@
   background: transparent;
   filter: drop-shadow(0 18px 18px rgba(0,0,0,.22));
   cursor: grab;
-  transform-origin: center;
+  transform-origin: center bottom;
 }
 
 .stitch-composer-item:active {
@@ -609,6 +795,11 @@
 .stitch-composer-item.is-selected {
   border-color: transparent;
   filter: drop-shadow(0 18px 18px rgba(0,0,0,.25));
+}
+
+.stitch-composer-item.is-sofa,
+.stitch-composer-item.is-sofa.is-selected {
+  filter: none;
 }
 
 .stitch-composer-item img {
@@ -623,6 +814,15 @@
 .stitch-composer-item.is-cutout { background: transparent; }
 .stitch-composer-item.is-scene-crop { overflow: hidden; background: #e8e4dc; }
 .stitch-composer-item.is-scene-crop img { object-fit: cover; object-position: center 67%; transform: scale(1.32); }
+.stitch-composer-item.has-physical-aspect img,
+.stitch-composer-item.has-physical-aspect img.stitch-composer-turntable {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: fill;
+}
 .stitch-composer-size-control { grid-template-columns: 1fr auto; min-width: 220px; }
 .stitch-composer-size-control > span { font-weight: 900; }
 .stitch-composer-size-control input { grid-column: 1 / -1; width: 100%; accent-color: var(--stitch-accent); }
@@ -1494,8 +1694,8 @@
   background: var(--stitch-bg-primary);
 }
 .stitch-composer-item img.stitch-composer-turntable { width: 100%; height: auto; aspect-ratio: auto; object-fit: contain; mix-blend-mode: normal; }
-.stitch-composer-item:has(.stitch-composer-turntable) { width: min(390px, 42%); border-radius: 2px; filter: drop-shadow(0 12px 10px rgba(0,0,0,.18)); }
-.stitch-composer-item:has(.stitch-composer-turntable)::before { content: ""; position: absolute; z-index: -1; left: 10%; right: 10%; bottom: 2%; height: 9%; border-radius: 50%; background: rgba(35,31,27,.26); filter: blur(10px); }
+.stitch-composer-item:not(.is-sofa):has(.stitch-composer-turntable) { border-radius: 2px; filter: drop-shadow(0 12px 10px rgba(0,0,0,.18)); }
+.stitch-composer-item:not(.is-sofa):has(.stitch-composer-turntable)::before { content: ""; position: absolute; z-index: -1; left: 10%; right: 10%; bottom: 2%; height: 9%; border-radius: 50%; background: rgba(35,31,27,.26); filter: blur(10px); }
 
 .stitch-compare-products .stitch-compare-remove {
   position: absolute;
@@ -2233,7 +2433,7 @@
 .stitch-config-history button { display: inline-flex; align-items: center; gap: 6px; }
 .stitch-config-history svg { width: 15px; }
 
-.stitch-composer-properties { position: absolute; right: 18px; top: 70px; z-index: 30; display: grid; gap: 8px; padding: 12px; background: rgba(251, 249, 244, .94); border: 1px solid rgba(25, 24, 21, .18); }
+.stitch-composer-properties { position: absolute; right: 18px; top: 290px; z-index: 30; display: grid; gap: 8px; padding: 12px; background: rgba(251, 249, 244, .94); border: 1px solid rgba(25, 24, 21, .18); }
 .stitch-composer-properties label { display: grid; gap: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
 .system-status { position: fixed; inset: 80px 0 auto; z-index: 90; padding: 10px 20px; text-align: center; background: #191815; color: white; }
 .consent-banner { position: fixed; inset: auto 20px 20px; z-index: 120; width: min(520px, calc(100% - 40px)); padding: 20px; background: #fbf9f4; border: 1px solid #191815; box-shadow: 0 18px 50px rgba(25,24,21,.2); }
@@ -5694,7 +5894,7 @@ img { max-width: 100%; display: block; }
 }
 
 .stitch-composer-more-tools {
-  margin-left: auto;
+  margin-left: 0;
 }
 
 .stitch-composer-more-tools > summary {

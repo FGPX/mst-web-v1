@@ -732,6 +732,62 @@ const verifiedRedUpholstery = new Set([
     "mr-385",
     "mr-2875"
 ]);
+const catalogueDimensionOverrides = {
+    // Dimensions correspond to the specific catalogue variants used by the Room Composer cutouts.
+    // PM100 corner configuration: approx. 232 x 268 cm, maximum back height 88 cm.
+    "justb-pm100": {
+        widthMm: 2680,
+        depthMm: 2320,
+        heightMm: 880
+    },
+    // Armchair dimensions match the specific catalogue cutouts used in the composer.
+    "mr-kleo": {
+        widthMm: 970,
+        depthMm: 880,
+        heightMm: 950
+    },
+    "mr-nils": {
+        widthMm: 700,
+        depthMm: 870,
+        heightMm: 1120
+    },
+    "mr-pamela": {
+        widthMm: 930,
+        depthMm: 1190,
+        heightMm: 610
+    },
+    "mr-281": {
+        widthMm: 780,
+        depthMm: 880,
+        heightMm: 1100
+    },
+    "mr-9445": {
+        widthMm: 670,
+        depthMm: 870,
+        heightMm: 800
+    },
+    // Storage dimensions match the pictured JANA and KANTO sideboard variants.
+    "jana": {
+        widthMm: 2560,
+        depthMm: 530,
+        heightMm: 770
+    },
+    "kanto": {
+        widthMm: 2100,
+        depthMm: 490,
+        heightMm: 940
+    },
+    "justb-ct100": {
+        widthMm: 600,
+        depthMm: 600,
+        heightMm: 360
+    },
+    "nara": {
+        widthMm: 890,
+        depthMm: 780,
+        heightMm: 440
+    }
+};
 const catalogueSearchOverrides = {
     "justb-pm100": {
         colors: [
@@ -938,9 +994,8 @@ const catalogueSearchOverrides = {
     },
     "justb-ct100": {
         colors: [
-            "brown",
-            "oak",
-            "natural"
+            "natural oak",
+            "black oak"
         ],
         styles: [
             "modern",
@@ -952,13 +1007,15 @@ const catalogueSearchOverrides = {
     },
     "nara": {
         colors: [
-            "black",
-            "charcoal"
+            "dark stone",
+            "natural oak",
+            "knotty oak"
         ],
         styles: [
             "modern",
             "minimal",
-            "metal"
+            "metal",
+            "wood"
         ],
         functions: [],
         modular: false
@@ -984,6 +1041,7 @@ const products = [
             "kitchen"
         ].includes(category);
         const searchOverride = catalogueSearchOverrides[official.slug] ?? {};
+        const dimensionOverride = catalogueDimensionOverrides[official.slug];
         return {
             ...template,
             id: official.appProductId,
@@ -999,9 +1057,9 @@ const products = [
             specificationNote: "Dimensions, configuration options, availability and prices are confirmed by an authorized Musterring retailer.",
             active: true,
             demoData: false,
-            widthMm: isStorage ? 3000 : template.widthMm,
-            depthMm: isStorage ? 450 : template.depthMm,
-            heightMm: isStorage ? 2050 : template.heightMm,
+            widthMm: dimensionOverride?.widthMm ?? (isStorage ? 3000 : template.widthMm),
+            depthMm: dimensionOverride?.depthMm ?? (isStorage ? 450 : template.depthMm),
+            heightMm: dimensionOverride?.heightMm ?? (isStorage ? 2050 : template.heightMm),
             seatHeightMm: isSeating ? template.seatHeightMm : 0,
             seatDepthMm: isSeating ? template.seatDepthMm : 0,
             numberOfSeats: isSeating ? template.numberOfSeats : 0,

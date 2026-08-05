@@ -39,8 +39,11 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
 
   const requestedRed = Array.isArray(response?.intent.colorFamilies) &&
     response.intent.colorFamilies.some((color) => ["red", "burgundy", "barolo"].includes(String(color)));
-  const resultImage = (slug: string, productId: string) =>
-    cutoutSlugs.has(slug) ? `/generated-product-views/${slug}/official-front.png?v=3` : requestedRed && slug === "mr-260" ? "/musterring-catalog/mr-260/image-08-hq.jpg" : productImages(productId)[0];
+  const resultImage = (slug: string, productId: string) => {
+    if (requestedRed && slug === "mr-260") return "/musterring-catalog/mr-260/image-08-hq.jpg?v=4";
+    if (cutoutSlugs.has(slug)) return `/generated-product-views/${slug}/official-front.png?v=3`;
+    return productImages(productId)[0];
+  };
 
   const submit = async (value = query) => {
     const next = value.trim();
@@ -119,7 +122,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               <p className="stitch-ai-label">{submitted ? "Best matching products" : "Recent searches"}</p>
               {!submitted && recent.length ? <div className="stitch-ai-suggestions" aria-label="Recent searches">{recent.map((item) => <button type="button" key={item} onClick={() => void submit(item)}>Recent: {item}</button>)}</div> : null}
               <div className="stitch-ai-recent">
-                {exact.slice(0, 4).map(({ product }) => <Link href={`/furniture/${product.slug}`} key={product.id}><Image src={resultImage(product.slug, product.id)} alt={product.name} width={220} height={130} /><span>{product.modelCode}</span></Link>)}
+                {exact.slice(0, 4).map(({ product }) => <Link href={`/furniture/${product.slug}`} key={product.id}><Image src={resultImage(product.slug, product.id)} alt={product.name} width={220} height={130} /><span>{product.modelCode}</span>{requestedRed ? <small>{product.slug === "mr-260" ? "Shown in red leather" : "Red option available · image differs"}</small> : null}</Link>)}
               </div>
             </div>
           </div>
@@ -142,7 +145,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               </div>
             </div>
             {pending ? <div className="card card-body" role="status">Interpreting request and searching validated catalogue data…</div> : exact.length ? (
-              <div className="grid grid-3">{exact.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} explanation={`Why it matches: ${reasons.join("; ") || "validated catalogue relevance"}.`} />)}</div>
+              <div className="grid grid-3">{exact.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={requestedRed ? (product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish") : undefined} explanation={`Why it matches: ${reasons.join("; ") || "validated catalogue relevance"}.`} />)}</div>
             ) : response ? (
               <div className="card card-body">
                 <h2>No exact catalogue match</h2>

@@ -154,20 +154,153 @@
   display: grid;
 }
 
+.stitch-ai-recent a > small {
+  color: var(--stitch-text-secondary);
+  letter-spacing: 0;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
 .stitch-ai-recent img {
   aspect-ratio: 16 / 8;
   object-fit: cover;
-  filter: grayscale();
+  filter: none;
   width: 100%;
-  transition: filter .18s;
+  transition: transform .18s;
 }
 
-.stitch-ai-search.is-colour-search .stitch-ai-recent img, .stitch-ai-recent a:hover img {
-  filter: none;
+.stitch-ai-recent a:hover img {
+  transform: scale(1.02);
 }
 
 .stitch-ai-results {
   border-top: 1px solid var(--stitch-border);
+}
+
+.stitch-ai-results .grid-3 {
+  align-items: stretch;
+  gap: 28px;
+}
+
+.stitch-ai-results .stitch-product-card {
+  background: #fff;
+  border: 1px solid #d8d3c9;
+  flex-direction: column;
+  min-width: 0;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(31, 29, 25, .06);
+}
+
+.stitch-ai-results .stitch-product-card:hover {
+  border-color: #b7afa2;
+  transform: translateY(-3px);
+  box-shadow: 0 20px 44px rgba(31, 29, 25, .1);
+}
+
+.stitch-ai-results .stitch-product-image {
+  aspect-ratio: 16 / 10;
+  border-bottom: 1px solid #e1ddd5;
+}
+
+.stitch-product-image .stitch-product-image-note {
+  z-index: 2;
+  color: #fff;
+  letter-spacing: .02em;
+  background: rgba(24, 24, 21, .88);
+  max-width: calc(100% - 24px);
+  padding: 7px 9px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.3;
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+}
+
+.stitch-ai-results .stitch-product-copy {
+  text-align: left;
+  flex-direction: column;
+  flex: 1;
+  padding: 26px 24px 24px;
+  display: flex;
+}
+
+.stitch-ai-results .stitch-product-copy h3 {
+  margin-top: 8px;
+  font-size: 28px;
+}
+
+.stitch-ai-results .stitch-product-copy p {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.stitch-ai-results .stitch-product-meta {
+  border-top: 1px solid #e5e1d9;
+  margin-top: 8px;
+  padding-top: 14px;
+  font-size: 12px;
+}
+
+.stitch-ai-results .stitch-product-explanation {
+  border-left: 3px solid var(--stitch-accent);
+  color: #403d37;
+  background: #f4f0e9;
+  min-height: 0;
+  margin: 6px 0 16px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.stitch-ai-results .stitch-product-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: auto;
+  display: grid;
+}
+
+.stitch-ai-results .stitch-product-actions a, .stitch-ai-results .stitch-product-actions button {
+  text-align: center;
+  background: #faf8f4;
+  border-color: #d1cbc1;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 10px;
+  font-size: 11px;
+  line-height: 1.2;
+  transition: border-color .16s, background .16s, color .16s;
+}
+
+.stitch-ai-results .stitch-product-actions > :first-child, .stitch-ai-results .stitch-product-actions > :last-child {
+  grid-column: 1 / -1;
+}
+
+.stitch-ai-results .stitch-product-actions > :first-child {
+  border-color: var(--stitch-text-primary);
+  background: var(--stitch-text-primary);
+  color: #fff;
+}
+
+.stitch-ai-results .stitch-product-actions a:hover, .stitch-ai-results .stitch-product-actions button:hover {
+  border-color: var(--stitch-accent);
+  color: var(--stitch-accent);
+  background: #efe8de;
+}
+
+.stitch-ai-results .stitch-product-actions > :first-child:hover {
+  background: var(--stitch-accent);
+  color: #fff;
+}
+
+@media (min-width: 901px) and (max-width: 1200px) {
+  .stitch-ai-results .grid-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .stitch-ai-results-head {
@@ -674,6 +807,51 @@
   color: var(--stitch-accent);
 }
 
+.stitch-composer-global-scale {
+  grid-template-columns: auto minmax(90px, 1fr) 42px;
+  align-items: center;
+  gap: 9px;
+  min-width: 240px;
+  margin-left: auto;
+  display: grid;
+}
+
+.stitch-composer-global-scale input {
+  width: 100%;
+  accent-color: var(--stitch-accent);
+}
+
+.stitch-composer-global-scale strong {
+  text-align: right;
+  font-size: 11px;
+}
+
+.stitch-composer-relative-size {
+  border: 1px solid var(--stitch-border);
+  background: #f4f1eb;
+  gap: 4px;
+  min-width: 220px;
+  padding: 9px 12px;
+  display: grid;
+}
+
+.stitch-composer-relative-size span {
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.stitch-composer-relative-size strong {
+  font-size: 12px;
+}
+
+.stitch-composer-keyboard-hint {
+  color: var(--stitch-text-secondary);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
 .stitch-composer-stage {
   touch-action: none;
   background: #d7d4ce;
@@ -709,7 +887,7 @@
 }
 
 .stitch-composer-neutral-room {
-  background: linear-gradient(#f2f0ea 0, #f2f0ea 61%, #c9c3b9 61.2%, #b8b1a7 100%);
+  background: linear-gradient(#f5f3ee 0, #f5f3ee 61%, #d3cec5 61.2%, #ada69c 100%);
   position: absolute;
   top: 0;
   bottom: 0;
@@ -719,7 +897,7 @@
 
 .stitch-composer-neutral-room:before {
   content: "";
-  background: radial-gradient(at 54% 36%, rgba(255, 255, 255, .96), rgba(0, 0, 0, 0) 48%);
+  background: radial-gradient(at 54% 34%, rgba(255, 255, 255, .98), rgba(0, 0, 0, 0) 50%);
   position: absolute;
   top: 0;
   bottom: 0;
@@ -739,19 +917,20 @@
 }
 
 .stitch-composer-neutral-room i {
-  background: linear-gradient(165deg, rgba(255, 255, 255, .22), rgba(0, 0, 0, 0) 55%);
-  border-top: 2px solid rgba(65, 58, 50, .24);
+  background: radial-gradient(at 52% -10%, rgba(255, 255, 255, .48), rgba(0, 0, 0, 0) 58%), radial-gradient(at 12% 78%, rgba(91, 82, 71, .08), rgba(0, 0, 0, 0) 38%), radial-gradient(at 86% 46%, rgba(255, 255, 255, .1), rgba(0, 0, 0, 0) 42%), linear-gradient(#d4cfc6 0%, #b4ada3 100%);
+  border-top: 1px solid rgba(65, 58, 50, .2);
   height: auto;
   position: absolute;
   top: 61%;
   bottom: 0;
   left: 0;
   right: 0;
+  box-shadow: inset 0 18px 30px rgba(70, 62, 53, .08);
 }
 
 .stitch-composer-shade {
   pointer-events: none;
-  background: linear-gradient(to top, rgba(20, 18, 15, .32), rgba(0, 0, 0, 0) 50%);
+  background: linear-gradient(to top, rgba(20, 18, 15, .17), rgba(0, 0, 0, 0) 45%);
   position: absolute;
   top: 0;
   bottom: 0;
@@ -762,10 +941,10 @@
 .stitch-composer-stage.has-grid:after {
   content: "";
   pointer-events: none;
-  opacity: .2;
+  opacity: .18;
   transform-origin: top;
-  background-image: linear-gradient(rgba(255, 255, 255, .7) 1px, rgba(0, 0, 0, 0) 1px), linear-gradient(90deg, rgba(255, 255, 255, .7) 1px, rgba(0, 0, 0, 0) 1px);
-  background-size: 76px 76px;
+  background-image: radial-gradient(circle, rgba(54, 49, 43, .5) 1px, rgba(0, 0, 0, 0) 1.6px);
+  background-size: 58px 58px;
   position: absolute;
   top: 61%;
   bottom: -62%;
@@ -778,7 +957,7 @@
   z-index: 3;
   filter: drop-shadow(0 18px 18px rgba(0, 0, 0, .22));
   cursor: grab;
-  transform-origin: center;
+  transform-origin: bottom;
   background: none;
   border: 2px solid rgba(0, 0, 0, 0);
   width: min(360px, 42%);
@@ -793,6 +972,10 @@
 .stitch-composer-item.is-selected {
   filter: drop-shadow(0 18px 18px rgba(0, 0, 0, .25));
   border-color: rgba(0, 0, 0, 0);
+}
+
+.stitch-composer-item.is-sofa, .stitch-composer-item.is-sofa.is-selected {
+  filter: none;
 }
 
 .stitch-composer-item img {
@@ -823,6 +1006,18 @@
   object-fit: cover;
   object-position: center 67%;
   transform: scale(1.32);
+}
+
+.stitch-composer-item.has-physical-aspect img, .stitch-composer-item.has-physical-aspect img.stitch-composer-turntable {
+  aspect-ratio: auto;
+  object-fit: fill;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .stitch-composer-size-control {
@@ -2502,13 +2697,12 @@
   height: auto;
 }
 
-.stitch-composer-item:has(.stitch-composer-turntable) {
+.stitch-composer-item:not(.is-sofa):has(.stitch-composer-turntable) {
   filter: drop-shadow(0 12px 10px rgba(0, 0, 0, .18));
   border-radius: 2px;
-  width: min(390px, 42%);
 }
 
-.stitch-composer-item:has(.stitch-composer-turntable):before {
+.stitch-composer-item:not(.is-sofa):has(.stitch-composer-turntable):before {
   content: "";
   z-index: -1;
   filter: blur(10px);
@@ -4490,7 +4684,7 @@
   padding: 12px;
   display: grid;
   position: absolute;
-  top: 70px;
+  top: 290px;
   right: 18px;
 }
 
@@ -10280,7 +10474,7 @@ img {
 }
 
 .stitch-composer-more-tools {
-  margin-left: auto;
+  margin-left: 0;
 }
 
 .stitch-composer-more-tools > summary {

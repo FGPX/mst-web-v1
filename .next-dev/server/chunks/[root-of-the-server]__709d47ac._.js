@@ -155,7 +155,10 @@ const searchIntentSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_
         "sofa",
         "armchair",
         "sectional",
-        "storage"
+        "storage",
+        "coffee-table",
+        "dining-table",
+        "small-furniture"
     ]).nullable(),
     colorFamilies: nullableStrings,
     materials: nullableStrings,
@@ -985,6 +988,238 @@ const verifiedRedUpholstery = new Set([
     "mr-385",
     "mr-2875"
 ]);
+const catalogueSearchOverrides = {
+    "justb-pm100": {
+        colors: [
+            "beige",
+            "cream",
+            "ivory"
+        ],
+        styles: [
+            "modern",
+            "minimal",
+            "modular"
+        ],
+        functions: [
+            "modular"
+        ],
+        modular: true
+    },
+    "justb-pm200": {
+        colors: [
+            "beige",
+            "cream",
+            "sand"
+        ],
+        styles: [
+            "modern",
+            "soft modern",
+            "modular"
+        ],
+        functions: [
+            "modular",
+            "relax"
+        ],
+        modular: true
+    },
+    "mr-lucia": {
+        colors: [
+            "light grey",
+            "grey",
+            "cream"
+        ],
+        styles: [
+            "soft modern",
+            "casual",
+            "minimal"
+        ],
+        functions: [
+            "modular"
+        ],
+        modular: true
+    },
+    "mr-230": {
+        colors: [
+            "light grey",
+            "grey",
+            "beige"
+        ],
+        styles: [
+            "modern",
+            "comfort"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-260": {
+        colors: [
+            "light grey",
+            "grey",
+            "beige",
+            "red",
+            "burgundy"
+        ],
+        styles: [
+            "modern",
+            "family"
+        ],
+        functions: [
+            "modular",
+            "relax"
+        ],
+        modular: true
+    },
+    "mr-270": {
+        colors: [
+            "yellow",
+            "mustard",
+            "cognac"
+        ],
+        styles: [
+            "modern",
+            "contemporary"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-280": {
+        colors: [
+            "beige",
+            "taupe",
+            "cream"
+        ],
+        styles: [
+            "classic modern",
+            "comfort"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-285": {
+        colors: [
+            "black",
+            "charcoal"
+        ],
+        styles: [
+            "modern",
+            "minimal"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-nils": {
+        colors: [
+            "taupe",
+            "beige"
+        ],
+        styles: [
+            "modern",
+            "ergonomic"
+        ],
+        functions: [
+            "relax",
+            "swivel"
+        ],
+        modular: false
+    },
+    "mr-pamela": {
+        colors: [
+            "cream",
+            "ivory",
+            "beige"
+        ],
+        styles: [
+            "soft modern",
+            "lounge"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-231": {
+        colors: [
+            "light grey",
+            "grey"
+        ],
+        styles: [
+            "modern",
+            "ergonomic"
+        ],
+        functions: [
+            "relax",
+            "swivel"
+        ],
+        modular: false
+    },
+    "jana": {
+        colors: [
+            "charcoal",
+            "brown",
+            "oak"
+        ],
+        styles: [
+            "modern",
+            "industrial",
+            "wood"
+        ],
+        functions: [
+            "storage"
+        ],
+        modular: false
+    },
+    "kanto": {
+        colors: [
+            "brown",
+            "oak",
+            "natural"
+        ],
+        styles: [
+            "natural",
+            "modern",
+            "wood"
+        ],
+        functions: [
+            "storage"
+        ],
+        modular: false
+    },
+    "justb-ct100": {
+        colors: [
+            "brown",
+            "oak",
+            "natural"
+        ],
+        styles: [
+            "modern",
+            "minimal",
+            "wood"
+        ],
+        functions: [],
+        modular: false
+    },
+    "nara": {
+        colors: [
+            "black",
+            "charcoal"
+        ],
+        styles: [
+            "modern",
+            "minimal",
+            "metal"
+        ],
+        functions: [],
+        modular: false
+    }
+};
 const products = [
     ...__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$generated$2f$musterring$2d$catalog$2e$json__$28$json$29$__["default"].products.map((official, index)=>{
         const category = official.category;
@@ -1004,6 +1239,7 @@ const products = [
             "bathroom",
             "kitchen"
         ].includes(category);
+        const searchOverride = catalogueSearchOverrides[official.slug] ?? {};
         return {
             ...template,
             id: official.appProductId,
@@ -1045,7 +1281,8 @@ const products = [
             comfortOptions: isSeating ? template.comfortOptions : [],
             collection: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$catalog$2d$taxonomy$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["categoryDetails"][category]?.room ?? "Musterring",
             modular: isStorage || isSeating && /modular|module|configur|system|programme|flexib/.test(searchableCopy),
-            smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy)
+            smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),
+            ...searchOverride
         };
     }),
     ...conceptProducts.filter((product)=>!__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$generated$2f$musterring$2d$catalog$2e$json__$28$json$29$__["default"].products.some((official)=>official.appProductId === product.id)).map((product)=>({
@@ -1255,7 +1492,11 @@ const colorTerms = [
     "taupe",
     "stone",
     "charcoal",
+    "black",
+    "white",
     "brown",
+    "oak",
+    "natural",
     "cream",
     "green",
     "grey",
@@ -1263,7 +1504,11 @@ const colorTerms = [
     "red",
     "burgundy",
     "barolo",
-    "purple"
+    "purple",
+    "yellow",
+    "mustard",
+    "cognac",
+    "sand"
 ];
 const stopWords = new Set([
     "want",
@@ -1327,6 +1572,8 @@ function parseSearchQuery(query) {
         q
     };
     if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
+    if (/coffee table|side table|couchtisch/.test(text)) filters.category = "coffee-table";
+    if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
     if (/armchair|chair|sessel/.test(text)) filters.category = "armchair";
     if (/sectional|corner|chaise|eck|wohnlandschaft/.test(text)) filters.category = "sectional";
     if (/sofa|couch/.test(text)) filters.category = "sofa";
@@ -1368,7 +1615,7 @@ function productMatches(product, filters) {
     if (filters.styles?.length && !filters.styles.some((style)=>product.styles.includes(style))) return false;
     if (filters.collections?.length && !filters.collections.includes(product.collection)) return false;
     if (filters.q && !filters.modelCode) {
-        const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${product.category} ${product.colors.join(" ")}`.toLowerCase();
+        const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${product.category} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
         const usefulTerms = filters.q.toLowerCase().split(/\W+/).filter((term)=>term.length > 2 && ![
                 "need",
                 "with",

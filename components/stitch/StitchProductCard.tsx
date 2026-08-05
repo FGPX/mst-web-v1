@@ -10,7 +10,7 @@ import { productImages } from "@/lib/musterring-assets";
 import { useEffect, useState } from "react";
 import { AlternativeFinderButton } from "../AlternativeFinderButton";
 
-export function StitchProductCard({ product, explanation, imageOverride }: { product: Product; explanation?: string; imageOverride?: string }) {
+export function StitchProductCard({ product, explanation, imageOverride, imageNote }: { product: Product; explanation?: string; imageOverride?: string; imageNote?: string }) {
   const [saved, setSaved] = useState(false);
   useEffect(() => setSaved(storage.savedProducts().includes(product.id)), [product.id]);
   const image = imageOverride ?? productImages(product.id)[0];
@@ -24,6 +24,7 @@ export function StitchProductCard({ product, explanation, imageOverride }: { pro
       }}>
         <Image src={image} alt={`${product.name} furniture photography`} width={900} height={675} sizes="(max-width: 760px) 100vw, (max-width: 1024px) 50vw, 33vw" />
         <span>View Details</span>
+        {imageNote ? <small className="stitch-product-image-note">{imageNote}</small> : null}
       </Link>
       <div className="stitch-product-copy">
         <p className="stitch-eyebrow">{product.modelCode}</p>

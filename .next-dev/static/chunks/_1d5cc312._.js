@@ -85,7 +85,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 function StitchProductCard(param) {
-    let { product, explanation, imageOverride } = param;
+    let { product, explanation, imageOverride, imageNote } = param;
     _s();
     const [saved, setSaved] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
@@ -141,7 +141,15 @@ function StitchProductCard(param) {
                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
                         lineNumber: 26,
                         columnNumber: 9
-                    }, this)
+                    }, this),
+                    imageNote ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
+                        className: "stitch-product-image-note",
+                        children: imageNote
+                    }, void 0, false, {
+                        fileName: "[project]/components/stitch/StitchProductCard.tsx",
+                        lineNumber: 27,
+                        columnNumber: 22
+                    }, this) : null
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
@@ -156,21 +164,21 @@ function StitchProductCard(param) {
                         children: product.modelCode
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                        lineNumber: 29,
+                        lineNumber: 30,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                         children: product.name
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                        lineNumber: 30,
+                        lineNumber: 31,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         children: product.subtitle
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                        lineNumber: 31,
+                        lineNumber: 32,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -178,7 +186,7 @@ function StitchProductCard(param) {
                         children: product.authorizedContent ? "Configuration-dependent dimensions · Price available from retailer" : "".concat((0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$format$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["dimensions"])(product.widthMm, product.depthMm, product.heightMm), " · Starting from ").concat((0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$format$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatEuro"])(product.indicativePriceCents))
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                        lineNumber: 32,
+                        lineNumber: 33,
                         columnNumber: 9
                     }, this),
                     explanation ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -186,7 +194,7 @@ function StitchProductCard(param) {
                         children: explanation
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                        lineNumber: 37,
+                        lineNumber: 38,
                         columnNumber: 24
                     }, this) : null,
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -206,7 +214,7 @@ function StitchProductCard(param) {
                                         size: 15
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                        lineNumber: 39,
+                                        lineNumber: 40,
                                         columnNumber: 170
                                     }, this),
                                     " ",
@@ -214,7 +222,7 @@ function StitchProductCard(param) {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                lineNumber: 39,
+                                lineNumber: 40,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$AlternativeFinderButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlternativeFinderButton"], {
@@ -223,7 +231,7 @@ function StitchProductCard(param) {
                                 className: ""
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                lineNumber: 40,
+                                lineNumber: 41,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -233,14 +241,14 @@ function StitchProductCard(param) {
                                         size: 15
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                        lineNumber: 41,
+                                        lineNumber: 42,
                                         columnNumber: 53
                                     }, this),
                                     " Compare"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                lineNumber: 41,
+                                lineNumber: 42,
                                 columnNumber: 11
                             }, this),
                             isConfigurable ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -250,14 +258,14 @@ function StitchProductCard(param) {
                                         size: 15
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                        lineNumber: 42,
+                                        lineNumber: 43,
                                         columnNumber: 74
                                     }, this),
                                     " Quick Configure"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                lineNumber: 42,
+                                lineNumber: 43,
                                 columnNumber: 29
                             }, this) : null,
                             canPlaceInRoom ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -267,14 +275,14 @@ function StitchProductCard(param) {
                                         size: 15
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                        lineNumber: 43,
+                                        lineNumber: 44,
                                         columnNumber: 57
                                     }, this),
                                     " See It in Your Room"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                lineNumber: 43,
+                                lineNumber: 44,
                                 columnNumber: 29
                             }, this) : null,
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -284,26 +292,26 @@ function StitchProductCard(param) {
                                         size: 15
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                        lineNumber: 44,
+                                        lineNumber: 45,
                                         columnNumber: 33
                                     }, this),
                                     " Find Near You"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                                lineNumber: 44,
+                                lineNumber: 45,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                        lineNumber: 38,
+                        lineNumber: 39,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
-                lineNumber: 28,
+                lineNumber: 29,
                 columnNumber: 7
             }, this)
         ]

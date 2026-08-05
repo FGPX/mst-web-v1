@@ -723,6 +723,295 @@ const verifiedRedUpholstery = new Set([
     "mr-385",
     "mr-2875"
 ]);
+const catalogueDimensionOverrides = {
+    // Dimensions correspond to the specific catalogue variants used by the Room Composer cutouts.
+    // PM100 corner configuration: approx. 232 x 268 cm, maximum back height 88 cm.
+    "justb-pm100": {
+        widthMm: 2680,
+        depthMm: 2320,
+        heightMm: 880
+    },
+    // Armchair dimensions match the specific catalogue cutouts used in the composer.
+    "mr-kleo": {
+        widthMm: 970,
+        depthMm: 880,
+        heightMm: 950
+    },
+    "mr-nils": {
+        widthMm: 700,
+        depthMm: 870,
+        heightMm: 1120
+    },
+    "mr-pamela": {
+        widthMm: 930,
+        depthMm: 1190,
+        heightMm: 610
+    },
+    "mr-281": {
+        widthMm: 780,
+        depthMm: 880,
+        heightMm: 1100
+    },
+    "mr-9445": {
+        widthMm: 670,
+        depthMm: 870,
+        heightMm: 800
+    },
+    // Storage dimensions match the pictured JANA and KANTO sideboard variants.
+    "jana": {
+        widthMm: 2560,
+        depthMm: 530,
+        heightMm: 770
+    },
+    "kanto": {
+        widthMm: 2100,
+        depthMm: 490,
+        heightMm: 940
+    },
+    "justb-ct100": {
+        widthMm: 600,
+        depthMm: 600,
+        heightMm: 360
+    },
+    "nara": {
+        widthMm: 890,
+        depthMm: 780,
+        heightMm: 440
+    }
+};
+const catalogueSearchOverrides = {
+    "justb-pm100": {
+        colors: [
+            "beige",
+            "cream",
+            "ivory"
+        ],
+        styles: [
+            "modern",
+            "minimal",
+            "modular"
+        ],
+        functions: [
+            "modular"
+        ],
+        modular: true
+    },
+    "justb-pm200": {
+        colors: [
+            "beige",
+            "cream",
+            "sand"
+        ],
+        styles: [
+            "modern",
+            "soft modern",
+            "modular"
+        ],
+        functions: [
+            "modular",
+            "relax"
+        ],
+        modular: true
+    },
+    "mr-lucia": {
+        colors: [
+            "light grey",
+            "grey",
+            "cream"
+        ],
+        styles: [
+            "soft modern",
+            "casual",
+            "minimal"
+        ],
+        functions: [
+            "modular"
+        ],
+        modular: true
+    },
+    "mr-230": {
+        colors: [
+            "light grey",
+            "grey",
+            "beige"
+        ],
+        styles: [
+            "modern",
+            "comfort"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-260": {
+        colors: [
+            "light grey",
+            "grey",
+            "beige",
+            "red",
+            "burgundy"
+        ],
+        styles: [
+            "modern",
+            "family"
+        ],
+        functions: [
+            "modular",
+            "relax"
+        ],
+        modular: true
+    },
+    "mr-270": {
+        colors: [
+            "yellow",
+            "mustard",
+            "cognac"
+        ],
+        styles: [
+            "modern",
+            "contemporary"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-280": {
+        colors: [
+            "beige",
+            "taupe",
+            "cream"
+        ],
+        styles: [
+            "classic modern",
+            "comfort"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-285": {
+        colors: [
+            "black",
+            "charcoal"
+        ],
+        styles: [
+            "modern",
+            "minimal"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-nils": {
+        colors: [
+            "taupe",
+            "beige"
+        ],
+        styles: [
+            "modern",
+            "ergonomic"
+        ],
+        functions: [
+            "relax",
+            "swivel"
+        ],
+        modular: false
+    },
+    "mr-pamela": {
+        colors: [
+            "cream",
+            "ivory",
+            "beige"
+        ],
+        styles: [
+            "soft modern",
+            "lounge"
+        ],
+        functions: [
+            "relax"
+        ],
+        modular: false
+    },
+    "mr-231": {
+        colors: [
+            "light grey",
+            "grey"
+        ],
+        styles: [
+            "modern",
+            "ergonomic"
+        ],
+        functions: [
+            "relax",
+            "swivel"
+        ],
+        modular: false
+    },
+    "jana": {
+        colors: [
+            "charcoal",
+            "brown",
+            "oak"
+        ],
+        styles: [
+            "modern",
+            "industrial",
+            "wood"
+        ],
+        functions: [
+            "storage"
+        ],
+        modular: false
+    },
+    "kanto": {
+        colors: [
+            "brown",
+            "oak",
+            "natural"
+        ],
+        styles: [
+            "natural",
+            "modern",
+            "wood"
+        ],
+        functions: [
+            "storage"
+        ],
+        modular: false
+    },
+    "justb-ct100": {
+        colors: [
+            "natural oak",
+            "black oak"
+        ],
+        styles: [
+            "modern",
+            "minimal",
+            "wood"
+        ],
+        functions: [],
+        modular: false
+    },
+    "nara": {
+        colors: [
+            "dark stone",
+            "natural oak",
+            "knotty oak"
+        ],
+        styles: [
+            "modern",
+            "minimal",
+            "metal",
+            "wood"
+        ],
+        functions: [],
+        modular: false
+    }
+};
 const products = [
     ...__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$generated$2f$musterring$2d$catalog$2e$json__$28$json$29$__["default"].products.map((official, index)=>{
         const category = official.category;
@@ -742,6 +1031,8 @@ const products = [
             "bathroom",
             "kitchen"
         ].includes(category);
+        const searchOverride = catalogueSearchOverrides[official.slug] ?? {};
+        const dimensionOverride = catalogueDimensionOverrides[official.slug];
         return {
             ...template,
             id: official.appProductId,
@@ -757,9 +1048,9 @@ const products = [
             specificationNote: "Dimensions, configuration options, availability and prices are confirmed by an authorized Musterring retailer.",
             active: true,
             demoData: false,
-            widthMm: isStorage ? 3000 : template.widthMm,
-            depthMm: isStorage ? 450 : template.depthMm,
-            heightMm: isStorage ? 2050 : template.heightMm,
+            widthMm: dimensionOverride?.widthMm ?? (isStorage ? 3000 : template.widthMm),
+            depthMm: dimensionOverride?.depthMm ?? (isStorage ? 450 : template.depthMm),
+            heightMm: dimensionOverride?.heightMm ?? (isStorage ? 2050 : template.heightMm),
             seatHeightMm: isSeating ? template.seatHeightMm : 0,
             seatDepthMm: isSeating ? template.seatDepthMm : 0,
             numberOfSeats: isSeating ? template.numberOfSeats : 0,
@@ -783,7 +1074,8 @@ const products = [
             comfortOptions: isSeating ? template.comfortOptions : [],
             collection: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$catalog$2d$taxonomy$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["categoryDetails"][category]?.room ?? "Musterring",
             modular: isStorage || isSeating && /modular|module|configur|system|programme|flexib/.test(searchableCopy),
-            smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy)
+            smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),
+            ...searchOverride
         };
     }),
     ...conceptProducts.filter((product)=>!__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$generated$2f$musterring$2d$catalog$2e$json__$28$json$29$__["default"].products.some((official)=>official.appProductId === product.id)).map((product)=>({
@@ -1037,11 +1329,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$stitch$2f$StitchProductCard$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/stitch/StitchProductCard.tsx [app-rsc] (ecmascript)");
 ;
 ;
-function ProductCard({ product, explanation, imageOverride }) {
+function ProductCard({ product, explanation, imageOverride, imageNote }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$stitch$2f$StitchProductCard$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["StitchProductCard"], {
         product: product,
         explanation: explanation,
-        imageOverride: imageOverride
+        imageOverride: imageOverride,
+        imageNote: imageNote
     }, void 0, false, {
         fileName: "[project]/components/ProductCard.tsx",
         lineNumber: 5,

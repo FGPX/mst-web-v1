@@ -1,22 +1,10 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/about/page": "app/about/page.js",
-  "/analytics/page": "app/analytics/page.js",
-  "/api/ai/alternatives/route": "app/api/ai/alternatives/route.js",
-  "/api/ai/room/route": "app/api/ai/room/route.js",
   "/api/ai/search/route": "app/api/ai/search/route.js",
-  "/configurator/[slug]/page": "app/configurator/[slug]/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/dealers/page": "app/dealers/page.js",
   "/furniture/[slug]/page": "app/furniture/[slug]/page.js",
   "/furniture/page": "app/furniture/page.js",
-  "/inspiration/rooms/page": "app/inspiration/rooms/page.js",
   "/my-musterring/page": "app/my-musterring/page.js",
   "/my-musterring/projects/[id]/page": "app/my-musterring/projects/[id]/page.js",
   "/page": "app/page.js",
-  "/partner/login/page": "app/partner/login/page.js",
-  "/privacy/page": "app/privacy/page.js",
   "/room-composer/page": "app/room-composer/page.js",
-  "/search/page": "app/search/page.js",
-  "/will-it-fit/[slug]/page": "app/will-it-fit/[slug]/page.js"
+  "/search/page": "app/search/page.js"
 }
