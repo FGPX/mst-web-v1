@@ -72,6 +72,10 @@ const armchairTemplates = conceptProducts.filter((product) => product.category =
 const verifiedRedUpholstery = new Set(["mr-260", "mr-365", "mr-370", "mr-385", "mr-2875"]);
 const catalogueDimensionOverrides: Record<string, { widthMm: number; depthMm: number; heightMm: number }> = {
   // Dimensions correspond to the specific catalogue variants used by the Room Composer cutouts.
+  // MR 260 three-seat sofa, fixed standard version with adjustable head cushions.
+  "mr-260": { widthMm: 2320, depthMm: 960, heightMm: 1070 },
+  // MR 270 three-seat sofa shown as the straight reference configuration.
+  "mr-270": { widthMm: 2500, depthMm: 1070, heightMm: 870 },
   // PM100 corner configuration: approx. 232 x 268 cm, maximum back height 88 cm.
   "justb-pm100": { widthMm: 2680, depthMm: 2320, heightMm: 880 },
   // Armchair dimensions match the specific catalogue cutouts used in the composer.

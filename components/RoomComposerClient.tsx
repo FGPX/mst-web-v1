@@ -22,7 +22,11 @@ const roomBackgrounds = [
 const generatedTurntableSlugs = new Set(["mr-alena", "mr-lia", "mr-281", "mr-2665", "mr-4100", "mr-5100", "mr-kleo", "mr-5111", "mr-720", "mr-9445"]);
 const generatedRearViewSlugs = new Set(["justb-pm100", "justb-pm200"]);
 const physicalFrontSlugs = new Set(["justb-pm100", "justb-pm200", "mr-kleo", "mr-nils", "mr-pamela", "mr-281", "mr-9445", "jana", "kanto"]);
-const verifiedComposerSlugs = new Set(["justb-pm100", "justb-ct100", "nara", "mr-kleo", "mr-nils", "mr-pamela", "mr-281", "mr-9445", "jana", "kanto"]);
+const verifiedComposerSlugs = new Set(["justb-pm100", "justb-ct100", "nara", "mr-260", "mr-270", "mr-kleo", "mr-nils", "mr-pamela", "mr-281", "mr-9445", "jana", "kanto"]);
+const composerDimensionLabels: Record<string, string> = {
+  "mr-260": "3-seat catalogue reference",
+  "mr-270": "3-seat catalogue reference"
+};
 const generatedCutoutSlugs = new Set([
   ...generatedTurntableSlugs,
   "justb-pm100",
@@ -132,7 +136,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [versions, setVersions] = useState(0);
   const [savedVersions, setSavedVersions] = useState<SavedScene[]>([]);
   const [sceneScale, setSceneScale] = useState(1);
-  const [roomSize, setRoomSize] = useState({ widthMm: 4200, lengthMm: 5600 });
+  const [roomSize, setRoomSize] = useState({ widthMm: 5600, lengthMm: 4200 });
   const [roomAnalysis, setRoomAnalysis] = useState<RoomAnalysis | null>(null);
   const [composerNotice, setComposerNotice] = useState("");
   useEffect(() => {
@@ -158,7 +162,6 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   };
   const catalog = activeProducts.filter((product) => categoryMatches(product.category)
     && generatedCutoutSlugs.has(product.slug)
-    && verifiedComposerSlugs.has(product.slug)
     && `${product.modelCode} ${product.name} ${product.subtitle}`.toLowerCase().includes(productQuery.toLowerCase()));
   const visibleCatalog = catalog.slice(0, visibleCount);
   const selectedBackground = roomBackgrounds.find((background) => background.id === roomBackgroundId) ?? roomBackgrounds[0];
@@ -208,12 +211,14 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     const finish = composerFinishes[product.slug]?.[0];
     setItems((current) => {
       const topLayer = Math.max(0, ...current.map((item) => item.zIndex ?? 0)) + 1;
-      return [...current, { id, productId, x: 44 + ((current.length * 8) % 24), y: 86, rotation: 0, scale: 0.9, materialId: finish?.materialId ?? product.materials[0], color: finish?.color ?? product.colors[0], zIndex: topLayer }];
+      return [...current, { id, productId, x: 44 + ((current.length * 8) % 24), y: 86, rotation: 0, scale: 1, materialId: finish?.materialId ?? product.materials[0], color: finish?.color ?? product.colors[0], zIndex: topLayer }];
     });
     setSelectedId(id);
     setShowBefore(false);
     setSaved(false);
-    setComposerNotice(`${product.modelCode} was added to the room.`);
+    setComposerNotice(verifiedComposerSlugs.has(product.slug)
+      ? `${product.modelCode} was added to the room at catalogue scale.`
+      : `${product.modelCode} was added as a visual preview; placement dimensions require retailer confirmation.`);
     requestAnimationFrame(() => stageRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
   };
   const replaceSelectedProduct = (productId: string) => {
@@ -226,7 +231,9 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     setSelectedId(selected.id);
     setShowBefore(false);
     setSaved(false);
-    setComposerNotice(`${product.modelCode} is now selected and visible in the room.`);
+    setComposerNotice(verifiedComposerSlugs.has(product.slug)
+      ? `${product.modelCode} is now selected at catalogue scale.`
+      : `${product.modelCode} is now shown as a visual preview; placement dimensions require retailer confirmation.`);
     requestAnimationFrame(() => stageRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
   };
   const chooseBackground = (backgroundId: (typeof roomBackgrounds)[number]["id"]) => {
@@ -390,21 +397,25 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
             <div className="stitch-composer-catalog-heading"><p className="eyebrow">Available products</p><span>{catalog.length} models</span></div>
             <input className="stitch-composer-search" type="search" value={productQuery} onChange={(event) => { setProductQuery(event.target.value); setVisibleCount(12); }} placeholder="Search model or product" aria-label="Search products" />
             <div className="stitch-composer-products">
-              {visibleCatalog.map((product) => (
-                <article key={product.id}>
-                  <div className={`stitch-composer-product-media ${composerImage(product.id).toLowerCase().endsWith(".png") ? "is-cutout" : "is-scene"}`}><Image src={composerImage(product.id)} alt={`${product.modelCode} product crop`} width={280} height={200} /><span>Product focus</span></div>
-                  <div className="stitch-composer-product-copy">
-                    <span>{product.modelCode}</span>
-                    <strong>{product.name}</strong>
-                    <small>{product.subtitle}</small>
-                    {product.authorizedContent && product.sourceUrl ? <a href={product.sourceUrl} target="_blank" rel="noreferrer">Official Musterring product</a> : null}
-                  </div>
-                  <div className="stitch-composer-product-actions">
-                    <button type="button" onClick={() => addProduct(product.id)}><Plus size={14} /> Add to room</button>
-                    {selected ? <button type="button" className="ghost replace" onClick={() => replaceSelectedProduct(product.id)}>Replace selected</button> : null}
-                  </div>
-                </article>
-              ))}
+              {visibleCatalog.map((product) => {
+                const hasVerifiedDimensions = verifiedComposerSlugs.has(product.slug);
+                return (
+                  <article key={product.id}>
+                    <div className={`stitch-composer-product-media ${composerImage(product.id).toLowerCase().endsWith(".png") ? "is-cutout" : "is-scene"}`}><Image src={composerImage(product.id)} alt={`${product.modelCode} product crop`} width={280} height={200} /><span>Product focus</span></div>
+                    <div className="stitch-composer-product-copy">
+                      <span>{product.modelCode}</span>
+                      <strong>{product.name}</strong>
+                      <small>{product.subtitle}</small>
+                      {hasVerifiedDimensions ? <small>{composerDimensionLabels[product.slug] ?? "Catalogue dimensions ready for room placement"}</small> : <small>Visual preview only · dimensions require retailer confirmation</small>}
+                      {product.authorizedContent && product.sourceUrl ? <a href={product.sourceUrl} target="_blank" rel="noreferrer">Official Musterring product</a> : null}
+                    </div>
+                    <div className="stitch-composer-product-actions">
+                      <button type="button" onClick={() => addProduct(product.id)}><Plus size={14} /> {hasVerifiedDimensions ? "Add to room" : "Add visual preview"}</button>
+                      {selected ? <button type="button" className="ghost replace" onClick={() => replaceSelectedProduct(product.id)}>Replace selected</button> : null}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
             {visibleCount < catalog.length ? <button type="button" className="stitch-composer-show-more" onClick={() => setVisibleCount((count) => count + 12)}>Show 12 more</button> : null}
           </aside>
@@ -439,7 +450,8 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               </details>
             </div>
             {planningMode === "accurate" ? <div className="chips" aria-label="Room dimensions"><label className="chip">Room width mm<input type="number" value={roomSize.widthMm} onChange={(event) => setRoomSize({ ...roomSize, widthMm: Number(event.target.value) })} /></label><label className="chip">Room length mm<input type="number" value={roomSize.lengthMm} onChange={(event) => setRoomSize({ ...roomSize, lengthMm: Number(event.target.value) })} /></label></div> : null}
-            <div ref={stageRef} className={`stitch-composer-stage ${grid ? "has-grid" : ""}`} tabIndex={0} aria-label="Room scene. Select a product and use the arrow keys to move it." onKeyDown={moveSelectedWithKeyboard}>
+            <div className="stitch-composer-stage-with-sidebar">
+              <div ref={stageRef} className={`stitch-composer-stage ${grid ? "has-grid" : ""}`} tabIndex={0} aria-label="Room scene. Select a product and use the arrow keys to move it." onKeyDown={moveSelectedWithKeyboard}>
               {roomPreview ? (
                 // Blob URLs are local room previews and cannot use the Next image optimizer.
                 // eslint-disable-next-line @next/next/no-img-element
@@ -456,12 +468,15 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 const generatedTurntable = turntableViews.length
                   ? turntableViews[(item.viewIndex ?? 0) % turntableViews.length]
                   : undefined;
-                const relativeWidth = Math.max(8, Math.min(82, (product.widthMm / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale));
+                const hasVerifiedDimensions = verifiedComposerSlugs.has(product.slug);
+                const relativeWidth = hasVerifiedDimensions
+                  ? (product.widthMm / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale
+                  : (["sofa", "sectional"].includes(product.category) ? 42 : 22) * sceneScale;
                 return (
                   <button
                     key={item.id}
                     className={`stitch-composer-item has-physical-aspect ${["sofa", "sectional"].includes(product.category) ? "is-sofa" : ""} ${selectedId === item.id ? "is-selected" : ""} ${generatedCutoutSlugs.has(product.slug) || sceneItemImage(product.id, item.viewIndex, item.materialId, item.color).toLowerCase().split("?")[0].endsWith(".png") ? "is-cutout" : "is-scene-crop"}`}
-                    style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio: `${product.widthMm} / ${product.heightMm}`, zIndex: item.zIndex, transform: `translate(-50%, -100%) rotate(${item.rotation}deg)` }}
+                    style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio: hasVerifiedDimensions ? `${product.widthMm} / ${product.heightMm}` : (["sofa", "sectional"].includes(product.category) ? "16 / 7" : "1 / 1"), zIndex: item.zIndex, transform: `translate(-50%, -100%) rotate(${item.rotation}deg)` }}
                     onPointerDown={(event) => {
                       pushHistory();
                       setSelectedId(item.id);
@@ -471,7 +486,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     onPointerMove={(event) => move(event, item)}
                     onPointerUp={() => setDragging(null)}
                   >
-                    {generatedTurntable ? <Image className="stitch-composer-turntable" src={generatedTurntable} alt={`${product.name}, catalogue view`} width={520} height={360} draggable={false} style={{ objectFit: "fill" }} /> : <Image src={sceneItemImage(product.id, item.viewIndex, item.materialId, item.color)} alt={`${product.name}, catalogue view`} width={420} height={240} draggable={false} style={{ objectFit: "fill" }} />}
+                    {generatedTurntable ? <Image className="stitch-composer-turntable" src={generatedTurntable} alt={`${product.name}, catalogue view`} width={520} height={360} draggable={false} style={{ objectFit: product.slug === "mr-kleo" ? "contain" : "fill" }} /> : <Image src={sceneItemImage(product.id, item.viewIndex, item.materialId, item.color)} alt={`${product.name}, catalogue view`} width={420} height={240} draggable={false} style={{ objectFit: "fill" }} />}
                   </button>
                 );
               }) : null}
@@ -491,6 +506,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   <button aria-label="Remove selected product" onClick={() => { pushHistory(); setItems((current) => current.filter((item) => item.id !== selected.id)); setSelectedId(""); }}><Trash2 /></button>
                 </div>
               ) : null}
+            </div>
 
               {selected ? (
                 <div className="stitch-composer-properties">
@@ -506,7 +522,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                       updateSelected({ viewIndex: ((selected.viewIndex ?? 0) + 1) % count });
                     }}><ChevronRight size={16} /></button>
                   </div>
-                  <div className="stitch-composer-relative-size"><span>Dimension-proportional size</span><strong>{(() => { const product = activeProducts.find((item) => item.id === selected.productId); return product ? `W ${Math.round(product.widthMm / 10)} × D ${Math.round(product.depthMm / 10)} × H ${Math.round(product.heightMm / 10)} cm` : "Catalogue dimensions"; })()}</strong></div>
+                  <div className="stitch-composer-relative-size"><span>{(() => { const product = activeProducts.find((item) => item.id === selected.productId); return product && verifiedComposerSlugs.has(product.slug) ? composerDimensionLabels[product.slug] ?? "Dimension-proportional size" : "Visual preview only"; })()}</span><strong>{(() => { const product = activeProducts.find((item) => item.id === selected.productId); return product && verifiedComposerSlugs.has(product.slug) ? `W ${Math.round(product.widthMm / 10)} × D ${Math.round(product.depthMm / 10)} × H ${Math.round(product.heightMm / 10)} cm` : "Dimensions require retailer confirmation"; })()}</strong></div>
                   <small className="stitch-composer-keyboard-hint">Move with arrow keys · hold Shift for 50 cm</small>
                   {(() => {
                     const product = activeProducts.find((item) => item.id === selected.productId);
@@ -525,9 +541,10 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     </>;
                   })()}
                 </div>
-              ) : null}
+              ) : <div className="stitch-composer-properties is-empty"><strong>Select a product</strong><span>Choose an item in the room to view its dimensions, material, color, and available views.</span></div>}
+            </div>
 
-              <div className="stitch-composer-summary">
+            <div className="stitch-composer-summary">
                 <div><small>Total items</small><strong>{String(items.length).padStart(2, "0")} Modules</strong></div>
                 <button onClick={() => {
                   if (!window.confirm("Save this room concept to My Musterring?")) return;
@@ -535,7 +552,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   const sceneId = `scene-${Date.now()}`;
                   const savedItems = items.map((item) => {
                     const product = activeProducts.find((candidate) => candidate.id === item.productId);
-                    return { ...item, dimensions: product ? { widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm } : undefined };
+                    return { ...item, dimensions: product && verifiedComposerSlugs.has(product.slug) ? { widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm } : undefined };
                   });
                   storage.saveRoomScene({ id: sceneId, name: "Living Room Concept", version, planningMode, roomSize, sceneScale, backgroundId: roomBackgroundId, backgroundSrc: roomPreview ? undefined : selectedBackground.src, items: savedItems, hasLocalRoomPhoto: Boolean(roomPreview), createdAt: new Date().toISOString() });
                   const existingProject = storage.projects().find((project) => project.id === "project-room-composer");
@@ -559,7 +576,6 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   setSaved(true);
                 }}><Save size={18} /> {saved ? "Saved to project" : "Save concept"}</button>
                 <Link href="/handover"><Send size={18} /> Send concept to retailer</Link>
-              </div>
             </div>
             <p className="stitch-composer-note">{planningMode === "accurate" ? "Accurate Planning Mode preserves entered room and product dimensions, but delivery feasibility must still be confirmed with a Musterring retailer." : "Inspirational visualization — product proportions and colors may vary. Never use this visualization for fit confirmation."} Saved versions: {versions}.</p>
             {savedVersions.length ? <div className="chips" aria-label="Saved room versions">{savedVersions.slice(-4).map((version, index) => <button className="chip" key={version.id ?? index} onClick={() => {

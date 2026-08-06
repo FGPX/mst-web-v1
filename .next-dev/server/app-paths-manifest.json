@@ -1,10 +1,15 @@
 {
+  "/about/page": "app/about/page.js",
+  "/analytics/page": "app/analytics/page.js",
   "/api/ai/search/route": "app/api/ai/search/route.js",
+  "/dealers/page": "app/dealers/page.js",
   "/furniture/[slug]/page": "app/furniture/[slug]/page.js",
   "/furniture/page": "app/furniture/page.js",
+  "/handover/page": "app/handover/page.js",
+  "/inspiration/rooms/page": "app/inspiration/rooms/page.js",
   "/my-musterring/page": "app/my-musterring/page.js",
-  "/my-musterring/projects/[id]/page": "app/my-musterring/projects/[id]/page.js",
   "/page": "app/page.js",
+  "/partner/login/page": "app/partner/login/page.js",
   "/room-composer/page": "app/room-composer/page.js",
   "/search/page": "app/search/page.js"
 }

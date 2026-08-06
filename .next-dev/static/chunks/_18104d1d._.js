@@ -84,10 +84,45 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+const physicalSceneSlugs = new Set([
+    "justb-pm100",
+    "justb-pm200",
+    "mr-kleo",
+    "mr-nils",
+    "mr-pamela",
+    "mr-281",
+    "mr-9445",
+    "jana",
+    "kanto"
+]);
+const generatedSceneSlugs = new Set([
+    "mr-alena",
+    "mr-lia",
+    "mr-4100",
+    "mr-5100",
+    "mr-5111",
+    "mr-720",
+    "mr-lucia",
+    "mr-230",
+    "mr-260",
+    "mr-270",
+    "mr-280",
+    "mr-285",
+    "mr-231",
+    "justb-ct100",
+    "nara"
+]);
 function savedProductImage(productId) {
     const images = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$musterring$2d$assets$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["productImages"])(productId);
     var _images_find;
     return (_images_find = images.find((image)=>image.toLowerCase().endsWith(".png"))) !== null && _images_find !== void 0 ? _images_find : images[0];
+}
+function savedSceneProductImage(productId) {
+    const product = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["products"].find((item)=>item.id === productId);
+    if (!product) return savedProductImage(productId);
+    if (physicalSceneSlugs.has(product.slug)) return "/generated-product-views/".concat(product.slug, "/physical-front.png?v=1");
+    if (generatedSceneSlugs.has(product.slug)) return "/generated-product-views/".concat(product.slug, "/official-front.png?v=4");
+    return savedProductImage(productId);
 }
 function ProjectsClient() {
     var _latestScene_items, _displayed_;
@@ -179,27 +214,27 @@ function ProjectsClient() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 59,
+                                lineNumber: 71,
                                 columnNumber: 14
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                                 children: (_project_name = project === null || project === void 0 ? void 0 : project.name) !== null && _project_name !== void 0 ? _project_name : "Living Room Project"
                             }, void 0, false, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 59,
+                                lineNumber: 71,
                                 columnNumber: 91
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 children: (project === null || project === void 0 ? void 0 : project.notes) || "Your saved planning journey from product discovery to retailer consultation."
                             }, void 0, false, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 59,
+                                lineNumber: 71,
                                 columnNumber: 140
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 59,
+                        lineNumber: 71,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -210,14 +245,14 @@ function ProjectsClient() {
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 60,
+                                        lineNumber: 72,
                                         columnNumber: 22
                                     }, this),
                                     " Share with designer"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 60,
+                                lineNumber: 72,
                                 columnNumber: 14
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -227,26 +262,26 @@ function ProjectsClient() {
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 60,
+                                        lineNumber: 72,
                                         columnNumber: 94
                                     }, this),
                                     " Send to retailer"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 60,
+                                lineNumber: 72,
                                 columnNumber: 71
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 60,
+                        lineNumber: 72,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/ProjectsClient.tsx",
-                lineNumber: 58,
+                lineNumber: 70,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -257,41 +292,54 @@ function ProjectsClient() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                        src: (latestScene === null || latestScene === void 0 ? void 0 : latestScene.backgroundSrc) || (project === null || project === void 0 ? void 0 : project.coverImage) || "/stitch-assets/original/room-living-clean.jpg",
+                                    (latestScene === null || latestScene === void 0 ? void 0 : latestScene.backgroundSrc) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        src: latestScene.backgroundSrc,
                                         alt: projectTitle,
                                         fill: true,
                                         sizes: "(max-width: 700px) 100vw, 66vw"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 65,
-                                        columnNumber: 13
+                                        lineNumber: 78,
+                                        columnNumber: 17
+                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "stitch-project-neutral-room",
+                                        "aria-label": "Saved neutral room background"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/ProjectsClient.tsx",
+                                        lineNumber: 79,
+                                        columnNumber: 17
                                     }, this),
                                     latestScene === null || latestScene === void 0 ? void 0 : (_latestScene_items = latestScene.items) === null || _latestScene_items === void 0 ? void 0 : _latestScene_items.map((item)=>{
+                                        var _latestScene_roomSize;
                                         const product = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["products"].find((entry)=>entry.id === item.productId);
                                         if (!product) return null;
+                                        const relativeWidth = item.dimensions && ((_latestScene_roomSize = latestScene.roomSize) === null || _latestScene_roomSize === void 0 ? void 0 : _latestScene_roomSize.widthMm) ? item.dimensions.widthMm / latestScene.roomSize.widthMm * 100 : [
+                                            "sofa",
+                                            "sectional"
+                                        ].includes(product.category) ? 42 : 22;
                                         var _item_zIndex;
                                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                             className: "stitch-project-scene-product",
-                                            src: savedProductImage(product.id),
+                                            src: savedSceneProductImage(product.id),
                                             alt: product.name,
                                             width: 520,
                                             height: 360,
                                             style: {
                                                 left: "".concat(item.x, "%"),
                                                 top: "".concat(item.y, "%"),
+                                                width: "".concat(relativeWidth, "%"),
                                                 zIndex: (_item_zIndex = item.zIndex) !== null && _item_zIndex !== void 0 ? _item_zIndex : 2,
-                                                transform: "translate(-50%, -50%) rotate(".concat(item.rotation, "deg) scale(").concat(item.scale, ")")
+                                                transform: "translate(-50%, -100%) rotate(".concat(item.rotation, "deg)")
                                             }
                                         }, item.id, false, {
                                             fileName: "[project]/components/ProjectsClient.tsx",
-                                            lineNumber: 69,
+                                            lineNumber: 86,
                                             columnNumber: 22
                                         }, this);
                                     }),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$maximize$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Maximize2$3e$__["Maximize2"], {}, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 71,
+                                        lineNumber: 88,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -300,26 +348,26 @@ function ProjectsClient() {
                                                 children: "Saved Room Composer visualization"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 71,
+                                                lineNumber: 88,
                                                 columnNumber: 32
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                 children: projectTitle
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 71,
+                                                lineNumber: 88,
                                                 columnNumber: 80
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 71,
+                                        lineNumber: 88,
                                         columnNumber: 26
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 64,
+                                lineNumber: 76,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -329,14 +377,14 @@ function ProjectsClient() {
                                         children: "Will It Fit Tool"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 73,
+                                        lineNumber: 90,
                                         columnNumber: 18
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                         children: "Project resources"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 73,
+                                        lineNumber: 90,
                                         columnNumber: 61
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("dl", {
@@ -347,20 +395,20 @@ function ProjectsClient() {
                                                         children: "Fit reports"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                                        lineNumber: 73,
+                                                        lineNumber: 90,
                                                         columnNumber: 96
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("dd", {
                                                         children: resourceCounts.fitReports
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                                        lineNumber: 73,
+                                                        lineNumber: 90,
                                                         columnNumber: 116
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 73,
+                                                lineNumber: 90,
                                                 columnNumber: 91
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -369,20 +417,20 @@ function ProjectsClient() {
                                                         children: "Room scenes"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                                        lineNumber: 73,
+                                                        lineNumber: 90,
                                                         columnNumber: 163
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("dd", {
                                                         children: resourceCounts.roomScenes
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                                        lineNumber: 73,
+                                                        lineNumber: 90,
                                                         columnNumber: 183
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 73,
+                                                lineNumber: 90,
                                                 columnNumber: 158
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -391,26 +439,26 @@ function ProjectsClient() {
                                                         children: "Comparisons"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                                        lineNumber: 73,
+                                                        lineNumber: 90,
                                                         columnNumber: 230
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("dd", {
                                                         children: resourceCounts.comparisons
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                                        lineNumber: 73,
+                                                        lineNumber: 90,
                                                         columnNumber: 250
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 73,
+                                                lineNumber: 90,
                                                 columnNumber: 225
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 73,
+                                        lineNumber: 90,
                                         columnNumber: 87
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -418,19 +466,19 @@ function ProjectsClient() {
                                         children: "Adjust measurements →"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 73,
+                                        lineNumber: 90,
                                         columnNumber: 298
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 73,
+                                lineNumber: 90,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 63,
+                        lineNumber: 75,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -444,20 +492,20 @@ function ProjectsClient() {
                                         children: savedIds.length
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 76,
+                                        lineNumber: 93,
                                         columnNumber: 35
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Saved products"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 76,
+                                        lineNumber: 93,
                                         columnNumber: 69
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 76,
+                                lineNumber: 93,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -467,20 +515,20 @@ function ProjectsClient() {
                                         children: resourceCounts.configurations
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 77,
+                                        lineNumber: 94,
                                         columnNumber: 93
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Configurations"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 77,
+                                        lineNumber: 94,
                                         columnNumber: 141
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 77,
+                                lineNumber: 94,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -490,20 +538,20 @@ function ProjectsClient() {
                                         children: resourceCounts.comparisons
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 78,
+                                        lineNumber: 95,
                                         columnNumber: 33
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Comparisons"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 78,
+                                        lineNumber: 95,
                                         columnNumber: 78
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 78,
+                                lineNumber: 95,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -513,20 +561,20 @@ function ProjectsClient() {
                                         children: resourceCounts.roomScenes
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 79,
+                                        lineNumber: 96,
                                         columnNumber: 39
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Room scenes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 79,
+                                        lineNumber: 96,
                                         columnNumber: 83
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 79,
+                                lineNumber: 96,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -536,20 +584,20 @@ function ProjectsClient() {
                                         children: resourceCounts.materials
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 80,
+                                        lineNumber: 97,
                                         columnNumber: 35
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Materials"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 80,
+                                        lineNumber: 97,
                                         columnNumber: 78
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 80,
+                                lineNumber: 97,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -559,20 +607,20 @@ function ProjectsClient() {
                                         children: resourceCounts.fitReports
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 81,
+                                        lineNumber: 98,
                                         columnNumber: 32
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Fit reports"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 81,
+                                        lineNumber: 98,
                                         columnNumber: 76
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 81,
+                                lineNumber: 98,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -582,20 +630,20 @@ function ProjectsClient() {
                                         children: (_preferredDealer_name = preferredDealer === null || preferredDealer === void 0 ? void 0 : preferredDealer.name) !== null && _preferredDealer_name !== void 0 ? _preferredDealer_name : "Select"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 82,
+                                        lineNumber: 99,
                                         columnNumber: 33
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Preferred retailer"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 82,
+                                        lineNumber: 99,
                                         columnNumber: 85
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 82,
+                                lineNumber: 99,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -605,20 +653,20 @@ function ProjectsClient() {
                                         children: resourceCounts.requests
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 83,
+                                        lineNumber: 100,
                                         columnNumber: 34
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Retailer requests"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 83,
+                                        lineNumber: 100,
                                         columnNumber: 76
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 83,
+                                lineNumber: 100,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -628,26 +676,26 @@ function ProjectsClient() {
                                         children: "View"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 84,
+                                        lineNumber: 101,
                                         columnNumber: 35
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "Website analytics"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 84,
+                                        lineNumber: 101,
                                         columnNumber: 56
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 84,
+                                lineNumber: 101,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 75,
+                        lineNumber: 92,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -657,7 +705,7 @@ function ProjectsClient() {
                                 children: "Saved Configurations"
                             }, void 0, false, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 86,
+                                lineNumber: 103,
                                 columnNumber: 47
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -667,20 +715,20 @@ function ProjectsClient() {
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 86,
+                                        lineNumber: 103,
                                         columnNumber: 99
                                     }, this),
                                     " Expert consultation"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 86,
+                                lineNumber: 103,
                                 columnNumber: 76
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 86,
+                        lineNumber: 103,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -697,34 +745,34 @@ function ProjectsClient() {
                                                 height: 360
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 88,
+                                                lineNumber: 105,
                                                 columnNumber: 126
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                                 children: product.modelCode
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 88,
+                                                lineNumber: 105,
                                                 columnNumber: 215
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                 children: product.name
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 88,
+                                                lineNumber: 105,
                                                 columnNumber: 249
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: "Saved in this room"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 88,
+                                                lineNumber: 105,
                                                 columnNumber: 280
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 88,
+                                        lineNumber: 105,
                                         columnNumber: 84
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$AlternativeFinderButton$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlternativeFinderButton"], {
@@ -733,13 +781,13 @@ function ProjectsClient() {
                                         className: ""
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 88,
+                                        lineNumber: 105,
                                         columnNumber: 318
                                     }, this)
                                 ]
                             }, product.id, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 88,
+                                lineNumber: 105,
                                 columnNumber: 58
                             }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "stitch-project-empty",
@@ -748,14 +796,14 @@ function ProjectsClient() {
                                     children: "No products saved yet"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ProjectsClient.tsx",
-                                    lineNumber: 88,
+                                    lineNumber: 105,
                                     columnNumber: 461
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: "Add products in Room Composer, then save the concept to see them here."
                                 }, void 0, false, {
                                     fileName: "[project]/components/ProjectsClient.tsx",
-                                    lineNumber: 88,
+                                    lineNumber: 105,
                                     columnNumber: 491
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -763,18 +811,18 @@ function ProjectsClient() {
                                     children: "Open Room Composer"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ProjectsClient.tsx",
-                                    lineNumber: 88,
+                                    lineNumber: 105,
                                     columnNumber: 568
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/ProjectsClient.tsx",
-                            lineNumber: 88,
+                            lineNumber: 105,
                             columnNumber: 423
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 87,
+                        lineNumber: 104,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -786,7 +834,7 @@ function ProjectsClient() {
                                         children: "Material Palette"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 91,
+                                        lineNumber: 108,
                                         columnNumber: 16
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -799,31 +847,31 @@ function ProjectsClient() {
                                                         className: "palette-".concat(index + 1)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                                        lineNumber: 91,
+                                                        lineNumber: 108,
                                                         columnNumber: 189
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                                         children: item
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                                        lineNumber: 91,
+                                                        lineNumber: 108,
                                                         columnNumber: 229
                                                     }, this)
                                                 ]
                                             }, item, true, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 91,
+                                                lineNumber: 108,
                                                 columnNumber: 172
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 91,
+                                        lineNumber: 108,
                                         columnNumber: 41
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 91,
+                                lineNumber: 108,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -832,14 +880,14 @@ function ProjectsClient() {
                                         children: "Notes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 109,
                                         columnNumber: 18
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: (project === null || project === void 0 ? void 0 : project.notes) || "Add planning notes before continuing with a retailer."
                                     }, void 0, false, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 109,
                                         columnNumber: 38
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -850,25 +898,25 @@ function ProjectsClient() {
                                                 size: 16
                                             }, void 0, false, {
                                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                                lineNumber: 92,
+                                                lineNumber: 109,
                                                 columnNumber: 223
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/ProjectsClient.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 109,
                                         columnNumber: 120
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 92,
+                                lineNumber: 109,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 90,
+                        lineNumber: 107,
                         columnNumber: 9
                     }, this),
                     lead ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -880,14 +928,14 @@ function ProjectsClient() {
                                 children: "Latest retailer request"
                             }, void 0, false, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 94,
+                                lineNumber: 111,
                                 columnNumber: 90
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                 children: String(lead.requestType)
                             }, void 0, false, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 94,
+                                lineNumber: 111,
                                 columnNumber: 140
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -899,13 +947,13 @@ function ProjectsClient() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 94,
+                                lineNumber: 111,
                                 columnNumber: 175
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 94,
+                        lineNumber: 111,
                         columnNumber: 17
                     }, this) : null,
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -916,26 +964,26 @@ function ProjectsClient() {
                                 size: 16
                             }, void 0, false, {
                                 fileName: "[project]/components/ProjectsClient.tsx",
-                                lineNumber: 95,
+                                lineNumber: 112,
                                 columnNumber: 68
                             }, this),
                             " Create another project"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/ProjectsClient.tsx",
-                        lineNumber: 95,
+                        lineNumber: 112,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/ProjectsClient.tsx",
-                lineNumber: 62,
+                lineNumber: 74,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/ProjectsClient.tsx",
-        lineNumber: 57,
+        lineNumber: 69,
         columnNumber: 5
     }, this);
 }

@@ -734,6 +734,18 @@ const verifiedRedUpholstery = new Set([
 ]);
 const catalogueDimensionOverrides = {
     // Dimensions correspond to the specific catalogue variants used by the Room Composer cutouts.
+    // MR 260 three-seat sofa, fixed standard version with adjustable head cushions.
+    "mr-260": {
+        widthMm: 2320,
+        depthMm: 960,
+        heightMm: 1070
+    },
+    // MR 270 three-seat sofa shown as the straight reference configuration.
+    "mr-270": {
+        widthMm: 2500,
+        depthMm: 1070,
+        heightMm: 870
+    },
     // PM100 corner configuration: approx. 232 x 268 cm, maximum back height 88 cm.
     "justb-pm100": {
         widthMm: 2680,
@@ -2794,6 +2806,12 @@ const storage = {
             scene
         ]);
     },
+    deleteRoomScene: (sceneKey)=>{
+        write(keys.roomScenes, storage.roomScenes().filter((scene, index)=>{
+            const id = typeof scene === "object" && scene && "id" in scene ? String(scene.id ?? "") : "";
+            return id !== sceneKey && `index-${index}` !== sceneKey;
+        }));
+    },
     consent: ()=>read(keys.consent, false),
     setConsent: (allowed)=>{
         write(keys.consent, allowed);
@@ -2898,8 +2916,8 @@ const storage = {
             version: 1,
             planningMode: "inspiration",
             roomSize: {
-                widthMm: 4200,
-                lengthMm: 5600
+                widthMm: 5600,
+                lengthMm: 4200
             },
             configurationId: configuration.id,
             items: selectedProducts.map((product, index)=>({

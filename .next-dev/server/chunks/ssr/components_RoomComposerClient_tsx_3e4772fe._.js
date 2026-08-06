@@ -93,6 +93,8 @@ const verifiedComposerSlugs = new Set([
     "justb-pm100",
     "justb-ct100",
     "nara",
+    "mr-260",
+    "mr-270",
     "mr-kleo",
     "mr-nils",
     "mr-pamela",
@@ -101,6 +103,10 @@ const verifiedComposerSlugs = new Set([
     "jana",
     "kanto"
 ]);
+const composerDimensionLabels = {
+    "mr-260": "3-seat catalogue reference",
+    "mr-270": "3-seat catalogue reference"
+};
 const generatedCutoutSlugs = new Set([
     ...generatedTurntableSlugs,
     "justb-pm100",
@@ -215,8 +221,8 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
     const [savedVersions, setSavedVersions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [sceneScale, setSceneScale] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(1);
     const [roomSize, setRoomSize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
-        widthMm: 4200,
-        lengthMm: 5600
+        widthMm: 5600,
+        lengthMm: 4200
     });
     const [roomAnalysis, setRoomAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [composerNotice, setComposerNotice] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
@@ -252,7 +258,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
             "small-furniture"
         ].includes(productCategory);
     };
-    const catalog = activeProducts.filter((product)=>categoryMatches(product.category) && generatedCutoutSlugs.has(product.slug) && verifiedComposerSlugs.has(product.slug) && `${product.modelCode} ${product.name} ${product.subtitle}`.toLowerCase().includes(productQuery.toLowerCase()));
+    const catalog = activeProducts.filter((product)=>categoryMatches(product.category) && generatedCutoutSlugs.has(product.slug) && `${product.modelCode} ${product.name} ${product.subtitle}`.toLowerCase().includes(productQuery.toLowerCase()));
     const visibleCatalog = catalog.slice(0, visibleCount);
     const selectedBackground = roomBackgrounds.find((background)=>background.id === roomBackgroundId) ?? roomBackgrounds[0];
     const composerImage = (productId)=>{
@@ -313,7 +319,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                     x: 44 + current.length * 8 % 24,
                     y: 86,
                     rotation: 0,
-                    scale: 0.9,
+                    scale: 1,
                     materialId: finish?.materialId ?? product.materials[0],
                     color: finish?.color ?? product.colors[0],
                     zIndex: topLayer
@@ -323,7 +329,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
         setSelectedId(id);
         setShowBefore(false);
         setSaved(false);
-        setComposerNotice(`${product.modelCode} was added to the room.`);
+        setComposerNotice(verifiedComposerSlugs.has(product.slug) ? `${product.modelCode} was added to the room at catalogue scale.` : `${product.modelCode} was added as a visual preview; placement dimensions require retailer confirmation.`);
         requestAnimationFrame(()=>stageRef.current?.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
@@ -349,7 +355,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
         setSelectedId(selected.id);
         setShowBefore(false);
         setSaved(false);
-        setComposerNotice(`${product.modelCode} is now selected and visible in the room.`);
+        setComposerNotice(verifiedComposerSlugs.has(product.slug) ? `${product.modelCode} is now selected at catalogue scale.` : `${product.modelCode} is now shown as a visual preview; placement dimensions require retailer confirmation.`);
         requestAnimationFrame(()=>stageRef.current?.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
@@ -434,7 +440,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                             children: "Room planning"
                         }, void 0, false, {
                             fileName: "[project]/components/RoomComposerClient.tsx",
-                            lineNumber: 289,
+                            lineNumber: 296,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -445,20 +451,20 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Room Composer"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 292,
+                                            lineNumber: 299,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: "Visualize Musterring furniture in a premium room scene. Add products, drag them into place, rotate and scale the composition, then save or hand it to a retailer."
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 293,
+                                            lineNumber: 300,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 291,
+                                    lineNumber: 298,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -474,14 +480,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     size: 18
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 296,
+                                                    lineNumber: 303,
                                                     columnNumber: 155
                                                 }, this),
                                                 " Shoppable scenes"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 296,
+                                            lineNumber: 303,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -493,7 +499,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     size: 18
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 297,
+                                                    lineNumber: 304,
                                                     columnNumber: 122
                                                 }, this),
                                                 " ",
@@ -501,7 +507,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 297,
+                                            lineNumber: 304,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -546,30 +552,30 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 298,
+                                            lineNumber: 305,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 295,
+                                    lineNumber: 302,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/RoomComposerClient.tsx",
-                            lineNumber: 290,
+                            lineNumber: 297,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/RoomComposerClient.tsx",
-                    lineNumber: 288,
+                    lineNumber: 295,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/RoomComposerClient.tsx",
-                lineNumber: 287,
+                lineNumber: 294,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -588,14 +594,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     children: "Private room upload"
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 339,
+                                    lineNumber: 346,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: "Your photo is processed temporarily for room analysis. It is not saved by this application and can be removed from the preview at any time."
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 340,
+                                    lineNumber: 347,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -610,14 +616,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             }
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 341,
+                                            lineNumber: 348,
                                             columnNumber: 39
                                         }, this),
                                         " I consent to temporary AI processing of this room photo."
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 341,
+                                    lineNumber: 348,
                                     columnNumber: 15
                                 }, this),
                                 uploadError ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -626,13 +632,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     children: uploadError
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 345,
+                                    lineNumber: 352,
                                     columnNumber: 30
                                 }, this) : null
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/RoomComposerClient.tsx",
-                            lineNumber: 338,
+                            lineNumber: 345,
                             columnNumber: 13
                         }, this) : null,
                         upload && roomAnalysis ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -646,7 +652,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     children: "Room analysis"
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 350,
+                                    lineNumber: 357,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -654,12 +660,12 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                         children: "This analysis supports inspiration. Confirm dimensions with “Will It Fit?” or a Musterring retailer."
                                     }, void 0, false, {
                                         fileName: "[project]/components/RoomComposerClient.tsx",
-                                        lineNumber: 351,
+                                        lineNumber: 358,
                                         columnNumber: 18
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 351,
+                                    lineNumber: 358,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -676,13 +682,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 353,
+                                                    lineNumber: 360,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 353,
+                                            lineNumber: 360,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -696,13 +702,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 354,
+                                                    lineNumber: 361,
                                                     columnNumber: 44
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 354,
+                                            lineNumber: 361,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -716,13 +722,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 355,
+                                                    lineNumber: 362,
                                                     columnNumber: 44
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 355,
+                                            lineNumber: 362,
                                             columnNumber: 17
                                         }, this),
                                         [
@@ -761,25 +767,25 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             })
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 364,
+                                                        lineNumber: 371,
                                                         columnNumber: 43
                                                     }, this)
                                                 ]
                                             }, key, true, {
                                                 fileName: "[project]/components/RoomComposerClient.tsx",
-                                                lineNumber: 364,
+                                                lineNumber: 371,
                                                 columnNumber: 19
                                             }, this))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 352,
+                                    lineNumber: 359,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/RoomComposerClient.tsx",
-                            lineNumber: 349,
+                            lineNumber: 356,
                             columnNumber: 13
                         }, this) : null,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -795,20 +801,20 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     children: "Room background"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 371,
+                                                    lineNumber: 378,
                                                     columnNumber: 20
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                     children: "Choose your space"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 371,
+                                                    lineNumber: 378,
                                                     columnNumber: 62
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 371,
+                                            lineNumber: 378,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -821,20 +827,20 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     size: 15
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 372,
+                                                    lineNumber: 379,
                                                     columnNumber: 144
                                                 }, this),
                                                 " Import"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 372,
+                                            lineNumber: 379,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 370,
+                                    lineNumber: 377,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -852,26 +858,26 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                         height: 82
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 377,
+                                                        lineNumber: 384,
                                                         columnNumber: 37
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "stitch-neutral-swatch"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 377,
+                                                        lineNumber: 384,
                                                         columnNumber: 101
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                                         children: background.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 378,
+                                                        lineNumber: 385,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, background.id, true, {
                                                 fileName: "[project]/components/RoomComposerClient.tsx",
-                                                lineNumber: 376,
+                                                lineNumber: 383,
                                                 columnNumber: 17
                                             }, this)),
                                         roomPreview ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -884,31 +890,31 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                         size: 18
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 381,
+                                                        lineNumber: 388,
                                                         columnNumber: 115
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 381,
+                                                    lineNumber: 388,
                                                     columnNumber: 74
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                                     children: "Imported photo"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 381,
+                                                    lineNumber: 388,
                                                     columnNumber: 142
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 381,
+                                            lineNumber: 388,
                                             columnNumber: 30
                                         }, this) : null
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 374,
+                                    lineNumber: 381,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -916,7 +922,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     children: "Module categories"
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 383,
+                                    lineNumber: 390,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -931,7 +937,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Seating"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 385,
+                                            lineNumber: 392,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -940,7 +946,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Armchairs"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 386,
+                                            lineNumber: 393,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -949,7 +955,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Storage"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 387,
+                                            lineNumber: 394,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -958,13 +964,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Tables"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 388,
+                                            lineNumber: 395,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 384,
+                                    lineNumber: 391,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -975,7 +981,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Available products"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 390,
+                                            lineNumber: 397,
                                             columnNumber: 62
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -985,13 +991,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 390,
+                                            lineNumber: 397,
                                             columnNumber: 107
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 390,
+                                    lineNumber: 397,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1006,12 +1012,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     "aria-label": "Search products"
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 391,
+                                    lineNumber: 398,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "stitch-composer-products",
-                                    children: visibleCatalog.map((product)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
+                                    children: visibleCatalog.map((product)=>{
+                                        const hasVerifiedDimensions = verifiedComposerSlugs.has(product.slug);
+                                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: `stitch-composer-product-media ${composerImage(product.id).toLowerCase().endsWith(".png") ? "is-cutout" : "is-scene"}`,
@@ -1023,21 +1031,21 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             height: 200
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 395,
-                                                            columnNumber: 155
+                                                            lineNumber: 404,
+                                                            columnNumber: 157
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: "Product focus"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 395,
-                                                            columnNumber: 263
+                                                            lineNumber: 404,
+                                                            columnNumber: 265
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 395,
-                                                    columnNumber: 19
+                                                    lineNumber: 404,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "stitch-composer-product-copy",
@@ -1046,22 +1054,35 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             children: product.modelCode
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 397,
-                                                            columnNumber: 21
+                                                            lineNumber: 406,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                             children: product.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 398,
-                                                            columnNumber: 21
+                                                            lineNumber: 407,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                                             children: product.subtitle
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 399,
-                                                            columnNumber: 21
+                                                            lineNumber: 408,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        hasVerifiedDimensions ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
+                                                            children: composerDimensionLabels[product.slug] ?? "Catalogue dimensions ready for room placement"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 409,
+                                                            columnNumber: 48
+                                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
+                                                            children: "Visual preview only · dimensions require retailer confirmation"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 409,
+                                                            columnNumber: 156
                                                         }, this),
                                                         product.authorizedContent && product.sourceUrl ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
                                                             href: product.sourceUrl,
@@ -1070,14 +1091,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             children: "Official Musterring product"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 400,
-                                                            columnNumber: 71
+                                                            lineNumber: 410,
+                                                            columnNumber: 73
                                                         }, this) : null
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 396,
-                                                    columnNumber: 19
+                                                    lineNumber: 405,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "stitch-composer-product-actions",
@@ -1090,15 +1111,16 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                                     size: 14
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                    lineNumber: 403,
-                                                                    columnNumber: 82
+                                                                    lineNumber: 413,
+                                                                    columnNumber: 84
                                                                 }, this),
-                                                                " Add to room"
+                                                                " ",
+                                                                hasVerifiedDimensions ? "Add to room" : "Add visual preview"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 403,
-                                                            columnNumber: 21
+                                                            lineNumber: 413,
+                                                            columnNumber: 23
                                                         }, this),
                                                         selected ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             type: "button",
@@ -1107,24 +1129,25 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             children: "Replace selected"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 404,
-                                                            columnNumber: 33
+                                                            lineNumber: 414,
+                                                            columnNumber: 35
                                                         }, this) : null
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 402,
-                                                    columnNumber: 19
+                                                    lineNumber: 412,
+                                                    columnNumber: 21
                                                 }, this)
                                             ]
                                         }, product.id, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 394,
-                                            columnNumber: 17
-                                        }, this))
+                                            lineNumber: 403,
+                                            columnNumber: 19
+                                        }, this);
+                                    })
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 392,
+                                    lineNumber: 399,
                                     columnNumber: 13
                                 }, this),
                                 visibleCount < catalog.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1134,13 +1157,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     children: "Show 12 more"
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 409,
+                                    lineNumber: 420,
                                     columnNumber: 46
                                 }, this) : null
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/RoomComposerClient.tsx",
-                            lineNumber: 369,
+                            lineNumber: 376,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1153,7 +1176,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 413,
+                                            lineNumber: 424,
                                             columnNumber: 85
                                         }, this),
                                         " ",
@@ -1161,7 +1184,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 413,
+                                    lineNumber: 424,
                                     columnNumber: 31
                                 }, this) : null,
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1173,7 +1196,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: planningMode === "accurate" ? "Accurate Planning Mode" : "Inspiration Mode"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 415,
+                                            lineNumber: 426,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1182,7 +1205,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Undo"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 416,
+                                            lineNumber: 427,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1193,14 +1216,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     size: 15
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 417,
+                                                    lineNumber: 428,
                                                     columnNumber: 64
                                                 }, this),
                                                 " Redo"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 417,
+                                            lineNumber: 428,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1210,7 +1233,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     children: "All items"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 419,
+                                                    lineNumber: 430,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1226,7 +1249,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 420,
+                                                    lineNumber: 431,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
@@ -1236,13 +1259,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 421,
+                                                    lineNumber: 432,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 418,
+                                            lineNumber: 429,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("details", {
@@ -1252,7 +1275,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     children: "More tools"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 424,
+                                                    lineNumber: 435,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1265,7 +1288,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                                     size: 16
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                    lineNumber: 426,
+                                                                    lineNumber: 437,
                                                                     columnNumber: 106
                                                                 }, this),
                                                                 " Grid: ",
@@ -1273,14 +1296,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 426,
+                                                            lineNumber: 437,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: "Snap: 10 cm"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 427,
+                                                            lineNumber: 438,
                                                             columnNumber: 19
                                                         }, this),
                                                         roomPreview ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1288,7 +1311,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             children: showBefore ? "Show designed room" : "Show before"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 428,
+                                                            lineNumber: 439,
                                                             columnNumber: 34
                                                         }, this) : null,
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1298,14 +1321,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                                     size: 15
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                    lineNumber: 429,
+                                                                    lineNumber: 440,
                                                                     columnNumber: 58
                                                                 }, this),
                                                                 " Print"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 429,
+                                                            lineNumber: 440,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1317,14 +1340,14 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                                     size: 15
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                    lineNumber: 430,
+                                                                    lineNumber: 441,
                                                                     columnNumber: 127
                                                                 }, this),
                                                                 " Share"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 430,
+                                                            lineNumber: 441,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1335,7 +1358,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             children: "Clear room"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 431,
+                                                            lineNumber: 442,
                                                             columnNumber: 19
                                                         }, this),
                                                         roomPreview ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1348,25 +1371,25 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             children: "Remove room photo"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 432,
+                                                            lineNumber: 443,
                                                             columnNumber: 34
                                                         }, this) : null
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 425,
+                                                    lineNumber: 436,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 423,
+                                            lineNumber: 434,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 414,
+                                    lineNumber: 425,
                                     columnNumber: 13
                                 }, this),
                                 planningMode === "accurate" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1386,13 +1409,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 441,
+                                                    lineNumber: 452,
                                                     columnNumber: 133
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 441,
+                                            lineNumber: 452,
                                             columnNumber: 96
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1408,239 +1431,255 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                         })
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 441,
+                                                    lineNumber: 452,
                                                     columnNumber: 315
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 441,
+                                            lineNumber: 452,
                                             columnNumber: 277
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 441,
+                                    lineNumber: 452,
                                     columnNumber: 44
                                 }, this) : null,
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    ref: stageRef,
-                                    className: `stitch-composer-stage ${grid ? "has-grid" : ""}`,
-                                    tabIndex: 0,
-                                    "aria-label": "Room scene. Select a product and use the arrow keys to move it.",
-                                    onKeyDown: moveSelectedWithKeyboard,
+                                    className: "stitch-composer-stage-with-sidebar",
                                     children: [
-                                        roomPreview ? // Blob URLs are local room previews and cannot use the Next image optimizer.
-                                        // eslint-disable-next-line @next/next/no-img-element
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                            className: "stitch-composer-room",
-                                            src: roomPreview,
-                                            alt: "Uploaded room scene"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 446,
-                                            columnNumber: 17
-                                        }, this) : selectedBackground.src ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                            className: "stitch-composer-room",
-                                            src: selectedBackground.src,
-                                            alt: selectedBackground.name,
-                                            fill: true,
-                                            priority: true,
-                                            sizes: "(max-width: 900px) 100vw, 75vw"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 448,
-                                            columnNumber: 17
-                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "stitch-composer-neutral-room",
-                                            "aria-label": "Neutral studio background",
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            ref: stageRef,
+                                            className: `stitch-composer-stage ${grid ? "has-grid" : ""}`,
+                                            tabIndex: 0,
+                                            "aria-label": "Room scene. Select a product and use the arrow keys to move it.",
+                                            onKeyDown: moveSelectedWithKeyboard,
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {}, void 0, false, {
+                                                roomPreview ? // Blob URLs are local room previews and cannot use the Next image optimizer.
+                                                // eslint-disable-next-line @next/next/no-img-element
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                                    className: "stitch-composer-room",
+                                                    src: roomPreview,
+                                                    alt: "Uploaded room scene"
+                                                }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 450,
-                                                    columnNumber: 102
+                                                    lineNumber: 458,
+                                                    columnNumber: 17
+                                                }, this) : selectedBackground.src ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                                    className: "stitch-composer-room",
+                                                    src: selectedBackground.src,
+                                                    alt: selectedBackground.name,
+                                                    fill: true,
+                                                    priority: true,
+                                                    sizes: "(max-width: 900px) 100vw, 75vw"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/RoomComposerClient.tsx",
+                                                    lineNumber: 460,
+                                                    columnNumber: 17
+                                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "stitch-composer-neutral-room",
+                                                    "aria-label": "Neutral studio background",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {}, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 462,
+                                                            columnNumber: 102
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {}, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 462,
+                                                            columnNumber: 110
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/RoomComposerClient.tsx",
+                                                    lineNumber: 462,
+                                                    columnNumber: 17
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("i", {}, void 0, false, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "stitch-composer-shade"
+                                                }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 450,
-                                                    columnNumber: 110
-                                                }, this)
+                                                    lineNumber: 464,
+                                                    columnNumber: 15
+                                                }, this),
+                                                !showBefore ? items.map((item)=>{
+                                                    const product = activeProducts.find((candidate)=>candidate.id === item.productId) ?? activeProducts[0];
+                                                    const turntableViews = generatedViews(product.slug);
+                                                    const generatedTurntable = turntableViews.length ? turntableViews[(item.viewIndex ?? 0) % turntableViews.length] : undefined;
+                                                    const hasVerifiedDimensions = verifiedComposerSlugs.has(product.slug);
+                                                    const relativeWidth = hasVerifiedDimensions ? product.widthMm / Math.max(roomSize.widthMm, 1) * 100 * sceneScale : ([
+                                                        "sofa",
+                                                        "sectional"
+                                                    ].includes(product.category) ? 42 : 22) * sceneScale;
+                                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        className: `stitch-composer-item has-physical-aspect ${[
+                                                            "sofa",
+                                                            "sectional"
+                                                        ].includes(product.category) ? "is-sofa" : ""} ${selectedId === item.id ? "is-selected" : ""} ${generatedCutoutSlugs.has(product.slug) || sceneItemImage(product.id, item.viewIndex, item.materialId, item.color).toLowerCase().split("?")[0].endsWith(".png") ? "is-cutout" : "is-scene-crop"}`,
+                                                        style: {
+                                                            left: `${item.x}%`,
+                                                            top: `${item.y}%`,
+                                                            width: `${relativeWidth}%`,
+                                                            aspectRatio: hasVerifiedDimensions ? `${product.widthMm} / ${product.heightMm}` : [
+                                                                "sofa",
+                                                                "sectional"
+                                                            ].includes(product.category) ? "16 / 7" : "1 / 1",
+                                                            zIndex: item.zIndex,
+                                                            transform: `translate(-50%, -100%) rotate(${item.rotation}deg)`
+                                                        },
+                                                        onPointerDown: (event)=>{
+                                                            pushHistory();
+                                                            setSelectedId(item.id);
+                                                            setDragging(item.id);
+                                                            event.currentTarget.setPointerCapture(event.pointerId);
+                                                        },
+                                                        onPointerMove: (event)=>move(event, item),
+                                                        onPointerUp: ()=>setDragging(null),
+                                                        children: generatedTurntable ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                                            className: "stitch-composer-turntable",
+                                                            src: generatedTurntable,
+                                                            alt: `${product.name}, catalogue view`,
+                                                            width: 520,
+                                                            height: 360,
+                                                            draggable: false,
+                                                            style: {
+                                                                objectFit: product.slug === "mr-kleo" ? "contain" : "fill"
+                                                            }
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 489,
+                                                            columnNumber: 43
+                                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                                            src: sceneItemImage(product.id, item.viewIndex, item.materialId, item.color),
+                                                            alt: `${product.name}, catalogue view`,
+                                                            width: 420,
+                                                            height: 240,
+                                                            draggable: false,
+                                                            style: {
+                                                                objectFit: "fill"
+                                                            }
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 489,
+                                                            columnNumber: 272
+                                                        }, this)
+                                                    }, item.id, false, {
+                                                        fileName: "[project]/components/RoomComposerClient.tsx",
+                                                        lineNumber: 476,
+                                                        columnNumber: 19
+                                                    }, this);
+                                                }) : null,
+                                                selected ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "stitch-composer-controls",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            "aria-label": "Rotate selected product",
+                                                            onClick: ()=>updateSelected({
+                                                                    rotation: selected.rotation + 15
+                                                                }),
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCw$3e$__["RotateCw"], {}, void 0, false, {
+                                                                fileName: "[project]/components/RoomComposerClient.tsx",
+                                                                lineNumber: 496,
+                                                                columnNumber: 133
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 496,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            "aria-label": "Duplicate selected product",
+                                                            onClick: ()=>{
+                                                                pushHistory();
+                                                                const topLayer = Math.max(0, ...items.map((item)=>item.zIndex ?? 0)) + 1;
+                                                                const copy = {
+                                                                    ...selected,
+                                                                    id: `scene-${Date.now()}`,
+                                                                    x: Math.min(92, selected.x + 4),
+                                                                    y: Math.min(88, selected.y + 4),
+                                                                    zIndex: topLayer
+                                                                };
+                                                                setItems((current)=>[
+                                                                        ...current,
+                                                                        copy
+                                                                    ]);
+                                                                setSelectedId(copy.id);
+                                                            },
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$copy$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Copy$3e$__["Copy"], {}, void 0, false, {
+                                                                fileName: "[project]/components/RoomComposerClient.tsx",
+                                                                lineNumber: 503,
+                                                                columnNumber: 22
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 497,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            "aria-label": selected.locked ? "Unlock selected product" : "Lock selected product",
+                                                            onClick: ()=>updateSelected({
+                                                                    locked: !selected.locked
+                                                                }),
+                                                            children: selected.locked ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Unlock$3e$__["Unlock"], {}, void 0, false, {
+                                                                fileName: "[project]/components/RoomComposerClient.tsx",
+                                                                lineNumber: 504,
+                                                                columnNumber: 190
+                                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Lock$3e$__["Lock"], {}, void 0, false, {
+                                                                fileName: "[project]/components/RoomComposerClient.tsx",
+                                                                lineNumber: 504,
+                                                                columnNumber: 203
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 504,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            "aria-label": "Bring selected product forward",
+                                                            onClick: ()=>updateSelected({
+                                                                    zIndex: Math.max(...items.map((item)=>item.zIndex ?? 1)) + 1
+                                                                }),
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$layers$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Layers$3e$__["Layers"], {}, void 0, false, {
+                                                                fileName: "[project]/components/RoomComposerClient.tsx",
+                                                                lineNumber: 505,
+                                                                columnNumber: 170
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 505,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            "aria-label": "Remove selected product",
+                                                            onClick: ()=>{
+                                                                pushHistory();
+                                                                setItems((current)=>current.filter((item)=>item.id !== selected.id));
+                                                                setSelectedId("");
+                                                            },
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {}, void 0, false, {
+                                                                fileName: "[project]/components/RoomComposerClient.tsx",
+                                                                lineNumber: 506,
+                                                                columnNumber: 192
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                                            lineNumber: 506,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/RoomComposerClient.tsx",
+                                                    lineNumber: 495,
+                                                    columnNumber: 17
+                                                }, this) : null
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 450,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "stitch-composer-shade"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 452,
+                                            lineNumber: 454,
                                             columnNumber: 15
                                         }, this),
-                                        !showBefore ? items.map((item)=>{
-                                            const product = activeProducts.find((candidate)=>candidate.id === item.productId) ?? activeProducts[0];
-                                            const turntableViews = generatedViews(product.slug);
-                                            const generatedTurntable = turntableViews.length ? turntableViews[(item.viewIndex ?? 0) % turntableViews.length] : undefined;
-                                            const relativeWidth = Math.max(8, Math.min(82, product.widthMm / Math.max(roomSize.widthMm, 1) * 100 * sceneScale));
-                                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                className: `stitch-composer-item has-physical-aspect ${[
-                                                    "sofa",
-                                                    "sectional"
-                                                ].includes(product.category) ? "is-sofa" : ""} ${selectedId === item.id ? "is-selected" : ""} ${generatedCutoutSlugs.has(product.slug) || sceneItemImage(product.id, item.viewIndex, item.materialId, item.color).toLowerCase().split("?")[0].endsWith(".png") ? "is-cutout" : "is-scene-crop"}`,
-                                                style: {
-                                                    left: `${item.x}%`,
-                                                    top: `${item.y}%`,
-                                                    width: `${relativeWidth}%`,
-                                                    aspectRatio: `${product.widthMm} / ${product.heightMm}`,
-                                                    zIndex: item.zIndex,
-                                                    transform: `translate(-50%, -100%) rotate(${item.rotation}deg)`
-                                                },
-                                                onPointerDown: (event)=>{
-                                                    pushHistory();
-                                                    setSelectedId(item.id);
-                                                    setDragging(item.id);
-                                                    event.currentTarget.setPointerCapture(event.pointerId);
-                                                },
-                                                onPointerMove: (event)=>move(event, item),
-                                                onPointerUp: ()=>setDragging(null),
-                                                children: generatedTurntable ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                                    className: "stitch-composer-turntable",
-                                                    src: generatedTurntable,
-                                                    alt: `${product.name}, catalogue view`,
-                                                    width: 520,
-                                                    height: 360,
-                                                    draggable: false,
-                                                    style: {
-                                                        objectFit: "fill"
-                                                    }
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 474,
-                                                    columnNumber: 43
-                                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                                    src: sceneItemImage(product.id, item.viewIndex, item.materialId, item.color),
-                                                    alt: `${product.name}, catalogue view`,
-                                                    width: 420,
-                                                    height: 240,
-                                                    draggable: false,
-                                                    style: {
-                                                        objectFit: "fill"
-                                                    }
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 474,
-                                                    columnNumber: 231
-                                                }, this)
-                                            }, item.id, false, {
-                                                fileName: "[project]/components/RoomComposerClient.tsx",
-                                                lineNumber: 461,
-                                                columnNumber: 19
-                                            }, this);
-                                        }) : null,
-                                        selected ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "stitch-composer-controls",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    "aria-label": "Rotate selected product",
-                                                    onClick: ()=>updateSelected({
-                                                            rotation: selected.rotation + 15
-                                                        }),
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCw$3e$__["RotateCw"], {}, void 0, false, {
-                                                        fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 481,
-                                                        columnNumber: 133
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 481,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    "aria-label": "Duplicate selected product",
-                                                    onClick: ()=>{
-                                                        pushHistory();
-                                                        const topLayer = Math.max(0, ...items.map((item)=>item.zIndex ?? 0)) + 1;
-                                                        const copy = {
-                                                            ...selected,
-                                                            id: `scene-${Date.now()}`,
-                                                            x: Math.min(92, selected.x + 4),
-                                                            y: Math.min(88, selected.y + 4),
-                                                            zIndex: topLayer
-                                                        };
-                                                        setItems((current)=>[
-                                                                ...current,
-                                                                copy
-                                                            ]);
-                                                        setSelectedId(copy.id);
-                                                    },
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$copy$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Copy$3e$__["Copy"], {}, void 0, false, {
-                                                        fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 488,
-                                                        columnNumber: 22
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 482,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    "aria-label": selected.locked ? "Unlock selected product" : "Lock selected product",
-                                                    onClick: ()=>updateSelected({
-                                                            locked: !selected.locked
-                                                        }),
-                                                    children: selected.locked ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Unlock$3e$__["Unlock"], {}, void 0, false, {
-                                                        fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 489,
-                                                        columnNumber: 190
-                                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Lock$3e$__["Lock"], {}, void 0, false, {
-                                                        fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 489,
-                                                        columnNumber: 203
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 489,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    "aria-label": "Bring selected product forward",
-                                                    onClick: ()=>updateSelected({
-                                                            zIndex: Math.max(...items.map((item)=>item.zIndex ?? 1)) + 1
-                                                        }),
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$layers$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Layers$3e$__["Layers"], {}, void 0, false, {
-                                                        fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 490,
-                                                        columnNumber: 170
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 490,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    "aria-label": "Remove selected product",
-                                                    onClick: ()=>{
-                                                        pushHistory();
-                                                        setItems((current)=>current.filter((item)=>item.id !== selected.id));
-                                                        setSelectedId("");
-                                                    },
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {}, void 0, false, {
-                                                        fileName: "[project]/components/RoomComposerClient.tsx",
-                                                        lineNumber: 491,
-                                                        columnNumber: 192
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 491,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 480,
-                                            columnNumber: 17
-                                        }, this) : null,
                                         selected ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "stitch-composer-properties",
                                             children: [
@@ -1651,7 +1690,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             children: "Product views"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 498,
+                                                            lineNumber: 514,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
@@ -1662,7 +1701,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 499,
+                                                            lineNumber: 515,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1679,12 +1718,12 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                lineNumber: 503,
+                                                                lineNumber: 519,
                                                                 columnNumber: 24
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 500,
+                                                            lineNumber: 516,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1701,44 +1740,47 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                lineNumber: 507,
+                                                                lineNumber: 523,
                                                                 columnNumber: 24
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 504,
+                                                            lineNumber: 520,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 497,
+                                                    lineNumber: 513,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "stitch-composer-relative-size",
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                            children: "Dimension-proportional size"
+                                                            children: (()=>{
+                                                                const product = activeProducts.find((item)=>item.id === selected.productId);
+                                                                return product && verifiedComposerSlugs.has(product.slug) ? composerDimensionLabels[product.slug] ?? "Dimension-proportional size" : "Visual preview only";
+                                                            })()
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 509,
+                                                            lineNumber: 525,
                                                             columnNumber: 66
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                                             children: (()=>{
                                                                 const product = activeProducts.find((item)=>item.id === selected.productId);
-                                                                return product ? `W ${Math.round(product.widthMm / 10)} × D ${Math.round(product.depthMm / 10)} × H ${Math.round(product.heightMm / 10)} cm` : "Catalogue dimensions";
+                                                                return product && verifiedComposerSlugs.has(product.slug) ? `W ${Math.round(product.widthMm / 10)} × D ${Math.round(product.depthMm / 10)} × H ${Math.round(product.heightMm / 10)} cm` : "Dimensions require retailer confirmation";
                                                             })()
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 509,
-                                                            columnNumber: 106
+                                                            lineNumber: 525,
+                                                            columnNumber: 329
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 509,
+                                                    lineNumber: 525,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
@@ -1746,7 +1788,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                     children: "Move with arrow keys · hold Shift for 50 cm"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 510,
+                                                    lineNumber: 526,
                                                     columnNumber: 19
                                                 }, this),
                                                 (()=>{
@@ -1778,18 +1820,18 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                                                 children: option.materialLabel
                                                                             }, option.materialId, false, {
                                                                                 fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                                lineNumber: 520,
+                                                                                lineNumber: 536,
                                                                                 columnNumber: 59
                                                                             }, this))
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                        lineNumber: 517,
+                                                                        lineNumber: 533,
                                                                         columnNumber: 38
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                lineNumber: 517,
+                                                                lineNumber: 533,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1809,18 +1851,18 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                                                                 children: color
                                                                             }, color, false, {
                                                                                 fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                                lineNumber: 524,
+                                                                                lineNumber: 540,
                                                                                 columnNumber: 55
                                                                             }, this))
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                        lineNumber: 521,
+                                                                        lineNumber: 537,
                                                                         columnNumber: 35
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/RoomComposerClient.tsx",
-                                                                lineNumber: 521,
+                                                                lineNumber: 537,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
@@ -1829,133 +1871,155 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 496,
+                                            lineNumber: 512,
                                             columnNumber: 17
-                                        }, this) : null,
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "stitch-composer-summary",
+                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "stitch-composer-properties is-empty",
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
-                                                            children: "Total items"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 531,
-                                                            columnNumber: 22
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
-                                                            children: [
-                                                                String(items.length).padStart(2, "0"),
-                                                                " Modules"
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 531,
-                                                            columnNumber: 48
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                    children: "Select a product"
+                                                }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 531,
-                                                    columnNumber: 17
+                                                    lineNumber: 544,
+                                                    columnNumber: 72
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    onClick: ()=>{
-                                                        if (!window.confirm("Save this room concept to My Musterring?")) return;
-                                                        const version = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].roomScenes().length + 1;
-                                                        const sceneId = `scene-${Date.now()}`;
-                                                        const savedItems = items.map((item)=>{
-                                                            const product = activeProducts.find((candidate)=>candidate.id === item.productId);
-                                                            return {
-                                                                ...item,
-                                                                dimensions: product ? {
-                                                                    widthMm: product.widthMm,
-                                                                    depthMm: product.depthMm,
-                                                                    heightMm: product.heightMm
-                                                                } : undefined
-                                                            };
-                                                        });
-                                                        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].saveRoomScene({
-                                                            id: sceneId,
-                                                            name: "Living Room Concept",
-                                                            version,
-                                                            planningMode,
-                                                            roomSize,
-                                                            sceneScale,
-                                                            backgroundId: roomBackgroundId,
-                                                            backgroundSrc: roomPreview ? undefined : selectedBackground.src,
-                                                            items: savedItems,
-                                                            hasLocalRoomPhoto: Boolean(roomPreview),
-                                                            createdAt: new Date().toISOString()
-                                                        });
-                                                        const existingProject = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].projects().find((project)=>project.id === "project-room-composer");
-                                                        const savedProductIds = [
-                                                            ...new Set(items.map((item)=>item.productId))
-                                                        ];
-                                                        const project = {
-                                                            id: "project-room-composer",
-                                                            name: "Room Composer Project",
-                                                            status: "Ideas Saved",
-                                                            coverImage: roomPreview ? "/stitch-assets/original/room-living-clean.jpg" : selectedBackground.src || "/stitch-assets/original/room-living-clean.jpg",
-                                                            savedProductIds,
-                                                            savedConfigurationIds: existingProject?.savedConfigurationIds ?? [],
-                                                            savedComparisonIds: existingProject?.savedComparisonIds ?? [],
-                                                            notes: `${savedProductIds.length} products saved from Room Composer · Version ${version}`,
-                                                            updatedAt: new Date().toISOString(),
-                                                            demoData: false
-                                                        };
-                                                        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].saveProject(project);
-                                                        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].track({
-                                                            name: "room_scene_saved"
-                                                        });
-                                                        setVersions(version);
-                                                        setSavedVersions(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].roomScenes());
-                                                        setSaved(true);
-                                                    },
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"], {
-                                                            size: 18
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 560,
-                                                            columnNumber: 20
-                                                        }, this),
-                                                        " ",
-                                                        saved ? "Saved to project" : "Save concept"
-                                                    ]
-                                                }, void 0, true, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    children: "Choose an item in the room to view its dimensions, material, color, and available views."
+                                                }, void 0, false, {
                                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 532,
-                                                    columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                                    href: "/handover",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$send$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Send$3e$__["Send"], {
-                                                            size: 18
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/components/RoomComposerClient.tsx",
-                                                            lineNumber: 561,
-                                                            columnNumber: 40
-                                                        }, this),
-                                                        " Send concept to retailer"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/components/RoomComposerClient.tsx",
-                                                    lineNumber: 561,
-                                                    columnNumber: 17
+                                                    lineNumber: 544,
+                                                    columnNumber: 105
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 530,
-                                            columnNumber: 15
+                                            lineNumber: 544,
+                                            columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 442,
+                                    lineNumber: 453,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "stitch-composer-summary",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
+                                                    children: "Total items"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/RoomComposerClient.tsx",
+                                                    lineNumber: 548,
+                                                    columnNumber: 22
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                    children: [
+                                                        String(items.length).padStart(2, "0"),
+                                                        " Modules"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/components/RoomComposerClient.tsx",
+                                                    lineNumber: 548,
+                                                    columnNumber: 48
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                            lineNumber: 548,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>{
+                                                if (!window.confirm("Save this room concept to My Musterring?")) return;
+                                                const version = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].roomScenes().length + 1;
+                                                const sceneId = `scene-${Date.now()}`;
+                                                const savedItems = items.map((item)=>{
+                                                    const product = activeProducts.find((candidate)=>candidate.id === item.productId);
+                                                    return {
+                                                        ...item,
+                                                        dimensions: product && verifiedComposerSlugs.has(product.slug) ? {
+                                                            widthMm: product.widthMm,
+                                                            depthMm: product.depthMm,
+                                                            heightMm: product.heightMm
+                                                        } : undefined
+                                                    };
+                                                });
+                                                __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].saveRoomScene({
+                                                    id: sceneId,
+                                                    name: "Living Room Concept",
+                                                    version,
+                                                    planningMode,
+                                                    roomSize,
+                                                    sceneScale,
+                                                    backgroundId: roomBackgroundId,
+                                                    backgroundSrc: roomPreview ? undefined : selectedBackground.src,
+                                                    items: savedItems,
+                                                    hasLocalRoomPhoto: Boolean(roomPreview),
+                                                    createdAt: new Date().toISOString()
+                                                });
+                                                const existingProject = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].projects().find((project)=>project.id === "project-room-composer");
+                                                const savedProductIds = [
+                                                    ...new Set(items.map((item)=>item.productId))
+                                                ];
+                                                const project = {
+                                                    id: "project-room-composer",
+                                                    name: "Room Composer Project",
+                                                    status: "Ideas Saved",
+                                                    coverImage: roomPreview ? "/stitch-assets/original/room-living-clean.jpg" : selectedBackground.src || "/stitch-assets/original/room-living-clean.jpg",
+                                                    savedProductIds,
+                                                    savedConfigurationIds: existingProject?.savedConfigurationIds ?? [],
+                                                    savedComparisonIds: existingProject?.savedComparisonIds ?? [],
+                                                    notes: `${savedProductIds.length} products saved from Room Composer · Version ${version}`,
+                                                    updatedAt: new Date().toISOString(),
+                                                    demoData: false
+                                                };
+                                                __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].saveProject(project);
+                                                __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].track({
+                                                    name: "room_scene_saved"
+                                                });
+                                                setVersions(version);
+                                                setSavedVersions(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].roomScenes());
+                                                setSaved(true);
+                                            },
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"], {
+                                                    size: 18
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/RoomComposerClient.tsx",
+                                                    lineNumber: 577,
+                                                    columnNumber: 20
+                                                }, this),
+                                                " ",
+                                                saved ? "Saved to project" : "Save concept"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                            lineNumber: 549,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                            href: "/handover",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$send$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Send$3e$__["Send"], {
+                                                    size: 18
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/RoomComposerClient.tsx",
+                                                    lineNumber: 578,
+                                                    columnNumber: 40
+                                                }, this),
+                                                " Send concept to retailer"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/RoomComposerClient.tsx",
+                                            lineNumber: 578,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/RoomComposerClient.tsx",
+                                    lineNumber: 547,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1968,7 +2032,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 564,
+                                    lineNumber: 580,
                                     columnNumber: 13
                                 }, this),
                                 savedVersions.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1989,29 +2053,29 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             ]
                                         }, version.id ?? index, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 565,
+                                            lineNumber: 581,
                                             columnNumber: 142
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 565,
+                                    lineNumber: 581,
                                     columnNumber: 37
                                 }, this) : null
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/RoomComposerClient.tsx",
-                            lineNumber: 412,
+                            lineNumber: 423,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/RoomComposerClient.tsx",
-                    lineNumber: 336,
+                    lineNumber: 343,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/RoomComposerClient.tsx",
-                lineNumber: 335,
+                lineNumber: 342,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -2025,20 +2089,20 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                     children: "Planning summary"
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 578,
+                                    lineNumber: 594,
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: "Your room concept stays organized and ready for the next consultation step."
                                 }, void 0, false, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 578,
+                                    lineNumber: 594,
                                     columnNumber: 41
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/RoomComposerClient.tsx",
-                            lineNumber: 578,
+                            lineNumber: 594,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("dl", {
@@ -2049,20 +2113,20 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Planning mode"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 580,
+                                            lineNumber: 596,
                                             columnNumber: 18
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("dd", {
                                             children: "Interactive local composition"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 580,
+                                            lineNumber: 596,
                                             columnNumber: 40
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 580,
+                                    lineNumber: 596,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2071,7 +2135,7 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Products"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 581,
+                                            lineNumber: 597,
                                             columnNumber: 18
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("dd", {
@@ -2081,13 +2145,13 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 581,
+                                            lineNumber: 597,
                                             columnNumber: 35
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 581,
+                                    lineNumber: 597,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2096,20 +2160,20 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Privacy"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 582,
+                                            lineNumber: 598,
                                             columnNumber: 18
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("dd", {
                                             children: "Room state stays in this browser"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 582,
+                                            lineNumber: 598,
                                             columnNumber: 34
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 582,
+                                    lineNumber: 598,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2118,43 +2182,43 @@ function RoomComposerClient({ upload = false, openPresentationScene = false }) {
                                             children: "Handover"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 583,
+                                            lineNumber: 599,
                                             columnNumber: 18
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("dd", {
                                             children: "Retailer-ready project summary"
                                         }, void 0, false, {
                                             fileName: "[project]/components/RoomComposerClient.tsx",
-                                            lineNumber: 583,
+                                            lineNumber: 599,
                                             columnNumber: 35
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/RoomComposerClient.tsx",
-                                    lineNumber: 583,
+                                    lineNumber: 599,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/RoomComposerClient.tsx",
-                            lineNumber: 579,
+                            lineNumber: 595,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/RoomComposerClient.tsx",
-                    lineNumber: 577,
+                    lineNumber: 593,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/RoomComposerClient.tsx",
-                lineNumber: 576,
+                lineNumber: 592,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/RoomComposerClient.tsx",
-        lineNumber: 286,
+        lineNumber: 293,
         columnNumber: 5
     }, this);
 }

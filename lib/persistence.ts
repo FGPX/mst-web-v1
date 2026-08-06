@@ -80,6 +80,12 @@ export const storage = {
   saveRoomScene: (scene: unknown) => {
     write(keys.roomScenes, [...storage.roomScenes(), scene]);
   },
+  deleteRoomScene: (sceneKey: string) => {
+    write(keys.roomScenes, storage.roomScenes().filter((scene, index) => {
+      const id = typeof scene === "object" && scene && "id" in scene ? String((scene as { id?: unknown }).id ?? "") : "";
+      return id !== sceneKey && `index-${index}` !== sceneKey;
+    }));
+  },
   consent: () => read(keys.consent, false),
   setConsent: (allowed: boolean) => {
     write(keys.consent, allowed);
@@ -140,7 +146,7 @@ export const storage = {
       name: "Living Room Presentation Concept",
       version: 1,
       planningMode: "inspiration",
-      roomSize: { widthMm: 4200, lengthMm: 5600 },
+      roomSize: { widthMm: 5600, lengthMm: 4200 },
       configurationId: configuration.id,
       items: selectedProducts.map((product, index) => ({
         id: `presentation-item-${index + 1}`,

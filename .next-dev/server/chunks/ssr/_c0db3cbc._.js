@@ -190,6 +190,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                         "aria-label": "Product actions",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                className: "stitch-product-action-save",
                                 onClick: ()=>{
                                     setSaved(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].toggleProduct(product.id).includes(product.id));
                                     __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["storage"].track({
@@ -203,7 +204,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
                                         lineNumber: 40,
-                                        columnNumber: 170
+                                        columnNumber: 209
                                     }, this),
                                     " ",
                                     saved ? "Saved" : "Save to Project"
@@ -216,13 +217,14 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$AlternativeFinderButton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlternativeFinderButton"], {
                                 productId: product.id,
                                 label: "Better Match",
-                                className: ""
+                                className: "stitch-product-action-match"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchProductCard.tsx",
                                 lineNumber: 41,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                className: "stitch-product-action-compare",
                                 href: `/compare?ids=${product.id}`,
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$git$2d$compare$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__GitCompare$3e$__["GitCompare"], {
@@ -230,7 +232,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
                                         lineNumber: 42,
-                                        columnNumber: 53
+                                        columnNumber: 95
                                     }, this),
                                     " Compare"
                                 ]
@@ -240,6 +242,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                                 columnNumber: 11
                             }, this),
                             isConfigurable ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                className: "stitch-product-action-configure",
                                 href: `/configurator/${product.slug}`,
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"], {
@@ -247,7 +250,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
                                         lineNumber: 43,
-                                        columnNumber: 74
+                                        columnNumber: 118
                                     }, this),
                                     " Quick Configure"
                                 ]
@@ -257,6 +260,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                                 columnNumber: 29
                             }, this) : null,
                             canPlaceInRoom ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                className: "stitch-product-action-room",
                                 href: "/room-composer",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
@@ -264,7 +268,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
                                         lineNumber: 44,
-                                        columnNumber: 57
+                                        columnNumber: 96
                                     }, this),
                                     " See It in Your Room"
                                 ]
@@ -274,6 +278,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                                 columnNumber: 29
                             }, this) : null,
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                className: "stitch-product-action-dealer",
                                 href: "/dealers",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
@@ -281,7 +286,7 @@ function StitchProductCard({ product, explanation, imageOverride, imageNote }) {
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchProductCard.tsx",
                                         lineNumber: 45,
-                                        columnNumber: 33
+                                        columnNumber: 74
                                     }, this),
                                     " Find Near You"
                                 ]
