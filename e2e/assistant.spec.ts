@@ -27,7 +27,19 @@ test("Voice text fallback searches products", async ({ page }) => {
   await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("Show me a modular corner sofa in beige.");
   await page.getByRole("button", { name: "Interpret typed text as a voice command" }).click();
-  await expect(page).toHaveURL(/\/search\?q=/);
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator(".advisor-products a").first()).toBeVisible();
+});
+
+test("Voice red sofa search does not show wrong-colour alternatives", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByLabel("Ask Musterring about products and your project").fill("red sofa");
+  await page.getByRole("button", { name: "Interpret typed text as a voice command" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.locator(".advisor-products a")).toHaveCount(1);
+  await expect(page.locator(".advisor-products")).toContainText("MR 260");
+  await expect(page.locator(".advisor-products")).not.toContainText("MR 2490");
 });
 
 test("Voice state-changing action requires confirmation", async ({ page }) => {
@@ -44,15 +56,24 @@ test("Advisor answers a grounded product question", async ({ page }) => {
   await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("What is the width and seat height of this product?");
   await page.getByRole("button", { name: "Send question" }).click();
-  await expect(page.getByText(/cm wide with a .* cm seat height/)).toBeVisible();
+  await expect(page.getByText(/cm wide, .* cm deep .* with a .* cm seat height/)).toBeVisible();
   await expect(page.getByText(/Source: Musterring product catalogue/)).toBeVisible();
+});
+
+test("Advisor answers simple conversation naturally", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByLabel("Ask Musterring about products and your project").fill("okay thank you");
+  await page.getByRole("button", { name: "Send question" }).click();
+  await expect(page.getByText(/you.re welcome/i)).toBeVisible();
+  await expect(page.getByText(/information is not currently available/i)).toHaveCount(0);
 });
 
 test("Advisor recommends and saves a referenced product after confirmation", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
   const input = page.getByLabel("Ask Musterring about products and your project");
-  await input.fill("Show me compact sofas under 260 cm");
+  await input.fill("Show me sofas under 260 cm");
   await page.getByRole("button", { name: "Send question" }).click();
   await expect(page.locator(".advisor-products a").first()).toBeVisible();
   await input.fill("Save the second one.");
@@ -69,14 +90,14 @@ test("Advisor configuration action continues to deterministic configurator", asy
   await page.getByRole("button", { name: "Send question" }).click();
   await page.getByRole("button", { name: /Validate options/ }).click();
   await expect(page).toHaveURL(/\/configurator\/mr-2875/);
-  await expect(page.getByText(/Deterministic product rules/)).toBeVisible();
+  await expect(page.getByText(/configuration engine validates the product rules/i)).toBeVisible();
 });
 
 test("Advisor resolves a follow-up against prior products", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
   const input = page.getByLabel("Ask Musterring about products and your project");
-  await input.fill("Show me compact sofas under 260 cm");
+  await input.fill("Show me sofas under 260 cm");
   await page.getByRole("button", { name: "Send question" }).click();
   await input.fill("Which one has the highest seat?");
   await page.getByRole("button", { name: "Send question" }).click();

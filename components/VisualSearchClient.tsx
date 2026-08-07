@@ -3,16 +3,17 @@
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { Camera, Check, LoaderCircle, Sparkles, Upload, X } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { materials } from "@/lib/data";
 import { storage } from "@/lib/persistence";
 import { productImages } from "@/lib/musterring-assets";
 import type { Category, Product } from "@/lib/types";
 
 type MatchCategory = Extract<Category, "sofa" | "armchair" | "storage">;
-type VisualResult = { product: Product; score: number; explanation: string };
+type VisualResult = { product: Product; score: number; explanation: string; differences: string };
 
 function matchLabel(score: number) {
+  if (score >= 100) return "Exact catalogue image";
   if (score >= 82) return "Excellent visual match";
   if (score >= 68) return "Strong visual match";
   if (score >= 54) return "Similar palette and form";
@@ -29,18 +30,69 @@ async function cropImageFile(source: string, crop: { x: number; y: number; size:
   const x = Math.round(image.naturalWidth * Math.min(1 - ratio, crop.x / 100));
   const y = Math.round(image.naturalHeight * Math.min(1 - ratio, crop.y / 100));
   const canvas = document.createElement("canvas");
-  canvas.width = Math.min(width, 1600);
-  canvas.height = Math.min(height, 1600);
+  const outputScale = Math.min(1, 1280 / width, 1280 / height);
+  canvas.width = Math.max(1, Math.round(width * outputScale));
+  canvas.height = Math.max(1, Math.round(height * outputScale));
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Crop is unavailable.");
   context.drawImage(image, x, y, width, height, 0, 0, canvas.width, canvas.height);
-  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, original.type, 0.9));
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.82));
   if (!blob) throw new Error("Crop could not be created.");
-  return new File([blob], original.name, { type: original.type });
+  return new File([blob], `${original.name.replace(/\.[^.]+$/, "") || "visual-search"}.jpg`, { type: "image/jpeg" });
+}
+
+async function detectColorFamilies(source: string, crop: { x: number; y: number; size: number }) {
+  const image = new window.Image();
+  image.src = source;
+  await image.decode();
+  const ratio = Math.max(0.25, Math.min(1, crop.size / 100));
+  const cropWidth = image.naturalWidth * ratio;
+  const cropHeight = image.naturalHeight * ratio;
+  const cropX = image.naturalWidth * Math.min(1 - ratio, crop.x / 100);
+  const cropY = image.naturalHeight * Math.min(1 - ratio, crop.y / 100);
+  const sampleWidth = cropWidth * 0.62;
+  const sampleHeight = cropHeight * 0.62;
+  const canvas = document.createElement("canvas");
+  canvas.width = 56;
+  canvas.height = 56;
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  if (!context) return [];
+  context.drawImage(
+    image,
+    cropX + (cropWidth - sampleWidth) / 2,
+    cropY + (cropHeight - sampleHeight) / 2,
+    sampleWidth,
+    sampleHeight,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+  const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+  const counts = new Map<string, number>();
+  for (let index = 0; index < pixels.length; index += 4) {
+    const r = pixels[index], g = pixels[index + 1], b = pixels[index + 2], alpha = pixels[index + 3];
+    if (alpha < 180) continue;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), brightness = (r + g + b) / 3;
+    let family: string;
+    if (brightness > 238) family = "cream";
+    else if (max - min < 16) family = brightness > 185 ? "cream" : brightness > 115 ? "grey" : "charcoal";
+    else if (r > g * 1.28 && r > b * 1.25) family = brightness > 150 ? "red" : "burgundy";
+    else if (b > r * 1.18 && b > g * 1.08) family = "blue";
+    else if (g > r * 1.12 && g > b * 1.08) family = "green";
+    else if (r > b + 12 && g > b + 6) family = brightness > 170 ? "beige" : brightness > 115 ? "brown" : "cognac";
+    else family = brightness > 175 ? "beige" : "grey";
+    counts.set(family, (counts.get(family) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((left, right) => right[1] - left[1])
+    .map(([family]) => family)
+    .slice(0, 3);
 }
 
 export function VisualSearchClient() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const analysisRequestRef = useRef(false);
   const [preview, setPreview] = useState("");
   const [status, setStatus] = useState<"idle" | "analyzing" | "ready" | "error">("idle");
   const [analysis, setAnalysis] = useState("");
@@ -88,26 +140,36 @@ export function VisualSearchClient() {
     setResults([]);
     setAnalysis("");
   };
-  const analyzeSelectedArea = async () => {
-    if (!preview || !selectedFile || !consent) return;
+  const analyzeSelectedArea = useCallback(async () => {
+    if (!preview || !selectedFile || !consent || analysisRequestRef.current) return;
+    analysisRequestRef.current = true;
     setStatus("analyzing");
     setError("");
     try {
-      const croppedFile = await cropImageFile(preview, crop, selectedFile);
+      const croppedFile = crop.size === 100 && crop.x === 0 && crop.y === 0
+        ? selectedFile
+        : await cropImageFile(preview, crop, selectedFile);
+      const observedColors = await detectColorFamilies(preview, crop);
       const form = new FormData();
       form.append("image", croppedFile);
       form.append("consent", "true");
       form.append("crop", JSON.stringify(crop));
+      form.append("preferredCategory", category);
+      form.append("observedColors", JSON.stringify(observedColors));
       const response = await fetch("/api/ai/image", { method: "POST", body: form });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload?.error);
       const detectedCategory = payload.tags.category;
       if (detectedCategory === "storage" || detectedCategory === "armchair" || detectedCategory === "sofa") setCategory(detectedCategory);
+      setColor("");
+      setMaterialId("");
+      setStyle("");
       setAnalysis(`${detectedCategory ?? "furniture"} · ${payload.tags.colorFamilies.join(", ")} · ${payload.tags.silhouette}`);
-      setResults(payload.matches.map((match: { product: Product; label: string; reasons: string[] }) => ({
+      setResults(payload.matches.map((match: { product: Product; label: string; reasons: string[]; differences: string[] }) => ({
         product: match.product,
-        score: match.label === "Excellent Visual Match" ? 90 : match.label === "Strong Match" ? 75 : match.label === "Similar Shape" ? 60 : match.label === "Similar Material" ? 45 : 25,
-        explanation: match.reasons.join(", ")
+        score: match.label === "Exact Catalogue Image" ? 100 : match.label === "Excellent Visual Match" ? 90 : match.label === "Strong Match" ? 75 : match.label === "Similar Shape" ? 60 : match.label === "Similar Material" ? 45 : 25,
+        explanation: match.reasons.join(", "),
+        differences: match.differences.join(", ")
       })));
       setAiMode(payload.ai.mode);
       setStatus("ready");
@@ -117,8 +179,15 @@ export function VisualSearchClient() {
       setError(cause instanceof Error && cause.message
         ? cause.message
         : "The selected area could not be analyzed.");
+    } finally {
+      analysisRequestRef.current = false;
     }
-  };
+  }, [preview, selectedFile, consent, crop, category]);
+  useEffect(() => {
+    if (preview && selectedFile && consent && status === "idle" && !analysis && results.length === 0) {
+      void analyzeSelectedArea();
+    }
+  }, [preview, selectedFile, consent, status, analysis, results.length, analyzeSelectedArea]);
   const removeUpload = () => {
     if (preview) URL.revokeObjectURL(preview);
     setPreview("");
@@ -193,14 +262,21 @@ export function VisualSearchClient() {
               </div>
 
               <div>
-                {primary ? (
+                {status === "idle" ? (
+                  <div className="stitch-visual-loading"><Sparkles /><p>Ready when you are. Confirm consent, adjust the target area and select Analyze.</p></div>
+                ) : status === "error" ? (
+                  <div className="stitch-visual-loading"><X /><p>Visual analysis could not be completed. Try the selected area again.</p></div>
+                ) : status === "ready" && !primary ? (
+                  <div className="stitch-visual-loading"><Sparkles /><p>No products match the active refinements. Remove a filter or choose another category.</p></div>
+                ) : primary ? (
                   <article className="stitch-visual-primary">
                     <div className="stitch-match-badge">{matchLabel(primary.score)}</div>
                     <Image src={productImages(primary.product.id)[0]} alt={primary.product.name} width={900} height={600} />
                     <div>
                       <p className="eyebrow">Visually similar to your upload</p>
                       <h2>{primary.product.modelCode}</h2>
-                      <p><strong>Why it matches:</strong> {primary.explanation}. Results are ranked locally from measurable image characteristics; the label is qualitative, not a claim of AI certainty.</p>
+                      <p><strong>{primary.score === 100 ? "Why it is exact:" : "Why it is similar:"}</strong> {primary.explanation}.</p>
+                      {primary.score < 100 ? <p><strong>Why it is not an exact match:</strong> {primary.differences}. The recommendation is catalogue-grounded, but model identity cannot be confirmed from visual similarity alone.</p> : null}
                       <div className="chips">
                         <Link className="button primary" href={primary.product.category === "storage" ? `/furniture/${primary.product.slug}` : `/configurator/${primary.product.slug}`}>
                           {primary.product.category === "storage" ? "View Product" : "Configure Piece"}
@@ -237,7 +313,7 @@ export function VisualSearchClient() {
       {visibleResults.length > 1 ? (
         <section className="section band">
           <div className="container">
-            <h2 className="h2">Other intelligent suggestions</h2>
+            <h2 className="h2">Similar catalogue suggestions</h2>
             <div className="stitch-visual-suggestions">
               {visibleResults.slice(1, 7).map(({ product, score }) => (
                 <Link href={`/furniture/${product.slug}`} key={product.id}>

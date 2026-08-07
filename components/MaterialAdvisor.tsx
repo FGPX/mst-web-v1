@@ -42,8 +42,8 @@ export function MaterialAdvisor() {
   const recommended = advice ? materials.filter((material) => advice.recommendedMaterialIds.includes(material.id)) : [];
   const avoided = advice ? materials.filter((material) => advice.materialsToAvoid.includes(material.id)) : [];
   return <section className="material-advisor" aria-labelledby="material-advisor-title">
-    <div><p className="stitch-eyebrow">AI Material & Care Advisor</p><h2 id="material-advisor-title">Describe your home and everyday needs</h2><p>Recommendations use recorded composition, durability, care, family, pet and light-sensitivity metadata. Unsupported protection or allergy claims are never added.</p></div>
-    <div className="material-advisor-input"><textarea aria-label="Describe your home and everyday needs" value={requestText} onChange={(event) => setRequestText(event.target.value)} /><button onClick={() => void submit()} disabled={status === "loading"}><Sparkles />{status === "loading" ? "Checking material metadata…" : "Advise me"}</button></div>
+    <div><p className="stitch-eyebrow">AI Material & Care Advisor</p><h2 id="material-advisor-title">Material & Care Advisor</h2><p>Recommendations use recorded composition, durability, care, family, pet and light-sensitivity metadata. Unsupported protection or allergy claims are never added.</p></div>
+    <div className="material-advisor-input"><label htmlFor="material-advisor-request">Describe your home and everyday needs</label><textarea id="material-advisor-request" value={requestText} onChange={(event) => setRequestText(event.target.value)} /><button onClick={() => void submit()} disabled={status === "loading"}><Sparkles />{status === "loading" ? "Checking material metadata…" : "Advise me"}</button></div>
     {status === "error" ? <p role="alert">Material advice is temporarily unavailable. Browse the validated attributes below.</p> : null}
     {notice ? <p role="status">{notice}</p> : null}
     {advice ? <div className="material-advice-results" aria-live="polite">

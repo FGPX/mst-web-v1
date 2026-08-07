@@ -122,7 +122,7 @@ export class LocalDemoAIProvider implements AIProvider {
     const text = request.toLowerCase();
     return configurationRequirementsSchema.parse({
       customerRequest: request,
-      category: intent.category === "storage" ? null : intent.category,
+      category: intent.category && ["sofa", "armchair", "sectional"].includes(intent.category) ? intent.category : null,
       colorFamily: intent.colorFamilies?.[0] ?? null,
       materialType: /leather/.test(text) ? "leather" : /fabric|easy[- ]care/.test(text) ? "fabric" : null,
       easyCare: /easy[- ]care|pflegeleicht|dog|pet|family|familie|children|kinder/.test(text),
@@ -296,11 +296,15 @@ export class OpenAIProvider implements AIProvider {
   }
 
   async answerProductQuestion(input: { question: string; context: ConversationContext }) {
+    const grounded = answerGroundedQuestion(input.question, input.context);
+    if (grounded.answerType !== "missing-data" || grounded.productIds.length || grounded.sources.length) return grounded;
     const candidateIds = [...new Set([...(input.context.referencedProductIds ?? []), ...(input.context.currentProductId ? [input.context.currentProductId] : [])])];
     const facts = products.filter((product) => candidateIds.includes(product.id)).map((product) => ({
       id: product.id, modelCode: product.modelCode, name: product.name, category: product.category,
-      widthMm: product.widthMm, seatHeightMm: product.seatHeightMm, materials: product.materials,
-      functions: product.functions, modular: product.modular, demoData: product.demoData
+      widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm,
+      seatHeightMm: product.seatHeightMm, seatDepthMm: product.seatDepthMm, numberOfSeats: product.numberOfSeats,
+      colors: product.colors, materials: product.materials, styles: product.styles,
+      functions: product.functions, electricFunctions: product.electricFunctions, modular: product.modular, demoData: product.demoData
     }));
     const result = await this.parse(advisorAnswerSchema, "product_advisor_answer",
       "Answer only from supplied Musterring facts and context. Unknown information must be stated as unavailable. Propose but never execute actions.",

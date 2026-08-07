@@ -42,6 +42,7 @@ export function ProductDetailActions({ product }: { product: Product }) {
         <button className="button ghost" onClick={() => setSaved(storage.toggleProduct(product.id).includes(product.id))}>
           <Star size={17} /> {saved ? "Saved to Project" : "Save to Project"}
         </button>
+        <AlternativeFinderButton productId={product.id} />
       </div>
       <Link className="product-retailer-action" href={`/handover?product=${encodeURIComponent(product.id)}`}>
         <MapPin size={18} />
@@ -50,7 +51,6 @@ export function ProductDetailActions({ product }: { product: Product }) {
       <details className="product-more-actions">
         <summary>More planning tools <ChevronDown size={18} /></summary>
         <div>
-          <AlternativeFinderButton productId={product.id} />
           <Link className="button ghost" href="/room-composer"><Eye size={16} /> See It in Your Room</Link>
           <Link className="button ghost" href={`/compare?ids=${product.id}`}>Compare</Link>
           <Link className="button ghost" href={`/handover?request=material&product=${encodeURIComponent(product.id)}&material=${encodeURIComponent(material)}`}><FileText size={16} /> Request Material Sample</Link>

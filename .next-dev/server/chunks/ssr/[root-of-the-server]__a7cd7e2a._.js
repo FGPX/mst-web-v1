@@ -716,15 +716,27 @@ const conceptProductsById = new Map(conceptProducts.map((product)=>[
     ]));
 const sofaTemplates = conceptProducts.filter((product)=>product.category !== "armchair");
 const armchairTemplates = conceptProducts.filter((product)=>product.category === "armchair");
+// Only MR 260 currently has a locally available, authorized catalogue image
+// that verifies the red presentation. Other programmes may support additional
+// covers in production, but they must not be claimed here until PIM/DAM data
+// provides a validated colour variant.
 const verifiedRedUpholstery = new Set([
-    "mr-260",
-    "mr-365",
-    "mr-370",
-    "mr-385",
-    "mr-2875"
+    "mr-260"
 ]);
 const catalogueDimensionOverrides = {
     // Dimensions correspond to the specific catalogue variants used by the Room Composer cutouts.
+    // MR 260 three-seat sofa, fixed standard version with adjustable head cushions.
+    "mr-260": {
+        widthMm: 2320,
+        depthMm: 960,
+        heightMm: 1070
+    },
+    // MR 270 three-seat sofa shown as the straight reference configuration.
+    "mr-270": {
+        widthMm: 2500,
+        depthMm: 1070,
+        heightMm: 870
+    },
     // PM100 corner configuration: approx. 232 x 268 cm, maximum back height 88 cm.
     "justb-pm100": {
         widthMm: 2680,

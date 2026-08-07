@@ -145,10 +145,21 @@ test("Visual search analyzes an upload and supports object selection", async ({ 
   await page.goto("/visual-search");
   await page.getByLabel(/I consent to temporary AI processing/).check();
   await page.locator('input[type="file"]').setInputFiles("public/test-assets/musterring/furniture/image-03.jpg");
+  await expect(page.getByText("Visual analysis complete")).toBeVisible({ timeout: 15_000 });
   await page.getByLabel(/Crop size/).fill("75");
   await page.getByRole("button", { name: "Analyze selected area" }).click();
   await expect(page.getByText("Visual analysis complete")).toBeVisible({ timeout: 60_000 });
   await expect(page.getByText("Visually similar to your upload")).toBeVisible();
+  await expect(page.getByText(/Why it is not an exact match/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Similar catalogue suggestions" })).toBeVisible();
+});
+
+test("Visual search identifies an identical catalogue image before ranking alternatives", async ({ page }) => {
+  await page.goto("/visual-search");
+  await page.getByLabel(/I consent to temporary AI processing/).check();
+  await page.locator('input[type="file"]').setInputFiles("public/test-assets/musterring/furniture/image-03.jpg");
+  await expect(page.getByText("Exact catalogue image", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "MR 2490" })).toBeVisible();
 });
 
 test("No exact colour match is explicitly separated from alternatives", async ({ page }) => {

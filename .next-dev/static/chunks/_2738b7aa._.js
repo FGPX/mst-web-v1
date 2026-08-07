@@ -715,12 +715,12 @@ const conceptProductsById = new Map(conceptProducts.map((product)=>[
     ]));
 const sofaTemplates = conceptProducts.filter((product)=>product.category !== "armchair");
 const armchairTemplates = conceptProducts.filter((product)=>product.category === "armchair");
+// Only MR 260 currently has a locally available, authorized catalogue image
+// that verifies the red presentation. Other programmes may support additional
+// covers in production, but they must not be claimed here until PIM/DAM data
+// provides a validated colour variant.
 const verifiedRedUpholstery = new Set([
-    "mr-260",
-    "mr-365",
-    "mr-370",
-    "mr-385",
-    "mr-2875"
+    "mr-260"
 ]);
 const catalogueDimensionOverrides = {
     // Dimensions correspond to the specific catalogue variants used by the Room Composer cutouts.
@@ -2037,6 +2037,7 @@ function StitchHeader() {
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                         className: "stitch-brand",
                         href: "/",
+                        "aria-label": "Musterring V1 home",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 className: "stitch-brand-mark",
@@ -2047,10 +2048,19 @@ function StitchHeader() {
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "stitch-brand-word",
                                 children: "Musterring"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
                                 lineNumber: 57,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
+                                className: "stitch-brand-version",
+                                children: "V1"
+                            }, void 0, false, {
+                                fileName: "[project]/components/stitch/StitchHeader.tsx",
+                                lineNumber: 58,
                                 columnNumber: 11
                             }, this)
                         ]
@@ -2078,13 +2088,13 @@ function StitchHeader() {
                                         "aria-hidden": "true"
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                        lineNumber: 67,
+                                        lineNumber: 68,
                                         columnNumber: 23
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 60,
+                                lineNumber: 61,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2103,13 +2113,13 @@ function StitchHeader() {
                                         "aria-hidden": "true"
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                        lineNumber: 76,
+                                        lineNumber: 77,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 69,
+                                lineNumber: 70,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2118,7 +2128,7 @@ function StitchHeader() {
                                 children: "Plan a Room"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 78,
+                                lineNumber: 79,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2127,7 +2137,7 @@ function StitchHeader() {
                                 children: "About"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 79,
+                                lineNumber: 80,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2136,7 +2146,7 @@ function StitchHeader() {
                                 children: "Contact"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 80,
+                                lineNumber: 81,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2145,7 +2155,7 @@ function StitchHeader() {
                                 children: "Partner Portal"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 81,
+                                lineNumber: 82,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2154,13 +2164,13 @@ function StitchHeader() {
                                 children: "My Project"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 82,
+                                lineNumber: 83,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 59,
+                        lineNumber: 60,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2175,12 +2185,12 @@ function StitchHeader() {
                                     strokeWidth: 1.6
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 85,
+                                    lineNumber: 86,
                                     columnNumber: 84
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 85,
+                                lineNumber: 86,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$stitch$2f$StitchButtons$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["StitchLinkButton"], {
@@ -2189,7 +2199,7 @@ function StitchHeader() {
                                 children: "Find a Retailer"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 86,
+                                lineNumber: 87,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2207,25 +2217,25 @@ function StitchHeader() {
                                     strokeWidth: 1.6
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 87,
+                                    lineNumber: 88,
                                     columnNumber: 259
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$menu$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Menu$3e$__["Menu"], {
                                     size: 24,
                                     strokeWidth: 1.6
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 87,
+                                    lineNumber: 88,
                                     columnNumber: 295
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 87,
+                                lineNumber: 88,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 84,
+                        lineNumber: 85,
                         columnNumber: 9
                     }, this)
                 ]
@@ -2247,21 +2257,21 @@ function StitchHeader() {
                                     children: "Product catalogue"
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 93,
+                                    lineNumber: 94,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                     children: "Furniture for every room."
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 94,
+                                    lineNumber: 95,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: "Browse all connected Musterring collections by room and product type."
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 95,
+                                    lineNumber: 96,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2273,19 +2283,19 @@ function StitchHeader() {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                            lineNumber: 96,
+                                            lineNumber: 97,
                                             columnNumber: 72
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 96,
+                                    lineNumber: 97,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                            lineNumber: 92,
+                            lineNumber: 93,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2296,7 +2306,7 @@ function StitchHeader() {
                                             children: group.name
                                         }, void 0, false, {
                                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                            lineNumber: 101,
+                                            lineNumber: 102,
                                             columnNumber: 17
                                         }, this),
                                         group.categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2305,29 +2315,29 @@ function StitchHeader() {
                                                 children: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$catalog$2d$taxonomy$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["categoryDetails"][category].label
                                             }, category, false, {
                                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                                lineNumber: 103,
+                                                lineNumber: 104,
                                                 columnNumber: 19
                                             }, this))
                                     ]
                                 }, group.name, true, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 100,
+                                    lineNumber: 101,
                                     columnNumber: 15
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                            lineNumber: 98,
+                            lineNumber: 99,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                    lineNumber: 91,
+                    lineNumber: 92,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                lineNumber: 90,
+                lineNumber: 91,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2343,21 +2353,21 @@ function StitchHeader() {
                                     children: "Furniture by room"
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 115,
+                                    lineNumber: 116,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                     children: "Find your living world."
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 116,
+                                    lineNumber: 117,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     children: "Start with a room, then go directly to its available furniture categories."
                                 }, void 0, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 117,
+                                    lineNumber: 118,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2369,19 +2379,19 @@ function StitchHeader() {
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                            lineNumber: 118,
+                                            lineNumber: 119,
                                             columnNumber: 76
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 118,
+                                    lineNumber: 119,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                            lineNumber: 114,
+                            lineNumber: 115,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2395,12 +2405,12 @@ function StitchHeader() {
                                                 children: room.name
                                             }, void 0, false, {
                                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                                lineNumber: 123,
+                                                lineNumber: 124,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                            lineNumber: 123,
+                                            lineNumber: 124,
                                             columnNumber: 17
                                         }, this),
                                         room.categories.map((param)=>{
@@ -2411,30 +2421,30 @@ function StitchHeader() {
                                                 children: label
                                             }, label, false, {
                                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                                lineNumber: 125,
+                                                lineNumber: 126,
                                                 columnNumber: 19
                                             }, this);
                                         })
                                     ]
                                 }, room.id, true, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 122,
+                                    lineNumber: 123,
                                     columnNumber: 15
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                            lineNumber: 120,
+                            lineNumber: 121,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                    lineNumber: 113,
+                    lineNumber: 114,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                lineNumber: 112,
+                lineNumber: 113,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2451,13 +2461,13 @@ function StitchHeader() {
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                        lineNumber: 134,
+                                        lineNumber: 135,
                                         columnNumber: 30
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 134,
+                                lineNumber: 135,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2466,7 +2476,7 @@ function StitchHeader() {
                                 children: "All furniture"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 135,
+                                lineNumber: 136,
                                 columnNumber: 11
                             }, this),
                             __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$catalog$2d$taxonomy$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["categoryGroups"].map((group)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2475,7 +2485,7 @@ function StitchHeader() {
                                             children: group.name
                                         }, void 0, false, {
                                             fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                            lineNumber: 138,
+                                            lineNumber: 139,
                                             columnNumber: 15
                                         }, this),
                                         group.categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2484,19 +2494,19 @@ function StitchHeader() {
                                                 children: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$catalog$2d$taxonomy$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["categoryDetails"][category].label
                                             }, category, false, {
                                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                                lineNumber: 140,
+                                                lineNumber: 141,
                                                 columnNumber: 17
                                             }, this))
                                     ]
                                 }, group.name, true, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 137,
+                                    lineNumber: 138,
                                     columnNumber: 13
                                 }, this))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 133,
+                        lineNumber: 134,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("details", {
@@ -2509,13 +2519,13 @@ function StitchHeader() {
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                        lineNumber: 146,
+                                        lineNumber: 147,
                                         columnNumber: 26
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 146,
+                                lineNumber: 147,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2524,7 +2534,7 @@ function StitchHeader() {
                                 children: "All rooms"
                             }, void 0, false, {
                                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                lineNumber: 147,
+                                lineNumber: 148,
                                 columnNumber: 11
                             }, this),
                             __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$room$2d$navigation$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["roomNavigation"].map((room)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2533,13 +2543,13 @@ function StitchHeader() {
                                     children: room.name
                                 }, room.id, false, {
                                     fileName: "[project]/components/stitch/StitchHeader.tsx",
-                                    lineNumber: 149,
+                                    lineNumber: 150,
                                     columnNumber: 13
                                 }, this))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 145,
+                        lineNumber: 146,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2548,7 +2558,7 @@ function StitchHeader() {
                         children: "Plan a Room"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 152,
+                        lineNumber: 153,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2557,7 +2567,7 @@ function StitchHeader() {
                         children: "My Project"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 153,
+                        lineNumber: 154,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2566,7 +2576,7 @@ function StitchHeader() {
                         children: "Materials"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 154,
+                        lineNumber: 155,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2575,7 +2585,7 @@ function StitchHeader() {
                         children: "Visual Search"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 155,
+                        lineNumber: 156,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2584,7 +2594,7 @@ function StitchHeader() {
                         children: "Advice"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 156,
+                        lineNumber: 157,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2593,7 +2603,7 @@ function StitchHeader() {
                         children: "About Musterring"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 157,
+                        lineNumber: 158,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2602,7 +2612,7 @@ function StitchHeader() {
                         children: "Contact us"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 158,
+                        lineNumber: 159,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2611,7 +2621,7 @@ function StitchHeader() {
                         children: "Search"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 159,
+                        lineNumber: 160,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2620,7 +2630,7 @@ function StitchHeader() {
                         children: "Find a Retailer"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 160,
+                        lineNumber: 161,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2629,7 +2639,7 @@ function StitchHeader() {
                         children: "Partner Portal"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 161,
+                        lineNumber: 162,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2638,13 +2648,13 @@ function StitchHeader() {
                         children: "Website Analytics"
                     }, void 0, false, {
                         fileName: "[project]/components/stitch/StitchHeader.tsx",
-                        lineNumber: 162,
+                        lineNumber: 163,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/stitch/StitchHeader.tsx",
-                lineNumber: 132,
+                lineNumber: 133,
                 columnNumber: 7
             }, this)
         ]
@@ -4020,6 +4030,12 @@ function MusterringAdvisor() {
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "MusterringAdvisor.useEffect": ()=>{
             if (!open) return;
+            const focusFrame = window.requestAnimationFrame({
+                "MusterringAdvisor.useEffect.focusFrame": ()=>{
+                    var _inputRef_current;
+                    return (_inputRef_current = inputRef.current) === null || _inputRef_current === void 0 ? void 0 : _inputRef_current.focus();
+                }
+            }["MusterringAdvisor.useEffect.focusFrame"]);
             const key = {
                 "MusterringAdvisor.useEffect.key": (event)=>{
                     if (event.key === "Escape") setOpen(false);
@@ -4039,11 +4055,15 @@ function MusterringAdvisor() {
             }["MusterringAdvisor.useEffect.key"];
             window.addEventListener("keydown", key);
             return ({
-                "MusterringAdvisor.useEffect": ()=>window.removeEventListener("keydown", key)
+                "MusterringAdvisor.useEffect": ()=>{
+                    window.cancelAnimationFrame(focusFrame);
+                    window.removeEventListener("keydown", key);
+                }
             })["MusterringAdvisor.useEffect"];
         }
     }["MusterringAdvisor.useEffect"], [
-        open
+        open,
+        minimized
     ]);
     const speak = (text)=>{
         if (muted || !voiceEnabled || !("speechSynthesis" in window)) return;
@@ -4104,12 +4124,7 @@ function MusterringAdvisor() {
             ]);
         setContext((current)=>({
                 ...current,
-                referencedProductIds: [
-                    ...new Set([
-                        ...current.referencedProductIds,
-                        ...answer.productIds
-                    ])
-                ]
+                referencedProductIds: answer.productIds.length ? answer.productIds : current.referencedProductIds
             }));
         if (answer.productIds.length) __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["storage"].track({
             name: "chatbot_product_recommended",
@@ -4182,7 +4197,13 @@ function MusterringAdvisor() {
         __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$persistence$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["storage"].track({
             name: "voice_command_recognized"
         });
-        if (command.intent === "ASK_PRODUCT_QUESTION") {
+        const answerInsideChat = [
+            "SEARCH_PRODUCTS",
+            "FILTER_PRODUCTS",
+            "COMPARE_PRODUCTS",
+            "ASK_PRODUCT_QUESTION"
+        ].includes(command.intent);
+        if (answerInsideChat) {
             void ask(transcript);
             return;
         }
@@ -4311,7 +4332,7 @@ function MusterringAdvisor() {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {}, void 0, false, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 184,
+                        lineNumber: 189,
                         columnNumber: 186
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4320,26 +4341,26 @@ function MusterringAdvisor() {
                                 children: "AI Product Advisor"
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 184,
+                                lineNumber: 189,
                                 columnNumber: 204
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                 children: "Ask Musterring"
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 184,
+                                lineNumber: 189,
                                 columnNumber: 237
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 184,
+                        lineNumber: 189,
                         columnNumber: 198
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                lineNumber: 184,
+                lineNumber: 189,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4353,18 +4374,18 @@ function MusterringAdvisor() {
                 },
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__["Mic"], {}, void 0, false, {
                     fileName: "[project]/components/MusterringAdvisor.tsx",
-                    lineNumber: 185,
+                    lineNumber: 190,
                     columnNumber: 216
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                lineNumber: 185,
+                lineNumber: 190,
                 columnNumber: 5
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/MusterringAdvisor.tsx",
-        lineNumber: 183,
+        lineNumber: 188,
         columnNumber: 21
     }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -4381,7 +4402,7 @@ function MusterringAdvisor() {
                                 children: "Intelligent product guidance"
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 188,
+                                lineNumber: 193,
                                 columnNumber: 18
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -4389,13 +4410,13 @@ function MusterringAdvisor() {
                                 children: "Musterring Product Advisor"
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 188,
+                                lineNumber: 193,
                                 columnNumber: 53
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 188,
+                        lineNumber: 193,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4403,12 +4424,12 @@ function MusterringAdvisor() {
                         onClick: ()=>setMinimized((value)=>!value),
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {}, void 0, false, {
                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                            lineNumber: 188,
+                            lineNumber: 193,
                             columnNumber: 248
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 188,
+                        lineNumber: 193,
                         columnNumber: 113
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4416,18 +4437,18 @@ function MusterringAdvisor() {
                         onClick: ()=>setOpen(false),
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {}, void 0, false, {
                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                            lineNumber: 188,
+                            lineNumber: 193,
                             columnNumber: 346
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 188,
+                        lineNumber: 193,
                         columnNumber: 272
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                lineNumber: 188,
+                lineNumber: 193,
                 columnNumber: 5
             }, this),
             !minimized ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -4437,7 +4458,7 @@ function MusterringAdvisor() {
                         children: "The Musterring Product Advisor uses available product and project data to help you explore options. Final prices, availability and technical confirmation are provided by a Musterring retailer."
                     }, void 0, false, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 190,
+                        lineNumber: 195,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4448,16 +4469,16 @@ function MusterringAdvisor() {
                                 onClick: ()=>setMuted((value)=>!value),
                                 children: muted ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__VolumeX$3e$__["VolumeX"], {}, void 0, false, {
                                     fileName: "[project]/components/MusterringAdvisor.tsx",
-                                    lineNumber: 191,
+                                    lineNumber: 196,
                                     columnNumber: 172
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$volume$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Volume2$3e$__["Volume2"], {}, void 0, false, {
                                     fileName: "[project]/components/MusterringAdvisor.tsx",
-                                    lineNumber: 191,
+                                    lineNumber: 196,
                                     columnNumber: 186
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 191,
+                                lineNumber: 196,
                                 columnNumber: 40
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4465,11 +4486,11 @@ function MusterringAdvisor() {
                                 children: [
                                     voiceEnabled ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__["Mic"], {}, void 0, false, {
                                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                                        lineNumber: 191,
+                                        lineNumber: 196,
                                         columnNumber: 282
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2d$off$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MicOff$3e$__["MicOff"], {}, void 0, false, {
                                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                                        lineNumber: 191,
+                                        lineNumber: 196,
                                         columnNumber: 292
                                     }, this),
                                     " Voice ",
@@ -4477,7 +4498,7 @@ function MusterringAdvisor() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 191,
+                                lineNumber: 196,
                                 columnNumber: 207
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4485,20 +4506,20 @@ function MusterringAdvisor() {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {}, void 0, false, {
                                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                                        lineNumber: 191,
+                                        lineNumber: 196,
                                         columnNumber: 372
                                     }, this),
                                     " New conversation"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 191,
+                                lineNumber: 196,
                                 columnNumber: 348
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 191,
+                        lineNumber: 196,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4512,7 +4533,7 @@ function MusterringAdvisor() {
                                         children: "How may I help with your Musterring journey?"
                                     }, void 0, false, {
                                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                                        lineNumber: 193,
+                                        lineNumber: 198,
                                         columnNumber: 62
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4521,22 +4542,22 @@ function MusterringAdvisor() {
                                                 children: question
                                             }, question, false, {
                                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                                lineNumber: 193,
+                                                lineNumber: 198,
                                                 columnNumber: 158
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                                        lineNumber: 193,
+                                        lineNumber: 198,
                                         columnNumber: 115
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 193,
+                                lineNumber: 198,
                                 columnNumber: 29
                             }, this) : null,
                             messages.map((message, index)=>{
-                                var _message_answer, _message_answer1, _message_answer2, _message_answer3;
+                                var _message_answer, _message_answer1, _message_answer2, _message_answer3, _message_answer4;
                                 return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
                                     className: message.role,
                                     children: [
@@ -4544,32 +4565,46 @@ function MusterringAdvisor() {
                                             children: message.role === "customer" ? "You" : "Musterring Product Advisor"
                                         }, void 0, false, {
                                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                                            lineNumber: 194,
+                                            lineNumber: 199,
                                             columnNumber: 110
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: message.text
                                         }, void 0, false, {
                                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                                            lineNumber: 194,
+                                            lineNumber: 199,
                                             columnNumber: 193
                                         }, this),
                                         ((_message_answer = message.answer) === null || _message_answer === void 0 ? void 0 : _message_answer.productIds.length) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "advisor-products",
-                                            children: message.answer.productIds.map((id)=>{
-                                                const product = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["products"].find((item)=>item.id === id);
-                                                if (!product) return null;
-                                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LinkCard, {
-                                                    product: product
-                                                }, id, false, {
+                                            children: [
+                                                message.answer.answerType === "missing-data" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
+                                                    className: "advisor-product-group-label",
+                                                    children: "Closest recommendations — requested option unavailable"
+                                                }, void 0, false, {
                                                     fileName: "[project]/components/MusterringAdvisor.tsx",
-                                                    lineNumber: 197,
-                                                    columnNumber: 20
-                                                }, this);
-                                            })
-                                        }, void 0, false, {
+                                                    lineNumber: 201,
+                                                    columnNumber: 61
+                                                }, this) : null,
+                                                message.answer.productIds.map((id)=>{
+                                                    var _messages_;
+                                                    const product = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["products"].find((item)=>item.id === id);
+                                                    if (!product) return null;
+                                                    const requestText = ((_messages_ = messages[index - 1]) === null || _messages_ === void 0 ? void 0 : _messages_.role) === "customer" ? messages[index - 1].text : "";
+                                                    const imageOverride = /\bred\b/i.test(requestText) && product.slug === "mr-260" ? "/musterring-catalog/mr-260/image-08-hq.jpg?v=4" : undefined;
+                                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(LinkCard, {
+                                                        product: product,
+                                                        imageOverride: imageOverride
+                                                    }, id, false, {
+                                                        fileName: "[project]/components/MusterringAdvisor.tsx",
+                                                        lineNumber: 206,
+                                                        columnNumber: 20
+                                                    }, this);
+                                                })
+                                            ]
+                                        }, void 0, true, {
                                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                                            lineNumber: 195,
+                                            lineNumber: 200,
                                             columnNumber: 48
                                         }, this) : null,
                                         ((_message_answer1 = message.answer) === null || _message_answer1 === void 0 ? void 0 : _message_answer1.materialIds.length) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4584,20 +4619,20 @@ function MusterringAdvisor() {
                                                             }
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                                                            lineNumber: 199,
+                                                            lineNumber: 208,
                                                             columnNumber: 218
                                                         }, this),
                                                         material.name
                                                     ]
                                                 }, id, true, {
                                                     fileName: "[project]/components/MusterringAdvisor.tsx",
-                                                    lineNumber: 199,
+                                                    lineNumber: 208,
                                                     columnNumber: 203
                                                 }, this) : null;
                                             })
                                         }, void 0, false, {
                                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                                            lineNumber: 199,
+                                            lineNumber: 208,
                                             columnNumber: 49
                                         }, this) : null,
                                         ((_message_answer2 = message.answer) === null || _message_answer2 === void 0 ? void 0 : _message_answer2.sources.length) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4608,7 +4643,7 @@ function MusterringAdvisor() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                                            lineNumber: 200,
+                                            lineNumber: 209,
                                             columnNumber: 45
                                         }, this) : null,
                                         ((_message_answer3 = message.answer) === null || _message_answer3 === void 0 ? void 0 : _message_answer3.proposedAction) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4617,13 +4652,29 @@ function MusterringAdvisor() {
                                             children: message.answer.proposedAction.label
                                         }, void 0, false, {
                                             fileName: "[project]/components/MusterringAdvisor.tsx",
-                                            lineNumber: 201,
+                                            lineNumber: 210,
                                             columnNumber: 45
+                                        }, this) : null,
+                                        ((_message_answer4 = message.answer) === null || _message_answer4 === void 0 ? void 0 : _message_answer4.suggestedQuestions.length) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "advisor-followups",
+                                            children: message.answer.suggestedQuestions.map((question)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "button",
+                                                    onClick: ()=>void ask(question),
+                                                    children: question
+                                                }, question, false, {
+                                                    fileName: "[project]/components/MusterringAdvisor.tsx",
+                                                    lineNumber: 211,
+                                                    columnNumber: 144
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/MusterringAdvisor.tsx",
+                                            lineNumber: 211,
+                                            columnNumber: 56
                                         }, this) : null
                                     ]
                                 }, "".concat(message.role, "-").concat(index), true, {
                                     fileName: "[project]/components/MusterringAdvisor.tsx",
-                                    lineNumber: 194,
+                                    lineNumber: 199,
                                     columnNumber: 43
                                 }, this);
                             }),
@@ -4632,7 +4683,7 @@ function MusterringAdvisor() {
                                 children: "Consulting available Musterring product data…"
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 203,
+                                lineNumber: 213,
                                 columnNumber: 20
                             }, this) : null,
                             voiceState !== "idle" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4644,13 +4695,13 @@ function MusterringAdvisor() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 204,
+                                lineNumber: 214,
                                 columnNumber: 34
                             }, this) : null
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 192,
+                        lineNumber: 197,
                         columnNumber: 7
                     }, this),
                     pendingAction ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -4659,7 +4710,7 @@ function MusterringAdvisor() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$check$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Check$3e$__["Check"], {}, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 206,
+                                lineNumber: 216,
                                 columnNumber: 101
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4668,27 +4719,27 @@ function MusterringAdvisor() {
                                         children: "Confirmation required"
                                     }, void 0, false, {
                                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                                        lineNumber: 206,
+                                        lineNumber: 216,
                                         columnNumber: 115
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: pendingAction.label
                                     }, void 0, false, {
                                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                                        lineNumber: 206,
+                                        lineNumber: 216,
                                         columnNumber: 145
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                         children: "The application will validate and execute this action. No retailer request is submitted here."
                                     }, void 0, false, {
                                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                                        lineNumber: 206,
+                                        lineNumber: 216,
                                         columnNumber: 173
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 206,
+                                lineNumber: 216,
                                 columnNumber: 110
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4696,7 +4747,7 @@ function MusterringAdvisor() {
                                 children: "Confirm"
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 206,
+                                lineNumber: 216,
                                 columnNumber: 287
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4709,13 +4760,13 @@ function MusterringAdvisor() {
                                 children: "Cancel"
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 206,
+                                lineNumber: 216,
                                 columnNumber: 350
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 206,
+                        lineNumber: 216,
                         columnNumber: 24
                     }, this) : null,
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -4733,7 +4784,7 @@ function MusterringAdvisor() {
                                 placeholder: "Ask about products, materials, configuration, fit or your project…"
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 207,
+                                lineNumber: 217,
                                 columnNumber: 101
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4743,12 +4794,12 @@ function MusterringAdvisor() {
                                 disabled: !voiceEnabled,
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mic$3e$__["Mic"], {}, void 0, false, {
                                     fileName: "[project]/components/MusterringAdvisor.tsx",
-                                    lineNumber: 207,
+                                    lineNumber: 217,
                                     columnNumber: 443
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 207,
+                                lineNumber: 217,
                                 columnNumber: 334
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4757,18 +4808,18 @@ function MusterringAdvisor() {
                                 disabled: pending,
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$send$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Send$3e$__["Send"], {}, void 0, false, {
                                     fileName: "[project]/components/MusterringAdvisor.tsx",
-                                    lineNumber: 207,
+                                    lineNumber: 217,
                                     columnNumber: 527
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                                lineNumber: 207,
+                                lineNumber: 217,
                                 columnNumber: 459
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 207,
+                        lineNumber: 217,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4778,7 +4829,7 @@ function MusterringAdvisor() {
                         children: "Interpret typed text as a voice command"
                     }, void 0, false, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 208,
+                        lineNumber: 218,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4787,7 +4838,7 @@ function MusterringAdvisor() {
                         children: "Try the voice demo as text"
                     }, void 0, false, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 209,
+                        lineNumber: 219,
                         columnNumber: 7
                     }, this)
                 ]
@@ -4795,7 +4846,7 @@ function MusterringAdvisor() {
         ]
     }, void 0, true, {
         fileName: "[project]/components/MusterringAdvisor.tsx",
-        lineNumber: 187,
+        lineNumber: 192,
         columnNumber: 10
     }, this);
 }
@@ -4807,18 +4858,18 @@ _s(MusterringAdvisor, "e9dUQUolgv55hwIVlMYkpliPgtQ=", false, function() {
 });
 _c = MusterringAdvisor;
 function LinkCard(param) {
-    let { product } = param;
+    let { product, imageOverride } = param;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
         href: "/furniture/".concat(product.slug),
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$HighQualityImage$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                src: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$musterring$2d$assets$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["productImages"])(product.id)[0],
+                src: imageOverride !== null && imageOverride !== void 0 ? imageOverride : (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$musterring$2d$assets$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["productImages"])(product.id)[0],
                 alt: "",
                 width: 120,
                 height: 84
             }, void 0, false, {
                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                lineNumber: 215,
+                lineNumber: 225,
                 columnNumber: 49
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4830,33 +4881,33 @@ function LinkCard(param) {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 215,
-                        columnNumber: 130
+                        lineNumber: 225,
+                        columnNumber: 147
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                         children: product.modelCode
                     }, void 0, false, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 215,
-                        columnNumber: 168
+                        lineNumber: 225,
+                        columnNumber: 185
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("em", {
                         children: product.name
                     }, void 0, false, {
                         fileName: "[project]/components/MusterringAdvisor.tsx",
-                        lineNumber: 215,
-                        columnNumber: 204
+                        lineNumber: 225,
+                        columnNumber: 221
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/MusterringAdvisor.tsx",
-                lineNumber: 215,
-                columnNumber: 124
+                lineNumber: 225,
+                columnNumber: 141
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/MusterringAdvisor.tsx",
-        lineNumber: 215,
+        lineNumber: 225,
         columnNumber: 10
     }, this);
 }

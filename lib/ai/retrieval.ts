@@ -155,6 +155,11 @@ export async function hybridCatalogueSearch(intent: SearchIntent, semantic: Sema
   const closeAlternatives = ranked.filter(({ product }) =>
     !exactIds.has(product.id) &&
     (!intent.category || product.category === intent.category) &&
+    // Preserve an explicitly requested colour whenever the catalogue has that
+    // colour in the requested category. A request such as "red sofa" must not
+    // be followed by a wall of beige and grey sofas. Wrong-colour alternatives
+    // are useful only when the requested colour is unavailable altogether.
+    (!requestedColors.length || !exactColorAvailable || requestedColors.some((color) => product.colors.includes(color))) &&
     isRelevantAlternative(product)
   ).slice(0, 6).map((match) => ({
     ...match,

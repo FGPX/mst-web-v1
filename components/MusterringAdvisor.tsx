@@ -63,6 +63,7 @@ export function MusterringAdvisor() {
   });
   useEffect(() => {
     if (!open) return;
+    const focusFrame = window.requestAnimationFrame(() => inputRef.current?.focus());
     const key = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
       if (event.key === "Tab") {
@@ -74,8 +75,11 @@ export function MusterringAdvisor() {
       }
     };
     window.addEventListener("keydown", key);
-    return () => window.removeEventListener("keydown", key);
-  }, [open]);
+    return () => {
+      window.cancelAnimationFrame(focusFrame);
+      window.removeEventListener("keydown", key);
+    };
+  }, [open, minimized]);
   const speak = (text: string) => {
     if (muted || !voiceEnabled || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
@@ -96,7 +100,7 @@ export function MusterringAdvisor() {
     }
     const answer = payload.answer as AdvisorAnswer;
     setMessages((current) => [...current, { role: "advisor", text: answer.answer, answer }]);
-    setContext((current) => ({ ...current, referencedProductIds: [...new Set([...current.referencedProductIds, ...answer.productIds])] }));
+    setContext((current) => ({ ...current, referencedProductIds: answer.productIds.length ? answer.productIds : current.referencedProductIds }));
     if (answer.productIds.length) storage.track({ name: "chatbot_product_recommended", productId: answer.productIds[0] });
     if (answer.proposedAction) storage.track({ name: "chatbot_action_proposed" });
     speak(answer.answer);
@@ -137,7 +141,8 @@ export function MusterringAdvisor() {
   const handleVoiceCommand = (command: VoiceCommand, transcript: string) => {
     setVoiceState("recognized");
     storage.track({ name: "voice_command_recognized" });
-    if (command.intent === "ASK_PRODUCT_QUESTION") {
+    const answerInsideChat = ["SEARCH_PRODUCTS", "FILTER_PRODUCTS", "COMPARE_PRODUCTS", "ASK_PRODUCT_QUESTION"].includes(command.intent);
+    if (answerInsideChat) {
       void ask(transcript);
       return;
     }
@@ -192,13 +197,18 @@ export function MusterringAdvisor() {
       <div className="advisor-messages" aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><h3>How may I help with your Musterring journey?</h3><div>{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}</button>)}</div></div> : null}
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><small>{message.role === "customer" ? "You" : "Musterring Product Advisor"}</small><p>{message.text}</p>
-          {message.answer?.productIds.length ? <div className="advisor-products">{message.answer.productIds.map((id) => {
+          {message.answer?.productIds.length ? <div className="advisor-products">
+            {message.answer.answerType === "missing-data" ? <small className="advisor-product-group-label">Closest recommendations — requested option unavailable</small> : null}
+            {message.answer.productIds.map((id) => {
             const product = products.find((item) => item.id === id); if (!product) return null;
-            return <LinkCard key={id} product={product} />;
+            const requestText = messages[index - 1]?.role === "customer" ? messages[index - 1].text : "";
+            const imageOverride = /\bred\b/i.test(requestText) && product.slug === "mr-260" ? "/musterring-catalog/mr-260/image-08-hq.jpg?v=4" : undefined;
+            return <LinkCard key={id} product={product} imageOverride={imageOverride} />;
           })}</div> : null}
           {message.answer?.materialIds.length ? <div className="advisor-materials">{message.answer.materialIds.map((id) => { const material = materials.find((item) => item.id === id); return material ? <span key={id}><i style={{ background: material.colorFamily }} />{material.name}</span> : null; })}</div> : null}
           {message.answer?.sources.length ? <p className="advisor-sources">Source: {message.answer.sources.join(" · ")}</p> : null}
           {message.answer?.proposedAction ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
+          {message.answer?.suggestedQuestions.length ? <div className="advisor-followups">{message.answer.suggestedQuestions.map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         </article>)}
         {pending ? <p role="status">Consulting available Musterring product data…</p> : null}
         {voiceState !== "idle" ? <p className={`voice-state is-${voiceState}`} role="status">Voice: {voiceState === "denied" ? "Microphone permission denied. Use text input." : voiceState}</p> : null}
@@ -211,6 +221,6 @@ export function MusterringAdvisor() {
   </aside>;
 }
 
-function LinkCard({ product }: { product: typeof products[number] }) {
-  return <a href={`/furniture/${product.slug}`}><Image src={productImages(product.id)[0]} alt="" width={120} height={84} /><span><small>Product ID {product.id}</small><strong>{product.modelCode}</strong><em>{product.name}</em></span></a>;
+function LinkCard({ product, imageOverride }: { product: typeof products[number]; imageOverride?: string }) {
+  return <a href={`/furniture/${product.slug}`}><Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={120} height={84} /><span><small>Product ID {product.id}</small><strong>{product.modelCode}</strong><em>{product.name}</em></span></a>;
 }

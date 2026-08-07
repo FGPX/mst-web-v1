@@ -69,7 +69,11 @@ const conceptProducts: Product[] = [
 const conceptProductsById = new Map(conceptProducts.map((product) => [product.id, product]));
 const sofaTemplates = conceptProducts.filter((product) => product.category !== "armchair");
 const armchairTemplates = conceptProducts.filter((product) => product.category === "armchair");
-const verifiedRedUpholstery = new Set(["mr-260", "mr-365", "mr-370", "mr-385", "mr-2875"]);
+// Only MR 260 currently has a locally available, authorized catalogue image
+// that verifies the red presentation. Other programmes may support additional
+// covers in production, but they must not be claimed here until PIM/DAM data
+// provides a validated colour variant.
+const verifiedRedUpholstery = new Set(["mr-260"]);
 const catalogueDimensionOverrides: Record<string, { widthMm: number; depthMm: number; heightMm: number }> = {
   // Dimensions correspond to the specific catalogue variants used by the Room Composer cutouts.
   // MR 260 three-seat sofa, fixed standard version with adjustable head cushions.

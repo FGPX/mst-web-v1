@@ -52,9 +52,10 @@ export function StitchHeader() {
   return (
     <header className="stitch-header" role="banner" ref={headerRef}>
       <nav className="stitch-nav" aria-label="Primary">
-        <Link className="stitch-brand" href="/">
+        <Link className="stitch-brand" href="/" aria-label="Musterring V1 home">
           <span className="stitch-brand-mark" aria-hidden="true" />
-          <span>Musterring</span>
+          <span className="stitch-brand-word">Musterring</span>
+          <small className="stitch-brand-version">V1</small>
         </Link>
         <div className="stitch-nav-links">
           <button

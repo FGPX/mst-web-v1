@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { checkRateLimit } from "@/lib/server-validation";
-import { withDemoFallback } from "@/lib/ai/providers";
+import { LocalDemoAIProvider, withDemoFallback } from "@/lib/ai/providers";
 import { hybridCatalogueSearch } from "@/lib/ai/retrieval";
 
 const requestSchema = z.object({ query: z.string().trim().min(1).max(1000) });
@@ -20,9 +20,25 @@ export async function POST(request: NextRequest) {
     }
     return provider.parseSearchIntent(parsed.data.query);
   });
-  const results = await hybridCatalogueSearch(interpreted.data);
+  const deterministic = await new LocalDemoAIProvider().parseSearchIntent(parsed.data.query);
+  const intent = {
+    ...interpreted.data,
+    queryText: parsed.data.query,
+    category: deterministic.category ?? interpreted.data.category,
+    colorFamilies: deterministic.colorFamilies ?? interpreted.data.colorFamilies,
+    materials: deterministic.materials ?? interpreted.data.materials,
+    maxWidthMm: deterministic.maxWidthMm ?? interpreted.data.maxWidthMm,
+    minSeatHeightMm: deterministic.minSeatHeightMm ?? interpreted.data.minSeatHeightMm,
+    maxSeatDepthMm: deterministic.maxSeatDepthMm ?? interpreted.data.maxSeatDepthMm,
+    numberOfSeats: deterministic.numberOfSeats ?? interpreted.data.numberOfSeats,
+    modular: deterministic.modular ?? interpreted.data.modular,
+    functions: deterministic.functions ?? interpreted.data.functions,
+    styles: deterministic.styles ?? interpreted.data.styles,
+    smallSpaceSuitable: deterministic.smallSpaceSuitable ?? interpreted.data.smallSpaceSuitable
+  };
+  const results = await hybridCatalogueSearch(intent);
   return NextResponse.json({
-    intent: interpreted.data,
+    intent,
     exactMatches: results.exactMatches.map(({ product, reasons }) => ({ product, reasons })),
     closeAlternatives: results.closeAlternatives.map(({ product, reasons }) => ({ product, reasons })),
     exactColorAvailable: results.exactColorAvailable,

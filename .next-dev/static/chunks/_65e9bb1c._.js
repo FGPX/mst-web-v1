@@ -9,14 +9,18 @@ __turbopack_context__.s([
     ()=>parseSearchQuery,
     "productMatches",
     ()=>productMatches,
+    "searchColorTerms",
+    ()=>searchColorTerms,
     "searchProducts",
     ()=>searchProducts,
     "searchProductsRanked",
-    ()=>searchProductsRanked
+    ()=>searchProductsRanked,
+    "searchStyleTerms",
+    ()=>searchStyleTerms
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/data.ts [app-client] (ecmascript)");
 ;
-const colorTerms = [
+const searchColorTerms = [
     "beige",
     "ivory",
     "taupe",
@@ -35,10 +39,22 @@ const colorTerms = [
     "burgundy",
     "barolo",
     "purple",
+    "blue",
+    "orange",
+    "pink",
     "yellow",
     "mustard",
     "cognac",
     "sand"
+];
+const searchStyleTerms = [
+    "modern",
+    "minimal",
+    "contemporary",
+    "classic",
+    "industrial",
+    "natural",
+    "elegant"
 ];
 const stopWords = new Set([
     "want",
@@ -101,17 +117,26 @@ function tokenMatches(queryToken, candidate) {
 function parseSearchQuery(query) {
     var _text_match_, _text_match, _text_match1;
     const q = query.trim();
-    const text = q.toLowerCase().replace(/\brot(?:es|er|e)?\b/g, "red").replace(/\bgrau(?:es|er|e)?\b/g, "grey").replace(/\bbraun(?:es|er|e)?\b/g, "brown").replace(/\bgrÃ¼n(?:es|er|e)?\b|\bgrün(?:es|er|e)?\b/g, "green").replace(/\bweiÃŸ(?:es|er|e)?\b|\bweiß(?:es|er|e)?\b/g, "white");
+    const text = q.toLowerCase().replace(/\bbeig(?:e|es|er|en|em)?\b/g, "beige").replace(/\brot(?:es|er|e)?\b/g, "red").replace(/\bgrau(?:es|er|e)?\b/g, "grey").replace(/\bbraun(?:es|er|e)?\b/g, "brown").replace(/\bgrÃ¼n(?:es|er|e)?\b|\bgrün(?:es|er|e)?\b/g, "green").replace(/\bweiÃŸ(?:es|er|e)?\b|\bweiß(?:es|er|e)?\b/g, "white");
     const filters = {
         q
     };
-    if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
-    if (/coffee table|side table|couchtisch/.test(text)) filters.category = "coffee-table";
-    if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
-    if (/armchair|chair|sessel/.test(text)) filters.category = "armchair";
-    if (/sectional|corner|chaise|eck|wohnlandschaft/.test(text)) filters.category = "sectional";
-    if (/sofa|couch/.test(text)) filters.category = "sofa";
-    const code = (_text_match = text.match(/\bmr\s?-?\d{4}\b/i)) === null || _text_match === void 0 ? void 0 : (_text_match_ = _text_match[0]) === null || _text_match_ === void 0 ? void 0 : _text_match_.replace(/\s|-/, " ").toUpperCase();
+    if (/dining chair|dining seat|esszimmerstuhl|stuhl/.test(text)) filters.category = "dining-chair";
+    else if (/armchair|accent chair|recliner|\bchair\b|sessel/.test(text)) filters.category = "armchair";
+    else if (/sectional|corner sofa|corner couch|chaise|ecksofa|wohnlandschaft/.test(text)) filters.category = "sectional";
+    else if (/sofa|couch/.test(text)) filters.category = "sofa";
+    else if (/coffee table|side table|couchtisch|beistelltisch/.test(text)) filters.category = "coffee-table";
+    else if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
+    else if (/wardrobe|closet|kleiderschrank/.test(text)) filters.category = "wardrobe";
+    else if (/bedroom series|bedroom furniture|schlafzimmerprogramm/.test(text)) filters.category = "bedroom-series";
+    else if (/\bbed\b|upholstered bed|boxspring|bett/.test(text)) filters.category = "bed";
+    else if (/bathroom|bath furniture|badmoebel|badmöbel/.test(text)) filters.category = "bathroom";
+    else if (/outdoor|garden furniture|patio|gartenmoebel|gartenmöbel/.test(text)) filters.category = "outdoor";
+    else if (/carpet|\brug\b|teppich/.test(text)) filters.category = "carpet";
+    else if (/\blamp\b|lighting|leuchte/.test(text)) filters.category = "lamp";
+    else if (/small furniture|occasional furniture/.test(text)) filters.category = "small-furniture";
+    else if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
+    const code = (_text_match = text.match(/\bmr\s*-?\s*\d{3,4}\b/i)) === null || _text_match === void 0 ? void 0 : (_text_match_ = _text_match[0]) === null || _text_match_ === void 0 ? void 0 : _text_match_.replace(/[\s-]+/g, " ").toUpperCase();
     if (code) filters.modelCode = code;
     const width = text.match(/(?:max(?:imum)?|under|below|unter|bis|maximale breite|maximum width)?\s*(\d{2,3})\s*(?:cm|centimeter)/);
     if (width) filters.maxWidthMm = Number(width[1]) * 10;
@@ -123,8 +148,10 @@ function parseSearchQuery(query) {
         three: 3,
         four: 4
     })[seatWord];
-    const colors = colorTerms.filter((color)=>text.includes(color));
+    const colors = searchColorTerms.filter((color)=>new RegExp("\\b".concat(color.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "\\b")).test(text));
     if (colors.length) filters.colors = colors;
+    const styles = searchStyleTerms.filter((style)=>new RegExp("\\b".concat(style, "\\b")).test(text));
+    if (styles.length) filters.styles = styles;
     if (/modular|module|flexible/.test(text)) filters.modular = true;
     if (/small|compact|apartment|wohnung|klein/.test(text)) filters.smallSpaceSuitable = true;
     if (/high[- ]seat|tall person|hohe sitzhÃ¶he|hohe sitzhöhe|gro(?:ÃŸ|ß|ss)e person/.test(text)) filters.minSeatHeightMm = 470;
@@ -185,10 +212,10 @@ function searchProductsRanked(query) {
     const wantsFabric = /\bfabric|textile|boucle|chenille|velvet\b/.test(normalized);
     const wantsComfort = /\bcomfort|comfortable|cosy|cozy|soft|relax|recline|lounge\b/.test(normalized);
     const wantsModern = /\bmodern|minimal|clean|contemporary|design\b/.test(normalized);
-    return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["products"].filter((product)=>product.active).filter((product)=>{
-        var _parsed_colors;
-        return !((_parsed_colors = parsed.colors) === null || _parsed_colors === void 0 ? void 0 : _parsed_colors.length) || parsed.colors.some((color)=>product.colors.includes(color));
-    }).map((product)=>{
+    return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["products"].filter((product)=>product.active).filter((product)=>productMatches(product, {
+            ...parsed,
+            q: undefined
+        })).map((product)=>{
         var _normalized_match, _parsed_colors;
         const copy = [
             product.modelCode,

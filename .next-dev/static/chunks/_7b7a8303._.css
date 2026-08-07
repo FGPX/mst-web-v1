@@ -2711,7 +2711,7 @@
   display: flex;
 }
 
-.stitch-compare-products, .stitch-compare-callout, .stitch-compare-rows > div {
+.stitch-compare-products, .stitch-compare-callout, .stitch-compare-sticky-headings, .stitch-compare-rows > div {
   grid-template-columns: 28% repeat(var(--stitch-compare-count, 3), minmax(0, 1fr));
   gap: 24px;
   display: grid;
@@ -2856,6 +2856,10 @@
   border-bottom: 1px solid var(--stitch-border-soft);
   background: var(--stitch-bg-low);
   margin-top: 54px;
+  padding: 0;
+}
+
+.stitch-compare-callout > * {
   padding: 24px;
 }
 
@@ -2873,6 +2877,10 @@
 
 .stitch-compare-rows > div {
   border-bottom: 1px solid var(--stitch-border-soft);
+  padding: 0;
+}
+
+.stitch-compare-rows > div > * {
   padding: 28px 24px;
 }
 
@@ -4483,14 +4491,9 @@ body:has(.stitch-project) .stitch-project-entry {
     overflow: hidden;
   }
 
-  .stitch-compare-products, .stitch-compare-callout, .stitch-compare-rows > div {
+  .stitch-compare-products, .stitch-compare-callout, .stitch-compare-sticky-headings, .stitch-compare-rows > div {
     grid-template-columns: 135px repeat(var(--stitch-compare-count, 3), 195px);
     gap: 12px;
-    width: max-content;
-  }
-
-  .stitch-compare-sticky-headings {
-    grid-template-columns: 135px repeat(var(--stitch-compare-count, 3), 195px);
     width: max-content;
   }
 
@@ -4675,6 +4678,22 @@ body:has(.stitch-project) .stitch-project-entry {
   height: 40px;
   display: block;
   overflow: hidden;
+}
+
+.stitch-brand-word {
+  line-height: 1;
+}
+
+.stitch-brand-version {
+  color: var(--stitch-accent);
+  font-family: var(--stitch-font-sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  align-self: flex-start;
+  margin: 5px 0 0 -9px;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .stitch-nav-links {
@@ -5534,11 +5553,9 @@ body:has(.stitch-project) .stitch-project-entry {
 
 .stitch-compare-sticky-headings {
   z-index: 25;
-  grid-template-columns: minmax(150px, .7fr) repeat(var(--stitch-compare-count, 3), minmax(0, 1fr));
   background: rgba(251, 249, 244, .96);
   border-top: 1px solid rgba(25, 24, 21, .16);
   border-bottom: 1px solid rgba(25, 24, 21, .16);
-  display: grid;
   position: -webkit-sticky;
   position: sticky;
   top: 80px;
@@ -5547,7 +5564,7 @@ body:has(.stitch-project) .stitch-project-entry {
 .stitch-compare-sticky-headings > * {
   letter-spacing: .08em;
   text-transform: uppercase;
-  padding: 12px;
+  padding: 12px 24px;
   font-size: 12px;
 }
 
@@ -9270,6 +9287,15 @@ img {
   display: grid;
 }
 
+.advisor-product-group-label {
+  color: #8b553b;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: 9px;
+  font-weight: 800;
+  display: block;
+}
+
 .advisor-products a {
   background: #fbf9f4;
   border: 1px solid rgba(25, 24, 21, .14);
@@ -9331,6 +9357,22 @@ img {
   padding: 8px 12px;
   font-size: 10px;
   font-weight: 800;
+}
+
+.advisor-followups {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  display: flex;
+}
+
+.advisor-followups button {
+  color: #191815;
+  text-align: left;
+  background: #fbf9f4;
+  border: 1px solid rgba(25, 24, 21, .18);
+  padding: 7px 9px;
+  font-size: 10px;
 }
 
 .advisor-confirmation {

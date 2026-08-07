@@ -492,7 +492,7 @@ function SearchExperience(param) {
     ]);
     const removeFilter = (key)=>{
         const replacements = {
-            category: /\b(sofa|couch|armchair|chair|sectional|corner|storage|cabinet|coffee table|side table|dining table)\b/gi,
+            category: /\b(sofa|couch|armchair|chair|sectional|corner|storage|cabinet|coffee table|side table|dining table|dining chair|bed|wardrobe|outdoor|garden furniture|carpet|rug|lamp|bathroom)\b/gi,
             colorFamilies: /\b(beige|ivory|taupe|stone|charcoal|brown|cream|green|grey|graphite|red|burgundy|barolo)\b/gi,
             modular: /\b(modular|module|flexible)\b/gi,
             smallSpaceSuitable: /\b(small|compact|apartment)\b/gi,

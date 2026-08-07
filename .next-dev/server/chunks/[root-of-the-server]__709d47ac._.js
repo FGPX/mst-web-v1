@@ -157,8 +157,18 @@ const searchIntentSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_
         "sectional",
         "storage",
         "coffee-table",
+        "bedroom-series",
+        "bed",
+        "wardrobe",
+        "dining-chair",
         "dining-table",
-        "small-furniture"
+        "bathroom",
+        "kitchen",
+        "outdoor",
+        "small-furniture",
+        "carpet",
+        "lamp",
+        "home-textile"
     ]).nullable(),
     colorFamilies: nullableStrings,
     materials: nullableStrings,
@@ -981,15 +991,27 @@ const conceptProductsById = new Map(conceptProducts.map((product)=>[
     ]));
 const sofaTemplates = conceptProducts.filter((product)=>product.category !== "armchair");
 const armchairTemplates = conceptProducts.filter((product)=>product.category === "armchair");
+// Only MR 260 currently has a locally available, authorized catalogue image
+// that verifies the red presentation. Other programmes may support additional
+// covers in production, but they must not be claimed here until PIM/DAM data
+// provides a validated colour variant.
 const verifiedRedUpholstery = new Set([
-    "mr-260",
-    "mr-365",
-    "mr-370",
-    "mr-385",
-    "mr-2875"
+    "mr-260"
 ]);
 const catalogueDimensionOverrides = {
     // Dimensions correspond to the specific catalogue variants used by the Room Composer cutouts.
+    // MR 260 three-seat sofa, fixed standard version with adjustable head cushions.
+    "mr-260": {
+        widthMm: 2320,
+        depthMm: 960,
+        heightMm: 1070
+    },
+    // MR 270 three-seat sofa shown as the straight reference configuration.
+    "mr-270": {
+        widthMm: 2500,
+        depthMm: 1070,
+        heightMm: 870
+    },
     // PM100 corner configuration: approx. 232 x 268 cm, maximum back height 88 cm.
     "justb-pm100": {
         widthMm: 2680,
@@ -1537,14 +1559,18 @@ __turbopack_context__.s([
     ()=>parseSearchQuery,
     "productMatches",
     ()=>productMatches,
+    "searchColorTerms",
+    ()=>searchColorTerms,
     "searchProducts",
     ()=>searchProducts,
     "searchProductsRanked",
-    ()=>searchProductsRanked
+    ()=>searchProductsRanked,
+    "searchStyleTerms",
+    ()=>searchStyleTerms
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/data.ts [app-route] (ecmascript)");
 ;
-const colorTerms = [
+const searchColorTerms = [
     "beige",
     "ivory",
     "taupe",
@@ -1563,10 +1589,22 @@ const colorTerms = [
     "burgundy",
     "barolo",
     "purple",
+    "blue",
+    "orange",
+    "pink",
     "yellow",
     "mustard",
     "cognac",
     "sand"
+];
+const searchStyleTerms = [
+    "modern",
+    "minimal",
+    "contemporary",
+    "classic",
+    "industrial",
+    "natural",
+    "elegant"
 ];
 const stopWords = new Set([
     "want",
@@ -1625,17 +1663,26 @@ function tokenMatches(queryToken, candidate) {
 }
 function parseSearchQuery(query) {
     const q = query.trim();
-    const text = q.toLowerCase().replace(/\brot(?:es|er|e)?\b/g, "red").replace(/\bgrau(?:es|er|e)?\b/g, "grey").replace(/\bbraun(?:es|er|e)?\b/g, "brown").replace(/\bgrÃ¼n(?:es|er|e)?\b|\bgrün(?:es|er|e)?\b/g, "green").replace(/\bweiÃŸ(?:es|er|e)?\b|\bweiß(?:es|er|e)?\b/g, "white");
+    const text = q.toLowerCase().replace(/\bbeig(?:e|es|er|en|em)?\b/g, "beige").replace(/\brot(?:es|er|e)?\b/g, "red").replace(/\bgrau(?:es|er|e)?\b/g, "grey").replace(/\bbraun(?:es|er|e)?\b/g, "brown").replace(/\bgrÃ¼n(?:es|er|e)?\b|\bgrün(?:es|er|e)?\b/g, "green").replace(/\bweiÃŸ(?:es|er|e)?\b|\bweiß(?:es|er|e)?\b/g, "white");
     const filters = {
         q
     };
-    if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
-    if (/coffee table|side table|couchtisch/.test(text)) filters.category = "coffee-table";
-    if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
-    if (/armchair|chair|sessel/.test(text)) filters.category = "armchair";
-    if (/sectional|corner|chaise|eck|wohnlandschaft/.test(text)) filters.category = "sectional";
-    if (/sofa|couch/.test(text)) filters.category = "sofa";
-    const code = text.match(/\bmr\s?-?\d{4}\b/i)?.[0]?.replace(/\s|-/, " ").toUpperCase();
+    if (/dining chair|dining seat|esszimmerstuhl|stuhl/.test(text)) filters.category = "dining-chair";
+    else if (/armchair|accent chair|recliner|\bchair\b|sessel/.test(text)) filters.category = "armchair";
+    else if (/sectional|corner sofa|corner couch|chaise|ecksofa|wohnlandschaft/.test(text)) filters.category = "sectional";
+    else if (/sofa|couch/.test(text)) filters.category = "sofa";
+    else if (/coffee table|side table|couchtisch|beistelltisch/.test(text)) filters.category = "coffee-table";
+    else if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
+    else if (/wardrobe|closet|kleiderschrank/.test(text)) filters.category = "wardrobe";
+    else if (/bedroom series|bedroom furniture|schlafzimmerprogramm/.test(text)) filters.category = "bedroom-series";
+    else if (/\bbed\b|upholstered bed|boxspring|bett/.test(text)) filters.category = "bed";
+    else if (/bathroom|bath furniture|badmoebel|badmöbel/.test(text)) filters.category = "bathroom";
+    else if (/outdoor|garden furniture|patio|gartenmoebel|gartenmöbel/.test(text)) filters.category = "outdoor";
+    else if (/carpet|\brug\b|teppich/.test(text)) filters.category = "carpet";
+    else if (/\blamp\b|lighting|leuchte/.test(text)) filters.category = "lamp";
+    else if (/small furniture|occasional furniture/.test(text)) filters.category = "small-furniture";
+    else if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
+    const code = text.match(/\bmr\s*-?\s*\d{3,4}\b/i)?.[0]?.replace(/[\s-]+/g, " ").toUpperCase();
     if (code) filters.modelCode = code;
     const width = text.match(/(?:max(?:imum)?|under|below|unter|bis|maximale breite|maximum width)?\s*(\d{2,3})\s*(?:cm|centimeter)/);
     if (width) filters.maxWidthMm = Number(width[1]) * 10;
@@ -1647,8 +1694,10 @@ function parseSearchQuery(query) {
         three: 3,
         four: 4
     })[seatWord];
-    const colors = colorTerms.filter((color)=>text.includes(color));
+    const colors = searchColorTerms.filter((color)=>new RegExp(`\\b${color.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text));
     if (colors.length) filters.colors = colors;
+    const styles = searchStyleTerms.filter((style)=>new RegExp(`\\b${style}\\b`).test(text));
+    if (styles.length) filters.styles = styles;
     if (/modular|module|flexible/.test(text)) filters.modular = true;
     if (/small|compact|apartment|wohnung|klein/.test(text)) filters.smallSpaceSuitable = true;
     if (/high[- ]seat|tall person|hohe sitzhÃ¶he|hohe sitzhöhe|gro(?:ÃŸ|ß|ss)e person/.test(text)) filters.minSeatHeightMm = 470;
@@ -1706,7 +1755,10 @@ function searchProductsRanked(query, limit = 12) {
     const wantsFabric = /\bfabric|textile|boucle|chenille|velvet\b/.test(normalized);
     const wantsComfort = /\bcomfort|comfortable|cosy|cozy|soft|relax|recline|lounge\b/.test(normalized);
     const wantsModern = /\bmodern|minimal|clean|contemporary|design\b/.test(normalized);
-    return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].filter((product)=>product.active).filter((product)=>!parsed.colors?.length || parsed.colors.some((color)=>product.colors.includes(color))).map((product)=>{
+    return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].filter((product)=>product.active).filter((product)=>productMatches(product, {
+            ...parsed,
+            q: undefined
+        })).map((product)=>{
         const copy = [
             product.modelCode,
             product.name,
@@ -2022,25 +2074,13 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/data.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$configurator$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/configurator.ts [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$search$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/search.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/ai/assistant-schemas.ts [app-route] (ecmascript)");
 ;
 ;
 ;
-const colors = [
-    "beige",
-    "ivory",
-    "taupe",
-    "stone",
-    "charcoal",
-    "brown",
-    "cream",
-    "green",
-    "grey",
-    "graphite",
-    "red",
-    "burgundy",
-    "purple"
-];
+;
+const colors = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$search$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["searchColorTerms"];
 function requestedAlternative(input, source) {
     const text = input.requestText?.toLowerCase() ?? "";
     const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
@@ -2288,6 +2328,7 @@ function materialReasons(material, advice) {
 }
 function parseVoiceCommandDeterministic(transcript) {
     const text = transcript.toLowerCase();
+    const searchFilters = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$search$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["parseSearchQuery"])(transcript);
     let intent = "ASK_PRODUCT_QUESTION";
     if (/book|consultation/.test(text)) intent = "BOOK_CONSULTATION";
     else if (/retailer|dealer|near me/.test(text)) intent = "FIND_RETAILER";
@@ -2299,7 +2340,7 @@ function parseVoiceCommandDeterministic(transcript) {
     else if (/change .*material|fabric|leather/.test(text) && /change|easy-care|grey|beige/.test(text)) intent = "CHANGE_MATERIAL";
     else if (/compare/.test(text)) intent = "COMPARE_PRODUCTS";
     else if (/configur/.test(text)) intent = "CONFIGURE_PRODUCT";
-    else if (/show me|find|search|under \d+/.test(text)) intent = "SEARCH_PRODUCTS";
+    else if (searchFilters.category || searchFilters.modelCode || /show me|find|search|looking for|recommend/.test(text)) intent = "SEARCH_PRODUCTS";
     const modelCodes = [
         ...transcript.matchAll(/\bMR\s*-?\s*\d{3,4}\b/gi)
     ].map((match)=>match[0].replace(/[\s-]+/g, " ").toUpperCase());
@@ -2325,15 +2366,126 @@ function groundedProductIds(ids) {
         ...new Set(ids)
     ].filter((id)=>active.has(id));
 }
+const productDiscoveryPattern = /\b(sofa|couch|armchair|chair|recliner|sectional|table|storage|cabinet|sideboard|wardrobe|bed|bathroom|outdoor|garden|carpet|rug|lamp|furniture)\b/;
+function supportsMaterialType(product, type) {
+    return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["materials"].some((material)=>product.materials.includes(material.id) && material.type === type);
+}
+function productDiscoveryAnswer(question) {
+    const text = question.toLowerCase();
+    const filters = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$search$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["parseSearchQuery"])(question);
+    const discoveryLanguage = /\b(i want|i need|show me|find|search|looking for|recommend|suggest|do you have|available)\b/.test(text);
+    const namedProduct = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].find((product)=>product.active && (text.includes(product.modelCode.toLowerCase()) || text.includes(product.name.toLowerCase())));
+    if (!filters.category && !filters.modelCode && !namedProduct && !(discoveryLanguage && productDiscoveryPattern.test(text))) return null;
+    const requestedMaterial = /\bleather\b/.test(text) ? "leather" : /\b(fabric|textile|boucle|chenille|velvet)\b/.test(text) ? "fabric" : null;
+    const wantsEasyCare = /easy[- ]care|easy to clean|pflegeleicht|family|familie|children|kinder|kids?|pets?|dog|hund|cat|katze/.test(text);
+    const hardFilters = {
+        ...filters,
+        q: undefined
+    };
+    const exactCandidates = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].filter((product)=>product.active && (!namedProduct || product.id === namedProduct.id) && (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$search$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["productMatches"])(product, hardFilters) && (!requestedMaterial || supportsMaterialType(product, requestedMaterial)) && (!wantsEasyCare || product.materials.some((id)=>__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["materials"].find((material)=>material.id === id)?.easyCare)));
+    const rankOrder = new Map((0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$search$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["searchProductsRanked"])(question, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].length).map((match, index)=>[
+            match.product.id,
+            index
+        ]));
+    const exact = exactCandidates.sort((left, right)=>(rankOrder.get(left.id) ?? 9999) - (rankOrder.get(right.id) ?? 9999) || left.modelCode.localeCompare(right.modelCode)).slice(0, 4);
+    const requested = [];
+    if (filters.category) requested.push(filters.category.replaceAll("-", " "));
+    if (filters.colors?.length) requested.push(`${filters.colors.join(" or ")} colour`);
+    if (requestedMaterial) requested.push(requestedMaterial);
+    if (filters.maxWidthMm) requested.push(`maximum ${filters.maxWidthMm / 10} cm width`);
+    if (filters.modular) requested.push("modular");
+    if (filters.smallSpaceSuitable) requested.push("small-space suitable");
+    if (filters.relaxFunction) requested.push("relax function");
+    if (filters.electricFunctions) requested.push("electric function");
+    if (wantsEasyCare) requested.push("easy-care material metadata");
+    if (exact.length) {
+        const exactIds = exact.map((product)=>product.id);
+        const wantsComparison = /compare/.test(text);
+        const comparisonAlternatives = wantsComparison && exactIds.length < 2 ? __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].filter((product)=>product.active && product.category === exact[0].category && !exactIds.includes(product.id)).sort((left, right)=>(rankOrder.get(left.id) ?? 9999) - (rankOrder.get(right.id) ?? 9999)).slice(0, 2) : [];
+        const ids = [
+            ...exactIds,
+            ...comparisonAlternatives.map((product)=>product.id)
+        ];
+        const comparisonNote = comparisonAlternatives.length ? ` ${exactIds.length === 1 ? "One product is an exact match" : `${exactIds.length} products are exact matches`}; the additional products are clearly labelled comparison alternatives and may not satisfy every filter.` : "";
+        return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
+            answer: `I found ${exact.length} exact catalogue match${exact.length === 1 ? "" : "es"}${requested.length ? ` for ${requested.join(", ")}` : ""}.${comparisonNote || " Every shown product satisfies the interpreted hard filters in the connected data."}`,
+            answerType: "products",
+            productIds: ids,
+            materialIds: [],
+            sources: [
+                "Musterring product catalogue",
+                ...requestedMaterial || wantsEasyCare ? [
+                    "Musterring concept material metadata"
+                ] : []
+            ],
+            proposedAction: wantsComparison && ids.length > 1 ? {
+                type: "COMPARE_PRODUCTS",
+                label: comparisonAlternatives.length ? "Compare match with alternatives" : "Compare the exact matches",
+                parameters: {
+                    productIds: ids.slice(0, 3)
+                },
+                requiresConfirmation: false
+            } : null,
+            suggestedQuestions: ids.length > 1 ? [
+                "Which one is most compact?",
+                "Compare the first three",
+                "Save the first one"
+            ] : [
+                "Open the first product",
+                "Find a similar alternative",
+                "Save this product"
+            ]
+        });
+    }
+    const sameCategory = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].filter((product)=>product.active && (!filters.category || product.category === filters.category));
+    const alternatives = sameCategory.map((product)=>{
+        let score = rankOrder.has(product.id) ? Math.max(0, 30 - (rankOrder.get(product.id) ?? 30)) : 0;
+        if (filters.colors?.length && filters.colors.some((color)=>product.colors.includes(color))) score += 20;
+        if (filters.maxWidthMm && product.widthMm <= filters.maxWidthMm) score += 15;
+        if (filters.modular && product.modular) score += 12;
+        if (filters.smallSpaceSuitable && product.smallSpaceSuitable) score += 12;
+        if (filters.relaxFunction && product.functions.includes("relax")) score += 12;
+        if (filters.electricFunctions && product.electricFunctions.length) score += 12;
+        if (requestedMaterial && supportsMaterialType(product, requestedMaterial)) score += 10;
+        if (wantsEasyCare && product.materials.some((id)=>__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["materials"].find((material)=>material.id === id)?.easyCare)) score += 10;
+        return {
+            product,
+            score
+        };
+    }).sort((left, right)=>right.score - left.score || left.product.modelCode.localeCompare(right.product.modelCode)).slice(0, 4).map(({ product })=>product);
+    return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
+        answer: `No catalogue product satisfies every requested condition${requested.length ? ` (${requested.join(", ")})` : ""}. The products below are closest recommendations and must not be treated as exact matches.`,
+        answerType: "missing-data",
+        productIds: alternatives.map((product)=>product.id),
+        materialIds: [],
+        sources: [
+            "Musterring product catalogue"
+        ],
+        proposedAction: /compare/.test(text) && alternatives.length > 1 ? {
+            type: "COMPARE_PRODUCTS",
+            label: "Compare the closest recommendations",
+            parameters: {
+                productIds: alternatives.slice(0, 3).map((product)=>product.id)
+            },
+            requiresConfirmation: false
+        } : null,
+        suggestedQuestions: [
+            "Remove one filter",
+            "Show another colour",
+            "Find a retailer"
+        ]
+    });
+}
 function answerGroundedQuestion(question, context) {
     const text = question.toLowerCase();
     const referenced = groundedProductIds(context.referencedProductIds);
     const code = question.match(/\bMR\s*-?\s*\d{3,4}\b/i)?.[0].replace(/[\s-]+/g, " ").toUpperCase();
-    const current = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].find((product)=>product.id === context.currentProductId) ?? __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].find((product)=>product.modelCode === code);
-    if (/second one/.test(text) && referenced[1]) {
-        const product = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].find((item)=>item.id === referenced[1]);
+    const current = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].find((product)=>product.modelCode === code) ?? __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].find((product)=>product.id === context.currentProductId);
+    const ordinal = /\b(first|1st)\b/.test(text) ? 0 : /\b(second|2nd)\b/.test(text) ? 1 : /\b(third|3rd)\b/.test(text) ? 2 : null;
+    if (ordinal !== null && referenced[ordinal]) {
+        const product = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].find((item)=>item.id === referenced[ordinal]);
         return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
-            answer: `The second referenced product is ${product.modelCode}, ${product.name}.`,
+            answer: `The referenced product is ${product.modelCode}, ${product.name}.`,
             answerType: "fact",
             productIds: [
                 product.id
@@ -2349,10 +2501,43 @@ function answerGroundedQuestion(question, context) {
                     productId: product.id
                 },
                 requiresConfirmation: true
+            } : /open|details?/.test(text) ? {
+                type: "OPEN_PRODUCT",
+                label: `Open ${product.modelCode}`,
+                parameters: {
+                    slug: product.slug
+                },
+                requiresConfirmation: false
             } : null,
             suggestedQuestions: [
                 "Compare it with the first product",
                 "Show its materials"
+            ]
+        });
+    }
+    if (/\bsave (this|it|the product)\b/.test(text) && (current || referenced[0])) {
+        const product = current ?? __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].find((item)=>item.id === referenced[0]);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
+            answer: `I can save ${product.modelCode}, ${product.name}, to My Musterring after confirmation.`,
+            answerType: "project",
+            productIds: [
+                product.id
+            ],
+            materialIds: [],
+            sources: [
+                "Musterring product catalogue"
+            ],
+            proposedAction: {
+                type: "SAVE_PRODUCT",
+                label: `Save ${product.modelCode} to My Musterring`,
+                parameters: {
+                    productId: product.id
+                },
+                requiresConfirmation: true
+            },
+            suggestedQuestions: [
+                "Open the product",
+                "Prepare my project for a retailer"
             ]
         });
     }
@@ -2378,7 +2563,7 @@ function answerGroundedQuestion(question, context) {
             ]
         });
     }
-    if (/material|dog|pet|children|care/.test(text) && !/sofa|armchair|sectional|compare|find|show me|i need/.test(text)) {
+    if (/material|dog|pet|children|care/.test(text) && !/sofa|couch|armchair|chair|sectional|table|bed|wardrobe|outdoor|carpet|rug|lamp|compare|find|show me|i need|i want/.test(text)) {
         const advice = parseMaterialNeeds(question);
         return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
             answer: "These recommendations use only recorded material durability, easy-care, family, pet and light-sensitivity attributes. No material is described as stain-proof, scratch-proof or allergy-safe.",
@@ -2404,7 +2589,7 @@ function answerGroundedQuestion(question, context) {
             ]
         });
     }
-    if (/fit|door|through/.test(text)) {
+    if (/\b(fit|door|doorway|delivery route|through)\b/.test(text)) {
         return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
             answer: current ? `Available product data lists ${current.modelCode} package guidance, but physical fit cannot be confirmed here. Use Will It Fit? with your measured route and retailer verification.` : "Select a product and use Will It Fit? with measured room and delivery-route data.",
             answerType: "fit",
@@ -2456,13 +2641,20 @@ function answerGroundedQuestion(question, context) {
             ]
         });
     }
-    if (/highest seat|difference|compare/.test(text) && referenced.length >= 2) {
+    if (/highest seat|lowest seat|smallest|most compact|narrowest|widest|difference|compare/.test(text) && referenced.length >= 2) {
         const selected = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].filter((product)=>referenced.includes(product.id));
-        const highest = [
+        const highlighted = /lowest seat/.test(text) ? [
+            ...selected
+        ].sort((a, b)=>a.seatHeightMm - b.seatHeightMm)[0] : /smallest|most compact|narrowest/.test(text) ? [
+            ...selected
+        ].sort((a, b)=>a.widthMm - b.widthMm)[0] : /widest/.test(text) ? [
+            ...selected
+        ].sort((a, b)=>b.widthMm - a.widthMm)[0] : [
             ...selected
         ].sort((a, b)=>b.seatHeightMm - a.seatHeightMm)[0];
+        const comparisonText = /smallest|most compact|narrowest/.test(text) ? `${highlighted.modelCode} is the narrowest referenced product at ${highlighted.widthMm / 10} cm.` : /widest/.test(text) ? `${highlighted.modelCode} is the widest referenced product at ${highlighted.widthMm / 10} cm.` : /lowest seat/.test(text) ? `${highlighted.modelCode} has the lowest recorded seat height among these products at ${highlighted.seatHeightMm / 10} cm.` : `${highlighted.modelCode} has the highest recorded seat height among these products at ${highlighted.seatHeightMm / 10} cm.`;
         return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
-            answer: `${highest.modelCode} has the highest recorded seat height among these products at ${highest.seatHeightMm / 10} cm. Final options must be confirmed against validated product data.`,
+            answer: `${comparisonText} Final options must be confirmed against validated product data.`,
             answerType: "comparison",
             productIds: selected.map((product)=>product.id),
             materialIds: [],
@@ -2483,10 +2675,14 @@ function answerGroundedQuestion(question, context) {
             ]
         });
     }
-    if (current && /seat|dimension|width|price|electric|relax|modular/.test(text)) {
-        const facts = `${current.modelCode} is recorded at ${current.widthMm / 10} cm wide with a ${current.seatHeightMm / 10} cm seat height. ${current.modular ? "It is marked modular." : "It is not marked modular."}`;
+    if (current && /seat|dimension|width|depth|height|price|cost|colou?r|material|electric|relax|modular|function/.test(text) && !/\b(i want|i need|show me|find|search|looking for|recommend)\b/.test(text)) {
+        const recordedMaterials = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["materials"].filter((material)=>current.materials.includes(material.id));
+        const facts = /price|cost/.test(text) ? `No confirmed price for ${current.modelCode} is available in the connected catalogue data.` : /colou?r/.test(text) ? `${current.modelCode} has these recorded colour families: ${current.colors.join(", ") || "none recorded"}.` : /material/.test(text) ? `${current.modelCode} has these validated material options: ${recordedMaterials.map((material)=>material.name).join(", ") || "none recorded"}.` : /electric|relax|function/.test(text) ? `${current.modelCode} has these recorded functions: ${[
+            ...current.functions,
+            ...current.electricFunctions
+        ].join(", ") || "none recorded"}.` : `${current.modelCode} is recorded at ${current.widthMm / 10} cm wide, ${current.depthMm / 10} cm deep and ${current.heightMm / 10} cm high, with a ${current.seatHeightMm / 10} cm seat height. ${current.modular ? "It is marked modular." : "It is not marked modular."}`;
         return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
-            answer: `${facts} Final pricing and availability are confirmed by the selected Musterring retailer.`,
+            answer: `${facts} Final pricing, availability and technical confirmation are provided by the selected Musterring retailer.`,
             answerType: "fact",
             productIds: [
                 current.id
@@ -2509,61 +2705,12 @@ function answerGroundedQuestion(question, context) {
             ]
         });
     }
-    if (/sofa|armchair|sectional|find|show me|i need/.test(text)) {
-        const category = /armchair/.test(text) ? "armchair" : /sectional|corner/.test(text) ? "sectional" : "sofa";
-        const width = text.match(/(?:under|below|max(?:imum)?|must be under)\s*(\d{2,3})\s*cm/);
-        const requestedColors = colors.filter((color)=>text.includes(color));
-        const wantsEasyCare = /easy[- ]care|family|children|pets?|dog/.test(text);
-        const ranked = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["products"].filter((product)=>product.active && product.category === category && (!width || product.widthMm <= Number(width[1]) * 10) && (!requestedColors.length || requestedColors.some((color)=>product.colors.includes(color))) && (!wantsEasyCare || product.materials.some((id)=>__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$data$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["materials"].find((material)=>material.id === id)?.easyCare))).sort((left, right)=>left.widthMm - right.widthMm).slice(0, 4);
-        if (ranked.length) {
-            const ids = ranked.map((product)=>product.id);
-            return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
-                answer: `I found ${ranked.length} catalogue product${ranked.length === 1 ? "" : "s"} that satisfy the stated hard filters. Recommendations are based on available Musterring product data.`,
-                answerType: "products",
-                productIds: ids,
-                materialIds: [],
-                sources: [
-                    "Musterring product catalogue",
-                    ...wantsEasyCare ? [
-                        "Musterring concept material metadata"
-                    ] : []
-                ],
-                proposedAction: /compare/.test(text) && ids.length > 1 ? {
-                    type: "COMPARE_PRODUCTS",
-                    label: "Compare the strongest matches",
-                    parameters: {
-                        productIds: ids.slice(0, 3)
-                    },
-                    requiresConfirmation: false
-                } : null,
-                suggestedQuestions: [
-                    "Which one has the highest seat?",
-                    "Save the second one",
-                    "Find a smaller alternative"
-                ]
-            });
-        }
-        return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
-            answer: "No catalogue product satisfies every stated hard filter. I can help relax one condition or show clearly labelled alternatives.",
-            answerType: "missing-data",
-            productIds: [],
-            materialIds: [],
-            sources: [
-                "Musterring product catalogue"
-            ],
-            proposedAction: null,
-            suggestedQuestions: [
-                "Increase the maximum width",
-                "Show closest alternatives"
-            ]
-        });
-    }
+    const discovery = productDiscoveryAnswer(question);
+    if (discovery) return discovery;
     return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$assistant$2d$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["advisorAnswerSchema"].parse({
         answer: "Information is not currently available in the connected product data. Ask about Musterring products, materials, configuration, room planning, fit guidance, saved projects or retailer preparation.",
         answerType: "missing-data",
-        productIds: current ? [
-            current.id
-        ] : referenced,
+        productIds: [],
         materialIds: [],
         sources: [],
         proposedAction: null,
@@ -2762,7 +2909,11 @@ class LocalDemoAIProvider {
         const text = request.toLowerCase();
         return __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$schemas$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["configurationRequirementsSchema"].parse({
             customerRequest: request,
-            category: intent.category === "storage" ? null : intent.category,
+            category: intent.category && [
+                "sofa",
+                "armchair",
+                "sectional"
+            ].includes(intent.category) ? intent.category : null,
             colorFamily: intent.colorFamilies?.[0] ?? null,
             materialType: /leather/.test(text) ? "leather" : /fabric|easy[- ]care/.test(text) ? "fabric" : null,
             easyCare: /easy[- ]care|pflegeleicht|dog|pet|family|familie|children|kinder/.test(text),
@@ -3002,6 +3153,8 @@ class OpenAIProvider {
         ]);
     }
     async answerProductQuestion(input) {
+        const grounded = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$assistant$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["answerGroundedQuestion"])(input.question, input.context);
+        if (grounded.answerType !== "missing-data" || grounded.productIds.length || grounded.sources.length) return grounded;
         const candidateIds = [
             ...new Set([
                 ...input.context.referencedProductIds ?? [],
@@ -3016,9 +3169,16 @@ class OpenAIProvider {
                 name: product.name,
                 category: product.category,
                 widthMm: product.widthMm,
+                depthMm: product.depthMm,
+                heightMm: product.heightMm,
                 seatHeightMm: product.seatHeightMm,
+                seatDepthMm: product.seatDepthMm,
+                numberOfSeats: product.numberOfSeats,
+                colors: product.colors,
                 materials: product.materials,
+                styles: product.styles,
                 functions: product.functions,
+                electricFunctions: product.electricFunctions,
                 modular: product.modular,
                 demoData: product.demoData
             }));
@@ -3302,7 +3462,11 @@ async function hybridCatalogueSearch(intent, semantic = new LocalSemanticRetriev
         const requiredMatches = Math.max(0, checks.length - 1);
         return checks.filter(Boolean).length >= requiredMatches;
     };
-    const closeAlternatives = ranked.filter(({ product })=>!exactIds.has(product.id) && (!intent.category || product.category === intent.category) && isRelevantAlternative(product)).slice(0, 6).map((match)=>({
+    const closeAlternatives = ranked.filter(({ product })=>!exactIds.has(product.id) && (!intent.category || product.category === intent.category) && // Preserve an explicitly requested colour whenever the catalogue has that
+        // colour in the requested category. A request such as "red sofa" must not
+        // be followed by a wall of beige and grey sofas. Wrong-colour alternatives
+        // are useful only when the requested colour is unavailable altogether.
+        (!requestedColors.length || !exactColorAvailable || requestedColors.some((color)=>product.colors.includes(color))) && isRelevantAlternative(product)).slice(0, 6).map((match)=>({
             ...match,
             reasons: requestedColors.length && !requestedColors.some((color)=>match.product.colors.includes(color)) ? [
                 `not available in requested ${requestedColors.join(", ")}`,
@@ -3391,9 +3555,25 @@ async function POST(request) {
         }
         return provider.parseSearchIntent(parsed.data.query);
     });
-    const results = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$retrieval$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["hybridCatalogueSearch"])(interpreted.data);
+    const deterministic = await new __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$providers$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["LocalDemoAIProvider"]().parseSearchIntent(parsed.data.query);
+    const intent = {
+        ...interpreted.data,
+        queryText: parsed.data.query,
+        category: deterministic.category ?? interpreted.data.category,
+        colorFamilies: deterministic.colorFamilies ?? interpreted.data.colorFamilies,
+        materials: deterministic.materials ?? interpreted.data.materials,
+        maxWidthMm: deterministic.maxWidthMm ?? interpreted.data.maxWidthMm,
+        minSeatHeightMm: deterministic.minSeatHeightMm ?? interpreted.data.minSeatHeightMm,
+        maxSeatDepthMm: deterministic.maxSeatDepthMm ?? interpreted.data.maxSeatDepthMm,
+        numberOfSeats: deterministic.numberOfSeats ?? interpreted.data.numberOfSeats,
+        modular: deterministic.modular ?? interpreted.data.modular,
+        functions: deterministic.functions ?? interpreted.data.functions,
+        styles: deterministic.styles ?? interpreted.data.styles,
+        smallSpaceSuitable: deterministic.smallSpaceSuitable ?? interpreted.data.smallSpaceSuitable
+    };
+    const results = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$ai$2f$retrieval$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["hybridCatalogueSearch"])(intent);
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-        intent: interpreted.data,
+        intent,
         exactMatches: results.exactMatches.map(({ product, reasons })=>({
                 product,
                 reasons

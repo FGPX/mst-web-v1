@@ -60,6 +60,7 @@ describe("grounded hybrid retrieval", () => {
     const result = await hybridCatalogueSearch(searchIntentSchema.parse({ ...baseIntent, queryText: "red sofa", colorFamilies: ["red"], maxWidthMm: null, modular: null, smallSpaceSuitable: null }));
     expect(result.exactMatches.length).toBeGreaterThan(0);
     expect(result.exactMatches.every(({ product }) => product.category === "sofa" && product.colors.includes("red"))).toBe(true);
+    expect(result.closeAlternatives).toHaveLength(0);
   });
 
   it("grounds visual results in catalogue IDs", () => {

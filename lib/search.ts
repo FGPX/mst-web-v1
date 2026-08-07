@@ -1,7 +1,8 @@
 import { products } from "./data";
 import type { Product, SearchFilters } from "./types";
 
-const colorTerms = ["beige", "ivory", "taupe", "stone", "charcoal", "black", "white", "brown", "oak", "natural", "cream", "green", "grey", "graphite", "red", "burgundy", "barolo", "purple", "yellow", "mustard", "cognac", "sand"];
+export const searchColorTerms = ["beige", "ivory", "taupe", "stone", "charcoal", "black", "white", "brown", "oak", "natural", "cream", "green", "grey", "graphite", "red", "burgundy", "barolo", "purple", "blue", "orange", "pink", "yellow", "mustard", "cognac", "sand"];
+export const searchStyleTerms = ["modern", "minimal", "contemporary", "classic", "industrial", "natural", "elegant"];
 const stopWords = new Set(["want", "something", "like", "this", "that", "with", "from", "have", "need", "looking", "product", "piece", "please", "show", "find", "furniture", "maximum", "about"]);
 const corrections: Record<string, string> = {
   wnat: "want",
@@ -51,19 +52,29 @@ function tokenMatches(queryToken: string, candidate: string) {
 export function parseSearchQuery(query: string): SearchFilters {
   const q = query.trim();
   const text = q.toLowerCase()
+    .replace(/\bbeig(?:e|es|er|en|em)?\b/g, "beige")
     .replace(/\brot(?:es|er|e)?\b/g, "red")
     .replace(/\bgrau(?:es|er|e)?\b/g, "grey")
     .replace(/\bbraun(?:es|er|e)?\b/g, "brown")
     .replace(/\bgrÃ¼n(?:es|er|e)?\b|\bgrün(?:es|er|e)?\b/g, "green")
     .replace(/\bweiÃŸ(?:es|er|e)?\b|\bweiß(?:es|er|e)?\b/g, "white");
   const filters: SearchFilters = { q };
-  if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
-  if (/coffee table|side table|couchtisch/.test(text)) filters.category = "coffee-table";
-  if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
-  if (/armchair|chair|sessel/.test(text)) filters.category = "armchair";
-  if (/sectional|corner|chaise|eck|wohnlandschaft/.test(text)) filters.category = "sectional";
-  if (/sofa|couch/.test(text)) filters.category = "sofa";
-  const code = text.match(/\bmr\s?-?\d{4}\b/i)?.[0]?.replace(/\s|-/, " ").toUpperCase();
+  if (/dining chair|dining seat|esszimmerstuhl|stuhl/.test(text)) filters.category = "dining-chair";
+  else if (/armchair|accent chair|recliner|\bchair\b|sessel/.test(text)) filters.category = "armchair";
+  else if (/sectional|corner sofa|corner couch|chaise|ecksofa|wohnlandschaft/.test(text)) filters.category = "sectional";
+  else if (/sofa|couch/.test(text)) filters.category = "sofa";
+  else if (/coffee table|side table|couchtisch|beistelltisch/.test(text)) filters.category = "coffee-table";
+  else if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
+  else if (/wardrobe|closet|kleiderschrank/.test(text)) filters.category = "wardrobe";
+  else if (/bedroom series|bedroom furniture|schlafzimmerprogramm/.test(text)) filters.category = "bedroom-series";
+  else if (/\bbed\b|upholstered bed|boxspring|bett/.test(text)) filters.category = "bed";
+  else if (/bathroom|bath furniture|badmoebel|badmöbel/.test(text)) filters.category = "bathroom";
+  else if (/outdoor|garden furniture|patio|gartenmoebel|gartenmöbel/.test(text)) filters.category = "outdoor";
+  else if (/carpet|\brug\b|teppich/.test(text)) filters.category = "carpet";
+  else if (/\blamp\b|lighting|leuchte/.test(text)) filters.category = "lamp";
+  else if (/small furniture|occasional furniture/.test(text)) filters.category = "small-furniture";
+  else if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
+  const code = text.match(/\bmr\s*-?\s*\d{3,4}\b/i)?.[0]?.replace(/[\s-]+/g, " ").toUpperCase();
   if (code) filters.modelCode = code;
   const width = text.match(/(?:max(?:imum)?|under|below|unter|bis|maximale breite|maximum width)?\s*(\d{2,3})\s*(?:cm|centimeter)/);
   if (width) filters.maxWidthMm = Number(width[1]) * 10;
@@ -71,8 +82,10 @@ export function parseSearchQuery(query: string): SearchFilters {
   const seatWord = text.match(/\b(two|three|four)[- ](?:seat|seater)\b/)?.[1];
   if (seats) filters.seatCount = Number(seats[1]);
   else if (seatWord) filters.seatCount = { two: 2, three: 3, four: 4 }[seatWord];
-  const colors = colorTerms.filter((color) => text.includes(color));
+  const colors = searchColorTerms.filter((color) => new RegExp(`\\b${color.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text));
   if (colors.length) filters.colors = colors;
+  const styles = searchStyleTerms.filter((style) => new RegExp(`\\b${style}\\b`).test(text));
+  if (styles.length) filters.styles = styles;
   if (/modular|module|flexible/.test(text)) filters.modular = true;
   if (/small|compact|apartment|wohnung|klein/.test(text)) filters.smallSpaceSuitable = true;
   if (/high[- ]seat|tall person|hohe sitzhÃ¶he|hohe sitzhöhe|gro(?:ÃŸ|ß|ss)e person/.test(text)) filters.minSeatHeightMm = 470;
@@ -130,7 +143,7 @@ export function searchProductsRanked(query: string, limit = 12): RankedProduct[]
 
   return products
     .filter((product) => product.active)
-    .filter((product) => !parsed.colors?.length || parsed.colors.some((color) => product.colors.includes(color)))
+    .filter((product) => productMatches(product, { ...parsed, q: undefined }))
     .map((product) => {
       const copy = [
         product.modelCode,
