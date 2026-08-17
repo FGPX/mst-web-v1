@@ -27,9 +27,9 @@
 }
 
 .stitch-ai-search-hero {
-  min-height: 640px;
+  min-height: 700px;
   /* The global navigation is fixed at 80px, so the hero needs its own offset. */
-  padding: 120px 0 72px;
+  padding: 116px 0 72px;
 }
 
 .stitch-ai-search.has-results .stitch-ai-search-hero {
@@ -49,26 +49,51 @@
   text-transform: uppercase;
 }
 
+.stitch-ai-search-hero .stitch-ai-kicker {
+  justify-content: center;
+  margin-bottom: 12px;
+  color: var(--stitch-accent);
+  font-size: 10px;
+}
+
+.stitch-ai-title {
+  margin: 0 0 24px;
+  text-align: center;
+  font-family: var(--stitch-font-display);
+  font-size: clamp(32px, 3.2vw, 46px);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.stitch-ai-search-hero form {
+  width: min(900px, 100%);
+  margin: 0 auto;
+}
+
 .stitch-ai-input-row {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   align-items: center;
-  gap: 16px;
-  min-height: 84px;
-  border-bottom: 2px solid var(--stitch-text-primary);
+  gap: 12px;
+  min-height: 58px;
+  border: 1px solid #ded8cf;
+  border-radius: 999px;
+  padding: 5px 6px 5px 18px;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(27, 28, 25, .1);
 }
 
 .stitch-ai-input-row input {
   width: 100%;
   border: 0;
   outline: 0;
-  padding: 18px 0 20px;
+  padding: 12px 0;
   background: transparent;
   color: var(--stitch-text-primary);
-  font-family: var(--stitch-font-display);
-  font-size: clamp(32px, 3vw, 44px);
-  letter-spacing: -0.035em;
-  line-height: 1.05;
+  font-family: var(--stitch-font-ui);
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 1.3;
 }
 
 .stitch-ai-input-row input::placeholder {
@@ -76,8 +101,8 @@
 }
 
 .stitch-ai-input-row button {
-  width: 52px;
-  height: 52px;
+  width: 46px;
+  height: 46px;
   border: 0;
   display: grid;
   place-items: center;
@@ -85,7 +110,8 @@
 }
 
 .stitch-ai-input-row button:last-child {
-  background: var(--stitch-text-primary);
+  border-radius: 50%;
+  background: var(--stitch-accent);
   color: var(--stitch-bg-primary);
 }
 
@@ -96,20 +122,26 @@
 }
 
 .stitch-ai-discovery {
+  width: min(1080px, 100%);
+  margin: 38px auto 0;
   display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 48px;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 20px;
   align-items: stretch;
 }
 
 .stitch-ai-visual-entry {
-  min-height: 300px;
-  border: 2px dashed var(--stitch-border);
+  min-height: 270px;
+  border: 1px dashed #d5cec4;
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 10px;
+  padding: 24px;
+  background: #fff;
+  box-shadow: 0 10px 32px rgba(27, 28, 25, .06);
   text-align: center;
   color: inherit;
   transition: background 180ms ease, border-color 180ms ease;
@@ -122,36 +154,94 @@
 
 .stitch-ai-visual-entry strong {
   font-family: var(--stitch-font-display);
-  font-size: 24px;
+  font-size: 21px;
 }
 
 .stitch-ai-visual-entry span {
-  max-width: 210px;
-  font-size: 12px;
+  max-width: 170px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
+.stitch-ai-visual-entry i {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 2px;
+  border-radius: 50%;
+  background: var(--stitch-bg-secondary);
+  color: var(--stitch-accent);
+}
+
+.stitch-ai-visual-entry b {
+  margin-top: 4px;
+  border-radius: 999px;
+  padding: 9px 18px;
+  background: var(--stitch-text-primary);
+  color: var(--stitch-bg-primary);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.stitch-ai-search-lists {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border: 1px solid #e3ddd4;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 10px 32px rgba(27, 28, 25, .06);
+}
+
+.stitch-ai-search-lists > section {
+  min-width: 0;
+  padding: 26px 28px;
+}
+
+.stitch-ai-search-lists > section + section {
+  border-left: 1px solid #e6e0d8;
+}
+
+.stitch-ai-search-lists .stitch-ai-label {
+  margin-bottom: 14px;
+  font-size: 10px;
+}
+
 .stitch-ai-suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 30px;
+  display: grid;
+  gap: 6px;
+  margin: 0;
 }
 
 .stitch-ai-suggestions button {
+  min-width: 0;
   border: 0;
-  border-radius: 999px;
-  padding: 11px 18px;
-  background: var(--stitch-bg-secondary);
-  font-size: 15px;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--stitch-bg-low);
+  color: var(--stitch-text-secondary);
+  font-size: 12px;
+  text-align: left;
 }
 
 .stitch-ai-suggestions button:hover {
-  background: var(--stitch-text-primary);
-  color: var(--stitch-bg-primary);
+  background: var(--stitch-bg-secondary);
+  color: var(--stitch-accent);
 }
+
+.stitch-ai-suggestions button svg { flex: 0 0 auto; }
+.stitch-ai-empty-recent { margin: 0; color: var(--stitch-text-secondary); font-size: 12px; }
+
+.stitch-ai-search.has-results .stitch-ai-title { display: none; }
+.stitch-ai-search.has-results .stitch-ai-search-hero .stitch-ai-kicker { justify-content: flex-start; }
 
 .stitch-ai-recent {
   display: grid;
@@ -1344,8 +1434,14 @@
   }
 
   .stitch-ai-input-row input {
-    font-size: 30px;
+    font-size: 13px;
   }
+
+  .stitch-ai-title { margin-bottom: 18px; font-size: 30px; }
+  .stitch-ai-discovery { margin-top: 28px; }
+  .stitch-ai-search-lists { grid-template-columns: 1fr; }
+  .stitch-ai-search-lists > section { padding: 22px; }
+  .stitch-ai-search-lists > section + section { border-left: 0; border-top: 1px solid #e6e0d8; }
 
   .stitch-ai-example {
     margin-bottom: 42px;
@@ -2461,13 +2557,14 @@ body:has(.stitch-project) .stitch-project-entry { border-bottom-color: var(--sti
 .stitch-search-autocomplete {
   position: relative;
   z-index: 3;
-  width: min(680px, calc(100% - 44px));
-  margin: -1px 0 24px 44px;
+  width: min(840px, calc(100% - 40px));
+  max-height: 380px;
+  margin: 8px auto 24px;
   display: grid;
-  overflow: hidden;
+  overflow: auto;
   border: 1px solid rgba(25, 24, 21, 0.16);
-  border-top: 3px solid var(--stitch-accent);
-  background: var(--stitch-bg-primary);
+  border-radius: 14px;
+  background: #fff;
   box-shadow: 0 18px 44px rgba(25, 24, 21, 0.12);
 }
 

@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ArrowRight, Camera, Search, Sparkles, X } from "lucide-react";
+import { ArrowRight, Camera, History, Search, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -132,10 +132,11 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
       <section className="stitch-ai-search-hero">
         <div className="container">
           <div className="stitch-ai-kicker"><Sparkles size={16} /> Guided Product Search</div>
+          <h1 className="stitch-ai-title">What are you looking for?</h1>
           <form onSubmit={(event) => { event.preventDefault(); void submit(); }} role="search">
             <div className="stitch-ai-input-row">
-              <Search size={28} />
-              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="What are you looking for?" aria-label="Describe the furniture you are looking for" />
+              <Search size={20} />
+              <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try: I need a compact beige modular sofa for a small apartment, maximum width 240 cm." aria-label="Describe the furniture you are looking for" />
               {query ? <button type="button" aria-label="Clear search" onClick={() => { setQuery(""); setSubmitted(""); setResponse(null); }}><X /></button> : null}
               <button type="submit" aria-label="Search products"><ArrowRight /></button>
             </div>
@@ -154,14 +155,17 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               ))}
             </div>
           ) : null}
-          {!submitted ? <p className="stitch-ai-example">Try: “I need a compact beige modular sofa for a small apartment, maximum width 240 cm.”</p> : null}
           {!submitted ? <div className="stitch-ai-discovery">
-            <Link className="stitch-ai-visual-entry" href="/visual-search"><Camera size={48} /><strong>Visual Search</strong><span>Upload an image to find similar pieces</span></Link>
-            <div>
-              <p className="stitch-ai-label">Suggested searches</p>
-              <div className="stitch-ai-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion.query} onClick={() => void submit(suggestion.query)}>{suggestion.label}</button>)}</div>
-              <p className="stitch-ai-label">Recent searches</p>
-              {recent.length ? <div className="stitch-ai-suggestions" aria-label="Recent searches">{recent.map((item) => <button type="button" key={item} onClick={() => void submit(item)}>{item}</button>)}</div> : null}
+            <Link className="stitch-ai-visual-entry" href="/visual-search"><i aria-hidden="true"><Camera size={24} /></i><strong>Visual Search</strong><span>Upload an image to find similar pieces</span><b>Upload image</b></Link>
+            <div className="stitch-ai-search-lists">
+              <section>
+                <p className="stitch-ai-label">Suggested searches</p>
+                <div className="stitch-ai-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion.query} onClick={() => void submit(suggestion.query)}><Search size={13} />{suggestion.label}</button>)}</div>
+              </section>
+              <section>
+                <p className="stitch-ai-label">Recent searches</p>
+                {recent.length ? <div className="stitch-ai-suggestions" aria-label="Recent searches">{recent.slice(0, 5).map((item) => <button type="button" key={item} onClick={() => void submit(item)}><History size={13} />{item}</button>)}</div> : <p className="stitch-ai-empty-recent">Your recent searches will appear here.</p>}
+              </section>
             </div>
           </div> : null}
         </div>
