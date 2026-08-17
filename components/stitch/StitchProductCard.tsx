@@ -9,7 +9,7 @@ import { storage } from "@/lib/persistence";
 import { productImages } from "@/lib/musterring-assets";
 import { AlternativeFinderButton } from "../AlternativeFinderButton";
 
-export function StitchProductCard({ product, explanation, imageOverride, imageNote }: { product: Product; explanation?: string; imageOverride?: string; imageNote?: string }) {
+export function StitchProductCard({ product, explanation, imageOverride, imageNote, showMeta = true }: { product: Product; explanation?: string; imageOverride?: string; imageNote?: string; showMeta?: boolean }) {
   const image = imageOverride ?? productImages(product.id)[0];
   const isConfigurable = ["sofa", "sectional", "armchair"].includes(product.category);
   const canPlaceInRoom = ["sofa", "sectional", "armchair", "storage", "coffee-table"].includes(product.category);
@@ -27,11 +27,11 @@ export function StitchProductCard({ product, explanation, imageOverride, imageNo
         <p className="stitch-eyebrow">{product.modelCode}</p>
         <h3>{product.name}</h3>
         <p>{product.subtitle}</p>
-        <p className="stitch-product-meta">
+        {showMeta ? <p className="stitch-product-meta">
           {product.authorizedContent
             ? "Configuration-dependent dimensions · Price available from retailer"
             : `${dimensions(product.widthMm, product.depthMm, product.heightMm)} · Starting from ${formatEuro(product.indicativePriceCents)}`}
-        </p>
+        </p> : null}
         {explanation ? <p className="stitch-product-explanation">{explanation}</p> : null}
         <div className="stitch-product-actions" aria-label="Product actions">
           <AlternativeFinderButton productId={product.id} label="Better Match" className="stitch-product-action-match" />

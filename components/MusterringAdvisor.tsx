@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import { usePathname, useRouter } from "next/navigation";
-import { Check, ChevronDown, Mic, MicOff, Send, Sparkles, Trash2, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowRight, Check, Mic, MicOff, Send, Sparkles, Trash2, Volume2, VolumeX, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { materials, products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -29,7 +29,6 @@ export function MusterringAdvisor() {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [minimized, setMinimized] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [pending, setPending] = useState(false);
@@ -52,7 +51,7 @@ export function MusterringAdvisor() {
   useEffect(() => {
     const show = (event: Event) => {
       const detail = (event as CustomEvent<{ mode?: "voice"; prompt?: string }>).detail;
-      setOpen(true); setMinimized(false);
+      setOpen(true);
       storage.track({ name: "chatbot_opened", route: pathname });
       if (detail?.prompt) setInput(detail.prompt);
       if (detail?.mode === "voice") window.setTimeout(() => void startVoice(), 50);
@@ -79,7 +78,7 @@ export function MusterringAdvisor() {
       window.cancelAnimationFrame(focusFrame);
       window.removeEventListener("keydown", key);
     };
-  }, [open, minimized]);
+  }, [open]);
   const speak = (text: string) => {
     if (muted || !voiceEnabled || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
@@ -186,17 +185,16 @@ export function MusterringAdvisor() {
     setContext(next); window.sessionStorage.removeItem(memoryKey);
   };
   if (!open) return <div className="assistant-dock" aria-label="Musterring assistance">
-    <button className="advisor-launcher" aria-label="Open Musterring Product Advisor" onClick={() => { setOpen(true); setMinimized(false); storage.track({ name: "chatbot_opened" }); }}><Sparkles /><span><small>AI Product Advisor</small><strong>Ask Musterring</strong></span></button>
-    <button className="voice-launcher" aria-label="Start Voice Interior Assistant" title="Use voice assistant" onClick={() => { setOpen(true); setMinimized(false); window.setTimeout(() => void startVoice(), 50); }}><Mic /></button>
+    <button className="advisor-launcher" aria-label="Open Musterring Product Advisor" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><Sparkles /><span><small>AI Product Advisor</small><strong>Ask Musterring</strong></span></button>
+    <button className="voice-launcher" aria-label="Start Voice Interior Assistant" title="Use voice assistant" onClick={() => { setOpen(true); window.setTimeout(() => void startVoice(), 50); }}><Mic /></button>
   </div>;
-  return <aside className={`advisor-panel ${minimized ? "is-minimized" : ""}`} role="dialog" aria-modal="true" aria-labelledby="advisor-title">
-    <header><div><p>Intelligent product guidance</p><h2 id="advisor-title">Musterring Product Advisor</h2></div><button aria-label={minimized ? "Expand Product Advisor" : "Minimize Product Advisor"} onClick={() => setMinimized((value) => !value)}><ChevronDown /></button><button aria-label="Close Product Advisor" onClick={() => setOpen(false)}><X /></button></header>
-    {!minimized ? <>
+  return <aside className="advisor-panel" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
+    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p>AI Product Advisor</p><h2 id="advisor-title">Ask Musterring</h2></div><button aria-label="Close Product Advisor" onClick={() => setOpen(false)}><X /></button></header>
       <p className="advisor-transparency">The Musterring Product Advisor uses available product and project data to help you explore options. Final prices, availability and technical confirmation are provided by a Musterring retailer.</p>
       <div className="advisor-toolbar"><button aria-label={muted ? "Enable spoken feedback" : "Mute spoken feedback"} onClick={() => setMuted((value) => !value)}>{muted ? <VolumeX /> : <Volume2 />}</button><button onClick={() => setVoiceEnabled((value) => !value)}>{voiceEnabled ? <Mic /> : <MicOff />} Voice {voiceEnabled ? "on" : "off"}</button><button onClick={clear}><Trash2 /> New conversation</button></div>
       <div className="advisor-messages" aria-live="polite">
-        {!messages.length ? <div className="advisor-welcome"><h3>How may I help with your Musterring journey?</h3><div>{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}</button>)}</div></div> : null}
-        {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><small>{message.role === "customer" ? "You" : "Musterring Product Advisor"}</small><p>{message.text}</p>
+        {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><span aria-hidden="true"><Sparkles /></span><div><h3>Hello! I’m your Musterring AI Product Advisor.</h3><p>I can help you explore furniture, materials, configurations, and find the right pieces for your space.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}</button>)}</div></div> : null}
+        {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Product Advisor"}</small><p>{message.text}</p></div></div>
           {message.answer?.productIds.length ? <div className="advisor-products">
             {message.answer.answerType === "missing-data" ? <small className="advisor-product-group-label">Closest recommendations — requested option unavailable</small> : null}
             {message.answer.productIds.map((id) => {
@@ -215,12 +213,9 @@ export function MusterringAdvisor() {
       </div>
       {pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
       <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask about products, materials, configuration, fit or your project…" /><button type="button" aria-label="Use microphone" onClick={() => void startVoice()} disabled={!voiceEnabled}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending}><Send /></button></form>
-      <button className="advisor-voice-demo" disabled={!input.trim()} onClick={() => void parseVoiceText(input)}>Interpret typed text as a voice command</button>
-      <button className="advisor-voice-demo" onClick={() => void parseVoiceText("Show me a modular corner sofa in beige, then add a matching table to my Living Room Project.")}>Try the voice demo as text</button>
-    </> : null}
   </aside>;
 }
 
 function LinkCard({ product, imageOverride }: { product: typeof products[number]; imageOverride?: string }) {
-  return <a href={`/furniture/${product.slug}`}><Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={120} height={84} /><span><small>Product ID {product.id}</small><strong>{product.modelCode}</strong><em>{product.name}</em></span></a>;
+  return <a href={`/furniture/${product.slug}`}><Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={260} height={180} /><span><strong>{product.modelCode}</strong><small>{product.category.replaceAll("-", " ")}</small><em>{product.subtitle}</em><b>View details <ArrowRight size={15} /></b></span></a>;
 }
