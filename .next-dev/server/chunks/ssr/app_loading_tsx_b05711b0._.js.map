@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Pc/ClaimsIkonAI/mst-web-v1/app/loading.tsx"],"sourcesContent":["export default function Loading() {\r\n  return <section className=\"app-route-loading\" aria-live=\"polite\" aria-busy=\"true\"><div className=\"container\"><p className=\"eyebrow\">Musterring</p><h1 className=\"h2\">Preparing your experience…</h1><p>Loading validated product and project data.</p></div></section>;\n}\r\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBAAO,8OAAC;QAAQ,WAAU;QAAoB,aAAU;QAAS,aAAU;kBAAO,cAAA,8OAAC;YAAI,WAAU;;8BAAY,8OAAC;oBAAE,WAAU;8BAAU;;;;;;8BAAc,8OAAC;oBAAG,WAAU;8BAAK;;;;;;8BAA+B,8OAAC;8BAAE;;;;;;;;;;;;;;;;;AACzM","debugId":null}}]
-}
