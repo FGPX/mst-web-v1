@@ -13,8 +13,8 @@
   --radius: 8px;
   --container: 1320px;
   --shadow: 0 20px 60px rgba(27, 28, 25, 0.1);
-  --font-caslon: "Libre Caslon Text", Georgia, "Times New Roman", serif;
-  --font-manrope: Manrope, "Segoe UI", Arial, sans-serif;
+  --font-caslon: "Frutiger LT Pro", "FrutigerLTPro", Frutiger, "Helvetica Neue", Arial, sans-serif;
+  --font-manrope: "Frutiger LT Pro", "FrutigerLTPro", Frutiger, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Presentation experiences: Stitch intelligent search, visual match, composer and configurator */
