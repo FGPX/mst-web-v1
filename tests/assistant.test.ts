@@ -5,6 +5,7 @@ import {
   parseVoiceCommandDeterministic, validateProposedConfiguration
 } from "@/lib/assistant";
 import { createConfiguration } from "@/lib/configurator";
+import { productImageForColors } from "@/lib/musterring-assets";
 import { voiceCommandSchema, type ConversationContext } from "@/lib/ai/assistant-schemas";
 
 const context: ConversationContext = {
@@ -24,6 +25,52 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.exactMatches).toHaveLength(0);
     expect(result.closestAlternatives).toHaveLength(0);
     expect(result.message).toMatch(/No exact alternative/);
+  });
+
+  it.each(["red sofa", "sofa red"])("treats colour and category as hard alternative requirements: %s", (requestText) => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText });
+    expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["sofa", "red colour"]));
+    expect(result.requestedColorFamilies).toEqual(["red"]);
+    expect(result.exactMatches.length).toBeGreaterThan(0);
+    expect(result.exactMatches.every((match) => {
+      const product = products.find((item) => item.id === match.productId)!;
+      return product.category === "sofa" && product.colors.includes("red");
+    })).toBe(true);
+    expect(result.exactMatches.some((match) => products.find((item) => item.id === match.productId)?.modelCode === "MR 260")).toBe(true);
+    expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("available in red"))).toBe(true);
+  });
+
+  it("uses the verified red catalogue presentation for the red MR 260 match", () => {
+    expect(productImageForColors("musterring-mr-260", ["red"])).toEqual({
+      src: "/musterring-catalog/mr-260/image-08-hq.jpg",
+      matchedColor: "red"
+    });
+  });
+
+  it("shows catalogue alternatives without claiming an unavailable colour is exact", () => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText: "purple sofa" });
+    expect(result.exactMatches).toHaveLength(0);
+    expect(result.closestAlternatives.length).toBeGreaterThan(0);
+    expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("available in purple"))).toBe(true);
+  });
+
+  it("ranks other suitable options according to each customer's request", () => {
+    const requests = [
+      "Similar product with a higher seat",
+      "Same style, but smaller",
+      "red sofa"
+    ];
+    const orders = requests.map((requestText) => findGroundedAlternatives({
+      sourceProductId: "musterring-justb-pm200",
+      requestText
+    }).closestAlternatives.map((match) => match.productId).join(","));
+    expect(new Set(orders).size).toBe(requests.length);
+  });
+
+  it("understands the easier-care quick request as a material requirement", () => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText: "Easier-care material" });
+    expect(result.interpretedRequirements).toContain("easy-care material");
+    expect([...result.exactMatches, ...result.closestAlternatives].every((match) => match.benefits.some((benefit) => /sofa category|easy-care/.test(benefit)))).toBe(true);
   });
 
   it("grounds material recommendations and care reasons in metadata", () => {

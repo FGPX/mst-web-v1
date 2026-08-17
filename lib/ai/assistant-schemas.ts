@@ -1,8 +1,17 @@
 import { z } from "zod";
 
+const catalogueCategorySchema = z.enum([
+  "sofa", "armchair", "sectional", "storage", "coffee-table", "bedroom-series", "bed", "wardrobe",
+  "dining-chair", "dining-table", "bathroom", "kitchen", "outdoor", "small-furniture", "carpet", "lamp", "home-textile"
+]);
+
 export const alternativeRequestSchema = z.object({
   sourceProductId: z.string().min(1),
   requestText: z.string().trim().max(1000).optional(),
+  category: catalogueCategorySchema.optional(),
+  colorFamilies: z.array(z.string().trim().min(1).max(80)).max(12).optional(),
+  styles: z.array(z.string().trim().min(1).max(80)).max(12).optional(),
+  numberOfSeats: z.number().int().positive().max(20).optional(),
   maxWidthMm: z.number().int().positive().optional(),
   minSeatHeightMm: z.number().int().nonnegative().optional(),
   maxIndicativePrice: z.number().int().nonnegative().optional(),
@@ -27,6 +36,8 @@ export const alternativeMatchSchema = z.object({
 
 export const alternativeResponseSchema = z.object({
   sourceProductId: z.string(),
+  interpretedRequirements: z.array(z.string()),
+  requestedColorFamilies: z.array(z.string()),
   exactMatches: z.array(alternativeMatchSchema),
   closestAlternatives: z.array(alternativeMatchSchema),
   message: z.string()

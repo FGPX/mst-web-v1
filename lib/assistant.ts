@@ -12,17 +12,23 @@ const colors = searchColorTerms;
 
 function requestedAlternative(input: AlternativeRequest, source: Product) {
   const text = input.requestText?.toLowerCase() ?? "";
+  const search = parseSearchQuery(input.requestText ?? "");
+  const easyCareRequested = /\b(?:easy|easier|easiest)[- ](?:care|clean)|easy to (?:care for|clean)|low[- ]maintenance\b/.test(text);
   const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
   const under = text.match(/(?:under|below|maximum|max)\s*(\d{2,3})\s*cm/);
   const price = text.match(/(?:under|below|maximum|max)\s*[€]?\s*(\d{3,5})/);
   return alternativeRequestSchema.parse({
     ...input,
-    maxWidthMm: input.maxWidthMm ?? (narrower ? source.widthMm - Number(narrower[1]) * 10 : under ? Number(under[1]) * 10 : undefined),
+    category: search.category ?? input.category,
+    colorFamilies: [...new Set([...(input.colorFamilies ?? []), ...(search.colors ?? [])].map((value) => value.toLowerCase()))],
+    styles: [...new Set([...(input.styles ?? []), ...(search.styles ?? [])].map((value) => value.toLowerCase()))],
+    numberOfSeats: search.seatCount ?? input.numberOfSeats,
+    maxWidthMm: input.maxWidthMm ?? (narrower ? source.widthMm - Number(narrower[1]) * 10 : under ? Number(under[1]) * 10 : /\b(?:smaller|more compact|narrower)\b/.test(text) ? source.widthMm - 10 : undefined),
     minSeatHeightMm: input.minSeatHeightMm ?? (/higher seat|high[- ]seat|tall/.test(text) ? source.seatHeightMm + 10 : undefined),
     maxIndicativePrice: input.maxIndicativePrice ?? (/lower (?:indicative )?price|cheaper/.test(text) ? source.indicativePriceCents - 1 : price ? Number(price[1]) * 100 : undefined),
     requiredFunctions: [...new Set([...(input.requiredFunctions ?? []), ...(/relax/.test(text) ? ["relax"] : []), ...(/modular/.test(text) ? ["modular"] : [])])],
     excludedFunctions: [...new Set([...(input.excludedFunctions ?? []), ...(/without electric|non-electric|no electric/.test(text) ? ["electric"] : [])])],
-    materialTags: [...new Set([...(input.materialTags ?? []), ...(/easy[- ]care|children|family|pets?|dog/.test(text) ? ["easy-care"] : [])])],
+    materialTags: [...new Set([...(input.materialTags ?? []), ...(/\bleather\b/.test(text) ? ["leather"] : []), ...(/\b(?:fabric|textile|boucle|chenille|velvet)\b/.test(text) ? ["fabric"] : []), ...(easyCareRequested || /children|family|pets?|dog/.test(text) ? ["easy-care"] : [])])],
     preserveStyle: input.preserveStyle ?? /same style|similar style/.test(text),
     preserveComfort: input.preserveComfort ?? /same comfort/.test(text)
   });
@@ -42,23 +48,98 @@ function hasMaterialTag(product: Product, tag: string) {
   return compatible.some((material) => material.type === tag || material.name.toLowerCase().includes(tag.toLowerCase()));
 }
 
+const relatedColourGroups = [
+  ["red", "burgundy", "barolo", "pink"],
+  ["beige", "cream", "ivory", "sand", "taupe", "stone", "natural", "brown", "cognac", "oak"],
+  ["black", "charcoal", "graphite", "grey", "gray"],
+  ["yellow", "mustard", "orange"]
+];
+
+function clampScore(value: number) {
+  return Math.max(0, Math.min(1, value));
+}
+
+function colourCloseness(requested: string, available: string[]) {
+  if (available.includes(requested)) return 1;
+  const group = relatedColourGroups.find((values) => values.includes(requested));
+  return group && available.some((color) => group.includes(color)) ? 0.55 : 0;
+}
+
+function softPreferenceTokens(text: string) {
+  const ignored = new Set([
+    "this", "that", "with", "from", "like", "need", "want", "find", "show", "product", "option", "alternative",
+    "sofa", "couch", "chair", "armchair", "sectional", "table", "smaller", "higher", "lower", "same", "similar",
+    ...searchColorTerms
+  ]);
+  return [...new Set(text.toLowerCase().split(/[^a-z0-9]+/).filter((token) => token.length > 3 && !ignored.has(token)))];
+}
+
 export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeResponse {
   const source = products.find((product) => product.id === raw.sourceProductId && product.active);
   if (!source) throw new Error("Unknown source Product ID.");
   const request = requestedAlternative(raw, source);
-  const candidates = products.filter((product) => product.active && product.id !== source.id && product.category === source.category);
+  const requestedCategory = request.category ?? source.category;
+  const candidates = products.filter((product) => product.active && product.id !== source.id && product.category === requestedCategory);
+  const preferenceTokens = softPreferenceTokens(request.requestText ?? "");
   const ranked = candidates.map((product) => {
-    const checks: Array<{ ok: boolean; label: string }> = [];
-    if (request.maxWidthMm) checks.push({ ok: product.widthMm <= request.maxWidthMm, label: `width must be at most ${request.maxWidthMm} mm` });
-    if (request.minSeatHeightMm) checks.push({ ok: product.seatHeightMm >= request.minSeatHeightMm, label: `seat height must be at least ${request.minSeatHeightMm} mm` });
-    if (request.maxIndicativePrice) checks.push({ ok: product.indicativePriceCents <= request.maxIndicativePrice, label: "indicative price must be below the requested limit" });
-    for (const value of request.requiredFunctions ?? []) checks.push({ ok: hasFunction(product, value), label: `requires ${value}` });
-    for (const value of request.excludedFunctions ?? []) checks.push({ ok: !hasFunction(product, value), label: `must not include ${value}` });
-    for (const value of request.materialTags ?? []) checks.push({ ok: hasMaterialTag(product, value), label: `requires ${value} material metadata` });
-    if (request.preserveStyle) checks.push({ ok: source.styles.some((style) => product.styles.includes(style)), label: "preserve style" });
-    if (request.preserveComfort) checks.push({ ok: source.comfortOptions.some((option) => product.comfortOptions.includes(option)), label: "preserve comfort options" });
+    const checks: Array<{ ok: boolean; label: string; closeness: number }> = [];
+    for (const value of request.colorFamilies ?? []) {
+      const closeness = colourCloseness(value, product.colors);
+      checks.push({ ok: closeness === 1, label: `available in ${value}`, closeness });
+    }
+    for (const value of request.styles ?? []) {
+      const exact = product.styles.some((style) => style.toLowerCase().includes(value));
+      const related = product.styles.some((style) => style.toLowerCase().split(/\s+/).some((term) => value.includes(term)));
+      checks.push({ ok: exact, label: `matches ${value} style`, closeness: exact ? 1 : related ? 0.5 : 0 });
+    }
+    if (request.numberOfSeats) {
+      const difference = Math.abs(product.numberOfSeats - request.numberOfSeats);
+      checks.push({ ok: difference === 0, label: `must have ${request.numberOfSeats} seats`, closeness: clampScore(1 - difference / Math.max(2, request.numberOfSeats)) });
+    }
+    if (request.maxWidthMm) {
+      const excess = Math.max(0, product.widthMm - request.maxWidthMm);
+      checks.push({ ok: excess === 0, label: `width must be at most ${request.maxWidthMm} mm`, closeness: clampScore(1 - excess / Math.max(500, request.maxWidthMm * 0.35)) });
+    }
+    if (request.minSeatHeightMm) {
+      const deficit = Math.max(0, request.minSeatHeightMm - product.seatHeightMm);
+      checks.push({ ok: deficit === 0, label: `seat height must be at least ${request.minSeatHeightMm} mm`, closeness: clampScore(1 - deficit / 120) });
+    }
+    if (request.maxIndicativePrice) {
+      const excess = Math.max(0, product.indicativePriceCents - request.maxIndicativePrice);
+      checks.push({ ok: excess === 0, label: "indicative price must be below the requested limit", closeness: clampScore(1 - excess / Math.max(10000, request.maxIndicativePrice * 0.5)) });
+    }
+    for (const value of request.requiredFunctions ?? []) checks.push({ ok: hasFunction(product, value), label: `requires ${value}`, closeness: hasFunction(product, value) ? 1 : 0 });
+    for (const value of request.excludedFunctions ?? []) checks.push({ ok: !hasFunction(product, value), label: `must not include ${value}`, closeness: !hasFunction(product, value) ? 1 : 0 });
+    for (const value of request.materialTags ?? []) checks.push({ ok: hasMaterialTag(product, value), label: `requires ${value} material metadata`, closeness: hasMaterialTag(product, value) ? 1 : 0 });
+    if (request.preserveStyle) {
+      const overlap = source.styles.filter((style) => product.styles.includes(style)).length;
+      checks.push({ ok: overlap > 0, label: "preserve style", closeness: clampScore(overlap / Math.max(1, source.styles.length)) });
+    }
+    if (request.preserveComfort) {
+      const overlap = source.comfortOptions.filter((option) => product.comfortOptions.includes(option)).length;
+      checks.push({ ok: overlap > 0, label: "preserve comfort options", closeness: clampScore(overlap / Math.max(1, source.comfortOptions.length)) });
+    }
     const unmet = checks.filter((check) => !check.ok).map((check) => check.label);
+    const productCopy = [product.name, product.subtitle, product.description, ...product.styles, ...product.functions].join(" ").toLowerCase();
+    const keywordMatches = preferenceTokens.filter((token) => productCopy.includes(token));
+    const requestReasons = [
+      `same ${requestedCategory.replace(/-/g, " ")} category`,
+      ...((request.colorFamilies ?? []).filter((color) => product.colors.includes(color)).map((color) => `available in ${color}`)),
+      ...((request.colorFamilies ?? []).flatMap((color) => {
+        if (product.colors.includes(color) || colourCloseness(color, product.colors) === 0) return [];
+        const group = relatedColourGroups.find((values) => values.includes(color));
+        const related = product.colors.find((available) => group?.includes(available));
+        return related ? [`related recorded colour: ${related}`] : [];
+      })),
+      ...(request.minSeatHeightMm ? [`${Math.round(product.seatHeightMm / 10)} cm recorded seat height`] : []),
+      ...(request.maxWidthMm ? [`${Math.round(product.widthMm / 10)} cm recorded width`] : []),
+      ...(request.numberOfSeats ? [`${product.numberOfSeats} recorded seats`] : []),
+      ...checks.filter((check) => check.ok && /requires|matches|preserve/.test(check.label)).map((check) => check.label.replace(/^requires /, "includes ")),
+      ...keywordMatches.slice(0, 2).map((token) => `catalogue description matches “${token}”`)
+    ];
     const benefits = [
+      ...((request.colorFamilies ?? []).filter((color) => product.colors.includes(color)).map((color) => `available in ${color}`)),
+      ...((request.styles ?? []).filter((style) => product.styles.some((productStyle) => productStyle.toLowerCase().includes(style))).map((style) => `${style} style`)),
       ...(product.widthMm < source.widthMm ? [`${Math.round((source.widthMm - product.widthMm) / 10)} cm narrower`] : []),
       ...(product.seatHeightMm > source.seatHeightMm ? [`${Math.round((product.seatHeightMm - source.seatHeightMm) / 10)} cm higher seat`] : []),
       ...(product.indicativePriceCents < source.indicativePriceCents ? ["lower indicative concept price"] : [])
@@ -76,9 +157,9 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       product,
       exact: unmet.length === 0,
       unmet,
-      score: checks.filter((check) => check.ok).length * 20 - unmet.length * 25 - Math.abs(product.widthMm - source.widthMm) / 100,
+      score: checks.filter((check) => check.ok).length * 100 + checks.reduce((total, check) => total + check.closeness * 50, 0) - unmet.length * 25 + keywordMatches.length * 12 - Math.abs(product.widthMm - source.widthMm) / 1000,
       differences,
-      benefits,
+      benefits: [...new Set([...benefits, ...requestReasons])],
       tradeOffs
     };
   }).sort((left, right) => right.score - left.score);
@@ -95,8 +176,22 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
   });
   const exactMatches = ranked.filter((item) => item.exact).slice(0, 6).map(toMatch);
   const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 6).map(toMatch);
+  const interpretedRequirements = [
+    ...(request.category ? [request.category.replace(/-/g, " ")] : []),
+    ...(request.colorFamilies ?? []).map((value) => `${value} colour`),
+    ...(request.styles ?? []).map((value) => `${value} style`),
+    ...(request.numberOfSeats ? [`${request.numberOfSeats} seats`] : []),
+    ...(request.maxWidthMm ? [`maximum ${Math.round(request.maxWidthMm / 10)} cm wide`] : []),
+    ...(request.minSeatHeightMm ? [`seat height at least ${Math.round(request.minSeatHeightMm / 10)} cm`] : []),
+    ...(request.requiredFunctions ?? []).map((value) => `${value} function`),
+    ...(request.materialTags ?? []).map((value) => `${value} material`),
+    ...(request.preserveStyle ? ["preserve style"] : []),
+    ...(request.preserveComfort ? ["preserve comfort"] : [])
+  ];
   return alternativeResponseSchema.parse({
     sourceProductId: source.id,
+    interpretedRequirements: [...new Set(interpretedRequirements)],
+    requestedColorFamilies: request.colorFamilies ?? [],
     exactMatches,
     closestAlternatives,
     message: exactMatches.length ? `${exactMatches.length} catalogue alternative${exactMatches.length === 1 ? "" : "s"} satisfy all requirements.` : "No exact alternative was found. The closest catalogue alternatives are labelled with every unmet condition."

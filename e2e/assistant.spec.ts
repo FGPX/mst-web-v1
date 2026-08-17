@@ -7,10 +7,29 @@ test.beforeEach(async ({ page }) => {
 test("Product Detail to Better Match to comparison", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
   await page.getByRole("button", { name: /Find a Better Match for Me/ }).click();
-  await page.getByLabel("What should be different?").fill("Same style, under 240 cm with a higher seat");
-  await page.getByRole("button", { name: "Find alternatives" }).click();
-  await expect(page.getByText(/catalogue alternative|No exact alternative/).first()).toBeVisible();
+  await page.getByLabel("What are you looking for?").fill("Same style, but smaller");
+  await page.getByRole("button", { name: "Show matches" }).click();
+  await expect(page.getByRole("heading", { name: "Exact matches" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Other options" })).toBeVisible();
+  await expect(page.locator(".alternative-group.is-exact article").first()).toContainText("Exact match");
+  await expect(page.locator(".alternative-group.is-other article").first()).toContainText("Differs from request");
   await expect(page.getByRole("link", { name: /Compare/ }).first()).toBeVisible();
+});
+
+test("Better Match treats a red sofa request as a catalogue requirement", async ({ page }) => {
+  await page.goto("/furniture/justb-pm200");
+  await page.getByRole("button", { name: /Find a Better Match for Me/ }).click();
+  await page.getByLabel("What are you looking for?").fill("sofa red");
+  await page.getByRole("button", { name: "Show matches" }).click();
+  await expect(page.getByText("red colour", { exact: true })).toBeVisible();
+  const exactGroup = page.locator(".alternative-group.is-exact");
+  await expect(exactGroup).toContainText("MR 260");
+  await expect(exactGroup.getByText("Shown in red", { exact: true })).toBeVisible();
+  await expect(exactGroup.locator("img")).toHaveAttribute("src", /mr-260%2Fimage-08-hq\.jpg|mr-260\/image-08-hq\.jpg/);
+  await expect(exactGroup.locator(".alternative-product-specs")).toContainText(/Width.*Depth.*Height.*Indicative concept price/s);
+  await expect(exactGroup.locator(".alternative-match-details")).toContainText("Matches your request");
+  await expect(exactGroup).not.toContainText("Differs from request");
+  await expect(page.locator(".alternative-group.is-other article").first()).toContainText("available in red");
 });
 
 test("Material Advisor grounds and saves a material", async ({ page }) => {

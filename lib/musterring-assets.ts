@@ -4,6 +4,13 @@ const authorizedProductImages = Object.fromEntries(
   authorizedCatalog.products.map((product) => [product.appProductId, product.images])
 ) as Record<string, string[]>;
 
+const verifiedColourImages: Record<string, Record<string, string>> = {
+  "musterring-mr-260": {
+    red: "/musterring-catalog/mr-260/image-08-hq.jpg",
+    burgundy: "/musterring-catalog/mr-260/image-08-hq.jpg"
+  }
+};
+
 const legacyProductImages: Record<string, string[]> = {
   p1: [
     "/test-assets/musterring/mr-2875/image-03.jpg",
@@ -62,4 +69,13 @@ const legacyProductImages: Record<string, string[]> = {
 
 export function productImages(productId: string) {
   return authorizedProductImages[productId] ?? legacyProductImages[productId] ?? authorizedProductImages.p1;
+}
+
+export function productImageForColors(productId: string, requestedColors: string[]) {
+  const verified = verifiedColourImages[productId];
+  const matchedColor = requestedColors.find((color) => verified?.[color.toLowerCase()]);
+  return {
+    src: matchedColor ? verified[matchedColor.toLowerCase()] : productImages(productId)[0],
+    matchedColor
+  };
 }

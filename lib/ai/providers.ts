@@ -208,7 +208,7 @@ export class OpenAIProvider implements AIProvider {
   private imageModel: string;
 
   constructor(apiKey: string) {
-    this.client = new OpenAI({ apiKey });
+    this.client = new OpenAI({ apiKey, baseURL: process.env.OPENAI_BASE_URL || undefined });
     this.model = process.env.AI_MODEL || "gpt-5.6";
     this.imageModel = process.env.AI_IMAGE_MODEL || this.model;
   }
@@ -267,7 +267,7 @@ export class OpenAIProvider implements AIProvider {
 
   async findProductAlternatives(input: AlternativeRequest) {
     const parsed = await this.parse(alternativeRequestSchema, "alternative_requirements",
-      "Extract only alternative-product constraints from the supplied request. Preserve the supplied sourceProductId. Do not invent product facts or IDs.",
+      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, materials and functions. Normalize colours and categories to lowercase English catalogue terms. Preserve sourceProductId, requestText and strict exactly. Do not invent product facts or IDs.",
       [{ role: "user", content: JSON.stringify(input) }]);
     return alternativeResponseSchema.parse(findGroundedAlternatives(parsed));
   }
@@ -363,7 +363,13 @@ export async function withDemoFallback<T>(operation: (provider: AIProvider) => P
   const provider = configuredProvider();
   try {
     return { data: await operation(provider), provider: provider.name, fallback: false };
-  } catch {
+  } catch (error) {
+    if (provider.name === "openai") {
+      const safeDetails = error && typeof error === "object"
+        ? { name: "name" in error ? String(error.name) : "Error", status: "status" in error ? Number(error.status) : undefined, code: "code" in error ? String(error.code) : undefined }
+        : { name: "Error" };
+      console.warn("AI provider request failed; using the deterministic catalogue fallback.", safeDetails);
+    }
     const demo = new LocalDemoAIProvider();
     return { data: await operation(demo), provider: "demo", fallback: true };
   }
