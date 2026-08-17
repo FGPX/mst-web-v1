@@ -11,14 +11,32 @@ import type { Product } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
 
 const suggestions = [
-  "beige modular sofa under 300 cm",
-  "black modern sofa with relax function",
-  "taupe swivel armchair",
-  "brown oak storage cabinet",
-  "black minimal coffee table"
+  { label: "Beige modular sofa", query: "beige modular sofa under 300 cm" },
+  { label: "Black relax sofa", query: "black modern sofa with relax function" },
+  { label: "Taupe armchair", query: "taupe swivel armchair" },
+  { label: "Oak storage", query: "brown oak storage cabinet" },
+  { label: "Minimal coffee table", query: "black minimal coffee table" }
 ];
 
 const cutoutSlugs = new Set(["justb-pm100", "justb-pm200", "mr-lucia", "mr-230", "mr-260", "mr-270", "mr-280", "mr-285", "mr-nils", "mr-pamela", "mr-231", "jana", "kanto", "justb-ct100", "nara", "mr-kleo", "mr-281", "mr-5111", "mr-9445"]);
+
+const autocompleteCategories: Array<{ category: Product["category"]; aliases: string[] }> = [
+  { category: "sofa", aliases: ["sofa", "couch"] },
+  { category: "armchair", aliases: ["armchair"] },
+  { category: "sectional", aliases: ["sectional", "corner"] },
+  { category: "storage", aliases: ["storage", "cabinet", "sideboard"] },
+  { category: "coffee-table", aliases: ["coffee"] },
+  { category: "dining-table", aliases: ["dining"] }
+];
+
+const compactMatchReason = (reason: string) => {
+  const concise = reason
+    .replace(/^requested colour family:\s*/i, "")
+    .replace(/^requested\s+/i, "")
+    .replace(/\s+catalogue flag$/i, "")
+    .replace(/\s+function$/i, "");
+  return concise.charAt(0).toUpperCase() + concise.slice(1);
+};
 
 type SearchResponse = {
   intent: Record<string, unknown>;
@@ -78,7 +96,21 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const autocomplete = useMemo(() => {
     const value = query.trim().toLowerCase();
     if (value.length < 2 || value === submitted.toLowerCase()) return [];
-    return products.filter((product) => `${product.modelCode} ${product.name} ${product.category} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm wide ${Math.round(product.depthMm / 10)} cm deep ${Math.round(product.heightMm / 10)} cm high`.toLowerCase().includes(value)).slice(0, 5);
+    const terms = value.split(/[^a-z0-9]+/).filter(Boolean);
+    const categoryTerms = new Set<string>();
+    const inferredCategory = autocompleteCategories.find(({ aliases }) => aliases.some((alias) =>
+      terms.some((term) => {
+        const isCategoryTerm = term.length >= 3 && (alias.startsWith(term) || term.startsWith(alias));
+        if (isCategoryTerm) categoryTerms.add(term);
+        return isCategoryTerm;
+      })
+    ))?.category;
+
+    return products.filter((product) => {
+      if (!product.active || (inferredCategory && product.category !== inferredCategory)) return false;
+      const words = `${product.modelCode} ${product.name} ${product.subtitle} ${product.category} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm wide ${Math.round(product.depthMm / 10)} cm deep ${Math.round(product.heightMm / 10)} cm high`.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+      return terms.every((term) => categoryTerms.has(term) || words.some((word) => word.startsWith(term)));
+    }).slice(0, 5);
   }, [query, submitted]);
 
   const removeFilter = (key: string) => {
@@ -96,13 +128,13 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const exact = response?.exactMatches ?? [];
 
   return (
-    <div className={`stitch-ai-search ${requestedRed ? "is-colour-search" : ""}`}>
+    <div className={`stitch-ai-search ${requestedRed ? "is-colour-search" : ""} ${submitted ? "has-results" : ""}`}>
       <section className="stitch-ai-search-hero">
         <div className="container">
           <div className="stitch-ai-kicker"><Sparkles size={16} /> Guided Product Search</div>
           <form onSubmit={(event) => { event.preventDefault(); void submit(); }} role="search">
             <div className="stitch-ai-input-row">
-              <Search size={34} />
+              <Search size={28} />
               <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="What are you looking for?" aria-label="Describe the furniture you are looking for" />
               {query ? <button type="button" aria-label="Clear search" onClick={() => { setQuery(""); setSubmitted(""); setResponse(null); }}><X /></button> : null}
               <button type="submit" aria-label="Search products"><ArrowRight /></button>
@@ -110,22 +142,28 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
           </form>
           {autocomplete.length ? (
             <div className="stitch-search-autocomplete" role="listbox" aria-label="Product suggestions">
-              {autocomplete.map((product) => <button type="button" role="option" aria-selected="false" key={product.id} onClick={() => void submit(product.modelCode)}><span>{product.modelCode}</span>{product.name}</button>)}
+              {autocomplete.map((product) => (
+                <button type="button" role="option" aria-selected="false" key={product.id} onClick={() => void submit(product.modelCode)}>
+                  <Image src={resultImage(product.slug, product.id)} alt="" width={64} height={48} />
+                  <span>
+                    <strong>{product.modelCode}</strong>
+                    <small>{product.category} · {Math.round(product.widthMm / 10)} cm wide</small>
+                  </span>
+                  <ArrowRight size={18} aria-hidden="true" />
+                </button>
+              ))}
             </div>
           ) : null}
-          <p className="stitch-ai-example">Try: “I need a compact beige modular sofa for a small apartment, maximum width 240 cm.”</p>
-          <div className="stitch-ai-discovery">
+          {!submitted ? <p className="stitch-ai-example">Try: “I need a compact beige modular sofa for a small apartment, maximum width 240 cm.”</p> : null}
+          {!submitted ? <div className="stitch-ai-discovery">
             <Link className="stitch-ai-visual-entry" href="/visual-search"><Camera size={48} /><strong>Visual Search</strong><span>Upload an image to find similar pieces</span></Link>
             <div>
               <p className="stitch-ai-label">Suggested searches</p>
-              <div className="stitch-ai-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion} onClick={() => void submit(suggestion)}>{suggestion}</button>)}</div>
-              <p className="stitch-ai-label">{submitted ? "Best matching products" : "Recent searches"}</p>
-              {!submitted && recent.length ? <div className="stitch-ai-suggestions" aria-label="Recent searches">{recent.map((item) => <button type="button" key={item} onClick={() => void submit(item)}>Recent: {item}</button>)}</div> : null}
-              <div className="stitch-ai-recent">
-                {exact.slice(0, 4).map(({ product }) => <Link href={`/furniture/${product.slug}`} key={product.id}><Image src={resultImage(product.slug, product.id)} alt={product.name} width={220} height={130} /><span>{product.modelCode}</span>{requestedRed ? <small>{product.slug === "mr-260" ? "Shown in red leather" : "Red option available · image differs"}</small> : null}</Link>)}
-              </div>
+              <div className="stitch-ai-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion.query} onClick={() => void submit(suggestion.query)}>{suggestion.label}</button>)}</div>
+              <p className="stitch-ai-label">Recent searches</p>
+              {recent.length ? <div className="stitch-ai-suggestions" aria-label="Recent searches">{recent.map((item) => <button type="button" key={item} onClick={() => void submit(item)}>{item}</button>)}</div> : null}
             </div>
-          </div>
+          </div> : null}
         </div>
       </section>
 
@@ -144,8 +182,11 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                   <button type="button" className="chip" key={key} onClick={() => removeFilter(key)} aria-label={`Remove ${key} filter`}>{key}: {Array.isArray(value) ? value.join(", ") : String(value)} ×</button>)}
               </div>
             </div>
+            {response && [...exact, ...response.closeAlternatives].some(({ product }) => product.authorizedContent) ? (
+              <p className="stitch-search-catalogue-notice">Dimensions and prices vary by configuration and are confirmed by a Musterring retailer.</p>
+            ) : null}
             {pending ? <div className="card card-body" role="status">Interpreting request and searching validated catalogue data…</div> : exact.length ? (
-              <div className="grid grid-3">{exact.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={requestedRed ? (product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish") : undefined} explanation={`Why it matches: ${reasons.join("; ") || "validated catalogue relevance"}.`} />)}</div>
+              <div className="grid grid-3">{exact.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={requestedRed ? (product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish") : undefined} explanation={`Matches: ${reasons.map(compactMatchReason).join(" · ") || "Catalogue relevance"}`} showMeta={false} />)}</div>
             ) : response ? (
               <div className="card card-body">
                 <h2>No exact catalogue match</h2>
@@ -156,7 +197,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               <div className="stitch-ai-alternatives">
                 <p className="eyebrow">Recommended alternatives</p>
                 <h2>Other products to consider</h2>
-                <div className="grid grid-3">{response.closeAlternatives.map(({ product, reasons }) => <ProductCard key={product.id} product={product} explanation={`Close alternative: ${reasons.join("; ")}.`} />)}</div>
+                <div className="grid grid-3">{response.closeAlternatives.map(({ product, reasons }) => <ProductCard key={product.id} product={product} explanation={`Close match: ${reasons.map(compactMatchReason).join(" · ")}`} showMeta={false} />)}</div>
               </div>
             ) : null}
           </div>

@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronDown, ChevronRight, Menu, Search, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { categoryDetails, categoryGroups } from "@/lib/catalog-taxonomy";
 import { roomNavigation } from "@/lib/room-navigation";
 import { StitchLinkButton } from "./StitchButtons";
+import musterringLogo from "../../Logo_MST png.png";
 
 export function StitchHeader() {
   const [open, setOpen] = useState(false);
@@ -52,10 +54,8 @@ export function StitchHeader() {
   return (
     <header className="stitch-header" role="banner" ref={headerRef}>
       <nav className="stitch-nav" aria-label="Primary">
-        <Link className="stitch-brand" href="/" aria-label="Musterring V1 home">
-          <span className="stitch-brand-mark" aria-hidden="true" />
-          <span className="stitch-brand-word">Musterring</span>
-          <small className="stitch-brand-version">V1</small>
+        <Link className="stitch-brand" href="/" aria-label="Musterring home">
+          <Image className="stitch-brand-logo" src={musterringLogo} alt="" width={2982} height={3750} priority />
         </Link>
         <div className="stitch-nav-links">
           <button
