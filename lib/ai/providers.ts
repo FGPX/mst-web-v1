@@ -5,6 +5,7 @@ import { zodTextFormat } from "openai/helpers/zod";
 import { z } from "zod";
 import {
   complementaryRecommendationSchema,
+  comparisonSummarySchema,
   configurationRequirementsSchema,
   matchExplanationSchema,
   retailerProjectDataSchema,
@@ -12,6 +13,8 @@ import {
   roomAnalysisSchema,
   searchIntentSchema,
   visualTagsSchema,
+  type ComparisonSummary,
+  type ComparisonSummaryInput,
   type ConfigurationRequirements,
   type RetailerProjectData,
   type RoomAnalysis,
@@ -25,6 +28,7 @@ import {
   type AdvisorAnswer, type AlternativeRequest, type AlternativeResponse, type ConversationContext,
   type MaterialAdvice, type VoiceCommand
 } from "./assistant-schemas";
+import { deterministicComparisonSummary, validateComparisonSummary } from "./comparison-summary";
 import { answerGroundedQuestion, findGroundedAlternatives, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
 import { materials, products } from "../data";
 import { catalogueCategories } from "../types";
@@ -48,6 +52,7 @@ export interface AIProvider {
   explainProductMatch(input: { request: string; productFacts: string }): Promise<string>;
   summarizeRetailerProject(project: RetailerProjectData, groundedFacts: string): Promise<string>;
   recommendComplementaryProducts(input: { selectedFacts: string }): Promise<z.infer<typeof complementaryRecommendationSchema>>;
+  summarizeProductComparison(input: ComparisonSummaryInput): Promise<ComparisonSummary>;
   findProductAlternatives(input: AlternativeRequest): Promise<AlternativeResponse>;
   adviseMaterials(input: { requestText: string }): Promise<MaterialAdvice>;
   parseVoiceCommand(transcript: string): Promise<VoiceCommand>;
@@ -169,6 +174,10 @@ export class LocalDemoAIProvider implements AIProvider {
     });
   }
 
+  async summarizeProductComparison(input: ComparisonSummaryInput) {
+    return deterministicComparisonSummary(input);
+  }
+
   async findProductAlternatives(input: AlternativeRequest) {
     return findGroundedAlternatives(input);
   }
@@ -264,7 +273,7 @@ export class OpenAIProvider implements AIProvider {
 
   constructor(apiKey: string) {
     this.client = new OpenAI({ apiKey, baseURL: process.env.OPENAI_BASE_URL || undefined });
-    this.model = process.env.AI_MODEL || "gpt-5.6";
+    this.model = process.env.AI_MODEL || "gpt-5-nano";
     this.imageModel = process.env.AI_IMAGE_MODEL || this.model;
   }
 
@@ -320,6 +329,26 @@ export class OpenAIProvider implements AIProvider {
     return this.parse(complementaryRecommendationSchema, "complementary_requirements",
       "Suggest complementary search criteria only. Never create product names or IDs.",
       [{ role: "user", content: input.selectedFacts }]);
+  }
+
+  async summarizeProductComparison(input: ComparisonSummaryInput) {
+    const baseline = deterministicComparisonSummary(input);
+    const result = await this.parse(
+      comparisonSummarySchema,
+      "product_comparison_summary",
+      "Summarize only the supplied verified catalogue facts.",
+      [
+        {
+          role: "system",
+          content: "You are Musterring's concise product comparison editor. Rewrite the supplied baseline into natural, useful English using only the verified catalogue facts provided. Keep every productId exactly unchanged and include each product exactly once. Do not add or infer dimensions, seating, materials, functions, modularity, prices, availability, compatibility, quality, comfort or physical fit. When data is missing, preserve the configuration-dependent wording. The recommendation must explain tradeoffs and must require retailer confirmation for exact configuration and room fit."
+        },
+        {
+          role: "user",
+          content: `Verified catalogue facts: ${JSON.stringify(input)}\nAuthoritative baseline: ${JSON.stringify(baseline)}`
+        }
+      ]
+    );
+    return validateComparisonSummary(result, input);
   }
 
   async findProductAlternatives(input: AlternativeRequest) {

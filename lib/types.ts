@@ -58,6 +58,11 @@ export type Product = {
     comfort: boolean;
     easyCare: boolean;
   };
+  /** Additional catalogue-verified facts shown in comparisons and supplied to AI summaries. */
+  verifiedComparisonFacts?: Array<{
+    label: string;
+    value: string;
+  }>;
   modular: boolean;
   styles: string[];
   colors: string[];

@@ -106,6 +106,40 @@ export const retailerSummarySchema = z.object({
   summary: z.string().max(3000)
 });
 
+export const comparisonProductFactsSchema = z.object({
+  productId: z.string().trim().min(1).max(160),
+  modelCode: z.string().trim().min(1).max(160),
+  category: z.string().trim().min(1).max(80),
+  verifiedWidthCm: z.number().int().positive().nullable(),
+  verifiedSeatCount: z.number().int().positive().nullable(),
+  verifiedMaterialTypes: z.array(z.string().trim().min(1).max(80)).max(10),
+  verifiedFunctions: z.array(z.string().trim().min(1).max(120)).max(20),
+  verifiedModular: z.boolean(),
+  verifiedSmallSpaceSuitable: z.boolean(),
+  verifiedDetails: z.array(z.object({
+    label: z.string().trim().min(1).max(100),
+    value: z.string().trim().min(1).max(300)
+  })).max(20),
+  comparisonHighlights: z.array(z.string().trim().min(1).max(160)).max(4)
+});
+
+export const comparisonSummaryInputSchema = z.object({
+  products: z.array(comparisonProductFactsSchema).min(2).max(3)
+});
+export type ComparisonSummaryInput = z.infer<typeof comparisonSummaryInputSchema>;
+
+export const comparisonSummarySchema = z.object({
+  products: z.array(z.object({
+    productId: z.string().trim().min(1).max(160),
+    summary: z.string().trim().min(1).max(500),
+    bestFor: z.string().trim().min(1).max(160),
+    facts: z.array(z.string().trim().min(1).max(240)).min(2).max(4)
+  })).min(2).max(3),
+  glance: z.array(z.string().trim().min(1).max(200)).min(1).max(5),
+  recommendation: z.string().trim().min(1).max(800)
+});
+export type ComparisonSummary = z.infer<typeof comparisonSummarySchema>;
+
 export const imageUploadSchema = z.object({
   type: z.enum(["image/jpeg", "image/png", "image/webp"]),
   size: z.number().int().positive().max(10 * 1024 * 1024),

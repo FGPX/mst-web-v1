@@ -308,10 +308,6 @@ function groundedProductIds(ids: string[]) {
 
 const productDiscoveryPattern = /\b(sofa|couch|armchair|chair|recliner|sectional|table|storage|cabinet|sideboard|wardrobe|bed|bathroom|outdoor|garden|carpet|rug|lamp|furniture)\b/;
 
-function supportsMaterialType(product: Product, type: "leather" | "fabric") {
-  return materials.some((material) => product.materials.includes(material.id) && material.type === type);
-}
-
 function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
   const text = question.toLowerCase();
   const filters = parseSearchQuery(question);
