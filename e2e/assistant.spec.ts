@@ -187,3 +187,13 @@ test("Musterring Assistant keeps the conversation after closing and reopening", 
   await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await expect(page.locator(".advisor-messages article.customer")).toContainText("hello");
 });
+
+test("Musterring Assistant closes when navigating to another page", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
+  await expect(page.locator(".advisor-panel")).toBeVisible();
+  await page.getByRole("link", { name: "About", exact: true }).click();
+  await expect(page).toHaveURL(/\/about$/);
+  await expect(page.locator(".advisor-panel")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Open Musterring Assistant" })).toBeVisible();
+});

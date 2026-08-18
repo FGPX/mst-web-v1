@@ -65,6 +65,11 @@ export function MusterringAdvisor() {
     } else setContext((current) => ({ ...current, route: pathname, currentProductId: currentProduct?.id ?? null }));
   }, [pathname, currentProduct?.id]);
   useEffect(() => {
+    setOpen(false);
+    setPendingAction(null);
+    setVoiceState("idle");
+  }, [pathname]);
+  useEffect(() => {
     window.sessionStorage.setItem(memoryKey, JSON.stringify(context));
   }, [context]);
   useEffect(() => {
@@ -202,7 +207,7 @@ export function MusterringAdvisor() {
     <button className="voice-launcher" aria-label="Start Voice Interior Assistant" title="Use voice assistant" onClick={() => { setOpen(true); window.setTimeout(() => void startVoice(), 50); }}><Mic /></button>
   </div>;
   return <aside className="advisor-panel" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
-    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p>Musterring Assistant</p><h2 id="advisor-title">ASK MUSTERRING</h2></div><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><ChevronDown /></button></header>
+    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><h2 id="advisor-title">MUSTERRING ASSISTANT</h2></div><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><ChevronDown /></button></header>
       <div className="advisor-messages" aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><h3>How can I help with your space?</h3><p>I’ll ask a few useful questions, then use connected Musterring product and material data to guide you.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}</button>)}</div></div> : null}
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><p>{message.text}</p></div></div>

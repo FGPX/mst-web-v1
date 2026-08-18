@@ -235,9 +235,9 @@ function comparisonRows(selected: Product[], diffOnly: boolean) {
   const rows: Array<[string, string[]]> = [
     ["Width", selected.map((product) => product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} cm` : "Configuration dependent")],
     ["Depth", selected.map((product) => product.verifiedFacts.dimensions ? `${Math.round(product.depthMm / 10)} cm` : "Configuration dependent")],
-    ["Height", selected.map((product) => product.verifiedFacts.dimensions ? `${Math.round(product.heightMm / 10)} cm` : "Configuration dependent")],
-    ["Seat Height", selected.map((product) => product.verifiedFacts.seatHeight ? `${Math.round(product.seatHeightMm / 10)} cm` : "Configuration dependent")],
-    ["Seat Depth", selected.map((product) => product.verifiedFacts.seatDepth ? `${Math.round(product.seatDepthMm / 10)} cm` : "Configuration dependent")],
+    ["Height", selected.map((product) => verifiedComparisonValue(product, "Height") ?? (product.verifiedFacts.dimensions ? `${Math.round(product.heightMm / 10)} cm` : "Configuration dependent"))],
+    ["Seat Height", selected.map((product) => verifiedComparisonValue(product, "Seat Height") ?? (product.verifiedFacts.seatHeight ? `${Math.round(product.seatHeightMm / 10)} cm` : "Configuration dependent"))],
+    ["Seat Depth", selected.map((product) => verifiedComparisonValue(product, "Seat Depth") ?? (product.verifiedFacts.seatDepth ? `${Math.round(product.seatDepthMm / 10)} cm` : "Configuration dependent"))],
     ["Seats", selected.map((product) => product.numberOfSeatsVerified ? String(product.numberOfSeats) : "Configuration dependent")],
     ["Modularity", selected.map((product) => product.verifiedFacts.modular ? "Modular system" : "Configuration dependent")],
     ["Functions", selected.map((product) => product.verifiedFacts.functions.join(", ") || "Configuration dependent")],
@@ -248,6 +248,13 @@ function comparisonRows(selected: Product[], diffOnly: boolean) {
     ["Configurator", selected.map((product) => product.category === "storage" ? "Retailer planning" : "Available")],
     ["Overall dimensions", selected.map((product) => product.verifiedFacts.dimensions ? dimensions(product.widthMm, product.depthMm, product.heightMm) : "Configuration dependent")]
   ];
+  const standardLabels = new Set(rows.map(([name]) => name));
+  const detailLabels = [...new Set(selected.flatMap((product) => product.verifiedComparisonFacts?.map((fact) => fact.label) ?? []))]
+    .filter((label) => !standardLabels.has(label));
+  rows.push(...detailLabels.map<[string, string[]]>((label) => [
+    label,
+    selected.map((product) => verifiedComparisonValue(product, label) ?? "Configuration dependent")
+  ]));
   return rows
     .map(([name, values]) => ({ name, values, ...differenceMeta(name, values) }))
     .filter(({ values }) => !diffOnly || new Set(values).size > 1);
@@ -255,7 +262,14 @@ function comparisonRows(selected: Product[], diffOnly: boolean) {
 
 function differenceMeta(name: string, values: string[]): { level: "same" | "different" | "major"; summary?: string } {
   if (new Set(values).size <= 1) return { level: "same" };
-  const thresholds: Record<string, number> = { Width: 20, Depth: 20, Height: 10, "Seat Height": 4, "Seat Depth": 5, Seats: 1 };
+  const thresholds: Record<string, number> = {
+    Width: 40,
+    Depth: 40,
+    Height: 15,
+    "Seat Height": 8,
+    "Seat Depth": 15,
+    Seats: 2
+  };
   const threshold = thresholds[name];
   if (threshold === undefined) return { level: "different" };
   const numbers = values.map((value) => Number(value.match(/-?\d+(?:\.\d+)?/)?.[0]));
@@ -276,6 +290,10 @@ function meaningfulDifference(product: Product, selected: Product[]) {
   if (product.verifiedFacts.functions.length) return `Includes ${product.verifiedFacts.functions.join(", ")}.`;
   if (product.verifiedFacts.modular) return "Verified modular system supports configurable planning.";
   return "Catalogue details vary by configuration.";
+}
+
+function verifiedComparisonValue(product: Product, label: string) {
+  return product.verifiedComparisonFacts?.find((fact) => fact.label === label)?.value;
 }
 
 function comparisonBadge(product: Product, selected: Product[]) {
@@ -328,6 +346,7 @@ function comparisonSummary(selected: Product[], awards: ReturnType<typeof compar
   const highestCapacity = seatingProducts.reduce<Product | null>((best, product) => !best || product.numberOfSeats > best.numberOfSeats ? product : best, null);
   const productsSummary = selected.map((product) => {
     const labels = awards.find((award) => award.productId === product.id)?.labels ?? [];
+    const detail = (label: string) => verifiedComparisonValue(product, label);
     const materialCopy = product.verifiedFacts.materialTypes.length ? ` Verified material types: ${product.verifiedFacts.materialTypes.join(", ")}.` : "";
     const summary = product.verifiedFacts.modular
       ? `A verified modular ${product.category.replace("-", " ")}.${materialCopy}`
@@ -340,22 +359,34 @@ function comparisonSummary(selected: Product[], awards: ReturnType<typeof compar
       bestFor: labels[0] ?? (product.verifiedFacts.smallSpaceSuitable ? "Verified for compact room planning" : "Compare with your room requirements"),
       facts: [
         `${dimensionFact} · ${seatingFact}`,
-        product.verifiedFacts.modular ? "Verified modular system" : "Modularity varies by configuration",
-        product.verifiedFacts.functions.length ? product.verifiedFacts.functions.join(", ") : "Functions vary by configuration"
-      ]
+        [detail("Height"), detail("Seat Height"), detail("Seat Depth")].filter(Boolean).join(" · "),
+        detail("Seat construction") ?? (product.verifiedFacts.modular ? "Verified modular system" : "Modularity varies by configuration"),
+        detail("Motorised function") ?? (product.verifiedFacts.functions.length ? product.verifiedFacts.functions.join(", ") : "Functions vary by configuration")
+      ].filter(Boolean).slice(0, 4)
     };
   });
   const modularCount = selected.filter((product) => product.verifiedFacts.modular).length;
+  const detailComparison = (label: string, heading: string) => {
+    const values = selected.map((product) => ({ modelCode: product.modelCode, value: verifiedComparisonValue(product, label) }))
+      .filter((item): item is { modelCode: string; value: string } => Boolean(item.value));
+    return values.length > 1 && new Set(values.map((item) => item.value)).size > 1
+      ? `${heading}: ${values.map((item) => `${item.modelCode} ${item.value}`).join("; ")}`
+      : "";
+  };
   const glance = [
     widths.length > 1 ? `Verified width range: ${Math.min(...widths)}–${Math.max(...widths)} cm` : "",
     seats.length > 1 ? `Verified capacity range: ${Math.min(...seats)}–${Math.max(...seats)} seats` : "",
+    detailComparison("Seat Height", "Seat heights"),
+    detailComparison("Seat construction", "Seat construction"),
     modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
     `${selected.filter((product) => product.verifiedFacts.functions.length).length} with verified function data`
-  ].filter(Boolean);
+  ].filter(Boolean).slice(0, 5);
   const recommendation = narrowest && highestCapacity && narrowest.id === highestCapacity.id
     ? `${narrowest.modelCode} combines the smallest verified width with the highest verified seating capacity in this selection. Confirm the exact configuration and room fit with a retailer.`
     : narrowest && highestCapacity
       ? `For a tighter room, ${narrowest.modelCode} has the smallest verified width. For maximum verified seating capacity, ${highestCapacity.modelCode} provides ${highestCapacity.numberOfSeats} seats. Refine the recommendation using your room and comfort priorities.`
+      : narrowest && dimensionProducts.length > 1
+        ? `${narrowest.modelCode} has the smallest verified reference width in this selection. The models also differ in seat height and seat construction, so choose according to your preferred sitting position and comfort, then confirm the exact configuration and room fit with a Musterring retailer.`
       : "There is not enough verified catalogue data to identify a single best option. Refine the recommendation and confirm the configuration with a Musterring retailer.";
   return { products: productsSummary, glance, recommendation };
 }

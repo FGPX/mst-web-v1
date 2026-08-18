@@ -50,6 +50,23 @@ describe("AI schemas and fallbacks", () => {
     expect(summary.products.map((product) => product.productId)).toEqual(selected.map((product) => product.id));
     expect(summary.recommendation).toMatch(/retailer|Refine/i);
   });
+
+  it("includes detailed verified facts for the JUSTB! comparison", () => {
+    const selected = ["musterring-justb-pm100", "musterring-justb-pm200"]
+      .map((id) => products.find((product) => product.id === id))
+      .filter((product): product is (typeof products)[number] => Boolean(product));
+    const input = comparisonSummaryInput(selected);
+    const summary = deterministicComparisonSummary(input);
+
+    expect(input.products).toHaveLength(2);
+    expect(input.products.every((product) => product.verifiedDetails.length >= 8)).toBe(true);
+    expect(input.products.find((product) => product.modelCode === "JUSTB! PM100")?.verifiedDetails)
+      .toContainEqual({ label: "Seat construction", value: "Spring core; optional barrel pocket spring core" });
+    expect(input.products.find((product) => product.modelCode === "JUSTB! PM200")?.verifiedDetails)
+      .toContainEqual({ label: "Seat Height", value: "41 or 43 cm" });
+    expect(summary.glance.join(" ")).toMatch(/Seat heights|Seat construction/);
+    expect(summary.recommendation).not.toMatch(/not enough verified catalogue data/i);
+  });
 });
 
 describe("grounded hybrid retrieval", () => {

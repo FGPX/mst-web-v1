@@ -118,6 +118,10 @@ export const comparisonProductFactsSchema = z.object({
   verifiedFunctions: z.array(z.string().trim().min(1).max(120)).max(20),
   verifiedModular: z.boolean(),
   verifiedSmallSpaceSuitable: z.boolean(),
+  verifiedDetails: z.array(z.object({
+    label: z.string().trim().min(1).max(100),
+    value: z.string().trim().min(1).max(300)
+  })).max(20),
   comparisonHighlights: z.array(z.string().trim().min(1).max(160)).max(4)
 });
 

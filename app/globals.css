@@ -5472,11 +5472,11 @@ img { max-width: 100%; display: block; }
 .assistant-dock button:hover > svg { box-shadow: none; }
 
 .advisor-panel {
-  top: auto;
+  top: 96px;
   right: 18px;
-  bottom: 18px;
-  width: min(480px, calc(100vw - 36px));
-  height: min(760px, calc(100dvh - 36px));
+  bottom: auto;
+  width: min(440px, calc(100vw - 36px));
+  height: min(680px, calc(100dvh - 114px));
   border-color: #cfc8be;
   border-radius: 22px;
   background: #f8f5ef;
@@ -5508,7 +5508,7 @@ img { max-width: 100%; display: block; }
 }
 .advisor-brand-icon svg { width: 25px; }
 .advisor-panel > header p { margin: 0 0 7px; color: #e2ddd6; font-size: 11px; letter-spacing: .2em; }
-.advisor-panel h2 { margin: 0; color: #fbf9f4; font-size: 27px; letter-spacing: .025em; }
+.advisor-panel h2 { margin: 0; color: #fbf9f4; font-size: 22px; letter-spacing: .055em; white-space: nowrap; }
 .advisor-panel > header button {
   flex-basis: 60px;
   width: 60px;
@@ -5656,7 +5656,7 @@ img { max-width: 100%; display: block; }
   .advisor-launcher span { display: none; }
   .advisor-panel > header { gap: 10px; }
   .advisor-brand-icon { width: 44px; height: 44px; flex-basis: 44px; }
-  .advisor-panel h2 { font-size: 24px; }
+  .advisor-panel h2 { font-size: 20px; }
   .advisor-panel > header button { width: 42px; height: 42px; flex-basis: 42px; }
   .advisor-starters { margin-left: 0; }
   .advisor-message-bubble { max-width: 92%; }
