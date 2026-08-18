@@ -147,7 +147,7 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
                 </div>
                 <div className="stitch-compare-actions">
                   <Link href={`/configurator/${product.slug}`}>Configure</Link>
-                  <AlternativeFinderButton productId={product.id} label="Find a Better Match" className="stitch-alternative-compare" />
+                  <AlternativeFinderButton productId={product.id} label="Discover More Like This" className="stitch-alternative-compare" />
                   <button className={`stitch-save-product${isSaved ? " is-saved" : ""}`} onClick={() => toggleSavedProduct(product.id)}>
                     {isSaved ? <Check size={14} /> : <Bookmark size={14} />}{isSaved ? "Saved to Project" : "Save to Project"}
                   </button>

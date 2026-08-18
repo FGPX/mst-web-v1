@@ -31,16 +31,20 @@ import {
 import { deterministicComparisonSummary, validateComparisonSummary } from "./comparison-summary";
 import { answerGroundedQuestion, findGroundedAlternatives, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
 import { materials, products } from "../data";
+import { catalogueCategories } from "../types";
 
-export type ProviderResult<T> = { data: T; provider: "openai" | "demo"; fallback: boolean };
+export type AIProviderName = "openai" | "gemini" | "demo";
+export type ProviderResult<T> = { data: T; provider: AIProviderName; fallback: boolean };
 
 const advisorNarrativeSchema = z.object({
   answer: z.string().trim().min(1).max(3000),
   suggestedQuestions: z.array(z.string().trim().min(1).max(180)).max(4)
 });
 
+const visualCategoryList = catalogueCategories.join(", ");
+
 export interface AIProvider {
-  readonly name: "openai" | "demo";
+  readonly name: AIProviderName;
   parseSearchIntent(query: string): Promise<SearchIntent>;
   analyzeProductImage(imageDataUrl: string): Promise<VisualTags>;
   analyzeRoomImage(imageDataUrl: string): Promise<RoomAnalysis>;
@@ -69,7 +73,7 @@ function emptyIntent(queryText: string): SearchIntent {
 }
 
 export class LocalDemoAIProvider implements AIProvider {
-  readonly name = "demo" as const;
+  readonly name: AIProviderName = "demo";
 
   async parseSearchIntent(query: string) {
     const filters = parseSearchQuery(query);
@@ -212,6 +216,48 @@ export class LocalDemoAIProvider implements AIProvider {
   }
 }
 
+export class GeminiVisionProvider extends LocalDemoAIProvider {
+  override readonly name: AIProviderName = "gemini";
+
+  constructor(private readonly apiKey: string) {
+    super();
+  }
+
+  override async analyzeProductImage(imageDataUrl: string) {
+    const match = imageDataUrl.match(/^data:(image\/(?:jpeg|png|webp));base64,(.+)$/s);
+    if (!match) throw new Error("Gemini vision received an invalid image payload.");
+    const model = process.env.GEMINI_IMAGE_MODEL || "gemini-3.6-flash";
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-goog-api-key": this.apiKey
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: match[1], data: match[2] } },
+            { text: `Analyze the most prominent furniture or home-accessory object for catalogue matching. Supported categories are: ${visualCategoryList}. If none is clearly visible, category must be null. Return only JSON with exactly these fields: category (supported category or null), colorFamilies (string array), likelyMaterial (fabric, leather, wood, metal, glass or null), style (string array), silhouette (string), notableVisualFeatures (string array). Describe only visible traits and never identify or invent a product.` }
+          ]
+        }],
+        generationConfig: {
+          temperature: 0.1,
+          responseMimeType: "application/json"
+        }
+      })
+    });
+    const payload = await response.json().catch(() => null) as {
+      error?: { message?: string };
+      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+    } | null;
+    if (!response.ok) throw new Error(payload?.error?.message || `Gemini vision failed with status ${response.status}.`);
+    const text = payload?.candidates?.[0]?.content?.parts?.map((part) => part.text ?? "").join("").trim();
+    if (!text) throw new Error("Gemini vision returned no structured analysis.");
+    const normalized = text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "");
+    return visualTagsSchema.parse(JSON.parse(normalized));
+  }
+}
+
 function imageFingerprint(dataUrl: string) {
   let value = 17;
   const sample = dataUrl.slice(-4096);
@@ -249,8 +295,8 @@ export class OpenAIProvider implements AIProvider {
 
   analyzeProductImage(imageDataUrl: string) {
     return this.parse(visualTagsSchema, "product_visual_tags",
-      "Analyze only the most prominent target furniture object. Allowed categories are sofa, sectional, armchair and storage. Set category to null when none of those objects is clearly visible. Describe only visible traits; never identify or invent a product.",
-      [{ role: "user", content: [{ type: "input_text", text: "Analyze the selected image area for visual catalogue matching. Return visible colour families, likely material, style, silhouette and notable features. If no supported furniture object is clearly visible, set category to null." }, { type: "input_image", image_url: imageDataUrl, detail: "auto" }] }], true);
+      `Analyze only the most prominent target furniture or home-accessory object. Allowed categories are: ${visualCategoryList}. Set category to null when none of those objects is clearly visible. Describe only visible traits; never identify or invent a product.`,
+      [{ role: "user", content: [{ type: "input_text", text: "Analyze the selected image area for visual catalogue matching. Return the catalogue category, visible colour families, likely material, style, silhouette and notable features. If no supported catalogue object is clearly visible, set category to null." }, { type: "input_image", image_url: imageDataUrl, detail: "auto" }] }], true);
   }
 
   analyzeRoomImage(imageDataUrl: string) {
@@ -306,9 +352,30 @@ export class OpenAIProvider implements AIProvider {
   }
 
   async findProductAlternatives(input: AlternativeRequest) {
-    const parsed = await this.parse(alternativeRequestSchema, "alternative_requirements",
-      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, layoutShapes, materials and functions. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Preserve sourceProductId, requestText and strict exactly. Do not invent product facts or IDs.",
+    const shape = alternativeRequestSchema.shape;
+    const extractionSchema = z.object({
+      category: shape.category.unwrap().nullable(),
+      colorFamilies: shape.colorFamilies.unwrap(),
+      styles: shape.styles.unwrap(),
+      numberOfSeats: shape.numberOfSeats.unwrap().nullable(),
+      maxWidthMm: shape.maxWidthMm.unwrap().nullable(),
+      minWidthMm: shape.minWidthMm.unwrap().nullable(),
+      targetWidthMm: shape.targetWidthMm.unwrap().nullable(),
+      layoutShapes: shape.layoutShapes.unwrap(),
+      minSeatHeightMm: shape.minSeatHeightMm.unwrap().nullable(),
+      requiredFunctions: shape.requiredFunctions.unwrap(),
+      excludedFunctions: shape.excludedFunctions.unwrap(),
+      materialTags: shape.materialTags.unwrap(),
+      preserveStyle: shape.preserveStyle.unwrap().nullable(),
+      preserveComfort: shape.preserveComfort.unwrap().nullable()
+    });
+    const extracted = await this.parse(extractionSchema, "alternative_requirements",
+      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, layoutShapes, materials and functions. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
       [{ role: "user", content: JSON.stringify(input) }]);
+    const inferred = Object.fromEntries(Object.entries(extracted).filter(([, value]) => value !== null));
+    // Explicit structured filters from the UI are authoritative; AI only fills
+    // constraints expressed in free text. IDs and request text never come from AI.
+    const parsed = alternativeRequestSchema.parse({ ...inferred, ...input });
     return alternativeResponseSchema.parse(findGroundedAlternatives(parsed));
   }
 
@@ -409,28 +476,34 @@ export class OpenAIProvider implements AIProvider {
   }
 }
 
-export function configuredProvider(): AIProvider {
+export function configuredProvider(options: { capability?: "vision" } = {}): AIProvider {
   const enabled = process.env.AI_ENABLED !== "false";
-  const wantsOpenAI = (process.env.AI_PROVIDER || "openai").toLowerCase() === "openai";
-  return enabled && wantsOpenAI && process.env.OPENAI_API_KEY
-    ? new OpenAIProvider(process.env.OPENAI_API_KEY)
+  const providerName = (process.env.AI_PROVIDER || "openai").toLowerCase();
+  const openAIKey = process.env.OPENAI_API_KEY;
+  const geminiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || (openAIKey?.startsWith("AQ.") ? openAIKey : undefined);
+  const wantsGeminiVision = options.capability === "vision" && (providerName === "gemini" || Boolean(openAIKey?.startsWith("AQ.")));
+  if (enabled && wantsGeminiVision && geminiKey) return new GeminiVisionProvider(geminiKey);
+  const wantsOpenAI = providerName === "openai" && !openAIKey?.startsWith("AQ.");
+  return enabled && wantsOpenAI && openAIKey
+    ? new OpenAIProvider(openAIKey)
     : new LocalDemoAIProvider();
 }
 
 export async function withDemoFallback<T>(
   operation: (provider: AIProvider) => Promise<T>,
-  options: { allowOpenAI?: boolean } = {}
+  options: { allowOpenAI?: boolean; capability?: "vision"; fallbackOnError?: boolean } = {}
 ): Promise<ProviderResult<T>> {
-  const provider = options.allowOpenAI ? configuredProvider() : new LocalDemoAIProvider();
+  const provider = options.allowOpenAI ? configuredProvider({ capability: options.capability }) : new LocalDemoAIProvider();
   try {
     return { data: await operation(provider), provider: provider.name, fallback: false };
   } catch (error) {
-    if (provider.name === "openai") {
+    if (provider.name === "openai" || provider.name === "gemini") {
       const safeDetails = error && typeof error === "object"
         ? { name: "name" in error ? String(error.name) : "Error", status: "status" in error ? Number(error.status) : undefined, code: "code" in error ? String(error.code) : undefined }
         : { name: "Error" };
       console.warn("AI provider request failed; using the deterministic catalogue fallback.", safeDetails);
     }
+    if (options.fallbackOnError === false) throw error;
     const demo = new LocalDemoAIProvider();
     return { data: await operation(demo), provider: "demo", fallback: true };
   }

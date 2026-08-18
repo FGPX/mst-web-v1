@@ -6,7 +6,7 @@ test.beforeEach(async ({ page }) => {
 
 test("Product Detail shows validated Better Match results", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
-  await page.getByRole("button", { name: /Find a Better Match for Me/ }).click();
+  await page.getByRole("button", { name: /Discover More Like This/ }).click();
   await expect(page.getByLabel("What are you looking for?")).toHaveValue("");
   await page.getByLabel("What are you looking for?").fill("Same style, but smaller");
   await page.getByRole("button", { name: "Show matches" }).click();
@@ -21,7 +21,7 @@ test("Product Detail shows validated Better Match results", async ({ page }) => 
 
 test("Better Match treats a red sofa request as a catalogue requirement", async ({ page }) => {
   await page.goto("/furniture/justb-pm200");
-  await page.getByRole("button", { name: /Find a Better Match for Me/ }).click();
+  await page.getByRole("button", { name: /Discover More Like This/ }).click();
   await page.getByLabel("What are you looking for?").fill("sofa red");
   await page.getByRole("button", { name: "Show matches" }).click();
   await expect(page.getByText("red colour", { exact: true })).toBeVisible();

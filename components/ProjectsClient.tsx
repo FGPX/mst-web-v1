@@ -90,7 +90,7 @@ export function ProjectsClient() {
         </section>
         <div className="stitch-project-title"><h2>Saved Products</h2><Link href="/handover"><MessageSquare size={16} /> Expert consultation</Link></div>
         <section className="stitch-project-products">
-          {displayed.length ? displayed.map((product) => <article key={product.id}><Link href={`/furniture/${product.slug}`}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={520} height={360} /><small>{product.modelCode}</small><strong>{product.name}</strong><span>Saved by you</span></Link><AlternativeFinderButton productId={product.id} label="Find a Better Match" className="" /></article>) : <div className="stitch-project-empty"><h3>No products saved yet</h3><p>Only products you explicitly save will appear here.</p><Link href="/furniture">Explore furniture</Link></div>}
+          {displayed.length ? displayed.map((product) => <article key={product.id}><Link href={`/furniture/${product.slug}`}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={520} height={360} /><small>{product.modelCode}</small><strong>{product.name}</strong><span>Saved by you</span></Link><AlternativeFinderButton productId={product.id} label="Discover More Like This" className="" /></article>) : <div className="stitch-project-empty"><h3>No products saved yet</h3><p>Only products you explicitly save will appear here.</p><Link href="/furniture">Explore furniture</Link></div>}
         </section>
         <section className="stitch-project-resource-index" aria-label="Saved journey resources">
           <Link href="/furniture"><strong>{savedIds.length}</strong><span>Saved products</span></Link>

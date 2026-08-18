@@ -30,7 +30,7 @@
 - Global layout and header: Advisor and voice entry points.
 - `/presentation`: four controlled assistant examples.
 - `/search`: alternative and Advisor actions.
-- `/furniture/[slug]`: Find a Better Match for Me.
+- `/furniture/[slug]`: Discover More Like This.
 - `/compare`: alternative action for compared products.
 - `/materials`: household-needs advisor and grounded care plan.
 - `/configurator/[slug]`, `/room-composer`, `/my-musterring`, `/handover`: contextual starter questions and validated action destinations.

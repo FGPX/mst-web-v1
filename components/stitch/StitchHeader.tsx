@@ -153,7 +153,7 @@ export function StitchHeader() {
         <Link href="/room-composer" onClick={close}>Plan a Room</Link>
         <Link href="/my-musterring" onClick={close}>My Project</Link>
         <Link href="/materials" onClick={close}>Materials</Link>
-        <Link href="/visual-search" onClick={close}>Visual Search</Link>
+        <Link href="/search#visual-search" onClick={close}>Visual Search</Link>
         <Link href="/comfort-match" onClick={close}>Advice</Link>
         <Link href="/about" onClick={close}>About Musterring</Link>
         <Link href="/contact" onClick={close}>Contact us</Link>

@@ -232,11 +232,16 @@ export function searchCatalogueByVisualTags(tags: VisualTags) {
   // An unrelated or unclear upload must never be turned into an arbitrary
   // Musterring recommendation merely because catalogue products exist.
   if (!tags.category) return [];
+  const isCompatibleCategory = (productCategory: Product["category"]) =>
+    productCategory === tags.category ||
+    ((tags.category === "sectional" || tags.category === "sofa") &&
+      (productCategory === "sectional" || productCategory === "sofa"));
   const active = products.filter((product) => product.active);
   return active.map((product) => {
     let score = 0;
     const reasons: string[] = [];
-    if (tags.category && product.category === tags.category) { score += 35; reasons.push("same furniture category"); }
+    if (product.category === tags.category) { score += 35; reasons.push("same furniture category"); }
+    else if (isCompatibleCategory(product.category)) { score += 30; reasons.push("same sofa family"); }
     const colors = tags.colorFamilies.filter((color) => product.colors.includes(color.toLowerCase()));
     if (colors.length) { score += 30; reasons.push(`similar ${colors.join(", ")} colour family`); }
     const styles = tags.style.filter((style) => product.styles.some((candidate) => candidate.includes(style) || style.includes(candidate)));
@@ -246,7 +251,7 @@ export function searchCatalogueByVisualTags(tags: VisualTags) {
       if (hasMaterial) { score += 15; reasons.push(`offers ${tags.likelyMaterial}`); }
     }
     return { product, score, reasons };
-  }).filter((match) => !tags.category || match.product.category === tags.category)
+  }).filter((match) => isCompatibleCategory(match.product.category))
     .sort((left, right) => right.score - left.score)
     .slice(0, 12);
 }

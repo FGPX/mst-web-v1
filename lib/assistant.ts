@@ -541,7 +541,7 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
       answer: `${facts} Availability and technical confirmation are provided by the selected Musterring retailer.`,
       answerType: "fact", productIds: [current.id], materialIds: [], sources: ["Musterring product catalogue"],
       proposedAction: /electric|relax|configur/.test(text) ? { type: "CONFIGURE_PRODUCT", label: `Validate options for ${current.modelCode}`, parameters: { slug: current.slug }, requiresConfirmation: false } : null,
-      suggestedQuestions: ["Find a better match", "Explain compatible materials"]
+      suggestedQuestions: ["Discover more like this", "Explain compatible materials"]
     });
   }
   const discovery = productDiscoveryAnswer(question);

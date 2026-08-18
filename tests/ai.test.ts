@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
+import { catalogueCategories } from "@/lib/types";
 import { buildGroundedConfiguration } from "@/lib/ai/configuration";
 import { comparisonSummaryInput, deterministicComparisonSummary } from "@/lib/ai/comparison-summary";
 import { groundProjectData } from "@/lib/ai/grounding";
@@ -96,6 +97,38 @@ describe("grounded hybrid retrieval", () => {
     const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({ category: "sofa", colorFamilies: ["beige"], likelyMaterial: "fabric", style: ["modern heritage"], silhouette: "wide", notableVisualFeatures: [] }));
     const ids = new Set(products.map((product) => product.id));
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
+  });
+
+  it("accepts every catalogue category for visual search", () => {
+    for (const category of catalogueCategories) {
+      expect(visualTagsSchema.safeParse({ category, colorFamilies: [], likelyMaterial: null, style: [], silhouette: "visible object", notableVisualFeatures: [] }).success).toBe(true);
+    }
+  });
+
+  it("maps visually detected sectionals to catalogue sofa programmes", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "sectional",
+      colorFamilies: ["beige", "cream"],
+      likelyMaterial: "fabric",
+      style: ["modern"],
+      silhouette: "corner sofa",
+      notableVisualFeatures: []
+    }));
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every(({ product }) => product.category === "sofa" || product.category === "sectional")).toBe(true);
+  });
+
+  it("returns catalogue dining tables for a visually detected dining table", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "dining-table",
+      colorFamilies: ["white", "beige"],
+      likelyMaterial: "wood",
+      style: ["modern"],
+      silhouette: "rectangular dining table",
+      notableVisualFeatures: ["light top", "metal legs"]
+    }));
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every(({ product }) => product.category === "dining-table")).toBe(true);
   });
 
   it("does not recommend a product when no supported furniture is detected", () => {

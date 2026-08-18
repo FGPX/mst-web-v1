@@ -1,6 +1,6 @@
 # AI Product Alternative Finder
 
-The shared **Find a Better Match for Me** panel is available from Product Detail, Intelligent Search cards, Product Comparison, My Musterring and the Product Advisor.
+The shared **Discover More Like This** panel is available from Product Detail, Intelligent Search cards, Product Comparison, My Musterring and the Product Advisor.
 
 Requests are validated by `alternativeRequestSchema`. `findGroundedAlternatives` compares only active catalogue products in the source category. Width, seat height, concept price, required/excluded functions, material tags, style and comfort are explicit checks. Exact results satisfy every check. Closest alternatives list every unmet requirement. Strict mode hides all non-exact alternatives.
 

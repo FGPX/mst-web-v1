@@ -3,7 +3,7 @@ import "./globals.css";
 import { ExperienceChrome } from "@/components/ExperienceChrome";
 
 export const metadata: Metadata = {
-  title: "Musterring | Find furniture and plan your room",
+  title: "Musterring | Intelligent Search and plan your room",
   description: "Discover furniture, plan your room and prepare your project for a personal Musterring consultation.",
   icons: {
     icon: [{ url: "/brand/musterring-logo.svg", type: "image/svg+xml" }],

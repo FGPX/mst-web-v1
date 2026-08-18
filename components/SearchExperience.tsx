@@ -3,7 +3,7 @@
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { ArrowRight, Camera, History, Search, Sparkles, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
@@ -12,11 +12,11 @@ import { ProductCard } from "./ProductCard";
 import { CompareSelectionBar } from "./CompareSelectionBar";
 
 const suggestions = [
-  "Beige modular sofa",
-  "Black relax sofa",
-  "Taupe armchair",
-  "Oak storage",
-  "Minimal coffee table"
+  "Beige modular sofa under 300 cm",
+  "Black modern sofa with relax function",
+  "Taupe swivel armchair",
+  "Brown oak storage cabinet",
+  "Black minimal coffee table"
 ];
 
 const cutoutSlugs = new Set(["justb-pm100", "justb-pm200", "mr-lucia", "mr-230", "mr-260", "mr-270", "mr-280", "mr-285", "mr-nils", "mr-pamela", "mr-231", "jana", "kanto", "justb-ct100", "nara", "mr-kleo", "mr-281", "mr-5111", "mr-9445"]);
@@ -74,13 +74,29 @@ type SearchResponse = {
   ai: { mode: string; fallback: boolean };
 };
 
+type VisualMatch = {
+  product: Product;
+  score: number;
+  label: string;
+  reasons: string[];
+  differences: string[];
+};
+
 export function SearchExperience({ initialQuery = "" }: { initialQuery?: string }) {
+  const visualInputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState(initialQuery);
   const [submitted, setSubmitted] = useState(initialQuery);
   const [recent, setRecent] = useState<string[]>([]);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [response, setResponse] = useState<SearchResponse | null>(null);
+  const [visualDragActive, setVisualDragActive] = useState(false);
+  const [visualUploadError, setVisualUploadError] = useState("");
+  const [visualPreview, setVisualPreview] = useState("");
+  const [visualPending, setVisualPending] = useState(false);
+  const [visualMatches, setVisualMatches] = useState<VisualMatch[]>([]);
+  const [visualAnalysis, setVisualAnalysis] = useState("");
+  const [visualNoMatchReason, setVisualNoMatchReason] = useState("");
   const [compareIds, setCompareIds] = useState<string[]>([]);
   useEffect(() => setRecent(storage.recentSearches()), []);
 
@@ -163,6 +179,53 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
 
   const exact = response?.exactMatches ?? [];
 
+  const startVisualUpload = async (file?: File) => {
+    if (!file) return;
+    setVisualUploadError("");
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setVisualUploadError("Choose a JPG, PNG or WebP image.");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setVisualUploadError("Choose an image smaller than 10 MB.");
+      return;
+    }
+    if (visualPreview) URL.revokeObjectURL(visualPreview);
+    setVisualPreview(URL.createObjectURL(file));
+    setVisualPending(true);
+    setVisualMatches([]);
+    setVisualAnalysis("");
+    setVisualNoMatchReason("");
+    storage.track({ name: "visual_search_uploaded" });
+    const form = new FormData();
+    form.append("image", file);
+    form.append("consent", "true");
+    form.append("observedColors", "[]");
+    const response = await fetch("/api/ai/image", { method: "POST", body: form }).catch(() => null);
+    const payload = response ? await response.json().catch(() => null) : null;
+    setVisualPending(false);
+    if (!response?.ok || !payload?.tags) {
+      setVisualUploadError(payload?.error ?? "Visual analysis could not be completed. Please try another image.");
+      return;
+    }
+    const matches = payload.matches ?? [];
+    setVisualMatches(matches);
+    setVisualNoMatchReason(payload.noMatchReason ?? "");
+    setVisualAnalysis([
+      payload.tags.category ? String(payload.tags.category).replace(/-/g, " ") : "Furniture",
+      ...(payload.tags.colorFamilies ?? []).slice(0, 2),
+      payload.ai?.mode
+    ].filter(Boolean).join(" · "));
+    storage.track({ name: "visual_search_analyzed" });
+    if (matches.length) {
+      window.setTimeout(() => document.getElementById("visual-recommendations")?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+    }
+  };
+
+  useEffect(() => () => {
+    if (visualPreview) URL.revokeObjectURL(visualPreview);
+  }, [visualPreview]);
+
   return (
     <div className={`stitch-ai-search ${requestedRed ? "is-colour-search" : ""} ${submitted ? "has-results" : ""}`}>
       <section className="stitch-ai-search-hero">
@@ -191,9 +254,57 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               ))}
             </div>
           ) : null}
-          {!submitted ? <div className="stitch-ai-discovery">
-            <Link className="stitch-ai-visual-entry" href="/visual-search"><i aria-hidden="true"><Camera size={24} /></i><strong>Visual Search</strong><span>Upload an image to find similar pieces</span><b>Upload image</b></Link>
-            <div className="stitch-ai-search-lists">
+          {!submitted ? <div className={`stitch-ai-discovery ${visualPreview ? "has-visual-search" : ""}`}>
+            <div className="stitch-ai-visual-upload-shell" id="visual-search">
+              <button
+                className={`stitch-ai-visual-entry ${visualDragActive ? "is-dragging" : ""}`}
+                type="button"
+                onClick={() => visualInputRef.current?.click()}
+                onDragEnter={(event) => { event.preventDefault(); setVisualDragActive(true); }}
+                onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "copy"; setVisualDragActive(true); }}
+                onDragLeave={() => setVisualDragActive(false)}
+                onDrop={(event) => {
+                  event.preventDefault();
+                  setVisualDragActive(false);
+                  void startVisualUpload(event.dataTransfer.files?.[0]);
+                }}
+              >
+                {visualPreview ? (
+                  // Blob URLs are local previews and cannot use the Next image optimizer.
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={visualPreview} alt="Selected visual search reference" />
+                ) : <i aria-hidden="true"><Camera size={27} /></i>}
+                <strong>{visualPending ? "Searching catalogue…" : visualPreview ? "Change image" : "Visual Search"}</strong>
+                <span>{visualDragActive ? "Drop the image to analyze it" : visualPreview ? "Upload another image or review the recommendations" : "Upload or drag an image to find similar pieces"}</span>
+                <b>{visualDragActive ? "Drop & analyze" : visualPreview ? "Choose another" : "Upload & analyze"}</b>
+                {visualUploadError ? <em role="alert">{visualUploadError}</em> : null}
+              </button>
+              <input
+                ref={visualInputRef}
+                hidden
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                onClick={(event) => { event.currentTarget.value = ""; }}
+                onChange={(event) => void startVisualUpload(event.target.files?.[0])}
+              />
+            </div>
+            {visualPreview ? (
+              <div className="stitch-inline-visual-results" aria-live="polite">
+                <div className="stitch-inline-visual-results-head">
+                  <div><p className="stitch-ai-label">Visual recommendations</p>{visualAnalysis ? <small>{visualAnalysis}</small> : null}</div>
+                  {visualMatches.length ? <strong>{visualMatches.length} catalogue {visualMatches.length === 1 ? "match" : "matches"}</strong> : null}
+                </div>
+                {visualPending ? (
+                  <div className="stitch-inline-visual-status"><Sparkles className="spin" /><strong>Analyzing the image and checking the Musterring catalogue…</strong></div>
+                ) : visualUploadError ? (
+                  <div className="stitch-inline-visual-status is-error"><X /><strong>{visualUploadError}</strong></div>
+                ) : visualMatches.length ? (
+                  <div className="stitch-inline-visual-status is-ready"><Sparkles /><strong>{visualMatches.length} catalogue recommendations are ready below.</strong></div>
+                ) : (
+                  <div className="stitch-inline-visual-status"><Search /><strong>{visualNoMatchReason || "No grounded catalogue match was found. Try another furniture image."}</strong></div>
+                )}
+              </div>
+            ) : <div className="stitch-ai-search-lists">
               <section>
                 <p className="stitch-ai-label">Suggested searches</p>
                 <div className="stitch-ai-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion} onClick={() => void submit(suggestion)}><Search size={13} />{suggestion}</button>)}</div>
@@ -202,10 +313,38 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                 <p className="stitch-ai-label">Recent searches</p>
                 {recent.length ? <div className="stitch-ai-suggestions" aria-label="Recent searches">{recent.slice(0, 5).map((item) => <button type="button" key={item} onClick={() => void submit(item)}><History size={13} />{item}</button>)}</div> : <p className="stitch-ai-empty-recent">Your recent searches will appear here.</p>}
               </section>
-            </div>
+            </div>}
           </div> : null}
         </div>
       </section>
+
+      {!submitted && visualPreview && visualMatches.length ? (
+        <section className="section stitch-ai-results stitch-visual-catalogue-results" id="visual-recommendations">
+          <div className="container">
+            <div className="stitch-ai-results-head">
+              <div>
+                <p className="eyebrow">Your visual search results</p>
+                <h1 className="h2">{visualMatches.length} catalogue {visualMatches.length === 1 ? "recommendation" : "recommendations"}</h1>
+                {visualAnalysis ? <details className="search-technical-details"><summary>How these results were prepared</summary><p>{visualAnalysis} · ranked against available catalogue data</p></details> : null}
+              </div>
+            </div>
+            <p className="stitch-search-catalogue-notice">Recommendations are based on visible similarity. Product identity, dimensions, upholstery and availability require catalogue or retailer confirmation.</p>
+            <div className="grid grid-3">
+              {visualMatches.map((match) => (
+                <ProductCard
+                  key={match.product.id}
+                  product={match.product}
+                  imageOverride={productImages(match.product.id)[0]}
+                  explanation={`${match.label}: ${match.reasons.map(compactMatchReason).join(" · ") || "Same detected furniture category"}`}
+                  showMeta={false}
+                  compareSelected={compareIds.includes(match.product.id)}
+                  onCompare={() => toggleCompare(match.product.id)}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {submitted ? (
         <section className="section stitch-ai-results">
