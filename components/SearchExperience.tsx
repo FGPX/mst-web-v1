@@ -9,13 +9,14 @@ import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
 import type { Product } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
+import { CompareSelectionBar } from "./CompareSelectionBar";
 
 const suggestions = [
-  { label: "Beige modular sofa", query: "beige modular sofa under 300 cm" },
-  { label: "Black relax sofa", query: "black modern sofa with relax function" },
-  { label: "Taupe armchair", query: "taupe swivel armchair" },
-  { label: "Oak storage", query: "brown oak storage cabinet" },
-  { label: "Minimal coffee table", query: "black minimal coffee table" }
+  "Beige modular sofa",
+  "Black relax sofa",
+  "Taupe armchair",
+  "Oak storage",
+  "Minimal coffee table"
 ];
 
 const cutoutSlugs = new Set(["justb-pm100", "justb-pm200", "mr-lucia", "mr-230", "mr-260", "mr-270", "mr-280", "mr-285", "mr-nils", "mr-pamela", "mr-231", "jana", "kanto", "justb-ct100", "nara", "mr-kleo", "mr-281", "mr-5111", "mr-9445"]);
@@ -53,6 +54,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [response, setResponse] = useState<SearchResponse | null>(null);
+  const [compareIds, setCompareIds] = useState<string[]>([]);
   useEffect(() => setRecent(storage.recentSearches()), []);
 
   const requestedRed = Array.isArray(response?.intent.colorFamilies) &&
@@ -125,6 +127,10 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
     void submit(next || "furniture");
   };
 
+  const toggleCompare = (productId: string) => setCompareIds((current) =>
+    current.includes(productId) ? current.filter((id) => id !== productId) : current.length < 3 ? [...current, productId] : current
+  );
+
   const exact = response?.exactMatches ?? [];
 
   return (
@@ -160,7 +166,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
             <div className="stitch-ai-search-lists">
               <section>
                 <p className="stitch-ai-label">Suggested searches</p>
-                <div className="stitch-ai-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion.query} onClick={() => void submit(suggestion.query)}><Search size={13} />{suggestion.label}</button>)}</div>
+                <div className="stitch-ai-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion} onClick={() => void submit(suggestion)}><Search size={13} />{suggestion}</button>)}</div>
               </section>
               <section>
                 <p className="stitch-ai-label">Recent searches</p>
@@ -190,7 +196,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               <p className="stitch-search-catalogue-notice">Dimensions and prices vary by configuration and are confirmed by a Musterring retailer.</p>
             ) : null}
             {pending ? <div className="card card-body" role="status">Interpreting request and searching validated catalogue data…</div> : exact.length ? (
-              <div className="grid grid-3">{exact.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={requestedRed ? (product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish") : undefined} explanation={`Matches: ${reasons.map(compactMatchReason).join(" · ") || "Catalogue relevance"}`} showMeta={false} />)}</div>
+              <div className="grid grid-3">{exact.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={requestedRed ? (product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish") : undefined} explanation={`Matches: ${reasons.map(compactMatchReason).join(" · ") || "Catalogue relevance"}`} showMeta={false} compareSelected={compareIds.includes(product.id)} onCompare={() => toggleCompare(product.id)} />)}</div>
             ) : response ? (
               <div className="card card-body">
                 <h2>No exact catalogue match</h2>
@@ -201,12 +207,13 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               <div className="stitch-ai-alternatives">
                 <p className="eyebrow">Recommended alternatives</p>
                 <h2>Other products to consider</h2>
-                <div className="grid grid-3">{response.closeAlternatives.map(({ product, reasons }) => <ProductCard key={product.id} product={product} explanation={`Close match: ${reasons.map(compactMatchReason).join(" · ")}`} showMeta={false} />)}</div>
+                <div className="grid grid-3">{response.closeAlternatives.map(({ product, reasons }) => <ProductCard key={product.id} product={product} explanation={`Close match: ${reasons.map(compactMatchReason).join(" · ")}`} showMeta={false} compareSelected={compareIds.includes(product.id)} onCompare={() => toggleCompare(product.id)} />)}</div>
               </div>
             ) : null}
           </div>
         </section>
       ) : null}
+      <CompareSelectionBar ids={compareIds} onClear={() => setCompareIds([])} />
     </div>
   );
 }

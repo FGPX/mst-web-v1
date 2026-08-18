@@ -26,6 +26,7 @@
   --stitch-radius-sm: 4px;
   --stitch-radius: 8px;
   --stitch-radius-lg: 16px;
+  --stitch-control-radius: 4px;
   --stitch-button-height: 56px;
   --stitch-button-padding-x: 40px;
   --stitch-shadow-soft: 0 30px 80px rgba(27, 28, 25, 0.1);

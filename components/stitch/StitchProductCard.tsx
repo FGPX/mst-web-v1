@@ -9,7 +9,7 @@ import { storage } from "@/lib/persistence";
 import { productImages } from "@/lib/musterring-assets";
 import { AlternativeFinderButton } from "../AlternativeFinderButton";
 
-export function StitchProductCard({ product, explanation, imageOverride, imageNote, showMeta = true }: { product: Product; explanation?: string; imageOverride?: string; imageNote?: string; showMeta?: boolean }) {
+export function StitchProductCard({ product, explanation, imageOverride, imageNote, showMeta = true, compareSelected = false, onCompare }: { product: Product; explanation?: string; imageOverride?: string; imageNote?: string; showMeta?: boolean; compareSelected?: boolean; onCompare?: () => void }) {
   const image = imageOverride ?? productImages(product.id)[0];
   const isConfigurable = ["sofa", "sectional", "armchair"].includes(product.category);
   const canPlaceInRoom = ["sofa", "sectional", "armchair", "storage", "coffee-table"].includes(product.category);
@@ -35,7 +35,7 @@ export function StitchProductCard({ product, explanation, imageOverride, imageNo
         {explanation ? <p className="stitch-product-explanation">{explanation}</p> : null}
         <div className="stitch-product-actions" aria-label="Product actions">
           <AlternativeFinderButton productId={product.id} label="Better Match" className="stitch-product-action-match" />
-          <Link className="stitch-product-action-compare" href={`/compare?ids=${product.id}`}><GitCompare size={15} /> Compare</Link>
+          {onCompare ? <button type="button" className={`stitch-product-action-compare${compareSelected ? " is-selected" : ""}`} onClick={onCompare}><GitCompare size={15} /> {compareSelected ? "Selected" : "Compare"}</button> : <Link className="stitch-product-action-compare" href={`/compare?ids=${product.id}`}><GitCompare size={15} /> Compare</Link>}
           {isConfigurable ? <Link className="stitch-product-action-configure" href={`/configurator/${product.slug}`}><Settings size={15} /> Quick Configure</Link> : null}
           {canPlaceInRoom ? <Link className={`stitch-product-action-room${isConfigurable ? "" : " stitch-product-action-wide"}`} href="/room-composer"><Eye size={15} /> See It in Your Room</Link> : null}
           {!canPlaceInRoom ? <Link className="stitch-product-action-details stitch-product-action-wide" href={`/furniture/${product.slug}`}><ArrowUpRight size={15} /> View Details</Link> : null}
