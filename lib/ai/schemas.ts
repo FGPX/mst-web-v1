@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { catalogueCategories } from "../types";
 
 const nullableString = z.string().nullable();
 const nullableNumber = z.number().int().nonnegative().nullable();
@@ -8,10 +9,7 @@ const layoutShapeSchema = z.enum(["straight", "l-shaped", "u-shaped", "corner", 
 
 export const searchIntentSchema = z.object({
   queryText: z.string().trim().min(1).max(1000),
-  category: z.enum([
-    "sofa", "armchair", "sectional", "storage", "coffee-table", "bedroom-series", "bed", "wardrobe",
-    "dining-chair", "dining-table", "bathroom", "kitchen", "outdoor", "small-furniture", "carpet", "lamp", "home-textile"
-  ]).nullable(),
+  category: z.enum(catalogueCategories).nullable(),
   colorFamilies: nullableStrings,
   materials: nullableStrings,
   maxWidthMm: nullableNumber,
@@ -30,7 +28,7 @@ export const searchIntentSchema = z.object({
 export type SearchIntent = z.infer<typeof searchIntentSchema>;
 
 export const visualTagsSchema = z.object({
-  category: z.enum(["sofa", "armchair", "sectional", "storage"]).nullable(),
+  category: z.enum(catalogueCategories).nullable(),
   colorFamilies: z.array(z.string()),
   likelyMaterial: nullableString,
   style: z.array(z.string()),

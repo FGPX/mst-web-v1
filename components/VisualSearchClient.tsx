@@ -7,9 +7,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { materials } from "@/lib/data";
 import { storage } from "@/lib/persistence";
 import { productImages } from "@/lib/musterring-assets";
-import type { Category, Product } from "@/lib/types";
+import { categoryDetails } from "@/lib/catalog-taxonomy";
+import { catalogueCategories, type Category, type Product } from "@/lib/types";
 
-type MatchCategory = Extract<Category, "sofa" | "sectional" | "armchair" | "storage">;
+type MatchCategory = Category;
 type VisualResult = { product: Product; score: number; explanation: string; differences: string };
 
 function matchLabel(score: number) {
@@ -108,9 +109,12 @@ export function VisualSearchClient() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [aiMode, setAiMode] = useState("");
   const [noMatchReason, setNoMatchReason] = useState("");
+  const [dropActive, setDropActive] = useState(false);
   const visibleResults = useMemo(
     () => results.filter(({ product }) =>
-      product.category === category &&
+      (product.category === category ||
+        ((category === "sofa" || category === "sectional") &&
+          (product.category === "sofa" || product.category === "sectional"))) &&
       (!color || product.colors.includes(color)) &&
       (!materialId || product.materials.includes(materialId)) &&
       (!style || product.styles.includes(style))
@@ -163,7 +167,7 @@ export function VisualSearchClient() {
       const payload = await response.json().catch(() => null);
       if (!response.ok) throw new Error(payload?.error ?? "The selected area could not be analyzed.");
       const detectedCategory = payload.tags.category;
-      if (detectedCategory === "storage" || detectedCategory === "armchair" || detectedCategory === "sectional" || detectedCategory === "sofa") setCategory(detectedCategory);
+      if (catalogueCategories.includes(detectedCategory as Category)) setCategory(detectedCategory as Category);
       setColor("");
       setMaterialId("");
       setStyle("");
@@ -235,10 +239,22 @@ export function VisualSearchClient() {
           {error ? <p className="form-error" role="alert">{error}</p> : null}
 
           {!preview ? (
-            <button className="stitch-visual-dropzone" type="button" onClick={() => inputRef.current?.click()}>
+            <button
+              className={`stitch-visual-dropzone ${dropActive ? "is-dragging" : ""}`}
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              onDragEnter={(event) => { event.preventDefault(); setDropActive(true); }}
+              onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "copy"; setDropActive(true); }}
+              onDragLeave={() => setDropActive(false)}
+              onDrop={(event) => {
+                event.preventDefault();
+                setDropActive(false);
+                void processFile(event.dataTransfer.files?.[0]);
+              }}
+            >
               <Camera size={56} />
               <strong>Search with an image</strong>
-              <span>Choose a JPG, PNG or WebP photo</span>
+              <span>{dropActive ? "Drop the image to continue" : "Choose or drag a JPG, PNG or WebP photo"}</span>
             </button>
           ) : (
             <div className="stitch-visual-stage">
@@ -283,9 +299,7 @@ export function VisualSearchClient() {
                       <p><strong>{primary.score === 100 ? "Why it is exact:" : "Why it is similar:"}</strong> {primary.explanation}.</p>
                       {primary.score < 100 ? <p><strong>Why it is not an exact match:</strong> {primary.differences}. The recommendation is catalogue-grounded, but model identity cannot be confirmed from visual similarity alone.</p> : null}
                       <div className="chips">
-                        <Link className="button primary" href={primary.product.category === "storage" ? `/furniture/${primary.product.slug}` : `/configurator/${primary.product.slug}`}>
-                          {primary.product.category === "storage" ? "View Product" : "Configure Piece"}
-                        </Link>
+                        <Link className="button primary" href={`/furniture/${primary.product.slug}`}>View Product</Link>
                         <Link className="button ghost" href="/handover">Book Consultation</Link>
                         <button className="button ghost" onClick={() => {
                           storage.toggleProduct(primary.product.id);
@@ -299,10 +313,10 @@ export function VisualSearchClient() {
                 )}
                 <div className="stitch-visual-refine">
                   <p className="eyebrow">Refine results</p>
-                  {(["storage", "sofa", "sectional", "armchair"] as const).map((item) => (
+                  {catalogueCategories.map((item) => (
                     <button className={category === item ? "is-active" : ""} key={item} onClick={() => setCategory(item)}>
                       {category === item ? <Check size={14} /> : null}
-                      {item === "storage" ? "Living walls" : item === "sectional" ? "Sectionals" : `${item}s`}
+                      {categoryDetails[item].label}
                     </button>
                   ))}
                   <label>Color<select value={color} onChange={(event) => setColor(event.target.value)}><option value="">Any color</option>{[...new Set(results.flatMap(({ product }) => product.colors))].map((item) => <option key={item}>{item}</option>)}</select></label>

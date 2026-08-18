@@ -1,21 +1,9 @@
-export type Category =
-  | "sofa"
-  | "armchair"
-  | "sectional"
-  | "storage"
-  | "coffee-table"
-  | "bedroom-series"
-  | "bed"
-  | "wardrobe"
-  | "dining-chair"
-  | "dining-table"
-  | "bathroom"
-  | "kitchen"
-  | "outdoor"
-  | "small-furniture"
-  | "carpet"
-  | "lamp"
-  | "home-textile";
+export const catalogueCategories = [
+  "sofa", "armchair", "sectional", "storage", "coffee-table", "bedroom-series", "bed", "wardrobe",
+  "dining-chair", "dining-table", "bathroom", "kitchen", "outdoor", "small-furniture", "carpet", "lamp", "home-textile"
+] as const;
+
+export type Category = (typeof catalogueCategories)[number];
 export type ProjectStatus =
   | "Ideas Saved"
   | "Configuration in Progress"

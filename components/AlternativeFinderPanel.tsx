@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Compass, Save, Sparkles, X } from "lucide-react";
+import { ArrowRight, CheckCircle2, Compass, Save, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImageForColors } from "@/lib/musterring-assets";
@@ -90,14 +90,27 @@ export function AlternativeFinderPanel() {
   );
   return <div className="assistant-scrim" onMouseDown={(event) => { if (event.target === event.currentTarget) setOpen(false); }}>
     <aside className="alternative-panel" role="dialog" aria-modal="true" aria-labelledby="alternative-title" ref={panelRef}>
-      <header><div><p className="stitch-eyebrow">Find a better match</p><h2 id="alternative-title">Alternatives for <em>{source.modelCode}</em></h2></div><button aria-label="Close alternative finder" onClick={() => setOpen(false)}><X /></button></header>
+      <header><div><p className="stitch-eyebrow">Discover More Like This</p><h2 id="alternative-title">Alternatives for <em>{source.modelCode}</em></h2></div><button aria-label="Close alternative finder" onClick={() => setOpen(false)}><X /></button></header>
       <div className="alternative-request">
-        <label>What are you looking for?<textarea value={requestText} onChange={(event) => setRequestText(event.target.value)} placeholder="Describe what you would like to change…" /></label>
-        <div className="assistant-quick-row">
-          {["Smaller size", "Higher seat", "Easy-care", "Relax function", "Three-seat sofa", "Modular design", "Electric recline", "Upright seating"].map((text) => <button key={text} onClick={() => setRequestText(text)}>{text}</button>)}
+        <div className="alternative-request-heading">
+          <label htmlFor="alternative-request-text">What are you looking for?</label>
+          <p>Describe what you would like to change about this product in your own words.</p>
         </div>
-        <label className="assistant-check"><input type="checkbox" checked={strict} onChange={(event) => setStrict(event.target.checked)} /> Exact matches only</label>
-        <button className="assistant-primary" onClick={() => void submit()} disabled={status === "loading" || !requestText.trim()}><Sparkles size={16} />{status === "loading" ? "Finding matches…" : "Show matches"}</button>
+        <div className="alternative-request-input">
+          <textarea id="alternative-request-text" value={requestText} onChange={(event) => setRequestText(event.target.value)} placeholder="For example: a smaller sofa with a higher seat" />
+          <button type="button" aria-label="Find matches from description" onClick={() => void submit()} disabled={status === "loading" || !requestText.trim()}><Search aria-hidden="true" /></button>
+        </div>
+        <div className="alternative-suggestions">
+          <span>Suggestions</span>
+          <div className="assistant-quick-row">
+            {["Smaller size", "Higher seat", "Easy-care", "Relax function", "Three-seat sofa", "Modular design", "Electric recline", "Upright seating"].map((text) => <button type="button" key={text} aria-pressed={requestText === text} onClick={() => setRequestText(text)}>{text}</button>)}
+          </div>
+        </div>
+        <label className="assistant-check">
+          <input type="checkbox" checked={strict} onChange={(event) => setStrict(event.target.checked)} />
+          <span><strong>Exact matches only</strong><small>Show only products that match all selected criteria exactly.</small></span>
+        </label>
+        <button className="assistant-primary" onClick={() => void submit()} disabled={status === "loading" || !requestText.trim()}><Search size={19} aria-hidden="true" />{status === "loading" ? "Finding matches…" : "Show matches"}</button>
         {status === "error" ? <p role="alert">Alternatives are temporarily unavailable. The source product remains saved and no catalogue facts were changed.</p> : null}
       </div>
       {result ? <section className="alternative-response" aria-live="polite">

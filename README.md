@@ -13,7 +13,7 @@ Presentation guidance and verification:
 Connected customer assistance:
 
 - Global **Ask Musterring** Product Advisor and Voice Interior Assistant
-- Product **Find a Better Match for Me** panel
+- Product **Discover More Like This** panel
 - Material Explorer household-needs and care advisor
 - Server-side OpenAI Responses API with deterministic no-key fallback
 - See `docs/AI_ASSISTANT_FEATURE_PLAN.md` and `docs/AI_ASSISTANT_TOOL_CONTRACTS.md`

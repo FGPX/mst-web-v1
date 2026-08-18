@@ -6,8 +6,13 @@ import { searchCatalogueByVisualTags } from "@/lib/ai/retrieval";
 import { materials, products } from "@/lib/data";
 import visualImageHashes from "@/lib/generated/visual-image-hashes.json";
 import { checkRateLimit } from "@/lib/server-validation";
+import { catalogueCategories, type Category } from "@/lib/types";
 
-const visualCategories = new Set(["sofa", "sectional", "armchair", "storage"]);
+const visualCategories = new Set<Category>(catalogueCategories);
+
+function isVisualCategory(value: string): value is Category {
+  return visualCategories.has(value as Category);
+}
 
 function sha256(buffer: Buffer) {
   return createHash("sha256").update(buffer).digest("hex");
@@ -50,14 +55,22 @@ export async function POST(request: NextRequest) {
   if (!validated.success) return NextResponse.json({ error: "Consent and a JPG, PNG or WebP image up to 10 MB are required." }, { status: 400 });
   const buffer = Buffer.from(await file.arrayBuffer());
   const exactProduct = exactCatalogueProduct(buffer);
-  const analysis = exactProduct
-    ? null
-    : await withDemoFallback(
-      (provider) => withTimeout(provider.analyzeProductImage(toDataUrl(file, buffer)), 20_000),
-      { allowOpenAI: true }
-    );
-  if (analysis?.fallback) {
-    return NextResponse.json({ error: "Visual analysis is temporarily unavailable. Please try again." }, { status: 503 });
+  let analysis = null;
+  if (!exactProduct) {
+    try {
+      analysis = await withDemoFallback(
+        (provider) => withTimeout(provider.analyzeProductImage(toDataUrl(file, buffer)), 20_000),
+        { allowOpenAI: true, capability: "vision", fallbackOnError: false }
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      const billingRequired = /free tier is not available|enable billing/i.test(message);
+      return NextResponse.json({
+        error: billingRequired
+          ? "Gemini image analysis requires billing for this Google AI Studio project and region. Enable billing, then try again."
+          : "Visual analysis is temporarily unavailable. Please try again."
+      }, { status: billingRequired ? 402 : 503 });
+    }
   }
   if (process.env.NODE_ENV === "production" && analysis?.provider === "demo") {
     return NextResponse.json({ error: "Visual analysis is not configured." }, { status: 503 });
@@ -66,7 +79,7 @@ export async function POST(request: NextRequest) {
     ? materials.find((material) => exactProduct.materials.includes(material.id))
     : null;
   const tags = exactProduct ? {
-    category: visualCategories.has(exactProduct.category) ? exactProduct.category as "sofa" | "sectional" | "armchair" | "storage" : null,
+    category: exactProduct.category,
     colorFamilies: exactProduct.colors.slice(0, 3),
     likelyMaterial: exactMaterial?.type ?? null,
     style: exactProduct.styles.slice(0, 3),
@@ -77,8 +90,8 @@ export async function POST(request: NextRequest) {
     // The browser sampler is a deterministic demo aid. Provider-backed vision
     // understands the selected object and must remain the source of truth.
     colorFamilies: analysis!.provider === "demo" && observedColors.length ? observedColors : analysis!.data.colorFamilies,
-    category: analysis!.provider === "demo" && visualCategories.has(preferredCategory)
-      ? preferredCategory as "sofa" | "sectional" | "armchair" | "storage"
+    category: analysis!.provider === "demo" && isVisualCategory(preferredCategory)
+      ? preferredCategory
       : analysis!.data.category
   };
   const visualMatches = searchCatalogueByVisualTags(tags).filter(({ product }) => product.id !== exactProduct?.id);
@@ -104,9 +117,9 @@ export async function POST(request: NextRequest) {
       };
     }),
     noMatchReason: !tags.category
-      ? "No supported furniture object was clearly detected. Try a closer photo of a sofa, sectional, armchair or storage unit."
+      ? "No supported catalogue object was clearly detected. Try a closer photo with one furniture or home-accessory item as the main subject."
       : matches.length === 0 ? "No sufficiently grounded catalogue recommendation is available for this image." : null,
-    ai: { provider: analysis?.provider ?? "catalogue", fallback: analysis?.fallback ?? false, mode: exactProduct ? "Exact catalogue image match" : analysis?.provider === "openai" ? "Provider-backed AI" : "Deterministic demo AI" }
+    ai: { provider: analysis?.provider ?? "catalogue", fallback: analysis?.fallback ?? false, mode: exactProduct ? "Exact catalogue image match" : analysis?.provider === "gemini" ? "Gemini visual analysis" : analysis?.provider === "openai" ? "OpenAI visual analysis" : "Deterministic demo AI" }
   });
 }
 
