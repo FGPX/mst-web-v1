@@ -4,11 +4,20 @@ import type { AnalyticsEvent, Configuration, Project } from "./types";
 import { dealers, materials, products, projects as seedProjects } from "./data";
 import { createConfiguration, priceConfiguration } from "./configurator";
 
+export type SavedComparison = {
+  id: string;
+  name: string;
+  productIds: string[];
+  createdAt: string;
+  updatedAt: string;
+};
+
 const keys = {
   products: "musterring.savedProducts",
   configurations: "musterring.configurations",
   projects: "musterring.projects",
   comparisons: "musterring.comparisons",
+  comparisonHistory: "musterring.comparisonHistory",
   events: "musterring.analytics",
   dealer: "musterring.selectedDealer",
   lead: "musterring.lastLead",
@@ -36,6 +45,11 @@ function write<T>(key: string, value: T) {
   if (typeof window !== "undefined") window.localStorage.setItem(key, JSON.stringify(value));
 }
 
+function comparisonName(ids: string[]) {
+  const names = ids.map((id) => products.find((product) => product.id === id)?.modelCode).filter(Boolean);
+  return names.length ? names.join(" vs ") : "Saved product comparison";
+}
+
 export const storage = {
   savedProducts: () => read<string[]>(keys.products, []),
   toggleProduct: (id: string) => {
@@ -57,7 +71,46 @@ export const storage = {
     write(keys.projects, storage.projects().filter((item) => item.id !== id));
   },
   comparisons: () => read<string[]>(keys.comparisons, []),
-  setComparison: (ids: string[]) => write(keys.comparisons, ids.slice(0, 3)),
+  setComparison: (ids: string[]) => write(keys.comparisons, [...new Set(ids)].slice(0, 3)),
+  savedComparisons: (): SavedComparison[] => {
+    const history = read<SavedComparison[]>(keys.comparisonHistory, []);
+    if (history.length) return history;
+    const legacyIds = read<string[]>(keys.comparisons, []);
+    if (!legacyIds.length) return [];
+    return [{
+      id: "legacy-comparison",
+      name: comparisonName(legacyIds),
+      productIds: legacyIds.slice(0, 3),
+      createdAt: "",
+      updatedAt: ""
+    }];
+  },
+  saveComparison: (ids: string[], name?: string) => {
+    const productIds = [...new Set(ids)].filter((id) => products.some((product) => product.active && product.id === id)).slice(0, 3);
+    if (!productIds.length) return null;
+    const current = storage.savedComparisons();
+    const comparisonKey = [...productIds].sort().join(",");
+    const existing = current.find((comparison) => [...comparison.productIds].sort().join(",") === comparisonKey);
+    const timestamp = new Date().toISOString();
+    const record: SavedComparison = {
+      id: existing?.id ?? crypto.randomUUID(),
+      name: name?.trim() || existing?.name || comparisonName(productIds),
+      productIds,
+      createdAt: existing?.createdAt || timestamp,
+      updatedAt: timestamp
+    };
+    write(keys.comparisons, productIds);
+    write(keys.comparisonHistory, [record, ...current.filter((comparison) => comparison.id !== record.id)].slice(0, 20));
+    return record;
+  },
+  deleteSavedComparison: (id: string) => {
+    const current = storage.savedComparisons();
+    const removed = current.find((comparison) => comparison.id === id);
+    const next = current.filter((comparison) => comparison.id !== id);
+    write(keys.comparisonHistory, next);
+    if (removed?.productIds.join(",") === storage.comparisons().join(",")) write(keys.comparisons, next[0]?.productIds ?? []);
+    return next;
+  },
   selectedDealer: () => read<string | null>(keys.dealer, null),
   setDealer: (id: string) => write(keys.dealer, id),
   saveLead: (lead: unknown) => {
@@ -190,7 +243,7 @@ export const storage = {
       demoData: true
     };
     const resetKeys = [
-      keys.products, keys.configurations, keys.projects, keys.comparisons, keys.events,
+      keys.products, keys.configurations, keys.projects, keys.comparisons, keys.comparisonHistory, keys.events,
       keys.dealer, keys.lead, keys.fitReports, keys.fitDrafts, keys.roomScenes,
       keys.recentSearches, keys.materials, keys.leads
     ];
@@ -198,7 +251,15 @@ export const storage = {
     write(keys.products, selectedProducts.map((product) => product.id));
     write(keys.configurations, [configuration]);
     write(keys.projects, [project]);
-    write(keys.comparisons, selectedProducts.map((product) => product.id).slice(0, 3));
+    const presentationComparisonIds = selectedProducts.map((product) => product.id).slice(0, 3);
+    write(keys.comparisons, presentationComparisonIds);
+    write(keys.comparisonHistory, [{
+      id: "comparison-presentation",
+      name: comparisonName(presentationComparisonIds),
+      productIds: presentationComparisonIds,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }]);
     write(keys.dealer, dealers[0].id);
     write(keys.fitReports, [fitReport]);
     write(keys.roomScenes, [roomScene]);

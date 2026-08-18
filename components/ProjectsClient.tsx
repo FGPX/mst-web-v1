@@ -40,7 +40,7 @@ export function ProjectsClient() {
     const { scenes, productIds } = readSavedContent();
     setSavedScenes(scenes);
     setSavedIds(productIds);
-    setResourceCounts({ fitReports: storage.fitReports().length, roomScenes: scenes.length, comparisons: storage.comparisons().length, configurations: storage.configurations().length, materials: storage.savedMaterials().length, requests: storage.leads().length });
+    setResourceCounts({ fitReports: storage.fitReports().length, roomScenes: scenes.length, comparisons: storage.savedComparisons().length, configurations: storage.configurations().length, materials: storage.savedMaterials().length, requests: storage.leads().length });
   };
 
   useEffect(() => {

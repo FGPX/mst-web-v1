@@ -37,6 +37,20 @@ describe("project persistence", () => {
     expect(storage.roomScenes()).toHaveLength(1);
   });
 
+  it("keeps a history of saved comparisons that can be reopened or deleted", () => {
+    const active = products.filter((product) => product.active).slice(0, 3);
+    const first = storage.saveComparison([active[0].id, active[1].id], "Living room shortlist");
+    const second = storage.saveComparison([active[1].id, active[2].id], "Compact alternatives");
+
+    expect(storage.savedComparisons()).toHaveLength(2);
+    expect(storage.savedComparisons()[0].name).toBe("Compact alternatives");
+    expect(storage.comparisons()).toEqual([active[1].id, active[2].id]);
+
+    storage.deleteSavedComparison(second!.id);
+    expect(storage.savedComparisons()).toEqual([first]);
+    expect(storage.comparisons()).toEqual(first!.productIds);
+  });
+
   it("restores the controlled presentation journey without clearing consent or settings", () => {
     window.localStorage.setItem("musterring.consent", "true");
     window.localStorage.setItem("musterring.settings", JSON.stringify({ reducedMotion: true }));
@@ -48,6 +62,7 @@ describe("project persistence", () => {
     expect(storage.savedProducts()).toHaveLength(3);
     expect(storage.roomScenes()).toHaveLength(1);
     expect(storage.fitReports()).toHaveLength(1);
+    expect(storage.savedComparisons()).toHaveLength(1);
     expect(storage.selectedDealer()).toBe(dealers[0].id);
     expect(storage.recentSearches()).toEqual([]);
     expect(storage.consent()).toBe(true);

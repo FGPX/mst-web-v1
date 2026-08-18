@@ -17,7 +17,7 @@ export function ProjectDetailClient({ seedProject }: { seedProject: Project }) {
   }, [seedProject]);
   const savedProducts = products.filter((item) => (hydrated ? storage.savedProducts() : project.savedProductIds).includes(item.id) || project.savedProductIds.includes(item.id));
   const configurations = hydrated ? storage.configurations() : [];
-  const comparison = hydrated ? storage.comparisons() : [];
+  const comparison = hydrated ? storage.savedComparisons() : [];
   const roomScenes = hydrated ? storage.roomScenes() : [];
   const fitReports = hydrated ? storage.fitReports() : [];
   const savedMaterials = materials.filter((material) => hydrated && storage.savedMaterials().includes(material.id));
