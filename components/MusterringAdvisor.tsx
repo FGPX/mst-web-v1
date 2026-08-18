@@ -203,11 +203,11 @@ export function MusterringAdvisor() {
     setVoiceState("listening"); recognition.start();
   };
   if (!open) return <div className="assistant-dock" aria-label="Musterring assistance">
-    <button className="advisor-launcher" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><Sparkles /><span><small>Musterring Assistant</small><strong>ASK MUSTERRING</strong></span></button>
+    <button className="advisor-launcher" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><Sparkles /><span><small>Musterring Assistant</small><strong>LOOKING FOR SOMETHING?</strong></span></button>
     <button className="voice-launcher" aria-label="Start Voice Interior Assistant" title="Use voice assistant" onClick={() => { setOpen(true); window.setTimeout(() => void startVoice(), 50); }}><Mic /></button>
   </div>;
   return <aside className="advisor-panel" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
-    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><h2 id="advisor-title">MUSTERRING ASSISTANT</h2></div><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><ChevronDown /></button></header>
+    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Musterring Assistant</p></div><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><ChevronDown /></button></header>
       <div className="advisor-messages" aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><h3>How can I help with your space?</h3><p>I’ll ask a few useful questions, then use connected Musterring product and material data to guide you.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}</button>)}</div></div> : null}
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><p>{message.text}</p></div></div>
@@ -228,7 +228,7 @@ export function MusterringAdvisor() {
         {voiceState !== "idle" ? <p className={`voice-state is-${voiceState}`} role="status">Voice: {voiceState === "denied" ? "Microphone permission denied. Use text input." : voiceState}</p> : null}
       </div>
       {pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
-      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder="Ask about products, materials, configuration, fit or your project…" /><button type="button" aria-label="Use microphone" onClick={() => void startVoice()}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending}><Send /></button></form>
+      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder="How can I help?" /><button type="button" aria-label="Use microphone" onClick={() => void startVoice()}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending}><Send /></button></form>
   </aside>;
 }
 

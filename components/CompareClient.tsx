@@ -170,14 +170,14 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
         <div className="stitch-compare-callout">
           <span>Meaningful differences</span>
           {selected.map((product) => <article key={product.id}>
-            <div><p>{meaningfulDifference(product, selected)}</p>{comparisonBadge(product, selected) ? <small>{comparisonBadge(product, selected)}</small> : null}</div>
+            <div><p>{meaningfulDifference(product, selected)}</p></div>
           </article>)}
         </div>
 
         <div className="stitch-compare-rows" role="table" aria-label="Product specification comparison">
           {rows.map(({ name, values, level, summary }) => (
             <div className={`is-${level}-difference`} role="row" key={name}>
-              <b role="rowheader">{name}{summary ? <small>Large difference · {summary}</small> : null}</b>
+              <b role="rowheader">{name}{summary ? <small>Difference · {summary}</small> : null}</b>
               {values.map((value, index) => {
                 const badge = valueBadge(name, index, selected, values);
                 return <span role="cell" key={`${name}-${selected[index]?.id ?? index}`}><strong>{value}</strong>{badge ? <small>{badge}</small> : null}</span>;
@@ -296,23 +296,13 @@ function verifiedComparisonValue(product: Product, label: string) {
   return product.verifiedComparisonFacts?.find((fact) => fact.label === label)?.value;
 }
 
-function comparisonBadge(product: Product, selected: Product[]) {
-  const widths = selected.filter((item) => item.verifiedFacts.dimensions).map((item) => item.widthMm);
-  if (product.verifiedFacts.dimensions && widths.length > 1 && new Set(widths).size > 1 && product.widthMm === Math.min(...widths)) return "Smallest";
-  if (product.verifiedFacts.dimensions && widths.length > 1 && new Set(widths).size > 1 && product.widthMm === Math.max(...widths)) return "Largest";
-  const sameSeatCount = selected.filter((item) => item.numberOfSeatsVerified && item.numberOfSeats === product.numberOfSeats).length;
-  if (product.numberOfSeatsVerified && sameSeatCount === 1 && product.numberOfSeats === 4) return "Only 4-seat option";
-  return "";
-}
-
 function valueBadge(name: string, index: number, selected: Product[], values: string[]) {
   const product = selected[index];
   if (!product || new Set(values).size <= 1) return "";
   if (name === "Width") {
     const widths = selected.filter((item) => item.verifiedFacts.dimensions).map((item) => item.widthMm);
     if (!product.verifiedFacts.dimensions || widths.length < 2) return "";
-    if (product.widthMm === Math.min(...widths)) return "Smallest";
-    if (product.widthMm === Math.max(...widths)) return "Largest";
+    if (product.widthMm === Math.max(...widths)) return "Wider option";
   }
   if (name === "Seats" && product.numberOfSeatsVerified && selected.filter((item) => item.numberOfSeatsVerified && item.numberOfSeats === product.numberOfSeats).length === 1) return product.numberOfSeats === 4 ? "Only 4-seat option" : "Unique";
   if ((name === "Modularity" || name === "Functions") && values[index] !== "Configuration dependent" && values.filter((value) => value === values[index]).length === 1) return "Unique";

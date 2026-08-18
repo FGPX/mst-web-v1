@@ -5465,8 +5465,8 @@ img { max-width: 100%; display: block; }
   box-shadow: none;
 }
 .advisor-launcher span { gap: 5px; }
-.advisor-launcher small { color: #e1ddd6; font-size: 9px; letter-spacing: .18em; }
-.advisor-launcher strong { font: 400 17px/1 var(--stitch-font-display); letter-spacing: .055em; }
+.advisor-launcher small { color: #f4f0e9; font-size: 13px; letter-spacing: .15em; }
+.advisor-launcher strong { color: #d5d0c8; font: 500 11px/1.25 var(--stitch-font-ui); letter-spacing: .09em; }
 .voice-launcher { width: 64px; border-left-color: rgba(251, 249, 244, .32); }
 .voice-launcher::after { width: 38px; height: 38px; border-color: rgba(251, 249, 244, .35); }
 .assistant-dock button:hover > svg { box-shadow: none; }
@@ -5487,18 +5487,18 @@ img { max-width: 100%; display: block; }
 @media (prefers-reduced-motion: reduce) { .advisor-panel { animation: none; } }
 .advisor-panel > header {
   align-items: center;
-  gap: 18px;
-  min-height: 108px;
-  padding: 20px 24px;
+  gap: 13px;
+  min-height: 78px;
+  padding: 11px 18px;
   border-bottom: 0;
   background: #1d1d1b;
   color: #fbf9f4;
 }
 .advisor-panel > header > div { flex: 1; }
 .advisor-brand-icon {
-  width: 56px;
-  height: 56px;
-  flex: 0 0 56px;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
   display: grid;
   place-items: center;
   border: 1px solid #d9d2c8;
@@ -5506,18 +5506,19 @@ img { max-width: 100%; display: block; }
   background: #f8f5ef;
   color: #191815;
 }
-.advisor-brand-icon svg { width: 25px; }
+.advisor-brand-icon svg { width: 21px; }
 .advisor-panel > header p { margin: 0 0 7px; color: #e2ddd6; font-size: 11px; letter-spacing: .2em; }
-.advisor-panel h2 { margin: 0; color: #fbf9f4; font-size: 22px; letter-spacing: .055em; white-space: nowrap; }
+.advisor-panel > header p.advisor-header-title { margin: 0; font-size: 13px; letter-spacing: .17em; line-height: 1.25; }
+.advisor-panel h2 { margin: 0; color: #fbf9f4; font-size: 27px; letter-spacing: .025em; }
 .advisor-panel > header button {
-  flex-basis: 60px;
-  width: 60px;
-  height: 60px;
+  flex-basis: 48px;
+  width: 48px;
+  height: 48px;
   border: 0;
   border-left: 1px solid rgba(251, 249, 244, .38);
   color: #fbf9f4;
 }
-.advisor-panel > header button svg { width: 30px; height: 30px; }
+.advisor-panel > header button svg { width: 24px; height: 24px; }
 .advisor-panel > header button:hover { background: rgba(255, 255, 255, .08); }
 .advisor-messages {
   gap: 20px;
@@ -5643,7 +5644,7 @@ img { max-width: 100%; display: block; }
 
 @media (max-width: 768px) {
   .advisor-panel { inset: 0; width: 100%; max-width: none; height: 100dvh; border: 0; border-radius: 0; }
-  .advisor-panel > header { position: sticky; top: 0; z-index: 2; padding: 18px; }
+  .advisor-panel > header { position: sticky; top: 0; z-index: 2; padding: 11px 14px; }
   .advisor-products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .advisor-input { position: sticky; bottom: 0; margin: 0 14px 12px; }
 }
@@ -5656,7 +5657,7 @@ img { max-width: 100%; display: block; }
   .advisor-launcher span { display: none; }
   .advisor-panel > header { gap: 10px; }
   .advisor-brand-icon { width: 44px; height: 44px; flex-basis: 44px; }
-  .advisor-panel h2 { font-size: 20px; }
+  .advisor-panel h2 { font-size: 24px; }
   .advisor-panel > header button { width: 42px; height: 42px; flex-basis: 42px; }
   .advisor-starters { margin-left: 0; }
   .advisor-message-bubble { max-width: 92%; }
