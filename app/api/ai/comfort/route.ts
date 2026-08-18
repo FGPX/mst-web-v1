@@ -30,12 +30,12 @@ export async function POST(request: NextRequest) {
     let score = 0;
     const reasons: string[] = [];
     const targetHeight = preferences.tallUser ? 470 : 450;
-    if (product.seatHeightMm >= targetHeight) { score += 3; reasons.push(`seat height ${product.seatHeightMm} mm`); }
-    if (product.comfortOptions.includes(preferences.comfort)) { score += 2; reasons.push(`${preferences.comfort} comfort option`); }
-    if (preferences.easyCare && product.materials.some((id) => /easy|micro|sand|oat/.test(id))) { score += 2; reasons.push("easy-care cover option"); }
-    if (preferences.electric && product.electricFunctions.length) { score += 2; reasons.push("electric relax option"); }
-    if (!preferences.maxWidthMm || product.widthMm <= preferences.maxWidthMm) score += 2;
-    if (!preferences.numberOfSeats || product.numberOfSeats === preferences.numberOfSeats) score += 2;
+    if (product.verifiedFacts.seatHeight && product.seatHeightMm >= targetHeight) { score += 3; reasons.push(`verified seat height ${product.seatHeightMm} mm`); }
+    if (product.verifiedFacts.comfort && product.comfortOptions.includes(preferences.comfort)) { score += 2; reasons.push(`${preferences.comfort} comfort option`); }
+    if (preferences.easyCare && product.verifiedFacts.easyCare) { score += 2; reasons.push("verified easy-care option"); }
+    if (preferences.electric && product.verifiedFacts.functions.includes("electric")) { score += 2; reasons.push("verified electric relax option"); }
+    if (!preferences.maxWidthMm || (product.verifiedFacts.dimensions && product.widthMm <= preferences.maxWidthMm)) score += 2;
+    if (!preferences.numberOfSeats || (product.numberOfSeatsVerified && product.numberOfSeats === preferences.numberOfSeats)) score += 2;
     return { product, score, reasons };
   }).sort((left, right) => right.score - left.score).slice(0, 5);
   return NextResponse.json({ preferences, matches, ai: { provider: extracted.provider, fallback: extracted.fallback }, scoringMode: "Deterministic catalogue scoring" });

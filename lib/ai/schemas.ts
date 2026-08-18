@@ -4,6 +4,7 @@ const nullableString = z.string().nullable();
 const nullableNumber = z.number().int().nonnegative().nullable();
 const nullableBoolean = z.boolean().nullable();
 const nullableStrings = z.array(z.string()).nullable();
+const layoutShapeSchema = z.enum(["straight", "l-shaped", "u-shaped", "corner", "island"]);
 
 export const searchIntentSchema = z.object({
   queryText: z.string().trim().min(1).max(1000),
@@ -14,6 +15,8 @@ export const searchIntentSchema = z.object({
   colorFamilies: nullableStrings,
   materials: nullableStrings,
   maxWidthMm: nullableNumber,
+  minWidthMm: nullableNumber,
+  targetWidthMm: nullableNumber,
   minSeatHeightMm: nullableNumber,
   maxSeatDepthMm: nullableNumber,
   numberOfSeats: nullableNumber,
@@ -21,7 +24,8 @@ export const searchIntentSchema = z.object({
   functions: nullableStrings,
   styles: nullableStrings,
   roomType: nullableString,
-  smallSpaceSuitable: nullableBoolean
+  smallSpaceSuitable: nullableBoolean,
+  layoutShapes: z.array(layoutShapeSchema).nullable()
 });
 export type SearchIntent = z.infer<typeof searchIntentSchema>;
 

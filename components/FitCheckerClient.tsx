@@ -215,7 +215,7 @@ export function FitCheckerClient({ product }: { product: Product }) {
       <section className="container fit-simulator">
         <aside className="fit-panel fit-input-panel">
           <div className="fit-panel-title"><div><p className="eyebrow">{step === "delivery" ? "Access route" : "Plan details"}</p><h2>{step === "delivery" ? "Delivery measurements" : "Room editor"}</h2></div><button className="icon-button" title="Measurement help"><HelpCircle /></button></div>
-          <div className="stitch-fit-product"><Image src={productImages(product.id)[0]} alt={product.name} width={110} height={86} /><span><strong>{product.modelCode}</strong><small>{product.numberOfSeats || 3}-seater · {product.modular ? "Modular" : "Fixed"}<br />{cm(product.widthMm)} × {cm(product.depthMm)} × {cm(product.heightMm)} cm</small></span></div>
+          <div className="stitch-fit-product"><Image src={productImages(product.id)[0]} alt={product.name} width={110} height={86} /><span><strong>{product.modelCode}</strong><small>{product.numberOfSeatsVerified ? `${product.numberOfSeats}-seater · ` : ""}{product.modular ? "Modular" : "Fixed"}<br />{cm(product.widthMm)} × {cm(product.depthMm)} × {cm(product.heightMm)} cm</small></span></div>
 
           {activeTab === "room" ? <>
             <details open><summary>Room dimensions <ChevronDown size={15} /></summary><div className="fit-field-grid">

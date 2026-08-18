@@ -41,6 +41,20 @@ const base: Omit<Product, "id" | "slug" | "modelCode" | "name" | "subtitle" | "w
   demoData: true,
   showroomEligible: true,
   smallSpaceSuitable: false,
+  numberOfSeatsVerified: true,
+  verifiedFacts: {
+    dimensions: true,
+    seatHeight: true,
+    seatDepth: true,
+    colors: ["beige", "taupe", "stone", "charcoal"],
+    materialTypes: ["fabric", "leather"],
+    styles: ["modern heritage", "editorial", "minimal"],
+    functions: ["relax", "storage", "modular", "electric"],
+    modular: true,
+    smallSpaceSuitable: true,
+    comfort: true,
+    easyCare: true
+  },
   packageDimensions: { widthMm: 1100, depthMm: 900, heightMm: 760, minOpeningMm: 820 }
 };
 
@@ -124,6 +138,17 @@ export const products: Product[] = [
 
     const searchOverride = catalogueSearchOverrides[official.slug] ?? {};
     const dimensionOverride = catalogueDimensionOverrides[official.slug];
+    const verifiedColors = verifiedRedUpholstery.has(official.slug) ? ["red", "burgundy"] : [];
+    const verifiedMaterialTypes: Array<"fabric" | "leather"> = [
+      ...(/\bfabric\b/.test(searchableCopy) ? ["fabric" as const] : []),
+      ...(/\bleather\b/.test(searchableCopy) ? ["leather" as const] : [])
+    ];
+    const verifiedFunctions = [
+      ...(/modular|module/.test(searchableCopy) ? ["modular"] : []),
+      ...(/reclin(?:e|er|ing)|reclining position|adjustable (?:backrest|legrest)|manual and motorised functions/.test(searchableCopy) ? ["relax"] : []),
+      ...(/motorised|electric|touch of a button/.test(searchableCopy) ? ["electric"] : []),
+      ...(isStorage ? ["storage"] : [])
+    ];
     return {
       ...template,
       id: official.appProductId,
@@ -136,7 +161,7 @@ export const products: Product[] = [
       imageAssets: official.images,
       sourceUrl: official.sourceUrl,
       authorizedContent: true,
-      specificationNote: "Dimensions, configuration options, availability and prices are confirmed by an authorized Musterring retailer.",
+      specificationNote: "Dimensions, configuration options and availability are confirmed by an authorized Musterring retailer.",
       active: true,
       demoData: false,
       widthMm: dimensionOverride?.widthMm ?? (isStorage ? 3000 : template.widthMm),
@@ -145,6 +170,21 @@ export const products: Product[] = [
       seatHeightMm: isSeating ? template.seatHeightMm : 0,
       seatDepthMm: isSeating ? template.seatDepthMm : 0,
       numberOfSeats: isSeating ? template.numberOfSeats : 0,
+      // Template values support internal layout rendering but are not catalogue facts.
+      numberOfSeatsVerified: false,
+      verifiedFacts: {
+        dimensions: Boolean(dimensionOverride),
+        seatHeight: false,
+        seatDepth: false,
+        colors: verifiedColors,
+        materialTypes: verifiedMaterialTypes,
+        styles: [],
+        functions: [...new Set(verifiedFunctions)],
+        modular: /modular|module/.test(searchableCopy),
+        smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),
+        comfort: false,
+        easyCare: false
+      },
       materials: isSeating ? template.materials : [],
       colors: !isSeating
         ? template.colors

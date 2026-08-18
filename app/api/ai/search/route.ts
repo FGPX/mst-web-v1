@@ -21,20 +21,26 @@ export async function POST(request: NextRequest) {
     return provider.parseSearchIntent(parsed.data.query);
   });
   const deterministic = await new LocalDemoAIProvider().parseSearchIntent(parsed.data.query);
+  const deterministicWidth = deterministic.minWidthMm !== null || deterministic.maxWidthMm !== null || deterministic.targetWidthMm !== null;
   const intent = {
     ...interpreted.data,
     queryText: parsed.data.query,
     category: deterministic.category ?? interpreted.data.category,
     colorFamilies: deterministic.colorFamilies ?? interpreted.data.colorFamilies,
     materials: deterministic.materials ?? interpreted.data.materials,
-    maxWidthMm: deterministic.maxWidthMm ?? interpreted.data.maxWidthMm,
+    // Relational dimensions are safety-critical. When deterministic parsing found
+    // one, use that complete set so "above 300" can never also become "max 300".
+    maxWidthMm: deterministicWidth ? deterministic.maxWidthMm : interpreted.data.maxWidthMm,
+    minWidthMm: deterministicWidth ? deterministic.minWidthMm : interpreted.data.minWidthMm,
+    targetWidthMm: deterministicWidth ? deterministic.targetWidthMm : interpreted.data.targetWidthMm,
     minSeatHeightMm: deterministic.minSeatHeightMm ?? interpreted.data.minSeatHeightMm,
     maxSeatDepthMm: deterministic.maxSeatDepthMm ?? interpreted.data.maxSeatDepthMm,
     numberOfSeats: deterministic.numberOfSeats ?? interpreted.data.numberOfSeats,
     modular: deterministic.modular ?? interpreted.data.modular,
     functions: deterministic.functions ?? interpreted.data.functions,
     styles: deterministic.styles ?? interpreted.data.styles,
-    smallSpaceSuitable: deterministic.smallSpaceSuitable ?? interpreted.data.smallSpaceSuitable
+    smallSpaceSuitable: deterministic.smallSpaceSuitable ?? interpreted.data.smallSpaceSuitable,
+    layoutShapes: deterministic.layoutShapes ?? interpreted.data.layoutShapes
   };
   const results = await hybridCatalogueSearch(intent);
   return NextResponse.json({
@@ -42,6 +48,8 @@ export async function POST(request: NextRequest) {
     exactMatches: results.exactMatches.map(({ product, reasons }) => ({ product, reasons })),
     closeAlternatives: results.closeAlternatives.map(({ product, reasons }) => ({ product, reasons })),
     exactColorAvailable: results.exactColorAvailable,
+    categoryAvailable: results.categoryAvailable,
+    unverifiedRequirements: results.unverifiedRequirements,
     ai: { provider: interpreted.provider, fallback: interpreted.fallback, mode: interpreted.provider === "openai" ? "Provider-backed AI" : "Deterministic demo AI" }
   });
 }

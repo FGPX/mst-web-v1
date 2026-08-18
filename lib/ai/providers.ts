@@ -52,8 +52,9 @@ export interface AIProvider {
 function emptyIntent(queryText: string): SearchIntent {
   return {
     queryText, category: null, colorFamilies: null, materials: null, maxWidthMm: null,
+    minWidthMm: null, targetWidthMm: null,
     minSeatHeightMm: null, maxSeatDepthMm: null, numberOfSeats: null, modular: null,
-    functions: null, styles: null, roomType: null, smallSpaceSuitable: null
+    functions: null, styles: null, roomType: null, smallSpaceSuitable: null, layoutShapes: null
   };
 }
 
@@ -70,6 +71,8 @@ export class LocalDemoAIProvider implements AIProvider {
       colorFamilies: filters.colors ?? (extraColor ? [extraColor] : null),
       materials: filters.materials ?? (/leather/.test(text) ? ["leather"] : /fabric|easy-care/.test(text) ? ["fabric"] : null),
       maxWidthMm: filters.maxWidthMm ?? null,
+      minWidthMm: filters.minWidthMm ?? null,
+      targetWidthMm: filters.targetWidthMm ?? null,
       minSeatHeightMm: /high[- ]seat|tall person|gro(?:ÃŸ|ß|ss)e person|easy.{0,8}(stand|rise)/.test(text) ? 470 : null,
       maxSeatDepthMm: /upright/.test(text) ? 560 : null,
       numberOfSeats: filters.seatCount ?? (text.match(/\bfour[- ]seat/) ? 4 : null),
@@ -85,7 +88,8 @@ export class LocalDemoAIProvider implements AIProvider {
       ] : null,
       styles: /modern heritage/.test(text) ? ["modern heritage"] : /modern|minimal|contemporary/.test(text) ? ["modern"] : null,
       roomType: /apartment|wohnung/.test(text) ? "small apartment" : /family|familie/.test(text) ? "family living room" : null,
-      smallSpaceSuitable: filters.smallSpaceSuitable ?? null
+      smallSpaceSuitable: filters.smallSpaceSuitable ?? null,
+      layoutShapes: filters.layoutShapes ?? null
     });
   }
 
@@ -224,8 +228,8 @@ export class OpenAIProvider implements AIProvider {
 
   parseSearchIntent(query: string) {
     return this.parse(searchIntentSchema, "search_intent",
-      "Extract furniture search requirements. Do not add facts not present. Use null for unknown fields.",
-      [{ role: "system", content: "Extract furniture search requirements. Do not add facts not present. Use null for unknown fields." }, { role: "user", content: query }]);
+      "Extract furniture search requirements. Distinguish minimum, maximum and approximate target widths. Normalize L-shaped, U-shaped, straight, corner and island layouts. Do not add facts not present. Use null for unknown fields.",
+      [{ role: "system", content: "Extract furniture search requirements. Distinguish minimum, maximum and approximate target widths. Normalize L-shaped, U-shaped, straight, corner and island layouts. Do not add facts not present. Use null for unknown fields." }, { role: "user", content: query }]);
   }
 
   analyzeProductImage(imageDataUrl: string) {
@@ -267,7 +271,7 @@ export class OpenAIProvider implements AIProvider {
 
   async findProductAlternatives(input: AlternativeRequest) {
     const parsed = await this.parse(alternativeRequestSchema, "alternative_requirements",
-      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, materials and functions. Normalize colours and categories to lowercase English catalogue terms. Preserve sourceProductId, requestText and strict exactly. Do not invent product facts or IDs.",
+      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, layoutShapes, materials and functions. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Preserve sourceProductId, requestText and strict exactly. Do not invent product facts or IDs.",
       [{ role: "user", content: JSON.stringify(input) }]);
     return alternativeResponseSchema.parse(findGroundedAlternatives(parsed));
   }
@@ -301,10 +305,14 @@ export class OpenAIProvider implements AIProvider {
     const candidateIds = [...new Set([...(input.context.referencedProductIds ?? []), ...(input.context.currentProductId ? [input.context.currentProductId] : [])])];
     const facts = products.filter((product) => candidateIds.includes(product.id)).map((product) => ({
       id: product.id, modelCode: product.modelCode, name: product.name, category: product.category,
-      widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm,
-      seatHeightMm: product.seatHeightMm, seatDepthMm: product.seatDepthMm, numberOfSeats: product.numberOfSeats,
-      colors: product.colors, materials: product.materials, styles: product.styles,
-      functions: product.functions, electricFunctions: product.electricFunctions, modular: product.modular, demoData: product.demoData
+      widthMm: product.verifiedFacts.dimensions ? product.widthMm : null,
+      depthMm: product.verifiedFacts.dimensions ? product.depthMm : null,
+      heightMm: product.verifiedFacts.dimensions ? product.heightMm : null,
+      seatHeightMm: product.verifiedFacts.seatHeight ? product.seatHeightMm : null,
+      seatDepthMm: product.verifiedFacts.seatDepth ? product.seatDepthMm : null,
+      numberOfSeats: product.numberOfSeatsVerified ? product.numberOfSeats : null,
+      colors: product.verifiedFacts.colors, materials: product.verifiedFacts.materialTypes, styles: product.verifiedFacts.styles,
+      functions: product.verifiedFacts.functions, modular: product.verifiedFacts.modular ? product.modular : null, demoData: product.demoData
     }));
     const result = await this.parse(advisorAnswerSchema, "product_advisor_answer",
       "Answer only from supplied Musterring facts and context. Unknown information must be stated as unavailable. Propose but never execute actions.",
@@ -319,7 +327,12 @@ export class OpenAIProvider implements AIProvider {
   }
 
   async recommendProductsFromConversation(input: { conversationSummary: string; candidateProductIds: string[] }) {
-    const candidates = products.filter((product) => input.candidateProductIds.includes(product.id)).map((product) => ({ id: product.id, name: product.name, widthMm: product.widthMm, seatHeightMm: product.seatHeightMm }));
+    const candidates = products.filter((product) => input.candidateProductIds.includes(product.id)).map((product) => ({
+      id: product.id,
+      name: product.name,
+      widthMm: product.verifiedFacts.dimensions ? product.widthMm : null,
+      seatHeightMm: product.verifiedFacts.seatHeight ? product.seatHeightMm : null
+    }));
     const result = await this.parse(conversationRecommendationSchema, "conversation_product_recommendations",
       "Choose only IDs from the supplied candidates. Do not add product facts.",
       [{ role: "user", content: `Summary: ${input.conversationSummary}\nCandidates: ${JSON.stringify(candidates)}` }]);
@@ -359,8 +372,11 @@ export function configuredProvider(): AIProvider {
     : new LocalDemoAIProvider();
 }
 
-export async function withDemoFallback<T>(operation: (provider: AIProvider) => Promise<T>): Promise<ProviderResult<T>> {
-  const provider = configuredProvider();
+export async function withDemoFallback<T>(
+  operation: (provider: AIProvider) => Promise<T>,
+  options: { allowOpenAI?: boolean } = {}
+): Promise<ProviderResult<T>> {
+  const provider = options.allowOpenAI ? configuredProvider() : new LocalDemoAIProvider();
   try {
     return { data: await operation(provider), provider: provider.name, fallback: false };
   } catch (error) {

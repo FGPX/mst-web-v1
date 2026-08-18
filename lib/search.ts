@@ -1,4 +1,4 @@
-import { products } from "./data";
+import { materials, products } from "./data";
 import type { Product, SearchFilters } from "./types";
 
 export const searchColorTerms = ["beige", "ivory", "taupe", "stone", "charcoal", "black", "white", "brown", "oak", "natural", "cream", "green", "grey", "graphite", "red", "burgundy", "barolo", "purple", "blue", "orange", "pink", "yellow", "mustard", "cognac", "sand"];
@@ -12,6 +12,54 @@ const corrections: Record<string, string> = {
   grey: "gray",
   modularer: "modular"
 };
+
+const phraseAliases: Array<[RegExp, string]> = [
+  [/\bsettee\b|\bdivan\b/g, "sofa"],
+  [/\bloveseat\b/g, "two seat sofa"],
+  [/\bcupboard\b|\bside board\b/g, "cabinet"],
+  [/\bkueche\b|\bküche\b/g, "kitchen"],
+  [/\beckküche\b|\beckkueche\b/g, "l shaped kitchen"],
+  [/\bpflegeleicht\b/g, "easy care"],
+  [/\bmindestens\b|\bwenigstens\b/g, "at least"],
+  [/\bhöchstens\b|\bhoechstens\b/g, "at most"],
+  [/\bunter\b|\bbis\b/g, "at most"],
+  [/\bmaximale breite\b/g, "maximum width"],
+  [/\büber\b|\bueber\b/g, "above"]
+];
+
+export function normalizeSearchText(value: string) {
+  let normalized = value.toLowerCase().normalize("NFKC");
+  for (const [pattern, replacement] of phraseAliases) normalized = normalized.replace(pattern, replacement);
+  return normalized
+    .replace(/\bbeig(?:e|es|er|en|em)?\b/g, "beige")
+    .replace(/\brot(?:es|er|e)?\b/g, "red")
+    .replace(/\bgrau(?:es|er|e)?\b/g, "grey")
+    .replace(/\bbraun(?:es|er|e)?\b/g, "brown")
+    .replace(/\bgr(?:ü|ue)n(?:es|er|e)?\b/g, "green")
+    .replace(/\bwei(?:ß|ss)(?:es|er|e)?\b/g, "white");
+}
+
+function measurementToMm(value: string, unit: string) {
+  const numeric = Number(value.replace(",", "."));
+  if (!Number.isFinite(numeric)) return undefined;
+  if (/^m(?:etre|eter)?s?$/.test(unit)) return Math.round(numeric * 1000);
+  if (/^mm|millimet/.test(unit)) return Math.round(numeric);
+  return Math.round(numeric * 10);
+}
+
+function widthConstraints(text: string) {
+  const amount = "(\\d+(?:[.,]\\d+)?)\\s*(mm|millimet(?:er|re)s?|cm|centimet(?:er|re)s?|m|met(?:er|re)s?)";
+  const minimum = text.match(new RegExp(`(?:above|over|more than|at least|minimum|min\\.?|greater than)\\s*${amount}(?:\\s+(?:wide|width))?`, "i"));
+  const maximum = text.match(new RegExp(`(?:under|below|less than|at most|maximum(?: width)?|max\\.?(?: width)?|no wider than|up to)\\s*${amount}(?:\\s+(?:wide|width))?`, "i"));
+  const approximate = text.match(new RegExp(`(?:around|about|approximately|approx\\.?|roughly)\\s*${amount}(?:\\s+(?:wide|width))?`, "i"));
+  const between = text.match(new RegExp(`between\\s*${amount}\\s*(?:and|to|-)\\s*${amount}`, "i"));
+  if (between) return { minWidthMm: measurementToMm(between[1], between[2]), maxWidthMm: measurementToMm(between[3], between[4]) };
+  if (minimum) return { minWidthMm: measurementToMm(minimum[1], minimum[2]) };
+  if (maximum) return { maxWidthMm: measurementToMm(maximum[1], maximum[2]) };
+  if (approximate) return { targetWidthMm: measurementToMm(approximate[1], approximate[2]) };
+  const bare = text.match(new RegExp(`${amount}(?:\\s+(?:wide|width|sofa|couch|kitchen))`, "i"));
+  return bare ? { targetWidthMm: measurementToMm(bare[1], bare[2]) } : {};
+}
 
 export type RankedProduct = {
   product: Product;
@@ -51,13 +99,7 @@ function tokenMatches(queryToken: string, candidate: string) {
 
 export function parseSearchQuery(query: string): SearchFilters {
   const q = query.trim();
-  const text = q.toLowerCase()
-    .replace(/\bbeig(?:e|es|er|en|em)?\b/g, "beige")
-    .replace(/\brot(?:es|er|e)?\b/g, "red")
-    .replace(/\bgrau(?:es|er|e)?\b/g, "grey")
-    .replace(/\bbraun(?:es|er|e)?\b/g, "brown")
-    .replace(/\bgrÃ¼n(?:es|er|e)?\b|\bgrün(?:es|er|e)?\b/g, "green")
-    .replace(/\bweiÃŸ(?:es|er|e)?\b|\bweiß(?:es|er|e)?\b/g, "white");
+  const text = normalizeSearchText(q);
   const filters: SearchFilters = { q };
   if (/dining chair|dining seat|esszimmerstuhl|stuhl/.test(text)) filters.category = "dining-chair";
   else if (/armchair|accent chair|recliner|\bchair\b|sessel/.test(text)) filters.category = "armchair";
@@ -69,6 +111,7 @@ export function parseSearchQuery(query: string): SearchFilters {
   else if (/bedroom series|bedroom furniture|schlafzimmerprogramm/.test(text)) filters.category = "bedroom-series";
   else if (/\bbed\b|upholstered bed|boxspring|bett/.test(text)) filters.category = "bed";
   else if (/bathroom|bath furniture|badmoebel|badmöbel/.test(text)) filters.category = "bathroom";
+  else if (/\bkitchen\b|\bkitchen unit\b|\bkitchen programme\b/.test(text)) filters.category = "kitchen";
   else if (/outdoor|garden furniture|patio|gartenmoebel|gartenmöbel/.test(text)) filters.category = "outdoor";
   else if (/carpet|\brug\b|teppich/.test(text)) filters.category = "carpet";
   else if (/\blamp\b|lighting|leuchte/.test(text)) filters.category = "lamp";
@@ -76,8 +119,13 @@ export function parseSearchQuery(query: string): SearchFilters {
   else if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
   const code = text.match(/\bmr\s*-?\s*\d{3,4}\b/i)?.[0]?.replace(/[\s-]+/g, " ").toUpperCase();
   if (code) filters.modelCode = code;
-  const width = text.match(/(?:max(?:imum)?|under|below|unter|bis|maximale breite|maximum width)?\s*(\d{2,3})\s*(?:cm|centimeter)/);
-  if (width) filters.maxWidthMm = Number(width[1]) * 10;
+  Object.assign(filters, widthConstraints(text));
+  const layoutShapes: NonNullable<SearchFilters["layoutShapes"]> = [];
+  if (/\bl[- ]shaped\b|\bl shape\b|\bcorner kitchen\b|\bwinkelk(?:ü|ue)che\b/.test(text)) layoutShapes.push("l-shaped");
+  if (/\bu[- ]shaped\b|\bu shape\b/.test(text)) layoutShapes.push("u-shaped");
+  if (/\bstraight(?: line)?\b|\bsingle[- ]wall\b|\bkitchen run\b/.test(text)) layoutShapes.push("straight");
+  if (/\bisland\b|\bkitchen island\b/.test(text)) layoutShapes.push("island");
+  if (layoutShapes.length) filters.layoutShapes = [...new Set(layoutShapes)];
   const seats = text.match(/(\d)\s*(?:seat|seater|sitzer)/);
   const seatWord = text.match(/\b(two|three|four)[- ](?:seat|seater)\b/)?.[1];
   if (seats) filters.seatCount = Number(seats[1]);
@@ -97,18 +145,24 @@ export function parseSearchQuery(query: string): SearchFilters {
 export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.modelCode && product.modelCode !== filters.modelCode) return false;
   if (filters.category && product.category !== filters.category) return false;
-  if (filters.maxWidthMm && product.widthMm > filters.maxWidthMm) return false;
-  if (filters.maxDepthMm && product.depthMm > filters.maxDepthMm) return false;
-  if (filters.minSeatHeightMm && product.seatHeightMm < filters.minSeatHeightMm) return false;
-  if (filters.maxSeatDepthMm && product.seatDepthMm > filters.maxSeatDepthMm) return false;
-  if (filters.seatCount && product.numberOfSeats !== filters.seatCount) return false;
-  if (filters.modular && !product.modular) return false;
-  if (filters.smallSpaceSuitable && !product.smallSpaceSuitable) return false;
-  if (filters.relaxFunction && !product.functions.includes("relax")) return false;
-  if (filters.electricFunctions && product.electricFunctions.length === 0) return false;
-  if (filters.colors?.length && !filters.colors.some((color) => product.colors.includes(color))) return false;
-  if (filters.materials?.length && !filters.materials.some((id) => product.materials.includes(id))) return false;
-  if (filters.styles?.length && !filters.styles.some((style) => product.styles.includes(style))) return false;
+  if (filters.maxWidthMm && (!product.verifiedFacts.dimensions || product.widthMm > filters.maxWidthMm)) return false;
+  if (filters.minWidthMm && (!product.verifiedFacts.dimensions || product.widthMm < filters.minWidthMm)) return false;
+  if (filters.targetWidthMm && (!product.verifiedFacts.dimensions || Math.abs(product.widthMm - filters.targetWidthMm) > Math.max(100, Math.round(filters.targetWidthMm * 0.03)))) return false;
+  if (filters.maxDepthMm && (!product.verifiedFacts.dimensions || product.depthMm > filters.maxDepthMm)) return false;
+  if (filters.minSeatHeightMm && (!product.verifiedFacts.seatHeight || product.seatHeightMm < filters.minSeatHeightMm)) return false;
+  if (filters.maxSeatDepthMm && (!product.verifiedFacts.seatDepth || product.seatDepthMm > filters.maxSeatDepthMm)) return false;
+  if (filters.seatCount && (!product.numberOfSeatsVerified || product.numberOfSeats !== filters.seatCount)) return false;
+  if (filters.modular && (!product.verifiedFacts.modular || !product.modular)) return false;
+  if (filters.smallSpaceSuitable && (!product.verifiedFacts.smallSpaceSuitable || !product.smallSpaceSuitable)) return false;
+  if (filters.layoutShapes?.length && !filters.layoutShapes.some((shape) => product.layoutShapes?.includes(shape))) return false;
+  if (filters.relaxFunction && !product.verifiedFacts.functions.includes("relax")) return false;
+  if (filters.electricFunctions && !product.verifiedFacts.functions.includes("electric")) return false;
+  if (filters.colors?.length && !filters.colors.some((color) => product.verifiedFacts.colors.includes(color))) return false;
+  if (filters.materials?.length && !filters.materials.some((requested) => {
+    const requestedType = materials.find((material) => material.id === requested)?.type ?? requested;
+    return product.verifiedFacts.materialTypes.includes(requestedType as "fabric" | "leather");
+  })) return false;
+  if (filters.styles?.length && !filters.styles.some((style) => product.verifiedFacts.styles.includes(style))) return false;
   if (filters.collections?.length && !filters.collections.includes(product.collection)) return false;
   if (filters.q && !filters.modelCode) {
     const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${product.category} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
@@ -140,10 +194,14 @@ export function searchProductsRanked(query: string, limit = 12): RankedProduct[]
   const wantsFabric = /\bfabric|textile|boucle|chenille|velvet\b/.test(normalized);
   const wantsComfort = /\bcomfort|comfortable|cosy|cozy|soft|relax|recline|lounge\b/.test(normalized);
   const wantsModern = /\bmodern|minimal|clean|contemporary|design\b/.test(normalized);
+  const active = products.filter((product) => product.active);
+  const verifiedMatches = active.filter((product) => productMatches(product, { ...parsed, q: undefined }));
+  const candidates = verifiedMatches.length ? verifiedMatches : active.filter((product) =>
+    (!requestedCategory || product.category === requestedCategory) &&
+    (!parsed.modelCode || product.modelCode === parsed.modelCode)
+  );
 
-  return products
-    .filter((product) => product.active)
-    .filter((product) => productMatches(product, { ...parsed, q: undefined }))
+  return candidates
     .map((product) => {
       const copy = [
         product.modelCode,

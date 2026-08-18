@@ -17,6 +17,8 @@ const baseIntent = {
   colorFamilies: ["beige"],
   materials: null,
   maxWidthMm: 2400,
+  minWidthMm: null,
+  targetWidthMm: null,
   minSeatHeightMm: null,
   maxSeatDepthMm: null,
   numberOfSeats: null,
@@ -24,7 +26,8 @@ const baseIntent = {
   functions: null,
   styles: null,
   roomType: null,
-  smallSpaceSuitable: true
+  smallSpaceSuitable: true,
+  layoutShapes: null
 };
 
 describe("AI schemas and fallbacks", () => {

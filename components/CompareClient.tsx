@@ -21,20 +21,20 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
   const awards = comparisonAwards(selected);
   useEffect(() => { storage.track({ name: "comparison_opened" }); }, []);
   const rows = useMemo(() => [
-    ["Width", selected.map((p) => `${Math.round(p.widthMm / 10)} cm`)],
-    ["Depth", selected.map((p) => `${Math.round(p.depthMm / 10)} cm`)],
-    ["Height", selected.map((p) => `${Math.round(p.heightMm / 10)} cm`)],
-    ["Seat Height", selected.map((p) => `${Math.round(p.seatHeightMm / 10)} cm`)],
-    ["Seat Depth", selected.map((p) => `${Math.round(p.seatDepthMm / 10)} cm`)],
-    ["Seats", selected.map((p) => String(p.numberOfSeats))],
-    ["Modularity", selected.map((p) => p.modular ? "Modular system" : "Fixed composition")],
-    ["Functions", selected.map((p) => [...p.functions, ...p.electricFunctions].slice(0, 2).join(", ") || "Configuration dependent")],
-    ["Materials", selected.map((p) => `${p.materials.length} curated cover families`)],
-    ["Comfort", selected.map((p) => p.comfortOptions.join(", ") || "Retailer consultation")],
+    ["Width", selected.map((p) => p.verifiedFacts.dimensions ? `${Math.round(p.widthMm / 10)} cm` : "Configuration dependent")],
+    ["Depth", selected.map((p) => p.verifiedFacts.dimensions ? `${Math.round(p.depthMm / 10)} cm` : "Configuration dependent")],
+    ["Height", selected.map((p) => p.verifiedFacts.dimensions ? `${Math.round(p.heightMm / 10)} cm` : "Configuration dependent")],
+    ["Seat Height", selected.map((p) => p.verifiedFacts.seatHeight ? `${Math.round(p.seatHeightMm / 10)} cm` : "Configuration dependent")],
+    ["Seat Depth", selected.map((p) => p.verifiedFacts.seatDepth ? `${Math.round(p.seatDepthMm / 10)} cm` : "Configuration dependent")],
+    ["Seats", selected.map((p) => p.numberOfSeatsVerified ? String(p.numberOfSeats) : "Configuration dependent")],
+    ["Modularity", selected.map((p) => p.verifiedFacts.modular ? "Modular system" : "Configuration dependent")],
+    ["Functions", selected.map((p) => p.verifiedFacts.functions.join(", ") || "Configuration dependent")],
+    ["Materials", selected.map((p) => p.verifiedFacts.materialTypes.join(", ") || "Configuration dependent")],
+    ["Comfort", selected.map((p) => p.verifiedFacts.comfort ? p.comfortOptions.join(", ") : "Configuration dependent")],
     ["Armrests", selected.map((p) => p.armrestOptions.join(", ") || "Configuration dependent")],
     ["Feet", selected.map((p) => p.feetOptions.join(", ") || "Configuration dependent")],
     ["Configurator", selected.map((p) => p.category === "storage" ? "Retailer planning" : "Available")],
-    ["Overall dimensions", selected.map((p) => dimensions(p.widthMm, p.depthMm, p.heightMm))]
+    ["Overall dimensions", selected.map((p) => p.verifiedFacts.dimensions ? dimensions(p.widthMm, p.depthMm, p.heightMm) : "Configuration dependent")]
   ].filter(([, values]) => !diffOnly || new Set(values as string[]).size > 1), [selected, diffOnly]);
 
   return (
