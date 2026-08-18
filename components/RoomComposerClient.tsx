@@ -300,7 +300,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               <p>Visualize Musterring furniture in a premium room scene. Add products, drag them into place, rotate and scale the composition, then save or hand it to a retailer.</p>
             </div>
             <div className="chips">
-              <button className="button ghost" onClick={() => document.querySelector(".stitch-composer-library")?.scrollIntoView({ behavior: "smooth" })}><Box size={18} /> Shoppable scenes</button>
+              <Link className="button ghost" href="/room-planner"><Box size={18} /> Open 3D Room Planner</Link>
               <button className="button consult" disabled={!uploadConsent} onClick={() => roomInputRef.current?.click()}><Upload size={18} /> {upload ? "Choose room photo" : "Upload room photo"}</button>
               <input
                 ref={roomInputRef}

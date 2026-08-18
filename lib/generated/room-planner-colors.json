@@ -1,0 +1,502 @@
+{
+  "justb-pm100": {
+    "hex": "#c6baab",
+    "sourceType": "transparent-cutout"
+  },
+  "justb-pm200": {
+    "hex": "#ada194",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-kleo": {
+    "hex": "#757460",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-alena": {
+    "hex": "#656063",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-lia": {
+    "hex": "#8a7f71",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-lucia": {
+    "hex": "#92908e",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-nils": {
+    "hex": "#bcada3",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-pamela": {
+    "hex": "#dcd1c3",
+    "sourceType": "transparent-cutout"
+  },
+  "translate-to-en-match-it": {
+    "hex": "#d8d8d7",
+    "sourceType": "catalog-image"
+  },
+  "mr-230": {
+    "hex": "#c1c1be",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-231": {
+    "hex": "#aba9a4",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-260": {
+    "hex": "#c3bfc0",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-261": {
+    "hex": "#c3c0bc",
+    "sourceType": "catalog-image"
+  },
+  "mr-270": {
+    "hex": "#dba84b",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-276": {
+    "hex": "#bebdab",
+    "sourceType": "catalog-image"
+  },
+  "mr-280": {
+    "hex": "#c3b8a7",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-281": {
+    "hex": "#5e5f61",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-285": {
+    "hex": "#1d1e1f",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-290": {
+    "hex": "#d8d9d4",
+    "sourceType": "catalog-image"
+  },
+  "translate-to-en-mr-300": {
+    "hex": "#a6a6a8",
+    "sourceType": "catalog-image"
+  },
+  "translate-to-en-mr-310": {
+    "hex": "#64594a",
+    "sourceType": "catalog-image"
+  },
+  "mr-315": {
+    "hex": "#d9d9d7",
+    "sourceType": "catalog-image"
+  },
+  "mr-365": {
+    "hex": "#60594f",
+    "sourceType": "catalog-image"
+  },
+  "mr-370": {
+    "hex": "#dadbd6",
+    "sourceType": "catalog-image"
+  },
+  "mr-376": {
+    "hex": "#303030",
+    "sourceType": "catalog-image"
+  },
+  "mr-385": {
+    "hex": "#d9d9d7",
+    "sourceType": "catalog-image"
+  },
+  "mr-1320": {
+    "hex": "#414846",
+    "sourceType": "catalog-image"
+  },
+  "mr-1370": {
+    "hex": "#d5d4d3",
+    "sourceType": "catalog-image"
+  },
+  "mr-1390": {
+    "hex": "#aca7a3",
+    "sourceType": "catalog-image"
+  },
+  "mr-1391": {
+    "hex": "#90887e",
+    "sourceType": "catalog-image"
+  },
+  "mr-2342": {
+    "hex": "#dadad6",
+    "sourceType": "catalog-image"
+  },
+  "mr-2490": {
+    "hex": "#dad9d6",
+    "sourceType": "catalog-image"
+  },
+  "mr-2665": {
+    "hex": "#8b6032",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-2795": {
+    "hex": "#c2c1bd",
+    "sourceType": "catalog-image"
+  },
+  "mr-2875": {
+    "hex": "#d5d4d3",
+    "sourceType": "catalog-image"
+  },
+  "mr-2985": {
+    "hex": "#2d2b2a",
+    "sourceType": "catalog-image"
+  },
+  "mr-2986": {
+    "hex": "#bebaac",
+    "sourceType": "catalog-image"
+  },
+  "mr-2995": {
+    "hex": "#d6d6d5",
+    "sourceType": "catalog-image"
+  },
+  "mr-4100": {
+    "hex": "#655b57",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-4585": {
+    "hex": "#ad8a2c",
+    "sourceType": "catalog-image"
+  },
+  "mr-4615": {
+    "hex": "#c4c3c0",
+    "sourceType": "catalog-image"
+  },
+  "mr-4820": {
+    "hex": "#454c46",
+    "sourceType": "catalog-image"
+  },
+  "mr-5100": {
+    "hex": "#a3978a",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-5111": {
+    "hex": "#ded7d2",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-700": {
+    "hex": "#d7d6d4",
+    "sourceType": "catalog-image"
+  },
+  "mr-710": {
+    "hex": "#c4c4c0",
+    "sourceType": "catalog-image"
+  },
+  "mr-720": {
+    "hex": "#957e76",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-6500": {
+    "hex": "#afaaa0",
+    "sourceType": "catalog-image"
+  },
+  "mr-6510": {
+    "hex": "#c2c1bf",
+    "sourceType": "catalog-image"
+  },
+  "mr-6540": {
+    "hex": "#acaba6",
+    "sourceType": "catalog-image"
+  },
+  "mr-6550": {
+    "hex": "#bca492",
+    "sourceType": "catalog-image"
+  },
+  "mr-9120": {
+    "hex": "#4b4945",
+    "sourceType": "catalog-image"
+  },
+  "mr-9420": {
+    "hex": "#a6a194",
+    "sourceType": "catalog-image"
+  },
+  "mr-9425": {
+    "hex": "#5a6575",
+    "sourceType": "catalog-image"
+  },
+  "mr-9440": {
+    "hex": "#c2c2bf",
+    "sourceType": "catalog-image"
+  },
+  "mr-9445": {
+    "hex": "#626262",
+    "sourceType": "transparent-cutout"
+  },
+  "mr-9450": {
+    "hex": "#dad9d7",
+    "sourceType": "catalog-image"
+  },
+  "mr-9455": {
+    "hex": "#dadad9",
+    "sourceType": "catalog-image"
+  },
+  "jana": {
+    "hex": "#5a5b5c",
+    "sourceType": "transparent-cutout"
+  },
+  "kanto": {
+    "hex": "#ba9564",
+    "sourceType": "transparent-cutout"
+  },
+  "kara-frame": {
+    "hex": "#494644",
+    "sourceType": "catalog-image"
+  },
+  "kara-system": {
+    "hex": "#342f2b",
+    "sourceType": "catalog-image"
+  },
+  "kira-system": {
+    "hex": "#c0c0bd",
+    "sourceType": "catalog-image"
+  },
+  "kiana": {
+    "hex": "#65605a",
+    "sourceType": "catalog-image"
+  },
+  "korsika": {
+    "hex": "#d7d0c1",
+    "sourceType": "catalog-image"
+  },
+  "maestra": {
+    "hex": "#484744",
+    "sourceType": "catalog-image"
+  },
+  "simea": {
+    "hex": "#7c7663",
+    "sourceType": "catalog-image"
+  },
+  "media-smart": {
+    "hex": "#1c1c1e",
+    "sourceType": "catalog-image"
+  },
+  "portland": {
+    "hex": "#c8c4bc",
+    "sourceType": "catalog-image"
+  },
+  "q-media-20": {
+    "hex": "#c4c2bc",
+    "sourceType": "catalog-image"
+  },
+  "trevio": {
+    "hex": "#73654c",
+    "sourceType": "catalog-image"
+  },
+  "justb-ct100": {
+    "hex": "#a07f5c",
+    "sourceType": "transparent-cutout"
+  },
+  "nara": {
+    "hex": "#f6bb75",
+    "sourceType": "transparent-cutout"
+  },
+  "nara-new-kopie-1": {
+    "hex": "#74645d",
+    "sourceType": "catalog-image"
+  },
+  "nela": {
+    "hex": "#c2baaa",
+    "sourceType": "catalog-image"
+  },
+  "joline": {
+    "hex": "#c2c1bd",
+    "sourceType": "catalog-image"
+  },
+  "san-antonio": {
+    "hex": "#c0bebc",
+    "sourceType": "catalog-image"
+  },
+  "malin": {
+    "hex": "#c0bfbf",
+    "sourceType": "catalog-image"
+  },
+  "jovanna": {
+    "hex": "#c1c1bb",
+    "sourceType": "catalog-image"
+  },
+  "joern": {
+    "hex": "#d5d7da",
+    "sourceType": "catalog-image"
+  },
+  "kara-frame-schlafen": {
+    "hex": "#2b1b13",
+    "sourceType": "catalog-image"
+  },
+  "madiva": {
+    "hex": "#d2d5d5",
+    "sourceType": "catalog-image"
+  },
+  "san-francisco": {
+    "hex": "#8b784c",
+    "sourceType": "catalog-image"
+  },
+  "san-diego": {
+    "hex": "#afa9a2",
+    "sourceType": "catalog-image"
+  },
+  "savona-20": {
+    "hex": "#c0bcba",
+    "sourceType": "catalog-image"
+  },
+  "sorrent": {
+    "hex": "#c1c2c1",
+    "sourceType": "catalog-image"
+  },
+  "justb-sc100": {
+    "hex": "#d7d8d5",
+    "sourceType": "catalog-image"
+  },
+  "justb-sc200": {
+    "hex": "#d8d8d4",
+    "sourceType": "catalog-image"
+  },
+  "delphi": {
+    "hex": "#dadad7",
+    "sourceType": "catalog-image"
+  },
+  "mr-dubai": {
+    "hex": "#dcdbd8",
+    "sourceType": "catalog-image"
+  },
+  "translate-to-en-eforma": {
+    "hex": "#b9afa4",
+    "sourceType": "catalog-image"
+  },
+  "elias": {
+    "hex": "#c0c1c0",
+    "sourceType": "catalog-image"
+  },
+  "elos": {
+    "hex": "#c5bca8",
+    "sourceType": "catalog-image"
+  },
+  "bari": {
+    "hex": "#ecebe7",
+    "sourceType": "catalog-image"
+  },
+  "mr-imola": {
+    "hex": "#d8d8d7",
+    "sourceType": "catalog-image"
+  },
+  "mr-isabelle": {
+    "hex": "#606060",
+    "sourceType": "catalog-image"
+  },
+  "justb-sp100": {
+    "hex": "#c2c1bd",
+    "sourceType": "catalog-image"
+  },
+  "justb-sp150": {
+    "hex": "#d8d7d5",
+    "sourceType": "catalog-image"
+  },
+  "helana": {
+    "hex": "#462d1e",
+    "sourceType": "catalog-image"
+  },
+  "helmond": {
+    "hex": "#d9d9d5",
+    "sourceType": "catalog-image"
+  },
+  "helvin": {
+    "hex": "#c2c1bf",
+    "sourceType": "catalog-image"
+  },
+  "navarra": {
+    "hex": "#4a4a43",
+    "sourceType": "catalog-image"
+  },
+  "nerina": {
+    "hex": "#d6d6d4",
+    "sourceType": "catalog-image"
+  },
+  "nevio": {
+    "hex": "#c1958a",
+    "sourceType": "catalog-image"
+  },
+  "nica": {
+    "hex": "#d8d9d7",
+    "sourceType": "catalog-image"
+  },
+  "nilan": {
+    "hex": "#dadad8",
+    "sourceType": "catalog-image"
+  },
+  "nova": {
+    "hex": "#464749",
+    "sourceType": "catalog-image"
+  },
+  "picara": {
+    "hex": "#dbdad7",
+    "sourceType": "catalog-image"
+  },
+  "pinero": {
+    "hex": "#c1c1bd",
+    "sourceType": "catalog-image"
+  },
+  "tamina": {
+    "hex": "#a4a8ac",
+    "sourceType": "catalog-image"
+  },
+  "tario": {
+    "hex": "#d9d9d9",
+    "sourceType": "catalog-image"
+  },
+  "tavia": {
+    "hex": "#a8a393",
+    "sourceType": "catalog-image"
+  },
+  "tiama": {
+    "hex": "#bebcac",
+    "sourceType": "catalog-image"
+  },
+  "tjark": {
+    "hex": "#c4c1bb",
+    "sourceType": "catalog-image"
+  },
+  "revento-line": {
+    "hex": "#a49277",
+    "sourceType": "catalog-image"
+  },
+  "riana": {
+    "hex": "#928a79",
+    "sourceType": "catalog-image"
+  },
+  "freilicht": {
+    "hex": "#72665f",
+    "sourceType": "catalog-image"
+  },
+  "summertime": {
+    "hex": "#c5b9ab",
+    "sourceType": "catalog-image"
+  },
+  "helmond-outdoor": {
+    "hex": "#95908c",
+    "sourceType": "catalog-image"
+  },
+  "justb-od100": {
+    "hex": "#a8a195",
+    "sourceType": "catalog-image"
+  },
+  "justb-km100": {
+    "hex": "#968a77",
+    "sourceType": "catalog-image"
+  },
+  "deluxe-collection": {
+    "hex": "#d2d3d5",
+    "sourceType": "catalog-image"
+  },
+  "mr-bergen": {
+    "hex": "#c4c3bc",
+    "sourceType": "catalog-image"
+  },
+  "justb-carpets": {
+    "hex": "#787063",
+    "sourceType": "catalog-image"
+  },
+  "lamps-20": {
+    "hex": "#ada38e",
+    "sourceType": "catalog-image"
+  }
+}
