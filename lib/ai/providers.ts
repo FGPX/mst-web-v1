@@ -233,8 +233,9 @@ export class OpenAIProvider implements AIProvider {
   }
 
   analyzeProductImage(imageDataUrl: string) {
-    return this.parse(visualTagsSchema, "product_visual_tags", "Analyze only the target furniture object. Describe visible traits; do not name products.",
-      [{ role: "user", content: [{ type: "input_text", text: "Analyze the furniture object into visual search tags. Do not identify or invent a product." }, { type: "input_image", image_url: imageDataUrl, detail: "low" }] }], true);
+    return this.parse(visualTagsSchema, "product_visual_tags",
+      "Analyze only the most prominent target furniture object. Allowed categories are sofa, sectional, armchair and storage. Set category to null when none of those objects is clearly visible. Describe only visible traits; never identify or invent a product.",
+      [{ role: "user", content: [{ type: "input_text", text: "Analyze the selected image area for visual catalogue matching. Return visible colour families, likely material, style, silhouette and notable features. If no supported furniture object is clearly visible, set category to null." }, { type: "input_image", image_url: imageDataUrl, detail: "auto" }] }], true);
   }
 
   analyzeRoomImage(imageDataUrl: string) {

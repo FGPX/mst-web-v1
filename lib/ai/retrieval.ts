@@ -229,6 +229,9 @@ export async function hybridCatalogueSearch(intent: SearchIntent, semantic: Sema
 }
 
 export function searchCatalogueByVisualTags(tags: VisualTags) {
+  // An unrelated or unclear upload must never be turned into an arbitrary
+  // Musterring recommendation merely because catalogue products exist.
+  if (!tags.category) return [];
   const active = products.filter((product) => product.active);
   return active.map((product) => {
     let score = 0;

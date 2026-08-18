@@ -96,41 +96,43 @@
 }
 
 .stitch-ai-discovery {
-  display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 48px;
-  align-items: stretch;
+  display: block;
+}
+
+.stitch-ai-discovery-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-bottom: 16px;
+}
+
+.stitch-ai-discovery-heading .stitch-ai-label {
+  margin: 0;
 }
 
 .stitch-ai-visual-entry {
-  min-height: 300px;
-  border: 2px dashed var(--stitch-border);
-  display: flex;
-  flex-direction: column;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--stitch-border);
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 14px;
-  text-align: center;
+  gap: 7px;
+  padding: 7px 10px;
   color: inherit;
-  transition: background 180ms ease, border-color 180ms ease;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
 
 .stitch-ai-visual-entry:hover {
   border-color: var(--stitch-accent);
   background: var(--stitch-bg-secondary);
-}
-
-.stitch-ai-visual-entry strong {
-  font-family: var(--stitch-font-display);
-  font-size: 24px;
-}
-
-.stitch-ai-visual-entry span {
-  max-width: 210px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  transform: translateY(-1px);
 }
 
 .stitch-ai-suggestions {
@@ -1298,10 +1300,6 @@
 
   .stitch-composer-layout > * {
     min-width: 0;
-  }
-
-  .stitch-ai-visual-entry {
-    min-height: 220px;
   }
 
   .stitch-composer-library {

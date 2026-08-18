@@ -186,9 +186,11 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
           ) : null}
           {!submitted ? <p className="stitch-ai-example">Try: “I need a compact beige modular sofa for a small apartment, maximum width 240 cm.”</p> : null}
           {!submitted ? <div className="stitch-ai-discovery">
-            <Link className="stitch-ai-visual-entry" href="/visual-search"><Camera size={48} /><strong>Visual Search</strong><span>Upload an image to find similar pieces</span></Link>
             <div>
-              <p className="stitch-ai-label">Suggested searches</p>
+              <div className="stitch-ai-discovery-heading">
+                <p className="stitch-ai-label">Suggested searches</p>
+                <Link className="stitch-ai-visual-entry" href="/visual-search"><Camera size={15} aria-hidden="true" /> Search by image</Link>
+              </div>
               <div className="stitch-ai-suggestions">{suggestions.map((suggestion) => <button type="button" key={suggestion.query} onClick={() => void submit(suggestion.query)}>{suggestion.label}</button>)}</div>
               <p className="stitch-ai-label">Recent searches</p>
               {recent.length ? <div className="stitch-ai-suggestions" aria-label="Recent searches">{recent.map((item) => <button type="button" key={item} onClick={() => void submit(item)}>{item}</button>)}</div> : null}

@@ -71,6 +71,18 @@ describe("grounded hybrid retrieval", () => {
     const ids = new Set(products.map((product) => product.id));
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
   });
+
+  it("does not recommend a product when no supported furniture is detected", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: null,
+      colorFamilies: ["grey"],
+      likelyMaterial: null,
+      style: [],
+      silhouette: "no supported furniture detected",
+      notableVisualFeatures: []
+    }));
+    expect(matches).toEqual([]);
+  });
 });
 
 describe("configuration and retailer grounding", () => {
