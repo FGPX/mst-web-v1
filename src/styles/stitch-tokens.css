@@ -10,8 +10,8 @@
   --stitch-accent: #845238;
   --stitch-border: #76777b;
   --stitch-border-soft: #c7c6ca;
-  --stitch-font-display: "Libre Caslon Text", Georgia, "Times New Roman", serif;
-  --stitch-font-ui: Manrope, "Segoe UI", Arial, sans-serif;
+  --stitch-font-display: "Frutiger LT Pro", "FrutigerLTPro", Frutiger, "Helvetica Neue", Arial, sans-serif;
+  --stitch-font-ui: "Frutiger LT Pro", "FrutigerLTPro", Frutiger, "Helvetica Neue", Arial, sans-serif;
   --stitch-display-size: 64px;
   --stitch-display-mobile: 40px;
   --stitch-headline-size: 32px;
@@ -26,6 +26,7 @@
   --stitch-radius-sm: 4px;
   --stitch-radius: 8px;
   --stitch-radius-lg: 16px;
+  --stitch-control-radius: 4px;
   --stitch-button-height: 56px;
   --stitch-button-padding-x: 40px;
   --stitch-shadow-soft: 0 30px 80px rgba(27, 28, 25, 0.1);

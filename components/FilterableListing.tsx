@@ -21,6 +21,7 @@ import { productMatches } from "@/lib/search";
 import type { Category, Product, SearchFilters } from "@/lib/types";
 import { storage } from "@/lib/persistence";
 import { categoryDetails, categoryGroups } from "@/lib/catalog-taxonomy";
+import { CompareSelectionBar } from "./CompareSelectionBar";
 
 const initialVisibleProducts = 4;
 
@@ -245,7 +246,7 @@ export function FilterableListing() {
           </div>
         )}
       </section>
-      {compareIds.length ? <div className="sticky-actions" role="status"><div className="container chips"><span>{compareIds.length}/3 selected for comparison</span><Link className="button primary" href={`/compare?ids=${compareIds.join(",")}`}>Compare selected</Link><button className="button ghost" onClick={() => setCompareIds([])}>Clear</button></div></div> : null}
+      <CompareSelectionBar ids={compareIds} onClear={() => setCompareIds([])} />
 
       <section className="stitch-consultation">
         <div className="stitch-consultation-inner">
@@ -339,7 +340,7 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
           <p>{product.subtitle}</p>
         </div>
         <div className="stitch-catalog-card-links">
-          <label className="chip"><input type="checkbox" checked={compareSelected} onChange={onCompare} /> Compare</label>
+          <label className={`stitch-card-compare${compareSelected ? " is-selected" : ""}`}><input type="checkbox" checked={compareSelected} onChange={onCompare} /> {compareSelected ? "Selected" : "Compare"}</label>
           <Link className="stitch-card-view-link" href={`/furniture/${product.slug}`}>
             <Eye size={17} /> View product
           </Link>

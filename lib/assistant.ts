@@ -362,11 +362,16 @@ function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
     const comparisonNote = comparisonAlternatives.length
       ? ` ${exactIds.length === 1 ? "One product is an exact match" : `${exactIds.length} products are exact matches`}; the additional products are clearly labelled comparison alternatives and may not satisfy every filter.`
       : "";
+    const needsBrief = requested.length === 1 && Boolean(filters.category) && !namedProduct;
     return advisorAnswerSchema.parse({
-      answer: `I found ${exact.length} exact catalogue match${exact.length === 1 ? "" : "es"}${requested.length ? ` for ${requested.join(", ")}` : ""}.${comparisonNote || " Every shown product satisfies the interpreted hard filters in the connected data."}`,
+      answer: needsBrief
+        ? `I found ${exact.length} catalogue match${exact.length === 1 ? "" : "es"} for ${requested[0]}. To make this feel personal rather than generic, tell me the room width or maximum furniture width, who will use it, and any must-have comfort or material preference.${comparisonNote}`
+        : `I found ${exact.length} exact catalogue match${exact.length === 1 ? "" : "es"}${requested.length ? ` for ${requested.join(", ")}` : ""}.${comparisonNote || " Every shown product satisfies the interpreted hard filters in the connected data."}`,
       answerType: "products", productIds: ids, materialIds: [], sources: ["Musterring product catalogue", ...(requestedMaterial || wantsEasyCare ? ["Musterring concept material metadata"] : [])],
       proposedAction: wantsComparison && ids.length > 1 ? { type: "COMPARE_PRODUCTS", label: comparisonAlternatives.length ? "Compare match with alternatives" : "Compare the exact matches", parameters: { productIds: ids.slice(0, 3) }, requiresConfirmation: false } : null,
-      suggestedQuestions: ids.length > 1 ? ["Which one is most compact?", "Compare the first three", "Save the first one"] : ["Open the first product", "Find a similar alternative", "Save this product"]
+      suggestedQuestions: needsBrief
+        ? ["My maximum width is 260 cm", "It is for a family with children or pets", "I prefer an upright, supportive seat"]
+        : ids.length > 1 ? ["Which one is most compact?", "Compare the first three", "Save the first one"] : ["Open the first product", "Find a similar alternative", "Save this product"]
     });
   }
 
@@ -414,6 +419,16 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
       proposedAction: null, suggestedQuestions: []
     });
   }
+  const widthFollowUp = text.trim().match(/^(?:yes[,.! ]*)?(?:width[ :,-]*)?(\d+(?:[.,]\d+)?)\s*(m|metres?|meters?|cm|centimetres?|centimeters?)\b/i);
+  if (widthFollowUp && referenced.length) {
+    const unit = widthFollowUp[2].toLowerCase();
+    const centimetres = Number(widthFollowUp[1].replace(",", ".")) * (unit.startsWith("m") && unit !== "mm" ? 100 : 1);
+    const referencedCategories = [...new Set(products.filter((product) => referenced.includes(product.id)).map((product) => product.category))];
+    if (Number.isFinite(centimetres) && centimetres > 0 && centimetres <= 1000 && referencedCategories.length === 1) {
+      const continuation = productDiscoveryAnswer(`I need a ${referencedCategories[0]} under ${centimetres} cm`);
+      if (continuation) return continuation;
+    }
+  }
   if (ordinal !== null && referenced[ordinal]) {
     const product = products.find((item) => item.id === referenced[ordinal])!;
     return advisorAnswerSchema.parse({
@@ -444,6 +459,30 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
       suggestedQuestions: ["Summarize my decisions", "Which room measurements are missing?"]
     });
   }
+  if (/configur|build (?:a |my )?(?:sofa|sectional|chair|bed)|plan (?:a |my )?(?:sofa|sectional|chair|bed)/.test(text)) {
+    if (current) {
+      return advisorAnswerSchema.parse({
+        answer: `I can take you to the validated configurator for ${current.modelCode}. Tell me your maximum width, preferred material and required functions first if you would like help narrowing the options. Compatibility, dimensions and any indicative price remain the configurator's job.`,
+        answerType: "configuration", productIds: [current.id], materialIds: [], sources: ["Musterring product catalogue", "Configuration validation service"],
+        proposedAction: { type: "CONFIGURE_PRODUCT", label: `Configure ${current.modelCode}`, parameters: { slug: current.slug }, requiresConfirmation: false },
+        suggestedQuestions: ["My maximum width is 260 cm", "I need an easy-care material", "I would like a relax function"]
+      });
+    }
+    return advisorAnswerSchema.parse({
+      answer: "I’d be happy to help shape a configuration brief. What would you like to configure, what is the maximum usable width in centimetres, and which of these matters most: modular flexibility, an upright or relaxed sit, easy-care material, or a relax function? I will only propose a product after those needs can be checked against the catalogue.",
+      answerType: "configuration", productIds: [], materialIds: [], sources: ["Musterring product catalogue", "Configuration validation service"],
+      proposedAction: null,
+      suggestedQuestions: ["I want a modular sofa under 260 cm", "I prefer an upright seat", "I need an easy-care material for pets"]
+    });
+  }
+  if (/material|fabric|leather|upholstery/.test(text) && /help|choose|which|what/.test(text) && !/dog|pet|children|care|sun|family|colour|color/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "I can help you choose from recorded material attributes. To make the recommendation useful, how will the furniture be used (children, pets or frequent use), is it in strong sunlight, and do you prefer fabric or leather? I will keep the advice to recorded care and suitability metadata.",
+      answerType: "materials", productIds: current ? [current.id] : [], materialIds: [], sources: ["Musterring concept material metadata"],
+      proposedAction: { type: "SHOW_MATERIALS", label: "Explore materials and care", parameters: { query: question }, requiresConfirmation: false },
+      suggestedQuestions: ["We have children and a dog", "The room has strong afternoon sun", "I prefer the feel of fabric"]
+    });
+  }
   if (/material|dog|pet|children|care/.test(text) && !/sofa|couch|armchair|chair|sectional|table|bed|wardrobe|outdoor|carpet|rug|lamp|compare|find|show me|i need|i want/.test(text)) {
     const advice = parseMaterialNeeds(question);
     return advisorAnswerSchema.parse({
@@ -455,10 +494,10 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
   }
   if (/\b(fit|door|doorway|delivery route|through)\b/.test(text)) {
     return advisorAnswerSchema.parse({
-      answer: current ? `Available product data lists ${current.modelCode} package guidance, but physical fit cannot be confirmed here. Use Will It Fit? with your measured route and retailer verification.` : "Select a product and use Will It Fit? with measured room and delivery-route data.",
+      answer: current ? `Available product data lists ${current.modelCode} package guidance, but physical fit cannot be confirmed here. Use Will It Fit? with your measured route and retailer verification.` : "I can help prepare a fit check, but I cannot confirm physical fit without the fit engine. Which product are you considering, and what are the narrowest doorway width and height, stair or lift constraints, and usable room width and depth?",
       answerType: "fit", productIds: current ? [current.id] : referenced, materialIds: [], sources: ["Product package data", "Will It Fit? deterministic service"],
       proposedAction: current ? { type: "OPEN_FIT_CHECK", label: `Check ${current.modelCode}`, parameters: { slug: current.slug }, requiresConfirmation: false } : null,
-      suggestedQuestions: ["Which measurements do I need?", "Prepare a technical fit request"]
+      suggestedQuestions: current ? ["Which measurements do I need?", "Prepare a technical fit request"] : ["I am considering MR 285", "My doorway is 82 cm wide and 198 cm high", "What measurements does the fit check need?"]
     });
   }
   if (/smaller|alternative|same style|better match/.test(text) && current) {

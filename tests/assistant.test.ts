@@ -148,6 +148,34 @@ describe("connected Musterring assistant grounding", () => {
     expect(answer.proposedAction?.type).toBe("COMPARE_PRODUCTS");
   });
 
+  it("turns a broad product request into a warm, grounded discovery brief", () => {
+    const answer = answerGroundedQuestion("I need a sofa", context);
+    expect(answer.answerType).toBe("products");
+    expect(answer.answer).toMatch(/maximum furniture width|who will use it/i);
+    expect(answer.suggestedQuestions).toContain("My maximum width is 260 cm");
+  });
+
+  it("asks for the essentials before proposing an unscoped configuration", () => {
+    const answer = answerGroundedQuestion("Help me configure a sofa", context);
+    expect(answer.answerType).toBe("configuration");
+    expect(answer.productIds).toEqual([]);
+    expect(answer.answer).toMatch(/maximum usable width/i);
+  });
+
+  it("gathers a material brief without making unsupported performance claims", () => {
+    const answer = answerGroundedQuestion("Which material should I choose?", context);
+    expect(answer.answerType).toBe("materials");
+    expect(answer.answer).toMatch(/children, pets or frequent use/i);
+    expect(answer.answer).not.toMatch(/stain-proof|scratch-proof/i);
+  });
+
+  it("collects measurements before offering an unscoped fit conclusion", () => {
+    const answer = answerGroundedQuestion("Will it fit through my door?", context);
+    expect(answer.answerType).toBe("fit");
+    expect(answer.proposedAction).toBeNull();
+    expect(answer.answer).toMatch(/cannot confirm physical fit/i);
+  });
+
   it("returns only the visually verified red sofa presentation", () => {
     const answer = answerGroundedQuestion("I want a red sofa", context);
     expect(answer.answerType).toBe("products");
@@ -247,6 +275,13 @@ describe("connected Musterring assistant grounding", () => {
     expect(answer.productIds).toEqual([first[1].id]);
     expect(answer.proposedAction?.type).toBe("SAVE_PRODUCT");
     expect(answer.proposedAction?.requiresConfirmation).toBe(true);
+  });
+
+  it("understands a width-only reply from the preceding product options", () => {
+    const sofas = products.filter((product) => product.active && product.category === "sofa").slice(0, 4);
+    const answer = answerGroundedQuestion("3 meters", { ...context, referencedProductIds: sofas.map((product) => product.id) });
+    expect(answer.productIds.length).toBeGreaterThan(0);
+    expect(answer.productIds.every((id) => (products.find((product) => product.id === id)?.widthMm ?? Infinity) <= 3000)).toBe(true);
   });
 
   it("uses deterministic configuration validation for proposed changes", () => {
