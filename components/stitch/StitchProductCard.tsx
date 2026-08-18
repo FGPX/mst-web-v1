@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "@/components/HighQualityImage";
 import { ArrowUpRight, Eye, GitCompare, MapPin, Settings } from "lucide-react";
 import type { Product } from "@/lib/types";
-import { dimensions, formatEuro } from "@/lib/format";
+import { dimensions } from "@/lib/format";
 import { storage } from "@/lib/persistence";
 import { productImages } from "@/lib/musterring-assets";
 import { AlternativeFinderButton } from "../AlternativeFinderButton";
@@ -28,9 +28,9 @@ export function StitchProductCard({ product, explanation, imageOverride, imageNo
         <h3>{product.name}</h3>
         <p>{product.subtitle}</p>
         {showMeta ? <p className="stitch-product-meta">
-          {product.authorizedContent
-            ? "Configuration-dependent dimensions · Price available from retailer"
-            : `${dimensions(product.widthMm, product.depthMm, product.heightMm)} · Starting from ${formatEuro(product.indicativePriceCents)}`}
+          {product.verifiedFacts.dimensions
+            ? dimensions(product.widthMm, product.depthMm, product.heightMm)
+            : "Product dimensions are configuration dependent"}
         </p> : null}
         {explanation ? <p className="stitch-product-explanation">{explanation}</p> : null}
         <div className="stitch-product-actions" aria-label="Product actions">

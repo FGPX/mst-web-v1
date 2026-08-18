@@ -13,8 +13,10 @@ export const alternativeRequestSchema = z.object({
   styles: z.array(z.string().trim().min(1).max(80)).max(12).optional(),
   numberOfSeats: z.number().int().positive().max(20).optional(),
   maxWidthMm: z.number().int().positive().optional(),
+  minWidthMm: z.number().int().positive().optional(),
+  targetWidthMm: z.number().int().positive().optional(),
+  layoutShapes: z.array(z.enum(["straight", "l-shaped", "u-shaped", "corner", "island"])).max(5).optional(),
   minSeatHeightMm: z.number().int().nonnegative().optional(),
-  maxIndicativePrice: z.number().int().nonnegative().optional(),
   requiredFunctions: z.array(z.string()).max(20).optional(),
   excludedFunctions: z.array(z.string()).max(20).optional(),
   materialTags: z.array(z.string()).max(20).optional(),
@@ -107,7 +109,11 @@ export const conversationContextSchema = z.object({
   selectedConfigurationId: z.string().nullable().optional(),
   selectedMaterialIds: z.array(z.string()).max(20).default([]),
   currentFilters: z.record(z.unknown()).default({}),
-  approvedPreferences: z.record(z.unknown()).default({})
+  approvedPreferences: z.record(z.unknown()).default({}),
+  recentMessages: z.array(z.object({
+    role: z.enum(["customer", "advisor"]),
+    text: z.string().trim().min(1).max(3000)
+  })).max(8).optional()
 });
 export type ConversationContext = z.infer<typeof conversationContextSchema>;
 

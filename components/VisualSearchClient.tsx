@@ -9,7 +9,7 @@ import { storage } from "@/lib/persistence";
 import { productImages } from "@/lib/musterring-assets";
 import type { Category, Product } from "@/lib/types";
 
-type MatchCategory = Extract<Category, "sofa" | "armchair" | "storage">;
+type MatchCategory = Extract<Category, "sofa" | "sectional" | "armchair" | "storage">;
 type VisualResult = { product: Product; score: number; explanation: string; differences: string };
 
 function matchLabel(score: number) {
@@ -107,6 +107,7 @@ export function VisualSearchClient() {
   const [consent, setConsent] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [aiMode, setAiMode] = useState("");
+  const [noMatchReason, setNoMatchReason] = useState("");
   const visibleResults = useMemo(
     () => results.filter(({ product }) =>
       product.category === category &&
@@ -139,12 +140,14 @@ export function VisualSearchClient() {
     setStatus("idle");
     setResults([]);
     setAnalysis("");
+    setNoMatchReason("");
   };
   const analyzeSelectedArea = useCallback(async () => {
     if (!preview || !selectedFile || !consent || analysisRequestRef.current) return;
     analysisRequestRef.current = true;
     setStatus("analyzing");
     setError("");
+    setNoMatchReason("");
     try {
       const croppedFile = crop.size === 100 && crop.x === 0 && crop.y === 0
         ? selectedFile
@@ -157,17 +160,18 @@ export function VisualSearchClient() {
       form.append("preferredCategory", category);
       form.append("observedColors", JSON.stringify(observedColors));
       const response = await fetch("/api/ai/image", { method: "POST", body: form });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload?.error);
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(payload?.error ?? "The selected area could not be analyzed.");
       const detectedCategory = payload.tags.category;
-      if (detectedCategory === "storage" || detectedCategory === "armchair" || detectedCategory === "sofa") setCategory(detectedCategory);
+      if (detectedCategory === "storage" || detectedCategory === "armchair" || detectedCategory === "sectional" || detectedCategory === "sofa") setCategory(detectedCategory);
       setColor("");
       setMaterialId("");
       setStyle("");
       setAnalysis(`${detectedCategory ?? "furniture"} · ${payload.tags.colorFamilies.join(", ")} · ${payload.tags.silhouette}`);
-      setResults(payload.matches.map((match: { product: Product; label: string; reasons: string[]; differences: string[] }) => ({
+      setNoMatchReason(payload.noMatchReason ?? "");
+      setResults(payload.matches.map((match: { product: Product; score: number; label: string; reasons: string[]; differences: string[] }) => ({
         product: match.product,
-        score: match.label === "Exact Catalogue Image" ? 100 : match.label === "Excellent Visual Match" ? 90 : match.label === "Strong Match" ? 75 : match.label === "Similar Shape" ? 60 : match.label === "Similar Material" ? 45 : 25,
+        score: match.score,
         explanation: match.reasons.join(", "),
         differences: match.differences.join(", ")
       })));
@@ -197,6 +201,7 @@ export function VisualSearchClient() {
     setError("");
     setSelectedFile(null);
     setAiMode("");
+    setNoMatchReason("");
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -208,7 +213,7 @@ export function VisualSearchClient() {
             <div>
               <p className="eyebrow">Visual intelligence</p>
               <h1 className="h2">Visual Match Results</h1>
-              <p className="lead">Upload a room or furniture photo. The browser analyzes its colour palette and proportions, then compares them with available Musterring products.</p>
+              <p className="lead">Upload a furniture or room photo, select the object, and compare its visible characteristics with available Musterring products.</p>
               <label className="chip"><input type="checkbox" checked={consent} onChange={(event) => {
                 setConsent(event.target.checked);
                 storage.recordConsent("photo-ai-processing", event.target.checked);
@@ -267,7 +272,7 @@ export function VisualSearchClient() {
                 ) : status === "error" ? (
                   <div className="stitch-visual-loading"><X /><p>Visual analysis could not be completed. Try the selected area again.</p></div>
                 ) : status === "ready" && !primary ? (
-                  <div className="stitch-visual-loading"><Sparkles /><p>No products match the active refinements. Remove a filter or choose another category.</p></div>
+                  <div className="stitch-visual-loading"><Sparkles /><p>{noMatchReason || "No products match the active refinements. Remove a filter or choose another category."}</p></div>
                 ) : primary ? (
                   <article className="stitch-visual-primary">
                     <div className="stitch-match-badge">{matchLabel(primary.score)}</div>
@@ -294,10 +299,10 @@ export function VisualSearchClient() {
                 )}
                 <div className="stitch-visual-refine">
                   <p className="eyebrow">Refine results</p>
-                  {(["storage", "sofa", "armchair"] as const).map((item) => (
+                  {(["storage", "sofa", "sectional", "armchair"] as const).map((item) => (
                     <button className={category === item ? "is-active" : ""} key={item} onClick={() => setCategory(item)}>
                       {category === item ? <Check size={14} /> : null}
-                      {item === "storage" ? "Living walls" : `${item}s`}
+                      {item === "storage" ? "Living walls" : item === "sectional" ? "Sectionals" : `${item}s`}
                     </button>
                   ))}
                   <label>Color<select value={color} onChange={(event) => setColor(event.target.value)}><option value="">Any color</option>{[...new Set(results.flatMap(({ product }) => product.colors))].map((item) => <option key={item}>{item}</option>)}</select></label>

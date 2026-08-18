@@ -23,6 +23,29 @@ describe("search query parsing", () => {
     expect(results.every((product) => product.widthMm <= 2400)).toBe(true);
   });
 
+  it("interprets an L-shaped kitchen above 300 cm without reversing the width relation", () => {
+    const filters = parseSearchQuery("L shaped kitchen above 300 cm");
+    expect(filters).toMatchObject({
+      category: "kitchen",
+      layoutShapes: ["l-shaped"],
+      minWidthMm: 3000
+    });
+    expect(filters.maxWidthMm).toBeUndefined();
+    expect(filters.targetWidthMm).toBeUndefined();
+  });
+
+  it.each([
+    ["corner kitchen at least 3 metres", 3000],
+    ["Eckküche mindestens 3 m", 3000]
+  ])("normalizes kitchen shape and metric minimums: %s", (query, expectedWidth) => {
+    expect(parseSearchQuery(query)).toMatchObject({ category: "kitchen", layoutShapes: ["l-shaped"], minWidthMm: expectedWidth });
+  });
+
+  it("keeps maximum and approximate widths distinct", () => {
+    expect(parseSearchQuery("sofa under 240 cm")).toMatchObject({ maxWidthMm: 2400 });
+    expect(parseSearchQuery("sofa around 240 cm")).toMatchObject({ targetWidthMm: 2400 });
+  });
+
   it("ranks conversational and misspelled product requests", () => {
     const results = searchProductsRanked("i wnat a confortable armchair with electric relax");
     expect(results.length).toBeGreaterThan(0);

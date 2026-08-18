@@ -31,7 +31,7 @@ Open `http://localhost:3000`.
 
 ## Environment
 
-Copy `.env.example` to `.env.local`. The app works without secrets in demo mode.
+Copy `.env.example` to `.env.local` and add `OPENAI_API_KEY` to run Ask Musterring with the OpenAI Responses API. The app uses deterministic demo mode only when a key is unavailable or an AI request fails.
 
 Optional variables include `OPENAI_API_KEY`, `DATABASE_URL`, `RESEND_API_KEY`, map tokens, analytics ID and S3 credentials.
 

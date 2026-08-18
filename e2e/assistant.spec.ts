@@ -4,16 +4,19 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("musterring.consent", "false"));
 });
 
-test("Product Detail to Better Match to comparison", async ({ page }) => {
+test("Product Detail shows validated Better Match results", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
   await page.getByRole("button", { name: /Find a Better Match for Me/ }).click();
+  await expect(page.getByLabel("What are you looking for?")).toHaveValue("");
   await page.getByLabel("What are you looking for?").fill("Same style, but smaller");
   await page.getByRole("button", { name: "Show matches" }).click();
   await expect(page.getByRole("heading", { name: "Exact matches" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Other options" })).toBeVisible();
   await expect(page.locator(".alternative-group.is-exact article").first()).toContainText("Exact match");
   await expect(page.locator(".alternative-group.is-other article").first()).toContainText("Differs from request");
-  await expect(page.getByRole("link", { name: /Compare/ }).first()).toBeVisible();
+  await expect(page.getByText("Your request", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: /Alternatives for/ })).not.toContainText(/price|pricing/i);
+  await expect(page.getByRole("link", { name: /Compare/ })).toHaveCount(0);
 });
 
 test("Better Match treats a red sofa request as a catalogue requirement", async ({ page }) => {
@@ -26,10 +29,25 @@ test("Better Match treats a red sofa request as a catalogue requirement", async 
   await expect(exactGroup).toContainText("MR 260");
   await expect(exactGroup.getByText("Shown in red", { exact: true })).toBeVisible();
   await expect(exactGroup.locator("img")).toHaveAttribute("src", /mr-260%2Fimage-08-hq\.jpg|mr-260\/image-08-hq\.jpg/);
-  await expect(exactGroup.locator(".alternative-product-specs")).toContainText(/Width.*Depth.*Height.*Indicative concept price/s);
-  await expect(exactGroup.locator(".alternative-match-details")).toContainText("Matches your request");
+  await expect(exactGroup.locator(".alternative-product-specs")).toContainText(/Width.*Depth.*Height/s);
+  const viewProduct = exactGroup.getByRole("link", { name: "View Product" });
+  await expect(viewProduct).toHaveAttribute("href", "/furniture/mr-260");
   await expect(exactGroup).not.toContainText("Differs from request");
-  await expect(page.locator(".alternative-group.is-other article").first()).toContainText("available in red");
+  await viewProduct.click();
+  await expect(page).toHaveURL(/\/furniture\/mr-260$/);
+  await expect(page.getByRole("dialog", { name: /Alternatives for/ })).toHaveCount(0);
+  await expect(page.locator(".alternative-group.is-other article").first()).toContainText("red colour is not verified for this product");
+});
+
+test("Guided search preserves kitchen shape and minimum width constraints", async ({ page }) => {
+  await page.goto("/search");
+  await page.getByLabel("Describe the furniture you are looking for").fill("L shaped kitchen above 300 cm");
+  await page.getByRole("button", { name: "Search products" }).click();
+  await expect(page.getByRole("button", { name: "Remove Category filter" })).toContainText("kitchen");
+  await expect(page.getByRole("button", { name: "Remove Layout filter" })).toContainText("l-shaped");
+  await expect(page.getByRole("button", { name: "Remove Minimum width filter" })).toContainText("300 cm");
+  await expect(page.getByRole("heading", { name: "No exact catalogue match" })).toBeVisible();
+  await expect(page.getByText("There are no active kitchen products in the connected catalogue.")).toBeVisible();
 });
 
 test("Material Advisor grounds and saves a material", async ({ page }) => {

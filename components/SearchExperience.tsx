@@ -39,11 +39,38 @@ const compactMatchReason = (reason: string) => {
   return concise.charAt(0).toUpperCase() + concise.slice(1);
 };
 
+const intentLabels: Record<string, string> = {
+  category: "Category",
+  colorFamilies: "Colour",
+  materials: "Material",
+  maxWidthMm: "Maximum width",
+  minWidthMm: "Minimum width",
+  targetWidthMm: "Target width",
+  minSeatHeightMm: "Minimum seat height",
+  maxSeatDepthMm: "Maximum seat depth",
+  numberOfSeats: "Seats",
+  modular: "Modular",
+  functions: "Functions",
+  styles: "Style",
+  roomType: "Room",
+  smallSpaceSuitable: "Small-space suitable",
+  layoutShapes: "Layout"
+};
+
+const formatIntentValue = (key: string, value: unknown) => {
+  if (typeof value === "number" && /Mm$/.test(key)) return `${Math.round(value / 10)} cm`;
+  if (typeof value === "boolean") return value ? "Yes" : "No";
+  if (Array.isArray(value)) return value.join(", ");
+  return String(value).replace(/-/g, " ");
+};
+
 type SearchResponse = {
   intent: Record<string, unknown>;
   exactMatches: Array<{ product: Product; reasons: string[] }>;
   closeAlternatives: Array<{ product: Product; reasons: string[] }>;
   exactColorAvailable: boolean;
+  categoryAvailable: boolean;
+  unverifiedRequirements: string[];
   ai: { mode: string; fallback: boolean };
 };
 
@@ -117,11 +144,14 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
 
   const removeFilter = (key: string) => {
     const replacements: Record<string, RegExp> = {
-      category: /\b(sofa|couch|armchair|chair|sectional|corner|storage|cabinet|coffee table|side table|dining table|dining chair|bed|wardrobe|outdoor|garden furniture|carpet|rug|lamp|bathroom)\b/gi,
+      category: /\b(sofa|couch|armchair|chair|sectional|corner|storage|cabinet|coffee table|side table|dining table|dining chair|bed|wardrobe|outdoor|garden furniture|carpet|rug|lamp|bathroom|kitchen|kitchen unit)\b/gi,
       colorFamilies: /\b(beige|ivory|taupe|stone|charcoal|brown|cream|green|grey|graphite|red|burgundy|barolo)\b/gi,
       modular: /\b(modular|module|flexible)\b/gi,
       smallSpaceSuitable: /\b(small|compact|apartment)\b/gi,
-      maxWidthMm: /\b(?:maximum width|max|under|below)?\s*\d{2,3}\s*(?:cm|centimeter)\b/gi
+      maxWidthMm: /\b(?:maximum width|max|under|below|less than|at most|no wider than|up to)\s*\d+(?:[.,]\d+)?\s*(?:mm|cm|m|millimeters?|centimeters?|meters?)\b/gi,
+      minWidthMm: /\b(?:minimum width|min|above|over|more than|at least|greater than)\s*\d+(?:[.,]\d+)?\s*(?:mm|cm|m|millimeters?|centimeters?|meters?)\b/gi,
+      targetWidthMm: /\b(?:around|about|approximately|approx\.?|roughly)?\s*\d+(?:[.,]\d+)?\s*(?:mm|cm|m|millimeters?|centimeters?|meters?)(?:\s+(?:wide|width|sofa|couch|kitchen))?\b/gi,
+      layoutShapes: /\b(?:l[- ]shaped|l shape|u[- ]shaped|u shape|straight(?: line)?|single[- ]wall|island|corner kitchen)\b/gi
     };
     const next = (replacements[key] ? submitted.replace(replacements[key], " ") : submitted).replace(/\s+/g, " ").trim();
     void submit(next || "furniture");
@@ -189,7 +219,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               </div>
               <div className="chips" aria-label="Editable interpreted request">
                 {Object.entries(response?.intent ?? {}).filter(([key, value]) => key !== "queryText" && value !== null && value !== "" && (!Array.isArray(value) || value.length)).map(([key, value]) =>
-                  <button type="button" className="chip" key={key} onClick={() => removeFilter(key)} aria-label={`Remove ${key} filter`}>{key}: {Array.isArray(value) ? value.join(", ") : String(value)} ×</button>)}
+                  <button type="button" className="chip" key={key} onClick={() => removeFilter(key)} aria-label={`Remove ${intentLabels[key] ?? key} filter`}>{intentLabels[key] ?? key}: {formatIntentValue(key, value)} ×</button>)}
               </div>
             </div>
             {response && [...exact, ...response.closeAlternatives].some(({ product }) => product.authorizedContent) ? (
@@ -200,7 +230,13 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
             ) : response ? (
               <div className="card card-body">
                 <h2>No exact catalogue match</h2>
-                <p>{!response.exactColorAvailable ? "There is no exact match in the requested colour. The products below are clearly labelled alternatives and do not claim that colour." : "Try removing or changing an interpreted filter."}</p>
+                <p>{!response.categoryAvailable
+                  ? `There are no active ${String(response.intent.category ?? "requested-category").replace(/-/g, " ")} products in the connected catalogue.`
+                  : response.unverifiedRequirements.length
+                    ? `The catalogue does not currently verify ${response.unverifiedRequirements.join(", ")} for products in this category. This requirement was not silently ignored.`
+                    : !response.exactColorAvailable
+                      ? "There is no exact match in the requested colour. The products below are clearly labelled alternatives and do not claim that colour."
+                      : "Try removing or changing an interpreted filter."}</p>
               </div>
             ) : null}
             {response?.closeAlternatives.length ? (

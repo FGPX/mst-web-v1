@@ -17,6 +17,8 @@ const baseIntent = {
   colorFamilies: ["beige"],
   materials: null,
   maxWidthMm: 2400,
+  minWidthMm: null,
+  targetWidthMm: null,
   minSeatHeightMm: null,
   maxSeatDepthMm: null,
   numberOfSeats: null,
@@ -24,7 +26,8 @@ const baseIntent = {
   functions: null,
   styles: null,
   roomType: null,
-  smallSpaceSuitable: true
+  smallSpaceSuitable: true,
+  layoutShapes: null
 };
 
 describe("AI schemas and fallbacks", () => {
@@ -67,6 +70,18 @@ describe("grounded hybrid retrieval", () => {
     const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({ category: "sofa", colorFamilies: ["beige"], likelyMaterial: "fabric", style: ["modern heritage"], silhouette: "wide", notableVisualFeatures: [] }));
     const ids = new Set(products.map((product) => product.id));
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
+  });
+
+  it("does not recommend a product when no supported furniture is detected", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: null,
+      colorFamilies: ["grey"],
+      likelyMaterial: null,
+      style: [],
+      silhouette: "no supported furniture detected",
+      notableVisualFeatures: []
+    }));
+    expect(matches).toEqual([]);
   });
 });
 

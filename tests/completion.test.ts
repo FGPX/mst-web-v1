@@ -8,12 +8,12 @@ import { handoverRequestSchema, uploadMetadataSchema } from "@/lib/server-valida
 beforeEach(() => window.localStorage.clear());
 
 describe("comparison normalization", () => {
-  it("assigns deterministic comparison awards", () => {
+  it("assigns deterministic comparison awards from verified catalogue facts", () => {
     const selected = products.filter((product) => product.active && product.category !== "storage").slice(0, 3);
     const awards = comparisonAwards(selected);
     expect(awards).toHaveLength(3);
     expect(awards.flatMap((award) => award.labels)).toContain("Best for Small Spaces");
-    expect(awards.flatMap((award) => award.labels)).toContain("Best for Comfort");
+    expect(awards.flatMap((award) => award.labels)).not.toContain("Best for Comfort");
   });
 });
 

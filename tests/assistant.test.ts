@@ -27,6 +27,31 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.message).toMatch(/No exact alternative/);
   });
 
+  it("does not repeat dimensions or discuss prices in alternative explanations", () => {
+    const result = findGroundedAlternatives({ sourceProductId: "p1", requestText: "I need something 30 cm narrower with a higher seat." });
+    const matches = [...result.exactMatches, ...result.closestAlternatives];
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every((match) => match.differences.length === 0)).toBe(true);
+    expect(matches.flatMap((match) => [...match.benefits, ...match.tradeOffs]).join(" ")).not.toMatch(/price|recorded width|recorded seat height|cm narrower|cm higher seat|floor width/i);
+  });
+
+  it("does not turn structured relax terms into duplicate catalogue-keyword benefits", () => {
+    const result = findGroundedAlternatives({ sourceProductId: "p1", requestText: "Relax function" });
+    const benefits = [...result.exactMatches, ...result.closestAlternatives].flatMap((match) => match.benefits);
+    expect(benefits).not.toEqual(expect.arrayContaining([
+      "catalogue description matches “relax”",
+      "catalogue description matches “function”"
+    ]));
+  });
+
+  it("does not claim MR 720 is a verified three-seat exact match", () => {
+    const mr720 = products.find((product) => product.slug === "mr-720")!;
+    expect(mr720.numberOfSeatsVerified).toBe(false);
+    const result = findGroundedAlternatives({ sourceProductId: "p1", requestText: "Three-seat sofa" });
+    expect(result.exactMatches.every((match) => products.find((product) => product.id === match.productId)?.numberOfSeatsVerified)).toBe(true);
+    expect(result.exactMatches.some((match) => match.productId === mr720.id)).toBe(false);
+  });
+
   it.each(["red sofa", "sofa red"])("treats colour and category as hard alternative requirements: %s", (requestText) => {
     const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText });
     expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["sofa", "red colour"]));
@@ -37,7 +62,28 @@ describe("connected Musterring assistant grounding", () => {
       return product.category === "sofa" && product.colors.includes("red");
     })).toBe(true);
     expect(result.exactMatches.some((match) => products.find((item) => item.id === match.productId)?.modelCode === "MR 260")).toBe(true);
-    expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("available in red"))).toBe(true);
+    expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("red colour is not verified for this product"))).toBe(true);
+  });
+
+  it.each(["300 cm sofas", "sofa around 300 cm", "sofa 300 cm"])("preserves a requested width as an exact-match requirement: %s", (requestText) => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText });
+    expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["sofa", "around 300 cm wide"]));
+    expect(result.exactMatches).toHaveLength(0);
+    expect(result.closestAlternatives.length).toBeGreaterThan(0);
+    expect(result.closestAlternatives.every((match) => match.unmetRequirements.some((requirement) => /width is not verified|width should be around/.test(requirement)))).toBe(true);
+  });
+
+  it("keeps an explicit width limit as a maximum rather than a target", () => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText: "sofas under 300 cm" });
+    expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["sofa", "maximum 300 cm wide"]));
+    expect(result.interpretedRequirements).not.toContain("around 300 cm wide");
+  });
+
+  it("preserves kitchen layout and minimum width without returning unrelated sofas", () => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-mr-lia", requestText: "L shaped kitchen above 300 cm" });
+    expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["kitchen", "l-shaped layout", "minimum 300 cm wide"]));
+    expect(result.exactMatches).toHaveLength(0);
+    expect(result.closestAlternatives).toHaveLength(0);
   });
 
   it("uses the verified red catalogue presentation for the red MR 260 match", () => {
@@ -51,7 +97,7 @@ describe("connected Musterring assistant grounding", () => {
     const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText: "purple sofa" });
     expect(result.exactMatches).toHaveLength(0);
     expect(result.closestAlternatives.length).toBeGreaterThan(0);
-    expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("available in purple"))).toBe(true);
+    expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("purple colour is not verified for this product"))).toBe(true);
   });
 
   it("ranks other suitable options according to each customer's request", () => {
@@ -102,6 +148,34 @@ describe("connected Musterring assistant grounding", () => {
     expect(answer.proposedAction?.type).toBe("COMPARE_PRODUCTS");
   });
 
+  it("turns a broad product request into a warm, grounded discovery brief", () => {
+    const answer = answerGroundedQuestion("I need a sofa", context);
+    expect(answer.answerType).toBe("products");
+    expect(answer.answer).toMatch(/maximum furniture width|who will use it/i);
+    expect(answer.suggestedQuestions).toContain("My maximum width is 260 cm");
+  });
+
+  it("asks for the essentials before proposing an unscoped configuration", () => {
+    const answer = answerGroundedQuestion("Help me configure a sofa", context);
+    expect(answer.answerType).toBe("configuration");
+    expect(answer.productIds).toEqual([]);
+    expect(answer.answer).toMatch(/maximum usable width/i);
+  });
+
+  it("gathers a material brief without making unsupported performance claims", () => {
+    const answer = answerGroundedQuestion("Which material should I choose?", context);
+    expect(answer.answerType).toBe("materials");
+    expect(answer.answer).toMatch(/children, pets or frequent use/i);
+    expect(answer.answer).not.toMatch(/stain-proof|scratch-proof/i);
+  });
+
+  it("collects measurements before offering an unscoped fit conclusion", () => {
+    const answer = answerGroundedQuestion("Will it fit through my door?", context);
+    expect(answer.answerType).toBe("fit");
+    expect(answer.proposedAction).toBeNull();
+    expect(answer.answer).toMatch(/cannot confirm physical fit/i);
+  });
+
   it("returns only the visually verified red sofa presentation", () => {
     const answer = answerGroundedQuestion("I want a red sofa", context);
     expect(answer.answerType).toBe("products");
@@ -110,13 +184,17 @@ describe("connected Musterring assistant grounding", () => {
     expect(answer.answer).toMatch(/exact catalogue match.*red colour/i);
   });
 
-  it("recognizes black as a hard colour filter and returns the black sofa", () => {
+  it("does not claim a black sofa when black is not verified in the connected catalogue", () => {
     const answer = answerGroundedQuestion("I want a black sofa", context);
-    expect(answer.answerType).toBe("products");
+    expect(answer.answerType).toBe("missing-data");
     expect(answer.productIds.length).toBeGreaterThan(0);
-    expect(answer.productIds.every((id) => products.find((product) => product.id === id)?.colors.includes("black"))).toBe(true);
-    expect(answer.productIds.some((id) => products.find((product) => product.id === id)?.slug === "mr-285")).toBe(true);
-    expect(answer.answer).toMatch(/exact catalogue match.*black colour/i);
+    expect(answer.answer).toMatch(/No catalogue product satisfies every requested condition/);
+  });
+
+  it("does not treat generic comfort wording as a verified relax function", () => {
+    const result = findGroundedAlternatives({ sourceProductId: "p2", requestText: "Relax function" });
+    const blocked = new Set(["MR 300", "MR 1390"]);
+    expect(result.exactMatches.every((match) => !blocked.has(products.find((product) => product.id === match.productId)?.modelCode ?? ""))).toBe(true);
   });
 
   it("recognizes a generic chair request as an armchair search", () => {
@@ -152,7 +230,7 @@ describe("connected Musterring assistant grounding", () => {
     const target = products.find((product) => product.modelCode === "MR 285")!;
     const answer = answerGroundedQuestion("What is the width of MR 285?", { ...context, currentProductId: "p1" });
     expect(answer.productIds).toEqual([target.id]);
-    expect(answer.answer).toContain(`${target.widthMm / 10} cm`);
+    expect(answer.answer).toContain("configuration dependent");
   });
 
   it("opens an ordinal result without confirmation and saves it only with confirmation", () => {
@@ -197,6 +275,13 @@ describe("connected Musterring assistant grounding", () => {
     expect(answer.productIds).toEqual([first[1].id]);
     expect(answer.proposedAction?.type).toBe("SAVE_PRODUCT");
     expect(answer.proposedAction?.requiresConfirmation).toBe(true);
+  });
+
+  it("understands a width-only reply from the preceding product options", () => {
+    const sofas = products.filter((product) => product.active && product.category === "sofa").slice(0, 4);
+    const answer = answerGroundedQuestion("3 meters", { ...context, referencedProductIds: sofas.map((product) => product.id) });
+    expect(answer.productIds.length).toBeGreaterThan(0);
+    expect(answer.productIds.every((id) => (products.find((product) => product.id === id)?.widthMm ?? Infinity) <= 3000)).toBe(true);
   });
 
   it("uses deterministic configuration validation for proposed changes", () => {

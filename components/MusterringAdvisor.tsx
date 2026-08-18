@@ -87,14 +87,20 @@ export function MusterringAdvisor() {
   const ask = async (question = input) => {
     const clean = question.trim();
     if (!clean) return;
+    if (!/[\p{L}\p{N}]/u.test(clean)) {
+      setInput("");
+      setMessages((current) => [...current, { role: "advisor", text: "I didn’t catch a question there. Tell me what you would like to find, compare, configure or check." }]);
+      return;
+    }
     setMessages((current) => [...current, { role: "customer", text: clean }]);
     setInput(""); setPending(true);
     storage.track({ name: "chatbot_question_submitted" });
-    const response = await fetch("/api/ai/advisor", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ question: clean, context: { ...context, route: pathname, currentProductId: currentProduct?.id ?? context.currentProductId } }) }).catch(() => null);
+    const recentMessages = [...messages, { role: "customer" as const, text: clean }].slice(-8).map(({ role, text }) => ({ role, text }));
+    const response = await fetch("/api/ai/advisor", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ question: clean, context: { ...context, route: pathname, currentProductId: currentProduct?.id ?? context.currentProductId, recentMessages } }) }).catch(() => null);
     const payload = response ? await response.json().catch(() => null) : null;
     setPending(false);
     if (!response?.ok || !payload?.answer) {
-      setMessages((current) => [...current, { role: "advisor", text: "The Product Advisor is temporarily unavailable. Your saved project has not changed." }]);
+      setMessages((current) => [...current, { role: "advisor", text: payload?.error ?? "The Product Advisor is temporarily unavailable. Your saved project has not changed." }]);
       return;
     }
     const answer = payload.answer as AdvisorAnswer;
@@ -192,7 +198,7 @@ export function MusterringAdvisor() {
     <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p>AI Product Advisor</p><h2 id="advisor-title">Ask Musterring</h2></div><button aria-label="Close Product Advisor" onClick={() => setOpen(false)}><X /></button></header>
       <div className="advisor-toolbar"><button aria-label={muted ? "Enable spoken feedback" : "Mute spoken feedback"} onClick={() => setMuted((value) => !value)}>{muted ? <VolumeX /> : <Volume2 />}</button><button onClick={() => setVoiceEnabled((value) => !value)}>{voiceEnabled ? <Mic /> : <MicOff />} Voice {voiceEnabled ? "on" : "off"}</button><button onClick={clear}><Trash2 /> New conversation</button></div>
       <div className="advisor-messages" aria-live="polite">
-        {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><h3>How can I help with your space?</h3></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}</button>)}</div></div> : null}
+        {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><h3>How can I help with your space?</h3><p>I’ll ask a few useful questions, then use connected Musterring product and material data to guide you.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}</button>)}</div></div> : null}
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Product Advisor"}</small><p>{message.text}</p></div></div>
           {message.answer?.productIds.length ? <div className="advisor-products">
             {message.answer.answerType === "missing-data" ? <small className="advisor-product-group-label">Closest recommendations — requested option unavailable</small> : null}
@@ -211,7 +217,7 @@ export function MusterringAdvisor() {
         {voiceState !== "idle" ? <p className={`voice-state is-${voiceState}`} role="status">Voice: {voiceState === "denied" ? "Microphone permission denied. Use text input." : voiceState}</p> : null}
       </div>
       {pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
-      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} placeholder="Ask about products, materials, configuration, fit or your project…" /><button type="button" aria-label="Use microphone" onClick={() => void startVoice()} disabled={!voiceEnabled}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending}><Send /></button></form>
+      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder="Ask about products, materials, configuration, fit or your project…" /><button type="button" aria-label="Use microphone" onClick={() => void startVoice()} disabled={!voiceEnabled}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending}><Send /></button></form>
   </aside>;
 }
 

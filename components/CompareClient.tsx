@@ -197,20 +197,20 @@ function comparisonDate(comparison: SavedComparison) {
 
 function comparisonRows(selected: Product[], diffOnly: boolean) {
   const rows: Array<[string, string[]]> = [
-    ["Width", selected.map((product) => `${Math.round(product.widthMm / 10)} cm`)],
-    ["Depth", selected.map((product) => `${Math.round(product.depthMm / 10)} cm`)],
-    ["Height", selected.map((product) => `${Math.round(product.heightMm / 10)} cm`)],
-    ["Seat Height", selected.map((product) => `${Math.round(product.seatHeightMm / 10)} cm`)],
-    ["Seat Depth", selected.map((product) => `${Math.round(product.seatDepthMm / 10)} cm`)],
-    ["Seats", selected.map((product) => String(product.numberOfSeats))],
-    ["Modularity", selected.map((product) => product.modular ? "Modular system" : "Fixed composition")],
-    ["Functions", selected.map((product) => [...product.functions, ...product.electricFunctions].slice(0, 3).join(", ") || "Configuration dependent")],
-    ["Materials", selected.map((product) => `${product.materials.length} recorded cover families`)],
-    ["Comfort", selected.map((product) => product.comfortOptions.join(", ") || "Retailer consultation")],
+    ["Width", selected.map((product) => product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} cm` : "Configuration dependent")],
+    ["Depth", selected.map((product) => product.verifiedFacts.dimensions ? `${Math.round(product.depthMm / 10)} cm` : "Configuration dependent")],
+    ["Height", selected.map((product) => product.verifiedFacts.dimensions ? `${Math.round(product.heightMm / 10)} cm` : "Configuration dependent")],
+    ["Seat Height", selected.map((product) => product.verifiedFacts.seatHeight ? `${Math.round(product.seatHeightMm / 10)} cm` : "Configuration dependent")],
+    ["Seat Depth", selected.map((product) => product.verifiedFacts.seatDepth ? `${Math.round(product.seatDepthMm / 10)} cm` : "Configuration dependent")],
+    ["Seats", selected.map((product) => product.numberOfSeatsVerified ? String(product.numberOfSeats) : "Configuration dependent")],
+    ["Modularity", selected.map((product) => product.verifiedFacts.modular ? "Modular system" : "Configuration dependent")],
+    ["Functions", selected.map((product) => product.verifiedFacts.functions.join(", ") || "Configuration dependent")],
+    ["Materials", selected.map((product) => product.verifiedFacts.materialTypes.join(", ") || "Configuration dependent")],
+    ["Comfort", selected.map((product) => product.verifiedFacts.comfort ? product.comfortOptions.join(", ") : "Configuration dependent")],
     ["Armrests", selected.map((product) => product.armrestOptions.join(", ") || "Configuration dependent")],
     ["Feet", selected.map((product) => product.feetOptions.join(", ") || "Configuration dependent")],
     ["Configurator", selected.map((product) => product.category === "storage" ? "Retailer planning" : "Available")],
-    ["Overall dimensions", selected.map((product) => dimensions(product.widthMm, product.depthMm, product.heightMm))]
+    ["Overall dimensions", selected.map((product) => product.verifiedFacts.dimensions ? dimensions(product.widthMm, product.depthMm, product.heightMm) : "Configuration dependent")]
   ];
   return rows
     .map(([name, values]) => ({ name, values, ...differenceMeta(name, values) }))
@@ -231,21 +231,23 @@ function differenceMeta(name: string, values: string[]): { level: "same" | "diff
 }
 
 function meaningfulDifference(product: Product, selected: Product[]) {
-  const narrowest = Math.min(...selected.map((item) => item.widthMm));
-  const largest = Math.max(...selected.map((item) => item.widthMm));
-  if (product.widthMm === narrowest && narrowest !== largest) return `Most compact width at ${Math.round(product.widthMm / 10)} cm.`;
-  if (product.numberOfSeats === Math.max(...selected.map((item) => item.numberOfSeats)) && new Set(selected.map((item) => item.numberOfSeats)).size > 1) return `Highest recorded capacity with ${product.numberOfSeats} seats.`;
-  if (product.electricFunctions.length) return `Includes ${product.electricFunctions.join(", ")}.`;
-  if (product.modular) return "Modular system supports configurable planning.";
-  return "Fixed composition with recorded catalogue dimensions.";
+  const dimensionProducts = selected.filter((item) => item.verifiedFacts.dimensions);
+  const widths = dimensionProducts.map((item) => item.widthMm);
+  if (product.verifiedFacts.dimensions && widths.length > 1 && product.widthMm === Math.min(...widths) && new Set(widths).size > 1) return `Most compact verified width at ${Math.round(product.widthMm / 10)} cm.`;
+  const seatingProducts = selected.filter((item) => item.numberOfSeatsVerified);
+  const seatCounts = seatingProducts.map((item) => item.numberOfSeats);
+  if (product.numberOfSeatsVerified && seatCounts.length > 1 && product.numberOfSeats === Math.max(...seatCounts) && new Set(seatCounts).size > 1) return `Highest verified capacity with ${product.numberOfSeats} seats.`;
+  if (product.verifiedFacts.functions.length) return `Includes ${product.verifiedFacts.functions.join(", ")}.`;
+  if (product.verifiedFacts.modular) return "Verified modular system supports configurable planning.";
+  return "Catalogue details vary by configuration.";
 }
 
 function comparisonBadge(product: Product, selected: Product[]) {
-  const widths = selected.map((item) => item.widthMm);
-  if (new Set(widths).size > 1 && product.widthMm === Math.min(...widths)) return "Smallest";
-  if (new Set(widths).size > 1 && product.widthMm === Math.max(...widths)) return "Largest";
-  const sameSeatCount = selected.filter((item) => item.numberOfSeats === product.numberOfSeats).length;
-  if (sameSeatCount === 1 && product.numberOfSeats === 4) return "Only 4-seat option";
+  const widths = selected.filter((item) => item.verifiedFacts.dimensions).map((item) => item.widthMm);
+  if (product.verifiedFacts.dimensions && widths.length > 1 && new Set(widths).size > 1 && product.widthMm === Math.min(...widths)) return "Smallest";
+  if (product.verifiedFacts.dimensions && widths.length > 1 && new Set(widths).size > 1 && product.widthMm === Math.max(...widths)) return "Largest";
+  const sameSeatCount = selected.filter((item) => item.numberOfSeatsVerified && item.numberOfSeats === product.numberOfSeats).length;
+  if (product.numberOfSeatsVerified && sameSeatCount === 1 && product.numberOfSeats === 4) return "Only 4-seat option";
   return "";
 }
 
@@ -253,45 +255,54 @@ function valueBadge(name: string, index: number, selected: Product[], values: st
   const product = selected[index];
   if (!product || new Set(values).size <= 1) return "";
   if (name === "Width") {
-    if (product.widthMm === Math.min(...selected.map((item) => item.widthMm))) return "Smallest";
-    if (product.widthMm === Math.max(...selected.map((item) => item.widthMm))) return "Largest";
+    const widths = selected.filter((item) => item.verifiedFacts.dimensions).map((item) => item.widthMm);
+    if (!product.verifiedFacts.dimensions || widths.length < 2) return "";
+    if (product.widthMm === Math.min(...widths)) return "Smallest";
+    if (product.widthMm === Math.max(...widths)) return "Largest";
   }
-  if (name === "Seats" && selected.filter((item) => item.numberOfSeats === product.numberOfSeats).length === 1) return product.numberOfSeats === 4 ? "Only 4-seat option" : "Unique";
-  if ((name === "Modularity" || name === "Functions") && values.filter((value) => value === values[index]).length === 1) return "Unique";
+  if (name === "Seats" && product.numberOfSeatsVerified && selected.filter((item) => item.numberOfSeatsVerified && item.numberOfSeats === product.numberOfSeats).length === 1) return product.numberOfSeats === 4 ? "Only 4-seat option" : "Unique";
+  if ((name === "Modularity" || name === "Functions") && values[index] !== "Configuration dependent" && values.filter((value) => value === values[index]).length === 1) return "Unique";
   return "";
 }
 
 function comparisonSummary(selected: Product[], awards: ReturnType<typeof comparisonAwards>) {
   if (!selected.length) return { products: [], glance: [], recommendation: "Select at least two products to receive a grounded comparison summary." };
-  const widths = selected.map((product) => Math.round(product.widthMm / 10));
-  const seats = selected.map((product) => product.numberOfSeats);
-  const narrowest = selected.reduce((best, product) => product.widthMm < best.widthMm ? product : best, selected[0]);
-  const highestCapacity = selected.reduce((best, product) => product.numberOfSeats > best.numberOfSeats ? product : best, selected[0]);
+  const dimensionProducts = selected.filter((product) => product.verifiedFacts.dimensions);
+  const seatingProducts = selected.filter((product) => product.numberOfSeatsVerified);
+  const widths = dimensionProducts.map((product) => Math.round(product.widthMm / 10));
+  const seats = seatingProducts.map((product) => product.numberOfSeats);
+  const narrowest = dimensionProducts.reduce<Product | null>((best, product) => !best || product.widthMm < best.widthMm ? product : best, null);
+  const highestCapacity = seatingProducts.reduce<Product | null>((best, product) => !best || product.numberOfSeats > best.numberOfSeats ? product : best, null);
   const productsSummary = selected.map((product) => {
     const labels = awards.find((award) => award.productId === product.id)?.labels ?? [];
-    const summary = product.modular
-      ? `A modular ${product.category.replace("-", " ")} with ${product.materials.length} recorded cover families.`
-      : `A fixed ${product.category.replace("-", " ")} with a ${Math.round(product.widthMm / 10)} cm recorded width.`;
+    const materialCopy = product.verifiedFacts.materialTypes.length ? ` Verified material types: ${product.verifiedFacts.materialTypes.join(", ")}.` : "";
+    const summary = product.verifiedFacts.modular
+      ? `A verified modular ${product.category.replace("-", " ")}.${materialCopy}`
+      : `A ${product.category.replace("-", " ")} whose exact specification depends on the selected configuration.${materialCopy}`;
+    const dimensionFact = product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} cm verified width` : "Dimensions vary by configuration";
+    const seatingFact = product.numberOfSeatsVerified ? `${product.numberOfSeats} ${product.numberOfSeats === 1 ? "seat" : "seats"}` : "Seat count varies by configuration";
     return {
       product,
       summary,
-      bestFor: labels[0] ?? (product.smallSpaceSuitable ? "Compact room planning" : "Balanced product planning"),
+      bestFor: labels[0] ?? (product.verifiedFacts.smallSpaceSuitable ? "Verified for compact room planning" : "Compare with your room requirements"),
       facts: [
-        `${Math.round(product.widthMm / 10)} cm wide · ${product.numberOfSeats || "configuration-dependent"} ${product.numberOfSeats === 1 ? "seat" : "seats"}`,
-        product.modular ? "Modular system" : "Fixed composition",
-        product.electricFunctions.length ? product.electricFunctions.join(", ") : `${product.comfortOptions.length} recorded comfort options`
+        `${dimensionFact} · ${seatingFact}`,
+        product.verifiedFacts.modular ? "Verified modular system" : "Modularity varies by configuration",
+        product.verifiedFacts.functions.length ? product.verifiedFacts.functions.join(", ") : "Functions vary by configuration"
       ]
     };
   });
-  const modularCount = selected.filter((product) => product.modular).length;
+  const modularCount = selected.filter((product) => product.verifiedFacts.modular).length;
   const glance = [
-    `Width range: ${Math.min(...widths)}–${Math.max(...widths)} cm`,
-    `Capacity range: ${Math.min(...seats)}–${Math.max(...seats)} seats`,
-    `${modularCount} modular option${modularCount === 1 ? "" : "s"}`,
-    `${selected.filter((product) => product.electricFunctions.length).length} with recorded electric functions`
-  ];
-  const recommendation = narrowest.id === highestCapacity.id
-    ? `${narrowest.modelCode} combines the smallest recorded width with the highest seating capacity in this selection. Confirm the exact configuration and room fit with a retailer.`
-    : `For a tighter room, ${narrowest.modelCode} has the smallest recorded width. For maximum seating capacity, ${highestCapacity.modelCode} provides ${highestCapacity.numberOfSeats} seats. Refine the recommendation using your room and comfort priorities.`;
+    widths.length > 1 ? `Verified width range: ${Math.min(...widths)}–${Math.max(...widths)} cm` : "",
+    seats.length > 1 ? `Verified capacity range: ${Math.min(...seats)}–${Math.max(...seats)} seats` : "",
+    modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
+    `${selected.filter((product) => product.verifiedFacts.functions.length).length} with verified function data`
+  ].filter(Boolean);
+  const recommendation = narrowest && highestCapacity && narrowest.id === highestCapacity.id
+    ? `${narrowest.modelCode} combines the smallest verified width with the highest verified seating capacity in this selection. Confirm the exact configuration and room fit with a retailer.`
+    : narrowest && highestCapacity
+      ? `For a tighter room, ${narrowest.modelCode} has the smallest verified width. For maximum verified seating capacity, ${highestCapacity.modelCode} provides ${highestCapacity.numberOfSeats} seats. Refine the recommendation using your room and comfort priorities.`
+      : "There is not enough verified catalogue data to identify a single best option. Refine the recommendation and confirm the configuration with a Musterring retailer.";
   return { products: productsSummary, glance, recommendation };
 }
