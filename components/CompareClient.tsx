@@ -10,6 +10,7 @@ import { dimensions } from "@/lib/format";
 import { productImages } from "@/lib/musterring-assets";
 import { storage, type SavedComparison } from "@/lib/persistence";
 import { comparisonAwards } from "@/lib/comparison";
+import type { ComparisonSummary } from "@/lib/ai/schemas";
 import type { Product } from "@/lib/types";
 import { AlternativeFinderButton } from "./AlternativeFinderButton";
 
@@ -20,6 +21,8 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
   const [savedComparisons, setSavedComparisons] = useState<SavedComparison[]>([]);
   const [savedProductIds, setSavedProductIds] = useState<string[]>([]);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [aiSummary, setAiSummary] = useState<ComparisonSummary | null>(null);
+  const [summaryStatus, setSummaryStatus] = useState<"idle" | "loading" | "openai" | "fallback" | "error">("idle");
   const selected = ids
     .map((id) => activeProducts.find((product) => product.id === id))
     .filter((product): product is Product => Boolean(product));
@@ -45,8 +48,41 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
     if (record) setSavedComparisons(storage.savedComparisons());
   }, [comparisonKey, comparisonName, selected.length]);
 
+  useEffect(() => {
+    if (comparisonKey.split(",").filter(Boolean).length < 2) {
+      setAiSummary(null);
+      setSummaryStatus("idle");
+      return;
+    }
+
+    const controller = new AbortController();
+    setAiSummary(null);
+    setSummaryStatus("loading");
+    fetch("/api/ai/comparison-summary", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productIds: comparisonKey.split(",") }),
+      signal: controller.signal
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Comparison summary request failed.");
+        return response.json() as Promise<{ summary: ComparisonSummary; ai: { mode: "openai" | "demo"; fallback: boolean } }>;
+      })
+      .then((response) => {
+        setAiSummary(response.summary);
+        setSummaryStatus(response.ai.mode === "openai" && !response.ai.fallback ? "openai" : "fallback");
+      })
+      .catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+        setSummaryStatus("error");
+      });
+
+    return () => controller.abort();
+  }, [comparisonKey]);
+
   const rows = comparisonRows(selected, diffOnly);
-  const summaries = comparisonSummary(selected, awards);
+  const localSummaries = comparisonSummary(selected, awards);
+  const summaries = aiSummary ? hydrateComparisonSummary(aiSummary, selected) : localSummaries;
 
   const removeProduct = (productId: string) => setIds((current) => current.filter((id) => id !== productId));
   const toggleSavedProduct = (productId: string) => setSavedProductIds(storage.toggleProduct(productId));
@@ -156,8 +192,8 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
         </div>
       </section>
 
-      <section className="container stitch-compare-ai" aria-labelledby="comparison-ai-title">
-        <header><Bot size={19} /><div><p className="eyebrow">AI summary</p><h2 id="comparison-ai-title">Your comparison, simplified</h2><small>Generated from the catalogue specifications shown above.</small></div></header>
+      <section className={`container stitch-compare-ai${summaryStatus === "loading" ? " is-loading" : ""}`} aria-labelledby="comparison-ai-title" aria-busy={summaryStatus === "loading"}>
+        <header><Bot size={19} /><div><p className="eyebrow">AI summary</p><h2 id="comparison-ai-title">Your comparison, simplified</h2><small aria-live="polite">{summaryStatusText(summaryStatus)}</small></div></header>
         <div className="stitch-compare-ai-products">
           {summaries.products.map(({ product, summary, bestFor, facts }) => <article key={product.id}>
             <div><Image src={productImages(product.id)[0]} alt="" width={78} height={58} /><span><strong>{product.modelCode}</strong><small>{bestFor}</small></span></div>
@@ -263,6 +299,23 @@ function valueBadge(name: string, index: number, selected: Product[], values: st
   if (name === "Seats" && product.numberOfSeatsVerified && selected.filter((item) => item.numberOfSeatsVerified && item.numberOfSeats === product.numberOfSeats).length === 1) return product.numberOfSeats === 4 ? "Only 4-seat option" : "Unique";
   if ((name === "Modularity" || name === "Functions") && values[index] !== "Configuration dependent" && values.filter((value) => value === values[index]).length === 1) return "Unique";
   return "";
+}
+
+function hydrateComparisonSummary(summary: ComparisonSummary, selected: Product[]) {
+  return {
+    ...summary,
+    products: summary.products.flatMap((item) => {
+      const product = selected.find((candidate) => candidate.id === item.productId);
+      return product ? [{ ...item, product }] : [];
+    })
+  };
+}
+
+function summaryStatusText(status: "idle" | "loading" | "openai" | "fallback" | "error") {
+  if (status === "loading") return "Generating with AI from the verified catalogue specifications shown above…";
+  if (status === "openai") return "Generated by AI from the verified catalogue specifications shown above.";
+  if (status === "fallback" || status === "error") return "Catalogue-based fallback shown because AI is temporarily unavailable.";
+  return "Generated from the catalogue specifications shown above.";
 }
 
 function comparisonSummary(selected: Product[], awards: ReturnType<typeof comparisonAwards>) {

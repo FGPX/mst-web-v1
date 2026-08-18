@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
 import { buildGroundedConfiguration } from "@/lib/ai/configuration";
+import { comparisonSummaryInput, deterministicComparisonSummary } from "@/lib/ai/comparison-summary";
 import { groundProjectData } from "@/lib/ai/grounding";
 import { hybridCatalogueSearch, searchCatalogueByVisualTags } from "@/lib/ai/retrieval";
 import {
@@ -40,6 +41,14 @@ describe("AI schemas and fallbacks", () => {
   it("rejects invalid AI output instead of trusting it", () => {
     expect(searchIntentSchema.safeParse({ queryText: "sofa", maxWidthMm: "wide" }).success).toBe(false);
     expect(visualTagsSchema.safeParse({ category: "invented", colorFamilies: [] }).success).toBe(false);
+  });
+
+  it("builds a grounded comparison fallback for the selected catalogue products", () => {
+    const selected = products.filter((product) => product.active).slice(0, 2);
+    const input = comparisonSummaryInput(selected);
+    const summary = deterministicComparisonSummary(input);
+    expect(summary.products.map((product) => product.productId)).toEqual(selected.map((product) => product.id));
+    expect(summary.recommendation).toMatch(/retailer|Refine/i);
   });
 });
 
