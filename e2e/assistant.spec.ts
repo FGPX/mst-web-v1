@@ -4,21 +4,24 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("musterring.consent", "false"));
 });
 
-test("Product Detail to Better Match to comparison", async ({ page }) => {
+test("Product Detail shows validated Better Match results", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
-  await page.getByRole("button", { name: /Find a Better Match for Me/ }).click();
+  await page.getByRole("button", { name: /Discover More Like This/ }).click();
+  await expect(page.getByLabel("What are you looking for?")).toHaveValue("");
   await page.getByLabel("What are you looking for?").fill("Same style, but smaller");
   await page.getByRole("button", { name: "Show matches" }).click();
   await expect(page.getByRole("heading", { name: "Exact matches" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Other options" })).toBeVisible();
   await expect(page.locator(".alternative-group.is-exact article").first()).toContainText("Exact match");
   await expect(page.locator(".alternative-group.is-other article").first()).toContainText("Differs from request");
-  await expect(page.getByRole("link", { name: /Compare/ }).first()).toBeVisible();
+  await expect(page.getByText("Your request", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: /Alternatives for/ })).not.toContainText(/price|pricing/i);
+  await expect(page.getByRole("link", { name: /Compare/ })).toHaveCount(0);
 });
 
 test("Better Match treats a red sofa request as a catalogue requirement", async ({ page }) => {
   await page.goto("/furniture/justb-pm200");
-  await page.getByRole("button", { name: /Find a Better Match for Me/ }).click();
+  await page.getByRole("button", { name: /Discover More Like This/ }).click();
   await page.getByLabel("What are you looking for?").fill("sofa red");
   await page.getByRole("button", { name: "Show matches" }).click();
   await expect(page.getByText("red colour", { exact: true })).toBeVisible();
@@ -26,10 +29,25 @@ test("Better Match treats a red sofa request as a catalogue requirement", async 
   await expect(exactGroup).toContainText("MR 260");
   await expect(exactGroup.getByText("Shown in red", { exact: true })).toBeVisible();
   await expect(exactGroup.locator("img")).toHaveAttribute("src", /mr-260%2Fimage-08-hq\.jpg|mr-260\/image-08-hq\.jpg/);
-  await expect(exactGroup.locator(".alternative-product-specs")).toContainText(/Width.*Depth.*Height.*Indicative concept price/s);
-  await expect(exactGroup.locator(".alternative-match-details")).toContainText("Matches your request");
+  await expect(exactGroup.locator(".alternative-product-specs")).toContainText(/Width.*Depth.*Height/s);
+  const viewProduct = exactGroup.getByRole("link", { name: "View Product" });
+  await expect(viewProduct).toHaveAttribute("href", "/furniture/mr-260");
   await expect(exactGroup).not.toContainText("Differs from request");
-  await expect(page.locator(".alternative-group.is-other article").first()).toContainText("available in red");
+  await viewProduct.click();
+  await expect(page).toHaveURL(/\/furniture\/mr-260$/);
+  await expect(page.getByRole("dialog", { name: /Alternatives for/ })).toHaveCount(0);
+  await expect(page.locator(".alternative-group.is-other article").first()).toContainText("red colour is not verified for this product");
+});
+
+test("Guided search preserves kitchen shape and minimum width constraints", async ({ page }) => {
+  await page.goto("/search");
+  await page.getByLabel("Describe the furniture you are looking for").fill("L shaped kitchen above 300 cm");
+  await page.getByRole("button", { name: "Search products" }).click();
+  await expect(page.getByRole("button", { name: "Remove Category filter" })).toContainText("kitchen");
+  await expect(page.getByRole("button", { name: "Remove Layout filter" })).toContainText("l-shaped");
+  await expect(page.getByRole("button", { name: "Remove Minimum width filter" })).toContainText("300 cm");
+  await expect(page.getByRole("heading", { name: "No exact catalogue match" })).toBeVisible();
+  await expect(page.getByText("There are no active kitchen products in the connected catalogue.")).toBeVisible();
 });
 
 test("Material Advisor grounds and saves a material", async ({ page }) => {
@@ -43,7 +61,7 @@ test("Material Advisor grounds and saves a material", async ({ page }) => {
 
 test("Voice text fallback searches products", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("Show me a modular corner sofa in beige.");
   await page.getByRole("button", { name: "Interpret typed text as a voice command" }).click();
   await expect(page).toHaveURL(/\/$/);
@@ -52,7 +70,7 @@ test("Voice text fallback searches products", async ({ page }) => {
 
 test("Voice red sofa search does not show wrong-colour alternatives", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("red sofa");
   await page.getByRole("button", { name: "Interpret typed text as a voice command" }).click();
   await expect(page).toHaveURL(/\/$/);
@@ -63,7 +81,7 @@ test("Voice red sofa search does not show wrong-colour alternatives", async ({ p
 
 test("Voice state-changing action requires confirmation", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("Book a consultation.");
   await page.getByRole("button", { name: "Interpret typed text as a voice command" }).click();
   await expect(page.getByRole("heading", { name: "Confirmation required" })).toBeVisible();
@@ -72,7 +90,7 @@ test("Voice state-changing action requires confirmation", async ({ page }) => {
 
 test("Advisor answers a grounded product question", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("What is the width and seat height of this product?");
   await page.getByRole("button", { name: "Send question" }).click();
   await expect(page.getByText(/cm wide, .* cm deep .* with a .* cm seat height/)).toBeVisible();
@@ -81,7 +99,7 @@ test("Advisor answers a grounded product question", async ({ page }) => {
 
 test("Advisor answers simple conversation naturally", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("okay thank you");
   await page.getByRole("button", { name: "Send question" }).click();
   await expect(page.getByText(/you.re welcome/i)).toBeVisible();
@@ -90,7 +108,7 @@ test("Advisor answers simple conversation naturally", async ({ page }) => {
 
 test("Advisor recommends and saves a referenced product after confirmation", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   const input = page.getByLabel("Ask Musterring about products and your project");
   await input.fill("Show me sofas under 260 cm");
   await page.getByRole("button", { name: "Send question" }).click();
@@ -104,7 +122,7 @@ test("Advisor recommends and saves a referenced product after confirmation", asy
 
 test("Advisor configuration action continues to deterministic configurator", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("Can I add an electric relax function?");
   await page.getByRole("button", { name: "Send question" }).click();
   await page.getByRole("button", { name: /Validate options/ }).click();
@@ -114,7 +132,7 @@ test("Advisor configuration action continues to deterministic configurator", asy
 
 test("Advisor resolves a follow-up against prior products", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   const input = page.getByLabel("Ask Musterring about products and your project");
   await input.fill("Show me sofas under 260 cm");
   await page.getByRole("button", { name: "Send question" }).click();
@@ -125,7 +143,7 @@ test("Advisor resolves a follow-up against prior products", async ({ page }) => 
 
 test("Advisor prepares but does not submit retailer handover", async ({ page }) => {
   await page.goto("/my-musterring");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("Prepare this project for a retailer.");
   await page.getByRole("button", { name: "Send question" }).click();
   await expect(page.getByText(/will not submit it/)).toBeVisible();
@@ -135,7 +153,7 @@ test("Advisor prepares but does not submit retailer handover", async ({ page }) 
 
 test("Missing API key retains deterministic Advisor behavior", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("What is the weather on Mars?");
   await page.getByRole("button", { name: "Send question" }).click();
   await expect(page.getByText(/not currently available in the connected product data/i)).toBeVisible();
@@ -144,7 +162,7 @@ test("Missing API key retains deterministic Advisor behavior", async ({ page }) 
 test("Mobile Advisor uses a full-height bottom sheet", async ({ page }) => {
   test.skip((page.viewportSize()?.width ?? 1000) > 600, "Mobile-only check");
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   const panel = page.locator(".advisor-panel");
   await expect(panel).toBeVisible();
   expect(await panel.evaluate((element) => Math.round(element.getBoundingClientRect().width))).toBe(page.viewportSize()?.width);
@@ -152,9 +170,30 @@ test("Mobile Advisor uses a full-height bottom sheet", async ({ page }) => {
 
 test("Advisor supports keyboard-only open, input and close", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Open Musterring Product Advisor" }).focus();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).focus();
   await page.keyboard.press("Enter");
   await expect(page.getByLabel("Ask Musterring about products and your project")).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(page.locator(".advisor-panel")).toHaveCount(0);
+});
+
+test("Musterring Assistant keeps the conversation after closing and reopening", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
+  await page.getByLabel("Ask Musterring about products and your project").fill("hello");
+  await page.getByRole("button", { name: "Send question" }).click();
+  await expect(page.locator(".advisor-messages article.customer")).toContainText("hello");
+  await page.getByRole("button", { name: "Close Musterring Assistant" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
+  await expect(page.locator(".advisor-messages article.customer")).toContainText("hello");
+});
+
+test("Musterring Assistant closes when navigating to another page", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
+  await expect(page.locator(".advisor-panel")).toBeVisible();
+  await page.getByRole("link", { name: "About", exact: true }).click();
+  await expect(page).toHaveURL(/\/about$/);
+  await expect(page.locator(".advisor-panel")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Open Musterring Assistant" })).toBeVisible();
 });

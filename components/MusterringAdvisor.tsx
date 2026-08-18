@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, Check, Mic, MicOff, Send, Sparkles, Trash2, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Mic, Send, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { materials, products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -11,6 +11,7 @@ import type { AdvisorAction, AdvisorAnswer, ConversationContext, VoiceCommand } 
 
 type Message = { role: "customer" | "advisor"; text: string; answer?: AdvisorAnswer };
 const memoryKey = "musterring.assistantContext";
+const conversationKey = "musterring.assistantConversation";
 
 function starters(pathname: string) {
   if (pathname.includes("configurator")) return ["Build a configuration from my needs", "Explain why this option is unavailable", "Suggest a compatible material", "Reduce the total width"];
@@ -31,20 +32,43 @@ export function MusterringAdvisor() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [conversationReady, setConversationReady] = useState(false);
   const [pending, setPending] = useState(false);
   const [pendingAction, setPendingAction] = useState<AdvisorAction | null>(null);
   const [voiceState, setVoiceState] = useState<"idle" | "listening" | "processing" | "recognized" | "error" | "denied">("idle");
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [muted, setMuted] = useState(true);
   const [context, setContext] = useState<ConversationContext>({ route: pathname, referencedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {} });
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const currentProduct = productFromPath(pathname);
+  useEffect(() => {
+    const stored = window.sessionStorage.getItem(conversationKey);
+    if (stored) {
+      try {
+        const parsed: unknown = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setMessages(parsed.filter(isStoredMessage).slice(-40));
+        }
+      } catch { /* discard malformed session conversation */ }
+    }
+    setConversationReady(true);
+  }, []);
+  useEffect(() => {
+    if (!conversationReady) return;
+    try {
+      const sessionMessages = messages.slice(-40).map(({ role, text }) => ({ role, text }));
+      window.sessionStorage.setItem(conversationKey, JSON.stringify(sessionMessages));
+    } catch { /* keep the current in-memory conversation if browser storage is unavailable */ }
+  }, [conversationReady, messages]);
   useEffect(() => {
     const stored = window.sessionStorage.getItem(memoryKey);
     if (stored) {
       try { setContext({ ...JSON.parse(stored), route: pathname, currentProductId: currentProduct?.id ?? null }); } catch { /* discard malformed session data */ }
     } else setContext((current) => ({ ...current, route: pathname, currentProductId: currentProduct?.id ?? null }));
   }, [pathname, currentProduct?.id]);
+  useEffect(() => {
+    setOpen(false);
+    setPendingAction(null);
+    setVoiceState("idle");
+  }, [pathname]);
   useEffect(() => {
     window.sessionStorage.setItem(memoryKey, JSON.stringify(context));
   }, [context]);
@@ -79,11 +103,6 @@ export function MusterringAdvisor() {
       window.removeEventListener("keydown", key);
     };
   }, [open]);
-  const speak = (text: string) => {
-    if (muted || !voiceEnabled || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text.slice(0, 500)));
-  };
   const ask = async (question = input) => {
     const clean = question.trim();
     if (!clean) return;
@@ -100,7 +119,7 @@ export function MusterringAdvisor() {
     const payload = response ? await response.json().catch(() => null) : null;
     setPending(false);
     if (!response?.ok || !payload?.answer) {
-      setMessages((current) => [...current, { role: "advisor", text: payload?.error ?? "The Product Advisor is temporarily unavailable. Your saved project has not changed." }]);
+      setMessages((current) => [...current, { role: "advisor", text: payload?.error ?? "The Musterring Assistant is temporarily unavailable. Your saved project has not changed." }]);
       return;
     }
     const answer = payload.answer as AdvisorAnswer;
@@ -108,7 +127,6 @@ export function MusterringAdvisor() {
     setContext((current) => ({ ...current, referencedProductIds: answer.productIds.length ? answer.productIds : current.referencedProductIds }));
     if (answer.productIds.length) storage.track({ name: "chatbot_product_recommended", productId: answer.productIds[0] });
     if (answer.proposedAction) storage.track({ name: "chatbot_action_proposed" });
-    speak(answer.answer);
   };
   const actionRoute = (action: AdvisorAction) => {
     const values = action.parameters;
@@ -173,7 +191,6 @@ export function MusterringAdvisor() {
     handleVoiceCommand(payload.command, transcript);
   };
   const startVoice = async () => {
-    if (!voiceEnabled) return;
     storage.track({ name: "voice_assistant_started" });
     const scope = window as unknown as { SpeechRecognition?: new () => { lang: string; interimResults: boolean; start: () => void; abort: () => void; onresult: (event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void; onerror: (event: { error: string }) => void; onend: () => void }; webkitSpeechRecognition?: new () => { lang: string; interimResults: boolean; start: () => void; abort: () => void; onresult: (event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void; onerror: (event: { error: string }) => void; onend: () => void } };
     const Recognition = scope.SpeechRecognition ?? scope.webkitSpeechRecognition;
@@ -185,21 +202,15 @@ export function MusterringAdvisor() {
     recognition.onend = () => setVoiceState((current) => current === "listening" ? "idle" : current);
     setVoiceState("listening"); recognition.start();
   };
-  const clear = () => {
-    setMessages([]); setPendingAction(null);
-    const next = { route: pathname, currentProductId: currentProduct?.id ?? null, referencedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {} };
-    setContext(next); window.sessionStorage.removeItem(memoryKey);
-  };
   if (!open) return <div className="assistant-dock" aria-label="Musterring assistance">
-    <button className="advisor-launcher" aria-label="Open Musterring Product Advisor" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><Sparkles /><span><small>AI Product Advisor</small><strong>Ask Musterring</strong></span></button>
+    <button className="advisor-launcher" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><Sparkles /><span><small>Musterring Assistant</small><strong>LOOKING FOR SOMETHING?</strong></span></button>
     <button className="voice-launcher" aria-label="Start Voice Interior Assistant" title="Use voice assistant" onClick={() => { setOpen(true); window.setTimeout(() => void startVoice(), 50); }}><Mic /></button>
   </div>;
   return <aside className="advisor-panel" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
-    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p>AI Product Advisor</p><h2 id="advisor-title">Ask Musterring</h2></div><button aria-label="Close Product Advisor" onClick={() => setOpen(false)}><X /></button></header>
-      <div className="advisor-toolbar"><button aria-label={muted ? "Enable spoken feedback" : "Mute spoken feedback"} onClick={() => setMuted((value) => !value)}>{muted ? <VolumeX /> : <Volume2 />}</button><button onClick={() => setVoiceEnabled((value) => !value)}>{voiceEnabled ? <Mic /> : <MicOff />} Voice {voiceEnabled ? "on" : "off"}</button><button onClick={clear}><Trash2 /> New conversation</button></div>
+    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Musterring Assistant</p></div><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><ChevronDown /></button></header>
       <div className="advisor-messages" aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><h3>How can I help with your space?</h3><p>I’ll ask a few useful questions, then use connected Musterring product and material data to guide you.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}</button>)}</div></div> : null}
-        {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Product Advisor"}</small><p>{message.text}</p></div></div>
+        {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><p>{message.text}</p></div></div>
           {message.answer?.productIds.length ? <div className="advisor-products">
             {message.answer.answerType === "missing-data" ? <small className="advisor-product-group-label">Closest recommendations — requested option unavailable</small> : null}
             {message.answer.productIds.map((id) => {
@@ -217,10 +228,18 @@ export function MusterringAdvisor() {
         {voiceState !== "idle" ? <p className={`voice-state is-${voiceState}`} role="status">Voice: {voiceState === "denied" ? "Microphone permission denied. Use text input." : voiceState}</p> : null}
       </div>
       {pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
-      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder="Ask about products, materials, configuration, fit or your project…" /><button type="button" aria-label="Use microphone" onClick={() => void startVoice()} disabled={!voiceEnabled}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending}><Send /></button></form>
+      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder="How can I help?" /><button type="button" aria-label="Use microphone" onClick={() => void startVoice()}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending}><Send /></button></form>
   </aside>;
 }
 
 function LinkCard({ product, imageOverride }: { product: typeof products[number]; imageOverride?: string }) {
   return <a href={`/furniture/${product.slug}`}><Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={260} height={180} /><span><strong>{product.modelCode}</strong><small>{product.category.replaceAll("-", " ")}</small><em>{product.subtitle}</em><b>View details <ArrowRight size={15} /></b></span></a>;
+}
+
+function isStoredMessage(value: unknown): value is Message {
+  if (!value || typeof value !== "object") return false;
+  const message = value as Partial<Message>;
+  return (message.role === "customer" || message.role === "advisor")
+    && typeof message.text === "string"
+    && message.text.length <= 5000;
 }

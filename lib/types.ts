@@ -1,21 +1,9 @@
-export type Category =
-  | "sofa"
-  | "armchair"
-  | "sectional"
-  | "storage"
-  | "coffee-table"
-  | "bedroom-series"
-  | "bed"
-  | "wardrobe"
-  | "dining-chair"
-  | "dining-table"
-  | "bathroom"
-  | "kitchen"
-  | "outdoor"
-  | "small-furniture"
-  | "carpet"
-  | "lamp"
-  | "home-textile";
+export const catalogueCategories = [
+  "sofa", "armchair", "sectional", "storage", "coffee-table", "bedroom-series", "bed", "wardrobe",
+  "dining-chair", "dining-table", "bathroom", "kitchen", "outdoor", "small-furniture", "carpet", "lamp", "home-textile"
+] as const;
+
+export type Category = (typeof catalogueCategories)[number];
 export type ProjectStatus =
   | "Ideas Saved"
   | "Configuration in Progress"
@@ -55,6 +43,26 @@ export type Product = {
   seatHeightMm: number;
   seatDepthMm: number;
   numberOfSeats: number;
+  /** True only when the connected catalogue verifies the seat count. */
+  numberOfSeatsVerified: boolean;
+  verifiedFacts: {
+    dimensions: boolean;
+    seatHeight: boolean;
+    seatDepth: boolean;
+    colors: string[];
+    materialTypes: Array<"fabric" | "leather">;
+    styles: string[];
+    functions: string[];
+    modular: boolean;
+    smallSpaceSuitable: boolean;
+    comfort: boolean;
+    easyCare: boolean;
+  };
+  /** Additional catalogue-verified facts shown in comparisons and supplied to AI summaries. */
+  verifiedComparisonFacts?: Array<{
+    label: string;
+    value: string;
+  }>;
   modular: boolean;
   styles: string[];
   colors: string[];
@@ -73,6 +81,8 @@ export type Product = {
   demoData: boolean;
   showroomEligible: boolean;
   smallSpaceSuitable: boolean;
+  /** Catalogue-verified plan shapes only; never infer these from an image. */
+  layoutShapes?: Array<"straight" | "l-shaped" | "u-shaped" | "corner" | "island">;
   indicativePriceCents: number;
   packageDimensions: { widthMm: number; depthMm: number; heightMm: number; minOpeningMm: number };
 };
@@ -163,6 +173,8 @@ export type SearchFilters = {
   materials?: string[];
   styles?: string[];
   maxWidthMm?: number;
+  minWidthMm?: number;
+  targetWidthMm?: number;
   maxDepthMm?: number;
   minSeatHeightMm?: number;
   maxSeatDepthMm?: number;
@@ -172,6 +184,7 @@ export type SearchFilters = {
   relaxFunction?: boolean;
   electricFunctions?: boolean;
   smallSpaceSuitable?: boolean;
+  layoutShapes?: Array<"straight" | "l-shaped" | "u-shaped" | "corner" | "island">;
 };
 
 export type Configuration = {

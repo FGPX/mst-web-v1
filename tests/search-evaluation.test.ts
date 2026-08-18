@@ -23,6 +23,8 @@ describe("curated bilingual search evaluation", () => {
         colorFamilies: parsed.colors ?? null,
         materials: expected.materials ?? null,
         maxWidthMm: parsed.maxWidthMm ?? null,
+        minWidthMm: parsed.minWidthMm ?? null,
+        targetWidthMm: parsed.targetWidthMm ?? null,
         minSeatHeightMm: parsed.minSeatHeightMm ?? null,
         maxSeatDepthMm: parsed.maxSeatDepthMm ?? null,
         numberOfSeats: parsed.seatCount ?? null,
@@ -34,7 +36,8 @@ describe("curated bilingual search evaluation", () => {
         ],
         styles: null,
         roomType: null,
-        smallSpaceSuitable: parsed.smallSpaceSuitable ?? null
+        smallSpaceSuitable: parsed.smallSpaceSuitable ?? null,
+        layoutShapes: parsed.layoutShapes ?? null
       });
       const result = await hybridCatalogueSearch(intent);
       const catalogueIds = new Set(products.map((product) => product.id));

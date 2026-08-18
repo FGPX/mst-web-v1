@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
+import { catalogueCategories } from "@/lib/types";
 import { buildGroundedConfiguration } from "@/lib/ai/configuration";
+import { comparisonSummaryInput, deterministicComparisonSummary } from "@/lib/ai/comparison-summary";
 import { groundProjectData } from "@/lib/ai/grounding";
 import { hybridCatalogueSearch, searchCatalogueByVisualTags } from "@/lib/ai/retrieval";
 import {
@@ -17,6 +19,8 @@ const baseIntent = {
   colorFamilies: ["beige"],
   materials: null,
   maxWidthMm: 2400,
+  minWidthMm: null,
+  targetWidthMm: null,
   minSeatHeightMm: null,
   maxSeatDepthMm: null,
   numberOfSeats: null,
@@ -24,7 +28,8 @@ const baseIntent = {
   functions: null,
   styles: null,
   roomType: null,
-  smallSpaceSuitable: true
+  smallSpaceSuitable: true,
+  layoutShapes: null
 };
 
 describe("AI schemas and fallbacks", () => {
@@ -37,6 +42,31 @@ describe("AI schemas and fallbacks", () => {
   it("rejects invalid AI output instead of trusting it", () => {
     expect(searchIntentSchema.safeParse({ queryText: "sofa", maxWidthMm: "wide" }).success).toBe(false);
     expect(visualTagsSchema.safeParse({ category: "invented", colorFamilies: [] }).success).toBe(false);
+  });
+
+  it("builds a grounded comparison fallback for the selected catalogue products", () => {
+    const selected = products.filter((product) => product.active).slice(0, 2);
+    const input = comparisonSummaryInput(selected);
+    const summary = deterministicComparisonSummary(input);
+    expect(summary.products.map((product) => product.productId)).toEqual(selected.map((product) => product.id));
+    expect(summary.recommendation).toMatch(/retailer|Refine/i);
+  });
+
+  it("includes detailed verified facts for the JUSTB! comparison", () => {
+    const selected = ["musterring-justb-pm100", "musterring-justb-pm200"]
+      .map((id) => products.find((product) => product.id === id))
+      .filter((product): product is (typeof products)[number] => Boolean(product));
+    const input = comparisonSummaryInput(selected);
+    const summary = deterministicComparisonSummary(input);
+
+    expect(input.products).toHaveLength(2);
+    expect(input.products.every((product) => product.verifiedDetails.length >= 8)).toBe(true);
+    expect(input.products.find((product) => product.modelCode === "JUSTB! PM100")?.verifiedDetails)
+      .toContainEqual({ label: "Seat construction", value: "Spring core; optional barrel pocket spring core" });
+    expect(input.products.find((product) => product.modelCode === "JUSTB! PM200")?.verifiedDetails)
+      .toContainEqual({ label: "Seat Height", value: "41 or 43 cm" });
+    expect(summary.glance.join(" ")).toMatch(/Seat heights|Seat construction/);
+    expect(summary.recommendation).not.toMatch(/not enough verified catalogue data/i);
   });
 });
 
@@ -67,6 +97,50 @@ describe("grounded hybrid retrieval", () => {
     const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({ category: "sofa", colorFamilies: ["beige"], likelyMaterial: "fabric", style: ["modern heritage"], silhouette: "wide", notableVisualFeatures: [] }));
     const ids = new Set(products.map((product) => product.id));
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
+  });
+
+  it("accepts every catalogue category for visual search", () => {
+    for (const category of catalogueCategories) {
+      expect(visualTagsSchema.safeParse({ category, colorFamilies: [], likelyMaterial: null, style: [], silhouette: "visible object", notableVisualFeatures: [] }).success).toBe(true);
+    }
+  });
+
+  it("maps visually detected sectionals to catalogue sofa programmes", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "sectional",
+      colorFamilies: ["beige", "cream"],
+      likelyMaterial: "fabric",
+      style: ["modern"],
+      silhouette: "corner sofa",
+      notableVisualFeatures: []
+    }));
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every(({ product }) => product.category === "sofa" || product.category === "sectional")).toBe(true);
+  });
+
+  it("returns catalogue dining tables for a visually detected dining table", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "dining-table",
+      colorFamilies: ["white", "beige"],
+      likelyMaterial: "wood",
+      style: ["modern"],
+      silhouette: "rectangular dining table",
+      notableVisualFeatures: ["light top", "metal legs"]
+    }));
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every(({ product }) => product.category === "dining-table")).toBe(true);
+  });
+
+  it("does not recommend a product when no supported furniture is detected", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: null,
+      colorFamilies: ["grey"],
+      likelyMaterial: null,
+      style: [],
+      silhouette: "no supported furniture detected",
+      notableVisualFeatures: []
+    }));
+    expect(matches).toEqual([]);
   });
 });
 

@@ -1,3 +1,3 @@
-import { VisualSearchClient } from "@/components/VisualSearchClient";
+import { redirect } from "next/navigation";
 
-export default function VisualSearchPage() { return <VisualSearchClient />; }
+export default function VisualSearchPage() { redirect("/search#visual-search"); }

@@ -41,6 +41,20 @@ const base: Omit<Product, "id" | "slug" | "modelCode" | "name" | "subtitle" | "w
   demoData: true,
   showroomEligible: true,
   smallSpaceSuitable: false,
+  numberOfSeatsVerified: true,
+  verifiedFacts: {
+    dimensions: true,
+    seatHeight: true,
+    seatDepth: true,
+    colors: ["beige", "taupe", "stone", "charcoal"],
+    materialTypes: ["fabric", "leather"],
+    styles: ["modern heritage", "editorial", "minimal"],
+    functions: ["relax", "storage", "modular", "electric"],
+    modular: true,
+    smallSpaceSuitable: true,
+    comfort: true,
+    easyCare: true
+  },
   packageDimensions: { widthMm: 1100, depthMm: 900, heightMm: 760, minOpeningMm: 820 }
 };
 
@@ -82,6 +96,8 @@ const catalogueDimensionOverrides: Record<string, { widthMm: number; depthMm: nu
   "mr-270": { widthMm: 2500, depthMm: 1070, heightMm: 870 },
   // PM100 corner configuration: approx. 232 x 268 cm, maximum back height 88 cm.
   "justb-pm100": { widthMm: 2680, depthMm: 2320, heightMm: 880 },
+  // PM200 proposal 2A: 2.5-seat add-on sofa with a small longchair, approx. 316 x 166 cm.
+  "justb-pm200": { widthMm: 3160, depthMm: 1660, heightMm: 780 },
   // Armchair dimensions match the specific catalogue cutouts used in the composer.
   "mr-kleo": { widthMm: 970, depthMm: 880, heightMm: 950 },
   "mr-nils": { widthMm: 700, depthMm: 870, heightMm: 1120 },
@@ -95,8 +111,83 @@ const catalogueDimensionOverrides: Record<string, { widthMm: number; depthMm: nu
   "nara": { widthMm: 890, depthMm: 780, heightMm: 440 }
 };
 const catalogueSearchOverrides: Record<string, Partial<Product>> = {
-  "justb-pm100": { colors: ["beige", "cream", "ivory"], styles: ["modern", "minimal", "modular"], functions: ["modular"], modular: true },
-  "justb-pm200": { colors: ["beige", "cream", "sand"], styles: ["modern", "soft modern", "modular"], functions: ["modular", "relax"], modular: true },
+  "justb-pm100": {
+    colors: ["beige", "cream", "ivory", "grey", "black"],
+    styles: ["modern", "minimal", "modular"],
+    functions: ["modular", "motorized seat extension", "electric lounge"],
+    electricFunctions: ["Motorized seat extension"],
+    armrestOptions: ["21 cm armrest"],
+    feetOptions: ["Black matt metal runners", "Chrome gloss runners", "Coloured metal feet or runners"],
+    comfortOptions: ["Spring core", "Optional barrel pocket spring core"],
+    seatHeightMm: 460,
+    seatDepthMm: 620,
+    modular: true,
+    layoutShapes: ["straight", "corner"],
+    verifiedFacts: {
+      dimensions: true,
+      seatHeight: true,
+      seatDepth: true,
+      colors: ["cream beige", "light grey", "white", "black"],
+      materialTypes: ["fabric", "leather"],
+      styles: ["modern", "modular"],
+      functions: ["modular", "motorized seat extension", "electric lounge"],
+      modular: true,
+      smallSpaceSuitable: false,
+      comfort: true,
+      easyCare: false
+    },
+    verifiedComparisonFacts: [
+      { label: "Reference configuration", value: "1-seat medium element + small corner + 2-seat add-on sofa" },
+      { label: "Height", value: "67–88 cm" },
+      { label: "Seat Height", value: "46 cm" },
+      { label: "Seat Depth", value: "62–96 cm" },
+      { label: "Upholstery choice", value: "Fabric or leather; 200 cover variants, 349 colours and 31 quality levels" },
+      { label: "Seat construction", value: "Spring core; optional barrel pocket spring core" },
+      { label: "Motorised function", value: "Optional motorized seat extension / electric lounge" },
+      { label: "Back cushions", value: "Two variants: spaced or flush" },
+      { label: "Module choice", value: "Individual sofas, add-on elements, longchair, corners and stools" },
+      { label: "Warranty", value: "5 years" }
+    ]
+  },
+  "justb-pm200": {
+    colors: ["beige", "cream", "sand", "light grey", "white"],
+    styles: ["modern", "soft modern", "modular"],
+    functions: ["modular", "motorized seat extension"],
+    electricFunctions: ["Motorized seat extension"],
+    armrestOptions: ["23 cm armrest"],
+    feetOptions: ["5 cm gliders", "7 cm gliders", "Oiled natural oak frame", "Black lacquered wood frame"],
+    comfortOptions: ["HR cold foam, density 35", "Wave-spring suspension", "Loose feather-blend back cushions"],
+    seatHeightMm: 410,
+    seatDepthMm: 620,
+    modular: true,
+    smallSpaceSuitable: true,
+    layoutShapes: ["straight", "corner", "u-shaped"],
+    verifiedFacts: {
+      dimensions: true,
+      seatHeight: true,
+      seatDepth: true,
+      colors: ["beige", "light grey", "white"],
+      materialTypes: ["fabric", "leather"],
+      styles: ["modern", "soft modern", "modular"],
+      functions: ["modular", "motorized seat extension"],
+      modular: true,
+      smallSpaceSuitable: true,
+      comfort: true,
+      easyCare: false
+    },
+    verifiedComparisonFacts: [
+      { label: "Reference configuration", value: "2.5-seat add-on sofa + small longchair" },
+      { label: "Height", value: "60–78 cm" },
+      { label: "Seat Height", value: "41 or 43 cm" },
+      { label: "Seat Depth", value: "62–75 cm" },
+      { label: "Upholstery choice", value: "Fabric, cord, Simply Clean fabric or leather" },
+      { label: "Seat construction", value: "HR cold foam, density 35, over wave-spring suspension" },
+      { label: "Motorised function", value: "Optional motorized seat extension" },
+      { label: "Back cushions", value: "Loose feather-blend cushions; spaced or flush variants" },
+      { label: "Module choice", value: "Individual sofas, add-on elements, longchair, corners and stools" },
+      { label: "Warranty", value: "5 years" }
+    ]
+  },
   "mr-lucia": { colors: ["light grey", "grey", "cream"], styles: ["soft modern", "casual", "minimal"], functions: ["modular"], modular: true },
   "mr-230": { colors: ["light grey", "grey", "beige"], styles: ["modern", "comfort"], functions: ["relax"], modular: false },
   "mr-260": { colors: ["light grey", "grey", "beige", "red", "burgundy"], styles: ["modern", "family"], functions: ["modular", "relax"], modular: true },
@@ -124,6 +215,17 @@ export const products: Product[] = [
 
     const searchOverride = catalogueSearchOverrides[official.slug] ?? {};
     const dimensionOverride = catalogueDimensionOverrides[official.slug];
+    const verifiedColors = verifiedRedUpholstery.has(official.slug) ? ["red", "burgundy"] : [];
+    const verifiedMaterialTypes: Array<"fabric" | "leather"> = [
+      ...(/\bfabric\b/.test(searchableCopy) ? ["fabric" as const] : []),
+      ...(/\bleather\b/.test(searchableCopy) ? ["leather" as const] : [])
+    ];
+    const verifiedFunctions = [
+      ...(/modular|module/.test(searchableCopy) ? ["modular"] : []),
+      ...(/reclin(?:e|er|ing)|reclining position|adjustable (?:backrest|legrest)|manual and motorised functions/.test(searchableCopy) ? ["relax"] : []),
+      ...(/motorised|electric|touch of a button/.test(searchableCopy) ? ["electric"] : []),
+      ...(isStorage ? ["storage"] : [])
+    ];
     return {
       ...template,
       id: official.appProductId,
@@ -136,7 +238,7 @@ export const products: Product[] = [
       imageAssets: official.images,
       sourceUrl: official.sourceUrl,
       authorizedContent: true,
-      specificationNote: "Dimensions, configuration options, availability and prices are confirmed by an authorized Musterring retailer.",
+      specificationNote: "Dimensions, configuration options and availability are confirmed by an authorized Musterring retailer.",
       active: true,
       demoData: false,
       widthMm: dimensionOverride?.widthMm ?? (isStorage ? 3000 : template.widthMm),
@@ -145,6 +247,21 @@ export const products: Product[] = [
       seatHeightMm: isSeating ? template.seatHeightMm : 0,
       seatDepthMm: isSeating ? template.seatDepthMm : 0,
       numberOfSeats: isSeating ? template.numberOfSeats : 0,
+      // Template values support internal layout rendering but are not catalogue facts.
+      numberOfSeatsVerified: false,
+      verifiedFacts: {
+        dimensions: Boolean(dimensionOverride),
+        seatHeight: false,
+        seatDepth: false,
+        colors: verifiedColors,
+        materialTypes: verifiedMaterialTypes,
+        styles: [],
+        functions: [...new Set(verifiedFunctions)],
+        modular: /modular|module/.test(searchableCopy),
+        smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),
+        comfort: false,
+        easyCare: false
+      },
       materials: isSeating ? template.materials : [],
       colors: !isSeating
         ? template.colors

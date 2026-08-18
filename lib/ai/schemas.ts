@@ -1,19 +1,20 @@
 import { z } from "zod";
+import { catalogueCategories } from "../types";
 
 const nullableString = z.string().nullable();
 const nullableNumber = z.number().int().nonnegative().nullable();
 const nullableBoolean = z.boolean().nullable();
 const nullableStrings = z.array(z.string()).nullable();
+const layoutShapeSchema = z.enum(["straight", "l-shaped", "u-shaped", "corner", "island"]);
 
 export const searchIntentSchema = z.object({
   queryText: z.string().trim().min(1).max(1000),
-  category: z.enum([
-    "sofa", "armchair", "sectional", "storage", "coffee-table", "bedroom-series", "bed", "wardrobe",
-    "dining-chair", "dining-table", "bathroom", "kitchen", "outdoor", "small-furniture", "carpet", "lamp", "home-textile"
-  ]).nullable(),
+  category: z.enum(catalogueCategories).nullable(),
   colorFamilies: nullableStrings,
   materials: nullableStrings,
   maxWidthMm: nullableNumber,
+  minWidthMm: nullableNumber,
+  targetWidthMm: nullableNumber,
   minSeatHeightMm: nullableNumber,
   maxSeatDepthMm: nullableNumber,
   numberOfSeats: nullableNumber,
@@ -21,12 +22,13 @@ export const searchIntentSchema = z.object({
   functions: nullableStrings,
   styles: nullableStrings,
   roomType: nullableString,
-  smallSpaceSuitable: nullableBoolean
+  smallSpaceSuitable: nullableBoolean,
+  layoutShapes: z.array(layoutShapeSchema).nullable()
 });
 export type SearchIntent = z.infer<typeof searchIntentSchema>;
 
 export const visualTagsSchema = z.object({
-  category: z.enum(["sofa", "armchair", "sectional", "storage"]).nullable(),
+  category: z.enum(catalogueCategories).nullable(),
   colorFamilies: z.array(z.string()),
   likelyMaterial: nullableString,
   style: z.array(z.string()),
@@ -103,6 +105,40 @@ export type RetailerProjectData = z.infer<typeof retailerProjectDataSchema>;
 export const retailerSummarySchema = z.object({
   summary: z.string().max(3000)
 });
+
+export const comparisonProductFactsSchema = z.object({
+  productId: z.string().trim().min(1).max(160),
+  modelCode: z.string().trim().min(1).max(160),
+  category: z.string().trim().min(1).max(80),
+  verifiedWidthCm: z.number().int().positive().nullable(),
+  verifiedSeatCount: z.number().int().positive().nullable(),
+  verifiedMaterialTypes: z.array(z.string().trim().min(1).max(80)).max(10),
+  verifiedFunctions: z.array(z.string().trim().min(1).max(120)).max(20),
+  verifiedModular: z.boolean(),
+  verifiedSmallSpaceSuitable: z.boolean(),
+  verifiedDetails: z.array(z.object({
+    label: z.string().trim().min(1).max(100),
+    value: z.string().trim().min(1).max(300)
+  })).max(20),
+  comparisonHighlights: z.array(z.string().trim().min(1).max(160)).max(4)
+});
+
+export const comparisonSummaryInputSchema = z.object({
+  products: z.array(comparisonProductFactsSchema).min(2).max(3)
+});
+export type ComparisonSummaryInput = z.infer<typeof comparisonSummaryInputSchema>;
+
+export const comparisonSummarySchema = z.object({
+  products: z.array(z.object({
+    productId: z.string().trim().min(1).max(160),
+    summary: z.string().trim().min(1).max(500),
+    bestFor: z.string().trim().min(1).max(160),
+    facts: z.array(z.string().trim().min(1).max(240)).min(2).max(4)
+  })).min(2).max(3),
+  glance: z.array(z.string().trim().min(1).max(200)).min(1).max(5),
+  recommendation: z.string().trim().min(1).max(800)
+});
+export type ComparisonSummary = z.infer<typeof comparisonSummarySchema>;
 
 export const imageUploadSchema = z.object({
   type: z.enum(["image/jpeg", "image/png", "image/webp"]),

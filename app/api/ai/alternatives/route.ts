@@ -7,6 +7,9 @@ export async function POST(request: Request) {
   if (!allowAssistantRequest(request).allowed) return NextResponse.json({ error: "Please wait before requesting more alternatives." }, { status: 429 });
   const input = alternativeRequestSchema.safeParse(await request.json().catch(() => null));
   if (!input.success) return NextResponse.json({ error: "The alternative request is incomplete.", details: input.error.flatten() }, { status: 400 });
-  const result = await withDemoFallback((provider) => provider.findProductAlternatives(input.data));
+  const result = await withDemoFallback(
+    (provider) => provider.findProductAlternatives(input.data),
+    { allowOpenAI: true }
+  );
   return NextResponse.json({ ...result.data, ai: { mode: result.provider, fallback: result.fallback } });
 }

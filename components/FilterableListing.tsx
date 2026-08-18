@@ -200,8 +200,8 @@ export function FilterableListing() {
                 <label>Minimum seat height cm<input type="number" value={filters.minSeatHeightMm ? filters.minSeatHeightMm / 10 : ""} onChange={(event) => set({ minSeatHeightMm: event.target.value ? Number(event.target.value) * 10 : undefined })} /></label>
                 <label>Maximum seat depth cm<input type="number" value={filters.maxSeatDepthMm ? filters.maxSeatDepthMm / 10 : ""} onChange={(event) => set({ maxSeatDepthMm: event.target.value ? Number(event.target.value) * 10 : undefined })} /></label>
                 <label>Seats<select value={filters.seatCount ?? ""} onChange={(event) => set({ seatCount: event.target.value ? Number(event.target.value) : undefined })}><option value="">Any</option>{[1, 2, 3, 4].map((count) => <option key={count}>{count}</option>)}</select></label>
-                <label>Color<select value={filters.colors?.[0] ?? ""} onChange={(event) => set({ colors: event.target.value ? [event.target.value] : undefined })}><option value="">Any</option>{[...new Set(products.flatMap((product) => product.colors))].map((color) => <option key={color}>{color}</option>)}</select></label>
-                <label>Style<select value={filters.styles?.[0] ?? ""} onChange={(event) => set({ styles: event.target.value ? [event.target.value] : undefined })}><option value="">Any</option>{[...new Set(products.flatMap((product) => product.styles))].map((style) => <option key={style}>{style}</option>)}</select></label>
+                <label>Color<select value={filters.colors?.[0] ?? ""} onChange={(event) => set({ colors: event.target.value ? [event.target.value] : undefined })}><option value="">Any</option>{[...new Set(products.flatMap((product) => product.verifiedFacts.colors))].map((color) => <option key={color}>{color}</option>)}</select></label>
+                <label>Style<select value={filters.styles?.[0] ?? ""} onChange={(event) => set({ styles: event.target.value ? [event.target.value] : undefined })}><option value="">Any</option>{[...new Set(products.flatMap((product) => product.verifiedFacts.styles))].map((style) => <option key={style}>{style}</option>)}</select></label>
                 <label>Collection<select value={filters.collections?.[0] ?? ""} onChange={(event) => set({ collections: event.target.value ? [event.target.value] : undefined })}><option value="">Any</option>{[...new Set(products.map((product) => product.collection))].map((collection) => <option key={collection}>{collection}</option>)}</select></label>
                 <label><input type="checkbox" checked={Boolean(filters.electricFunctions)} onChange={(event) => set({ electricFunctions: event.target.checked || undefined })} /> Electric function</label>
                 <label><input type="checkbox" checked={Boolean(filters.smallSpaceSuitable)} onChange={(event) => set({ smallSpaceSuitable: event.target.checked || undefined })} /> Small-space suitable</label>
@@ -286,8 +286,8 @@ export function FilterableListing() {
 function CatalogProductCard({ product, compareSelected, onCompare }: { product: Product; compareSelected: boolean; onCompare: () => void }) {
   const image = productImages(product.id)[0];
   const configurable = ["sofa", "armchair", "sectional"].includes(product.category);
-  const availableColors = product.colors.length ? product.colors : ["Product options"];
-  const [selectedColor, setSelectedColor] = useState(availableColors[0]);
+  const availableColors = product.verifiedFacts.colors;
+  const [selectedColor, setSelectedColor] = useState(availableColors[0] ?? "");
   const [showAllColors, setShowAllColors] = useState(false);
   const colorStyle = (color: string) => {
     const value = color.toLowerCase();
@@ -314,14 +314,14 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
         <div className="stitch-config-preview stitch-config-preview-compact">
           <div>
             <p>Quick Configuration</p>
-            <div className="stitch-config-swatches" aria-label="Available material colours">
+            {availableColors.length ? <div className="stitch-config-swatches" aria-label="Verified material colours">
               {availableColors.slice(0, 3).map((color) => <button type="button" key={color} className={selectedColor === color ? "is-selected" : ""} style={{ background: colorStyle(color) }} title={color} aria-label={`Select ${color}`} onClick={() => setSelectedColor(color)} />)}
               {availableColors.length > 3 ? <button type="button" className="is-more" aria-expanded={showAllColors} onClick={() => setShowAllColors((value) => !value)}>+{availableColors.length - 3}</button> : null}
-            </div>
+            </div> : <small>Colour options are configuration dependent.</small>}
             {showAllColors ? <div className="stitch-config-color-menu">{availableColors.map((color) => <button type="button" key={color} onClick={() => { setSelectedColor(color); setShowAllColors(false); }}><i style={{ background: colorStyle(color) }} />{color}</button>)}</div> : null}
-            <small className="stitch-selected-color">Selected: {selectedColor}</small>
+            {selectedColor ? <small className="stitch-selected-color">Selected: {selectedColor}</small> : null}
             <div className="stitch-config-action">
-              <span>{product.authorizedContent ? "Price available from retailer" : "Planning estimate available"}</span>
+              <span>Review verified product information</span>
               <div>
                 <Link className="stitch-view-product-action" href={`/furniture/${product.slug}`}>
                   <Eye size={16} /> View Product
@@ -351,10 +351,10 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
         <summary>More details <ChevronDown size={15} /></summary>
         <dl>
           <div><dt>Collection</dt><dd>{product.collection}</dd></div>
-          <div><dt>Dimensions</dt><dd>{product.widthMm && product.depthMm && product.heightMm ? `${Math.round(product.widthMm / 10)} × ${Math.round(product.depthMm / 10)} × ${Math.round(product.heightMm / 10)} cm` : "Available from retailer"}</dd></div>
-          <div><dt>Seats</dt><dd>{product.numberOfSeats || "Model dependent"}</dd></div>
-          <div><dt>Materials</dt><dd>{product.materials.length ? `${product.materials.length} available` : "See product details"}</dd></div>
-          <div><dt>Configuration</dt><dd>{product.modular ? "Modular" : product.functions[0] ?? "Standard"}</dd></div>
+          <div><dt>Dimensions</dt><dd>{product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} × ${Math.round(product.depthMm / 10)} × ${Math.round(product.heightMm / 10)} cm` : "Configuration dependent"}</dd></div>
+          <div><dt>Seats</dt><dd>{product.numberOfSeatsVerified ? product.numberOfSeats : "Configuration dependent"}</dd></div>
+          <div><dt>Materials</dt><dd>{product.verifiedFacts.materialTypes.join(", ") || "Configuration dependent"}</dd></div>
+          <div><dt>Configuration</dt><dd>{product.verifiedFacts.modular ? "Modular" : product.verifiedFacts.functions[0] ?? "Configuration dependent"}</dd></div>
         </dl>
       </details>
     </article>

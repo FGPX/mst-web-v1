@@ -8,11 +8,11 @@ export function buildGroundedConfiguration(requirements: ConfigurationRequiremen
     product.active &&
     product.category !== "storage" &&
     (!requirements.category || product.category === requirements.category) &&
-    (!requirements.maxWidthMm || product.widthMm <= requirements.maxWidthMm) &&
-    (!requirements.numberOfSeats || product.numberOfSeats === requirements.numberOfSeats) &&
-    (!requirements.modular || product.modular) &&
-    (!requirements.relaxFunction || product.functions.includes("relax")) &&
-    (!requirements.colorFamily || product.colors.includes(requirements.colorFamily))
+    (!requirements.maxWidthMm || (product.verifiedFacts.dimensions && product.widthMm <= requirements.maxWidthMm)) &&
+    (!requirements.numberOfSeats || (product.numberOfSeatsVerified && product.numberOfSeats === requirements.numberOfSeats)) &&
+    (!requirements.modular || (product.verifiedFacts.modular && product.modular)) &&
+    (!requirements.relaxFunction || product.verifiedFacts.functions.includes("relax")) &&
+    (!requirements.colorFamily || product.verifiedFacts.colors.includes(requirements.colorFamily))
   );
   const product = candidates[0] ?? products.find((candidate) => candidate.active && candidate.category !== "storage");
   if (!product) throw new Error("No configurable catalogue product is available.");

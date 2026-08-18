@@ -10,22 +10,32 @@ import {
 
 const colors = searchColorTerms;
 
+function requestedTargetWidthMm(text: string) {
+  const match =
+    text.match(/\b(?:around|about|approximately|approx\.?|roughly)\s*(\d{2,3})\s*cm(?:\s+(?:wide|width))?\b/) ??
+    text.match(/\b(\d{2,3})\s*cm\s*(?:wide|width|sofas?|couches?)\b/) ??
+    text.match(/\b(?:sofas?|couches?)\b.{0,24}\b(\d{2,3})\s*cm\b/);
+  return match ? Number(match[1]) * 10 : undefined;
+}
+
 function requestedAlternative(input: AlternativeRequest, source: Product) {
   const text = input.requestText?.toLowerCase() ?? "";
   const search = parseSearchQuery(input.requestText ?? "");
   const easyCareRequested = /\b(?:easy|easier|easiest)[- ](?:care|clean)|easy to (?:care for|clean)|low[- ]maintenance\b/.test(text);
   const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
-  const under = text.match(/(?:under|below|maximum|max)\s*(\d{2,3})\s*cm/);
-  const price = text.match(/(?:under|below|maximum|max)\s*[€]?\s*(\d{3,5})/);
+  const parsedWidth = search.minWidthMm !== undefined || search.maxWidthMm !== undefined || search.targetWidthMm !== undefined;
+  const targetWidthMm = !narrower && !parsedWidth ? requestedTargetWidthMm(text) : search.targetWidthMm;
   return alternativeRequestSchema.parse({
     ...input,
     category: search.category ?? input.category,
     colorFamilies: [...new Set([...(input.colorFamilies ?? []), ...(search.colors ?? [])].map((value) => value.toLowerCase()))],
     styles: [...new Set([...(input.styles ?? []), ...(search.styles ?? [])].map((value) => value.toLowerCase()))],
+    layoutShapes: search.layoutShapes ?? input.layoutShapes,
     numberOfSeats: search.seatCount ?? input.numberOfSeats,
-    maxWidthMm: input.maxWidthMm ?? (narrower ? source.widthMm - Number(narrower[1]) * 10 : under ? Number(under[1]) * 10 : /\b(?:smaller|more compact|narrower)\b/.test(text) ? source.widthMm - 10 : undefined),
+    maxWidthMm: narrower ? source.widthMm - Number(narrower[1]) * 10 : parsedWidth ? search.maxWidthMm : input.maxWidthMm ?? (/\b(?:smaller|more compact|narrower)\b/.test(text) ? source.widthMm - 10 : undefined),
+    minWidthMm: parsedWidth ? search.minWidthMm : input.minWidthMm,
+    targetWidthMm: parsedWidth ? targetWidthMm : input.targetWidthMm ?? targetWidthMm,
     minSeatHeightMm: input.minSeatHeightMm ?? (/higher seat|high[- ]seat|tall/.test(text) ? source.seatHeightMm + 10 : undefined),
-    maxIndicativePrice: input.maxIndicativePrice ?? (/lower (?:indicative )?price|cheaper/.test(text) ? source.indicativePriceCents - 1 : price ? Number(price[1]) * 100 : undefined),
     requiredFunctions: [...new Set([...(input.requiredFunctions ?? []), ...(/relax/.test(text) ? ["relax"] : []), ...(/modular/.test(text) ? ["modular"] : [])])],
     excludedFunctions: [...new Set([...(input.excludedFunctions ?? []), ...(/without electric|non-electric|no electric/.test(text) ? ["electric"] : [])])],
     materialTags: [...new Set([...(input.materialTags ?? []), ...(/\bleather\b/.test(text) ? ["leather"] : []), ...(/\b(?:fabric|textile|boucle|chenille|velvet)\b/.test(text) ? ["fabric"] : []), ...(easyCareRequested || /children|family|pets?|dog/.test(text) ? ["easy-care"] : [])])],
@@ -35,17 +45,13 @@ function requestedAlternative(input: AlternativeRequest, source: Product) {
 }
 
 function hasFunction(product: Product, value: string) {
-  if (value === "electric") return product.electricFunctions.length > 0;
-  if (value === "modular") return product.modular;
-  return product.functions.some((item) => item.toLowerCase().includes(value.toLowerCase()));
+  if (value === "modular") return product.verifiedFacts.modular && product.modular;
+  return product.verifiedFacts.functions.some((item) => item.toLowerCase().includes(value.toLowerCase()));
 }
 
 function hasMaterialTag(product: Product, tag: string) {
-  const compatible = materials.filter((material) => product.materials.includes(material.id));
-  if (tag === "easy-care") return compatible.some((material) => material.easyCare);
-  if (tag === "family") return compatible.some((material) => material.familyFriendly);
-  if (tag === "pet") return compatible.some((material) => material.petFriendly);
-  return compatible.some((material) => material.type === tag || material.name.toLowerCase().includes(tag.toLowerCase()));
+  if (tag === "easy-care" || tag === "family" || tag === "pet") return product.verifiedFacts.easyCare;
+  return product.verifiedFacts.materialTypes.includes(tag as "fabric" | "leather");
 }
 
 const relatedColourGroups = [
@@ -69,6 +75,8 @@ function softPreferenceTokens(text: string) {
   const ignored = new Set([
     "this", "that", "with", "from", "like", "need", "want", "find", "show", "product", "option", "alternative",
     "sofa", "couch", "chair", "armchair", "sectional", "table", "smaller", "higher", "lower", "same", "similar",
+    "function", "functions", "relax", "recline", "electric", "modular", "design", "seat", "seating", "upright",
+    "easy", "care", "material",
     ...searchColorTerms
   ]);
   return [...new Set(text.toLowerCase().split(/[^a-z0-9]+/).filter((token) => token.length > 3 && !ignored.has(token)))];
@@ -84,81 +92,93 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
   const ranked = candidates.map((product) => {
     const checks: Array<{ ok: boolean; label: string; closeness: number }> = [];
     for (const value of request.colorFamilies ?? []) {
-      const closeness = colourCloseness(value, product.colors);
-      checks.push({ ok: closeness === 1, label: `available in ${value}`, closeness });
+      const closeness = colourCloseness(value, product.verifiedFacts.colors);
+      const verified = product.verifiedFacts.colors.includes(value);
+      checks.push({
+        ok: verified,
+        label: verified ? `verified in ${value}` : `${value} colour is not verified for this product`,
+        closeness
+      });
     }
     for (const value of request.styles ?? []) {
-      const exact = product.styles.some((style) => style.toLowerCase().includes(value));
-      const related = product.styles.some((style) => style.toLowerCase().split(/\s+/).some((term) => value.includes(term)));
+      const exact = product.verifiedFacts.styles.some((style) => style.toLowerCase().includes(value));
+      const related = product.verifiedFacts.styles.some((style) => style.toLowerCase().split(/\s+/).some((term) => value.includes(term)));
       checks.push({ ok: exact, label: `matches ${value} style`, closeness: exact ? 1 : related ? 0.5 : 0 });
     }
     if (request.numberOfSeats) {
       const difference = Math.abs(product.numberOfSeats - request.numberOfSeats);
-      checks.push({ ok: difference === 0, label: `must have ${request.numberOfSeats} seats`, closeness: clampScore(1 - difference / Math.max(2, request.numberOfSeats)) });
+      checks.push({
+        ok: product.numberOfSeatsVerified && difference === 0,
+        label: product.numberOfSeatsVerified ? `must have ${request.numberOfSeats} seats` : "seat count is not verified in the connected catalogue",
+        closeness: product.numberOfSeatsVerified ? clampScore(1 - difference / Math.max(2, request.numberOfSeats)) : 0
+      });
     }
     if (request.maxWidthMm) {
       const excess = Math.max(0, product.widthMm - request.maxWidthMm);
-      checks.push({ ok: excess === 0, label: `width must be at most ${request.maxWidthMm} mm`, closeness: clampScore(1 - excess / Math.max(500, request.maxWidthMm * 0.35)) });
+      checks.push({ ok: product.verifiedFacts.dimensions && excess === 0, label: product.verifiedFacts.dimensions ? `width must be at most ${Math.round(request.maxWidthMm / 10)} cm` : "width is not verified in the connected catalogue", closeness: product.verifiedFacts.dimensions ? clampScore(1 - excess / Math.max(500, request.maxWidthMm * 0.35)) : 0 });
+    }
+    if (request.minWidthMm) {
+      const deficit = Math.max(0, request.minWidthMm - product.widthMm);
+      checks.push({ ok: product.verifiedFacts.dimensions && deficit === 0, label: product.verifiedFacts.dimensions ? `width must be at least ${Math.round(request.minWidthMm / 10)} cm` : "width is not verified in the connected catalogue", closeness: product.verifiedFacts.dimensions ? clampScore(1 - deficit / Math.max(500, request.minWidthMm * 0.35)) : 0 });
+    }
+    if (request.targetWidthMm) {
+      const difference = Math.abs(product.widthMm - request.targetWidthMm);
+      const tolerance = Math.max(100, Math.round(request.targetWidthMm * 0.03));
+      checks.push({
+        ok: product.verifiedFacts.dimensions && difference <= tolerance,
+        label: product.verifiedFacts.dimensions ? `width should be around ${Math.round(request.targetWidthMm / 10)} cm` : "width is not verified in the connected catalogue",
+        closeness: product.verifiedFacts.dimensions ? clampScore(1 - difference / Math.max(500, request.targetWidthMm * 0.25)) : 0
+      });
     }
     if (request.minSeatHeightMm) {
       const deficit = Math.max(0, request.minSeatHeightMm - product.seatHeightMm);
-      checks.push({ ok: deficit === 0, label: `seat height must be at least ${request.minSeatHeightMm} mm`, closeness: clampScore(1 - deficit / 120) });
+      checks.push({ ok: product.verifiedFacts.seatHeight && deficit === 0, label: product.verifiedFacts.seatHeight ? `seat height must be at least ${request.minSeatHeightMm} mm` : "seat height is not verified in the connected catalogue", closeness: product.verifiedFacts.seatHeight ? clampScore(1 - deficit / 120) : 0 });
     }
-    if (request.maxIndicativePrice) {
-      const excess = Math.max(0, product.indicativePriceCents - request.maxIndicativePrice);
-      checks.push({ ok: excess === 0, label: "indicative price must be below the requested limit", closeness: clampScore(1 - excess / Math.max(10000, request.maxIndicativePrice * 0.5)) });
+    for (const value of request.layoutShapes ?? []) {
+      const matchesShape = product.layoutShapes?.includes(value) ?? false;
+      checks.push({ ok: matchesShape, label: `requires verified ${value} layout`, closeness: matchesShape ? 1 : 0 });
     }
     for (const value of request.requiredFunctions ?? []) checks.push({ ok: hasFunction(product, value), label: `requires ${value}`, closeness: hasFunction(product, value) ? 1 : 0 });
     for (const value of request.excludedFunctions ?? []) checks.push({ ok: !hasFunction(product, value), label: `must not include ${value}`, closeness: !hasFunction(product, value) ? 1 : 0 });
     for (const value of request.materialTags ?? []) checks.push({ ok: hasMaterialTag(product, value), label: `requires ${value} material metadata`, closeness: hasMaterialTag(product, value) ? 1 : 0 });
     if (request.preserveStyle) {
-      const overlap = source.styles.filter((style) => product.styles.includes(style)).length;
-      checks.push({ ok: overlap > 0, label: "preserve style", closeness: clampScore(overlap / Math.max(1, source.styles.length)) });
+      const overlap = source.verifiedFacts.styles.filter((style) => product.verifiedFacts.styles.includes(style)).length;
+      checks.push({ ok: overlap > 0, label: "style is not verified as equivalent", closeness: clampScore(overlap / Math.max(1, source.verifiedFacts.styles.length)) });
     }
     if (request.preserveComfort) {
-      const overlap = source.comfortOptions.filter((option) => product.comfortOptions.includes(option)).length;
-      checks.push({ ok: overlap > 0, label: "preserve comfort options", closeness: clampScore(overlap / Math.max(1, source.comfortOptions.length)) });
+      const overlap = source.verifiedFacts.comfort && product.verifiedFacts.comfort ? source.comfortOptions.filter((option) => product.comfortOptions.includes(option)).length : 0;
+      checks.push({ ok: overlap > 0, label: "comfort equivalence is not verified", closeness: clampScore(overlap / Math.max(1, source.comfortOptions.length)) });
     }
     const unmet = checks.filter((check) => !check.ok).map((check) => check.label);
-    const productCopy = [product.name, product.subtitle, product.description, ...product.styles, ...product.functions].join(" ").toLowerCase();
+    const productCopy = [product.name, product.subtitle, product.description].join(" ").toLowerCase();
     const keywordMatches = preferenceTokens.filter((token) => productCopy.includes(token));
     const requestReasons = [
       `same ${requestedCategory.replace(/-/g, " ")} category`,
-      ...((request.colorFamilies ?? []).filter((color) => product.colors.includes(color)).map((color) => `available in ${color}`)),
+      ...((request.colorFamilies ?? []).filter((color) => product.verifiedFacts.colors.includes(color)).map((color) => `verified in ${color}`)),
       ...((request.colorFamilies ?? []).flatMap((color) => {
-        if (product.colors.includes(color) || colourCloseness(color, product.colors) === 0) return [];
+        if (product.verifiedFacts.colors.includes(color) || colourCloseness(color, product.verifiedFacts.colors) === 0) return [];
         const group = relatedColourGroups.find((values) => values.includes(color));
-        const related = product.colors.find((available) => group?.includes(available));
+        const related = product.verifiedFacts.colors.find((available) => group?.includes(available));
         return related ? [`related recorded colour: ${related}`] : [];
       })),
-      ...(request.minSeatHeightMm ? [`${Math.round(product.seatHeightMm / 10)} cm recorded seat height`] : []),
-      ...(request.maxWidthMm ? [`${Math.round(product.widthMm / 10)} cm recorded width`] : []),
-      ...(request.numberOfSeats ? [`${product.numberOfSeats} recorded seats`] : []),
+      ...(request.numberOfSeats && product.numberOfSeatsVerified ? [`${product.numberOfSeats} verified seats`] : []),
       ...checks.filter((check) => check.ok && /requires|matches|preserve/.test(check.label)).map((check) => check.label.replace(/^requires /, "includes ")),
       ...keywordMatches.slice(0, 2).map((token) => `catalogue description matches “${token}”`)
     ];
     const benefits = [
-      ...((request.colorFamilies ?? []).filter((color) => product.colors.includes(color)).map((color) => `available in ${color}`)),
-      ...((request.styles ?? []).filter((style) => product.styles.some((productStyle) => productStyle.toLowerCase().includes(style))).map((style) => `${style} style`)),
-      ...(product.widthMm < source.widthMm ? [`${Math.round((source.widthMm - product.widthMm) / 10)} cm narrower`] : []),
-      ...(product.seatHeightMm > source.seatHeightMm ? [`${Math.round((product.seatHeightMm - source.seatHeightMm) / 10)} cm higher seat`] : []),
-      ...(product.indicativePriceCents < source.indicativePriceCents ? ["lower indicative concept price"] : [])
+      ...((request.colorFamilies ?? []).filter((color) => product.verifiedFacts.colors.includes(color)).map((color) => `verified in ${color}`)),
+      ...((request.styles ?? []).filter((style) => product.verifiedFacts.styles.some((productStyle) => productStyle.toLowerCase().includes(style))).map((style) => `${style} style`))
     ];
     const tradeOffs = [
-      ...(product.numberOfSeats < source.numberOfSeats ? [`one fewer seat than ${source.modelCode}`] : []),
-      ...(product.widthMm > source.widthMm ? ["requires more floor width"] : []),
+      ...(product.numberOfSeatsVerified && source.numberOfSeatsVerified && product.numberOfSeats < source.numberOfSeats ? [`one fewer seat than ${source.modelCode}`] : []),
       ...(!product.modular && source.modular ? ["less modular flexibility"] : [])
-    ];
-    const differences = [
-      `${product.widthMm} mm wide versus ${source.widthMm} mm`,
-      `${product.seatHeightMm} mm seat height versus ${source.seatHeightMm} mm`
     ];
     return {
       product,
       exact: unmet.length === 0,
       unmet,
-      score: checks.filter((check) => check.ok).length * 100 + checks.reduce((total, check) => total + check.closeness * 50, 0) - unmet.length * 25 + keywordMatches.length * 12 - Math.abs(product.widthMm - source.widthMm) / 1000,
-      differences,
+      score: checks.filter((check) => check.ok).length * 100 + checks.reduce((total, check) => total + check.closeness * 50, 0) - unmet.length * 25 + keywordMatches.length * 12 - Math.abs(product.widthMm - (request.targetWidthMm ?? source.widthMm)) / 1000,
+      differences: [],
       benefits: [...new Set([...benefits, ...requestReasons])],
       tradeOffs
     };
@@ -182,6 +202,9 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     ...(request.styles ?? []).map((value) => `${value} style`),
     ...(request.numberOfSeats ? [`${request.numberOfSeats} seats`] : []),
     ...(request.maxWidthMm ? [`maximum ${Math.round(request.maxWidthMm / 10)} cm wide`] : []),
+    ...(request.minWidthMm ? [`minimum ${Math.round(request.minWidthMm / 10)} cm wide`] : []),
+    ...(request.targetWidthMm ? [`around ${Math.round(request.targetWidthMm / 10)} cm wide`] : []),
+    ...(request.layoutShapes ?? []).map((value) => `${value} layout`),
     ...(request.minSeatHeightMm ? [`seat height at least ${Math.round(request.minSeatHeightMm / 10)} cm`] : []),
     ...(request.requiredFunctions ?? []).map((value) => `${value} function`),
     ...(request.materialTags ?? []).map((value) => `${value} material`),
@@ -285,10 +308,6 @@ function groundedProductIds(ids: string[]) {
 
 const productDiscoveryPattern = /\b(sofa|couch|armchair|chair|recliner|sectional|table|storage|cabinet|sideboard|wardrobe|bed|bathroom|outdoor|garden|carpet|rug|lamp|furniture)\b/;
 
-function supportsMaterialType(product: Product, type: "leather" | "fabric") {
-  return materials.some((material) => product.materials.includes(material.id) && material.type === type);
-}
-
 function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
   const text = question.toLowerCase();
   const filters = parseSearchQuery(question);
@@ -308,8 +327,8 @@ function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
     product.active &&
     (!namedProduct || product.id === namedProduct.id) &&
     productMatches(product, hardFilters) &&
-    (!requestedMaterial || supportsMaterialType(product, requestedMaterial)) &&
-    (!wantsEasyCare || product.materials.some((id) => materials.find((material) => material.id === id)?.easyCare))
+    (!requestedMaterial || product.verifiedFacts.materialTypes.includes(requestedMaterial)) &&
+    (!wantsEasyCare || product.verifiedFacts.easyCare)
   );
   const rankOrder = new Map(searchProductsRanked(question, products.length).map((match, index) => [match.product.id, index]));
   const exact = exactCandidates
@@ -355,14 +374,14 @@ function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
   const sameCategory = products.filter((product) => product.active && (!catalogueCategory || product.category === catalogueCategory));
   const alternatives = sameCategory.map((product) => {
     let score = rankOrder.has(product.id) ? Math.max(0, 30 - (rankOrder.get(product.id) ?? 30)) : 0;
-    if (filters.colors?.length && filters.colors.some((color) => product.colors.includes(color))) score += 20;
-    if (filters.maxWidthMm && product.widthMm <= filters.maxWidthMm) score += 15;
-    if (filters.modular && product.modular) score += 12;
-    if (filters.smallSpaceSuitable && product.smallSpaceSuitable) score += 12;
-    if (filters.relaxFunction && product.functions.includes("relax")) score += 12;
-    if (filters.electricFunctions && product.electricFunctions.length) score += 12;
-    if (requestedMaterial && supportsMaterialType(product, requestedMaterial)) score += 10;
-    if (wantsEasyCare && product.materials.some((id) => materials.find((material) => material.id === id)?.easyCare)) score += 10;
+    if (filters.colors?.length && filters.colors.some((color) => product.verifiedFacts.colors.includes(color))) score += 20;
+    if (filters.maxWidthMm && product.verifiedFacts.dimensions && product.widthMm <= filters.maxWidthMm) score += 15;
+    if (filters.modular && product.verifiedFacts.modular && product.modular) score += 12;
+    if (filters.smallSpaceSuitable && product.verifiedFacts.smallSpaceSuitable && product.smallSpaceSuitable) score += 12;
+    if (filters.relaxFunction && product.verifiedFacts.functions.includes("relax")) score += 12;
+    if (filters.electricFunctions && product.verifiedFacts.functions.includes("electric")) score += 12;
+    if (requestedMaterial && product.verifiedFacts.materialTypes.includes(requestedMaterial)) score += 10;
+    if (wantsEasyCare && product.verifiedFacts.easyCare) score += 10;
     return { product, score };
   }).sort((left, right) => right.score - left.score || left.product.modelCode.localeCompare(right.product.modelCode)).slice(0, 4).map(({ product }) => product);
   return advisorAnswerSchema.parse({
@@ -508,22 +527,21 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
       suggestedQuestions: ["Which is most compact?", "Find a higher-seat alternative"]
     });
   }
-  if (current && /seat|dimension|width|depth|height|price|cost|colou?r|material|electric|relax|modular|function/.test(text) && !/\b(i want|i need|show me|find|search|looking for|recommend)\b/.test(text)) {
-    const recordedMaterials = materials.filter((material) => current.materials.includes(material.id));
-    const facts = /price|cost/.test(text)
-      ? `No confirmed price for ${current.modelCode} is available in the connected catalogue data.`
-      : /colou?r/.test(text)
-        ? `${current.modelCode} has these recorded colour families: ${current.colors.join(", ") || "none recorded"}.`
-        : /material/.test(text)
-          ? `${current.modelCode} has these validated material options: ${recordedMaterials.map((material) => material.name).join(", ") || "none recorded"}.`
-          : /electric|relax|function/.test(text)
-            ? `${current.modelCode} has these recorded functions: ${[...current.functions, ...current.electricFunctions].join(", ") || "none recorded"}.`
-            : `${current.modelCode} is recorded at ${current.widthMm / 10} cm wide, ${current.depthMm / 10} cm deep and ${current.heightMm / 10} cm high, with a ${current.seatHeightMm / 10} cm seat height. ${current.modular ? "It is marked modular." : "It is not marked modular."}`;
+  if (current && /seat|dimension|width|depth|height|colou?r|material|electric|relax|modular|function/.test(text) && !/\b(i want|i need|show me|find|search|looking for|recommend)\b/.test(text)) {
+    const facts = /colou?r/.test(text)
+      ? `${current.modelCode} has these verified colour families: ${current.verifiedFacts.colors.join(", ") || "none in the connected data"}.`
+      : /material/.test(text)
+        ? `${current.modelCode} has these verified material types: ${current.verifiedFacts.materialTypes.join(", ") || "none in the connected data"}.`
+        : /electric|relax|function/.test(text)
+          ? `${current.modelCode} has these verified functions: ${current.verifiedFacts.functions.join(", ") || "none in the connected data"}.`
+          : current.verifiedFacts.dimensions
+            ? `${current.modelCode} has verified dimensions of ${current.widthMm / 10} cm wide, ${current.depthMm / 10} cm deep and ${current.heightMm / 10} cm high.${current.verifiedFacts.seatHeight ? ` Its verified seat height is ${current.seatHeightMm / 10} cm.` : " Seat height is configuration dependent."}`
+            : `Dimensions and seat geometry for ${current.modelCode} are configuration dependent in the connected data.`;
     return advisorAnswerSchema.parse({
-      answer: `${facts} Final pricing, availability and technical confirmation are provided by the selected Musterring retailer.`,
+      answer: `${facts} Availability and technical confirmation are provided by the selected Musterring retailer.`,
       answerType: "fact", productIds: [current.id], materialIds: [], sources: ["Musterring product catalogue"],
       proposedAction: /electric|relax|configur/.test(text) ? { type: "CONFIGURE_PRODUCT", label: `Validate options for ${current.modelCode}`, parameters: { slug: current.slug }, requiresConfirmation: false } : null,
-      suggestedQuestions: ["Find a better match", "Explain compatible materials"]
+      suggestedQuestions: ["Discover more like this", "Explain compatible materials"]
     });
   }
   const discovery = productDiscoveryAnswer(question);

@@ -7,9 +7,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { materials } from "@/lib/data";
 import { storage } from "@/lib/persistence";
 import { productImages } from "@/lib/musterring-assets";
-import type { Category, Product } from "@/lib/types";
+import { categoryDetails } from "@/lib/catalog-taxonomy";
+import { catalogueCategories, type Category, type Product } from "@/lib/types";
 
-type MatchCategory = Extract<Category, "sofa" | "armchair" | "storage">;
+type MatchCategory = Category;
 type VisualResult = { product: Product; score: number; explanation: string; differences: string };
 
 function matchLabel(score: number) {
@@ -107,9 +108,13 @@ export function VisualSearchClient() {
   const [consent, setConsent] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [aiMode, setAiMode] = useState("");
+  const [noMatchReason, setNoMatchReason] = useState("");
+  const [dropActive, setDropActive] = useState(false);
   const visibleResults = useMemo(
     () => results.filter(({ product }) =>
-      product.category === category &&
+      (product.category === category ||
+        ((category === "sofa" || category === "sectional") &&
+          (product.category === "sofa" || product.category === "sectional"))) &&
       (!color || product.colors.includes(color)) &&
       (!materialId || product.materials.includes(materialId)) &&
       (!style || product.styles.includes(style))
@@ -139,12 +144,14 @@ export function VisualSearchClient() {
     setStatus("idle");
     setResults([]);
     setAnalysis("");
+    setNoMatchReason("");
   };
   const analyzeSelectedArea = useCallback(async () => {
     if (!preview || !selectedFile || !consent || analysisRequestRef.current) return;
     analysisRequestRef.current = true;
     setStatus("analyzing");
     setError("");
+    setNoMatchReason("");
     try {
       const croppedFile = crop.size === 100 && crop.x === 0 && crop.y === 0
         ? selectedFile
@@ -157,17 +164,18 @@ export function VisualSearchClient() {
       form.append("preferredCategory", category);
       form.append("observedColors", JSON.stringify(observedColors));
       const response = await fetch("/api/ai/image", { method: "POST", body: form });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload?.error);
+      const payload = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(payload?.error ?? "The selected area could not be analyzed.");
       const detectedCategory = payload.tags.category;
-      if (detectedCategory === "storage" || detectedCategory === "armchair" || detectedCategory === "sofa") setCategory(detectedCategory);
+      if (catalogueCategories.includes(detectedCategory as Category)) setCategory(detectedCategory as Category);
       setColor("");
       setMaterialId("");
       setStyle("");
       setAnalysis(`${detectedCategory ?? "furniture"} · ${payload.tags.colorFamilies.join(", ")} · ${payload.tags.silhouette}`);
-      setResults(payload.matches.map((match: { product: Product; label: string; reasons: string[]; differences: string[] }) => ({
+      setNoMatchReason(payload.noMatchReason ?? "");
+      setResults(payload.matches.map((match: { product: Product; score: number; label: string; reasons: string[]; differences: string[] }) => ({
         product: match.product,
-        score: match.label === "Exact Catalogue Image" ? 100 : match.label === "Excellent Visual Match" ? 90 : match.label === "Strong Match" ? 75 : match.label === "Similar Shape" ? 60 : match.label === "Similar Material" ? 45 : 25,
+        score: match.score,
         explanation: match.reasons.join(", "),
         differences: match.differences.join(", ")
       })));
@@ -197,6 +205,7 @@ export function VisualSearchClient() {
     setError("");
     setSelectedFile(null);
     setAiMode("");
+    setNoMatchReason("");
     if (inputRef.current) inputRef.current.value = "";
   };
 
@@ -208,7 +217,7 @@ export function VisualSearchClient() {
             <div>
               <p className="eyebrow">Visual intelligence</p>
               <h1 className="h2">Visual Match Results</h1>
-              <p className="lead">Upload a room or furniture photo. The browser analyzes its colour palette and proportions, then compares them with available Musterring products.</p>
+              <p className="lead">Upload a furniture or room photo, select the object, and compare its visible characteristics with available Musterring products.</p>
               <label className="chip"><input type="checkbox" checked={consent} onChange={(event) => {
                 setConsent(event.target.checked);
                 storage.recordConsent("photo-ai-processing", event.target.checked);
@@ -230,10 +239,22 @@ export function VisualSearchClient() {
           {error ? <p className="form-error" role="alert">{error}</p> : null}
 
           {!preview ? (
-            <button className="stitch-visual-dropzone" type="button" onClick={() => inputRef.current?.click()}>
+            <button
+              className={`stitch-visual-dropzone ${dropActive ? "is-dragging" : ""}`}
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              onDragEnter={(event) => { event.preventDefault(); setDropActive(true); }}
+              onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = "copy"; setDropActive(true); }}
+              onDragLeave={() => setDropActive(false)}
+              onDrop={(event) => {
+                event.preventDefault();
+                setDropActive(false);
+                void processFile(event.dataTransfer.files?.[0]);
+              }}
+            >
               <Camera size={56} />
               <strong>Search with an image</strong>
-              <span>Choose a JPG, PNG or WebP photo</span>
+              <span>{dropActive ? "Drop the image to continue" : "Choose or drag a JPG, PNG or WebP photo"}</span>
             </button>
           ) : (
             <div className="stitch-visual-stage">
@@ -267,7 +288,7 @@ export function VisualSearchClient() {
                 ) : status === "error" ? (
                   <div className="stitch-visual-loading"><X /><p>Visual analysis could not be completed. Try the selected area again.</p></div>
                 ) : status === "ready" && !primary ? (
-                  <div className="stitch-visual-loading"><Sparkles /><p>No products match the active refinements. Remove a filter or choose another category.</p></div>
+                  <div className="stitch-visual-loading"><Sparkles /><p>{noMatchReason || "No products match the active refinements. Remove a filter or choose another category."}</p></div>
                 ) : primary ? (
                   <article className="stitch-visual-primary">
                     <div className="stitch-match-badge">{matchLabel(primary.score)}</div>
@@ -278,9 +299,7 @@ export function VisualSearchClient() {
                       <p><strong>{primary.score === 100 ? "Why it is exact:" : "Why it is similar:"}</strong> {primary.explanation}.</p>
                       {primary.score < 100 ? <p><strong>Why it is not an exact match:</strong> {primary.differences}. The recommendation is catalogue-grounded, but model identity cannot be confirmed from visual similarity alone.</p> : null}
                       <div className="chips">
-                        <Link className="button primary" href={primary.product.category === "storage" ? `/furniture/${primary.product.slug}` : `/configurator/${primary.product.slug}`}>
-                          {primary.product.category === "storage" ? "View Product" : "Configure Piece"}
-                        </Link>
+                        <Link className="button primary" href={`/furniture/${primary.product.slug}`}>View Product</Link>
                         <Link className="button ghost" href="/handover">Book Consultation</Link>
                         <button className="button ghost" onClick={() => {
                           storage.toggleProduct(primary.product.id);
@@ -294,10 +313,10 @@ export function VisualSearchClient() {
                 )}
                 <div className="stitch-visual-refine">
                   <p className="eyebrow">Refine results</p>
-                  {(["storage", "sofa", "armchair"] as const).map((item) => (
+                  {catalogueCategories.map((item) => (
                     <button className={category === item ? "is-active" : ""} key={item} onClick={() => setCategory(item)}>
                       {category === item ? <Check size={14} /> : null}
-                      {item === "storage" ? "Living walls" : `${item}s`}
+                      {categoryDetails[item].label}
                     </button>
                   ))}
                   <label>Color<select value={color} onChange={(event) => setColor(event.target.value)}><option value="">Any color</option>{[...new Set(results.flatMap(({ product }) => product.colors))].map((item) => <option key={item}>{item}</option>)}</select></label>

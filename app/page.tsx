@@ -18,7 +18,7 @@ const quickStarts = [
   {
     number: "01",
     icon: Search,
-    title: "Find furniture",
+    title: "Intelligent Search",
     text: "Search by product, style or size and compare suitable models.",
     href: "/search",
     action: "Start search"
