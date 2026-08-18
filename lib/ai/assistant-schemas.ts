@@ -107,7 +107,11 @@ export const conversationContextSchema = z.object({
   selectedConfigurationId: z.string().nullable().optional(),
   selectedMaterialIds: z.array(z.string()).max(20).default([]),
   currentFilters: z.record(z.unknown()).default({}),
-  approvedPreferences: z.record(z.unknown()).default({})
+  approvedPreferences: z.record(z.unknown()).default({}),
+  recentMessages: z.array(z.object({
+    role: z.enum(["customer", "advisor"]),
+    text: z.string().trim().min(1).max(3000)
+  })).max(8).optional()
 });
 export type ConversationContext = z.infer<typeof conversationContextSchema>;
 

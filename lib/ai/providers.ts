@@ -30,6 +30,11 @@ import { materials, products } from "../data";
 
 export type ProviderResult<T> = { data: T; provider: "openai" | "demo"; fallback: boolean };
 
+const advisorNarrativeSchema = z.object({
+  answer: z.string().trim().min(1).max(3000),
+  suggestedQuestions: z.array(z.string().trim().min(1).max(180)).max(4)
+});
+
 export interface AIProvider {
   readonly name: "openai" | "demo";
   parseSearchIntent(query: string): Promise<SearchIntent>;
@@ -217,6 +222,7 @@ export class OpenAIProvider implements AIProvider {
     const response = await this.client.responses.parse({
       model: image ? this.imageModel : this.model,
       input,
+      store: false,
       text: { format: zodTextFormat(schema, name) }
     });
     return schema.parse(response.output_parsed);
@@ -297,25 +303,34 @@ export class OpenAIProvider implements AIProvider {
 
   async answerProductQuestion(input: { question: string; context: ConversationContext }) {
     const grounded = answerGroundedQuestion(input.question, input.context);
-    if (grounded.answerType !== "missing-data" || grounded.productIds.length || grounded.sources.length) return grounded;
-    const candidateIds = [...new Set([...(input.context.referencedProductIds ?? []), ...(input.context.currentProductId ? [input.context.currentProductId] : [])])];
-    const facts = products.filter((product) => candidateIds.includes(product.id)).map((product) => ({
+    const answerProducts = products.filter((product) => grounded.productIds.includes(product.id)).map((product) => ({
       id: product.id, modelCode: product.modelCode, name: product.name, category: product.category,
       widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm,
       seatHeightMm: product.seatHeightMm, seatDepthMm: product.seatDepthMm, numberOfSeats: product.numberOfSeats,
       colors: product.colors, materials: product.materials, styles: product.styles,
       functions: product.functions, electricFunctions: product.electricFunctions, modular: product.modular, demoData: product.demoData
     }));
-    const result = await this.parse(advisorAnswerSchema, "product_advisor_answer",
-      "Answer only from supplied Musterring facts and context. Unknown information must be stated as unavailable. Propose but never execute actions.",
-      [{ role: "user", content: `Question: ${input.question}\nContext: ${JSON.stringify(input.context)}\nFacts: ${JSON.stringify(facts)}` }]);
-    const validProducts = new Set(products.map((product) => product.id));
-    const validMaterials = new Set(materials.map((material) => material.id));
-    return advisorAnswerSchema.parse({
-      ...result,
-      productIds: result.productIds.filter((id) => validProducts.has(id)),
-      materialIds: result.materialIds.filter((id) => validMaterials.has(id))
-    });
+    const answerMaterials = materials.filter((material) => grounded.materialIds.includes(material.id)).map((material) => ({
+      id: material.id, name: material.name, type: material.type, colorFamily: material.colorFamily,
+      durability: material.durability, easyCare: material.easyCare, petFriendly: material.petFriendly,
+      familyFriendly: material.familyFriendly, lightSensitivity: material.lightSensitivity
+    }));
+    const broadDiscovery = grounded.answerType === "products" && /\b(i want|i need|show me|find|looking for|recommend)\b/i.test(input.question) &&
+      !/\b\d{2,3}\s*(?:cm|centimet)|\b(?:fabric|leather|modular|relax|electric|pet|dog|cat|child|family)\b/i.test(input.question);
+    const decisionForNarrative = {
+      answerType: grounded.answerType,
+      productIds: grounded.productIds,
+      materialIds: grounded.materialIds,
+      sources: grounded.sources,
+      proposedAction: grounded.proposedAction
+    };
+    const replyBrief = broadDiscovery
+      ? "This is a broad discovery request. Begin naturally with 'Absolutely' or an equivalent in the customer's language. Ask only for their maximum sofa width as the next essential detail. For example: 'Absolutely — what maximum width can the sofa have in your room?' Do not mention how many matches exist, catalogue matches, filters, data, generic recommendations, or product cards."
+      : "Give the most useful next response for this specific request.";
+    const narrative = await this.parse(advisorNarrativeSchema, "product_advisor_narrative",
+      "You are Ask Musterring, an exceptional interior advisor: warm, perceptive and concise. Write a natural reply in the customer's language, not a system explanation. The authoritative decision is binding: do not change its product IDs, material IDs, answer type, source boundaries or proposed action. Use only supplied facts. Never invent products, dimensions, prices, availability, compatibility or physical fit. Do not claim fit; direct customers to the fit check when appropriate. Do not execute or imply that an action has executed. For a broad request such as 'I want a sofa', do not say 'I found catalogue matches', do not mention filters or data, and do not list the product cards; they are shown separately. Instead, acknowledge the goal warmly, then ask one clear, human question that will make the next recommendation more useful. Prefer the customer's maximum width as the first question, unless they have already supplied it. Keep the reply under 70 words. Suggested questions must be short, natural answers the customer can choose; offer up to four. If the decision says information is unavailable, say so clearly and offer only supported next steps.",
+      [{ role: "user", content: `Customer question: ${input.question}\nConversation context: ${JSON.stringify(input.context)}\nResponse brief: ${replyBrief}\nAuthoritative decision: ${JSON.stringify(decisionForNarrative)}\nValidated product facts: ${JSON.stringify(answerProducts)}\nValidated material facts: ${JSON.stringify(answerMaterials)}` }]);
+    return advisorAnswerSchema.parse({ ...grounded, ...narrative });
   }
 
   async recommendProductsFromConversation(input: { conversationSummary: string; candidateProductIds: string[] }) {
@@ -353,7 +368,7 @@ export class OpenAIProvider implements AIProvider {
 
 export function configuredProvider(): AIProvider {
   const enabled = process.env.AI_ENABLED !== "false";
-  const wantsOpenAI = (process.env.AI_PROVIDER || "demo").toLowerCase() === "openai";
+  const wantsOpenAI = (process.env.AI_PROVIDER || "openai").toLowerCase() === "openai";
   return enabled && wantsOpenAI && process.env.OPENAI_API_KEY
     ? new OpenAIProvider(process.env.OPENAI_API_KEY)
     : new LocalDemoAIProvider();
