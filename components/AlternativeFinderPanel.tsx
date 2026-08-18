@@ -60,7 +60,9 @@ export function AlternativeFinderPanel() {
         const product = products.find((item) => item.id === match.productId);
         if (!product) return null;
         const presentation = productImageForColors(product.id, result?.requestedColorFamilies ?? []);
-        const inlineBenefits = match.benefits
+        const benefits = [...new Set(match.benefits)];
+        const unmetRequirements = [...new Set(match.unmetRequirements)];
+        const inlineBenefits = benefits
           .filter((benefit) => !/^same\s/i.test(benefit) && !/^catalogue description matches/i.test(benefit))
           .slice(0, 2);
         return <article key={product.id} className={exact ? "is-exact" : "is-alternative"}>
@@ -73,8 +75,8 @@ export function AlternativeFinderPanel() {
               <div><small>Height</small><strong>{cm(product.heightMm)}</strong></div>
             </div> : null}
             {!exact ? <div className="alternative-match-details">
-              <div className="is-match"><strong>Why it’s relevant</strong><ul>{match.benefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul></div>
-              {match.unmetRequirements.length ? <div className="alternative-unmet"><strong>Differs from request</strong><ul>{match.unmetRequirements.map((requirement) => <li key={requirement}>{requirement}</li>)}</ul></div> : null}
+              <div className="is-match"><strong>Why it’s relevant</strong><ul>{benefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul></div>
+              {unmetRequirements.length ? <div className="alternative-unmet"><strong>Differs from request</strong><ul>{unmetRequirements.map((requirement) => <li key={requirement}>{requirement}</li>)}</ul></div> : null}
             </div> : null}
             <div className="assistant-card-actions">
               <button className="alternative-save" aria-label="Save to project" onClick={() => { if (!storage.savedProducts().includes(product.id)) storage.toggleProduct(product.id); storage.track({ name: "product_alternative_selected", productId: product.id }); }}><Save size={14} /> Save</button>
