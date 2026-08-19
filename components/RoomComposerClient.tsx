@@ -7,6 +7,7 @@ import { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent,
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
+import { analyzePlacement, type Door, type RoomItem } from "@/lib/fit-simulator";
 import type { RoomAnalysis } from "@/lib/ai/schemas";
 import type { Project } from "@/lib/types";
 
@@ -107,6 +108,10 @@ type SavedScene = {
   items?: SceneItem[];
 };
 
+type Wall = Door["wall"];
+type MeasuredOpening = { id: string; wall: Wall; positionCm: number; widthCm: number; heightCm: number; sillHeightCm?: number; hinge?: Door["hinge"]; opens?: Door["opens"] };
+type FixedFeature = { id: string; kind: "radiator" | "built-in" | "column" | "other"; name: string; xCm: number; yCm: number; widthCm: number; depthCm: number; heightCm: number };
+
 export function RoomComposerClient({ upload = false, openPresentationScene = false }: { upload?: boolean; openPresentationScene?: boolean }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const roomInputRef = useRef<HTMLInputElement>(null);
@@ -147,6 +152,13 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [generationError, setGenerationError] = useState("");
   const [showGenerated, setShowGenerated] = useState(false);
   const [comparisonPosition, setComparisonPosition] = useState(50);
+  const [fitOpen, setFitOpen] = useState(false);
+  const [measuredRoom, setMeasuredRoom] = useState({ widthCm: 0, lengthCm: 0, heightCm: 0 });
+  const [measuredDoors, setMeasuredDoors] = useState<MeasuredOpening[]>([]);
+  const [measuredWindows, setMeasuredWindows] = useState<MeasuredOpening[]>([]);
+  const [fixedFeatures, setFixedFeatures] = useState<FixedFeature[]>([]);
+  const [featuresConfirmed, setFeaturesConfirmed] = useState(false);
+  const [configurationsConfirmed, setConfigurationsConfirmed] = useState(false);
   useEffect(() => {
     storage.track({ name: "room_composer_started" });
     const scenes = storage.roomScenes() as SavedScene[];
@@ -178,6 +190,46 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
       : 0);
   const visibleCatalog = catalog.slice(0, visibleCount);
   const selectedBackground = roomBackgrounds.find((background) => background.id === roomBackgroundId) ?? roomBackgrounds[0];
+  const fitAssessment = useMemo(() => {
+    const selected = items.map((item) => ({ item, product: activeProducts.find((product) => product.id === item.productId) })).filter((entry) => entry.product);
+    const missing: string[] = [];
+    if (!measuredRoom.widthCm || !measuredRoom.lengthCm || !measuredRoom.heightCm) missing.push("Enter the room width, length, and height.");
+    if (!featuresConfirmed) missing.push("Confirm that every door, window, radiator, built-in, column, and other fixed obstruction is included.");
+    if (!configurationsConfirmed) missing.push("Confirm the exact selected product configurations with their verified dimensions.");
+    const unverified = selected.filter(({ product }) => !product!.verifiedFacts.dimensions);
+    if (unverified.length) missing.push(`Verified configuration dimensions are unavailable for ${unverified.map(({ product }) => product!.modelCode).join(", ")}.`);
+    if (!selected.length) missing.push("Choose at least one product.");
+    if (missing.length) return { status: "unverified" as const, missing, issues: [] as string[], severity: undefined };
+
+    const widthMm = measuredRoom.widthCm * 10;
+    const lengthMm = measuredRoom.lengthCm * 10;
+    const doors: Door[] = measuredDoors.map((door) => ({ id: door.id, wall: door.wall, position: door.positionCm * 10, width: door.widthCm * 10, height: door.heightCm * 10, hinge: door.hinge ?? "left", opens: door.opens ?? "inward" }));
+    const obstacles: RoomItem[] = fixedFeatures.map((feature) => ({ id: feature.id, kind: feature.kind === "built-in" ? "obstacle" : feature.kind === "other" ? "obstacle" : feature.kind, name: feature.name || feature.kind, x: feature.xCm * 10, y: feature.yCm * 10, width: feature.widthCm * 10, depth: feature.depthCm * 10, locked: true }));
+    const issues: { message: string; severity: "tight" | "conflict" }[] = [];
+    selected.forEach(({ item, product }, index) => {
+      const placement = { x: item.x / 100 * widthMm, y: item.y / 100 * lengthMm - product!.depthMm / 2, rotation: item.rotation };
+      const otherProducts: RoomItem[] = selected.filter((_, otherIndex) => otherIndex !== index).map(({ item: otherItem, product: otherProduct }) => {
+        const quarterTurn = Math.abs(otherItem.rotation % 180) > 45 && Math.abs(otherItem.rotation % 180) < 135;
+        const otherWidth = quarterTurn ? otherProduct!.depthMm : otherProduct!.widthMm;
+        const otherDepth = quarterTurn ? otherProduct!.widthMm : otherProduct!.depthMm;
+        return { id: otherItem.id, kind: "furniture", name: otherProduct!.modelCode, x: otherItem.x / 100 * widthMm - otherWidth / 2, y: otherItem.y / 100 * lengthMm - otherDepth, width: otherWidth, depth: otherDepth };
+      });
+      const lowWindows: RoomItem[] = measuredWindows.filter((window) => product!.heightMm > (window.sillHeightCm ?? 0) * 10).map((window) => {
+        const position = window.positionCm * 10;
+        const span = window.widthCm * 10;
+        if (window.wall === "north") return { id: window.id, kind: "restricted", name: "low window", x: position, y: 0, width: span, depth: 120 };
+        if (window.wall === "south") return { id: window.id, kind: "restricted", name: "low window", x: position, y: lengthMm - 120, width: span, depth: 120 };
+        if (window.wall === "west") return { id: window.id, kind: "restricted", name: "low window", x: 0, y: position, width: 120, depth: span };
+        return { id: window.id, kind: "restricted", name: "low window", x: widthMm - 120, y: position, width: 120, depth: span };
+      });
+      if (product!.heightMm > measuredRoom.heightCm * 10) issues.push({ message: `${product!.modelCode} is taller than the measured room.`, severity: "conflict" });
+      const analysis = analyzePlacement(widthMm, lengthMm, product!, placement, [...obstacles, ...otherProducts, ...lowWindows], doors);
+      analysis.issues.forEach((issue) => issues.push({ message: `${product!.modelCode}: ${issue.message}`, severity: issue.severity }));
+    });
+    const uniqueIssues = [...new Map(issues.map((issue) => [issue.message, issue])).values()];
+    const severity = uniqueIssues.some((issue) => issue.severity === "conflict") ? "conflict" as const : uniqueIssues.length ? "tight" as const : undefined;
+    return { status: severity ?? "safe" as const, missing, issues: uniqueIssues.map((issue) => issue.message), severity };
+  }, [activeProducts, configurationsConfirmed, featuresConfirmed, fixedFeatures, items, measuredDoors, measuredRoom, measuredWindows]);
   const sceneSignature = useMemo(() => JSON.stringify({
     room: roomPhoto ? [roomPhoto.name, roomPhoto.size, roomPhoto.lastModified] : null,
     sceneScale,
@@ -666,6 +718,56 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 </div>
               ) : !upload ? <div className="stitch-composer-properties is-empty"><strong>Select a product</strong><span>Choose an item in the room to view its dimensions, material, color, and available views.</span></div> : null}
             </div>
+
+            {upload ? <section className="stitch-fit-panel" aria-labelledby="room-fit-heading">
+              <button type="button" className="stitch-fit-panel__toggle" aria-expanded={fitOpen} onClick={() => setFitOpen((value) => !value)}>
+                <span><small>Measured planning</small><strong id="room-fit-heading">Will these products fit?</strong></span>
+                <span className={`stitch-fit-status is-${fitAssessment.status}`}>{fitAssessment.status === "safe" ? "Likely fits" : fitAssessment.status === "tight" ? "Tight clearance" : fitAssessment.status === "conflict" ? "Does not fit here" : "Measurements needed"}</span>
+              </button>
+              {fitOpen ? <div className="stitch-fit-panel__body">
+                <p className="stitch-fit-intro">The result is calculated from measurements, not guessed from the photograph. Enter every fixed feature and verify the exact product configuration.</p>
+                <div className="stitch-fit-grid">
+                  <fieldset><legend>Room</legend><div className="stitch-fit-fields">
+                    <label>Width (cm)<input type="number" min="1" value={measuredRoom.widthCm || ""} onChange={(event) => setMeasuredRoom((room) => ({ ...room, widthCm: Number(event.target.value) }))} /></label>
+                    <label>Length (cm)<input type="number" min="1" value={measuredRoom.lengthCm || ""} onChange={(event) => setMeasuredRoom((room) => ({ ...room, lengthCm: Number(event.target.value) }))} /></label>
+                    <label>Height (cm)<input type="number" min="1" value={measuredRoom.heightCm || ""} onChange={(event) => setMeasuredRoom((room) => ({ ...room, heightCm: Number(event.target.value) }))} /></label>
+                  </div></fieldset>
+
+                  <fieldset><legend>Doors</legend>{measuredDoors.map((door) => <div className="stitch-fit-row" key={door.id}>
+                    <select aria-label="Door wall" value={door.wall} onChange={(event) => setMeasuredDoors((rows) => rows.map((row) => row.id === door.id ? { ...row, wall: event.target.value as Wall } : row))}><option value="north">North wall</option><option value="east">East wall</option><option value="south">South wall</option><option value="west">West wall</option></select>
+                    <label>From corner (cm)<input type="number" value={door.positionCm || ""} onChange={(event) => setMeasuredDoors((rows) => rows.map((row) => row.id === door.id ? { ...row, positionCm: Number(event.target.value) } : row))} /></label>
+                    <label>Width (cm)<input type="number" value={door.widthCm || ""} onChange={(event) => setMeasuredDoors((rows) => rows.map((row) => row.id === door.id ? { ...row, widthCm: Number(event.target.value) } : row))} /></label>
+                    <label>Height (cm)<input type="number" value={door.heightCm || ""} onChange={(event) => setMeasuredDoors((rows) => rows.map((row) => row.id === door.id ? { ...row, heightCm: Number(event.target.value) } : row))} /></label>
+                    <select aria-label="Door hinge side" value={door.hinge ?? "left"} onChange={(event) => setMeasuredDoors((rows) => rows.map((row) => row.id === door.id ? { ...row, hinge: event.target.value as Door["hinge"] } : row))}><option value="left">Left hinge</option><option value="right">Right hinge</option></select>
+                    <select aria-label="Door opening direction" value={door.opens ?? "inward"} onChange={(event) => setMeasuredDoors((rows) => rows.map((row) => row.id === door.id ? { ...row, opens: event.target.value as Door["opens"] } : row))}><option value="inward">Opens inward</option><option value="outward">Opens outward</option></select>
+                    <button type="button" aria-label="Remove door" onClick={() => setMeasuredDoors((rows) => rows.filter((row) => row.id !== door.id))}><Trash2 size={15} /></button>
+                  </div>)}<button type="button" className="stitch-fit-add" onClick={() => setMeasuredDoors((rows) => [...rows, { id: `door-${Date.now()}`, wall: "north", positionCm: 0, widthCm: 90, heightCm: 210, hinge: "left", opens: "inward" }])}><Plus size={15} /> Add door</button></fieldset>
+
+                  <fieldset><legend>Windows</legend>{measuredWindows.map((window) => <div className="stitch-fit-row" key={window.id}>
+                    <select aria-label="Window wall" value={window.wall} onChange={(event) => setMeasuredWindows((rows) => rows.map((row) => row.id === window.id ? { ...row, wall: event.target.value as Wall } : row))}><option value="north">North wall</option><option value="east">East wall</option><option value="south">South wall</option><option value="west">West wall</option></select>
+                    <label>From corner (cm)<input type="number" value={window.positionCm || ""} onChange={(event) => setMeasuredWindows((rows) => rows.map((row) => row.id === window.id ? { ...row, positionCm: Number(event.target.value) } : row))} /></label>
+                    <label>Width (cm)<input type="number" value={window.widthCm || ""} onChange={(event) => setMeasuredWindows((rows) => rows.map((row) => row.id === window.id ? { ...row, widthCm: Number(event.target.value) } : row))} /></label>
+                    <label>Height (cm)<input type="number" value={window.heightCm || ""} onChange={(event) => setMeasuredWindows((rows) => rows.map((row) => row.id === window.id ? { ...row, heightCm: Number(event.target.value) } : row))} /></label>
+                    <label>Sill height (cm)<input type="number" value={window.sillHeightCm || ""} onChange={(event) => setMeasuredWindows((rows) => rows.map((row) => row.id === window.id ? { ...row, sillHeightCm: Number(event.target.value) } : row))} /></label>
+                    <button type="button" aria-label="Remove window" onClick={() => setMeasuredWindows((rows) => rows.filter((row) => row.id !== window.id))}><Trash2 size={15} /></button>
+                  </div>)}<button type="button" className="stitch-fit-add" onClick={() => setMeasuredWindows((rows) => [...rows, { id: `window-${Date.now()}`, wall: "north", positionCm: 0, widthCm: 120, heightCm: 120, sillHeightCm: 90 }])}><Plus size={15} /> Add window</button></fieldset>
+
+                  <fieldset><legend>Radiators, built-ins and fixed objects</legend>{fixedFeatures.map((feature) => <div className="stitch-fit-row is-feature" key={feature.id}>
+                    <select aria-label="Fixed feature type" value={feature.kind} onChange={(event) => setFixedFeatures((rows) => rows.map((row) => row.id === feature.id ? { ...row, kind: event.target.value as FixedFeature["kind"], name: event.target.value } : row))}><option value="radiator">Radiator</option><option value="built-in">Built-in</option><option value="column">Column</option><option value="other">Other</option></select>
+                    {(["xCm", "yCm", "widthCm", "depthCm", "heightCm"] as const).map((key) => <label key={key}>{key === "xCm" ? "X from left" : key === "yCm" ? "Y from top" : key === "widthCm" ? "Width" : key === "depthCm" ? "Depth" : "Height"} (cm)<input type="number" value={feature[key] || ""} onChange={(event) => setFixedFeatures((rows) => rows.map((row) => row.id === feature.id ? { ...row, [key]: Number(event.target.value) } : row))} /></label>)}
+                    <button type="button" aria-label="Remove fixed feature" onClick={() => setFixedFeatures((rows) => rows.filter((row) => row.id !== feature.id))}><Trash2 size={15} /></button>
+                  </div>)}<button type="button" className="stitch-fit-add" onClick={() => setFixedFeatures((rows) => [...rows, { id: `feature-${Date.now()}`, kind: "radiator", name: "radiator", xCm: 0, yCm: 0, widthCm: 100, depthCm: 15, heightCm: 60 }])}><Plus size={15} /> Add fixed object</button></fieldset>
+                </div>
+
+                <div className="stitch-fit-products"><strong>Selected configuration dimensions</strong>{items.length ? items.map((item) => { const product = activeProducts.find((entry) => entry.id === item.productId); return product ? <div key={item.id}><span>{product.modelCode}</span><span>{product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} × ${Math.round(product.depthMm / 10)} × ${Math.round(product.heightMm / 10)} cm` : "Not verified — fit cannot be confirmed"}</span></div> : null; }) : <p>No products selected.</p>}</div>
+                <label className="stitch-fit-confirm"><input type="checkbox" checked={featuresConfirmed} onChange={(event) => setFeaturesConfirmed(event.target.checked)} /> I have added every door, window, radiator, built-in, column, and other fixed obstruction.</label>
+                <label className="stitch-fit-confirm"><input type="checkbox" checked={configurationsConfirmed} onChange={(event) => setConfigurationsConfirmed(event.target.checked)} /> These are the exact product configurations I intend to order; their displayed dimensions have been verified.</label>
+                <div className={`stitch-fit-result is-${fitAssessment.status}`} role="status"><strong>{fitAssessment.status === "safe" ? "Likely to fit in this measured layout" : fitAssessment.status === "tight" ? "The product fits, but clearance is tight" : fitAssessment.status === "conflict" ? "This product does not fit in the entered placement" : "Fit cannot be verified yet"}</strong>
+                  <ul>{(fitAssessment.status === "unverified" ? fitAssessment.missing : fitAssessment.issues.length ? fitAssessment.issues : ["No boundary, fixed-object, low-window, door-swing, or product-overlap conflicts were found in the entered layout."]).map((message) => <li key={message}>{message}</li>)}</ul>
+                  <small>This is a planning check, not installation confirmation. A Musterring retailer should confirm final configuration and site measurements.</small>
+                </div>
+              </div> : null}
+            </section> : null}
 
             <div className="stitch-composer-ai-panel" aria-busy={generationStatus === "loading"}>
               <div>
