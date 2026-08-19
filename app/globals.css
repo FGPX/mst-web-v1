@@ -1285,6 +1285,82 @@
   height: 100%;
   object-fit: cover;
 }
+
+.stitch-room-comparison {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+}
+
+.stitch-room-comparison-original {
+  z-index: 2;
+}
+
+.stitch-room-comparison-label {
+  position: absolute;
+  z-index: 4;
+  top: 16px;
+  border: 1px solid rgba(255, 255, 255, .72);
+  padding: 7px 10px;
+  background: rgba(20, 19, 17, .72);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  line-height: 1;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+
+.stitch-room-comparison-label.is-original { left: 16px; }
+.stitch-room-comparison-label.is-generated { right: 16px; }
+
+.stitch-room-comparison-divider {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .2), 0 0 18px rgba(0, 0, 0, .22);
+  pointer-events: none;
+  transform: translateX(-1px);
+}
+
+.stitch-room-comparison-divider i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #1d1d1a;
+  color: white;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, .3);
+  transform: translate(-50%, -50%);
+}
+
+.stitch-room-comparison-slider {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.stitch-room-comparison:focus-within .stitch-room-comparison-divider i {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
 .stitch-composer-feedback { margin: 0; min-height: 44px; display: flex; align-items: center; gap: 9px; border: 1px solid #9ca88f; border-bottom: 0; padding: 10px 14px; background: #eef1ea; color: #283020; font-size: 12px; font-weight: 700; }
 
 .stitch-composer-neutral-room { position: absolute; inset: 0; background: linear-gradient(180deg,#f5f3ee 0 61%,#d3cec5 61.2%,#ada69c 100%); }

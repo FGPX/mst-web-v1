@@ -146,6 +146,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [generationStatus, setGenerationStatus] = useState<"idle" | "loading" | "error">("idle");
   const [generationError, setGenerationError] = useState("");
   const [showGenerated, setShowGenerated] = useState(false);
+  const [comparisonPosition, setComparisonPosition] = useState(50);
   useEffect(() => {
     storage.track({ name: "room_composer_started" });
     const scenes = storage.roomScenes() as SavedScene[];
@@ -350,6 +351,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
 
     setGeneratedVisualization(payload.image);
     setGeneratedForSignature(signature);
+    setComparisonPosition(50);
     setGenerationStatus("idle");
     setShowBefore(false);
     setShowGenerated(true);
@@ -539,9 +541,31 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
             <div className="stitch-composer-stage-with-sidebar">
               <div ref={stageRef} className={`stitch-composer-stage ${grid ? "has-grid" : ""}`} tabIndex={0} aria-label="Room scene. Select a product and use the arrow keys to move it." onKeyDown={moveSelectedWithKeyboard}>
               {displayGenerated ? (
-                // Generated data URLs are returned directly by the server and cannot use the Next image optimizer.
-                // eslint-disable-next-line @next/next/no-img-element
-                <img className="stitch-composer-room" src={generatedVisualization} alt="AI-staged room visualization" />
+                <div className="stitch-room-comparison">
+                  {/* Generated data URLs and local blob URLs cannot use the Next image optimizer. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="stitch-composer-room" src={generatedVisualization} alt="AI-generated room" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    className="stitch-composer-room stitch-room-comparison-original"
+                    src={roomPreview}
+                    alt="Original uploaded room"
+                    style={{ clipPath: `inset(0 ${100 - comparisonPosition}% 0 0)` }}
+                  />
+                  <span className="stitch-room-comparison-label is-original">Original</span>
+                  <span className="stitch-room-comparison-label is-generated">Generated</span>
+                  <span className="stitch-room-comparison-divider" style={{ left: `${comparisonPosition}%` }} aria-hidden="true"><i><ChevronLeft size={16} /><ChevronRight size={16} /></i></span>
+                  <input
+                    className="stitch-room-comparison-slider"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={comparisonPosition}
+                    onChange={(event) => setComparisonPosition(Number(event.target.value))}
+                    onKeyDown={(event) => event.stopPropagation()}
+                    aria-label={`Compare original and generated room: ${comparisonPosition}% original`}
+                  />
+                </div>
               ) : roomPreview ? (
                 // Blob URLs are local room previews and cannot use the Next image optimizer.
                 // eslint-disable-next-line @next/next/no-img-element
