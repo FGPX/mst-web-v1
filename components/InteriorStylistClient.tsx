@@ -293,14 +293,14 @@ export default function InteriorStylistClient() {
           <label className="stylist-note-field"><span>{currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption) ? currentQuestion.noteLabel : "Something else? (optional)"}</span><textarea aria-label={currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption) ? currentQuestion.noteLabel : `Something else for ${currentQuestion.prompt}`} placeholder="Describe what you have in mind…" required={Boolean(currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption))} maxLength={240} rows={3} value={notes[currentQuestion.id] ?? ""} onChange={(event) => { setNotes((current) => ({ ...current, [currentQuestion.id]: event.target.value })); resetResult(); }} /></label>
         </fieldset> : null}
 
-        {isConfirmation && roomType ? <div className="stylist-ready"><span><Sparkles size={22} /></span><h3>Perfect — I have enough to start.</h3><p>I&apos;ll look for Musterring products that match your room, needs, space and design preferences.</p><div className="stylist-choice-summary stylist-adaptive-summary">
+        {isConfirmation && roomType ? <div className="stylist-ready"><span><Sparkles size={22} /></span><h3>Ready. Let&apos;s find what fits.</h3><div className="stylist-choice-summary stylist-adaptive-summary">
           <div><small>Area</small><strong>{roomLabel(roomType)}</strong></div>
           {questions.map((question) => <div key={question.id}><small>{question.prompt}</small><strong>{stylistAnswerLabel(roomType, question.id, answers[question.id])}{notes[question.id] ? ` · ${notes[question.id]}` : ""}</strong></div>)}
         </div></div> : null}
 
         <div className={`stylist-flow-actions${step === 0 ? " is-first-step" : ""}`}>
           {step > 0 ? <button type="button" className="stylist-back" disabled={status === "loading"} onClick={() => setStep((current) => Math.max(0, current - 1))}><ArrowLeft size={17} /> Back</button> : null}
-          {!isConfirmation ? <button type="button" className="stylist-continue" disabled={!canContinue} onClick={advance}>Continue <ArrowRight size={17} /></button> : <button className="stylist-submit" type="button" disabled={status === "loading"} onClick={() => void createSet()}>{status === "loading" ? <><LoaderCircle className="spin" size={20} /> Matching your preferences…</> : status === "error" ? <><RefreshCw size={19} /> Try again</> : <><Sparkles size={19} /> Create my recommendations</>}</button>}
+          {!isConfirmation ? <button type="button" className="stylist-continue" disabled={!canContinue} onClick={advance}>Continue <ArrowRight size={17} /></button> : <button className="stylist-submit" type="button" disabled={status === "loading"} onClick={() => void createSet()}>{status === "loading" ? <><LoaderCircle className="spin" size={20} /> Matching your preferences…</> : status === "error" ? <><RefreshCw size={19} /> Try again</> : <><Sparkles size={19} /> Find my matches</>}</button>}
         </div>
         {error ? <div className="stylist-error" role="alert"><strong>We could not create the recommendations.</strong><span>{error}</span></div> : null}
       </div>
