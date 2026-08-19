@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { catalogueCategories } from "../types";
+import { catalogueCategories, stylistRoomTypes } from "../types";
+import { validateStylistQuizInput } from "./stylist-quiz";
 
 const nullableString = z.string().nullable();
 const nullableNumber = z.number().int().nonnegative().nullable();
@@ -136,7 +137,7 @@ export const comparisonSummarySchema = z.object({
     facts: z.array(z.string().trim().min(1).max(220)).min(1).max(2)
   })).min(2).max(3),
   glance: z.array(z.string().trim().min(1).max(180)).min(1).max(2),
-  recommendation: z.string().trim().min(1).max(280)
+  recommendation: z.string().trim().min(1).max(600)
 });
 export type ComparisonSummary = z.infer<typeof comparisonSummarySchema>;
 
@@ -145,4 +146,72 @@ export const imageUploadSchema = z.object({
   size: z.number().int().positive().max(10 * 1024 * 1024),
   consent: z.literal(true)
 });
+
+export const stylistOptionsSchema = z.object({
+  roomType: z.enum(stylistRoomTypes),
+  answers: z.record(z.string().trim().min(1).max(80)).refine((value) => Object.keys(value).length <= 10),
+  notes: z.record(z.string().trim().max(240)).refine((value) => Object.keys(value).length <= 4),
+  selectedProductIds: z.array(z.string().trim().min(1).max(180)).max(20).refine((values) => new Set(values).size === values.length),
+  maxWidthMm: z.number().int().min(300).max(10_000).nullable(),
+  maxDepthMm: z.number().int().min(300).max(10_000).nullable()
+}).strict().superRefine((value, context) => {
+  if (!validateStylistQuizInput(value)) context.addIssue({ code: z.ZodIssueCode.custom, path: ["answers"], message: "Complete the supported questions for the selected room." });
+});
+
+export const stylistSlotIds = [
+  "living-seating", "living-table", "living-storage",
+  "bedroom-bed", "bedroom-wardrobe", "bedroom-series",
+  "dining-table", "dining-chair", "dining-storage",
+  "single-product", "hallway-wardrobe", "hallway-storage",
+  "kitchen-table", "kitchen-seating", "kitchen-storage",
+  "accessory-small", "accessory-carpet", "accessory-lamp",
+  "bathroom-series", "outdoor-set"
+] as const;
+
+export const stylistProviderResultSchema = z.object({
+  title: z.string().trim().min(1).max(120),
+  rationale: z.string().trim().min(1).max(600),
+  selections: z.array(z.object({
+    slotId: z.enum(stylistSlotIds),
+    productId: z.string().trim().min(1).max(180),
+    reason: z.string().trim().min(1).max(320),
+    alternatives: z.array(z.object({
+      productId: z.string().trim().min(1).max(180),
+      reason: z.string().trim().min(1).max(260)
+    })).max(5)
+  })).min(1).max(3)
+});
+
+export type StylistProviderResult = z.infer<typeof stylistProviderResultSchema>;
+
+export function stylistProviderResultSchemaForCandidates(constraints: Array<{
+  slotId: (typeof stylistSlotIds)[number];
+  candidateIds: string[];
+}>) {
+  if (constraints.length < 1 || constraints.length > 3 || constraints.some((constraint) => constraint.candidateIds.length < 1)) {
+    throw new Error("Every stylist slot requires at least one catalogue candidate.");
+  }
+  const variants = constraints.map((constraint) => {
+    const candidateIdSchema = z.enum(constraint.candidateIds as [string, ...string[]]);
+    const availableAlternatives = Math.max(0, constraint.candidateIds.length - 1);
+    const alternativeLimits = constraints.length === 1
+      ? { min: Math.min(2, availableAlternatives), max: Math.min(5, availableAlternatives) }
+      : { min: Math.min(1, availableAlternatives), max: Math.min(2, availableAlternatives) };
+    return z.object({
+      slotId: z.literal(constraint.slotId),
+      productId: candidateIdSchema,
+      reason: z.string().trim().min(1).max(320),
+      alternatives: z.array(z.object({
+        productId: candidateIdSchema,
+        reason: z.string().trim().min(1).max(260)
+      })).min(alternativeLimits.min).max(alternativeLimits.max)
+    });
+  });
+  const selectionVariant = variants.length === 1
+    ? variants[0]!
+    : z.union(variants as [typeof variants[number], typeof variants[number], ...Array<typeof variants[number]>]);
+  return stylistProviderResultSchema.extend({
+    selections: z.array(selectionVariant).length(constraints.length)
+  });
+}
 

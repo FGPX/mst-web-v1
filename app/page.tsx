@@ -25,6 +25,14 @@ const quickStarts = [
   },
   {
     number: "02",
+    icon: Sparkles,
+    title: "AI Interior Stylist",
+    text: "Answer a short room-specific questionnaire and receive focused Musterring catalogue recommendations.",
+    href: "/ai-stylist",
+    action: "Style your room"
+  },
+  {
+    number: "03",
     icon: Ruler,
     title: "Plan a room",
     text: "Arrange products in your room and check measurements step by step.",
@@ -32,7 +40,7 @@ const quickStarts = [
     action: "Plan your room"
   },
   {
-    number: "03",
+    number: "04",
     icon: FolderOpen,
     title: "Open a project",
     text: "Continue saved selections, configurations and notes in one place.",
