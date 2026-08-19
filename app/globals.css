@@ -11580,6 +11580,99 @@ button.assistant-dock:focus-visible { outline: 2px solid #8b553b; outline-offset
 @media (max-width: 520px) {
   button.assistant-dock { right: 16px; width: auto; height: 46px; min-height: 46px; padding: 0 17px 0 14px; }
 }
+
+/* Ask Musterring concierge — dark editorial direction. */
+.advisor-panel { top: 136px; right: 24px; width: min(446px,calc(100vw - 48px)); height: min(720px,calc(100dvh - 160px)); border: 0; border-radius: 2px; background: #20211f; color: #f7f4ee; box-shadow: 0 30px 90px rgba(12,12,11,.34); }
+.advisor-panel > header { min-height: 82px; gap: 14px; padding: 16px 18px 16px 20px; border-bottom: 1px solid rgba(247,244,238,.13); background: #20211f; color: #f7f4ee; }
+.advisor-panel .advisor-brand-icon { width: 42px; height: 42px; flex: 0 0 42px; border: 1px solid rgba(247,244,238,.2); border-radius: 50%; background: rgba(247,244,238,.07); color: #f7f4ee; }
+.advisor-panel .advisor-brand-icon svg { width: 17px; }
+.advisor-panel > header p.advisor-header-title { margin: 0 0 5px; color: #f7f4ee; font-size: 12px; letter-spacing: .15em; }
+.advisor-panel > header small { display: block; color: #aaa69f; font-size: 10px; letter-spacing: .04em; }
+.advisor-panel > header button { width: 38px; height: 38px; flex-basis: 38px; color: #f7f4ee; }
+.advisor-panel > header button:hover { background: rgba(247,244,238,.08); }
+.advisor-panel .advisor-messages { gap: 24px; padding: 30px 24px 120px; background: #20211f; color: #f7f4ee; }
+.advisor-panel .advisor-welcome { padding: 0; border: 0; }
+.advisor-panel .advisor-welcome-kicker { display: block; margin-bottom: 13px; color: #c48261; font-size: 9px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.advisor-panel .advisor-welcome h3 { max-width: 350px; margin: 0 0 13px; color: #f7f4ee; font: 400 36px/1.05 var(--stitch-font-display); letter-spacing: -.025em; }
+.advisor-panel .advisor-welcome p { max-width: 340px; margin: 0; color: #b8b4ad; font-size: 14px; line-height: 1.55; }
+.advisor-panel .advisor-starters { display: grid !important; grid-template-columns: 1fr; gap: 0 !important; margin-top: 30px; border-top: 1px solid rgba(247,244,238,.15); }
+.advisor-panel .advisor-welcome .advisor-starters button { min-height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border: 0; border-bottom: 1px solid rgba(247,244,238,.15); border-radius: 0; background: transparent; color: #f7f4ee; padding: 12px 2px; font-size: 13px; }
+.advisor-panel .advisor-welcome .advisor-starters button svg { width: 15px; color: #c48261; transition: transform 160ms ease; }
+.advisor-panel .advisor-welcome .advisor-starters button:hover { color: #fff; border-color: rgba(247,244,238,.34); }
+.advisor-panel .advisor-welcome .advisor-starters button:hover svg { transform: translateX(3px); }
+.advisor-panel .advisor-messages article,.advisor-panel .advisor-messages article.customer { width: 100%; margin: 0; color: #f7f4ee; }
+.advisor-panel .advisor-message-bubble { max-width: 92%; gap: 12px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.advisor-panel .advisor-message-icon { width: 30px; height: 30px; flex: 0 0 30px; border: 1px solid rgba(247,244,238,.17); background: transparent; color: #f7f4ee; }
+.advisor-panel .advisor-message-icon svg { width: 13px; }
+.advisor-panel .advisor-messages article small { color: #aaa69f; font-size: 8px; }
+.advisor-panel .advisor-messages article p { margin-top: 7px; color: #eeebe5; font-size: 13px; line-height: 1.58; }
+.advisor-panel .advisor-messages article.customer .advisor-message-bubble { max-width: 80%; margin-left: auto; padding: 13px 15px; border: 1px solid rgba(247,244,238,.12); border-radius: 12px 12px 2px 12px; background: #34332f; }
+.advisor-panel .advisor-messages article.customer small { color: #c48261; }
+.advisor-panel .advisor-sources { color: #8e8a84; }
+.advisor-panel .advisor-followups { gap: 7px; }
+.advisor-panel .advisor-followups button { border-color: rgba(247,244,238,.18); border-radius: 999px; background: transparent; color: #d8d4cd; padding: 8px 11px; }
+.advisor-panel .advisor-followups button:hover { border-color: #c48261; color: #fff; }
+.advisor-panel .advisor-products a { border-color: rgba(247,244,238,.14); background: #2b2c29; color: #f7f4ee; }
+.advisor-panel .advisor-products span > small,.advisor-panel .advisor-products em { color: #aaa69f; }
+.advisor-panel .advisor-products b { border-top-color: rgba(247,244,238,.13); }
+.advisor-panel .advisor-materials span { border-color: rgba(247,244,238,.18); }
+.advisor-panel .advisor-proposal { border: 1px solid #c48261; border-radius: 0; background: transparent; color: #f7f4ee; }
+.advisor-panel .advisor-input { position: absolute; right: 18px; bottom: 18px; left: 18px; z-index: 3; grid-template-columns: 1fr 42px 42px; gap: 4px; margin: 0; padding: 5px; border: 1px solid rgba(247,244,238,.2); border-radius: 4px; background: #f4f1eb; box-shadow: 0 16px 38px rgba(0,0,0,.25); }
+.advisor-panel .advisor-input:focus-within { border-color: #c48261; box-shadow: 0 16px 38px rgba(0,0,0,.25),0 0 0 1px #c48261; }
+.advisor-panel .advisor-input textarea { min-height: 54px; color: #20211f; caret-color: #9a5738; }
+.advisor-panel .advisor-input textarea::placeholder { color: #77736c; }
+.advisor-panel .advisor-input button { width: 40px; height: 42px; color: #20211f; }
+.advisor-panel .advisor-input button:last-child { background: #20211f; color: #f7f4ee; }
+.advisor-panel .advisor-input button:hover:not(:disabled) { background: #ded9d0; }
+.advisor-panel .advisor-input button:last-child:hover:not(:disabled) { background: #9a5738; }
+.advisor-panel .advisor-confirmation { border-top-color: rgba(247,244,238,.14); background: #34332f; color: #f7f4ee; }
+.advisor-panel .advisor-confirmation small { color: #aaa69f; }
+@media (max-width:768px) { .advisor-panel { inset: 0; width: 100%; height: 100dvh; border-radius: 0; } .advisor-panel .advisor-messages { padding-inline: 20px; } .advisor-panel .advisor-input { right: 12px; bottom: 12px; left: 12px; } }
+
+/* Bright concierge theme and restrained launcher. */
+button.assistant-dock { border: 1px solid rgba(25,24,21,.24); background: rgba(255,255,255,.96); color: #191815; box-shadow: 0 8px 26px rgba(25,24,21,.14); backdrop-filter: blur(10px); }
+button.assistant-dock { height: 56px; min-height: 56px; gap: 11px; padding: 0 23px 0 18px; }
+button.assistant-dock:hover { background: #fff; color: #191815; box-shadow: 0 11px 30px rgba(25,24,21,.18); }
+button.assistant-dock > svg { width: 20px; height: 20px; stroke-width: 1.7; }
+button.assistant-dock > span { font-size: 13px; }
+
+.advisor-panel { width: min(478px,calc(100vw - 48px)); height: min(750px,calc(100dvh - 160px)); border: 1px solid rgba(25,24,21,.15); background: #fbfaf7; color: #191815; box-shadow: 0 30px 90px rgba(25,24,21,.22); }
+.advisor-panel > header { border-bottom-color: rgba(25,24,21,.12); background: #fff; color: #191815; }
+.advisor-panel .advisor-brand-icon { border-color: rgba(25,24,21,.15); background: #f1eee8; color: #191815; }
+.advisor-panel > header p.advisor-header-title { color: #191815; }
+.advisor-panel > header small { color: #777169; }
+.advisor-panel > header button { color: #191815; }
+.advisor-panel > header button:hover { background: #f1eee8; }
+.advisor-panel .advisor-messages { background: #fbfaf7; color: #191815; }
+.advisor-panel .advisor-welcome h3 { color: #191815; }
+.advisor-panel .advisor-welcome p { color: #68635c; }
+.advisor-panel .advisor-welcome-kicker { color: #955338; }
+.advisor-panel .advisor-starters { border-top-color: rgba(25,24,21,.14); }
+.advisor-panel .advisor-welcome .advisor-starters button { border-bottom-color: rgba(25,24,21,.14); color: #191815; }
+.advisor-panel .advisor-welcome .advisor-starters button svg { color: #955338; }
+.advisor-panel .advisor-welcome .advisor-starters button:hover { border-color: #955338; color: #955338; }
+.advisor-panel .advisor-messages article,.advisor-panel .advisor-messages article.customer { color: #191815; }
+.advisor-panel .advisor-message-icon { border-color: rgba(25,24,21,.14); background: #fff; color: #191815; }
+.advisor-panel .advisor-messages article small { color: #777169; }
+.advisor-panel .advisor-messages article p { color: #292824; }
+.advisor-panel .advisor-messages article.customer .advisor-message-bubble { border-color: rgba(25,24,21,.1); background: #ece8df; }
+.advisor-panel .advisor-messages article.customer small { color: #955338; }
+.advisor-panel .advisor-sources { color: #817b73; }
+.advisor-panel .advisor-followups button { border-color: rgba(25,24,21,.17); background: #fff; color: #35332f; }
+.advisor-panel .advisor-followups button:hover { border-color: #955338; color: #955338; }
+.advisor-panel .advisor-products a { border-color: rgba(25,24,21,.14); background: #fff; color: #191815; }
+.advisor-panel .advisor-products span > small,.advisor-panel .advisor-products em { color: #777169; }
+.advisor-panel .advisor-products b { border-top-color: rgba(25,24,21,.12); }
+.advisor-panel .advisor-materials span { border-color: rgba(25,24,21,.16); }
+.advisor-panel .advisor-proposal { border-color: #955338; background: #191815; color: #fff; }
+.advisor-panel .advisor-confirmation { border-top-color: rgba(25,24,21,.14); background: #ece8df; color: #191815; }
+.advisor-panel .advisor-confirmation small { color: #68635c; }
+.advisor-panel .advisor-input { border-color: rgba(25,24,21,.2); background: #fff; box-shadow: 0 14px 34px rgba(25,24,21,.13); }
+.advisor-panel .advisor-input:focus-within { border-color: #955338; box-shadow: 0 14px 34px rgba(25,24,21,.13),0 0 0 1px #955338; }
+
+@media (max-width:520px) {
+  button.assistant-dock { height: 50px; min-height: 50px; padding: 0 18px 0 15px; }
+}
 /* Scroll-composed living room story */
 .product-assembly {
   --assembly-progress: 0;
