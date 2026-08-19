@@ -261,13 +261,13 @@ export default function InteriorStylistClient() {
 
   return <div className="stylist-page">
     <section className="stylist-hero"><div className="container stylist-hero-inner"><div className="stylist-hero-copy">
-      <span className="stylist-kicker">AI Stylist</span>
+      <span className="stylist-kicker">Style Finder</span>
       <h1>Tell us what feels right.<br />We&apos;ll find what fits.</h1>
       <p>Furniture matched to your space and style.</p>
     </div></div></section>
 
-    <section className="container stylist-builder" aria-label="AI Stylist questionnaire">
-      <header className="stylist-builder-intro is-compact"><div className="stylist-progress-summary"><span>Step {displayProgressStep} of {displayProgressTotal}</span><div role="progressbar" aria-label="Stylist quiz progress" aria-valuemin={1} aria-valuemax={displayProgressTotal} aria-valuenow={displayProgressStep}><i style={{ width: `${(displayProgressStep / displayProgressTotal) * 100}%` }} /></div></div></header>
+    <section className="container stylist-builder" aria-label="Style Finder questionnaire">
+      <header className="stylist-builder-intro is-compact"><div className="stylist-progress-summary"><span>Step {displayProgressStep} of {displayProgressTotal}</span><div role="progressbar" aria-label="Style Finder quiz progress" aria-valuemin={1} aria-valuemax={displayProgressTotal} aria-valuenow={displayProgressStep}><i style={{ width: `${(displayProgressStep / displayProgressTotal) * 100}%` }} /></div></div></header>
 
       <div className="stylist-flow">
         {styleDirection && styleSourceRoom ? <div className="stylist-style-carryover"><Sparkles size={17} /><span>Continuing the <strong>{stylistStyleLabel(styleDirection)}</strong> direction from your {roomLabel(styleSourceRoom).toLowerCase()}.</span></div> : null}
@@ -284,7 +284,6 @@ export default function InteriorStylistClient() {
               const selected = answerSelected(answers[currentQuestion.id], choice.id);
               return <button aria-pressed={selected} type="button" key={choice.id} className={selected ? "is-active" : ""} onClick={() => chooseAnswer(currentQuestion, choice.id)}>
                 {currentQuestion.visual ? <span className="stylist-style-image"><Image src={visualImages[index % visualImages.length]} alt="" width={420} height={260} /></span> : null}
-                {!currentQuestion.visual ? <span className="stylist-answer-index">{String(index + 1).padStart(2, "0")}</span> : null}
                 <span className={currentQuestion.visual ? "stylist-style-copy" : "stylist-answer-copy"}><strong>{choice.label}</strong></span>
                 {selected ? currentQuestion.visual ? <i><Check size={15} /></i> : <span className="stylist-answer-action is-selected"><Check size={15} /></span> : !currentQuestion.visual ? <span className="stylist-answer-action"><ArrowRight size={16} /></span> : null}
               </button>;

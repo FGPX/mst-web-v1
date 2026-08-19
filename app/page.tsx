@@ -28,7 +28,7 @@ const quickStarts = [
   {
     number: "02",
     icon: Sparkles,
-    title: "AI Interior Stylist",
+    title: "Style Finder",
     text: "Answer a short room-specific questionnaire and receive focused Musterring catalogue recommendations.",
     href: "/ai-stylist",
     action: "Style your room"

@@ -103,7 +103,7 @@ export function ProjectsClient() {
             </article>;
           }) : <div className="stitch-project-empty"><h3>No room views saved yet</h3><p>Save a view from Plan a Room and it will appear here.</p><Link href="/room-composer">Open Plan a Room</Link></div>}
         </section>
-        <div className="stitch-project-title"><h2>AI Stylist Sets</h2><Link href="/ai-stylist"><Sparkles size={16} /> Create another set</Link></div>
+        <div className="stitch-project-title"><h2>Style Finder Sets</h2><Link href="/ai-stylist"><Sparkles size={16} /> Create another set</Link></div>
         <section className="stylist-saved-grid">
           {savedStylistSets.length ? savedStylistSets.map((set) => <article key={set.id}>
             <header><small>{set.roomType.replaceAll("-", " ")} · {stylistStyleLabel(set.style)}{set.preferences ? ` · ${set.preferences.spaceSize}` : ""}</small><h3>{set.name}</h3><p>{set.summary}</p></header>
@@ -111,7 +111,7 @@ export function ProjectsClient() {
               const product = products.find((item) => item.id === productId);
               return product ? <Link href={`/furniture/${product.slug}`} key={product.id}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={260} height={190} /><span><small>{product.modelCode}</small><strong>{product.name}</strong></span></Link> : null;
             })}</div>
-          </article>) : <div className="stitch-project-empty"><h3>No AI stylist sets saved yet</h3><p>Answer the style quiz and save a coordinated set of catalogue products.</p><Link href="/ai-stylist">Open AI Stylist</Link></div>}
+          </article>) : <div className="stitch-project-empty"><h3>No Style Finder sets saved yet</h3><p>Answer the style quiz and save a coordinated set of catalogue products.</p><Link href="/ai-stylist">Open Style Finder</Link></div>}
         </section>
         <div className="stitch-project-title"><h2>Saved Products</h2><Link href="/handover"><MessageSquare size={16} /> Expert consultation</Link></div>
         <section className="stitch-project-products">
@@ -137,7 +137,7 @@ export function ProjectsClient() {
           <Link href={project ? `/my-musterring/projects/${project.id}` : "/my-musterring"}><strong>{resourceCounts.configurations}</strong><span>Configurations</span></Link>
           <Link href="/compare"><strong>{resourceCounts.comparisons}</strong><span>Comparisons</span></Link>
           <Link href="/room-composer"><strong>{resourceCounts.roomScenes}</strong><span>Room scenes</span></Link>
-          <Link href="/ai-stylist"><strong>{resourceCounts.stylistSets}</strong><span>Stylist sets</span></Link>
+          <Link href="/ai-stylist"><strong>{resourceCounts.stylistSets}</strong><span>Style Finder sets</span></Link>
           <Link href="/materials"><strong>{resourceCounts.materials}</strong><span>Materials</span></Link>
           <Link href={fitHref}><strong>{resourceCounts.fitReports}</strong><span>Fit reports</span></Link>
           <Link href="/dealers"><strong>{preferredDealer?.name ?? "Select"}</strong><span>Preferred retailer</span></Link>

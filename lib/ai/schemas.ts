@@ -151,7 +151,7 @@ export const stylistOptionsSchema = z.object({
   roomType: z.enum(stylistRoomTypes),
   answers: z.record(z.union([
     z.string().trim().min(1).max(80),
-    z.array(z.string().trim().min(1).max(80)).min(1).max(2).refine((values) => new Set(values).size === values.length)
+    z.array(z.string().trim().min(1).max(80)).min(1).max(4).refine((values) => new Set(values).size === values.length)
   ])).refine((value) => Object.keys(value).length <= 10),
   notes: z.record(z.string().trim().max(240)).refine((value) => Object.keys(value).length <= 10),
   selectedProductIds: z.array(z.string().trim().min(1).max(180)).max(20).refine((values) => new Set(values).size === values.length),

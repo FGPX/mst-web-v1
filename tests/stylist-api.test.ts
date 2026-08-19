@@ -48,7 +48,7 @@ describe("POST /api/ai/stylist", () => {
     expect(malformed.status).toBe(400);
     const incomplete = await POST(requestWith({ roomType: "living-room", style: "modern-contemporary" }));
     expect(incomplete.status).toBe(400);
-    await expect(incomplete.json()).resolves.toMatchObject({ error: expect.stringMatching(/every stylist question/i) });
+    await expect(incomplete.json()).resolves.toMatchObject({ error: expect.stringMatching(/every Style Finder question/i) });
   });
 
   it("rejects unsupported, duplicate or excessive choices", async () => {
