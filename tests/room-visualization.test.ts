@@ -38,10 +38,14 @@ describe("catalogue-grounded room visualization", () => {
   it("builds a full-scene editorial prompt from grounded catalogue facts", () => {
     const prompt = buildRoomVisualizationPrompt(groundVisualizationItems([item]));
     expect(prompt).toContain(product.modelCode);
+    expect(prompt).toContain(item.color);
+    expect(prompt).toContain(item.materialId);
     expect(prompt).toContain("one complete, cohesive, photorealistic premium interior photograph");
     expect(prompt).toContain("Keep it unmistakably the same room");
     expect(prompt).toContain("Do not add people, text, logos, decorations, plants, or unselected furniture");
-    expect(prompt).toContain("selected products; then beautiful unified photographic rendering");
+    expect(prompt).toContain("PRODUCT LOCK");
+    expect(prompt).toContain("Do not recolour, desaturate, brighten, darken");
+    expect(prompt).toContain("exact selected-product appearance");
   });
 
   it("normalizes room photos to an API-safe size without changing their aspect materially", async () => {

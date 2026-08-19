@@ -326,7 +326,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
       return;
     }
     const confirmed = window.confirm(
-      "Generate a new full-room image? Your room photo and selected catalogue product references will be sent to OpenAI, and this request uses image-generation quota. Your uploaded file stays unchanged, but the generated image re-renders the complete scene and may reinterpret lighting, finishes, decor, and loose objects."
+      "Generate a new full-room image? Your room photo and selected catalogue product references will be sent to OpenAI, and this request uses image-generation quota. Your uploaded file stays unchanged. The selected products are locked to their catalogue references, while the generated image may reinterpret room lighting, room finishes, decor, and loose objects."
     );
     if (!confirmed) return;
 
@@ -671,7 +671,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               <div>
                 <p className="eyebrow"><Sparkles size={15} /> AI room staging</p>
                 <strong>{upload ? "Generate room" : "Add the selected catalogue products to your real room"}</strong>
-                <span>{upload ? "Creates one cohesive room photograph with natural perspective, lighting, and shadows. Usually takes 1–3 minutes. The result is inspirational and cannot confirm physical fit." : "OpenAI re-renders the complete photograph while using your room as the architectural reference and the selected catalogue images as product references. Generation usually takes 1–3 minutes. The result is inspirational and cannot confirm physical fit."}</span>
+                <span>{upload ? "Creates one cohesive room photograph while locking each selected product to its catalogue colour, material, and visible details. Usually takes 1–3 minutes. The result is inspirational and cannot confirm physical fit." : "OpenAI re-renders the complete photograph while using your room as the architectural reference and locking selected products to their catalogue references. Generation usually takes 1–3 minutes. The result is inspirational and cannot confirm physical fit."}</span>
                 {generatedIsCurrent ? <small role="status">Generated from the current room and {items.length} selected {items.length === 1 ? "product" : "products"}.</small> : null}
                 {generatedVisualization && !generatedIsCurrent ? <small role="status">Your room layout changed after the last generation. Generate again to update the realistic view.</small> : null}
                 {uploadError ? <small className="form-error" role="alert">{uploadError}</small> : null}
