@@ -7,8 +7,37 @@ import {
   voiceCommandSchema, type AdvisorAnswer, type AlternativeRequest, type AlternativeResponse,
   type ConversationContext, type MaterialAdvice, type VoiceCommand
 } from "./ai/assistant-schemas";
+import { extractExcludedLayoutShapes } from "./ai/alternative-intent";
 
 const colors = searchColorTerms;
+
+export function materialMatchesNeeds(material: Material, needs: MaterialAdvice["needs"]) {
+  if (needs.easyCareRequired && !material.easyCare) return false;
+  if (needs.children && !material.familyFriendly) return false;
+  if (needs.pets && !material.petFriendly) return false;
+  if (needs.strongSunlight && material.lightSensitivity !== "low") return false;
+  if (needs.preferredColors?.length && !needs.preferredColors.includes(material.colorFamily)) return false;
+  if (needs.preferredMaterialGroups?.length && !needs.preferredMaterialGroups.includes(material.type)) return false;
+  if (needs.avoidMaterialGroups?.includes(material.type)) return false;
+  return true;
+}
+
+const materialQueryStopWords = new Set(["the", "and", "for", "with", "that", "this", "from", "material", "materials", "something", "want", "need", "looking", "show", "find"]);
+
+export function materialMetadataMatches(requestText: string) {
+  const tokens = requestText.toLowerCase().match(/[a-z0-9]+/g)?.filter((token) => token.length > 2 && !materialQueryStopWords.has(token)) ?? [];
+  if (!tokens.length) return [];
+  return materials.filter((material) => {
+    const attributeLabels = [
+      material.easyCare ? "easy care easy to clean easy to wash washable" : "specialist care",
+      material.petFriendly ? "pet friendly pets dog cat" : "not pet friendly",
+      material.familyFriendly ? "family friendly children kids" : "not family friendly",
+      `${material.lightSensitivity} light sensitivity`
+    ];
+    const corpus = [material.name, material.type, material.colorFamily, material.texture, material.composition, material.care, material.maintenance, ...material.cleaningMethods, ...material.recommendedUses, ...material.cautions, ...attributeLabels].join(" ").toLowerCase();
+    return tokens.every((token) => corpus.includes(token));
+  }).map((material) => material.id);
+}
 
 function requestedTargetWidthMm(text: string) {
   const match =
@@ -21,16 +50,22 @@ function requestedTargetWidthMm(text: string) {
 function requestedAlternative(input: AlternativeRequest, source: Product) {
   const text = input.requestText?.toLowerCase() ?? "";
   const search = parseSearchQuery(input.requestText ?? "");
+  const excludedLayoutShapes = extractExcludedLayoutShapes(input.requestText ?? "");
+  const requestedLayoutShapes = (search.layoutShapes ?? input.layoutShapes ?? []).filter((shape) => !excludedLayoutShapes.includes(shape));
   const easyCareRequested = /\b(?:easy|easier|easiest)[- ](?:care|clean)|easy to (?:care for|clean)|low[- ]maintenance\b/.test(text);
   const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
   const parsedWidth = search.minWidthMm !== undefined || search.maxWidthMm !== undefined || search.targetWidthMm !== undefined;
   const targetWidthMm = !narrower && !parsedWidth ? requestedTargetWidthMm(text) : search.targetWidthMm;
   return alternativeRequestSchema.parse({
     ...input,
-    category: search.category ?? input.category,
+    // "Discover more like this" is scoped to the product being viewed. A
+    // request may refine that category, but it must never switch the panel to
+    // sofas, beds or another unrelated catalogue category.
+    category: source.category,
     colorFamilies: [...new Set([...(input.colorFamilies ?? []), ...(search.colors ?? [])].map((value) => value.toLowerCase()))],
     styles: [...new Set([...(input.styles ?? []), ...(search.styles ?? [])].map((value) => value.toLowerCase()))],
-    layoutShapes: search.layoutShapes ?? input.layoutShapes,
+    layoutShapes: requestedLayoutShapes.length ? requestedLayoutShapes : undefined,
+    excludedLayoutShapes: [...new Set([...(input.excludedLayoutShapes ?? []), ...excludedLayoutShapes])],
     numberOfSeats: search.seatCount ?? input.numberOfSeats,
     maxWidthMm: narrower ? source.widthMm - Number(narrower[1]) * 10 : parsedWidth ? search.maxWidthMm : input.maxWidthMm ?? (/\b(?:smaller|more compact|narrower)\b/.test(text) ? source.widthMm - 10 : undefined),
     minWidthMm: parsedWidth ? search.minWidthMm : input.minWidthMm,
@@ -138,6 +173,16 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       const matchesShape = product.layoutShapes?.includes(value) ?? false;
       checks.push({ ok: matchesShape, label: `requires verified ${value} layout`, closeness: matchesShape ? 1 : 0 });
     }
+    for (const value of request.excludedLayoutShapes ?? []) {
+      const verifiedLayouts = product.layoutShapes ?? [];
+      const hasVerifiedLayout = verifiedLayouts.length > 0;
+      const hasExcludedLayout = verifiedLayouts.includes(value);
+      checks.push({
+        ok: hasVerifiedLayout && !hasExcludedLayout,
+        label: hasExcludedLayout ? `must not use ${value} layout` : `a non-${value} layout is not verified for this product`,
+        closeness: hasVerifiedLayout && !hasExcludedLayout ? 1 : 0
+      });
+    }
     for (const value of request.requiredFunctions ?? []) checks.push({ ok: hasFunction(product, value), label: `requires ${value}`, closeness: hasFunction(product, value) ? 1 : 0 });
     for (const value of request.excludedFunctions ?? []) checks.push({ ok: !hasFunction(product, value), label: `must not include ${value}`, closeness: !hasFunction(product, value) ? 1 : 0 });
     for (const value of request.materialTags ?? []) checks.push({ ok: hasMaterialTag(product, value), label: `requires ${value} material metadata`, closeness: hasMaterialTag(product, value) ? 1 : 0 });
@@ -195,7 +240,11 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       : `${item.product.modelCode} is a close alternative, but ${item.unmet.join("; ")}.`
   });
   const exactMatches = ranked.filter((item) => item.exact).slice(0, 6).map(toMatch);
-  const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 6).map(toMatch);
+  // Exact requirements determine the exact-match bucket. The best remaining
+  // same-category products are still useful recommendations when they are
+  // clearly labelled with every unmet requirement (for example, an unverified
+  // requested colour). Keep this group deliberately small and ranked.
+  const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 3).map(toMatch);
   const interpretedRequirements = [
     ...(request.category ? [request.category.replace(/-/g, " ")] : []),
     ...(request.colorFamilies ?? []).map((value) => `${value} colour`),
@@ -205,6 +254,7 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     ...(request.minWidthMm ? [`minimum ${Math.round(request.minWidthMm / 10)} cm wide`] : []),
     ...(request.targetWidthMm ? [`around ${Math.round(request.targetWidthMm / 10)} cm wide`] : []),
     ...(request.layoutShapes ?? []).map((value) => `${value} layout`),
+    ...(request.excludedLayoutShapes ?? []).map((value) => `not ${value} layout`),
     ...(request.minSeatHeightMm ? [`seat height at least ${Math.round(request.minSeatHeightMm / 10)} cm`] : []),
     ...(request.requiredFunctions ?? []).map((value) => `${value} function`),
     ...(request.materialTags ?? []).map((value) => `${value} material`),
@@ -231,7 +281,7 @@ export function parseMaterialNeeds(textValue: string): MaterialAdvice {
     pets: /pets?|dog|cat|hund|katze/.test(text),
     highUse: /high use|everyday|daily|busy|frequent/.test(text),
     strongSunlight: /strong (?:afternoon )?sunlight|direct sun|sunny/.test(text),
-    easyCareRequired: /easy[- ]care|easy clean|cleaning|children|pets?|dog|stain/.test(text),
+    easyCareRequired: /easy(?: to)? (?:care|clean|wash)|easy[- ]care|washable|children|pets?|dog|stain/.test(text),
     preferredColors: preferredColors.length ? preferredColors : undefined,
     preferredMaterialGroups: preferredMaterialGroups.length ? preferredMaterialGroups : undefined,
     avoidMaterialGroups: avoidMaterialGroups.length ? avoidMaterialGroups : undefined
@@ -248,7 +298,11 @@ export function parseMaterialNeeds(textValue: string): MaterialAdvice {
     if (avoidMaterialGroups.includes(material.type)) score -= 20;
     return { material, score };
   }).sort((left, right) => right.score - left.score);
-  const recommendedMaterialIds = scored.filter(({ score }) => score >= 3).slice(0, 5).map(({ material }) => material.id);
+  const scoredMaterialIds = scored
+    .filter(({ material, score }) => score >= 3 && materialMatchesNeeds(material, needs))
+    .map(({ material }) => material.id);
+  const hasStructuredNeed = Boolean(needs.children || needs.pets || needs.highUse || needs.strongSunlight || needs.easyCareRequired || preferredColors.length || preferredMaterialGroups.length || avoidMaterialGroups.length);
+  const recommendedMaterialIds = hasStructuredNeed ? scoredMaterialIds : materialMetadataMatches(textValue);
   const materialsToAvoid = scored.filter(({ score }) => score < 0).slice(-4).map(({ material }) => material.id);
   const explanationKeys = [
     ...(needs.children ? ["family-suitability"] : []),
@@ -392,6 +446,63 @@ function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
   });
 }
 
+function customerJourneyAnswer(question: string, context: ConversationContext): AdvisorAnswer | null {
+  const text = question.toLowerCase();
+  const referenced = groundedProductIds(context.referencedProductIds);
+
+  if (/\b(plan|design|style|arrange|furnish|layout|visuali[sz]e)\b.*\b(room|space|living room|bedroom|dining room)\b|\broom (?:planner|planning|layout|design)\b/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "I can help plan your room step by step. Start with the room type and measurements, then add doors, windows and existing furniture. The room planner can explore layouts with catalogue products; use the fit check before treating any placement as physically confirmed.",
+      answerType: "room", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["Musterring room-planning tools"],
+      proposedAction: { type: "OPEN_ROOM_COMPOSER", label: "Open the room planner", parameters: {}, requiresConfirmation: false },
+      suggestedQuestions: ["What measurements do I need?", "Help me plan a living room", "How much walking space should I record?"]
+    });
+  }
+
+  if (/\b(my project|saved project|saved items?|my musterring|my selections?|my decisions?)\b/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "My Musterring keeps your saved catalogue products, configurations, room concepts and planning decisions together. I can help review what is selected, identify missing project details and prepare the information for a retailer. Nothing is changed or submitted without your confirmation.",
+      answerType: "project", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["My Musterring project data"],
+      proposedAction: null,
+      suggestedQuestions: ["What is missing from my project?", "Summarize my decisions", "Prepare my project for a retailer"]
+    });
+  }
+
+  if (/\b(retailer|dealer|store|showroom|consultation|appointment|where (?:can|do) i (?:buy|see)|buy in person)\b/.test(text)) {
+    const wantsBooking = /\b(book|appointment|consultation)\b/.test(text);
+    return advisorAnswerSchema.parse({
+      answer: wantsBooking
+        ? "A Musterring retailer can confirm local availability, pricing, delivery, configuration details and your final room requirements. I can take you to the consultation handover, where you can review everything before any personal details are submitted."
+        : "Use the retailer finder to choose a Musterring retailer. The retailer can confirm local availability, pricing, delivery, samples and final configuration details.",
+      answerType: "dealer", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["Musterring retailer service"],
+      proposedAction: wantsBooking
+        ? { type: "BOOK_CONSULTATION", label: "Prepare a consultation request", parameters: {}, requiresConfirmation: true }
+        : { type: "FIND_RETAILER", label: "Find a retailer", parameters: {}, requiresConfirmation: false },
+      suggestedQuestions: ["What should I prepare for a consultation?", "Can a retailer confirm availability?", "Prepare my project for a retailer"]
+    });
+  }
+
+  if (/\b(delivery|shipping|lead time|stock|availability|available now|price|cost|discount|payment|finance|warranty|guarantee|repair|spare part|return|refund|complaint|damaged|customer service|support|contact)\b/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "Pricing, availability, delivery, payment, warranty, returns and after-sales support depend on the selected retailer and order. I cannot verify those details here, but I can help you find a retailer or prepare the relevant product and project information for a clear enquiry.",
+      answerType: "dealer", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["Musterring retailer service"],
+      proposedAction: { type: "FIND_RETAILER", label: "Find a retailer", parameters: {}, requiresConfirmation: false },
+      suggestedQuestions: ["Prepare my retailer enquiry", "What information should I include?", "Find a retailer"]
+    });
+  }
+
+  if (/\b(how (?:does|do|can) (?:this|the) (?:site|website)|where (?:is|can i find)|navigate|website help|what can you do|help me use)\b/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "I can guide you across the Musterring journey: discover and compare products, understand materials, prepare configurations, plan a room, start a fit check, review saved project decisions, find a retailer and prepare a consultation handover.",
+      answerType: "fact", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["Musterring website"],
+      proposedAction: null,
+      suggestedQuestions: ["Help me plan a room", "Help me find furniture", "Show me how to prepare for a retailer"]
+    });
+  }
+
+  return null;
+}
+
 export function answerGroundedQuestion(question: string, context: ConversationContext): AdvisorAnswer {
   const text = question.toLowerCase();
   const conversationalText = text.trim().replace(/[.!?]+$/g, "").trim();
@@ -455,6 +566,8 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
       suggestedQuestions: ["Summarize my decisions", "Which room measurements are missing?"]
     });
   }
+  const journey = customerJourneyAnswer(question, context);
+  if (journey) return journey;
   if (/configur|build (?:a |my )?(?:sofa|sectional|chair|bed)|plan (?:a |my )?(?:sofa|sectional|chair|bed)/.test(text)) {
     if (current) {
       return advisorAnswerSchema.parse({
@@ -547,7 +660,7 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
   const discovery = productDiscoveryAnswer(question);
   if (discovery) return discovery;
   return advisorAnswerSchema.parse({
-    answer: "Information is not currently available in the connected product data. Ask about Musterring products, materials, configuration, room planning, fit guidance, saved projects or retailer preparation.",
+    answer: "I can help with anything across your Musterring journey: products, rooms, materials, configuration, fit preparation, saved projects, retailers and customer-service handover. I do not have enough verified information to answer that request yet, so tell me what you are trying to achieve and I will guide you to the right next step.",
     answerType: "missing-data", productIds: [], materialIds: [], sources: [],
     proposedAction: null, suggestedQuestions: ["Help me find the right sofa", "Choose a material", "Prepare my project for a retailer"]
   });

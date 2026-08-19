@@ -16,6 +16,7 @@ export const alternativeRequestSchema = z.object({
   minWidthMm: z.number().int().positive().optional(),
   targetWidthMm: z.number().int().positive().optional(),
   layoutShapes: z.array(z.enum(["straight", "l-shaped", "u-shaped", "corner", "island"])).max(5).optional(),
+  excludedLayoutShapes: z.array(z.enum(["straight", "l-shaped", "u-shaped", "corner", "island"])).max(5).optional(),
   minSeatHeightMm: z.number().int().nonnegative().optional(),
   requiredFunctions: z.array(z.string()).max(20).optional(),
   excludedFunctions: z.array(z.string()).max(20).optional(),

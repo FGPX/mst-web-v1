@@ -35,7 +35,8 @@ import {
 } from "./assistant-schemas";
 import { deterministicComparisonSummary, validateComparisonSummary } from "./comparison-summary";
 import { groundAlternativeRequest } from "./alternative-grounding";
-import { answerGroundedQuestion, findGroundedAlternatives, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
+import { validatedAIAlternativeRequirements } from "./alternative-intent";
+import { answerGroundedQuestion, findGroundedAlternatives, materialMatchesNeeds, materialMetadataMatches, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
 import { materials, products } from "../data";
 import { catalogueCategories } from "../types";
 
@@ -45,6 +46,24 @@ export type ProviderResult<T> = { data: T; provider: AIProviderName; fallback: b
 const advisorNarrativeSchema = z.object({
   answer: z.string().trim().min(1).max(3000),
   suggestedQuestions: z.array(z.string().trim().min(1).max(180)).max(4)
+});
+
+// Structured Outputs requires every object property to be present. Nullable
+// fields are normalized back to the app's optional MaterialAdvice shape below.
+const openAIMaterialAdviceSchema = z.object({
+  needs: z.object({
+    children: z.boolean().nullable(),
+    pets: z.boolean().nullable(),
+    highUse: z.boolean().nullable(),
+    strongSunlight: z.boolean().nullable(),
+    easyCareRequired: z.boolean().nullable(),
+    preferredColors: z.array(z.string()).nullable(),
+    preferredMaterialGroups: z.array(z.string()).nullable(),
+    avoidMaterialGroups: z.array(z.string()).nullable()
+  }),
+  recommendedMaterialIds: z.array(z.string()),
+  materialsToAvoid: z.array(z.string()),
+  explanationKeys: z.array(z.string())
 });
 
 const visualCategoryList = catalogueCategories.join(", ");
@@ -411,6 +430,7 @@ export class OpenAIProvider implements AIProvider {
       minWidthMm: shape.minWidthMm.unwrap().nullable(),
       targetWidthMm: shape.targetWidthMm.unwrap().nullable(),
       layoutShapes: shape.layoutShapes.unwrap(),
+      excludedLayoutShapes: shape.excludedLayoutShapes.unwrap(),
       minSeatHeightMm: shape.minSeatHeightMm.unwrap().nullable(),
       requiredFunctions: shape.requiredFunctions.unwrap(),
       excludedFunctions: shape.excludedFunctions.unwrap(),
@@ -419,29 +439,52 @@ export class OpenAIProvider implements AIProvider {
       preserveComfort: shape.preserveComfort.unwrap().nullable()
     });
     const extracted = await this.parse(extractionSchema, "alternative_requirements",
-      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, layoutShapes, materials and functions. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
+      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, included and excluded layout shapes, materials and functions. Put negated layouts such as 'not L-shaped' only in excludedLayoutShapes, never in layoutShapes. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
       [{ role: "user", content: JSON.stringify(input) }]);
-    const inferred = Object.fromEntries(Object.entries(extracted).filter(([, value]) => value !== null));
-    // AI extraction is only a proposal. Keep a constraint when the deterministic
-    // parser or the user's literal text supports it; never turn hallucinated
-    // styles, layouts or materials into hard requirements.
-    const parsed = groundAlternativeRequest(input, inferred);
+    const inferred = validatedAIAlternativeRequirements(input, extracted);
+    // Explicit structured filters from the UI are authoritative; AI only fills
+    // constraints that can be verified in the free text. IDs and request text
+    // never come from AI.
+    const parsed = alternativeRequestSchema.parse({ ...inferred, ...input });
     return alternativeResponseSchema.parse(findGroundedAlternatives(parsed));
   }
 
   async adviseMaterials(input: { requestText: string }) {
     const facts = materials.map((material) => ({
-      id: material.id, type: material.type, color: material.colorFamily, durability: material.durability,
+      id: material.id, name: material.name, type: material.type, color: material.colorFamily,
+      texture: material.texture, composition: material.composition, durability: material.durability,
       easyCare: material.easyCare, petFriendly: material.petFriendly, familyFriendly: material.familyFriendly,
-      lightSensitivity: material.lightSensitivity
+      lightSensitivity: material.lightSensitivity, careInstruction: material.care,
+      cleaningMethods: material.cleaningMethods, maintenance: material.maintenance,
+      recommendedUses: material.recommendedUses, cautions: material.cautions
     }));
-    const result = await this.parse(materialAdviceSchema, "material_advice",
-      "Recommend only supplied material IDs. Use only supplied metadata. Never claim stain-proof, scratch-proof, allergy-safe or indestructible.",
-      [{ role: "user", content: `Household request: ${input.requestText}\nMaterial metadata: ${JSON.stringify(facts)}` }]);
+    const instructions = "Analyze the customer's complete request against every supplied material record. Return every supplied material ID that is relevant and satisfies all explicit requirements; exclude records that contradict any explicit requirement. Use only supplied metadata. Return an empty list when none match. Never create IDs or claim stain-proof, scratch-proof, allergy-safe, indestructible, availability, price, or physical compatibility.";
+    const result = await this.parse(openAIMaterialAdviceSchema, "material_advice", instructions,
+      [{ role: "system", content: instructions }, { role: "user", content: `Material metadata: ${JSON.stringify(facts)}\nHousehold request: ${input.requestText}` }]);
+    const deterministic = parseMaterialNeeds(input.requestText);
+    const metadataMatchIds = materialMetadataMatches(input.requestText);
     const validIds = new Set(materials.map((material) => material.id));
+    const aiMaterialIds = result.recommendedMaterialIds.filter((id) => {
+      if (!validIds.has(id)) return false;
+      const material = materials.find((item) => item.id === id);
+      return Boolean(material && materialMatchesNeeds(material, deterministic.needs) && (!metadataMatchIds.length || metadataMatchIds.includes(material.id)));
+    });
+    const recommendedMaterialIds = [...new Set([...aiMaterialIds, ...deterministic.recommendedMaterialIds, ...metadataMatchIds])];
     return materialAdviceSchema.parse({
       ...result,
-      recommendedMaterialIds: result.recommendedMaterialIds.filter((id) => validIds.has(id)),
+      needs: {
+        ...deterministic.needs,
+        ...result.needs,
+        children: Boolean(result.needs.children || deterministic.needs.children),
+        pets: Boolean(result.needs.pets || deterministic.needs.pets),
+        highUse: Boolean(result.needs.highUse || deterministic.needs.highUse),
+        strongSunlight: Boolean(result.needs.strongSunlight || deterministic.needs.strongSunlight),
+        easyCareRequired: Boolean(result.needs.easyCareRequired || deterministic.needs.easyCareRequired),
+        preferredColors: deterministic.needs.preferredColors ?? result.needs.preferredColors ?? undefined,
+        preferredMaterialGroups: deterministic.needs.preferredMaterialGroups ?? result.needs.preferredMaterialGroups ?? undefined,
+        avoidMaterialGroups: deterministic.needs.avoidMaterialGroups ?? result.needs.avoidMaterialGroups ?? undefined
+      },
+      recommendedMaterialIds,
       materialsToAvoid: result.materialsToAvoid.filter((id) => validIds.has(id))
     });
   }
@@ -482,8 +525,8 @@ export class OpenAIProvider implements AIProvider {
     const replyBrief = broadDiscovery
       ? "This is a broad discovery request. Begin naturally with 'Absolutely' or an equivalent in the customer's language. Ask only for their maximum sofa width as the next essential detail. For example: 'Absolutely — what maximum width can the sofa have in your room?' Do not mention how many matches exist, catalogue matches, filters, data, generic recommendations, or product cards."
       : "Give the most useful next response for this specific request.";
-    const narrative = await this.parse(advisorNarrativeSchema, "product_advisor_narrative",
-      "You are Ask Musterring, an exceptional interior advisor: warm, perceptive and concise. Write a natural reply in the customer's language, not a system explanation. The authoritative decision is binding: do not change its product IDs, material IDs, answer type, source boundaries or proposed action. Use only supplied facts. Never invent products, dimensions, prices, availability, compatibility or physical fit. Do not claim fit; direct customers to the fit check when appropriate. Do not execute or imply that an action has executed. For a broad request such as 'I want a sofa', do not say 'I found catalogue matches', do not mention filters or data, and do not list the product cards; they are shown separately. Instead, acknowledge the goal warmly, then ask one clear, human question that will make the next recommendation more useful. Prefer the customer's maximum width as the first question, unless they have already supplied it. Keep the reply under 70 words. Suggested questions must be short, natural answers the customer can choose; offer up to four. If the decision says information is unavailable, say so clearly and offer only supported next steps.",
+    const narrative = await this.parse(advisorNarrativeSchema, "musterring_customer_assistant_narrative",
+      "You are Ask Musterring, a complete customer-journey assistant: warm, perceptive and concise. Help with products, materials, room planning, configuration, fit preparation, saved projects, website guidance, retailers, consultation preparation and after-sales handover. Write a natural reply in the customer's language, not a system explanation. The authoritative decision is binding: do not change its product IDs, material IDs, answer type, source boundaries or proposed action. Use only supplied facts. Never invent products, dimensions, prices, availability, compatibility, policies or physical fit. Do not claim fit; direct customers to the fit check when appropriate. Retailer-specific matters such as price, availability, delivery, payment, warranty and returns must be referred to the selected retailer. Do not execute or imply that an action has executed. For a broad request such as 'I want a sofa', acknowledge the goal warmly, then ask one clear question that improves the next recommendation. Keep the reply under 70 words. Suggested questions must be short, natural answers the customer can choose; offer up to four. If verified information is unavailable, say so clearly and offer supported next steps.",
       [{ role: "user", content: `Customer question: ${input.question}\nConversation context: ${JSON.stringify(input.context)}\nResponse brief: ${replyBrief}\nAuthoritative decision: ${JSON.stringify(decisionForNarrative)}\nValidated product facts: ${JSON.stringify(answerProducts)}\nValidated material facts: ${JSON.stringify(answerMaterials)}` }]);
     return advisorAnswerSchema.parse({ ...grounded, ...narrative });
   }

@@ -5,6 +5,21 @@ import { categoryDetails } from "./catalog-taxonomy";
 
 const image = (name: string) => `/stitch-assets/${name}.png`;
 
+const materialDetails: Record<string, Pick<Material, "cleaningMethods" | "maintenance" | "recommendedUses" | "cautions">> = {
+  "mat-ivory-boucle": { cleaningMethods: ["Vacuum", "Blot spills"], maintenance: "Weekly vacuuming; treat spills immediately", recommendedUses: ["Family living", "Pet households", "Regular use"], cautions: ["Medium light sensitivity", "Do not rub spills"] },
+  "mat-sand-weave": { cleaningMethods: ["Soft brush", "pH-neutral cleaner"], maintenance: "Brush and spot-clean as needed", recommendedUses: ["Busy households", "Children", "Pets", "Sunny rooms"], cautions: ["Use only pH-neutral cleaner"] },
+  "mat-taupe-chenille": { cleaningMethods: ["Directional brushing", "Spot cleaning"], maintenance: "Restore the pile after cleaning", recommendedUses: ["Family living", "Regular use"], cautions: ["Not recorded as pet friendly", "Medium light sensitivity"] },
+  "mat-walnut-leather": { cleaningMethods: ["Approved leather care"], maintenance: "Condition twice per year", recommendedUses: ["Family living", "High-use seating"], cautions: ["Specialist care", "High light sensitivity", "Not recorded as pet friendly"] },
+  "mat-charcoal-wool": { cleaningMethods: ["Professional cleaning", "Gentle vacuuming"], maintenance: "Professional cleaning when required", recommendedUses: ["Pet households", "High-use seating", "Sunny rooms"], cautions: ["Not easy-care", "Not recorded as family friendly"] },
+  "mat-stone-micro": { cleaningMethods: ["Damp cloth", "Gentle wiping"], maintenance: "Wipe marks as needed", recommendedUses: ["Busy households", "Children", "Pets", "Sunny rooms"], cautions: ["Follow the recorded damp-cloth care instruction"] },
+  "mat-moss-weave": { cleaningMethods: ["Water-based spot cleaner", "Spot cleaning"], maintenance: "Spot-clean marks as needed", recommendedUses: ["Family living", "Pet households", "Regular use"], cautions: ["Medium light sensitivity"] },
+  "mat-clay-linen": { cleaningMethods: ["Gentle spot cleaning"], maintenance: "Follow specialist fabric guidance", recommendedUses: ["Lower-traffic rooms"], cautions: ["Avoid direct sunlight", "Not easy-care", "Not recorded as pet or family friendly"] },
+  "mat-cream-leather": { cleaningMethods: ["Approved leather milk"], maintenance: "Clean with approved leather care products", recommendedUses: ["Family living"], cautions: ["Specialist care", "High light sensitivity", "Not recorded as pet friendly"] },
+  "mat-smoke-velvet": { cleaningMethods: ["Gentle brushing"], maintenance: "Brush gently and keep the pile dry", recommendedUses: ["Lower-traffic rooms"], cautions: ["Avoid soaking", "Not easy-care", "Not recorded as pet or family friendly"] },
+  "mat-graphite-easy": { cleaningMethods: ["Machine-clean removable covers", "Routine vacuuming"], maintenance: "Clean removable covers only where applicable", recommendedUses: ["Busy households", "Children", "Pets", "Sunny rooms"], cautions: ["Confirm that the selected product has removable covers"] },
+  "mat-oat-performance": { cleaningMethods: ["Blot spills", "Spot cleaning"], maintenance: "Treat spills promptly without rubbing", recommendedUses: ["Busy households", "Children", "Pets", "Sunny rooms"], cautions: ["Blot rather than rub"] }
+};
+
 export const materials: Material[] = [
   ["mat-ivory-boucle", "Ivory Boucle", "fabric", "ivory", "soft loop", "polyester blend", 4, true, true, true, "medium", "Vacuum weekly, dab spills immediately."],
   ["mat-sand-weave", "Sand Structured Weave", "fabric", "beige", "woven", "recycled polyester blend", 5, true, true, true, "low", "Use a soft brush and pH-neutral cleaner."],
@@ -19,7 +34,8 @@ export const materials: Material[] = [
   ["mat-graphite-easy", "Graphite Easy-Care", "fabric", "graphite", "flat weave", "polyester", 5, true, true, true, "low", "Machine-clean removable covers when applicable."],
   ["mat-oat-performance", "Oat Performance Cloth", "fabric", "beige", "fine weave", "polyester blend", 5, true, true, true, "low", "Blot, do not rub."]
 ].map(([id, name, type, colorFamily, texture, composition, durability, easyCare, petFriendly, familyFriendly, lightSensitivity, care]) => ({
-  id, name, type, colorFamily, texture, composition, durability, easyCare, petFriendly, familyFriendly, lightSensitivity, care, demoData: true
+  id, name, type, colorFamily, texture, composition, durability, easyCare, petFriendly, familyFriendly, lightSensitivity, care,
+  ...materialDetails[String(id)], demoData: true
 } as Material));
 
 const base: Omit<Product, "id" | "slug" | "modelCode" | "name" | "subtitle" | "widthMm" | "depthMm" | "numberOfSeats" | "category" | "imageAssets" | "indicativePriceCents"> = {

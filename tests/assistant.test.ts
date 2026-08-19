@@ -14,6 +14,19 @@ const context: ConversationContext = {
 };
 
 describe("connected Musterring assistant grounding", () => {
+  it("supports room planning as a first-class customer journey", () => {
+    const answer = answerGroundedQuestion("Plan a room", context);
+    expect(answer.answerType).toBe("room");
+    expect(answer.proposedAction?.type).toBe("OPEN_ROOM_COMPOSER");
+  });
+
+  it("guides retailer-specific service questions without inventing policy", () => {
+    const answer = answerGroundedQuestion("Can you help with delivery and warranty?", context);
+    expect(answer.answerType).toBe("dealer");
+    expect(answer.proposedAction?.type).toBe("FIND_RETAILER");
+    expect(answer.answer).toMatch(/selected retailer/i);
+  });
+
   it("returns only catalogue-grounded product alternatives", () => {
     const result = findGroundedAlternatives({ sourceProductId: "p1", requestText: "I need something 30 cm narrower with a higher seat." });
     const ids = new Set(products.map((product) => product.id));
@@ -63,6 +76,10 @@ describe("connected Musterring assistant grounding", () => {
       return product.category === "sofa" && product.colors.includes("red");
     })).toBe(true);
     expect(result.exactMatches.some((match) => products.find((item) => item.id === match.productId)?.modelCode === "MR 260")).toBe(true);
+    expect(result.closestAlternatives.length).toBeGreaterThan(0);
+    expect(result.closestAlternatives.length).toBeLessThanOrEqual(3);
+    expect(result.closestAlternatives.every((match) => products.find((product) => product.id === match.productId)?.category === "sofa")).toBe(true);
+    expect(result.closestAlternatives.map((match) => match.productId)).not.toEqual(expect.arrayContaining(["musterring-mr-2665", "musterring-mr-4100"]));
     expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("red colour is not verified for this product"))).toBe(true);
   });
 
@@ -85,6 +102,11 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.exactMatches.some((match) => products.find((product) => product.id === match.productId)?.modelCode === "MR 260")).toBe(true);
   });
 
+  it("classifies catalogue recliners as armchairs rather than sofas", () => {
+    expect(products.find((product) => product.id === "musterring-mr-2665")?.category).toBe("armchair");
+    expect(products.find((product) => product.id === "musterring-mr-4100")?.category).toBe("armchair");
+  });
+
   it.each(["300 cm sofas", "sofa around 300 cm", "sofa 300 cm"])("preserves a requested width as an exact-match requirement: %s", (requestText) => {
     const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText });
     expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["sofa", "around 300 cm wide"]));
@@ -99,11 +121,14 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.interpretedRequirements).not.toContain("around 300 cm wide");
   });
 
-  it("preserves kitchen layout and minimum width without returning unrelated sofas", () => {
+  it("does not let request text switch the source product to another category", () => {
     const result = findGroundedAlternatives({ sourceProductId: "musterring-mr-lia", requestText: "L shaped kitchen above 300 cm" });
-    expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["kitchen", "l-shaped layout", "minimum 300 cm wide"]));
-    expect(result.exactMatches).toHaveLength(0);
-    expect(result.closestAlternatives).toHaveLength(0);
+    const sourceCategory = products.find((product) => product.id === "musterring-mr-lia")!.category;
+    expect(result.interpretedRequirements).toEqual(expect.arrayContaining([sourceCategory, "l-shaped layout", "minimum 300 cm wide"]));
+    expect(result.interpretedRequirements).not.toContain("kitchen");
+    expect([...result.exactMatches, ...result.closestAlternatives].every((match) =>
+      products.find((product) => product.id === match.productId)?.category === sourceCategory
+    )).toBe(true);
   });
 
   it("uses the verified red catalogue presentation for the red MR 260 match", () => {
@@ -120,17 +145,43 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("purple colour is not verified for this product"))).toBe(true);
   });
 
-  it("ranks other suitable options according to each customer's request", () => {
+  it("returns a bounded set of grounded other options for each customer's request", () => {
     const requests = [
       "Similar product with a higher seat",
       "Same style, but smaller",
       "red sofa"
     ];
-    const orders = requests.map((requestText) => findGroundedAlternatives({
+    const results = requests.map((requestText) => findGroundedAlternatives({
       sourceProductId: "musterring-justb-pm200",
       requestText
-    }).closestAlternatives.map((match) => match.productId).join(","));
-    expect(new Set(orders).size).toBe(requests.length);
+    }));
+    expect(results.every((result) => result.closestAlternatives.length > 0 && result.closestAlternatives.length <= 3)).toBe(true);
+    expect(results.flatMap((result) => result.closestAlternatives).every((match) => products.some((product) => product.id === match.productId))).toBe(true);
+    expect(results[2].closestAlternatives.every((match) => match.unmetRequirements.includes("red colour is not verified for this product"))).toBe(true);
+  });
+
+  it("locks Discover more like this results to the source product category", () => {
+    const source = products.find((product) => product.active && product.category === "dining-table")!;
+    expect(source).toBeTruthy();
+    const result = findGroundedAlternatives({ sourceProductId: source.id, requestText: "show me a smaller sofa under 250 cm" });
+    const matches = [...result.exactMatches, ...result.closestAlternatives];
+    expect(result.interpretedRequirements).toContain("dining table");
+    expect(result.interpretedRequirements).not.toContain("sofa");
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every((match) => products.find((product) => product.id === match.productId)?.category === "dining-table")).toBe(true);
+  });
+
+  it("treats not L-shaped as an exclusion rather than a positive layout requirement", () => {
+    const result = findGroundedAlternatives({
+      sourceProductId: "musterring-justb-pm200",
+      requestText: "find me a better sofa not L shaped and in grey color"
+    });
+    expect(result.interpretedRequirements).toContain("not l-shaped layout");
+    expect(result.interpretedRequirements).not.toContain("l-shaped layout");
+    expect(result.exactMatches.every((match) => {
+      const layouts = products.find((product) => product.id === match.productId)?.layoutShapes ?? [];
+      return layouts.length > 0 && !layouts.includes("l-shaped");
+    })).toBe(true);
   });
 
   it("understands the easier-care quick request as a material requirement", () => {
@@ -148,6 +199,27 @@ describe("connected Musterring assistant grounding", () => {
     expect(advice.needs.strongSunlight).toBe(true);
     const material = materials.find((item) => item.id === advice.recommendedMaterialIds[0])!;
     expect(materialReasons(material, advice).suitable.join(" ")).not.toMatch(/stain-proof|scratch-proof|allergy-safe|indestructible/i);
+  });
+
+  it("recognizes easy-to-wash phrasing as an easy-care material request", () => {
+    const advice = parseMaterialNeeds("easy to wash");
+    const easyCareIds = materials.filter((material) => material.easyCare).map((material) => material.id);
+    expect(advice.needs.easyCareRequired).toBe(true);
+    expect(advice.recommendedMaterialIds).toEqual(easyCareIds);
+    expect(advice.recommendedMaterialIds.every((id) => materials.find((material) => material.id === id)?.easyCare)).toBe(true);
+  });
+
+  it("does not relax an unavailable explicit material colour", () => {
+    const advice = parseMaterialNeeds("purple leather");
+    expect(advice.needs.preferredColors).toEqual(["purple"]);
+    expect(advice.needs.preferredMaterialGroups).toEqual(["leather"]);
+    expect(advice.recommendedMaterialIds).toEqual([]);
+  });
+
+  it("does not confuse professional cleaning with an easy-care request", () => {
+    const advice = parseMaterialNeeds("professional cleaning");
+    expect(advice.needs.easyCareRequired).toBe(false);
+    expect(advice.recommendedMaterialIds).toEqual(["mat-charcoal-wool"]);
   });
 
   it("validates the complete voice intent schema", () => {
@@ -204,11 +276,12 @@ describe("connected Musterring assistant grounding", () => {
     expect(answer.answer).toMatch(/exact catalogue match.*red colour/i);
   });
 
-  it("does not claim a black sofa when black is not verified in the connected catalogue", () => {
+  it("returns only verified black sofas when black is available in the connected catalogue", () => {
     const answer = answerGroundedQuestion("I want a black sofa", context);
-    expect(answer.answerType).toBe("missing-data");
+    expect(answer.answerType).toBe("products");
     expect(answer.productIds.length).toBeGreaterThan(0);
-    expect(answer.answer).toMatch(/No catalogue product satisfies every requested condition/);
+    expect(answer.productIds.every((id) => products.find((product) => product.id === id)?.verifiedFacts.colors.includes("black"))).toBe(true);
+    expect(answer.answer).toMatch(/exact catalogue match.*black colour/i);
   });
 
   it("does not treat generic comfort wording as a verified relax function", () => {

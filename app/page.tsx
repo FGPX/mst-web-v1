@@ -13,6 +13,8 @@ import {
   Sparkles
 } from "lucide-react";
 import { StitchLinkButton } from "@/components/stitch/StitchButtons";
+import ProductAssemblyStory from "@/components/ProductAssemblyStory";
+import Chair360Experience from "@/components/Chair360Experience";
 
 const quickStarts = [
   {
@@ -58,6 +60,8 @@ const rooms = [
 export default function HomePage() {
   return (
     <div className="simple-home">
+      <ProductAssemblyStory />
+
       <section className="simple-hero" aria-labelledby="home-heading">
         <div className="simple-hero-inner">
           <div className="simple-hero-copy">
@@ -122,6 +126,8 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      <Chair360Experience />
 
       <section className="simple-rooms" aria-labelledby="rooms-heading">
         <div className="simple-container">
