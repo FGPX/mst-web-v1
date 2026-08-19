@@ -6,6 +6,7 @@ import {
 } from "@/lib/assistant";
 import { createConfiguration } from "@/lib/configurator";
 import { productImageForColors } from "@/lib/musterring-assets";
+import { groundAlternativeRequest } from "@/lib/ai/alternative-grounding";
 import { voiceCommandSchema, type ConversationContext } from "@/lib/ai/assistant-schemas";
 
 const context: ConversationContext = {
@@ -13,6 +14,19 @@ const context: ConversationContext = {
 };
 
 describe("connected Musterring assistant grounding", () => {
+  it("supports room planning as a first-class customer journey", () => {
+    const answer = answerGroundedQuestion("Plan a room", context);
+    expect(answer.answerType).toBe("room");
+    expect(answer.proposedAction?.type).toBe("OPEN_ROOM_COMPOSER");
+  });
+
+  it("guides retailer-specific service questions without inventing policy", () => {
+    const answer = answerGroundedQuestion("Can you help with delivery and warranty?", context);
+    expect(answer.answerType).toBe("dealer");
+    expect(answer.proposedAction?.type).toBe("FIND_RETAILER");
+    expect(answer.answer).toMatch(/selected retailer/i);
+  });
+
   it("returns only catalogue-grounded product alternatives", () => {
     const result = findGroundedAlternatives({ sourceProductId: "p1", requestText: "I need something 30 cm narrower with a higher seat." });
     const ids = new Set(products.map((product) => product.id));
@@ -67,6 +81,25 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.closestAlternatives.every((match) => products.find((product) => product.id === match.productId)?.category === "sofa")).toBe(true);
     expect(result.closestAlternatives.map((match) => match.productId)).not.toEqual(expect.arrayContaining(["musterring-mr-2665", "musterring-mr-4100"]));
     expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("red colour is not verified for this product"))).toBe(true);
+  });
+
+  it("removes AI-invented filters from a simple red sofa request", () => {
+    const request = groundAlternativeRequest(
+      { sourceProductId: "musterring-justb-pm200", requestText: "red sofa" },
+      {
+        category: "sofa",
+        colorFamilies: ["red"],
+        styles: ["modern", "contemporary", "classic"],
+        layoutShapes: ["straight", "l-shaped", "u-shaped", "corner"],
+        materialTags: ["fabric", "leather", "microfiber", "velvet"]
+      }
+    );
+    expect(request).toMatchObject({ category: "sofa", colorFamilies: ["red"] });
+    expect(request.styles).toBeUndefined();
+    expect(request.layoutShapes).toBeUndefined();
+    expect(request.materialTags).toEqual([]);
+    const result = findGroundedAlternatives(request);
+    expect(result.exactMatches.some((match) => products.find((product) => product.id === match.productId)?.modelCode === "MR 260")).toBe(true);
   });
 
   it("classifies catalogue recliners as armchairs rather than sofas", () => {

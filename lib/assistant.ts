@@ -446,6 +446,63 @@ function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
   });
 }
 
+function customerJourneyAnswer(question: string, context: ConversationContext): AdvisorAnswer | null {
+  const text = question.toLowerCase();
+  const referenced = groundedProductIds(context.referencedProductIds);
+
+  if (/\b(plan|design|style|arrange|furnish|layout|visuali[sz]e)\b.*\b(room|space|living room|bedroom|dining room)\b|\broom (?:planner|planning|layout|design)\b/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "I can help plan your room step by step. Start with the room type and measurements, then add doors, windows and existing furniture. The room planner can explore layouts with catalogue products; use the fit check before treating any placement as physically confirmed.",
+      answerType: "room", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["Musterring room-planning tools"],
+      proposedAction: { type: "OPEN_ROOM_COMPOSER", label: "Open the room planner", parameters: {}, requiresConfirmation: false },
+      suggestedQuestions: ["What measurements do I need?", "Help me plan a living room", "How much walking space should I record?"]
+    });
+  }
+
+  if (/\b(my project|saved project|saved items?|my musterring|my selections?|my decisions?)\b/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "My Musterring keeps your saved catalogue products, configurations, room concepts and planning decisions together. I can help review what is selected, identify missing project details and prepare the information for a retailer. Nothing is changed or submitted without your confirmation.",
+      answerType: "project", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["My Musterring project data"],
+      proposedAction: null,
+      suggestedQuestions: ["What is missing from my project?", "Summarize my decisions", "Prepare my project for a retailer"]
+    });
+  }
+
+  if (/\b(retailer|dealer|store|showroom|consultation|appointment|where (?:can|do) i (?:buy|see)|buy in person)\b/.test(text)) {
+    const wantsBooking = /\b(book|appointment|consultation)\b/.test(text);
+    return advisorAnswerSchema.parse({
+      answer: wantsBooking
+        ? "A Musterring retailer can confirm local availability, pricing, delivery, configuration details and your final room requirements. I can take you to the consultation handover, where you can review everything before any personal details are submitted."
+        : "Use the retailer finder to choose a Musterring retailer. The retailer can confirm local availability, pricing, delivery, samples and final configuration details.",
+      answerType: "dealer", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["Musterring retailer service"],
+      proposedAction: wantsBooking
+        ? { type: "BOOK_CONSULTATION", label: "Prepare a consultation request", parameters: {}, requiresConfirmation: true }
+        : { type: "FIND_RETAILER", label: "Find a retailer", parameters: {}, requiresConfirmation: false },
+      suggestedQuestions: ["What should I prepare for a consultation?", "Can a retailer confirm availability?", "Prepare my project for a retailer"]
+    });
+  }
+
+  if (/\b(delivery|shipping|lead time|stock|availability|available now|price|cost|discount|payment|finance|warranty|guarantee|repair|spare part|return|refund|complaint|damaged|customer service|support|contact)\b/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "Pricing, availability, delivery, payment, warranty, returns and after-sales support depend on the selected retailer and order. I cannot verify those details here, but I can help you find a retailer or prepare the relevant product and project information for a clear enquiry.",
+      answerType: "dealer", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["Musterring retailer service"],
+      proposedAction: { type: "FIND_RETAILER", label: "Find a retailer", parameters: {}, requiresConfirmation: false },
+      suggestedQuestions: ["Prepare my retailer enquiry", "What information should I include?", "Find a retailer"]
+    });
+  }
+
+  if (/\b(how (?:does|do|can) (?:this|the) (?:site|website)|where (?:is|can i find)|navigate|website help|what can you do|help me use)\b/.test(text)) {
+    return advisorAnswerSchema.parse({
+      answer: "I can guide you across the Musterring journey: discover and compare products, understand materials, prepare configurations, plan a room, start a fit check, review saved project decisions, find a retailer and prepare a consultation handover.",
+      answerType: "fact", productIds: referenced, materialIds: context.selectedMaterialIds, sources: ["Musterring website"],
+      proposedAction: null,
+      suggestedQuestions: ["Help me plan a room", "Help me find furniture", "Show me how to prepare for a retailer"]
+    });
+  }
+
+  return null;
+}
+
 export function answerGroundedQuestion(question: string, context: ConversationContext): AdvisorAnswer {
   const text = question.toLowerCase();
   const conversationalText = text.trim().replace(/[.!?]+$/g, "").trim();
@@ -509,6 +566,8 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
       suggestedQuestions: ["Summarize my decisions", "Which room measurements are missing?"]
     });
   }
+  const journey = customerJourneyAnswer(question, context);
+  if (journey) return journey;
   if (/configur|build (?:a |my )?(?:sofa|sectional|chair|bed)|plan (?:a |my )?(?:sofa|sectional|chair|bed)/.test(text)) {
     if (current) {
       return advisorAnswerSchema.parse({
@@ -601,7 +660,7 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
   const discovery = productDiscoveryAnswer(question);
   if (discovery) return discovery;
   return advisorAnswerSchema.parse({
-    answer: "Information is not currently available in the connected product data. Ask about Musterring products, materials, configuration, room planning, fit guidance, saved projects or retailer preparation.",
+    answer: "I can help with anything across your Musterring journey: products, rooms, materials, configuration, fit preparation, saved projects, retailers and customer-service handover. I do not have enough verified information to answer that request yet, so tell me what you are trying to achieve and I will guide you to the right next step.",
     answerType: "missing-data", productIds: [], materialIds: [], sources: [],
     proposedAction: null, suggestedQuestions: ["Help me find the right sofa", "Choose a material", "Prepare my project for a retailer"]
   });

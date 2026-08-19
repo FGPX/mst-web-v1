@@ -106,6 +106,7 @@ describe("AI schemas and fallbacks", () => {
       .toContainEqual({ label: "Seat construction", value: "Spring core; optional barrel pocket spring core" });
     expect(input.products.find((product) => product.modelCode === "JUSTB! PM200")?.verifiedDetails)
       .toContainEqual({ label: "Seat Height", value: "41 or 43 cm" });
+    expect(new Set(summary.products.map((product) => product.summary)).size).toBe(summary.products.length);
     expect(summary.glance.join(" ")).toMatch(/Seat heights|Seat construction/);
     expect(summary.recommendation).not.toMatch(/not enough verified catalogue data/i);
   });

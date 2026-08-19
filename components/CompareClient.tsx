@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ArrowRight, Bookmark, Bot, Check, Clock3, Plus, Send, Trash2, X } from "lucide-react";
+import { ArrowRight, Bookmark, Check, Clock3, Plus, Send, Sparkles, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { products } from "@/lib/data";
@@ -90,13 +90,6 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
     if (!window.confirm(`Delete "${comparison.name}"?`)) return;
     setSavedComparisons(storage.deleteSavedComparison(comparison.id));
   };
-  const refineRecommendation = () => {
-    storage.track({ name: "comparison_refinement_opened" });
-    window.dispatchEvent(new CustomEvent("musterring:advisor", {
-      detail: { prompt: `Help me refine the comparison between ${comparisonName}. Ask about my room, comfort and configuration priorities before recommending one.` }
-    }));
-  };
-
   return (
     <main className="stitch-compare">
       <section className="stitch-compare-head container">
@@ -170,14 +163,14 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
         <div className="stitch-compare-callout">
           <span>Meaningful differences</span>
           {selected.map((product) => <article key={product.id}>
-            <div><p>{meaningfulDifference(product, selected)}</p>{comparisonBadge(product, selected) ? <small>{comparisonBadge(product, selected)}</small> : null}</div>
+            <div><p>{meaningfulDifference(product, selected)}</p></div>
           </article>)}
         </div>
 
         <div className="stitch-compare-rows" role="table" aria-label="Product specification comparison">
           {rows.map(({ name, values, level, summary }) => (
             <div className={`is-${level}-difference`} role="row" key={name}>
-              <b role="rowheader">{name}{summary ? <small>Large difference · {summary}</small> : null}</b>
+              <b role="rowheader">{name}{summary ? <small>Difference · {summary}</small> : null}</b>
               {values.map((value, index) => {
                 const badge = valueBadge(name, index, selected, values);
                 return <span role="cell" key={`${name}-${selected[index]?.id ?? index}`}><strong>{value}</strong>{badge ? <small>{badge}</small> : null}</span>;
@@ -193,17 +186,13 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
       </section>
 
       <section className={`container stitch-compare-ai${summaryStatus === "loading" ? " is-loading" : ""}`} aria-labelledby="comparison-ai-title" aria-busy={summaryStatus === "loading"}>
-        <header><Bot size={19} /><div><p className="eyebrow">AI summary</p><h2 id="comparison-ai-title">Your comparison, simplified</h2><small aria-live="polite">{summaryStatusText(summaryStatus)}</small></div></header>
-        <div className="stitch-compare-ai-products">
-          {summaries.products.map(({ product, summary, bestFor, facts }) => <article key={product.id}>
-            <div><Image src={productImages(product.id)[0]} alt="" width={78} height={58} /><span><strong>{product.modelCode}</strong><small>{bestFor}</small></span></div>
-            <p>{summary}</p>
-            <ul>{facts.map((fact) => <li key={fact}><Check size={13} />{fact}</li>)}</ul>
-          </article>)}
-        </div>
-        <div className="stitch-compare-ai-glance">
-          <div><h3>Key differences at a glance</h3>{summaries.glance.map((item) => <span key={item}>{item}</span>)}</div>
-          <aside><span><Bot size={17} /><strong>Overall recommendation</strong></span><p>{summaries.recommendation}</p><button type="button" onClick={refineRecommendation}>Refine Recommendation <ArrowRight size={15} /></button></aside>
+        <header>
+          <span className="stitch-compare-ai-mark" aria-hidden="true"><Sparkles size={18} /></span>
+          <div><p className="eyebrow">AI summary</p><h2 id="comparison-ai-title">Your comparison, simplified</h2><small aria-live="polite">{summaryStatusText(summaryStatus)}</small></div>
+        </header>
+        <div className="stitch-compare-ai-text">
+          {summaries.products.map(({ product, summary }) => <p key={product.id}><strong>{product.modelCode}:</strong> {summary}</p>)}
+          <p className="stitch-compare-ai-conclusion"><strong>Recommendation:</strong> {summaries.recommendation}</p>
         </div>
       </section>
 
@@ -296,23 +285,13 @@ function verifiedComparisonValue(product: Product, label: string) {
   return product.verifiedComparisonFacts?.find((fact) => fact.label === label)?.value;
 }
 
-function comparisonBadge(product: Product, selected: Product[]) {
-  const widths = selected.filter((item) => item.verifiedFacts.dimensions).map((item) => item.widthMm);
-  if (product.verifiedFacts.dimensions && widths.length > 1 && new Set(widths).size > 1 && product.widthMm === Math.min(...widths)) return "Smallest";
-  if (product.verifiedFacts.dimensions && widths.length > 1 && new Set(widths).size > 1 && product.widthMm === Math.max(...widths)) return "Largest";
-  const sameSeatCount = selected.filter((item) => item.numberOfSeatsVerified && item.numberOfSeats === product.numberOfSeats).length;
-  if (product.numberOfSeatsVerified && sameSeatCount === 1 && product.numberOfSeats === 4) return "Only 4-seat option";
-  return "";
-}
-
 function valueBadge(name: string, index: number, selected: Product[], values: string[]) {
   const product = selected[index];
   if (!product || new Set(values).size <= 1) return "";
   if (name === "Width") {
     const widths = selected.filter((item) => item.verifiedFacts.dimensions).map((item) => item.widthMm);
     if (!product.verifiedFacts.dimensions || widths.length < 2) return "";
-    if (product.widthMm === Math.min(...widths)) return "Smallest";
-    if (product.widthMm === Math.max(...widths)) return "Largest";
+    if (product.widthMm === Math.max(...widths)) return "Wider option";
   }
   if (name === "Seats" && product.numberOfSeatsVerified && selected.filter((item) => item.numberOfSeatsVerified && item.numberOfSeats === product.numberOfSeats).length === 1) return product.numberOfSeats === 4 ? "Only 4-seat option" : "Unique";
   if ((name === "Modularity" || name === "Functions") && values[index] !== "Configuration dependent" && values.filter((value) => value === values[index]).length === 1) return "Unique";
@@ -330,10 +309,10 @@ function hydrateComparisonSummary(summary: ComparisonSummary, selected: Product[
 }
 
 function summaryStatusText(status: "idle" | "loading" | "openai" | "fallback" | "error") {
-  if (status === "loading") return "Generating with AI from the verified catalogue specifications shown above…";
-  if (status === "openai") return "Generated by AI from the verified catalogue specifications shown above.";
-  if (status === "fallback" || status === "error") return "Catalogue-based fallback shown because AI is temporarily unavailable.";
-  return "Generated from the catalogue specifications shown above.";
+  if (status === "loading") return "Creating summary…";
+  if (status === "openai") return "Based on verified catalogue data.";
+  if (status === "fallback" || status === "error") return "Using available catalogue data.";
+  return "Based on catalogue data.";
 }
 
 function comparisonSummary(selected: Product[], awards: ReturnType<typeof comparisonAwards>) {
@@ -348,21 +327,35 @@ function comparisonSummary(selected: Product[], awards: ReturnType<typeof compar
     const labels = awards.find((award) => award.productId === product.id)?.labels ?? [];
     const detail = (label: string) => verifiedComparisonValue(product, label);
     const materialCopy = product.verifiedFacts.materialTypes.length ? ` Verified material types: ${product.verifiedFacts.materialTypes.join(", ")}.` : "";
-    const summary = product.verifiedFacts.modular
-      ? `A verified modular ${product.category.replace("-", " ")}.${materialCopy}`
-      : `A ${product.category.replace("-", " ")} whose exact specification depends on the selected configuration.${materialCopy}`;
+    const differencePriority = ["Seat construction", "Motorised function", "Seat Height", "Seat Depth", "Reference configuration"];
+    const distinctiveDetail = differencePriority
+      .map((label) => product.verifiedComparisonFacts?.find((item) => item.label === label))
+      .find((item) => item && selected.some((other) => other.id !== product.id
+        && other.verifiedComparisonFacts?.find((candidate) => candidate.label === item.label)?.value !== item.value));
+    const summary = product.verifiedFacts.dimensions && distinctiveDetail
+      ? `${Math.round(product.widthMm / 10)} cm wide — ${distinctiveDetail.value}.`
+      : product.verifiedFacts.dimensions
+        ? `${Math.round(product.widthMm / 10)} cm wide${product.verifiedFacts.modular ? " modular" : ""} ${product.category.replace("-", " ")}.`
+        : distinctiveDetail
+          ? `${distinctiveDetail.label}: ${distinctiveDetail.value}.`
+          : product.verifiedFacts.modular
+            ? `Modular ${product.category.replace("-", " ")}.${materialCopy}`
+            : `Specifications depend on the selected configuration.${materialCopy}`;
     const dimensionFact = product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} cm verified width` : "Dimensions vary by configuration";
     const seatingFact = product.numberOfSeatsVerified ? `${product.numberOfSeats} ${product.numberOfSeats === 1 ? "seat" : "seats"}` : "Seat count varies by configuration";
+    const specificationFact = [detail("Height"), detail("Seat Height"), detail("Seat Depth")].filter(Boolean).join(" · ");
+    const functionFact = detail("Motorised function")
+      ?? (product.verifiedFacts.functions.length ? product.verifiedFacts.functions.join(", ") : "Functions vary by configuration");
+    const keyFact = functionFact || detail("Seat construction") || specificationFact
+      || (product.verifiedFacts.modular ? "Verified modular system" : "Other specifications vary by configuration");
     return {
       product,
       summary,
       bestFor: labels[0] ?? (product.verifiedFacts.smallSpaceSuitable ? "Verified for compact room planning" : "Compare with your room requirements"),
       facts: [
         `${dimensionFact} · ${seatingFact}`,
-        [detail("Height"), detail("Seat Height"), detail("Seat Depth")].filter(Boolean).join(" · "),
-        detail("Seat construction") ?? (product.verifiedFacts.modular ? "Verified modular system" : "Modularity varies by configuration"),
-        detail("Motorised function") ?? (product.verifiedFacts.functions.length ? product.verifiedFacts.functions.join(", ") : "Functions vary by configuration")
-      ].filter(Boolean).slice(0, 4)
+        keyFact
+      ].filter(Boolean).slice(0, 2)
     };
   });
   const modularCount = selected.filter((product) => product.verifiedFacts.modular).length;
@@ -380,13 +373,13 @@ function comparisonSummary(selected: Product[], awards: ReturnType<typeof compar
     detailComparison("Seat construction", "Seat construction"),
     modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
     `${selected.filter((product) => product.verifiedFacts.functions.length).length} with verified function data`
-  ].filter(Boolean).slice(0, 5);
+  ].filter(Boolean).slice(0, 2);
   const recommendation = narrowest && highestCapacity && narrowest.id === highestCapacity.id
-    ? `${narrowest.modelCode} combines the smallest verified width with the highest verified seating capacity in this selection. Confirm the exact configuration and room fit with a retailer.`
+    ? `${narrowest.modelCode} is the more compact option and has the most verified seats. Confirm the final fit with a retailer.`
     : narrowest && highestCapacity
-      ? `For a tighter room, ${narrowest.modelCode} has the smallest verified width. For maximum verified seating capacity, ${highestCapacity.modelCode} provides ${highestCapacity.numberOfSeats} seats. Refine the recommendation using your room and comfort priorities.`
+      ? `${narrowest.modelCode} is the more compact option. ${highestCapacity.modelCode} has the most verified seats.`
       : narrowest && dimensionProducts.length > 1
-        ? `${narrowest.modelCode} has the smallest verified reference width in this selection. The models also differ in seat height and seat construction, so choose according to your preferred sitting position and comfort, then confirm the exact configuration and room fit with a Musterring retailer.`
-      : "There is not enough verified catalogue data to identify a single best option. Refine the recommendation and confirm the configuration with a Musterring retailer.";
+        ? `${narrowest.modelCode} is the more compact option. Compare comfort and confirm the final configuration with a retailer.`
+      : "There is not enough verified data to choose one. Confirm the final configuration with a retailer.";
   return { products: productsSummary, glance, recommendation };
 }

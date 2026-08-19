@@ -38,6 +38,7 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
     (best, product) => !best || product.verifiedSeatCount! > best.verifiedSeatCount! ? product : best,
     null
   );
+  const differencePriority = ["Seat construction", "Motorised function", "Seat Height", "Seat Depth", "Reference configuration"];
 
   const products = parsed.products.map((product) => {
     const detail = (label: string) => product.verifiedDetails.find((item) => item.label === label)?.value;
@@ -58,20 +59,31 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
     const comfortFact = detail("Seat construction") ?? detail("Upholstery choice");
     const functionFact = detail("Motorised function")
       ?? (product.verifiedFunctions.length ? product.verifiedFunctions.join(", ") : "Functions vary by configuration");
+    const keyFact = functionFact || comfortFact || specificationFact
+      || (product.verifiedModular ? "Verified modular system" : "Other specifications vary by configuration");
+    const distinctiveDetail = differencePriority
+      .map((label) => product.verifiedDetails.find((item) => item.label === label))
+      .find((item) => item && parsed.products.some((other) => other.productId !== product.productId
+        && other.verifiedDetails.find((candidate) => candidate.label === item.label)?.value !== item.value));
+    const conciseSummary = product.verifiedWidthCm !== null && distinctiveDetail
+      ? `${product.verifiedWidthCm} cm wide — ${distinctiveDetail.value}.`
+      : product.verifiedWidthCm !== null
+        ? `${product.verifiedWidthCm} cm wide${product.verifiedModular ? " modular" : ""} ${product.category}.`
+        : distinctiveDetail
+          ? `${distinctiveDetail.label}: ${distinctiveDetail.value}.`
+          : product.verifiedModular
+            ? `Modular ${product.category}.${materialCopy}`
+            : `Specifications depend on the selected configuration.${materialCopy}`;
 
     return {
       productId: product.productId,
-      summary: product.verifiedModular
-        ? `A verified modular ${product.category}.${materialCopy}`
-        : `A ${product.category} whose exact specification depends on the selected configuration.${materialCopy}`,
+      summary: conciseSummary,
       bestFor: product.comparisonHighlights[0]
         ?? (product.verifiedSmallSpaceSuitable ? "Verified for compact room planning" : "Compare with your room requirements"),
       facts: [
         `${dimensionFact} · ${seatingFact}`,
-        specificationFact,
-        comfortFact ?? (product.verifiedModular ? "Verified modular system" : "Modularity varies by configuration"),
-        functionFact
-      ].filter(Boolean).slice(0, 4)
+        keyFact
+      ].filter(Boolean).slice(0, 2)
     };
   });
 
@@ -94,14 +106,14 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
     detailComparison("Seat construction", "Seat construction"),
     modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
     `${parsed.products.filter((product) => product.verifiedFunctions.length).length} with verified function data`
-  ].filter(Boolean).slice(0, 5);
+  ].filter(Boolean).slice(0, 2);
   const recommendation = narrowest && highestCapacity && narrowest.productId === highestCapacity.productId
-    ? `${narrowest.modelCode} combines the smallest verified width with the highest verified seating capacity in this selection. Confirm the exact configuration and room fit with a retailer.`
+    ? `${narrowest.modelCode} is the more compact option and has the most verified seats. Confirm the final fit with a retailer.`
     : narrowest && highestCapacity
-      ? `For a tighter room, ${narrowest.modelCode} has the smallest verified width. For maximum verified seating capacity, ${highestCapacity.modelCode} provides ${highestCapacity.verifiedSeatCount} seats. Refine the recommendation using your room and comfort priorities.`
+      ? `${narrowest.modelCode} is the more compact option. ${highestCapacity.modelCode} has the most verified seats.`
       : narrowest && widthProducts.length > 1
-        ? `${narrowest.modelCode} has the smallest verified reference width in this selection. The models also differ in seat height and seat construction, so choose according to your preferred sitting position and comfort, then confirm the exact configuration and room fit with a Musterring retailer.`
-      : "There is not enough verified catalogue data to identify a single best option. Refine the recommendation and confirm the configuration with a Musterring retailer.";
+        ? `${narrowest.modelCode} is the more compact option. Compare comfort and confirm the final configuration with a retailer.`
+      : "There is not enough verified data to choose one. Confirm the final configuration with a retailer.";
 
   return comparisonSummarySchema.parse({ products, glance, recommendation });
 }
@@ -111,14 +123,30 @@ export function validateComparisonSummary(
   input: ComparisonSummaryInput
 ): ComparisonSummary {
   const parsed = comparisonSummarySchema.parse(summary);
+  const baseline = deterministicComparisonSummary(input);
   const expectedIds = input.products.map((product) => product.productId);
   const receivedIds = parsed.products.map((product) => product.productId);
   if (receivedIds.length !== expectedIds.length || expectedIds.some((id) => !receivedIds.includes(id))) {
     throw new Error("Comparison summary returned products outside the grounded selection.");
   }
   const byId = new Map(parsed.products.map((product) => [product.productId, product]));
+  const baselineById = new Map(baseline.products.map((product) => [product.productId, product]));
+  const normalizedSummaries = parsed.products.map((product) => product.summary.trim().toLocaleLowerCase());
+  const hasDuplicateSummaries = new Set(normalizedSummaries).size !== normalizedSummaries.length;
+  const recommendation = parsed.recommendation.trim().split(/\s+/).length <= 30
+    ? parsed.recommendation
+    : baseline.recommendation;
   return comparisonSummarySchema.parse({
     ...parsed,
-    products: expectedIds.map((id) => byId.get(id))
+    products: expectedIds.map((id) => ({
+      ...byId.get(id)!,
+      summary: !hasDuplicateSummaries && byId.get(id)!.summary.trim().split(/\s+/).length <= 20
+        ? byId.get(id)!.summary
+        : baselineById.get(id)!.summary,
+      bestFor: baselineById.get(id)!.bestFor,
+      facts: baselineById.get(id)!.facts
+    })),
+    glance: baseline.glance,
+    recommendation
   });
 }

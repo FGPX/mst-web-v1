@@ -16,6 +16,8 @@
     "import:musterring-assets": "node scripts/import-musterring-assets.mjs",
     "import:musterring-assets:dry": "node scripts/import-musterring-assets.mjs --dry-run",
     "import:content-manifest": "node scripts/build-content-manifest.mjs",
+    "extract:room-planner-colors": "node scripts/extract-room-planner-colors.mjs",
+    "generate:room-planner-models": "npm run extract:room-planner-colors && node scripts/generate-room-planner-glbs.mjs",
     "seed": "node -e \"console.log('Demo data is bundled in lib/data.ts')\""
   },
   "dependencies": {
@@ -39,9 +41,11 @@
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.4",
     "@types/react-dom": "^19.0.2",
+    "@types/three": "^0.185.4",
     "eslint": "^9.17.0",
     "eslint-config-next": "^15.1.4",
     "jsdom": "^29.1.1",
+    "sharp": "^0.35.3",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }
