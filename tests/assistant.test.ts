@@ -14,6 +14,19 @@ const context: ConversationContext = {
 };
 
 describe("connected Musterring assistant grounding", () => {
+  it("supports room planning as a first-class customer journey", () => {
+    const answer = answerGroundedQuestion("Plan a room", context);
+    expect(answer.answerType).toBe("room");
+    expect(answer.proposedAction?.type).toBe("OPEN_ROOM_COMPOSER");
+  });
+
+  it("guides retailer-specific service questions without inventing policy", () => {
+    const answer = answerGroundedQuestion("Can you help with delivery and warranty?", context);
+    expect(answer.answerType).toBe("dealer");
+    expect(answer.proposedAction?.type).toBe("FIND_RETAILER");
+    expect(answer.answer).toMatch(/selected retailer/i);
+  });
+
   it("returns only catalogue-grounded product alternatives", () => {
     const result = findGroundedAlternatives({ sourceProductId: "p1", requestText: "I need something 30 cm narrower with a higher seat." });
     const ids = new Set(products.map((product) => product.id));
