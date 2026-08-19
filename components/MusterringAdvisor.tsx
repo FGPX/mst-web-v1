@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, Check, MessageCircle, Mic, Send, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, Mic, Send, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { materials, products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -202,7 +202,7 @@ export function MusterringAdvisor() {
     recognition.onend = () => setVoiceState((current) => current === "listening" ? "idle" : current);
     setVoiceState("listening"); recognition.start();
   };
-  if (!open) return <button className="assistant-dock" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><MessageCircle /><span>Ask</span></button>;
+  if (!open) return <button className="assistant-dock" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><span className="assistant-mark-crop" aria-hidden="true"><Image className="assistant-launcher-logo" src="/brand/musterring-logo.svg" alt="" width={70} height={90} /></span><span>Ask</span></button>;
   return <aside className="advisor-panel" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
     <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></header>
       <div className="advisor-messages" aria-live="polite">

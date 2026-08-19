@@ -11631,10 +11631,12 @@ button.assistant-dock:focus-visible { outline: 2px solid #8b553b; outline-offset
 
 /* Bright concierge theme and restrained launcher. */
 button.assistant-dock { border: 1px solid rgba(25,24,21,.24); background: rgba(255,255,255,.96); color: #191815; box-shadow: 0 8px 26px rgba(25,24,21,.14); backdrop-filter: blur(10px); }
-button.assistant-dock { height: 56px; min-height: 56px; gap: 11px; padding: 0 23px 0 18px; }
+button.assistant-dock { height: 72px; min-height: 72px; gap: 15px; padding: 0 28px 0 18px; }
 button.assistant-dock:hover { background: #fff; color: #191815; box-shadow: 0 11px 30px rgba(25,24,21,.18); }
 button.assistant-dock > svg { width: 20px; height: 20px; stroke-width: 1.7; }
-button.assistant-dock > span { font-size: 13px; }
+.assistant-mark-crop { position: relative; width: 48px; height: 48px; flex: 0 0 48px; overflow: hidden; }
+button.assistant-dock .assistant-launcher-logo { position: absolute; top: -4px; left: -4px; width: 56px; height: 72px; max-width: none; object-fit: contain; object-position: top center; }
+button.assistant-dock > span:last-child { font-size: 14px; }
 
 .advisor-panel { width: min(478px,calc(100vw - 48px)); height: min(750px,calc(100dvh - 160px)); border: 1px solid rgba(25,24,21,.15); background: #fbfaf7; color: #191815; box-shadow: 0 30px 90px rgba(25,24,21,.22); }
 .advisor-panel > header { border-bottom-color: rgba(25,24,21,.12); background: #fff; color: #191815; }
@@ -11671,7 +11673,9 @@ button.assistant-dock > span { font-size: 13px; }
 .advisor-panel .advisor-input:focus-within { border-color: #955338; box-shadow: 0 14px 34px rgba(25,24,21,.13),0 0 0 1px #955338; }
 
 @media (max-width:520px) {
-  button.assistant-dock { height: 50px; min-height: 50px; padding: 0 18px 0 15px; }
+  button.assistant-dock { height: 62px; min-height: 62px; padding: 0 21px 0 15px; }
+  .assistant-mark-crop { width: 40px; height: 40px; flex-basis: 40px; }
+  button.assistant-dock .assistant-launcher-logo { width: 48px; height: 62px; }
 }
 /* Scroll-composed living room story */
 .product-assembly {
