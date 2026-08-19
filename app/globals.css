@@ -1864,6 +1864,440 @@ body:has(.stitch-room-composer.is-upload-flow) .assistant-dock {
   }
 }
 
+/* Premium, compact real-room visualizer. */
+body:has(.stitch-room-composer.is-upload-flow) {
+  background: #f7f5f1;
+}
+
+body:has(.stitch-room-composer.is-upload-flow) .stitch-header {
+  top: 18px;
+  right: 18px;
+  left: 18px;
+  border: 1px solid #dedbd5;
+  border-radius: 14px 14px 0 0;
+  background: rgba(255, 255, 255, .96);
+}
+
+body:has(.stitch-room-composer.is-upload-flow) .stitch-nav {
+  width: min(calc(100% - 64px), 1518px);
+  height: 96px;
+}
+
+body:has(.stitch-room-composer.is-upload-flow) .stitch-brand-logo {
+  display: block;
+  width: auto;
+  height: 64px;
+  object-fit: contain;
+}
+
+body:has(.stitch-room-composer.is-upload-flow) .stitch-nav-links {
+  flex: 1;
+  justify-content: center;
+  gap: clamp(22px, 2.5vw, 42px);
+}
+
+body:has(.stitch-room-composer.is-upload-flow) .stitch-nav-links a,
+body:has(.stitch-room-composer.is-upload-flow) .stitch-furniture-trigger {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+body:has(.stitch-room-composer.is-upload-flow) .stitch-nav-actions .stitch-button {
+  min-height: 50px;
+  border-radius: 7px;
+  padding-inline: 24px;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-intro > .container,
+.stitch-room-composer.is-upload-flow .stitch-composer-workspace > .container {
+  width: min(calc(100% - 80px), 1518px);
+}
+
+@media (min-width: 901px) {
+  .stitch-room-composer.is-upload-flow .stitch-composer-intro {
+    padding-top: 168px;
+  }
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-intro {
+  padding-bottom: 26px;
+  background: #fff;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-intro .eyebrow {
+  margin-bottom: 8px;
+  color: #687181;
+  font-size: 12px;
+  letter-spacing: .1em;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-intro h1 {
+  font: 600 clamp(38px, 3.2vw, 48px)/1.05 var(--stitch-font-ui);
+  letter-spacing: -.035em;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-intro p:not(.eyebrow) {
+  display: none;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-intro .consult {
+  min-height: 51px;
+  border-radius: 7px;
+  padding: 0 28px;
+  background: #1d1d1b;
+  color: white;
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-intro .consult svg {
+  display: none;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-workspace {
+  padding: 12px 0 70px;
+  background: #fff;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-layout {
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 40px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-library {
+  max-height: 750px;
+  padding: 0 10px 0 0;
+  background: transparent;
+  scrollbar-color: #9da4ae #e8ebef;
+  scrollbar-width: thin;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-catalog-heading,
+.stitch-room-composer.is-upload-flow .stitch-composer-search {
+  display: none;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-library > .eyebrow {
+  position: sticky;
+  z-index: 3;
+  top: 0;
+  margin: 0;
+  padding: 2px 0 10px;
+  background: #fff;
+  color: #687181;
+  font-size: 11px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-tabs {
+  position: sticky;
+  z-index: 3;
+  top: 27px;
+  display: flex;
+  overflow-x: auto;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding: 0 0 12px;
+  background: #fff;
+  scrollbar-width: none;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-tabs button {
+  flex: 0 0 auto;
+  min-height: 32px;
+  border: 1px solid #dfe1e4;
+  border-radius: 999px;
+  padding: 0 12px;
+  background: #fff;
+  color: #4f5662;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-tabs button.is-active {
+  border-color: #1d1d1b;
+  background: #1d1d1b;
+  color: #fff;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-products {
+  gap: 20px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-products > article {
+  min-height: 258px;
+  overflow: hidden;
+  border: 1px solid #dfe1e4;
+  border-radius: 14px;
+  padding: 18px 20px 20px;
+  gap: 10px;
+  background: #fff;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-product-media {
+  min-height: 165px;
+  border-radius: 0;
+  background: #efefef;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-product-media img {
+  padding: 8px 18px;
+  mix-blend-mode: normal;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-product-copy {
+  display: block;
+  min-width: 0;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-product-copy > span,
+.stitch-room-composer.is-upload-flow .stitch-composer-product-copy > strong {
+  display: block;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-product-actions {
+  justify-content: flex-end;
+  margin-top: -38px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-product-actions button:first-child {
+  flex: 0 0 auto;
+  min-height: 35px;
+  border-radius: 7px;
+  padding: 0 14px;
+  font-size: 11px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-show-more {
+  position: sticky;
+  bottom: 0;
+  min-height: 44px;
+  margin-top: 14px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, .96);
+  backdrop-filter: blur(8px);
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-main {
+  position: relative;
+  min-width: 0;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-view-toggle {
+  position: absolute;
+  z-index: 12;
+  top: 20px;
+  left: 50%;
+  overflow: hidden;
+  margin: 0;
+  border: 5px solid white;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
+  transform: translateX(-50%);
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-view-toggle button {
+  min-height: 36px;
+  border: 0;
+  padding: 0 22px;
+  color: #707787;
+  font-size: 12px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-view-toggle button.is-active {
+  border-radius: 999px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-stage {
+  aspect-ratio: 1.88 / 1;
+  border: 1px solid #d9d6d0;
+  border-radius: 14px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-room {
+  border-radius: 13px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-panel {
+  margin-top: 30px;
+  border: 0;
+  padding: 6px 0 0;
+  align-items: start;
+  gap: 44px;
+  background: transparent;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-panel > div:first-child {
+  max-width: 500px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-panel .eyebrow {
+  margin-bottom: 10px;
+  color: #687181;
+  font-size: 12px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-panel .eyebrow svg {
+  display: none;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-panel > div:first-child > strong {
+  font-size: 31px;
+  font-weight: 600;
+  letter-spacing: -.025em;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-panel > div:first-child > span {
+  margin-top: 14px;
+  color: #5d6574;
+  font-size: 14px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-actions {
+  min-width: min(100%, 520px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 14px;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-actions > button,
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-actions > a {
+  min-height: 56px;
+  border-radius: 7px;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-actions > button:last-of-type {
+  grid-column: 1 / -1;
+  background: #d8d0c4;
+  color: #242320;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-consent {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 8px;
+  color: #687181;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-consent input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #1d1d1a;
+}
+
+.stitch-room-composer.is-upload-flow .stitch-composer-ai-consent a {
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  display: inline;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-decoration: underline;
+  text-transform: none;
+}
+
+@media (max-width: 1100px) {
+  body:has(.stitch-room-composer.is-upload-flow) .stitch-nav {
+    width: calc(100% - 40px);
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-layout {
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  body:has(.stitch-room-composer.is-upload-flow) .stitch-header {
+    top: 0;
+    right: 0;
+    left: 0;
+    border-radius: 0;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-intro > .container,
+  .stitch-room-composer.is-upload-flow .stitch-composer-workspace > .container {
+    width: min(calc(100% - 32px), 1518px);
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-library {
+    max-height: none;
+    padding: 0;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-main { order: 1; }
+  .stitch-room-composer.is-upload-flow .stitch-composer-library { order: 2; }
+}
+
+@media (max-width: 620px) {
+  .stitch-room-composer.is-upload-flow .stitch-composer-intro > .container > div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-products,
+  .stitch-room-composer.is-upload-flow .stitch-composer-ai-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-ai-panel {
+    flex-direction: column;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-ai-actions > * {
+    grid-column: 1 !important;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-view-toggle {
+    top: 10px;
+    border-width: 3px;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-view-toggle button {
+    min-height: 32px;
+    padding: 0 11px;
+    font-size: 10px;
+  }
+
+  .stitch-room-composer.is-upload-flow .stitch-composer-stage {
+    aspect-ratio: 4 / 3;
+  }
+}
+
 .stitch-engineering-specs .container {
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
