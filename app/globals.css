@@ -10586,3 +10586,98 @@ body:has(.sticky-actions) .assistant-dock {
 .planner3d-real-view { display: flex; align-items: center; gap: 6px; margin-top: 12px; color: #557257; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
 @media (max-width: 1000px) { .planner3d-workspace { grid-template-columns: 230px 1fr; }.planner3d-properties { position: absolute; right: 12px; bottom: 12px; width: 240px; max-height: 60vh; box-shadow: 0 8px 30px rgba(0,0,0,.15); }.planner3d-setup { grid-template-columns: 330px 1fr; }.planner3d-setup > aside { padding: 36px 28px; } }
 @media (max-width: 700px) { .planner3d-topbar > a, .planner3d-topbar span { display: none; }.planner3d-setup { display: block; }.planner3d-setup-preview { min-height: 360px; }.planner3d-workspace { grid-template-columns: 1fr; height: auto; overflow: visible; }.planner3d-catalog { max-height: 390px; }.planner3d-canvas-wrap { height: 65vh; }.planner3d-properties { position: static; width: auto; max-height: none; }.planner3d-products { grid-template-columns: repeat(2,1fr); } }
+
+/* Minimal, quiet presentation for the global Product Advisor. */
+.assistant-dock {
+  right: 24px;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  grid-template-columns: auto 48px;
+  padding: 0;
+  border: 1px solid rgba(25, 24, 21, .16);
+  border-radius: 999px;
+  background: rgba(251, 249, 244, .96);
+  color: #191815;
+  box-shadow: 0 10px 30px rgba(25, 24, 21, .14);
+  backdrop-filter: blur(12px);
+}
+.assistant-dock:hover { transform: translateY(-2px); border-color: rgba(25, 24, 21, .3); box-shadow: 0 14px 36px rgba(25, 24, 21, .17); }
+.assistant-dock .advisor-launcher,
+.assistant-dock .voice-launcher { min-height: 56px; }
+.assistant-dock .advisor-launcher { gap: 11px; padding: 0 18px 0 8px; }
+.assistant-dock .advisor-launcher > svg { width: 40px; height: 40px; flex-basis: 40px; padding: 11px; border: 0; background: #191815; color: #fbf9f4; box-shadow: none; }
+.assistant-dock .advisor-launcher span { gap: 2px; }
+.assistant-dock .advisor-launcher small { color: #191815; font-size: 10px; letter-spacing: .11em; }
+.assistant-dock .advisor-launcher strong { color: #777169; font: 500 10px/1.25 var(--stitch-font-ui); letter-spacing: .02em; text-transform: none; }
+.assistant-dock .voice-launcher { width: 48px; border-left-color: rgba(25, 24, 21, .13); }
+.assistant-dock .voice-launcher::after { display: none; }
+.assistant-dock .voice-launcher svg { width: 17px; }
+.assistant-dock button:hover { background: transparent; }
+.assistant-dock .voice-launcher:hover { background: #f0ede7; }
+
+.advisor-panel {
+  width: min(420px, calc(100vw - 36px));
+  height: min(650px, calc(100dvh - 114px));
+  border-color: rgba(25, 24, 21, .16);
+  border-radius: 16px;
+  background: #fbf9f4;
+  box-shadow: 0 24px 64px rgba(25, 24, 21, .2);
+}
+.advisor-panel > header { gap: 11px; min-height: 64px; padding: 10px 12px 10px 16px; border-bottom: 1px solid rgba(25, 24, 21, .12); background: #fbf9f4; color: #191815; }
+.advisor-brand-icon { width: 36px; height: 36px; flex: 0 0 36px; border: 0; }
+.advisor-brand-icon svg { width: 17px; }
+.advisor-panel > header p.advisor-header-title { margin: 0; color: #191815; font-size: 11px; letter-spacing: .13em; }
+.advisor-panel > header button { width: 40px; height: 40px; flex-basis: 40px; border: 0; border-radius: 50%; color: #191815; }
+.advisor-panel > header button svg { width: 20px; height: 20px; }
+.advisor-panel > header button:hover { background: #f0ede7; }
+.advisor-messages { gap: 18px; padding: 26px 22px; background: #fbf9f4; }
+.advisor-welcome { padding-bottom: 22px; border-bottom-color: #ded8cf; }
+.advisor-welcome h3 { max-width: 340px; margin: 2px 0 10px; font: 500 27px/1.15 var(--stitch-font-display); }
+.advisor-welcome p { max-width: 360px; font-size: 14px; line-height: 1.55; }
+.advisor-starters { display: grid !important; grid-template-columns: 1fr 1fr; align-items: stretch; gap: 8px !important; margin: 20px 0 0; }
+.advisor-welcome .advisor-starters button { min-height: 46px; border-radius: 8px; background: transparent; padding: 10px 12px; font-size: 12px; }
+.advisor-input { margin: 0 18px 18px; border-radius: 12px; }
+.advisor-input:focus-within { box-shadow: 0 0 0 2px rgba(139, 85, 59, .1); }
+.advisor-input textarea { min-height: 54px; border-radius: 8px; padding: 8px 10px; }
+
+@media (max-width: 768px) {
+  .advisor-panel { width: 100%; height: 100dvh; border-radius: 0; }
+}
+@media (max-width: 520px) {
+  .assistant-dock { right: 14px; bottom: max(14px, env(safe-area-inset-bottom)); grid-template-columns: 52px 44px; }
+  .assistant-dock .advisor-launcher, .assistant-dock .voice-launcher { min-height: 52px; }
+  .assistant-dock .advisor-launcher { width: 52px; padding: 0; }
+  .assistant-dock .advisor-launcher > svg { width: 36px; height: 36px; flex-basis: 36px; padding: 10px; }
+  .assistant-dock .voice-launcher { width: 44px; }
+  .advisor-starters { grid-template-columns: 1fr; }
+}
+
+/* Reduced advisor chrome: one clear entry point, no promotional copy. */
+button.assistant-dock {
+  width: auto;
+  height: 50px;
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 0 16px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: #191815;
+  color: #fbf9f4;
+  box-shadow: 0 8px 24px rgba(25, 24, 21, .18);
+}
+button.assistant-dock::after { display: none; }
+button.assistant-dock:hover { transform: translateY(-2px); background: #2c2b28; box-shadow: 0 10px 28px rgba(25, 24, 21, .22); }
+button.assistant-dock > svg { width: 18px; height: 18px; stroke-width: 1.8; }
+button.assistant-dock > span { font: 600 12px/1 var(--stitch-font-ui); letter-spacing: .08em; text-transform: uppercase; }
+button.assistant-dock:focus-visible { outline: 2px solid #8b553b; outline-offset: 3px; }
+
+.advisor-panel > header { min-height: 56px; padding: 8px 10px 8px 18px; }
+.advisor-panel > header > div { min-width: 0; }
+.advisor-panel > header p.advisor-header-title { font-size: 10px; letter-spacing: .14em; }
+.advisor-panel > header button { width: 36px; height: 36px; flex-basis: 36px; }
+
+@media (max-width: 520px) {
+  button.assistant-dock { right: 16px; width: auto; height: 46px; min-height: 46px; padding: 0 17px 0 14px; }
+}
