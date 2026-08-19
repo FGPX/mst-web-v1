@@ -12,6 +12,9 @@ import {
   retailerSummarySchema,
   roomAnalysisSchema,
   searchIntentSchema,
+  stylistProviderResultSchema,
+  stylistProviderResultSchemaForCandidates,
+  stylistSlotIds,
   visualTagsSchema,
   type ComparisonSummary,
   type ComparisonSummaryInput,
@@ -19,8 +22,10 @@ import {
   type RetailerProjectData,
   type RoomAnalysis,
   type SearchIntent,
+  type StylistProviderResult,
   type VisualTags
 } from "./schemas";
+import type { StylistPreferences } from "../types";
 import { parseSearchQuery } from "../search";
 import {
   advisorAnswerSchema, alternativeRequestSchema, alternativeResponseSchema, conversationRecommendationSchema,
@@ -77,12 +82,19 @@ const openAIMaterialAdviceSchema = z.object({
 });
 
 const visualCategoryList = catalogueCategories.join(", ");
+const stylistCandidatePayloadSchema = z.object({
+  slots: z.array(z.object({
+    slotId: z.enum(stylistSlotIds),
+    candidates: z.array(z.object({ id: z.string().trim().min(1) })).min(1)
+  })).min(1).max(3)
+});
 
 export interface AIProvider {
   readonly name: AIProviderName;
   parseSearchIntent(query: string): Promise<SearchIntent>;
   analyzeProductImage(imageDataUrl: string): Promise<VisualTags>;
   analyzeRoomImage(imageDataUrl: string): Promise<RoomAnalysis>;
+  styleRoomFromPreferences(input: { preferences: StylistPreferences; candidateFacts: string }): Promise<StylistProviderResult>;
   suggestConfigurationRequirements(request: string): Promise<ConfigurationRequirements>;
   explainProductMatch(input: { request: string; productFacts: string }): Promise<string>;
   summarizeRetailerProject(project: RetailerProjectData, groundedFacts: string): Promise<string>;
@@ -168,6 +180,10 @@ export class LocalDemoAIProvider implements AIProvider {
       styleTags: ["modern", "calm", "residential"],
       lightingDescription: fingerprint % 2 ? "soft natural side light" : "balanced ambient light"
     });
+  }
+
+  async styleRoomFromPreferences(): Promise<StylistProviderResult> {
+    throw new Error("AI Interior Stylist requires a configured OpenAI provider.");
   }
 
   async suggestConfigurationRequirements(request: string) {
@@ -305,20 +321,31 @@ export class OpenAIProvider implements AIProvider {
   private client: OpenAI;
   private model: string;
   private imageModel: string;
+  private stylistModel: string;
 
   constructor(apiKey: string) {
     this.client = new OpenAI({ apiKey, baseURL: process.env.OPENAI_BASE_URL || undefined });
     this.model = process.env.AI_MODEL || "gpt-5-nano";
     this.imageModel = process.env.AI_IMAGE_MODEL || this.model;
+    this.stylistModel = process.env.AI_STYLIST_MODEL || this.model;
   }
 
-  private async parse<T>(schema: z.ZodType<T>, name: string, system: string, input: OpenAI.Responses.ResponseInput, image = false): Promise<T> {
+  private async parse<T>(
+    schema: z.ZodType<T>,
+    name: string,
+    system: string,
+    input: OpenAI.Responses.ResponseInput,
+    image = false,
+    options: { model?: string; maxOutputTokens?: number; reasoningEffort?: "low" } = {}
+  ): Promise<T> {
     const response = await this.client.responses.parse({
-      model: image ? this.imageModel : this.model,
+      model: options.model ?? (image ? this.imageModel : this.model),
       input,
       store: false,
-      text: { format: zodTextFormat(schema, name) }
-    });
+      max_output_tokens: options.maxOutputTokens,
+      reasoning: options.reasoningEffort ? { effort: options.reasoningEffort } : undefined,
+      text: { format: zodTextFormat(schema, name), verbosity: options.maxOutputTokens ? "low" : undefined }
+    }, { timeout: options.maxOutputTokens ? 45_000 : undefined, maxRetries: options.maxOutputTokens ? 0 : undefined });
     return schema.parse(response.output_parsed);
   }
 
@@ -337,6 +364,27 @@ export class OpenAIProvider implements AIProvider {
   analyzeRoomImage(imageDataUrl: string) {
     return this.parse(roomAnalysisSchema, "room_analysis", "Describe visible room features. Dimensions and boundaries are approximate and must not be presented as measurements.",
       [{ role: "user", content: [{ type: "input_text", text: "Analyze visible room features. Treat geometry as approximate." }, { type: "input_image", image_url: imageDataUrl, detail: "low" }] }], true);
+  }
+
+  async styleRoomFromPreferences(input: { preferences: StylistPreferences; candidateFacts: string }) {
+    const system = "You are Musterring's interior stylist. Select exclusively from the supplied catalogue candidates. Treat every room-specific quiz answer as a planning preference, while stating product facts only when supplied as catalogue evidence. Evaluate every candidate; do not default to the first candidate. Return exactly one selection for every supplied slot and use the other available candidates as distinct alternatives: up to two per slot in a multi-product set and up to five for a single slot. A slot with only one candidate must return an empty alternatives array. Prefer stronger styleMatch and preferenceMatch evidence. Claim an exact requested subtype such as bench, mirror, lounger or vanity only when authorizedCatalogueCopy explicitly supports it; otherwise call the choice the closest available catalogue series. When evidence is limited, say closest catalogue option instead of claiming an exact match. Never invent IDs, products, colours, materials, prices, dimensions, availability, compatibility or physical fit. Keep copy concise.";
+    const candidatePayload = stylistCandidatePayloadSchema.parse(JSON.parse(input.candidateFacts));
+    const constrainedSchema = stylistProviderResultSchemaForCandidates(candidatePayload.slots.map((slot) => ({
+      slotId: slot.slotId,
+      candidateIds: slot.candidates.map((candidate) => candidate.id)
+    })));
+    const result = await this.parse(
+      constrainedSchema,
+      "interior_stylist_set",
+      system,
+      [{
+        role: "user",
+        content: `Preference-ranked catalogue candidates: ${input.candidateFacts}\nCreate one grounded set for this quiz profile. Do not repeat a product merely because it appeared first in the candidate list.`
+      }],
+      false,
+      { model: this.stylistModel, maxOutputTokens: 2_500, reasoningEffort: "low" }
+    );
+    return stylistProviderResultSchema.parse(result);
   }
 
   suggestConfigurationRequirements(request: string) {
@@ -375,7 +423,7 @@ export class OpenAIProvider implements AIProvider {
       [
         {
           role: "system",
-          content: "You are Musterring's concise product comparison editor. Rewrite the supplied baseline in very simple, clear English using only the verified catalogue facts provided. Keep every productId exactly unchanged and include each product exactly once. Give each product one short sentence of no more than 20 words. Each sentence must highlight a verified difference; never repeat the same generic description for multiple products. Return no more than two key differences. Keep the recommendation to no more than 30 words. Do not add or infer dimensions, seating, materials, functions, modularity, prices, availability, compatibility, quality, comfort or physical fit. When data is missing, preserve the configuration-dependent wording. Require retailer confirmation for exact configuration and room fit."
+          content: "You are Musterring's concise product comparison editor. Rewrite the supplied baseline in very simple, clear English using only the verified catalogue facts provided. Keep every productId exactly unchanged and include each product exactly once. Give each product one short sentence of no more than 20 words. Each sentence must highlight a verified difference; never repeat the same generic description for multiple products. Return no more than two key differences. The overall recommendation must mention every compared model, explain one practical reason to choose each, and remain under 80 words. Do not add or infer dimensions, seating, materials, functions, modularity, prices, availability, compatibility, quality, comfort or physical fit. When data is missing, preserve the configuration-dependent wording. Require retailer confirmation for exact configuration and room fit."
         },
         {
           role: "user",

@@ -2,11 +2,11 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { Heart, MessageSquare, Send, Share2, Trash2 } from "lucide-react";
+import { Heart, MessageSquare, Send, Share2, Sparkles, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { dealers, materials, products } from "@/lib/data";
 import { materialImages } from "@/lib/material-assets";
-import type { Project } from "@/lib/types";
+import { stylistStyleLabel, type Project, type SavedStylistSet } from "@/lib/types";
 import { storage } from "@/lib/persistence";
 import { roomSceneProductImage } from "@/lib/room-scene-assets";
 import { AlternativeFinderButton } from "./AlternativeFinderButton";
@@ -22,29 +22,33 @@ type SavedRoomScene = PreviewScene & {
 
 function readSavedContent() {
   const scenes = storage.roomScenes() as SavedRoomScene[];
+  const stylistSets = storage.stylistSets();
   const productIds = [...new Set([
     ...storage.savedProducts(),
-    ...scenes.flatMap((scene) => scene.items?.map((item) => item.productId) ?? [])
+    ...scenes.flatMap((scene) => scene.items?.map((item) => item.productId) ?? []),
+    ...stylistSets.flatMap((set) => set.productIds)
   ])];
-  return { scenes, productIds };
+  return { scenes, stylistSets, productIds };
 }
 
 export function ProjectsClient() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [lead, setLead] = useState<Record<string, unknown> | null>(null);
-  const [resourceCounts, setResourceCounts] = useState({ fitReports: 0, roomScenes: 0, comparisons: 0, configurations: 0, materials: 0, requests: 0 });
+  const [resourceCounts, setResourceCounts] = useState({ fitReports: 0, roomScenes: 0, stylistSets: 0, comparisons: 0, configurations: 0, materials: 0, requests: 0 });
   const [dealerId, setDealerId] = useState<string | null>(null);
   const [savedScenes, setSavedScenes] = useState<SavedRoomScene[]>([]);
+  const [savedStylistSets, setSavedStylistSets] = useState<SavedStylistSet[]>([]);
   const [savedMaterialIds, setSavedMaterialIds] = useState<string[]>([]);
 
   const syncSavedContent = () => {
-    const { scenes, productIds } = readSavedContent();
+    const { scenes, stylistSets, productIds } = readSavedContent();
     setSavedScenes(scenes);
+    setSavedStylistSets(stylistSets);
     setSavedIds(productIds);
     const materialIds = storage.savedMaterials();
     setSavedMaterialIds(materialIds);
-    setResourceCounts({ fitReports: storage.fitReports().length, roomScenes: scenes.length, comparisons: storage.savedComparisons().length, configurations: storage.configurations().length, materials: materialIds.length, requests: storage.leads().length });
+    setResourceCounts({ fitReports: storage.fitReports().length, roomScenes: scenes.length, stylistSets: stylistSets.length, comparisons: storage.savedComparisons().length, configurations: storage.configurations().length, materials: materialIds.length, requests: storage.leads().length });
   };
 
   useEffect(() => {
@@ -99,6 +103,16 @@ export function ProjectsClient() {
             </article>;
           }) : <div className="stitch-project-empty"><h3>No room views saved yet</h3><p>Save a view from Plan a Room and it will appear here.</p><Link href="/room-composer">Open Plan a Room</Link></div>}
         </section>
+        <div className="stitch-project-title"><h2>AI Stylist Sets</h2><Link href="/ai-stylist"><Sparkles size={16} /> Create another set</Link></div>
+        <section className="stylist-saved-grid">
+          {savedStylistSets.length ? savedStylistSets.map((set) => <article key={set.id}>
+            <header><small>{set.roomType.replaceAll("-", " ")} · {stylistStyleLabel(set.style)}{set.preferences ? ` · ${set.preferences.spaceSize}` : ""}</small><h3>{set.name}</h3><p>{set.summary}</p></header>
+            <div>{set.productIds.map((productId) => {
+              const product = products.find((item) => item.id === productId);
+              return product ? <Link href={`/furniture/${product.slug}`} key={product.id}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={260} height={190} /><span><small>{product.modelCode}</small><strong>{product.name}</strong></span></Link> : null;
+            })}</div>
+          </article>) : <div className="stitch-project-empty"><h3>No AI stylist sets saved yet</h3><p>Answer the style quiz and save a coordinated set of catalogue products.</p><Link href="/ai-stylist">Open AI Stylist</Link></div>}
+        </section>
         <div className="stitch-project-title"><h2>Saved Products</h2><Link href="/handover"><MessageSquare size={16} /> Expert consultation</Link></div>
         <section className="stitch-project-products">
           {displayed.length ? displayed.map((product) => <article key={product.id}><Link href={`/furniture/${product.slug}`}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={520} height={360} /><small>{product.modelCode}</small><strong>{product.name}</strong><span>Saved by you</span></Link><AlternativeFinderButton productId={product.id} label="Discover More Like This" className="" /></article>) : <div className="stitch-project-empty"><h3>No products saved yet</h3><p>Only products you explicitly save will appear here.</p><Link href="/furniture">Explore furniture</Link></div>}
@@ -123,6 +137,7 @@ export function ProjectsClient() {
           <Link href={project ? `/my-musterring/projects/${project.id}` : "/my-musterring"}><strong>{resourceCounts.configurations}</strong><span>Configurations</span></Link>
           <Link href="/compare"><strong>{resourceCounts.comparisons}</strong><span>Comparisons</span></Link>
           <Link href="/room-composer"><strong>{resourceCounts.roomScenes}</strong><span>Room scenes</span></Link>
+          <Link href="/ai-stylist"><strong>{resourceCounts.stylistSets}</strong><span>Stylist sets</span></Link>
           <Link href="/materials"><strong>{resourceCounts.materials}</strong><span>Materials</span></Link>
           <Link href={fitHref}><strong>{resourceCounts.fitReports}</strong><span>Fit reports</span></Link>
           <Link href="/dealers"><strong>{preferredDealer?.name ?? "Select"}</strong><span>Preferred retailer</span></Link>

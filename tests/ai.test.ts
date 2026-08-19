@@ -109,6 +109,8 @@ describe("AI schemas and fallbacks", () => {
     expect(new Set(summary.products.map((product) => product.summary)).size).toBe(summary.products.length);
     expect(summary.glance.join(" ")).toMatch(/Seat heights|Seat construction/);
     expect(summary.recommendation).not.toMatch(/not enough verified catalogue data/i);
+    expect(summary.recommendation).toContain("JUSTB! PM100");
+    expect(summary.recommendation).toContain("JUSTB! PM200");
   });
 });
 

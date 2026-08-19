@@ -4,6 +4,78 @@ export const catalogueCategories = [
 ] as const;
 
 export type Category = (typeof catalogueCategories)[number];
+export const stylistRoomTypes = ["living-room", "bedroom", "dining-room", "bathroom", "hallway", "kitchen", "outdoor", "home-accessories"] as const;
+export type StylistRoomType = (typeof stylistRoomTypes)[number];
+export const stylistStyles = [
+  "modern-contemporary",
+  "minimalist-scandinavian",
+  "warm-natural-rustic",
+  "classic-elegant-luxury",
+  "industrial-urban",
+  "retro-decorative"
+] as const;
+export type StylistStyle = (typeof stylistStyles)[number];
+export const stylistStylePreferences = [...stylistStyles, "not-sure"] as const;
+export type StylistStylePreference = (typeof stylistStylePreferences)[number];
+export const stylistTargets = [
+  "sofa", "armchair", "coffee-table", "side-table", "wall-unit", "sideboard", "complete-living-room",
+  "bed", "wardrobe", "bedside-tables", "dresser", "bedroom-series", "complete-bedroom",
+  "dining-table", "dining-chairs", "dining-bench", "dining-sideboard", "complete-dining-room",
+  "vanity-unit", "washbasin-cabinet", "tall-cabinet", "mirror-cabinet", "bathroom-storage", "complete-bathroom-series",
+  "hallway-wardrobe", "shoe-storage", "coat-storage", "hallway-bench", "mirror", "complete-hallway",
+  "kitchen-storage", "kitchen-dining-area", "kitchen-seating", "kitchen-small-furniture", "complete-kitchen-concept",
+  "outdoor-sofa", "outdoor-chairs", "outdoor-dining-table", "lounge-furniture", "lounger", "complete-outdoor-set",
+  "small-furniture", "carpet", "lamp", "home-textiles", "several-accessories"
+] as const;
+export type StylistTarget = (typeof stylistTargets)[number];
+export const stylistSpaceSizes = ["compact", "medium", "large", "known-dimensions"] as const;
+export type StylistSpaceSize = (typeof stylistSpaceSizes)[number];
+export const stylistPalettes = ["light-neutral", "warm-natural", "dark-tones", "colour-accents", "no-preference"] as const;
+export type StylistPalette = (typeof stylistPalettes)[number];
+export const stylistMaterialPreferences = ["fabric", "leather", "wood", "mixed", "no-preference"] as const;
+export type StylistMaterialPreference = (typeof stylistMaterialPreferences)[number];
+export const stylistPriorities = ["comfort", "easy-care", "flexible-modular", "compact-footprint", "relax-functions", "premium-materials"] as const;
+export type StylistPriority = (typeof stylistPriorities)[number];
+export type StylistQuizInput = {
+  roomType: StylistRoomType;
+  answers: Record<string, string>;
+  notes: Record<string, string>;
+  selectedProductIds: string[];
+  maxWidthMm: number | null;
+  maxDepthMm: number | null;
+};
+export type StylistPreferences = StylistQuizInput & {
+  target: StylistTarget;
+  style: StylistStylePreference;
+  palette: StylistPalette;
+  material: StylistMaterialPreference | null;
+  spaceSize: StylistSpaceSize;
+  priorities: StylistPriority[];
+};
+export const stylistStyleLabels: Record<StylistStyle, string> = {
+  "modern-contemporary": "Modern / Contemporary",
+  "minimalist-scandinavian": "Minimalist / Scandinavian",
+  "warm-natural-rustic": "Warm Natural / Rustic",
+  "classic-elegant-luxury": "Classic / Elegant Luxury",
+  "industrial-urban": "Industrial / Urban",
+  "retro-decorative": "Retro / Decorative"
+};
+
+export function stylistStyleLabel(style: StylistStyle | string) {
+  return stylistStyleLabels[style as StylistStyle] ?? style.replaceAll("-", " ");
+}
+
+export type SavedStylistSet = {
+  id: string;
+  name: string;
+  roomType: StylistRoomType;
+  style: StylistStylePreference;
+  productIds: string[];
+  alternativeProductIds: Record<string, string[]>;
+  preferences?: StylistPreferences;
+  summary: string;
+  createdAt: string;
+};
 export type ProjectStatus =
   | "Ideas Saved"
   | "Configuration in Progress"

@@ -1,6 +1,6 @@
 "use client";
 
-import type { AnalyticsEvent, Configuration, Project } from "./types";
+import type { AnalyticsEvent, Configuration, Project, SavedStylistSet } from "./types";
 import { dealers, materials, products, projects as seedProjects } from "./data";
 import { createConfiguration, priceConfiguration } from "./configurator";
 
@@ -24,6 +24,7 @@ const keys = {
   fitReports: "musterring.fitReports",
   fitDrafts: "musterring.fitDrafts",
   roomScenes: "musterring.roomScenes",
+  stylistSets: "musterring.stylistSets",
   consent: "musterring.consent",
   recentSearches: "musterring.recentSearches",
   materials: "musterring.savedMaterials",
@@ -139,6 +140,20 @@ export const storage = {
       return id !== sceneKey && `index-${index}` !== sceneKey;
     }));
   },
+  stylistSets: () => read<SavedStylistSet[]>(keys.stylistSets, []),
+  saveStylistSet: (set: SavedStylistSet) => {
+    const activeIds = new Set(products.filter((product) => product.active).map((product) => product.id));
+    const productIds = [...new Set(set.productIds)].filter((id) => activeIds.has(id));
+    if (!productIds.length) return null;
+    const alternativeProductIds = Object.fromEntries(
+      Object.entries(set.alternativeProductIds).map(([slotId, ids]) => [slotId, [...new Set(ids)].filter((id) => activeIds.has(id) && !productIds.includes(id)).slice(0, 5)])
+    );
+    const grounded = { ...set, productIds, alternativeProductIds };
+    const current = storage.stylistSets();
+    write(keys.stylistSets, [grounded, ...current.filter((item) => item.id !== grounded.id)].slice(0, 20));
+    write(keys.products, [...new Set([...storage.savedProducts(), ...productIds])]);
+    return grounded;
+  },
   consent: () => read(keys.consent, false),
   setConsent: (allowed: boolean) => {
     write(keys.consent, allowed);
@@ -244,7 +259,7 @@ export const storage = {
     };
     const resetKeys = [
       keys.products, keys.configurations, keys.projects, keys.comparisons, keys.comparisonHistory, keys.events,
-      keys.dealer, keys.lead, keys.fitReports, keys.fitDrafts, keys.roomScenes,
+      keys.dealer, keys.lead, keys.fitReports, keys.fitDrafts, keys.roomScenes, keys.stylistSets,
       keys.recentSearches, keys.materials, keys.leads
     ];
     resetKeys.forEach((key) => window.localStorage.removeItem(key));

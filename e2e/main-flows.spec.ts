@@ -1,4 +1,59 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+import { products } from "../lib/data";
+
+function stylistResponse() {
+  const slots = [
+    { slotId: "living-seating", slotLabel: "Seating", categories: ["sofa", "sectional"] },
+    { slotId: "living-table", slotLabel: "Coffee table", categories: ["coffee-table"] },
+    { slotId: "living-storage", slotLabel: "Living storage", categories: ["storage"] }
+  ];
+  return {
+    preferences: {
+      roomType: "living-room",
+      answers: { target: "complete-living-room", "seating-capacity": "3", "seating-type": "modular-sofa", "special-functions": "relax-function", space: "compact", material: "fabric", "style-colours": "light-neutral" },
+      notes: {}, selectedProductIds: [], target: "complete-living-room", style: "minimalist-scandinavian", palette: "light-neutral", material: "fabric", spaceSize: "compact", maxWidthMm: null, maxDepthMm: null, priorities: ["flexible-modular", "compact-footprint"]
+    },
+    title: "Warm modern living set",
+    rationale: "A coherent catalogue-grounded set for the selected quiz preferences.",
+    catalogueMatch: { level: "partial", message: "This set combines explicit and partial catalogue evidence for the selected preferences." },
+    roomType: "living-room",
+    style: "modern-contemporary",
+    ai: { provider: "openai", mode: "Test fixture" },
+    selections: slots.map((slot) => {
+      const matches = products.filter((product) => product.active && slot.categories.includes(product.category)).slice(0, 3);
+      return {
+        slotId: slot.slotId,
+        slotLabel: slot.slotLabel,
+        product: matches[0],
+        reason: "Selected from verified catalogue candidates.",
+        styleMatch: "partial",
+        preferenceMatch: "partial",
+        matchEvidence: ["Authorized catalogue copy supports the selected direction."],
+        alternatives: matches.slice(1).map((product) => ({ product, reason: "A grounded catalogue alternative.", styleMatch: "partial", preferenceMatch: "partial", matchEvidence: [] }))
+      };
+    })
+  };
+}
+
+async function prepareStylistQuiz(page: Page) {
+  await page.getByRole("button", { name: /^Living room/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Complete living room/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^3/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Modular sofa/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Relax function/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Compact/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Fabric/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Light & neutral/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await expect(page.getByRole("button", { name: "Create my recommendations" })).toBeEnabled();
+}
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("musterring.consent", "false"));
@@ -122,6 +177,63 @@ test("Upload room consent, preview and save", async ({ page }) => {
   await page.getByRole("button", { name: /Add to room/ }).first().click({ force: true });
   await page.getByRole("button", { name: "Save concept" }).click({ force: true });
   await expect(page.getByRole("button", { name: "Saved to project" })).toBeVisible();
+});
+
+test("AI stylist creates, adjusts and saves a grounded room set", async ({ page }) => {
+  await page.route("**/api/ai/stylist", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(stylistResponse()) }));
+  await page.goto("/ai-stylist");
+  await prepareStylistQuiz(page);
+  await page.getByRole("button", { name: "Create my recommendations" }).click();
+  await expect(page.getByRole("heading", { name: "Warm modern living set" })).toBeVisible();
+  await page.getByRole("button", { name: /MR|JUSTB|KARA|NARA/ }).first().click();
+  await page.getByRole("button", { name: "Save complete set" }).click();
+  await expect(page.getByRole("button", { name: "Saved to My Musterring" })).toBeVisible();
+  await page.getByRole("link", { name: /View product/ }).first().click();
+  await expect(page).toHaveURL(/\/furniture\//);
+  await page.goto("/my-musterring");
+  await expect(page.getByRole("heading", { name: "AI Stylist Sets", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Warm modern living set" })).toBeVisible();
+});
+
+test("AI stylist shows a retry and never substitutes demo results", async ({ page }) => {
+  let attempts = 0;
+  await page.route("**/api/ai/stylist", (route) => {
+    attempts += 1;
+    return attempts === 1
+      ? route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: "The room could not be styled right now. Please try again." }) })
+      : route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(stylistResponse()) });
+  });
+  await page.goto("/ai-stylist");
+  await prepareStylistQuiz(page);
+  await page.getByRole("button", { name: "Create my recommendations" }).click();
+  await expect(page.getByText("We could not create the recommendations.")).toBeVisible();
+  await page.getByRole("button", { name: "Try again" }).click();
+  await expect(page.getByRole("heading", { name: "Warm modern living set" })).toBeVisible();
+});
+
+test("AI stylist adapts its questions and keeps dimension validation usable on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/ai-stylist");
+  await page.getByRole("button", { name: /^Bedroom/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await expect(page.getByText("What are you looking for?", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Bed Select/ })).toBeVisible();
+  await page.getByRole("button", { name: /^Bed Select/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^160 × 200/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Upholstered/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^No/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Maximum comfort/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Enter dimensions/ }).click();
+  await expect(page.getByRole("button", { name: /Continue/ })).toBeDisabled();
+  await page.getByLabel("Maximum width in centimetres").fill("220");
+  await page.getByLabel("Maximum depth in centimetres").fill("210");
+  await expect(page.getByRole("button", { name: /Continue/ })).toBeEnabled();
+  await expect(page.getByRole("heading", { name: "Build your personal brief" })).toBeVisible();
 });
 
 test("Material compare and save", async ({ page }) => {

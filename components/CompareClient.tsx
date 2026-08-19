@@ -192,7 +192,7 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
         </header>
         <div className="stitch-compare-ai-text">
           {summaries.products.map(({ product, summary }) => <p key={product.id}><strong>{product.modelCode}:</strong> {summary}</p>)}
-          <p className="stitch-compare-ai-conclusion"><strong>Recommendation:</strong> {summaries.recommendation}</p>
+          <p className="stitch-compare-ai-conclusion"><strong>Overall recommendation:</strong> {summaries.recommendation}</p>
         </div>
       </section>
 
@@ -323,15 +323,16 @@ function comparisonSummary(selected: Product[], awards: ReturnType<typeof compar
   const seats = seatingProducts.map((product) => product.numberOfSeats);
   const narrowest = dimensionProducts.reduce<Product | null>((best, product) => !best || product.widthMm < best.widthMm ? product : best, null);
   const highestCapacity = seatingProducts.reduce<Product | null>((best, product) => !best || product.numberOfSeats > best.numberOfSeats ? product : best, null);
+  const differencePriority = ["Seat construction", "Motorised function", "Seat Height", "Seat Depth", "Reference configuration"];
+  const distinctiveDetailFor = (product: Product) => differencePriority
+    .map((label) => product.verifiedComparisonFacts?.find((item) => item.label === label))
+    .find((item) => item && selected.some((other) => other.id !== product.id
+      && other.verifiedComparisonFacts?.find((candidate) => candidate.label === item.label)?.value !== item.value));
   const productsSummary = selected.map((product) => {
     const labels = awards.find((award) => award.productId === product.id)?.labels ?? [];
     const detail = (label: string) => verifiedComparisonValue(product, label);
     const materialCopy = product.verifiedFacts.materialTypes.length ? ` Verified material types: ${product.verifiedFacts.materialTypes.join(", ")}.` : "";
-    const differencePriority = ["Seat construction", "Motorised function", "Seat Height", "Seat Depth", "Reference configuration"];
-    const distinctiveDetail = differencePriority
-      .map((label) => product.verifiedComparisonFacts?.find((item) => item.label === label))
-      .find((item) => item && selected.some((other) => other.id !== product.id
-        && other.verifiedComparisonFacts?.find((candidate) => candidate.label === item.label)?.value !== item.value));
+    const distinctiveDetail = distinctiveDetailFor(product);
     const summary = product.verifiedFacts.dimensions && distinctiveDetail
       ? `${Math.round(product.widthMm / 10)} cm wide — ${distinctiveDetail.value}.`
       : product.verifiedFacts.dimensions
@@ -374,12 +375,15 @@ function comparisonSummary(selected: Product[], awards: ReturnType<typeof compar
     modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
     `${selected.filter((product) => product.verifiedFacts.functions.length).length} with verified function data`
   ].filter(Boolean).slice(0, 2);
-  const recommendation = narrowest && highestCapacity && narrowest.id === highestCapacity.id
-    ? `${narrowest.modelCode} is the more compact option and has the most verified seats. Confirm the final fit with a retailer.`
-    : narrowest && highestCapacity
-      ? `${narrowest.modelCode} is the more compact option. ${highestCapacity.modelCode} has the most verified seats.`
-      : narrowest && dimensionProducts.length > 1
-        ? `${narrowest.modelCode} is the more compact option. Compare comfort and confirm the final configuration with a retailer.`
-      : "There is not enough verified data to choose one. Confirm the final configuration with a retailer.";
+  const recommendation = `${selected.map((product) => {
+    const distinctiveDetail = distinctiveDetailFor(product);
+    const isMoreCompact = narrowest?.id === product.id
+      && dimensionProducts.some((other) => other.widthMm > product.widthMm);
+    if (isMoreCompact) return `Choose ${product.modelCode} when space is the priority (${Math.round(product.widthMm / 10)} cm wide).`;
+    if (distinctiveDetail) return `Choose ${product.modelCode} for ${distinctiveDetail.value.replace(/[.!?]+$/, "").replace(/^./, (character) => character.toLowerCase())}.`;
+    if (product.numberOfSeatsVerified && highestCapacity?.id === product.id) return `Choose ${product.modelCode} when verified seating capacity is the priority.`;
+    if (product.verifiedFacts.modular) return `Choose ${product.modelCode} for modular planning.`;
+    return `Consider ${product.modelCode} after confirming its exact configuration.`;
+  }).join(" ")} Confirm the final configuration and room fit with a Musterring retailer.`;
   return { products: productsSummary, glance, recommendation };
 }
