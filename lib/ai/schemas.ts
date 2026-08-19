@@ -131,12 +131,12 @@ export type ComparisonSummaryInput = z.infer<typeof comparisonSummaryInputSchema
 export const comparisonSummarySchema = z.object({
   products: z.array(z.object({
     productId: z.string().trim().min(1).max(160),
-    summary: z.string().trim().min(1).max(500),
+    summary: z.string().trim().min(1).max(160),
     bestFor: z.string().trim().min(1).max(160),
-    facts: z.array(z.string().trim().min(1).max(240)).min(2).max(4)
+    facts: z.array(z.string().trim().min(1).max(220)).min(1).max(2)
   })).min(2).max(3),
-  glance: z.array(z.string().trim().min(1).max(200)).min(1).max(5),
-  recommendation: z.string().trim().min(1).max(800)
+  glance: z.array(z.string().trim().min(1).max(180)).min(1).max(2),
+  recommendation: z.string().trim().min(1).max(280)
 });
 export type ComparisonSummary = z.infer<typeof comparisonSummarySchema>;
 

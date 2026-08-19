@@ -6,6 +6,7 @@ import {
 } from "@/lib/assistant";
 import { createConfiguration } from "@/lib/configurator";
 import { productImageForColors } from "@/lib/musterring-assets";
+import { groundAlternativeRequest } from "@/lib/ai/alternative-grounding";
 import { voiceCommandSchema, type ConversationContext } from "@/lib/ai/assistant-schemas";
 
 const context: ConversationContext = {
@@ -63,6 +64,25 @@ describe("connected Musterring assistant grounding", () => {
     })).toBe(true);
     expect(result.exactMatches.some((match) => products.find((item) => item.id === match.productId)?.modelCode === "MR 260")).toBe(true);
     expect(result.closestAlternatives.every((match) => match.unmetRequirements.includes("red colour is not verified for this product"))).toBe(true);
+  });
+
+  it("removes AI-invented filters from a simple red sofa request", () => {
+    const request = groundAlternativeRequest(
+      { sourceProductId: "musterring-justb-pm200", requestText: "red sofa" },
+      {
+        category: "sofa",
+        colorFamilies: ["red"],
+        styles: ["modern", "contemporary", "classic"],
+        layoutShapes: ["straight", "l-shaped", "u-shaped", "corner"],
+        materialTags: ["fabric", "leather", "microfiber", "velvet"]
+      }
+    );
+    expect(request).toMatchObject({ category: "sofa", colorFamilies: ["red"] });
+    expect(request.styles).toBeUndefined();
+    expect(request.layoutShapes).toBeUndefined();
+    expect(request.materialTags).toEqual([]);
+    const result = findGroundedAlternatives(request);
+    expect(result.exactMatches.some((match) => products.find((product) => product.id === match.productId)?.modelCode === "MR 260")).toBe(true);
   });
 
   it.each(["300 cm sofas", "sofa around 300 cm", "sofa 300 cm"])("preserves a requested width as an exact-match requirement: %s", (requestText) => {

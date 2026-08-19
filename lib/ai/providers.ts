@@ -29,6 +29,7 @@ import {
   type MaterialAdvice, type VoiceCommand
 } from "./assistant-schemas";
 import { deterministicComparisonSummary, validateComparisonSummary } from "./comparison-summary";
+import { groundAlternativeRequest } from "./alternative-grounding";
 import { answerGroundedQuestion, findGroundedAlternatives, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
 import { materials, products } from "../data";
 import { catalogueCategories } from "../types";
@@ -340,7 +341,7 @@ export class OpenAIProvider implements AIProvider {
       [
         {
           role: "system",
-          content: "You are Musterring's concise product comparison editor. Rewrite the supplied baseline into natural, useful English using only the verified catalogue facts provided. Keep every productId exactly unchanged and include each product exactly once. Do not add or infer dimensions, seating, materials, functions, modularity, prices, availability, compatibility, quality, comfort or physical fit. When data is missing, preserve the configuration-dependent wording. The recommendation must explain tradeoffs and must require retailer confirmation for exact configuration and room fit."
+          content: "You are Musterring's concise product comparison editor. Rewrite the supplied baseline in very simple, clear English using only the verified catalogue facts provided. Keep every productId exactly unchanged and include each product exactly once. Give each product one short sentence of no more than 20 words. Each sentence must highlight a verified difference; never repeat the same generic description for multiple products. Return no more than two key differences. Keep the recommendation to no more than 30 words. Do not add or infer dimensions, seating, materials, functions, modularity, prices, availability, compatibility, quality, comfort or physical fit. When data is missing, preserve the configuration-dependent wording. Require retailer confirmation for exact configuration and room fit."
         },
         {
           role: "user",
@@ -373,9 +374,10 @@ export class OpenAIProvider implements AIProvider {
       "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, layoutShapes, materials and functions. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
       [{ role: "user", content: JSON.stringify(input) }]);
     const inferred = Object.fromEntries(Object.entries(extracted).filter(([, value]) => value !== null));
-    // Explicit structured filters from the UI are authoritative; AI only fills
-    // constraints expressed in free text. IDs and request text never come from AI.
-    const parsed = alternativeRequestSchema.parse({ ...inferred, ...input });
+    // AI extraction is only a proposal. Keep a constraint when the deterministic
+    // parser or the user's literal text supports it; never turn hallucinated
+    // styles, layouts or materials into hard requirements.
+    const parsed = groundAlternativeRequest(input, inferred);
     return alternativeResponseSchema.parse(findGroundedAlternatives(parsed));
   }
 
