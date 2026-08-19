@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import { z } from "zod";
 import { products } from "../data";
-import { roomSceneProductImage } from "../room-scene-assets";
+import { roomSceneProductFinish, roomSceneProductImage } from "../room-scene-assets";
 import type { Category } from "../types";
 
 export const MAX_VISUALIZATION_ITEMS = 6;
@@ -60,11 +60,6 @@ const categoryMaskSize: Record<Category, { width: number; height: number }> = {
   "home-textile": { width: 26, height: 28 }
 };
 
-function catalogueValue(value: string | undefined, allowed: string[]) {
-  if (!value) return undefined;
-  return allowed.find((candidate) => candidate.toLowerCase() === value.toLowerCase());
-}
-
 export function groundVisualizationItems(items: RoomVisualizationItemInput[]) {
   const references = new Map<string, number>();
 
@@ -77,6 +72,13 @@ export function groundVisualizationItems(items: RoomVisualizationItemInput[]) {
       color: item.color
     });
     if (!assetUrl) throw new Error(`No catalogue image is available for ${product.modelCode}.`);
+    // Browser layout templates include approximate styling values. They are
+    // not evidence of the finish pictured by a fixed catalogue reference.
+    // Only a finish mapped to this exact asset may become a text instruction.
+    const referenceFinish = roomSceneProductFinish(product.id, {
+      materialId: item.materialId,
+      color: item.color
+    });
 
     const assetKey = assetUrl.split("?")[0].toLowerCase();
     let referenceImageIndex = references.get(assetKey);
@@ -92,8 +94,8 @@ export function groundVisualizationItems(items: RoomVisualizationItemInput[]) {
       category: product.category,
       assetUrl,
       referenceImageIndex,
-      verifiedColor: catalogueValue(item.color, product.colors),
-      verifiedMaterialId: catalogueValue(item.materialId, product.materials)
+      verifiedColor: referenceFinish?.color,
+      verifiedMaterialId: referenceFinish?.materialId
     } satisfies GroundedVisualizationItem;
   });
 }

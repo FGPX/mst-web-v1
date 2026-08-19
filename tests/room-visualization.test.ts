@@ -38,14 +38,30 @@ describe("catalogue-grounded room visualization", () => {
   it("builds a full-scene editorial prompt from grounded catalogue facts", () => {
     const prompt = buildRoomVisualizationPrompt(groundVisualizationItems([item]));
     expect(prompt).toContain(product.modelCode);
-    expect(prompt).toContain(item.color);
-    expect(prompt).toContain(item.materialId);
     expect(prompt).toContain("one complete, cohesive, photorealistic premium interior photograph");
     expect(prompt).toContain("Keep it unmistakably the same room");
     expect(prompt).toContain("Do not add people, text, logos, decorations, plants, or unselected furniture");
     expect(prompt).toContain("PRODUCT LOCK");
     expect(prompt).toContain("Do not recolour, desaturate, brighten, darken");
     expect(prompt).toContain("exact selected-product appearance");
+  });
+
+  it("never lets an approximate layout colour override a fixed catalogue reference", () => {
+    const kleo = products.find((candidate) => candidate.slug === "mr-kleo")!;
+    const grounded = groundVisualizationItems([{
+      productId: kleo.id,
+      x: 40,
+      y: 86,
+      rotation: 0,
+      scale: 1,
+      color: "beige",
+      materialId: kleo.materials[0]
+    }]);
+    expect(grounded[0].verifiedColor).toBeUndefined();
+    expect(grounded[0].verifiedMaterialId).toBeUndefined();
+    const prompt = buildRoomVisualizationPrompt(grounded);
+    expect(prompt).not.toContain("required catalogue finish is beige");
+    expect(prompt).toContain("Copy the exact visible colour, material, texture, and finish from reference image 2");
   });
 
   it("normalizes room photos to an API-safe size without changing their aspect materially", async () => {
