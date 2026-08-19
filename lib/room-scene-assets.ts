@@ -16,6 +16,14 @@ const savedFinishes: Record<string, Array<{ materialId: string; color: string; i
   ]
 };
 
+export function roomSceneProductFinish(productId: string, options?: { materialId?: string; color?: string }) {
+  const product = products.find((item) => item.id === productId);
+  if (!product) return undefined;
+  return savedFinishes[product.slug]?.find((item) => item.materialId === options?.materialId)
+    ?? savedFinishes[product.slug]?.find((item) => item.color === options?.color)
+    ?? savedFinishes[product.slug]?.[0];
+}
+
 export function roomSceneProductImage(productId: string, options?: { viewIndex?: number; materialId?: string; color?: string }) {
   const product = products.find((item) => item.id === productId);
   const images = productImages(productId);
@@ -25,9 +33,7 @@ export function roomSceneProductImage(productId: string, options?: { viewIndex?:
     const views = ["/generated-product-views/justb-pm100/physical-front.png?v=1", "/generated-product-views/justb-pm100/physical-back-v3.png?v=1"];
     return views[(options?.viewIndex ?? 0) % views.length];
   }
-  const finish = savedFinishes[product.slug]?.find((item) => item.materialId === options?.materialId)
-    ?? savedFinishes[product.slug]?.find((item) => item.color === options?.color)
-    ?? savedFinishes[product.slug]?.[0];
+  const finish = roomSceneProductFinish(productId, options);
   if (finish) return finish.image;
   if (physicalSceneSlugs.has(product.slug)) return `/generated-product-views/${product.slug}/physical-front.png?v=1`;
   if (generatedSceneSlugs.has(product.slug)) return `/generated-product-views/${product.slug}/official-front.png?v=4`;

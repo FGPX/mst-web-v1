@@ -17,20 +17,42 @@ export default function ProductAssemblyStory() {
     const section = sectionRef.current;
     if (!section) return;
 
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let frame = 0;
+    let lastFrameTime = 0;
+    let currentProgress = 0;
+    let targetProgress = 0;
     const navigationEntry = window.performance
       .getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
     const isPageReload = navigationEntry?.type === "reload";
 
-    const update = () => {
-      frame = 0;
+    const measure = () => {
       const rect = section.getBoundingClientRect();
       const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
-      const progress = Math.min(1, Math.max(0, -rect.top / distance));
-      section.style.setProperty("--assembly-progress", progress.toFixed(4));
+      targetProgress = Math.min(1, Math.max(0, -rect.top / distance));
     };
+
+    const render = (time: number) => {
+      const delta = targetProgress - currentProgress;
+      const elapsed = lastFrameTime ? Math.min(time - lastFrameTime, 64) : 16.7;
+      const ease = 1 - Math.exp(-elapsed / 85);
+      lastFrameTime = time;
+      currentProgress = reduceMotion || Math.abs(delta) < 0.0002
+        ? targetProgress
+        : currentProgress + delta * ease;
+      section.style.setProperty("--assembly-progress", currentProgress.toFixed(4));
+
+      if (Math.abs(targetProgress - currentProgress) >= 0.0002) {
+        frame = window.requestAnimationFrame(render);
+      } else {
+        frame = 0;
+        lastFrameTime = 0;
+      }
+    };
+
     const requestUpdate = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
+      measure();
+      if (!frame) frame = window.requestAnimationFrame(render);
     };
 
     const resetReloadedStory = () => {
@@ -48,10 +70,12 @@ export default function ProductAssemblyStory() {
     };
 
     resetReloadedStory();
-    update();
+    measure();
+    currentProgress = targetProgress;
+    section.style.setProperty("--assembly-progress", currentProgress.toFixed(4));
     window.addEventListener("load", resetReloadedStory, { once: true });
     window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
+    window.addEventListener("resize", requestUpdate, { passive: true });
     return () => {
       window.removeEventListener("load", resetReloadedStory);
       window.removeEventListener("scroll", requestUpdate);

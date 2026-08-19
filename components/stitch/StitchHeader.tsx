@@ -76,7 +76,8 @@ export function StitchHeader() {
           >
             Rooms <ChevronDown size={14} aria-hidden="true" />
           </button>
-          <Link className={active("/room-composer") ? "is-active" : ""} href="/room-composer">Plan a Room</Link>
+          <Link className={pathname === "/room-composer" ? "is-active" : ""} href="/room-composer">Plan a Room</Link>
+          <Link className={pathname === "/room-composer/upload" ? "is-active" : ""} href="/room-composer/upload">Room Visualizer</Link>
           <Link className={active("/ai-stylist") ? "is-active" : ""} href="/ai-stylist">AI Stylist</Link>
           <Link className={active("/about") ? "is-active" : ""} href="/about">About</Link>
           <Link className={active("/contact") ? "is-active" : ""} href="/contact">Contact</Link>
@@ -152,6 +153,7 @@ export function StitchHeader() {
           ))}
         </details>
         <Link href="/room-composer" onClick={close}>Plan a Room</Link>
+        <Link href="/room-composer/upload" onClick={close}>Room Visualizer</Link>
         <Link href="/ai-stylist" onClick={close}>AI Stylist</Link>
         <Link href="/my-musterring" onClick={close}>My Project</Link>
         <Link href="/materials" onClick={close}>Materials</Link>
