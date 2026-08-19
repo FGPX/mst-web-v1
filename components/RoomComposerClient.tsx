@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { Box, Check, ChevronLeft, ChevronRight, Copy, Grid3X3, Layers, Lock, Plus, Printer, Redo2, RotateCw, Save, Send, Share2, Trash2, Unlock, Upload } from "lucide-react";
+import { Box, Check, ChevronLeft, ChevronRight, Copy, Download, Grid3X3, Layers, Lock, Plus, Printer, Redo2, RotateCw, Save, Send, Share2, Sparkles, Trash2, Unlock, Upload } from "lucide-react";
 import { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -11,6 +11,7 @@ import type { RoomAnalysis } from "@/lib/ai/schemas";
 import type { Project } from "@/lib/types";
 
 type ComposerCategory = "seating" | "armchair" | "storage" | "tables";
+const maxGeneratedVisualizationItems = 6;
 
 const roomBackgrounds = [
   { id: "neutral", name: "Neutral studio", src: "" },
@@ -117,19 +118,20 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   );
   const [category, setCategory] = useState<ComposerCategory>("seating");
   const [productQuery, setProductQuery] = useState("");
-  const [visibleCount, setVisibleCount] = useState(12);
+  const [visibleCount, setVisibleCount] = useState(upload ? 4 : 12);
   const [roomBackgroundId, setRoomBackgroundId] = useState<(typeof roomBackgrounds)[number]["id"]>("neutral");
-  const [items, setItems] = useState<SceneItem[]>([
+  const [items, setItems] = useState<SceneItem[]>(upload ? [] : [
     { id: "scene-product-1", productId: activeProducts[0].id, x: 50, y: 86, rotation: 0, scale: 1, materialId: activeProducts[0].materials[0], color: activeProducts[0].colors[0], zIndex: 1 }
   ]);
   const [history, setHistory] = useState<SceneItem[][]>([]);
   const [future, setFuture] = useState<SceneItem[][]>([]);
-  const [selectedId, setSelectedId] = useState(items[0].id);
+  const [selectedId, setSelectedId] = useState(items[0]?.id ?? "");
   const [grid, setGrid] = useState(true);
   const [saved, setSaved] = useState(false);
   const [dragging, setDragging] = useState<string | null>(null);
   const [roomPreview, setRoomPreview] = useState("");
-  const [uploadConsent, setUploadConsent] = useState(!upload);
+  const [roomPhoto, setRoomPhoto] = useState<File | null>(null);
+  const [uploadConsent, setUploadConsent] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [planningMode, setPlanningMode] = useState<"inspiration" | "accurate">("inspiration");
   const [showBefore, setShowBefore] = useState(false);
@@ -139,6 +141,11 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [roomSize, setRoomSize] = useState({ widthMm: 5600, lengthMm: 4200 });
   const [roomAnalysis, setRoomAnalysis] = useState<RoomAnalysis | null>(null);
   const [composerNotice, setComposerNotice] = useState("");
+  const [generatedVisualization, setGeneratedVisualization] = useState("");
+  const [generatedForSignature, setGeneratedForSignature] = useState("");
+  const [generationStatus, setGenerationStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [generationError, setGenerationError] = useState("");
+  const [showGenerated, setShowGenerated] = useState(false);
   useEffect(() => {
     storage.track({ name: "room_composer_started" });
     const scenes = storage.roomScenes() as SavedScene[];
@@ -165,6 +172,13 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     && `${product.modelCode} ${product.name} ${product.subtitle}`.toLowerCase().includes(productQuery.toLowerCase()));
   const visibleCatalog = catalog.slice(0, visibleCount);
   const selectedBackground = roomBackgrounds.find((background) => background.id === roomBackgroundId) ?? roomBackgrounds[0];
+  const sceneSignature = useMemo(() => JSON.stringify({
+    room: roomPhoto ? [roomPhoto.name, roomPhoto.size, roomPhoto.lastModified] : null,
+    sceneScale,
+    items: items.map(({ productId, x, y, rotation, scale, materialId, color }) => ({ productId, x, y, rotation, scale, materialId, color }))
+  }), [items, roomPhoto, sceneScale]);
+  const generatedIsCurrent = Boolean(generatedVisualization && generatedForSignature === sceneSignature);
+  const displayGenerated = generatedIsCurrent && showGenerated && !showBefore;
   const composerImage = (productId: string) => {
     const product = activeProducts.find((item) => item.id === productId);
     if (product && physicalFrontSlugs.has(product.slug)) return `/generated-product-views/${product.slug}/physical-front.png?v=1`;
@@ -239,7 +253,11 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const chooseBackground = (backgroundId: (typeof roomBackgrounds)[number]["id"]) => {
     if (roomPreview) URL.revokeObjectURL(roomPreview);
     setRoomPreview("");
+    setRoomPhoto(null);
     setRoomAnalysis(null);
+    setGeneratedVisualization("");
+    setGeneratedForSignature("");
+    setShowGenerated(false);
     setRoomBackgroundId(backgroundId);
     if (roomInputRef.current) roomInputRef.current.value = "";
     setSaved(false);
@@ -289,19 +307,68 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     setSaved(false);
   };
 
+  const generateRoomVisualization = async () => {
+    setGenerationError("");
+    if (!roomPhoto || !roomPreview) {
+      setGenerationStatus("error");
+      setGenerationError("Upload a real room photo first.");
+      return;
+    }
+    if (!items.length || items.length > maxGeneratedVisualizationItems) {
+      setGenerationStatus("error");
+      setGenerationError(`Choose between one and ${maxGeneratedVisualizationItems} products for one generated view.`);
+      return;
+    }
+    const confirmed = window.confirm(
+      "Generate a new full-room image? Your room photo and selected catalogue product references will be sent to OpenAI, and this request uses image-generation quota. Your uploaded file stays unchanged, but the generated image re-renders the complete scene and may reinterpret lighting, finishes, decor, and loose objects."
+    );
+    if (!confirmed) return;
+
+    setGenerationStatus("loading");
+    const signature = sceneSignature;
+    const form = new FormData();
+    form.append("image", roomPhoto);
+    form.append("consent", "true");
+    form.append("confirmed", "true");
+    form.append("items", JSON.stringify(items.map((item) => ({
+      productId: item.productId,
+      x: item.x,
+      y: item.y,
+      rotation: item.rotation,
+      scale: item.scale * sceneScale,
+      materialId: item.materialId,
+      color: item.color
+    }))));
+
+    const response = await fetch("/api/ai/room-visualization", { method: "POST", body: form }).catch(() => null);
+    const payload = response ? await response.json().catch(() => null) : null;
+    if (!response?.ok || !payload?.image) {
+      setGenerationStatus("error");
+      setGenerationError(payload?.error ?? "The room visualization could not be generated. Please try again.");
+      return;
+    }
+
+    setGeneratedVisualization(payload.image);
+    setGeneratedForSignature(signature);
+    setGenerationStatus("idle");
+    setShowBefore(false);
+    setShowGenerated(true);
+    storage.track({ name: "room_visualization_generated" });
+  };
+
   return (
-    <div className="stitch-room-composer">
+    <div className={`stitch-room-composer ${upload ? "is-upload-flow" : ""}`}>
       <section className="stitch-composer-intro">
         <div className="container">
-          <p className="eyebrow">Room planning</p>
+          <p className="eyebrow">{upload ? "Room preview" : "Room planning"}</p>
           <div>
             <div>
-              <h1>Room Composer</h1>
-              <p>Visualize Musterring furniture in a premium room scene. Add products, drag them into place, rotate and scale the composition, then save or hand it to a retailer.</p>
+              <h1>{upload ? "See it in your room" : "Room Composer"}</h1>
+              <p>{upload ? "Upload a photo, choose products, and generate a realistic preview." : "Upload your real room, choose catalogue products, arrange their approximate placement, and generate a realistic staged view while keeping the original photo available for comparison."}</p>
             </div>
             <div className="chips">
-              <Link className="button ghost" href="/room-planner"><Box size={18} /> Open 3D Room Planner</Link>
-              <button className="button consult" disabled={!uploadConsent} onClick={() => roomInputRef.current?.click()}><Upload size={18} /> {upload ? "Choose room photo" : "Upload room photo"}</button>
+              {!upload ? <Link className="button ghost" href="/room-planner"><Box size={18} /> Open 3D Room Planner</Link> : null}
+              <button className="button consult" disabled={!upload && !uploadConsent} onClick={() => roomInputRef.current?.click()}><Upload size={18} /> {upload ? "Choose room photo" : "Upload room photo"}</button>
               <input
                 ref={roomInputRef}
                 hidden
@@ -319,17 +386,29 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     setUploadError("Choose an image smaller than 10 MB.");
                     return;
                   }
+                  if (roomPreview) URL.revokeObjectURL(roomPreview);
+                  setRoomPreview(URL.createObjectURL(file));
+                  setRoomPhoto(file);
+                  setRoomAnalysis(null);
+                  setGeneratedVisualization("");
+                  setGeneratedForSignature("");
+                  setShowGenerated(false);
+                  setShowBefore(false);
+                  if (upload) {
+                    storage.track({ name: "room_photo_selected" });
+                    return;
+                  }
                   const form = new FormData();
                   form.append("image", file);
                   form.append("consent", String(uploadConsent));
                   const validation = await fetch("/api/ai/room", { method: "POST", body: form }).catch(() => null);
                   const payload = validation ? await validation.json().catch(() => null) : null;
                   if (!validation?.ok || !payload?.analysis) {
-                    setUploadError(payload?.error ?? "The room analysis could not be completed.");
+                    setUploadError(payload?.error
+                      ? `The photo is ready, but room analysis could not be completed: ${payload.error}`
+                      : "The photo is ready, but room analysis could not be completed.");
                     return;
                   }
-                  if (roomPreview) URL.revokeObjectURL(roomPreview);
-                  setRoomPreview(URL.createObjectURL(file));
                   setRoomAnalysis(payload.analysis);
                   storage.track({ name: "room_analysis_completed" });
                 }}
@@ -341,18 +420,16 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
 
       <section className="section stitch-composer-workspace">
         <div className="container stitch-composer-layout">
-          {upload ? (
-            <div className="card card-body" style={{ gridColumn: "1 / -1" }}>
-              <p className="eyebrow">Private room upload</p>
-              <p>Your photo is processed temporarily for room analysis. It is not saved by this application and can be removed from the preview at any time.</p>
-              <label className="chip"><input type="checkbox" checked={uploadConsent} onChange={(event) => {
-                setUploadConsent(event.target.checked);
-                storage.recordConsent("photo-ai-processing", event.target.checked);
-              }} /> I consent to temporary AI processing of this room photo.</label>
-              {uploadError ? <p className="form-error" role="alert">{uploadError}</p> : null}
-            </div>
-          ) : null}
-          {upload && roomAnalysis ? (
+          <div className="card card-body stitch-composer-privacy" style={{ gridColumn: "1 / -1" }}>
+            <p className="eyebrow">Private room upload</p>
+            <p>{upload ? "Your photo is sent only when you confirm generation. This app does not save it." : "Your photo is sent for room analysis only after you consent. Generating a realistic staged view requires a second confirmation before the room photo and selected catalogue references are sent to OpenAI. This application does not save the uploaded photo."}</p>
+            <label className="chip"><input type="checkbox" checked={uploadConsent} onChange={(event) => {
+              setUploadConsent(event.target.checked);
+              storage.recordConsent("photo-ai-processing", event.target.checked);
+            }} /> I agree to temporary AI processing.</label>
+            {uploadError ? <p className="form-error" role="alert">{uploadError}</p> : null}
+          </div>
+          {!upload && roomAnalysis ? (
             <div className="card card-body room-analysis-editor" style={{ gridColumn: "1 / -1" }}>
               <p className="eyebrow">Room analysis</p>
               <p><strong>This analysis supports inspiration. Confirm dimensions with “Will It Fit?” or a Musterring retailer.</strong></p>
@@ -374,7 +451,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
             </div>
           ) : null}
           <aside className="stitch-composer-library">
-            <div className="stitch-composer-library-heading">
+            {!upload ? <><div className="stitch-composer-library-heading">
               <div><p className="eyebrow">Room background</p><strong>Choose your space</strong></div>
               <button type="button" className="stitch-composer-upload" disabled={!uploadConsent} onClick={() => roomInputRef.current?.click()}><Upload size={15} /> Import</button>
             </div>
@@ -386,16 +463,16 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 </button>
               ))}
               {roomPreview ? <button type="button" className="is-active"><span className="stitch-uploaded-swatch"><Upload size={18} /></span><small>Imported photo</small></button> : null}
-            </div>
-            <p className="eyebrow">Module categories</p>
+            </div></> : null}
+            <p className="eyebrow">{upload ? "Choose products" : "Module categories"}</p>
             <div className="stitch-composer-tabs">
-              <button className={category === "seating" ? "is-active" : ""} onClick={() => { setCategory("seating"); setVisibleCount(12); }}>Seating</button>
+              <button className={category === "seating" ? "is-active" : ""} onClick={() => { setCategory("seating"); setVisibleCount(upload ? 4 : 12); }}>Seating</button>
               <button className={category === "armchair" ? "is-active" : ""} onClick={() => setCategory("armchair")}>Armchairs</button>
               <button className={category === "storage" ? "is-active" : ""} onClick={() => setCategory("storage")}>Storage</button>
               <button className={category === "tables" ? "is-active" : ""} onClick={() => setCategory("tables")}>Tables</button>
             </div>
             <div className="stitch-composer-catalog-heading"><p className="eyebrow">Available products</p><span>{catalog.length} models</span></div>
-            <input className="stitch-composer-search" type="search" value={productQuery} onChange={(event) => { setProductQuery(event.target.value); setVisibleCount(12); }} placeholder="Search model or product" aria-label="Search products" />
+            <input className="stitch-composer-search" type="search" value={productQuery} onChange={(event) => { setProductQuery(event.target.value); setVisibleCount(upload ? 4 : 12); }} placeholder="Search model or product" aria-label="Search products" />
             <div className="stitch-composer-products">
               {visibleCatalog.map((product) => {
                 const hasVerifiedDimensions = verifiedComposerSlugs.has(product.slug);
@@ -404,25 +481,25 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     <div className={`stitch-composer-product-media ${composerImage(product.id).toLowerCase().endsWith(".png") ? "is-cutout" : "is-scene"}`}><Image src={composerImage(product.id)} alt={`${product.modelCode} product crop`} width={280} height={200} /><span>Product focus</span></div>
                     <div className="stitch-composer-product-copy">
                       <span>{product.modelCode}</span>
-                      <strong>{product.name}</strong>
-                      <small>{product.subtitle}</small>
-                      {hasVerifiedDimensions ? <small>{composerDimensionLabels[product.slug] ?? "Catalogue dimensions ready for room placement"}</small> : <small>Visual preview only · dimensions require retailer confirmation</small>}
-                      {product.authorizedContent && product.sourceUrl ? <a href={product.sourceUrl} target="_blank" rel="noreferrer">Official Musterring product</a> : null}
+                      {product.name.trim().toLowerCase() !== product.modelCode.trim().toLowerCase() ? <strong>{product.name}</strong> : null}
+                      {!upload ? <small>{product.subtitle}</small> : null}
+                      {!upload ? (hasVerifiedDimensions ? <small>{composerDimensionLabels[product.slug] ?? "Catalogue dimensions ready for room placement"}</small> : <small>Visual preview only · dimensions require retailer confirmation</small>) : null}
+                      {!upload && product.authorizedContent && product.sourceUrl ? <a href={product.sourceUrl} target="_blank" rel="noreferrer">Official Musterring product</a> : null}
                     </div>
                     <div className="stitch-composer-product-actions">
-                      <button type="button" onClick={() => addProduct(product.id)}><Plus size={14} /> {hasVerifiedDimensions ? "Add to room" : "Add visual preview"}</button>
-                      {selected ? <button type="button" className="ghost replace" onClick={() => replaceSelectedProduct(product.id)}>Replace selected</button> : null}
+                      <button type="button" onClick={() => addProduct(product.id)}><Plus size={14} /> {upload ? "Add" : hasVerifiedDimensions ? "Add to room" : "Add visual preview"}</button>
+                      {!upload && selected ? <button type="button" className="ghost replace" onClick={() => replaceSelectedProduct(product.id)}>Replace selected</button> : null}
                     </div>
                   </article>
                 );
               })}
             </div>
-            {visibleCount < catalog.length ? <button type="button" className="stitch-composer-show-more" onClick={() => setVisibleCount((count) => count + 12)}>Show 12 more</button> : null}
+            {visibleCount < catalog.length ? <button type="button" className="stitch-composer-show-more" onClick={() => setVisibleCount((count) => count + (upload ? 4 : 12))}>{upload ? "Show more" : "Show 12 more"}</button> : null}
           </aside>
 
-          <div>
+          <div className="stitch-composer-main">
             {composerNotice ? <p className="stitch-composer-feedback" role="status"><Check size={16} /> {composerNotice}</p> : null}
-            <div className="stitch-composer-toolbar">
+            {!upload ? <div className="stitch-composer-toolbar">
               <button className={planningMode === "accurate" ? "is-active" : ""} onClick={() => setPlanningMode((mode) => mode === "accurate" ? "inspiration" : "accurate")}>{planningMode === "accurate" ? "Accurate Planning Mode" : "Inspiration Mode"}</button>
               <button onClick={undo} disabled={!history.length}>Undo</button>
               <button onClick={redo} disabled={!future.length}><Redo2 size={15} /> Redo</button>
@@ -436,23 +513,36 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 <div>
                   <button className={grid ? "is-active" : ""} onClick={() => setGrid((value) => !value)}><Grid3X3 size={16} /> Grid: {grid ? "on" : "off"}</button>
                   <span>Snap: 10 cm</span>
-                  {roomPreview ? <button onClick={() => setShowBefore((value) => !value)}>{showBefore ? "Show designed room" : "Show before"}</button> : null}
+                  {roomPreview ? <button onClick={() => setShowBefore((value) => !value)}>{showBefore ? (generatedIsCurrent && showGenerated ? "Show generated view" : "Show product layout") : "Show original room"}</button> : null}
                   <button onClick={() => window.print()}><Printer size={15} /> Print</button>
                   <button onClick={async () => { await navigator.clipboard?.writeText(`${location.origin}/room-composer`); }}><Share2 size={15} /> Share</button>
                   <button onClick={() => { setItems([]); setSelectedId(""); }}>Clear room</button>
                   {roomPreview ? <button onClick={() => {
                     URL.revokeObjectURL(roomPreview);
                     setRoomPreview("");
+                    setRoomPhoto(null);
                     setRoomAnalysis(null);
+                    setGeneratedVisualization("");
+                    setGeneratedForSignature("");
+                    setShowGenerated(false);
+                    setShowBefore(false);
                     if (roomInputRef.current) roomInputRef.current.value = "";
                   }}>Remove room photo</button> : null}
                 </div>
               </details>
-            </div>
-            {planningMode === "accurate" ? <div className="chips" aria-label="Room dimensions"><label className="chip">Room width mm<input type="number" value={roomSize.widthMm} onChange={(event) => setRoomSize({ ...roomSize, widthMm: Number(event.target.value) })} /></label><label className="chip">Room length mm<input type="number" value={roomSize.lengthMm} onChange={(event) => setRoomSize({ ...roomSize, lengthMm: Number(event.target.value) })} /></label></div> : null}
+            </div> : roomPreview ? <div className="stitch-composer-view-toggle" aria-label="Room view">
+              <button className={showBefore ? "is-active" : ""} onClick={() => setShowBefore(true)}>Original</button>
+              <button className={!showBefore && !displayGenerated ? "is-active" : ""} onClick={() => { setShowBefore(false); setShowGenerated(false); }}>Layout</button>
+              {generatedIsCurrent ? <button className={displayGenerated ? "is-active" : ""} onClick={() => { setShowBefore(false); setShowGenerated(true); }}>Generated</button> : null}
+            </div> : null}
+            {!upload && planningMode === "accurate" ? <div className="chips" aria-label="Room dimensions"><label className="chip">Room width mm<input type="number" value={roomSize.widthMm} onChange={(event) => setRoomSize({ ...roomSize, widthMm: Number(event.target.value) })} /></label><label className="chip">Room length mm<input type="number" value={roomSize.lengthMm} onChange={(event) => setRoomSize({ ...roomSize, lengthMm: Number(event.target.value) })} /></label></div> : null}
             <div className="stitch-composer-stage-with-sidebar">
               <div ref={stageRef} className={`stitch-composer-stage ${grid ? "has-grid" : ""}`} tabIndex={0} aria-label="Room scene. Select a product and use the arrow keys to move it." onKeyDown={moveSelectedWithKeyboard}>
-              {roomPreview ? (
+              {displayGenerated ? (
+                // Generated data URLs are returned directly by the server and cannot use the Next image optimizer.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className="stitch-composer-room" src={generatedVisualization} alt="AI-staged room visualization" />
+              ) : roomPreview ? (
                 // Blob URLs are local room previews and cannot use the Next image optimizer.
                 // eslint-disable-next-line @next/next/no-img-element
                 <img className="stitch-composer-room" src={roomPreview} alt="Uploaded room scene" />
@@ -461,8 +551,10 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               ) : (
                 <div className="stitch-composer-neutral-room" aria-label="Neutral studio background"><span /><i /></div>
               )}
-              <div className="stitch-composer-shade" />
-              {!showBefore ? items.map((item) => {
+              {upload && !roomPreview ? <div className="stitch-composer-empty-state"><Upload size={22} /><strong>Upload your room photo</strong></div> : null}
+              {upload && roomPreview && !items.length ? <div className="stitch-composer-empty-state"><Plus size={22} /><strong>Choose a product to add</strong></div> : null}
+              {!displayGenerated && !showBefore ? <div className="stitch-composer-shade" /> : null}
+              {!showBefore && !displayGenerated ? items.map((item) => {
                 const product = activeProducts.find((candidate) => candidate.id === item.productId) ?? activeProducts[0];
                 const turntableViews = generatedViews(product.slug);
                 const generatedTurntable = turntableViews.length
@@ -491,24 +583,24 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 );
               }) : null}
 
-              {selected ? (
+              {selected && !showBefore && !displayGenerated ? (
                 <div className="stitch-composer-controls">
                   <button aria-label="Rotate selected product" onClick={() => updateSelected({ rotation: selected.rotation + 15 })}><RotateCw /></button>
-                  <button aria-label="Duplicate selected product" onClick={() => {
+                  {!upload ? <button aria-label="Duplicate selected product" onClick={() => {
                     pushHistory();
                     const topLayer = Math.max(0, ...items.map((item) => item.zIndex ?? 0)) + 1;
                     const copy = { ...selected, id: `scene-${Date.now()}`, x: Math.min(92, selected.x + 4), y: Math.min(88, selected.y + 4), zIndex: topLayer };
                     setItems((current) => [...current, copy]);
                     setSelectedId(copy.id);
-                  }}><Copy /></button>
-                  <button aria-label={selected.locked ? "Unlock selected product" : "Lock selected product"} onClick={() => updateSelected({ locked: !selected.locked })}>{selected.locked ? <Unlock /> : <Lock />}</button>
-                  <button aria-label="Bring selected product forward" onClick={() => updateSelected({ zIndex: Math.max(...items.map((item) => item.zIndex ?? 1)) + 1 })}><Layers /></button>
+                  }}><Copy /></button> : null}
+                  {!upload ? <button aria-label={selected.locked ? "Unlock selected product" : "Lock selected product"} onClick={() => updateSelected({ locked: !selected.locked })}>{selected.locked ? <Unlock /> : <Lock />}</button> : null}
+                  {!upload ? <button aria-label="Bring selected product forward" onClick={() => updateSelected({ zIndex: Math.max(...items.map((item) => item.zIndex ?? 1)) + 1 })}><Layers /></button> : null}
                   <button aria-label="Remove selected product" onClick={() => { pushHistory(); setItems((current) => current.filter((item) => item.id !== selected.id)); setSelectedId(""); }}><Trash2 /></button>
                 </div>
               ) : null}
             </div>
 
-              {selected ? (
+              {!upload && selected ? (
                 <div className="stitch-composer-properties">
                   <div className="stitch-composer-angle-control">
                     <span>Product views</span>
@@ -541,10 +633,31 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     </>;
                   })()}
                 </div>
-              ) : <div className="stitch-composer-properties is-empty"><strong>Select a product</strong><span>Choose an item in the room to view its dimensions, material, color, and available views.</span></div>}
+              ) : !upload ? <div className="stitch-composer-properties is-empty"><strong>Select a product</strong><span>Choose an item in the room to view its dimensions, material, color, and available views.</span></div> : null}
             </div>
 
-            <div className="stitch-composer-summary">
+            <div className="stitch-composer-ai-panel" aria-busy={generationStatus === "loading"}>
+              <div>
+                <p className="eyebrow"><Sparkles size={15} /> AI room staging</p>
+                <strong>{upload ? "Generate room" : "Add the selected catalogue products to your real room"}</strong>
+                <span>{upload ? "Creates one cohesive room photograph with natural perspective, lighting, and shadows. Usually takes 1–3 minutes. The result is inspirational and cannot confirm physical fit." : "OpenAI re-renders the complete photograph while using your room as the architectural reference and the selected catalogue images as product references. Generation usually takes 1–3 minutes. The result is inspirational and cannot confirm physical fit."}</span>
+                {generatedIsCurrent ? <small role="status">Generated from the current room and {items.length} selected {items.length === 1 ? "product" : "products"}.</small> : null}
+                {generatedVisualization && !generatedIsCurrent ? <small role="status">Your room layout changed after the last generation. Generate again to update the realistic view.</small> : null}
+                {generationError ? <small className="form-error" role="alert">{generationError}</small> : null}
+              </div>
+              <div>
+                {generatedIsCurrent && !showGenerated ? <button type="button" className="ghost" onClick={() => { setShowBefore(false); setShowGenerated(true); }}>View generated</button> : null}
+                {displayGenerated ? <button type="button" className="ghost" onClick={() => { setShowBefore(false); setShowGenerated(false); }}>Edit placement</button> : null}
+                {generatedIsCurrent ? <a className="ghost" href={generatedVisualization} download={`musterring-room-visualization.${generatedVisualization.startsWith("data:image/png") ? "png" : "jpg"}`}><Download size={16} /> Download</a> : null}
+                <button
+                  type="button"
+                  onClick={generateRoomVisualization}
+                  disabled={!roomPhoto || !uploadConsent || !items.length || items.length > maxGeneratedVisualizationItems || generationStatus === "loading"}
+                ><Sparkles size={17} /> {generationStatus === "loading" ? "Generating realistic view…" : generatedIsCurrent ? "Generate again" : "Generate realistic view"}</button>
+              </div>
+            </div>
+
+            {!upload ? <><div className="stitch-composer-summary">
                 <div><small>Total items</small><strong>{String(items.length).padStart(2, "0")} Modules</strong></div>
                 <button onClick={() => {
                   if (!window.confirm("Save this room concept to My Musterring?")) return;
@@ -584,22 +697,22 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               setItems(version.items);
               setSceneScale(version.sceneScale ?? 1);
               setSelectedId(version.items[0]?.id ?? "");
-            }}>Open version {version.version ?? index + 1}</button>)}</div> : null}
+            }}>Open version {version.version ?? index + 1}</button>)}</div> : null}</> : null}
           </div>
         </div>
       </section>
 
-      <section className="section band stitch-engineering-specs">
+      {!upload ? <section className="section band stitch-engineering-specs">
         <div className="container">
           <div><h2>Planning summary</h2><p>Your room concept stays organized and ready for the next consultation step.</p></div>
           <dl>
-            <div><dt>Planning mode</dt><dd>Interactive local composition</dd></div>
+            <div><dt>Planning mode</dt><dd>Interactive composition + confirmed AI staging</dd></div>
             <div><dt>Products</dt><dd>{activeProducts.length} available models</dd></div>
-            <div><dt>Privacy</dt><dd>Room state stays in this browser</dd></div>
+            <div><dt>Privacy</dt><dd>Uploads are processed with consent and are not saved by this app</dd></div>
             <div><dt>Handover</dt><dd>Retailer-ready project summary</dd></div>
           </dl>
         </div>
-      </section>
+      </section> : null}
     </div>
   );
 }
