@@ -43,6 +43,21 @@ const advisorNarrativeSchema = z.object({
   suggestedQuestions: z.array(z.string().trim().min(1).max(180)).max(4)
 });
 
+const aiAdvisorAnswerSchema = z.object({
+  answer: advisorAnswerSchema.shape.answer,
+  answerType: advisorAnswerSchema.shape.answerType,
+  productIds: advisorAnswerSchema.shape.productIds,
+  materialIds: advisorAnswerSchema.shape.materialIds,
+  sources: advisorAnswerSchema.shape.sources,
+  proposedAction: z.object({
+    type: advisorAnswerSchema.shape.proposedAction.unwrap().shape.type,
+    label: z.string(),
+    parametersJson: z.string(),
+    requiresConfirmation: z.boolean()
+  }).nullable(),
+  suggestedQuestions: advisorAnswerSchema.shape.suggestedQuestions
+});
+
 // Structured Outputs requires every object property to be present. Nullable
 // fields are normalized back to the app's optional MaterialAdvice shape below.
 const openAIMaterialAdviceSchema = z.object({
@@ -448,6 +463,50 @@ export class OpenAIProvider implements AIProvider {
   }
 
   async answerProductQuestion(input: { question: string; context: ConversationContext }) {
+    const completeCatalogueFacts = products.filter((product) => product.active).map((product) => ({
+      id: product.id, modelCode: product.modelCode, name: product.name, category: product.category,
+      widthMm: product.verifiedFacts.dimensions ? product.widthMm : null,
+      depthMm: product.verifiedFacts.dimensions ? product.depthMm : null,
+      heightMm: product.verifiedFacts.dimensions ? product.heightMm : null,
+      seatHeightMm: product.verifiedFacts.seatHeight ? product.seatHeightMm : null,
+      seatDepthMm: product.verifiedFacts.seatDepth ? product.seatDepthMm : null,
+      numberOfSeats: product.numberOfSeatsVerified ? product.numberOfSeats : null,
+      colors: product.verifiedFacts.colors, materials: product.verifiedFacts.materialTypes,
+      styles: product.verifiedFacts.styles, functions: product.verifiedFacts.functions,
+      modular: product.verifiedFacts.modular ? product.modular : null
+    }));
+    const completeMaterialFacts = materials.map((material) => ({
+      id: material.id, name: material.name, type: material.type, colorFamily: material.colorFamily,
+      durability: material.durability, easyCare: material.easyCare, petFriendly: material.petFriendly,
+      familyFriendly: material.familyFriendly, lightSensitivity: material.lightSensitivity
+    }));
+    const generated = await this.parse(aiAdvisorAnswerSchema, "musterring_customer_assistant_answer",
+      `You are Ask Musterring, a capable conversational assistant for the complete Musterring customer journey. Interpret the current message together with recentMessages. Never repeat a question when the customer has just provided the requested details. Help naturally with interior planning, room layouts, measurements, product discovery and comparison, materials and care, configuration preparation, delivery-route preparation, saved projects, website guidance, retailers, consultations and after-sales handover.
+
+The customer may include ordinary personal context. Silently ignore harmless details that are irrelevant to the request; do not mention that you cannot help with them, refuse them, moralize or scold. Focus on the relevant planning need. Do not treat every mention of a door, window or room as a new fit request. Acknowledge useful details already supplied, explain what can be concluded, and ask only for genuinely missing information.
+
+Recommend or identify products only by IDs in VALIDATED CATALOGUE FACTS and use only their supplied facts. Every product named in the prose must also appear in productIds. Material IDs must come from VALIDATED MATERIAL FACTS. Never invent products, dimensions, prices, availability, compatibility, policies or physical-fit conclusions. Never say or imply that a product "fits", "should fit", "can fit" or "fits dimensionally" from conversational measurements; only the fit engine may make that determination. You may compare verified product dimensions with supplied room dimensions as raw measurements while explicitly stating that this is not a fit result. Retailer-specific price, availability, delivery, payment, warranty and returns require retailer confirmation.
+
+Actions are proposals only; never claim they happened. SAVE_PRODUCT, SAVE_CONFIGURATION, PREPARE_HANDOVER and BOOK_CONSULTATION require confirmation. Use null when no action is useful. Sources may name only the supplied catalogue/material data or the relevant Musterring tool; use an empty array for general planning guidance. Keep answers natural and useful, normally under 140 words. Answer in the customer's language.`,
+      [{ role: "user", content: `CURRENT QUESTION: ${input.question}\nCONVERSATION AND PAGE CONTEXT: ${JSON.stringify(input.context)}\nVALIDATED CATALOGUE FACTS: ${JSON.stringify(completeCatalogueFacts)}\nVALIDATED MATERIAL FACTS: ${JSON.stringify(completeMaterialFacts)}\nAVAILABLE TOOLS: product search, comparison, product pages, validated configurator, My Musterring saves, room planner, Will It Fit, retailer finder, consultation handover, alternatives and material advisor. For proposedAction.parametersJson, return a JSON object encoded as a string, or "{}" when no parameters are needed.` }]);
+    let parameters: Record<string, unknown> = {};
+    if (generated.proposedAction) {
+      try {
+        const parsed: unknown = JSON.parse(generated.proposedAction.parametersJson);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) parameters = parsed as Record<string, unknown>;
+      } catch { /* invalid action parameters are safely reduced to an empty object */ }
+    }
+    return advisorAnswerSchema.parse({
+      ...generated,
+      proposedAction: generated.proposedAction ? {
+        type: generated.proposedAction.type,
+        label: generated.proposedAction.label,
+        parameters,
+        requiresConfirmation: generated.proposedAction.requiresConfirmation
+      } : null
+    });
+
+    /* istanbul ignore next -- retained below only for deterministic provider compatibility */
     const grounded = answerGroundedQuestion(input.question, input.context);
     const answerProducts = products.filter((product) => grounded.productIds.includes(product.id)).map((product) => ({
       id: product.id, modelCode: product.modelCode, name: product.name, category: product.category,
