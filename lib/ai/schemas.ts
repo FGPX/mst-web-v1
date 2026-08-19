@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { catalogueCategories, stylistRoomTypes } from "../types";
+import { catalogueCategories, stylistRoomTypes, stylistStylePreferences } from "../types";
 import { validateStylistQuizInput } from "./stylist-quiz";
 
 const nullableString = z.string().nullable();
@@ -149,11 +149,15 @@ export const imageUploadSchema = z.object({
 
 export const stylistOptionsSchema = z.object({
   roomType: z.enum(stylistRoomTypes),
-  answers: z.record(z.string().trim().min(1).max(80)).refine((value) => Object.keys(value).length <= 10),
-  notes: z.record(z.string().trim().max(240)).refine((value) => Object.keys(value).length <= 4),
+  answers: z.record(z.union([
+    z.string().trim().min(1).max(80),
+    z.array(z.string().trim().min(1).max(80)).min(1).max(2).refine((values) => new Set(values).size === values.length)
+  ])).refine((value) => Object.keys(value).length <= 10),
+  notes: z.record(z.string().trim().max(240)).refine((value) => Object.keys(value).length <= 10),
   selectedProductIds: z.array(z.string().trim().min(1).max(180)).max(20).refine((values) => new Set(values).size === values.length),
   maxWidthMm: z.number().int().min(300).max(10_000).nullable(),
-  maxDepthMm: z.number().int().min(300).max(10_000).nullable()
+  maxDepthMm: z.number().int().min(300).max(10_000).nullable(),
+  styleDirection: z.enum(stylistStylePreferences).nullable().optional()
 }).strict().superRefine((value, context) => {
   if (!validateStylistQuizInput(value)) context.addIssue({ code: z.ZodIssueCode.custom, path: ["answers"], message: "Complete the supported questions for the selected room." });
 });

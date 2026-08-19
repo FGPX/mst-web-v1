@@ -36,13 +36,15 @@ export const stylistMaterialPreferences = ["fabric", "leather", "wood", "mixed",
 export type StylistMaterialPreference = (typeof stylistMaterialPreferences)[number];
 export const stylistPriorities = ["comfort", "easy-care", "flexible-modular", "compact-footprint", "relax-functions", "premium-materials"] as const;
 export type StylistPriority = (typeof stylistPriorities)[number];
+export type StylistQuizAnswer = string | string[];
 export type StylistQuizInput = {
   roomType: StylistRoomType;
-  answers: Record<string, string>;
+  answers: Record<string, StylistQuizAnswer>;
   notes: Record<string, string>;
   selectedProductIds: string[];
   maxWidthMm: number | null;
   maxDepthMm: number | null;
+  styleDirection?: StylistStylePreference | null;
 };
 export type StylistPreferences = StylistQuizInput & {
   target: StylistTarget;

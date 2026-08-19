@@ -22,6 +22,9 @@ export default function ProductAssemblyStory() {
     let lastFrameTime = 0;
     let currentProgress = 0;
     let targetProgress = 0;
+    const navigationEntry = window.performance
+      .getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    const isPageReload = navigationEntry?.type === "reload";
 
     const measure = () => {
       const rect = section.getBoundingClientRect();
@@ -52,12 +55,29 @@ export default function ProductAssemblyStory() {
       if (!frame) frame = window.requestAnimationFrame(render);
     };
 
+    const resetReloadedStory = () => {
+      if (!isPageReload) return;
+
+      const rect = section.getBoundingClientRect();
+      const sectionTop = window.scrollY + rect.top;
+      const sectionEnd = sectionTop + Math.max(section.offsetHeight - window.innerHeight, 1);
+
+      if (window.scrollY > sectionTop && window.scrollY <= sectionEnd) {
+        window.scrollTo({ top: sectionTop, left: 0, behavior: "auto" });
+      }
+
+      requestUpdate();
+    };
+
+    resetReloadedStory();
     measure();
     currentProgress = targetProgress;
     section.style.setProperty("--assembly-progress", currentProgress.toFixed(4));
+    window.addEventListener("load", resetReloadedStory, { once: true });
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate, { passive: true });
     return () => {
+      window.removeEventListener("load", resetReloadedStory);
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
       if (frame) window.cancelAnimationFrame(frame);
