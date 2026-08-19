@@ -7,8 +7,37 @@ import {
   voiceCommandSchema, type AdvisorAnswer, type AlternativeRequest, type AlternativeResponse,
   type ConversationContext, type MaterialAdvice, type VoiceCommand
 } from "./ai/assistant-schemas";
+import { extractExcludedLayoutShapes } from "./ai/alternative-intent";
 
 const colors = searchColorTerms;
+
+export function materialMatchesNeeds(material: Material, needs: MaterialAdvice["needs"]) {
+  if (needs.easyCareRequired && !material.easyCare) return false;
+  if (needs.children && !material.familyFriendly) return false;
+  if (needs.pets && !material.petFriendly) return false;
+  if (needs.strongSunlight && material.lightSensitivity !== "low") return false;
+  if (needs.preferredColors?.length && !needs.preferredColors.includes(material.colorFamily)) return false;
+  if (needs.preferredMaterialGroups?.length && !needs.preferredMaterialGroups.includes(material.type)) return false;
+  if (needs.avoidMaterialGroups?.includes(material.type)) return false;
+  return true;
+}
+
+const materialQueryStopWords = new Set(["the", "and", "for", "with", "that", "this", "from", "material", "materials", "something", "want", "need", "looking", "show", "find"]);
+
+export function materialMetadataMatches(requestText: string) {
+  const tokens = requestText.toLowerCase().match(/[a-z0-9]+/g)?.filter((token) => token.length > 2 && !materialQueryStopWords.has(token)) ?? [];
+  if (!tokens.length) return [];
+  return materials.filter((material) => {
+    const attributeLabels = [
+      material.easyCare ? "easy care easy to clean easy to wash washable" : "specialist care",
+      material.petFriendly ? "pet friendly pets dog cat" : "not pet friendly",
+      material.familyFriendly ? "family friendly children kids" : "not family friendly",
+      `${material.lightSensitivity} light sensitivity`
+    ];
+    const corpus = [material.name, material.type, material.colorFamily, material.texture, material.composition, material.care, material.maintenance, ...material.cleaningMethods, ...material.recommendedUses, ...material.cautions, ...attributeLabels].join(" ").toLowerCase();
+    return tokens.every((token) => corpus.includes(token));
+  }).map((material) => material.id);
+}
 
 function requestedTargetWidthMm(text: string) {
   const match =
@@ -21,16 +50,22 @@ function requestedTargetWidthMm(text: string) {
 function requestedAlternative(input: AlternativeRequest, source: Product) {
   const text = input.requestText?.toLowerCase() ?? "";
   const search = parseSearchQuery(input.requestText ?? "");
+  const excludedLayoutShapes = extractExcludedLayoutShapes(input.requestText ?? "");
+  const requestedLayoutShapes = (search.layoutShapes ?? input.layoutShapes ?? []).filter((shape) => !excludedLayoutShapes.includes(shape));
   const easyCareRequested = /\b(?:easy|easier|easiest)[- ](?:care|clean)|easy to (?:care for|clean)|low[- ]maintenance\b/.test(text);
   const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
   const parsedWidth = search.minWidthMm !== undefined || search.maxWidthMm !== undefined || search.targetWidthMm !== undefined;
   const targetWidthMm = !narrower && !parsedWidth ? requestedTargetWidthMm(text) : search.targetWidthMm;
   return alternativeRequestSchema.parse({
     ...input,
-    category: search.category ?? input.category,
+    // "Discover more like this" is scoped to the product being viewed. A
+    // request may refine that category, but it must never switch the panel to
+    // sofas, beds or another unrelated catalogue category.
+    category: source.category,
     colorFamilies: [...new Set([...(input.colorFamilies ?? []), ...(search.colors ?? [])].map((value) => value.toLowerCase()))],
     styles: [...new Set([...(input.styles ?? []), ...(search.styles ?? [])].map((value) => value.toLowerCase()))],
-    layoutShapes: search.layoutShapes ?? input.layoutShapes,
+    layoutShapes: requestedLayoutShapes.length ? requestedLayoutShapes : undefined,
+    excludedLayoutShapes: [...new Set([...(input.excludedLayoutShapes ?? []), ...excludedLayoutShapes])],
     numberOfSeats: search.seatCount ?? input.numberOfSeats,
     maxWidthMm: narrower ? source.widthMm - Number(narrower[1]) * 10 : parsedWidth ? search.maxWidthMm : input.maxWidthMm ?? (/\b(?:smaller|more compact|narrower)\b/.test(text) ? source.widthMm - 10 : undefined),
     minWidthMm: parsedWidth ? search.minWidthMm : input.minWidthMm,
@@ -138,6 +173,16 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       const matchesShape = product.layoutShapes?.includes(value) ?? false;
       checks.push({ ok: matchesShape, label: `requires verified ${value} layout`, closeness: matchesShape ? 1 : 0 });
     }
+    for (const value of request.excludedLayoutShapes ?? []) {
+      const verifiedLayouts = product.layoutShapes ?? [];
+      const hasVerifiedLayout = verifiedLayouts.length > 0;
+      const hasExcludedLayout = verifiedLayouts.includes(value);
+      checks.push({
+        ok: hasVerifiedLayout && !hasExcludedLayout,
+        label: hasExcludedLayout ? `must not use ${value} layout` : `a non-${value} layout is not verified for this product`,
+        closeness: hasVerifiedLayout && !hasExcludedLayout ? 1 : 0
+      });
+    }
     for (const value of request.requiredFunctions ?? []) checks.push({ ok: hasFunction(product, value), label: `requires ${value}`, closeness: hasFunction(product, value) ? 1 : 0 });
     for (const value of request.excludedFunctions ?? []) checks.push({ ok: !hasFunction(product, value), label: `must not include ${value}`, closeness: !hasFunction(product, value) ? 1 : 0 });
     for (const value of request.materialTags ?? []) checks.push({ ok: hasMaterialTag(product, value), label: `requires ${value} material metadata`, closeness: hasMaterialTag(product, value) ? 1 : 0 });
@@ -195,7 +240,11 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       : `${item.product.modelCode} is a close alternative, but ${item.unmet.join("; ")}.`
   });
   const exactMatches = ranked.filter((item) => item.exact).slice(0, 6).map(toMatch);
-  const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 6).map(toMatch);
+  // Exact requirements determine the exact-match bucket. The best remaining
+  // same-category products are still useful recommendations when they are
+  // clearly labelled with every unmet requirement (for example, an unverified
+  // requested colour). Keep this group deliberately small and ranked.
+  const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 3).map(toMatch);
   const interpretedRequirements = [
     ...(request.category ? [request.category.replace(/-/g, " ")] : []),
     ...(request.colorFamilies ?? []).map((value) => `${value} colour`),
@@ -205,6 +254,7 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     ...(request.minWidthMm ? [`minimum ${Math.round(request.minWidthMm / 10)} cm wide`] : []),
     ...(request.targetWidthMm ? [`around ${Math.round(request.targetWidthMm / 10)} cm wide`] : []),
     ...(request.layoutShapes ?? []).map((value) => `${value} layout`),
+    ...(request.excludedLayoutShapes ?? []).map((value) => `not ${value} layout`),
     ...(request.minSeatHeightMm ? [`seat height at least ${Math.round(request.minSeatHeightMm / 10)} cm`] : []),
     ...(request.requiredFunctions ?? []).map((value) => `${value} function`),
     ...(request.materialTags ?? []).map((value) => `${value} material`),
@@ -231,7 +281,7 @@ export function parseMaterialNeeds(textValue: string): MaterialAdvice {
     pets: /pets?|dog|cat|hund|katze/.test(text),
     highUse: /high use|everyday|daily|busy|frequent/.test(text),
     strongSunlight: /strong (?:afternoon )?sunlight|direct sun|sunny/.test(text),
-    easyCareRequired: /easy[- ]care|easy clean|cleaning|children|pets?|dog|stain/.test(text),
+    easyCareRequired: /easy(?: to)? (?:care|clean|wash)|easy[- ]care|washable|children|pets?|dog|stain/.test(text),
     preferredColors: preferredColors.length ? preferredColors : undefined,
     preferredMaterialGroups: preferredMaterialGroups.length ? preferredMaterialGroups : undefined,
     avoidMaterialGroups: avoidMaterialGroups.length ? avoidMaterialGroups : undefined
@@ -248,7 +298,11 @@ export function parseMaterialNeeds(textValue: string): MaterialAdvice {
     if (avoidMaterialGroups.includes(material.type)) score -= 20;
     return { material, score };
   }).sort((left, right) => right.score - left.score);
-  const recommendedMaterialIds = scored.filter(({ score }) => score >= 3).slice(0, 5).map(({ material }) => material.id);
+  const scoredMaterialIds = scored
+    .filter(({ material, score }) => score >= 3 && materialMatchesNeeds(material, needs))
+    .map(({ material }) => material.id);
+  const hasStructuredNeed = Boolean(needs.children || needs.pets || needs.highUse || needs.strongSunlight || needs.easyCareRequired || preferredColors.length || preferredMaterialGroups.length || avoidMaterialGroups.length);
+  const recommendedMaterialIds = hasStructuredNeed ? scoredMaterialIds : materialMetadataMatches(textValue);
   const materialsToAvoid = scored.filter(({ score }) => score < 0).slice(-4).map(({ material }) => material.id);
   const explanationKeys = [
     ...(needs.children ? ["family-suitability"] : []),

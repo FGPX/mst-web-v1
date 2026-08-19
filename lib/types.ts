@@ -12,7 +12,7 @@ export type ProjectStatus =
   | "Consultation Booked"
   | "Retailer Responded";
 
-export type Material = {
+  export type Material = {
   id: string;
   name: string;
   type: "fabric" | "leather";
@@ -24,8 +24,12 @@ export type Material = {
   petFriendly: boolean;
   familyFriendly: boolean;
   lightSensitivity: "low" | "medium" | "high";
-  care: string;
-  demoData: boolean;
+    care: string;
+    cleaningMethods: string[];
+    maintenance: string;
+    recommendedUses: string[];
+    cautions: string[];
+    demoData: boolean;
 };
 
 export type Product = {

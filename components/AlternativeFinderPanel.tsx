@@ -116,6 +116,10 @@ export function AlternativeFinderPanel() {
         {status === "error" ? <p role="alert">Alternatives are temporarily unavailable. The source product remains saved and no catalogue facts were changed.</p> : null}
       </div>
       {result ? <section className="alternative-response" aria-live="polite">
+        {result.interpretedRequirements.length ? <div className="alternative-requirements">
+          <strong>We understood</strong>
+          <div>{result.interpretedRequirements.map((requirement) => <span key={requirement}>{requirement}</span>)}</div>
+        </div> : null}
         {result.exactMatches.length ? <div className="alternative-group is-exact" aria-labelledby="exact-match-heading">
           <header><CheckCircle2 aria-hidden="true" /><div><h4 id="exact-match-heading">Exact matches</h4></div><span>{result.exactMatches.length}</span></header>
           {renderMatches(result.exactMatches, true)}

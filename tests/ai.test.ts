@@ -5,6 +5,7 @@ import { buildGroundedConfiguration } from "@/lib/ai/configuration";
 import { comparisonSummaryInput, deterministicComparisonSummary } from "@/lib/ai/comparison-summary";
 import { groundProjectData } from "@/lib/ai/grounding";
 import { hybridCatalogueSearch, searchCatalogueByVisualTags } from "@/lib/ai/retrieval";
+import { validatedAIAlternativeRequirements } from "@/lib/ai/alternative-intent";
 import {
   configurationRequirementsSchema,
   retailerProjectDataSchema,
@@ -33,6 +34,46 @@ const baseIntent = {
 };
 
 describe("AI schemas and fallbacks", () => {
+  it("discards model-invented alternative requirements without request evidence", () => {
+    const result = validatedAIAlternativeRequirements(
+      { sourceProductId: "musterring-justb-pm200", requestText: "red sofa" },
+      {
+        category: "sofa", colorFamilies: ["red"], styles: ["modern", "classic"], numberOfSeats: null,
+        maxWidthMm: null, minWidthMm: null, targetWidthMm: null,
+        layoutShapes: ["straight", "l-shaped", "u-shaped", "corner", "island"], excludedLayoutShapes: [], minSeatHeightMm: null,
+        requiredFunctions: ["relax", "electric"], excludedFunctions: [],
+        materialTags: ["fabric", "leather", "velvet"], preserveStyle: true, preserveComfort: true
+      }
+    );
+    expect(result).toEqual({ category: "sofa", colorFamilies: ["red"] });
+  });
+
+  it("keeps explicitly requested style and comfort preservation", () => {
+    const result = validatedAIAlternativeRequirements(
+      { sourceProductId: "musterring-justb-pm200", requestText: "a red sofa with the same style and same comfort" },
+      {
+        category: "sofa", colorFamilies: ["red"], styles: [], numberOfSeats: null,
+        maxWidthMm: null, minWidthMm: null, targetWidthMm: null, layoutShapes: [], excludedLayoutShapes: [], minSeatHeightMm: null,
+        requiredFunctions: [], excludedFunctions: [], materialTags: [], preserveStyle: true, preserveComfort: true
+      }
+    );
+    expect(result).toMatchObject({ category: "sofa", colorFamilies: ["red"], preserveStyle: true, preserveComfort: true });
+  });
+
+  it("keeps a negated layout out of positive layout requirements", () => {
+    const result = validatedAIAlternativeRequirements(
+      { sourceProductId: "musterring-justb-pm200", requestText: "grey sofa, not L-shaped" },
+      {
+        category: "sofa", colorFamilies: ["grey"], styles: [], numberOfSeats: null,
+        maxWidthMm: null, minWidthMm: null, targetWidthMm: null,
+        layoutShapes: ["l-shaped"], excludedLayoutShapes: ["l-shaped"], minSeatHeightMm: null,
+        requiredFunctions: [], excludedFunctions: [], materialTags: [], preserveStyle: false, preserveComfort: false
+      }
+    );
+    expect(result.layoutShapes).toBeUndefined();
+    expect(result.excludedLayoutShapes).toEqual(["l-shaped"]);
+  });
+
   it("validates structured search, image and room outputs", () => {
     expect(searchIntentSchema.safeParse(baseIntent).success).toBe(true);
     expect(visualTagsSchema.safeParse({ category: "sofa", colorFamilies: ["beige"], likelyMaterial: "fabric", style: ["modern"], silhouette: "wide", notableVisualFeatures: ["low arms"] }).success).toBe(true);

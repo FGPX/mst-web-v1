@@ -13,6 +13,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { StitchLinkButton } from "@/components/stitch/StitchButtons";
+import Chair360Experience from "@/components/Chair360Experience";
 
 const quickStarts = [
   {
@@ -114,6 +115,8 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      <Chair360Experience />
 
       <section className="simple-rooms" aria-labelledby="rooms-heading">
         <div className="simple-container">

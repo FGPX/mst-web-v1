@@ -29,7 +29,8 @@ import {
   type MaterialAdvice, type VoiceCommand
 } from "./assistant-schemas";
 import { deterministicComparisonSummary, validateComparisonSummary } from "./comparison-summary";
-import { answerGroundedQuestion, findGroundedAlternatives, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
+import { validatedAIAlternativeRequirements } from "./alternative-intent";
+import { answerGroundedQuestion, findGroundedAlternatives, materialMatchesNeeds, materialMetadataMatches, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
 import { materials, products } from "../data";
 import { catalogueCategories } from "../types";
 
@@ -39,6 +40,24 @@ export type ProviderResult<T> = { data: T; provider: AIProviderName; fallback: b
 const advisorNarrativeSchema = z.object({
   answer: z.string().trim().min(1).max(3000),
   suggestedQuestions: z.array(z.string().trim().min(1).max(180)).max(4)
+});
+
+// Structured Outputs requires every object property to be present. Nullable
+// fields are normalized back to the app's optional MaterialAdvice shape below.
+const openAIMaterialAdviceSchema = z.object({
+  needs: z.object({
+    children: z.boolean().nullable(),
+    pets: z.boolean().nullable(),
+    highUse: z.boolean().nullable(),
+    strongSunlight: z.boolean().nullable(),
+    easyCareRequired: z.boolean().nullable(),
+    preferredColors: z.array(z.string()).nullable(),
+    preferredMaterialGroups: z.array(z.string()).nullable(),
+    avoidMaterialGroups: z.array(z.string()).nullable()
+  }),
+  recommendedMaterialIds: z.array(z.string()),
+  materialsToAvoid: z.array(z.string()),
+  explanationKeys: z.array(z.string())
 });
 
 const visualCategoryList = catalogueCategories.join(", ");
@@ -362,6 +381,7 @@ export class OpenAIProvider implements AIProvider {
       minWidthMm: shape.minWidthMm.unwrap().nullable(),
       targetWidthMm: shape.targetWidthMm.unwrap().nullable(),
       layoutShapes: shape.layoutShapes.unwrap(),
+      excludedLayoutShapes: shape.excludedLayoutShapes.unwrap(),
       minSeatHeightMm: shape.minSeatHeightMm.unwrap().nullable(),
       requiredFunctions: shape.requiredFunctions.unwrap(),
       excludedFunctions: shape.excludedFunctions.unwrap(),
@@ -370,28 +390,52 @@ export class OpenAIProvider implements AIProvider {
       preserveComfort: shape.preserveComfort.unwrap().nullable()
     });
     const extracted = await this.parse(extractionSchema, "alternative_requirements",
-      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, layoutShapes, materials and functions. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
+      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, included and excluded layout shapes, materials and functions. Put negated layouts such as 'not L-shaped' only in excludedLayoutShapes, never in layoutShapes. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
       [{ role: "user", content: JSON.stringify(input) }]);
-    const inferred = Object.fromEntries(Object.entries(extracted).filter(([, value]) => value !== null));
+    const inferred = validatedAIAlternativeRequirements(input, extracted);
     // Explicit structured filters from the UI are authoritative; AI only fills
-    // constraints expressed in free text. IDs and request text never come from AI.
+    // constraints that can be verified in the free text. IDs and request text
+    // never come from AI.
     const parsed = alternativeRequestSchema.parse({ ...inferred, ...input });
     return alternativeResponseSchema.parse(findGroundedAlternatives(parsed));
   }
 
   async adviseMaterials(input: { requestText: string }) {
     const facts = materials.map((material) => ({
-      id: material.id, type: material.type, color: material.colorFamily, durability: material.durability,
+      id: material.id, name: material.name, type: material.type, color: material.colorFamily,
+      texture: material.texture, composition: material.composition, durability: material.durability,
       easyCare: material.easyCare, petFriendly: material.petFriendly, familyFriendly: material.familyFriendly,
-      lightSensitivity: material.lightSensitivity
+      lightSensitivity: material.lightSensitivity, careInstruction: material.care,
+      cleaningMethods: material.cleaningMethods, maintenance: material.maintenance,
+      recommendedUses: material.recommendedUses, cautions: material.cautions
     }));
-    const result = await this.parse(materialAdviceSchema, "material_advice",
-      "Recommend only supplied material IDs. Use only supplied metadata. Never claim stain-proof, scratch-proof, allergy-safe or indestructible.",
-      [{ role: "user", content: `Household request: ${input.requestText}\nMaterial metadata: ${JSON.stringify(facts)}` }]);
+    const instructions = "Analyze the customer's complete request against every supplied material record. Return every supplied material ID that is relevant and satisfies all explicit requirements; exclude records that contradict any explicit requirement. Use only supplied metadata. Return an empty list when none match. Never create IDs or claim stain-proof, scratch-proof, allergy-safe, indestructible, availability, price, or physical compatibility.";
+    const result = await this.parse(openAIMaterialAdviceSchema, "material_advice", instructions,
+      [{ role: "system", content: instructions }, { role: "user", content: `Material metadata: ${JSON.stringify(facts)}\nHousehold request: ${input.requestText}` }]);
+    const deterministic = parseMaterialNeeds(input.requestText);
+    const metadataMatchIds = materialMetadataMatches(input.requestText);
     const validIds = new Set(materials.map((material) => material.id));
+    const aiMaterialIds = result.recommendedMaterialIds.filter((id) => {
+      if (!validIds.has(id)) return false;
+      const material = materials.find((item) => item.id === id);
+      return Boolean(material && materialMatchesNeeds(material, deterministic.needs) && (!metadataMatchIds.length || metadataMatchIds.includes(material.id)));
+    });
+    const recommendedMaterialIds = [...new Set([...aiMaterialIds, ...deterministic.recommendedMaterialIds, ...metadataMatchIds])];
     return materialAdviceSchema.parse({
       ...result,
-      recommendedMaterialIds: result.recommendedMaterialIds.filter((id) => validIds.has(id)),
+      needs: {
+        ...deterministic.needs,
+        ...result.needs,
+        children: Boolean(result.needs.children || deterministic.needs.children),
+        pets: Boolean(result.needs.pets || deterministic.needs.pets),
+        highUse: Boolean(result.needs.highUse || deterministic.needs.highUse),
+        strongSunlight: Boolean(result.needs.strongSunlight || deterministic.needs.strongSunlight),
+        easyCareRequired: Boolean(result.needs.easyCareRequired || deterministic.needs.easyCareRequired),
+        preferredColors: deterministic.needs.preferredColors ?? result.needs.preferredColors ?? undefined,
+        preferredMaterialGroups: deterministic.needs.preferredMaterialGroups ?? result.needs.preferredMaterialGroups ?? undefined,
+        avoidMaterialGroups: deterministic.needs.avoidMaterialGroups ?? result.needs.avoidMaterialGroups ?? undefined
+      },
+      recommendedMaterialIds,
       materialsToAvoid: result.materialsToAvoid.filter((id) => validIds.has(id))
     });
   }

@@ -329,7 +329,7 @@ function extractProductContent(html, page) {
       : h1;
   const categoryCopy = `${h1} ${description}`.toLowerCase();
   const category = page.category === "auto"
-    ? (/armchair|reclining chair|easy chair|beanbag/.test(categoryCopy) ? "armchair" : "sofa")
+    ? (/armchair|recliner|reclining chair|easy chair|beanbag/.test(categoryCopy) ? "armchair" : "sofa")
     : page.category === "auto-dining"
       ? (/chair|armchair|stool|bench/.test(categoryCopy) ? "dining-chair" : "dining-table")
       : page.category;

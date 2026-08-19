@@ -2,9 +2,10 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { MessageSquare, Send, Share2 } from "lucide-react";
+import { Heart, MessageSquare, Send, Share2, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { dealers, products } from "@/lib/data";
+import { dealers, materials, products } from "@/lib/data";
+import { materialImages } from "@/lib/material-assets";
 import type { Project } from "@/lib/types";
 import { storage } from "@/lib/persistence";
 import { roomSceneProductImage } from "@/lib/room-scene-assets";
@@ -35,12 +36,15 @@ export function ProjectsClient() {
   const [resourceCounts, setResourceCounts] = useState({ fitReports: 0, roomScenes: 0, comparisons: 0, configurations: 0, materials: 0, requests: 0 });
   const [dealerId, setDealerId] = useState<string | null>(null);
   const [savedScenes, setSavedScenes] = useState<SavedRoomScene[]>([]);
+  const [savedMaterialIds, setSavedMaterialIds] = useState<string[]>([]);
 
   const syncSavedContent = () => {
     const { scenes, productIds } = readSavedContent();
     setSavedScenes(scenes);
     setSavedIds(productIds);
-    setResourceCounts({ fitReports: storage.fitReports().length, roomScenes: scenes.length, comparisons: storage.savedComparisons().length, configurations: storage.configurations().length, materials: storage.savedMaterials().length, requests: storage.leads().length });
+    const materialIds = storage.savedMaterials();
+    setSavedMaterialIds(materialIds);
+    setResourceCounts({ fitReports: storage.fitReports().length, roomScenes: scenes.length, comparisons: storage.savedComparisons().length, configurations: storage.configurations().length, materials: materialIds.length, requests: storage.leads().length });
   };
 
   useEffect(() => {
@@ -60,6 +64,13 @@ export function ProjectsClient() {
   const displayed = products.filter((product) => savedIds.includes(product.id));
   const preferredDealer = dealers.find((dealer) => dealer.id === dealerId);
   const fitHref = displayed[0] ? `/will-it-fit/${displayed[0].slug}` : "/room-composer";
+  const savedMaterials = materials.filter((material) => savedMaterialIds.includes(material.id));
+
+  const removeMaterial = (materialId: string, materialName: string) => {
+    if (!window.confirm(`Remove ${materialName} from your saved materials?`)) return;
+    storage.toggleMaterial(materialId);
+    syncSavedContent();
+  };
 
   return (
     <div className="stitch-project">
@@ -91,6 +102,21 @@ export function ProjectsClient() {
         <div className="stitch-project-title"><h2>Saved Products</h2><Link href="/handover"><MessageSquare size={16} /> Expert consultation</Link></div>
         <section className="stitch-project-products">
           {displayed.length ? displayed.map((product) => <article key={product.id}><Link href={`/furniture/${product.slug}`}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={520} height={360} /><small>{product.modelCode}</small><strong>{product.name}</strong><span>Saved by you</span></Link><AlternativeFinderButton productId={product.id} label="Discover More Like This" className="" /></article>) : <div className="stitch-project-empty"><h3>No products saved yet</h3><p>Only products you explicitly save will appear here.</p><Link href="/furniture">Explore furniture</Link></div>}
+        </section>
+        <div className="stitch-project-title" id="saved-materials"><h2>Saved Materials</h2><Link href="/materials"><Heart size={16} /> Explore materials</Link></div>
+        <section className="stitch-saved-materials">
+          {savedMaterials.length ? savedMaterials.map((material) => (
+            <article key={material.id}>
+              <div className="stitch-saved-material-image"><Image src={materialImages[material.id]} alt={`${material.name} material texture`} width={520} height={360} /></div>
+              <div className="stitch-saved-material-copy">
+                <small>{material.type} · {material.colorFamily}</small>
+                <strong>{material.name}</strong>
+                <p>{material.texture} · {material.composition}</p>
+                <div className="stitch-saved-material-tags">{material.easyCare ? <span>Easy care</span> : null}{material.familyFriendly ? <span>Family friendly</span> : null}{material.petFriendly ? <span>Pet friendly</span> : null}</div>
+                <div className="stitch-saved-material-actions"><Link href={`/handover?request=material&material=${encodeURIComponent(material.id)}`}>Request sample</Link><button type="button" onClick={() => removeMaterial(material.id, material.name)}><Trash2 size={14} /> Remove</button></div>
+              </div>
+            </article>
+          )) : <div className="stitch-project-empty"><h3>No materials saved yet</h3><p>Use the heart on any material to keep it here for your project.</p><Link href="/materials">Explore materials</Link></div>}
         </section>
         <section className="stitch-project-resource-index" aria-label="Saved journey resources">
           <Link href="/furniture"><strong>{savedIds.length}</strong><span>Saved products</span></Link>
