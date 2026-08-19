@@ -18,6 +18,10 @@ export default function ProductAssemblyStory() {
     if (!section) return;
 
     let frame = 0;
+    const navigationEntry = window.performance
+      .getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    const isPageReload = navigationEntry?.type === "reload";
+
     const update = () => {
       frame = 0;
       const rect = section.getBoundingClientRect();
@@ -29,10 +33,27 @@ export default function ProductAssemblyStory() {
       if (!frame) frame = window.requestAnimationFrame(update);
     };
 
+    const resetReloadedStory = () => {
+      if (!isPageReload) return;
+
+      const rect = section.getBoundingClientRect();
+      const sectionTop = window.scrollY + rect.top;
+      const sectionEnd = sectionTop + Math.max(section.offsetHeight - window.innerHeight, 1);
+
+      if (window.scrollY > sectionTop && window.scrollY <= sectionEnd) {
+        window.scrollTo({ top: sectionTop, left: 0, behavior: "auto" });
+      }
+
+      requestUpdate();
+    };
+
+    resetReloadedStory();
     update();
+    window.addEventListener("load", resetReloadedStory, { once: true });
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate);
     return () => {
+      window.removeEventListener("load", resetReloadedStory);
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
       if (frame) window.cancelAnimationFrame(frame);

@@ -11,7 +11,7 @@ import {
   type StylistTarget
 } from "../types";
 import { stylistProviderResultSchema, stylistSlotIds, type StylistProviderResult } from "./schemas";
-import { stylistAnswerLabel } from "./stylist-quiz";
+import { stylistAnswerLabel, stylistAnswerValues } from "./stylist-quiz";
 
 export type StylistSlot = {
   id: (typeof stylistSlotIds)[number];
@@ -242,8 +242,9 @@ function assessCandidate(product: Product, preferences: StylistPreferences) {
   const isCollectionRequest = /^complete-|several-accessories$/.test(preferences.target);
   const targetCopyMatch = !isCollectionRequest && termMatches(copy, targetLabel) ? `Authorized catalogue copy explicitly references ${targetLabel.toLowerCase()}.` : null;
   const matchedQuizLabels = Object.entries(preferences.answers)
-    .filter(([questionId, answerId]) => questionId !== "target" && !["yes", "no", "none", "not-sure", "no-preference"].includes(answerId))
-    .map(([questionId, answerId]) => stylistAnswerLabel(preferences.roomType, questionId, answerId))
+    .flatMap(([questionId, answer]) => questionId === "target" ? [] : stylistAnswerValues(answer)
+      .filter((answerId) => !["yes", "no", "none", "not-sure", "no-preference"].includes(answerId))
+      .map((answerId) => stylistAnswerLabel(preferences.roomType, questionId, answerId)))
     .filter((label) => label.length >= 4 && termMatches(copy, label))
     .slice(0, 2);
   const matchedPriorities = preferences.priorities.flatMap((priority) => {

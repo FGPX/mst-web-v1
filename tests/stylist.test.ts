@@ -143,6 +143,45 @@ describe("AI Interior Stylist grounding", () => {
     dimensions.maxWidthMm = 2400;
     dimensions.maxDepthMm = 1100;
     expect(stylistOptionsSchema.safeParse(dimensions).success).toBe(true);
+
+    const withWrittenDetails = quizInput();
+    withWrittenDetails.notes = Object.fromEntries(
+      stylistQuizByRoom[withWrittenDetails.roomType].map((question) => [question.id, `Additional preference for ${question.id}.`])
+    );
+    expect(validateStylistQuizInput(withWrittenDetails)).toBe(true);
+    expect(stylistOptionsSchema.safeParse(withWrittenDetails).success).toBe(true);
+    expect(stylistCandidateFacts(normalizeStylistQuiz(withWrittenDetails))).toContain("Additional preference");
+
+    withWrittenDetails.notes["unsupported-question"] = "This note must not enter the stylist prompt.";
+    expect(stylistOptionsSchema.safeParse(withWrittenDetails).success).toBe(false);
+  });
+
+  it("accepts up to two answers only for supported multi-select questions", () => {
+    const input = quizInput();
+    input.answers["special-functions"] = ["relax-function", "adjustable-headrest"];
+    expect(stylistOptionsSchema.safeParse(input).success).toBe(true);
+    expect(normalizeStylistQuiz(input).priorities).toContain("relax-functions");
+
+    input.answers["special-functions"] = ["relax-function", "recliner", "adjustable-headrest"];
+    expect(stylistOptionsSchema.safeParse(input).success).toBe(false);
+
+    input.answers["special-functions"] = ["relax-function", "none"];
+    expect(stylistOptionsSchema.safeParse(input).success).toBe(false);
+
+    const singleChoiceQuestion = quizInput();
+    singleChoiceQuestion.answers.target = ["sofa"];
+    expect(stylistOptionsSchema.safeParse(singleChoiceQuestion).success).toBe(false);
+  });
+
+  it("carries a style direction into another room without overriding an explicit new choice", () => {
+    const diningRoom = quizInput("dining-room");
+    diningRoom.styleDirection = "warm-natural-rustic";
+    expect(normalizeStylistQuiz(diningRoom).style).toBe("warm-natural-rustic");
+
+    const livingRoom = quizInput("living-room");
+    livingRoom.styleDirection = "warm-natural-rustic";
+    livingRoom.answers["style-colours"] = "dark-elegant";
+    expect(normalizeStylistQuiz(livingRoom).style).toBe("classic-elegant-luxury");
   });
 
   it("builds one focused slot with several alternatives for a single product request", () => {

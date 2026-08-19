@@ -3,6 +3,7 @@ import { z } from "zod";
 import { checkRateLimit } from "@/lib/server-validation";
 import { LocalDemoAIProvider, withDemoFallback } from "@/lib/ai/providers";
 import { hybridCatalogueSearch } from "@/lib/ai/retrieval";
+import { canonicalizeSearchIntent } from "@/lib/ai/search-intent";
 
 const requestSchema = z.object({ query: z.string().trim().min(1).max(1000) });
 
@@ -13,34 +14,38 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) return NextResponse.json({ error: "Enter a valid search request." }, { status: 400 });
   const simulateProviderError = process.env.NODE_ENV !== "production" && request.headers.get("x-ai-test-provider-error") === "true";
   let firstAttempt = true;
-  const interpreted = await withDemoFallback((provider) => {
-    if (simulateProviderError && firstAttempt) {
-      firstAttempt = false;
-      throw new Error("Simulated provider failure for fallback contract test.");
-    }
-    return provider.parseSearchIntent(parsed.data.query);
-  });
+  const interpreted = await withDemoFallback(
+    (provider) => {
+      if (simulateProviderError && firstAttempt) {
+        firstAttempt = false;
+        throw new Error("Simulated provider failure for fallback contract test.");
+      }
+      return provider.parseSearchIntent(parsed.data.query);
+    },
+    { allowOpenAI: true }
+  );
+  const providerIntent = canonicalizeSearchIntent(interpreted.data);
   const deterministic = await new LocalDemoAIProvider().parseSearchIntent(parsed.data.query);
   const deterministicWidth = deterministic.minWidthMm !== null || deterministic.maxWidthMm !== null || deterministic.targetWidthMm !== null;
   const intent = {
-    ...interpreted.data,
+    ...providerIntent,
     queryText: parsed.data.query,
-    category: deterministic.category ?? interpreted.data.category,
-    colorFamilies: deterministic.colorFamilies ?? interpreted.data.colorFamilies,
-    materials: deterministic.materials ?? interpreted.data.materials,
+    category: deterministic.category ?? providerIntent.category,
+    colorFamilies: deterministic.colorFamilies ?? providerIntent.colorFamilies,
+    materials: deterministic.materials ?? providerIntent.materials,
     // Relational dimensions are safety-critical. When deterministic parsing found
     // one, use that complete set so "above 300" can never also become "max 300".
-    maxWidthMm: deterministicWidth ? deterministic.maxWidthMm : interpreted.data.maxWidthMm,
-    minWidthMm: deterministicWidth ? deterministic.minWidthMm : interpreted.data.minWidthMm,
-    targetWidthMm: deterministicWidth ? deterministic.targetWidthMm : interpreted.data.targetWidthMm,
-    minSeatHeightMm: deterministic.minSeatHeightMm ?? interpreted.data.minSeatHeightMm,
-    maxSeatDepthMm: deterministic.maxSeatDepthMm ?? interpreted.data.maxSeatDepthMm,
-    numberOfSeats: deterministic.numberOfSeats ?? interpreted.data.numberOfSeats,
-    modular: deterministic.modular ?? interpreted.data.modular,
-    functions: deterministic.functions ?? interpreted.data.functions,
-    styles: deterministic.styles ?? interpreted.data.styles,
-    smallSpaceSuitable: deterministic.smallSpaceSuitable ?? interpreted.data.smallSpaceSuitable,
-    layoutShapes: deterministic.layoutShapes ?? interpreted.data.layoutShapes
+    maxWidthMm: deterministicWidth ? deterministic.maxWidthMm : providerIntent.maxWidthMm,
+    minWidthMm: deterministicWidth ? deterministic.minWidthMm : providerIntent.minWidthMm,
+    targetWidthMm: deterministicWidth ? deterministic.targetWidthMm : providerIntent.targetWidthMm,
+    minSeatHeightMm: deterministic.minSeatHeightMm ?? providerIntent.minSeatHeightMm,
+    maxSeatDepthMm: deterministic.maxSeatDepthMm ?? providerIntent.maxSeatDepthMm,
+    numberOfSeats: deterministic.numberOfSeats ?? providerIntent.numberOfSeats,
+    modular: deterministic.modular ?? providerIntent.modular,
+    functions: deterministic.functions ?? providerIntent.functions,
+    styles: deterministic.styles ?? providerIntent.styles,
+    smallSpaceSuitable: deterministic.smallSpaceSuitable ?? providerIntent.smallSpaceSuitable,
+    layoutShapes: deterministic.layoutShapes ?? providerIntent.layoutShapes
   };
   const results = await hybridCatalogueSearch(intent);
   return NextResponse.json({

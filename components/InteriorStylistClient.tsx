@@ -2,12 +2,28 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Check, LoaderCircle, RefreshCw, Save, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  Armchair,
+  ArrowLeft,
+  ArrowRight,
+  Bath,
+  BedDouble,
+  Check,
+  CookingPot,
+  DoorOpen,
+  LampFloor,
+  LoaderCircle,
+  RefreshCw,
+  Save,
+  Sparkles,
+  TreePine,
+  UtensilsCrossed
+} from "lucide-react";
 import { useState } from "react";
-import { stylistAnswerLabel, stylistQuizByRoom, stylistRoomOptions, type StylistQuizQuestion } from "@/lib/ai/stylist-quiz";
+import { stylistAnswerLabel, stylistAnswerValues, stylistQuizByRoom, stylistRoomOptions, type StylistQuizQuestion } from "@/lib/ai/stylist-quiz";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
-import { stylistStyleLabel, type Product, type StylistPreferences, type StylistQuizInput, type StylistRoomType } from "@/lib/types";
+import { stylistStyleLabel, type Product, type StylistPreferences, type StylistQuizAnswer, type StylistQuizInput, type StylistRoomType } from "@/lib/types";
 
 type MatchLevel = "strong" | "partial" | "limited";
 type StylistAlternative = { product: Product; reason: string; styleMatch: MatchLevel; preferenceMatch: MatchLevel; matchEvidence: string[] };
@@ -40,6 +56,28 @@ const visualImages = [
   "/musterring-catalog/mr-270/image-01.jpg"
 ];
 
+const roomIcons = {
+  "living-room": Armchair,
+  bedroom: BedDouble,
+  "dining-room": UtensilsCrossed,
+  bathroom: Bath,
+  hallway: DoorOpen,
+  kitchen: CookingPot,
+  outdoor: TreePine,
+  "home-accessories": LampFloor
+};
+
+const continuationRooms: Record<StylistRoomType, StylistRoomType[]> = {
+  "living-room": ["dining-room", "bedroom", "home-accessories"],
+  bedroom: ["living-room", "dining-room", "home-accessories"],
+  "dining-room": ["living-room", "kitchen", "home-accessories"],
+  bathroom: ["bedroom", "hallway", "home-accessories"],
+  hallway: ["living-room", "bedroom", "home-accessories"],
+  kitchen: ["dining-room", "living-room", "home-accessories"],
+  outdoor: ["living-room", "dining-room", "home-accessories"],
+  "home-accessories": ["living-room", "bedroom", "dining-room"]
+};
+
 function roomLabel(roomType: StylistRoomType) {
   return stylistRoomOptions.find((room) => room.id === roomType)?.label ?? roomType.replaceAll("-", " ");
 }
@@ -51,22 +89,29 @@ function catalogueMatchFor(selections: StylistSelection[]) {
   return { level: "strong" as const, message: "Every recommendation has strong catalogue evidence for your style and preferences." };
 }
 
-function questionComplete(question: StylistQuizQuestion | undefined, answers: Record<string, string>, notes: Record<string, string>, width: string, depth: string) {
+function answerSelected(answer: StylistQuizAnswer | undefined, value: string) {
+  return stylistAnswerValues(answer).includes(value);
+}
+
+function questionComplete(question: StylistQuizQuestion | undefined, answers: Record<string, StylistQuizAnswer>, notes: Record<string, string>, width: string, depth: string) {
   if (!question) return false;
   const answer = answers[question.id];
-  if (!answer) return false;
-  if (question.noteOption === answer && !notes[question.id]?.trim()) return false;
-  if (question.dimensionOption === answer && (Number(width) < 30 || Number(depth) < 30)) return false;
+  const values = stylistAnswerValues(answer);
+  if (!values.length || (question.maxSelections && values.length > question.maxSelections)) return false;
+  if (question.noteOption && values.includes(question.noteOption) && !notes[question.id]?.trim()) return false;
+  if (question.dimensionOption && values.includes(question.dimensionOption) && (Number(width) < 30 || Number(depth) < 30)) return false;
   return true;
 }
 
 export default function InteriorStylistClient() {
   const [step, setStep] = useState(0);
   const [roomType, setRoomType] = useState<StylistRoomType | null>(null);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Record<string, StylistQuizAnswer>>({});
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [maxWidthCm, setMaxWidthCm] = useState("");
   const [maxDepthCm, setMaxDepthCm] = useState("");
+  const [styleDirection, setStyleDirection] = useState<StylistPreferences["style"] | null>(null);
+  const [styleSourceRoom, setStyleSourceRoom] = useState<StylistRoomType | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [error, setError] = useState("");
   const [result, setResult] = useState<StylistResult | null>(null);
@@ -76,6 +121,8 @@ export default function InteriorStylistClient() {
   const currentQuestion = step > 0 && step <= questions.length ? questions[step - 1] : undefined;
   const confirmationStep = questions.length + 1;
   const progressTotal = questions.length + 1;
+  const displayProgressTotal = roomType ? progressTotal : 6;
+  const displayProgressStep = Math.min(step + 1, displayProgressTotal);
   const isConfirmation = Boolean(roomType && step === confirmationStep);
   const canContinue = step === 0 ? Boolean(roomType) : questionComplete(currentQuestion, answers, notes, maxWidthCm, maxDepthCm);
 
@@ -92,16 +139,28 @@ export default function InteriorStylistClient() {
     setNotes({});
     setMaxWidthCm("");
     setMaxDepthCm("");
+    setStyleDirection(null);
+    setStyleSourceRoom(null);
     resetResult();
   };
 
   const chooseAnswer = (question: StylistQuizQuestion, value: string) => {
-    setAnswers((current) => ({ ...current, [question.id]: value }));
-    if (question.noteOption !== value) setNotes((current) => {
-      const next = { ...current };
-      delete next[question.id];
-      return next;
-    });
+    if (question.maxSelections) {
+      const selected = stylistAnswerValues(answers[question.id]);
+      const isExclusive = question.exclusiveOptions?.includes(value);
+      const withoutExclusive = selected.filter((answer) => !question.exclusiveOptions?.includes(answer));
+      const next = selected.includes(value)
+        ? selected.filter((answer) => answer !== value)
+        : isExclusive
+          ? [value]
+          : withoutExclusive.length >= question.maxSelections
+            ? selected
+            : [...withoutExclusive, value];
+      if (next === selected || (next.length === selected.length && next.every((answer, index) => answer === selected[index]))) return;
+      setAnswers((current) => ({ ...current, [question.id]: next }));
+    } else {
+      setAnswers((current) => ({ ...current, [question.id]: value }));
+    }
     if (question.dimensionOption !== value) {
       setMaxWidthCm("");
       setMaxDepthCm("");
@@ -111,14 +170,15 @@ export default function InteriorStylistClient() {
 
   const requestBody = (): StylistQuizInput | null => {
     if (!roomType || !isConfirmation) return null;
-    const usesDimensions = questions.some((question) => question.dimensionOption && answers[question.id] === question.dimensionOption);
+    const usesDimensions = questions.some((question) => question.dimensionOption && answerSelected(answers[question.id], question.dimensionOption));
     return {
       roomType,
       answers,
       notes,
-      selectedProductIds: roomType === "home-accessories" && answers["match-selected"] === "yes" ? storage.savedProducts() : [],
+      selectedProductIds: roomType === "home-accessories" && answerSelected(answers["match-selected"], "yes") ? storage.savedProducts() : [],
       maxWidthMm: usesDimensions ? Math.round(Number(maxWidthCm) * 10) : null,
-      maxDepthMm: usesDimensions ? Math.round(Number(maxDepthCm) * 10) : null
+      maxDepthMm: usesDimensions ? Math.round(Number(maxDepthCm) * 10) : null,
+      styleDirection
     };
   };
 
@@ -183,35 +243,55 @@ export default function InteriorStylistClient() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const continueStyleInRoom = (nextRoom: StylistRoomType) => {
+    if (!result) return;
+    const sourceRoom = result.roomType;
+    const sourceStyle = result.style;
+    setRoomType(nextRoom);
+    setAnswers({});
+    setNotes({});
+    setMaxWidthCm("");
+    setMaxDepthCm("");
+    setStyleDirection(sourceStyle);
+    setStyleSourceRoom(sourceRoom);
+    resetResult();
+    setStep(1);
+    requestAnimationFrame(() => document.querySelector(".stylist-builder")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  };
+
   return <div className="stylist-page">
     <section className="stylist-hero"><div className="container stylist-hero-inner"><div className="stylist-hero-copy">
-      <span className="stylist-kicker"><Sparkles size={15} /> Catalogue-grounded inspiration</span>
-      <h1>Tell us how you live. We&apos;ll find what fits your style.</h1>
-      <p>Choose a room and answer a short, tailored questionnaire. Our AI stylist will recommend only real products from the Musterring catalogue.</p>
-      <span className="stylist-hero-assurance"><ShieldCheck size={16} /> Catalogue-verified recommendations only</span>
+      <span className="stylist-kicker">AI Stylist</span>
+      <h1>Tell us what feels right.<br />We&apos;ll find what fits.</h1>
+      <p>Furniture matched to your space and style.</p>
     </div></div></section>
 
-    <section className="container stylist-builder" aria-labelledby="stylist-builder-heading">
-      <header><h2 id="stylist-builder-heading">Build your personal brief</h2><p>The questions adapt to the room you choose, so every answer is relevant to the product search.</p></header>
-      <nav className="stylist-progress is-adaptive" aria-label="Stylist quiz progress">
-        {Array.from({ length: progressTotal }, (_, index) => <span key={index} className={index === step ? "is-active" : index < step ? "is-complete" : ""}>{index < step ? <Check size={13} /> : index + 1}</span>)}
-      </nav>
+    <section className="container stylist-builder" aria-label="AI Stylist questionnaire">
+      <header className="stylist-builder-intro is-compact"><div className="stylist-progress-summary"><span>Step {displayProgressStep} of {displayProgressTotal}</span><div role="progressbar" aria-label="Stylist quiz progress" aria-valuemin={1} aria-valuemax={displayProgressTotal} aria-valuenow={displayProgressStep}><i style={{ width: `${(displayProgressStep / displayProgressTotal) * 100}%` }} /></div></div></header>
 
       <div className="stylist-flow">
-        {step === 0 ? <fieldset className="stylist-question"><legend><span>First, choose a space</span><strong>Which area would you like help with?</strong></legend><div className="stylist-room-options stylist-room-options-adaptive">
-          {stylistRoomOptions.map(({ id, label, text }) => <button aria-pressed={roomType === id} type="button" key={id} className={roomType === id ? "is-active" : ""} onClick={() => chooseRoom(id)}><span><strong>{label}</strong><small>{text}</small></span>{roomType === id ? <Check size={16} /> : <ArrowRight size={15} />}</button>)}
+        {styleDirection && styleSourceRoom ? <div className="stylist-style-carryover"><Sparkles size={17} /><span>Continuing the <strong>{stylistStyleLabel(styleDirection)}</strong> direction from your {roomLabel(styleSourceRoom).toLowerCase()}.</span></div> : null}
+        {step === 0 ? <fieldset className="stylist-question"><legend><strong>Choose a room</strong></legend><div className="stylist-room-options stylist-room-options-adaptive">
+          {stylistRoomOptions.map(({ id, label }) => {
+            const RoomIcon = roomIcons[id];
+            return <button aria-pressed={roomType === id} type="button" key={id} className={roomType === id ? "is-active" : ""} onClick={() => chooseRoom(id)}><span className="stylist-room-icon"><RoomIcon aria-hidden="true" size={38} strokeWidth={1.35} /></span><span className="stylist-room-copy"><strong>{label}</strong></span><span className="stylist-room-action">{roomType === id ? <Check size={15} /> : <ArrowRight size={17} />}</span></button>;
+          })}
         </div></fieldset> : null}
 
-        {currentQuestion ? <fieldset className="stylist-question"><legend><span>Question {step} of {questions.length}</span><strong>{currentQuestion.prompt}</strong>{currentQuestion.help ? <small>{currentQuestion.help}</small> : null}</legend>
+        {currentQuestion ? <fieldset className="stylist-question"><legend><strong>{currentQuestion.prompt}</strong>{currentQuestion.help || currentQuestion.maxSelections ? <small>{currentQuestion.help ? `${currentQuestion.help} ` : ""}{currentQuestion.maxSelections ? `Choose up to ${currentQuestion.maxSelections}.` : ""}</small> : null}</legend>
           <div className={currentQuestion.visual ? "stylist-style-visuals" : "stylist-target-options stylist-adaptive-options"}>
-            {currentQuestion.options.map((choice, index) => <button aria-pressed={answers[currentQuestion.id] === choice.id} type="button" key={choice.id} className={answers[currentQuestion.id] === choice.id ? "is-active" : ""} onClick={() => chooseAnswer(currentQuestion, choice.id)}>
-              {currentQuestion.visual ? <span className="stylist-style-image"><Image src={visualImages[index % visualImages.length]} alt="" width={420} height={260} /></span> : null}
-              <span className={currentQuestion.visual ? "stylist-style-copy" : ""}><strong>{choice.label}</strong>{!currentQuestion.visual ? <small>Select this preference</small> : null}</span>
-              {answers[currentQuestion.id] === choice.id ? currentQuestion.visual ? <i><Check size={15} /></i> : <Check size={16} /> : !currentQuestion.visual ? <ArrowRight size={15} /> : null}
-            </button>)}
+            {currentQuestion.options.map((choice, index) => {
+              const selected = answerSelected(answers[currentQuestion.id], choice.id);
+              return <button aria-pressed={selected} type="button" key={choice.id} className={selected ? "is-active" : ""} onClick={() => chooseAnswer(currentQuestion, choice.id)}>
+                {currentQuestion.visual ? <span className="stylist-style-image"><Image src={visualImages[index % visualImages.length]} alt="" width={420} height={260} /></span> : null}
+                {!currentQuestion.visual ? <span className="stylist-answer-index">{String(index + 1).padStart(2, "0")}</span> : null}
+                <span className={currentQuestion.visual ? "stylist-style-copy" : "stylist-answer-copy"}><strong>{choice.label}</strong></span>
+                {selected ? currentQuestion.visual ? <i><Check size={15} /></i> : <span className="stylist-answer-action is-selected"><Check size={15} /></span> : !currentQuestion.visual ? <span className="stylist-answer-action"><ArrowRight size={16} /></span> : null}
+              </button>;
+            })}
           </div>
-          {currentQuestion.dimensionOption === answers[currentQuestion.id] ? <div className="stylist-dimension-fields"><label><span>Maximum width</span><span><input aria-label="Maximum width in centimetres" min="30" max="1000" type="number" inputMode="decimal" value={maxWidthCm} onChange={(event) => { setMaxWidthCm(event.target.value); resetResult(); }} /> cm</span></label><label><span>Maximum depth</span><span><input aria-label="Maximum depth in centimetres" min="30" max="1000" type="number" inputMode="decimal" value={maxDepthCm} onChange={(event) => { setMaxDepthCm(event.target.value); resetResult(); }} /> cm</span></label><p>Only products with verified dimensions inside both limits will be considered.</p></div> : null}
-          {currentQuestion.noteOption === answers[currentQuestion.id] ? <label className="stylist-note-field"><span>{currentQuestion.noteLabel}</span><input aria-label={currentQuestion.noteLabel} maxLength={240} value={notes[currentQuestion.id] ?? ""} onChange={(event) => { setNotes((current) => ({ ...current, [currentQuestion.id]: event.target.value })); resetResult(); }} /></label> : null}
+          {currentQuestion.dimensionOption && answerSelected(answers[currentQuestion.id], currentQuestion.dimensionOption) ? <div className="stylist-dimension-fields"><label><span>Maximum width</span><span><input aria-label="Maximum width in centimetres" min="30" max="1000" type="number" inputMode="decimal" value={maxWidthCm} onChange={(event) => { setMaxWidthCm(event.target.value); resetResult(); }} /> cm</span></label><label><span>Maximum depth</span><span><input aria-label="Maximum depth in centimetres" min="30" max="1000" type="number" inputMode="decimal" value={maxDepthCm} onChange={(event) => { setMaxDepthCm(event.target.value); resetResult(); }} /> cm</span></label><p>Only products with verified dimensions inside both limits will be considered.</p></div> : null}
+          <label className="stylist-note-field"><span>{currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption) ? currentQuestion.noteLabel : "Something else? (optional)"}</span><textarea aria-label={currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption) ? currentQuestion.noteLabel : `Something else for ${currentQuestion.prompt}`} placeholder="Describe what you have in mind…" required={Boolean(currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption))} maxLength={240} rows={3} value={notes[currentQuestion.id] ?? ""} onChange={(event) => { setNotes((current) => ({ ...current, [currentQuestion.id]: event.target.value })); resetResult(); }} /></label>
         </fieldset> : null}
 
         {isConfirmation && roomType ? <div className="stylist-ready"><span><Sparkles size={22} /></span><h3>Perfect — I have enough to start.</h3><p>I&apos;ll look for Musterring products that match your room, needs, space and design preferences.</p><div className="stylist-choice-summary stylist-adaptive-summary">
@@ -219,8 +299,8 @@ export default function InteriorStylistClient() {
           {questions.map((question) => <div key={question.id}><small>{question.prompt}</small><strong>{stylistAnswerLabel(roomType, question.id, answers[question.id])}{notes[question.id] ? ` · ${notes[question.id]}` : ""}</strong></div>)}
         </div></div> : null}
 
-        <div className="stylist-flow-actions">
-          <button type="button" className="stylist-back" disabled={step === 0 || status === "loading"} onClick={() => setStep((current) => Math.max(0, current - 1))}><ArrowLeft size={17} /> Back</button>
+        <div className={`stylist-flow-actions${step === 0 ? " is-first-step" : ""}`}>
+          {step > 0 ? <button type="button" className="stylist-back" disabled={status === "loading"} onClick={() => setStep((current) => Math.max(0, current - 1))}><ArrowLeft size={17} /> Back</button> : null}
           {!isConfirmation ? <button type="button" className="stylist-continue" disabled={!canContinue} onClick={advance}>Continue <ArrowRight size={17} /></button> : <button className="stylist-submit" type="button" disabled={status === "loading"} onClick={() => void createSet()}>{status === "loading" ? <><LoaderCircle className="spin" size={20} /> Matching your preferences…</> : status === "error" ? <><RefreshCw size={19} /> Try again</> : <><Sparkles size={19} /> Create my recommendations</>}</button>}
         </div>
         {error ? <div className="stylist-error" role="alert"><strong>We could not create the recommendations.</strong><span>{error}</span></div> : null}
@@ -231,9 +311,13 @@ export default function InteriorStylistClient() {
 
     {result ? <section className="stylist-results" id="stylist-results"><div className="container">
       <header className="stylist-result-head"><div><span className="stylist-kicker"><Sparkles size={15} /> Your grounded recommendations</span><h2>{result.title}</h2><p>{result.rationale}</p><div className={`stylist-match-note is-${result.catalogueMatch.level}`}><strong>{result.catalogueMatch.level === "strong" ? "Strong catalogue evidence" : result.catalogueMatch.level === "partial" ? "Partial catalogue evidence" : "Closest catalogue match"}</strong><span>{result.catalogueMatch.message}</span></div></div><div className="stylist-result-actions"><button type="button" onClick={saveSet} disabled={saved}><Save size={17} /> {saved ? "Saved to My Musterring" : result.selections.length === 1 ? "Save recommendation" : "Save complete set"}</button>{saved ? <Link href="/my-musterring">View saved set <ArrowRight size={16} /></Link> : null}</div></header>
-      <div className="stylist-analysis stylist-adaptive-results"><div><span>Area</span><p>{roomLabel(result.preferences.roomType)}</p></div><div><span>Catalogue direction</span><p>{stylistStyleLabel(result.preferences.style)}</p></div>{Object.entries(result.preferences.answers).map(([questionId, answerId]) => <div key={questionId}><span>{stylistQuizByRoom[result.preferences.roomType].find((question) => question.id === questionId)?.prompt}</span><p>{stylistAnswerLabel(result.preferences.roomType, questionId, answerId)}</p></div>)}</div>
+      <div className="stylist-analysis stylist-adaptive-results"><div><span>Area</span><p>{roomLabel(result.preferences.roomType)}</p></div><div><span>Catalogue direction</span><p>{stylistStyleLabel(result.preferences.style)}</p></div>{Object.entries(result.preferences.answers).map(([questionId, answerId]) => <div key={questionId}><span>{stylistQuizByRoom[result.preferences.roomType].find((question) => question.id === questionId)?.prompt}</span><p>{stylistAnswerLabel(result.preferences.roomType, questionId, answerId)}{result.preferences.notes[questionId] ? ` · ${result.preferences.notes[questionId]}` : ""}</p></div>)}</div>
       <div className={`stylist-set-grid${result.selections.length === 1 ? " is-single" : ""}`}>{result.selections.map((selection, index) => <article className="stylist-product" key={selection.slotId}><div className="stylist-product-number">0{index + 1} · {selection.slotLabel}</div><Link className="stylist-product-image" href={`/furniture/${selection.product.slug}`}><Image src={productImages(selection.product.id)[0]} alt={selection.product.name} width={760} height={560} /><span>View product <ArrowRight size={15} /></span></Link><div className="stylist-product-copy"><small>{selection.product.modelCode}</small><h3>{selection.product.name}</h3><div className="stylist-product-match"><span className={`is-${selection.styleMatch}`}>Style: {selection.styleMatch === "limited" ? "closest" : selection.styleMatch}</span><span className={`is-${selection.preferenceMatch}`}>Preference: {selection.preferenceMatch === "limited" ? "closest" : selection.preferenceMatch}</span></div><p>{selection.reason}</p></div>{selection.alternatives.length ? <div className="stylist-alternatives"><strong>Try an alternative</strong>{selection.alternatives.map((alternative) => <button type="button" key={alternative.product.id} onClick={() => swapAlternative(selection.slotId, alternative)}><Image src={productImages(alternative.product.id)[0]} alt="" width={120} height={90} /><span><small>{alternative.product.modelCode}</small><b>{alternative.product.name}</b><em>{alternative.reason}</em></span><RefreshCw size={15} /></button>)}</div> : <div className="stylist-no-alternatives">No other active catalogue product is available in this category.</div>}</article>)}</div>
       <p className="stylist-boundary">These recommendations are for inspiration. Dimensions, exact configuration, physical fit and availability must be confirmed through the product details, Will It Fit, or a Musterring retailer.</p>
+      <section className="stylist-continue-style" aria-labelledby="continue-style-heading"><header><span className="stylist-kicker"><Sparkles size={15} /> Continue this style</span><h3 id="continue-style-heading">Bring the same direction into another space.</h3><p>Choose where to continue. We&apos;ll carry over the {stylistStyleLabel(result.style)} direction and ask only the room-specific questions needed for a grounded recommendation.</p></header><div>{continuationRooms[result.roomType].map((nextRoom) => {
+        const RoomIcon = roomIcons[nextRoom];
+        return <button type="button" key={nextRoom} onClick={() => continueStyleInRoom(nextRoom)}><RoomIcon aria-hidden="true" size={26} strokeWidth={1.35} /><span><strong>{roomLabel(nextRoom)}</strong><small>Continue this style</small></span><ArrowRight aria-hidden="true" size={18} /></button>;
+      })}</div></section>
     </div></section> : null}
   </div>;
 }
