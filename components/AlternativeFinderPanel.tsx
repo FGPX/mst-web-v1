@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Compass, Save, Search, X } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, Compass, Save, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImageForColors } from "@/lib/musterring-assets";
@@ -105,7 +105,7 @@ export function AlternativeFinderPanel() {
             <div className="assistant-card-actions">
               <button className="alternative-save" aria-label="Save to project" onClick={() => { if (!storage.savedProducts().includes(product.id)) storage.toggleProduct(product.id); storage.track({ name: "product_alternative_selected", productId: product.id }); }}><Save size={14} /> Save</button>
               {["sofa", "armchair", "sectional"].includes(product.category) ? <Link href={`/configurator/${product.slug}`}>Configure</Link> : null}
-              <Link href="/room-composer" aria-label="See it in your room">View in Room</Link>
+              <Link href="/room-composer/upload" aria-label="See it in your room">View in Room</Link>
               <Link className="alternative-retailer" href={`/handover?product=${product.id}`} aria-label="Continue with a retailer">Retailer <ArrowRight size={14} /></Link>
               <Link href={"/furniture/" + product.slug} onClick={() => setOpen(false)}>View Product</Link>
             </div>
@@ -143,7 +143,10 @@ export function AlternativeFinderPanel() {
         {result.exactMatches.length ? <div className="alternative-group is-exact" aria-labelledby="exact-match-heading">
           <header><CheckCircle2 aria-hidden="true" /><div><h4 id="exact-match-heading">Exact matches</h4></div><span>{result.exactMatches.length}</span></header>
           {renderMatches(result.exactMatches, true)}
-        </div> : <div className="alternative-group-empty"><strong>No fully verified matches</strong><span>{result.message}</span></div>}
+        </div> : <div className="alternative-group-empty" role="status">
+          <AlertCircle aria-hidden="true" />
+          <div><strong>No exact match found</strong><span>{result.message}</span></div>
+        </div>}
         {result.closestAlternatives.length ? <div className="alternative-group is-other" aria-labelledby="other-options-heading">
           <header><Compass aria-hidden="true" /><div><h4 id="other-options-heading">Other options</h4></div><span>{result.closestAlternatives.length}</span></header>
           {renderMatches(result.closestAlternatives, false)}

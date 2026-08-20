@@ -52,7 +52,7 @@ export function ProductDetailActions({ product }: { product: Product }) {
       <details className="product-more-actions">
         <summary>More planning tools <ChevronDown size={18} /></summary>
         <div>
-          <Link className="button ghost" href="/room-composer"><Eye size={16} /> See It in Your Room</Link>
+          <Link className="button ghost" href="/room-composer/upload"><Eye size={16} /> See It in Your Room</Link>
           <Link className="button ghost" href={`/compare?ids=${product.id}`}>Compare</Link>
           <Link className="button ghost" href={`/handover?request=material&product=${encodeURIComponent(product.id)}&material=${encodeURIComponent(material)}`}><FileText size={16} /> Request Material Sample</Link>
           <button className="button ghost" onClick={() => window.print()}><Download size={16} /> Print Product Summary</button>

@@ -37,7 +37,7 @@ export function StitchProductCard({ product, explanation, imageOverride, imageNo
           <AlternativeFinderButton productId={product.id} label="Better Match" className="stitch-product-action-match" />
           {onCompare ? <button type="button" className={`stitch-product-action-compare${compareSelected ? " is-selected" : ""}`} onClick={onCompare}><GitCompare size={15} /> {compareSelected ? "Selected" : "Compare"}</button> : <Link className="stitch-product-action-compare" href={`/compare?ids=${product.id}`}><GitCompare size={15} /> Compare</Link>}
           {isConfigurable ? <Link className="stitch-product-action-configure" href={`/configurator/${product.slug}`}><Settings size={15} /> Quick Configure</Link> : null}
-          {canPlaceInRoom ? <Link className={`stitch-product-action-room${isConfigurable ? "" : " stitch-product-action-wide"}`} href="/room-composer"><Eye size={15} /> See It in Your Room</Link> : null}
+          {canPlaceInRoom ? <Link className={`stitch-product-action-room${isConfigurable ? "" : " stitch-product-action-wide"}`} href="/room-composer/upload"><Eye size={15} /> See It in Your Room</Link> : null}
           {!canPlaceInRoom ? <Link className="stitch-product-action-details stitch-product-action-wide" href={`/furniture/${product.slug}`}><ArrowUpRight size={15} /> View Details</Link> : null}
           <Link className="stitch-product-action-dealer" href="/dealers"><MapPin size={15} /> Find Near You</Link>
         </div>

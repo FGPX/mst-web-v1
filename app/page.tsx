@@ -38,7 +38,7 @@ const quickStarts = [
     icon: Ruler,
     title: "Plan a room",
     text: "Arrange products in your room and check measurements step by step.",
-    href: "/room-composer",
+    href: "/room-composer/upload",
     action: "Plan your room"
   },
   {

@@ -222,11 +222,6 @@ export default function ProductAssemblyStory() {
             <Image src="/assembly-layers/tables-layer.png" alt="" fill sizes="100vw" style={assemblyImageStyle} />
           </div>
 
-          <Link className="assembly-product-link" href="/furniture/justb-pm100">
-            <small>Sofa</small>
-            <strong>JUSTB! PM100</strong>
-            <ArrowRight size={15} aria-hidden="true" />
-          </Link>
         </div>
 
         <div className="assembly-finale">
