@@ -1890,6 +1890,49 @@
   background: linear-gradient(135deg, #eef1ea, #f8f5ef);
 }
 
+.stitch-generation-progress {
+  margin-top: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.stitch-generation-progress__copy {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  color: var(--stitch-text-primary);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.stitch-generation-progress__copy strong {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stitch-generation-progress__track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e4e1da;
+}
+
+.stitch-generation-progress__track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #657358;
+  transition: width 700ms ease;
+}
+
+.stitch-generation-progress small {
+  color: var(--stitch-text-secondary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
 .stitch-composer-ai-panel > div:first-child {
   max-width: 680px;
   display: grid;
