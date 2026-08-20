@@ -233,9 +233,11 @@ const catalogueSearchOverrides: Record<string, Partial<Product>> = {
       { label: "Dining level", value: "Standard-height dining table for family meals and social gatherings" },
       { label: "Visual style", value: "Clear-cut modern: concrete-look top with matt black metal base, or solid oak" },
       { label: "Reference format", value: "200 × 100 cm tabletop; 77 cm high reference configuration" },
+      { label: "Height options", value: "77 cm standard-height reference configuration" },
+      { label: "Planning range", value: "Featured 200 × 100 cm dining configuration" },
+      { label: "Design detail", value: "Concrete-look or solid-oak top with matt black metal base" },
       { label: "Tabletop shapes", value: "Focused rectangular format" },
-      { label: "Tabletop materials", value: "HPL or solid oak" },
-      { label: "Care profile", value: "Concrete-look version is described as easy-care" }
+      { label: "Tabletop materials", value: "HPL or solid oak" }
     ]
   },
   "helana": {
