@@ -123,10 +123,15 @@ export function normalizedOrientation(rotation: number) {
   };
 }
 
-function wallInstruction(wallPlacement: RoomVisualizationItemInput["wallPlacement"]) {
+function wallInstruction(wallPlacement: RoomVisualizationItemInput["wallPlacement"], category: Category) {
   if (!wallPlacement || wallPlacement === "free") return "Keep this item in the user-selected free-standing position; do not move it to the centre by default.";
   const wall = wallPlacement === "back" ? "back wall" : `${wallPlacement} wall`;
-  return `Place it close to the visible ${wall}, with a realistic residential clearance of approximately 5-15 cm where physically possible. Keep it visibly wall-adjacent; do not pull it toward the middle of the room. Preserve skirting boards, radiators, openings, and other fixed obstacles, and use believable contact shadows and perspective at the wall.`;
+  const alignment = ["sofa", "sectional"].includes(category)
+    ? "Align the main rear run of the seating parallel to that wall; for a sectional, only its chaise or return may project perpendicularly into the room."
+    : ["storage", "sideboard", "shelving"].includes(category)
+      ? "Set the entire rear face of the storage unit straight and parallel to that wall. It must not sit diagonally, pivot at one end, or float at an angle."
+      : "Align the product's rear edge or intended wall-facing edge parallel to that wall.";
+  return `HARD WALL GEOMETRY: place it against the visible ${wall}, with only approximately 3-8 cm of realistic clearance for the skirting board. ${alignment} Show no broad strip of floor between its rear edge and the wall. Do not pull it toward the middle of the room for balance, circulation, the rug, the coffee table, or a more symmetrical composition. Preserve radiators, openings, and other fixed obstacles; if there is a conflict, slide the item along the same wall rather than moving it away from the wall. Use continuous believable contact shadows along the wall-side base.`;
 }
 
 function compositionInstructions(items: GroundedVisualizationItem[]) {
@@ -169,7 +174,10 @@ function placementInstructions(items: GroundedVisualizationItem[]) {
         ? "The editor indicates a somewhat larger presentation, but keep it realistic and do not overpower larger product categories."
         : "Use a natural room-relative size.";
     const orientation = normalizedOrientation(item.rotation);
-    return `${index + 1}. Add exactly one ${item.modelCode} (${item.name}) from reference image ${item.referenceImageIndex}. Use the editor position as a nearby anchor zone, not an exact pixel lock: its chosen anchor is approximately ${Math.round(item.x)}% from the left edge and its floor-contact base approximately ${Math.round(item.y)}% from the top edge (${horizontalPlacement(item.x)}). Keep it recognizably in that part of the room, but move it a modest distance when needed to create a coherent furniture grouping, realistic clearance, and a better composition. Its scale role is ${categoryScaleGuidance[item.category]}. ${scalePreference} Keep the product upright and preserve its chosen general facing direction of ${orientation.degrees} degrees: ${orientation.label}. A subtle perspective-aware adjustment of up to about 15 degrees is allowed only when it makes the furniture group interact more naturally; never flip it to another side. Never rotate or tilt the flat image in the picture plane. ${wallInstruction(item.wallPlacement)}${finish}`;
+    const rotationAdjustment = item.wallPlacement && item.wallPlacement !== "free"
+      ? "Do not apply a decorative angle: its orientation must follow the selected wall geometry exactly."
+      : "A subtle perspective-aware adjustment of up to about 15 degrees is allowed only when it makes the furniture group interact more naturally; never flip it to another side.";
+    return `${index + 1}. Add exactly one ${item.modelCode} (${item.name}) from reference image ${item.referenceImageIndex}. Use the editor position as a nearby anchor zone, not an exact pixel lock: its chosen anchor is approximately ${Math.round(item.x)}% from the left edge and its floor-contact base approximately ${Math.round(item.y)}% from the top edge (${horizontalPlacement(item.x)}). Keep it recognizably in that part of the room, but move it a modest distance when needed to create a coherent furniture grouping, realistic clearance, and a better composition. Its scale role is ${categoryScaleGuidance[item.category]}. ${scalePreference} Keep the product upright and preserve its chosen general facing direction of ${orientation.degrees} degrees: ${orientation.label}. ${rotationAdjustment} Never rotate or tilt the flat image in the picture plane. ${wallInstruction(item.wallPlacement, item.category)}${finish}`;
   }).join("\n");
 }
 
@@ -181,7 +189,7 @@ export function buildRoomVisualizationPrompt(items: GroundedVisualizationItem[])
 
 Input image 1 is the customer's real room and the high-fidelity source of truth. Keep it unmistakably the same room: preserve the exact camera position, viewing direction, lens perspective, crop, room proportions, wall/floor/ceiling geometry, windows, doors, openings, trim, radiators, built-ins, and exterior view. Do not redesign the architecture, change structural finishes, expand the space, or invent doors or windows. The uploaded original must remain recognizable at a glance.
 
-Create a beautiful, restrained Musterring editorial result across the whole image. Harmonize the room with believable natural light, accurate global illumination, ambient shadows, contact shadows, reflections, depth, and clean photographic detail. The chosen furniture must feel physically present in the room rather than pasted onto it. Keep the scene minimal and uncluttered. Do not add people, text, logos, decorations, plants, or unselected furniture. The only permitted new non-catalogue styling object is the neutral area rug explicitly required by the layout instructions. Existing fixed room features remain; loose objects may only be subtly tidied where needed for a coherent result.
+Create a beautiful, believable, lived-in Musterring editorial result across the whole image. Harmonize the room with natural light, accurate global illumination, ambient shadows, contact shadows, reflections, depth, and clean photographic detail. The chosen furniture must feel physically present in a real home rather than pasted into an empty showroom. Keep the result refined and uncluttered, but add a restrained layer of ordinary, unbranded, non-catalogue styling accessories where the room benefits from them: coordinated wall art, one or two healthy plants, a floor or table lamp, a few books, ceramics, trays, or similarly subtle objects. Add only a small number appropriate to the available surfaces and empty areas. These accessories are decorative context only, not Musterring products. They must never replace, redesign, cover, touch awkwardly, or compete with a selected catalogue product, block circulation, conceal architectural features, or introduce readable text or logos. Do not add people, pets, televisions, or additional unselected seating, tables, storage furniture, or other major furniture. A neutral area rug may be added when explicitly required by the layout instructions. Existing fixed room features remain; loose objects may be subtly tidied where needed for a coherent result.
 
 PRODUCT LOCK — this requirement outranks room styling and photographic beautification. Add only the catalogue products listed below. Each product reference image is the canonical visual source of truth. Reproduce every selected product without redesign or reinterpretation: identical base colour and colour temperature, upholstery or surface material, weave or grain, silhouette, module count and arrangement, proportions, seams, piping, tufting, cushions and cushion colours, arms, backrests, legs, feet, hardware, and all other visible details. Do not recolour, desaturate, brighten, darken, coordinate with the room palette, swap fabric or material, add or remove cushions, change modules, or substitute a similar design. Room illumination may create physically natural highlights and shadows, but it must not alter the product's underlying colour or finish. If aesthetic styling conflicts with product fidelity, preserve the product exactly and keep the room treatment simpler.
 
@@ -192,7 +200,7 @@ ${composition}
 
 ${placements}
 
-Before returning the image, compare every rendered product against its numbered reference and correct any difference in colour, material, construction, cushions, modules, or visible details. Return a single polished full-room photograph. Prioritize, in order: exact selected-product appearance; the same room architecture and camera; then beautiful unified photographic rendering.`;
+Before returning the image, compare every rendered product against its numbered reference and correct any difference in colour, material, construction, cushions, modules, or visible details. Then verify every wall-assigned product: it is visibly close to its specified wall, its rear geometry is parallel to that wall, and it has not been angled or pulled into the room. Return a single polished full-room photograph. Prioritize, in order: exact selected-product appearance; selected wall placement and alignment; the same room architecture and camera; then beautiful unified photographic rendering.`;
 }
 
 function roundedMultipleOf16(value: number) {
