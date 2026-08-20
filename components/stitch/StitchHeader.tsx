@@ -120,7 +120,7 @@ export function StitchHeader() {
               </section>;
             })}
             <section>
-              <h3><SwatchBook aria-hidden="true" />Materials &amp; finishes</h3>
+              <h3><SwatchBook aria-hidden="true" />Materials</h3>
               <Link href="/materials" onClick={close}>Materials</Link>
             </section>
           </div>
@@ -139,7 +139,7 @@ export function StitchHeader() {
             </div>
           ))}
           <div>
-            <span>Materials &amp; finishes</span>
+            <span>Materials</span>
             <Link href="/materials" onClick={close}>Materials</Link>
           </div>
         </details>
