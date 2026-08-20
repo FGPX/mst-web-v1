@@ -51,6 +51,26 @@ export const roomAnalysisSchema = z.object({
 });
 export type RoomAnalysis = z.infer<typeof roomAnalysisSchema>;
 
+export const roomSizeExplanationSchema = z.object({
+  summary: z.string().trim().min(1).max(500),
+  considerations: z.array(z.string().trim().min(1).max(300)).min(2).max(5)
+});
+export type RoomSizeExplanation = z.infer<typeof roomSizeExplanationSchema>;
+
+export const roomSizeVisionRecommendationSchema = z.object({
+  minimumWidthMm: z.number().int().min(1500).max(15000).describe("Compact room width from left to right across the back wall in the image."),
+  minimumLengthMm: z.number().int().min(1500).max(15000).describe("Compact room length from the back wall toward the camera."),
+  recommendedWidthMm: z.number().int().min(2000).max(15000).describe("Comfortable room width from left to right across the back wall in the image."),
+  recommendedLengthMm: z.number().int().min(2000).max(15000).describe("Comfortable room length from the back wall toward the camera."),
+  minimumSummary: z.string().trim().min(1).max(320),
+  recommendedSummary: z.string().trim().min(1).max(320),
+  summary: z.string().trim().min(1).max(500),
+  layoutRelationships: z.array(z.string().trim().min(1).max(260)).min(2).max(5),
+  reasoning: z.array(z.string().trim().min(1).max(300)).min(2).max(5),
+  confidence: z.enum(["medium", "high"])
+});
+export type RoomSizeVisionRecommendation = z.infer<typeof roomSizeVisionRecommendationSchema>;
+
 export const configurationRequirementsSchema = z.object({
   customerRequest: z.string(),
   category: z.enum(["sofa", "armchair", "sectional"]).nullable(),
