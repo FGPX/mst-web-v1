@@ -42,6 +42,10 @@ function read<T>(key: string, fallback: T): T {
   }
 }
 
+function notifyAnalyticsUpdated() {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event("musterring:analytics-updated"));
+}
+
 function write<T>(key: string, value: T) {
   if (typeof window !== "undefined") window.localStorage.setItem(key, JSON.stringify(value));
 }
@@ -165,6 +169,7 @@ export const storage = {
       policyVersion: "2027-demo-1"
     }]);
     if (!allowed) write(keys.events, []);
+    notifyAnalyticsUpdated();
   },
   consentRecords: () => read<Record<string, unknown>[]>(keys.consentRecords, []),
   recordConsent: (scope: string, granted: boolean) => {
@@ -192,6 +197,7 @@ export const storage = {
     write("musterring.session", sessionId);
     const next = [...storage.events(), { ...event, id: crypto.randomUUID(), timestamp: new Date().toISOString(), sessionId, locale: navigator.language || "en", consent: true }].slice(-5000);
     write(keys.events, next);
+    notifyAnalyticsUpdated();
     return true;
   },
   resetPresentationDemo: () => {
