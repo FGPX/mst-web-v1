@@ -4,6 +4,14 @@ import { productImages } from "./musterring-assets";
 const physicalSceneSlugs = new Set(["justb-pm100", "justb-pm200", "mr-kleo", "mr-nils", "mr-pamela", "mr-281", "mr-9445", "jana", "kanto"]);
 const generatedSceneSlugs = new Set(["mr-alena", "mr-lia", "mr-2665", "mr-4100", "mr-5100", "mr-5111", "mr-720", "mr-lucia", "mr-230", "mr-260", "mr-270", "mr-280", "mr-285", "mr-231", "justb-ct100", "nara"]);
 
+// Some catalogue galleries start with an editorial room scene even though a
+// clean, authoritative product photograph exists later in the gallery. Keep
+// those choices explicit: a multi-product room scene is an ambiguous image
+// generation reference and can cause the model to redesign the selected item.
+const preferredCatalogueReferences: Record<string, string> = {
+  nela: "/musterring-catalog/nela/image-02.jpg"
+};
+
 const savedFinishes: Record<string, Array<{ materialId: string; color: string; image: string }>> = {
   "justb-ct100": [
     { materialId: "ct100-light-wild-oak", color: "natural oak", image: "/generated-product-views/justb-ct100/official-front.png?v=4" },
@@ -42,5 +50,6 @@ export function roomSceneProductImage(productId: string, options?: { viewIndex?:
   if (finish) return finish.image;
   if (physicalSceneSlugs.has(product.slug)) return `/generated-product-views/${product.slug}/physical-front.png?v=1`;
   if (generatedSceneSlugs.has(product.slug)) return `/generated-product-views/${product.slug}/official-front.png?v=4`;
+  if (preferredCatalogueReferences[product.slug]) return preferredCatalogueReferences[product.slug];
   return fallback;
 }
