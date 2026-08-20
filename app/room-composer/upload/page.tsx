@@ -1,3 +1,11 @@
 import { RoomComposerClient } from "@/components/RoomComposerClient";
+import { products } from "@/lib/data";
+import { normalizeRoomComposerProductIds } from "@/lib/room-composer-selection";
 
-export default function UploadRoomPage() { return <RoomComposerClient upload />; }
+export default async function UploadRoomPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const query = await searchParams;
+  const activeProductIds = products.filter((product) => product.active).map((product) => product.id);
+  const recommendedProductIds = normalizeRoomComposerProductIds(query.product, activeProductIds);
+
+  return <RoomComposerClient upload recommendedProductIds={recommendedProductIds} />;
+}

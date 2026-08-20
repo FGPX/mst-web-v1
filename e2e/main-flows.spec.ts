@@ -10,7 +10,7 @@ function stylistResponse() {
   return {
     preferences: {
       roomType: "living-room",
-      answers: { target: "complete-living-room", "seating-capacity": "3", "seating-type": "modular-sofa", "special-functions": "relax-function", space: "compact", material: "fabric", "style-colours": "light-neutral" },
+      answers: { target: "complete-living-room", "seating-capacity": "3", "storage-purpose": "mixed-storage", space: "compact", "style-colours": "light-neutral" },
       notes: {}, selectedProductIds: [], target: "complete-living-room", style: "minimalist-scandinavian", palette: "light-neutral", material: "fabric", spaceSize: "compact", maxWidthMm: null, maxDepthMm: null, priorities: ["flexible-modular", "compact-footprint"]
     },
     title: "Warm modern living set",
@@ -42,17 +42,13 @@ async function prepareStylistQuiz(page: Page) {
   await page.getByRole("button", { name: /Continue/ }).click();
   await page.getByRole("button", { name: /^3/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
-  await page.getByRole("button", { name: /^Modular sofa/ }).click();
-  await page.getByRole("button", { name: /Continue/ }).click();
-  await page.getByRole("button", { name: /^Relax function/ }).click();
+  await page.getByRole("button", { name: /^A balanced mix/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
   await page.getByRole("button", { name: /^Compact/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
-  await page.getByRole("button", { name: /^Fabric/ }).click();
-  await page.getByRole("button", { name: /Continue/ }).click();
   await page.getByRole("button", { name: /^Light & neutral/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
-  await expect(page.getByRole("button", { name: "Create my recommendations" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Find my matches" })).toBeEnabled();
 }
 
 test.beforeEach(async ({ page }) => {
@@ -168,7 +164,7 @@ test("Listing selects three products and saves comparison", async ({ page }) => 
 
 test("Upload room consent, preview and save", async ({ page }) => {
   await page.goto("/room-composer/upload");
-  await page.getByLabel(/I consent to temporary AI processing/).check();
+  await page.getByLabel(/I agree to temporary AI processing/).check();
   await page.locator('input[type="file"]').setInputFiles("public/test-assets/musterring/furniture/image-03.jpg");
   await expect(page.getByAltText("Uploaded room scene")).toBeVisible();
   await expect(page.getByText("Room analysis", { exact: true })).toBeVisible();
@@ -183,7 +179,7 @@ test("Style Finder creates, adjusts and saves a grounded room set", async ({ pag
   await page.route("**/api/ai/stylist", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(stylistResponse()) }));
   await page.goto("/ai-stylist");
   await prepareStylistQuiz(page);
-  await page.getByRole("button", { name: "Create my recommendations" }).click();
+  await page.getByRole("button", { name: "Find my matches" }).click();
   await expect(page.getByRole("heading", { name: "Warm modern living set" })).toBeVisible();
   await page.getByRole("button", { name: /MR|JUSTB|KARA|NARA/ }).first().click();
   await page.getByRole("button", { name: "Save complete set" }).click();
@@ -193,6 +189,48 @@ test("Style Finder creates, adjusts and saves a grounded room set", async ({ pag
   await page.goto("/my-musterring");
   await expect(page.getByRole("heading", { name: "Style Finder Sets", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Warm modern living set" })).toBeVisible();
+});
+
+test("Style Finder recommendations can be added individually in the uploaded room", async ({ page }) => {
+  const response = stylistResponse();
+  await page.route("**/api/ai/stylist", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(response) }));
+  await page.goto("/ai-stylist");
+  await prepareStylistQuiz(page);
+  await page.getByRole("button", { name: "Find my matches" }).click();
+  await page.getByRole("link", { name: "See this set in your room" }).click();
+
+  await expect(page).toHaveURL(/\/room-composer\/upload\?product=/);
+  await expect(page.getByText("3 Style Finder recommendations are ready. Choose the products you want to add.")).toBeVisible();
+  const recommendations = page.getByRole("region", { name: "Style Finder recommendations" });
+  const otherProducts = page.getByRole("region", { name: "Other products" });
+  await expect(recommendations).toBeVisible();
+  await expect(otherProducts).toBeVisible();
+  await expect(recommendations.getByRole("article")).toHaveCount(3);
+  await expect(recommendations.getByRole("button", { name: "Add", exact: true })).toHaveCount(3);
+  await expect(recommendations.getByRole("button", { name: "Added" })).toHaveCount(0);
+  await expect(page.locator(".stitch-composer-item")).toHaveCount(0);
+  const generateButton = page.getByRole("button", { name: "Generate realistic view" });
+  await expect(generateButton).toBeDisabled();
+
+  await page.getByLabel(/I agree to temporary AI processing/).check();
+  await page.locator('input[type="file"]').setInputFiles("public/test-assets/musterring/furniture/image-03.jpg");
+  await expect(page.getByAltText("Uploaded room scene")).toBeVisible();
+  await expect(page.getByText("Choose a product to add", { exact: true })).toBeVisible();
+  await expect(page.locator(".stitch-composer-item")).toHaveCount(0);
+  await expect(recommendations.getByRole("button", { name: "Add", exact: true })).toHaveCount(3);
+  await expect(generateButton).toBeDisabled();
+
+  await recommendations.getByRole("button", { name: "Add", exact: true }).first().click();
+  await expect(recommendations.getByRole("button", { name: "Added" })).toHaveCount(1);
+  await expect(recommendations.getByRole("button", { name: "Add", exact: true })).toHaveCount(2);
+  await expect(page.locator(".stitch-composer-item")).toHaveCount(1);
+  await expect(page.getByAltText(`${response.selections[0].product.name}, catalogue view`, { exact: true })).toBeVisible();
+  await expect(generateButton).toBeEnabled();
+
+  await page.locator('input[type="file"]').setInputFiles("public/test-assets/musterring/sofas-armchairs/image-05.jpg");
+  await expect(page.getByAltText("Uploaded room scene")).toBeVisible();
+  await expect(page.locator(".stitch-composer-item")).toHaveCount(1);
+  await expect(recommendations.getByRole("button", { name: "Added" })).toHaveCount(1);
 });
 
 test("Style Finder shows a retry and never substitutes demo results", async ({ page }) => {
@@ -205,7 +243,7 @@ test("Style Finder shows a retry and never substitutes demo results", async ({ p
   });
   await page.goto("/ai-stylist");
   await prepareStylistQuiz(page);
-  await page.getByRole("button", { name: "Create my recommendations" }).click();
+  await page.getByRole("button", { name: "Find my matches" }).click();
   await expect(page.getByText("We could not create the recommendations.")).toBeVisible();
   await page.getByRole("button", { name: "Try again" }).click();
   await expect(page.getByRole("heading", { name: "Warm modern living set" })).toBeVisible();
@@ -217,23 +255,28 @@ test("Style Finder adapts its questions and keeps dimension validation usable on
   await page.getByRole("button", { name: /^Bedroom/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
   await expect(page.getByText("What are you looking for?", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: /^Bed Select/ })).toBeVisible();
-  await page.getByRole("button", { name: /^Bed Select/ }).click();
+  await page.getByRole("button", { name: /^Wardrobe/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
-  await page.getByRole("button", { name: /^160 × 200/ }).click();
+  await expect(page.getByText("How much wardrobe storage do you need?", { exact: true })).toBeVisible();
+  await expect(page.getByText("What bed size do you need?")).not.toBeVisible();
+  await page.getByRole("button", { name: /^Standard · two people/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
-  await page.getByRole("button", { name: /^Upholstered/ }).click();
+  await page.getByRole("button", { name: /^Sliding doors/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
-  await page.getByRole("button", { name: /^No/ }).click();
-  await page.getByRole("button", { name: /Continue/ }).click();
-  await page.getByRole("button", { name: /^Maximum comfort/ }).click();
+  await page.getByRole("button", { name: /^No preference/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
   await page.getByRole("button", { name: /^Enter dimensions/ }).click();
   await expect(page.getByRole("button", { name: /Continue/ })).toBeDisabled();
   await page.getByLabel("Maximum width in centimetres").fill("220");
   await page.getByLabel("Maximum depth in centimetres").fill("210");
   await expect(page.getByRole("button", { name: /Continue/ })).toBeEnabled();
-  await expect(page.getByRole("heading", { name: "Build your personal brief" })).toBeVisible();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Calm & neutral/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await expect(page.getByRole("heading", { name: "Your questions and answers" })).toBeVisible();
+  await expect(page.getByText("What type of wardrobe doors do you prefer?", { exact: true })).toBeVisible();
+  await expect(page.getByText("Sliding doors", { exact: true })).toBeVisible();
+  await expect(page.getByText("What bed size do you need?", { exact: true })).not.toBeVisible();
 });
 
 test("Material compare and save", async ({ page }) => {

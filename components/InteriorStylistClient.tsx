@@ -20,9 +20,10 @@ import {
   UtensilsCrossed
 } from "lucide-react";
 import { useState } from "react";
-import { stylistAnswerLabel, stylistAnswerValues, stylistQuizByRoom, stylistRoomOptions, type StylistQuizQuestion } from "@/lib/ai/stylist-quiz";
+import { stylistAnswerLabel, stylistAnswerValues, stylistQuestionsForAnswers, stylistQuizByRoom, stylistRoomOptions, type StylistQuizQuestion } from "@/lib/ai/stylist-quiz";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
+import { roomComposerUploadHref } from "@/lib/room-composer-selection";
 import { stylistStyleLabel, type Product, type StylistPreferences, type StylistQuizAnswer, type StylistQuizInput, type StylistRoomType } from "@/lib/types";
 
 type MatchLevel = "strong" | "partial" | "limited";
@@ -55,6 +56,14 @@ const visualImages = [
   "/musterring-catalog/mr-5100/image-01.jpg",
   "/musterring-catalog/mr-270/image-01.jpg"
 ];
+
+const atmosphereVisualImages: Record<string, string> = {
+  "calm-neutral": "/ai-stylist/atmospheres/calm-neutral.webp",
+  "warm-cosy": "/ai-stylist/atmospheres/warm-cosy.webp",
+  modern: "/ai-stylist/atmospheres/modern.webp",
+  elegant: "/ai-stylist/atmospheres/elegant.webp",
+  "dark-dramatic": "/ai-stylist/atmospheres/dark-dramatic.webp"
+};
 
 const roomIcons = {
   "living-room": Armchair,
@@ -117,7 +126,7 @@ export default function InteriorStylistClient() {
   const [result, setResult] = useState<StylistResult | null>(null);
   const [saved, setSaved] = useState(false);
 
-  const questions = roomType ? stylistQuizByRoom[roomType] : [];
+  const questions = roomType ? stylistQuestionsForAnswers(roomType, answers) : [];
   const currentQuestion = step > 0 && step <= questions.length ? questions[step - 1] : undefined;
   const confirmationStep = questions.length + 1;
   const progressTotal = questions.length + 1;
@@ -145,6 +154,21 @@ export default function InteriorStylistClient() {
   };
 
   const chooseAnswer = (question: StylistQuizQuestion, value: string) => {
+    if (question.id === "target") {
+      const questionsBeforeTarget = roomType
+        ? stylistQuizByRoom[roomType].slice(0, stylistQuizByRoom[roomType].findIndex((candidate) => candidate.id === "target"))
+        : [];
+      const preservedQuestionIds = new Set(questionsBeforeTarget.map((candidate) => candidate.id));
+      setAnswers((current) => ({
+        ...Object.fromEntries(Object.entries(current).filter(([questionId]) => preservedQuestionIds.has(questionId))),
+        target: value
+      }));
+      setNotes((current) => Object.fromEntries(Object.entries(current).filter(([questionId]) => preservedQuestionIds.has(questionId))));
+      setMaxWidthCm("");
+      setMaxDepthCm("");
+      resetResult();
+      return;
+    }
     if (question.maxSelections) {
       const selected = stylistAnswerValues(answers[question.id]);
       const isExclusive = question.exclusiveOptions?.includes(value);
@@ -279,11 +303,11 @@ export default function InteriorStylistClient() {
         </div></fieldset> : null}
 
         {currentQuestion ? <fieldset className="stylist-question"><legend><strong>{currentQuestion.prompt}</strong>{currentQuestion.help || currentQuestion.maxSelections ? <small>{currentQuestion.help ? `${currentQuestion.help} ` : ""}{currentQuestion.maxSelections ? `Choose up to ${currentQuestion.maxSelections}.` : ""}</small> : null}</legend>
-          <div className={currentQuestion.visual ? "stylist-style-visuals" : "stylist-target-options stylist-adaptive-options"}>
+          <div className={currentQuestion.visual ? `stylist-style-visuals${currentQuestion.id === "atmosphere" ? " is-atmosphere" : ""}` : "stylist-target-options stylist-adaptive-options"}>
             {currentQuestion.options.map((choice, index) => {
               const selected = answerSelected(answers[currentQuestion.id], choice.id);
               return <button aria-pressed={selected} type="button" key={choice.id} className={selected ? "is-active" : ""} onClick={() => chooseAnswer(currentQuestion, choice.id)}>
-                {currentQuestion.visual ? <span className="stylist-style-image"><Image src={visualImages[index % visualImages.length]} alt="" width={420} height={260} /></span> : null}
+                {currentQuestion.visual ? <span className="stylist-style-image"><Image src={currentQuestion.id === "atmosphere" ? atmosphereVisualImages[choice.id] : visualImages[index % visualImages.length]} alt={`${choice.label} interior atmosphere`} width={420} height={260} /></span> : null}
                 <span className={currentQuestion.visual ? "stylist-style-copy" : "stylist-answer-copy"}><strong>{choice.label}</strong></span>
                 {selected ? currentQuestion.visual ? <i><Check size={15} /></i> : <span className="stylist-answer-action is-selected"><Check size={15} /></span> : !currentQuestion.visual ? <span className="stylist-answer-action"><ArrowRight size={16} /></span> : null}
               </button>;
@@ -293,7 +317,7 @@ export default function InteriorStylistClient() {
           <label className="stylist-note-field"><span>{currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption) ? currentQuestion.noteLabel : "Something else? (optional)"}</span><textarea aria-label={currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption) ? currentQuestion.noteLabel : `Something else for ${currentQuestion.prompt}`} placeholder="Describe what you have in mind…" required={Boolean(currentQuestion.noteOption && answerSelected(answers[currentQuestion.id], currentQuestion.noteOption))} maxLength={240} rows={3} value={notes[currentQuestion.id] ?? ""} onChange={(event) => { setNotes((current) => ({ ...current, [currentQuestion.id]: event.target.value })); resetResult(); }} /></label>
         </fieldset> : null}
 
-        {isConfirmation && roomType ? <div className="stylist-ready"><span><Sparkles size={22} /></span><h3>Ready. Let&apos;s find what fits.</h3><div className="stylist-choice-summary stylist-adaptive-summary">
+        {isConfirmation && roomType ? <div className="stylist-ready"><span><Sparkles size={22} /></span><h3>Ready. Let&apos;s find what fits.</h3><p className="stylist-ready-intro">Review every question and answer before creating your recommendations.</p><h4>Your questions and answers</h4><div className="stylist-choice-summary stylist-adaptive-summary">
           <div><small>Area</small><strong>{roomLabel(roomType)}</strong></div>
           {questions.map((question) => <div key={question.id}><small>{question.prompt}</small><strong>{stylistAnswerLabel(roomType, question.id, answers[question.id])}{notes[question.id] ? ` · ${notes[question.id]}` : ""}</strong></div>)}
         </div></div> : null}
@@ -309,7 +333,7 @@ export default function InteriorStylistClient() {
     {status === "loading" ? <section className="stylist-loading" aria-live="polite"><LoaderCircle className="spin" size={38} /><h2>Matching your brief to the catalogue</h2><p>We&apos;re ranking verified products against every answer in your tailored questionnaire.</p></section> : null}
 
     {result ? <section className="stylist-results" id="stylist-results"><div className="container">
-      <header className="stylist-result-head"><div><span className="stylist-kicker"><Sparkles size={15} /> Your grounded recommendations</span><h2>{result.title}</h2><p>{result.rationale}</p><div className={`stylist-match-note is-${result.catalogueMatch.level}`}><strong>{result.catalogueMatch.level === "strong" ? "Strong catalogue evidence" : result.catalogueMatch.level === "partial" ? "Partial catalogue evidence" : "Closest catalogue match"}</strong><span>{result.catalogueMatch.message}</span></div></div><div className="stylist-result-actions"><button type="button" onClick={saveSet} disabled={saved}><Save size={17} /> {saved ? "Saved to My Musterring" : result.selections.length === 1 ? "Save recommendation" : "Save complete set"}</button>{saved ? <Link href="/my-musterring">View saved set <ArrowRight size={16} /></Link> : null}</div></header>
+      <header className="stylist-result-head"><div><span className="stylist-kicker"><Sparkles size={15} /> Your grounded recommendations</span><h2>{result.title}</h2><p>{result.rationale}</p><div className={`stylist-match-note is-${result.catalogueMatch.level}`}><strong>{result.catalogueMatch.level === "strong" ? "Strong catalogue evidence" : result.catalogueMatch.level === "partial" ? "Partial catalogue evidence" : "Closest catalogue match"}</strong><span>{result.catalogueMatch.message}</span></div></div><div className="stylist-result-actions"><Link className="is-primary" href={roomComposerUploadHref(result.selections.map((selection) => selection.product.id))}><Armchair size={17} /> See this set in your room</Link><button type="button" onClick={saveSet} disabled={saved}><Save size={17} /> {saved ? "Saved to My Musterring" : result.selections.length === 1 ? "Save recommendation" : "Save complete set"}</button>{saved ? <Link href="/my-musterring">View saved set <ArrowRight size={16} /></Link> : null}</div></header>
       <div className="stylist-analysis stylist-adaptive-results"><div><span>Area</span><p>{roomLabel(result.preferences.roomType)}</p></div><div><span>Catalogue direction</span><p>{stylistStyleLabel(result.preferences.style)}</p></div>{Object.entries(result.preferences.answers).map(([questionId, answerId]) => <div key={questionId}><span>{stylistQuizByRoom[result.preferences.roomType].find((question) => question.id === questionId)?.prompt}</span><p>{stylistAnswerLabel(result.preferences.roomType, questionId, answerId)}{result.preferences.notes[questionId] ? ` · ${result.preferences.notes[questionId]}` : ""}</p></div>)}</div>
       <div className={`stylist-set-grid${result.selections.length === 1 ? " is-single" : ""}`}>{result.selections.map((selection, index) => <article className="stylist-product" key={selection.slotId}><div className="stylist-product-number">0{index + 1} · {selection.slotLabel}</div><Link className="stylist-product-image" href={`/furniture/${selection.product.slug}`}><Image src={productImages(selection.product.id)[0]} alt={selection.product.name} width={760} height={560} /><span>View product <ArrowRight size={15} /></span></Link><div className="stylist-product-copy"><small>{selection.product.modelCode}</small><h3>{selection.product.name}</h3><div className="stylist-product-match"><span className={`is-${selection.styleMatch}`}>Style: {selection.styleMatch === "limited" ? "closest" : selection.styleMatch}</span><span className={`is-${selection.preferenceMatch}`}>Preference: {selection.preferenceMatch === "limited" ? "closest" : selection.preferenceMatch}</span></div><p>{selection.reason}</p></div>{selection.alternatives.length ? <div className="stylist-alternatives"><strong>Try an alternative</strong>{selection.alternatives.map((alternative) => <button type="button" key={alternative.product.id} onClick={() => swapAlternative(selection.slotId, alternative)}><Image src={productImages(alternative.product.id)[0]} alt="" width={120} height={90} /><span><small>{alternative.product.modelCode}</small><b>{alternative.product.name}</b><em>{alternative.reason}</em></span><RefreshCw size={15} /></button>)}</div> : <div className="stylist-no-alternatives">No other active catalogue product is available in this category.</div>}</article>)}</div>
       <p className="stylist-boundary">These recommendations are for inspiration. Dimensions, exact configuration, physical fit and availability must be confirmed through the product details, Will It Fit, or a Musterring retailer.</p>
