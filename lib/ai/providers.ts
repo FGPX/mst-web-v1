@@ -338,6 +338,9 @@ export class OpenAIProvider implements AIProvider {
     image = false,
     options: { model?: string; maxOutputTokens?: number; reasoningEffort?: "low" } = {}
   ): Promise<T> {
+    const requestOptions = options.maxOutputTokens
+      ? { timeout: 45_000, maxRetries: 0 }
+      : {};
     const response = await this.client.responses.parse({
       model: options.model ?? (image ? this.imageModel : this.model),
       input,
@@ -345,7 +348,7 @@ export class OpenAIProvider implements AIProvider {
       max_output_tokens: options.maxOutputTokens,
       reasoning: options.reasoningEffort ? { effort: options.reasoningEffort } : undefined,
       text: { format: zodTextFormat(schema, name), verbosity: options.maxOutputTokens ? "low" : undefined }
-    }, { timeout: options.maxOutputTokens ? 45_000 : undefined, maxRetries: options.maxOutputTokens ? 0 : undefined });
+    }, requestOptions);
     return schema.parse(response.output_parsed);
   }
 
