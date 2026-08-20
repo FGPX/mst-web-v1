@@ -10,7 +10,7 @@ function stylistResponse() {
   return {
     preferences: {
       roomType: "living-room",
-      answers: { target: "complete-living-room", "seating-capacity": "3", "storage-purpose": "mixed-storage", space: "compact", "style-colours": "light-neutral" },
+      answers: { target: "complete-living-room", "living-pieces": ["sofa", "coffee-table", "wall-unit"], "seating-capacity": "3", "storage-purpose": "mixed-storage", space: "compact", "style-colours": "light-neutral" },
       notes: {}, selectedProductIds: [], target: "complete-living-room", style: "minimalist-scandinavian", palette: "light-neutral", material: "fabric", spaceSize: "compact", maxWidthMm: null, maxDepthMm: null, priorities: ["flexible-modular", "compact-footprint"]
     },
     title: "Warm modern living set",
@@ -19,6 +19,10 @@ function stylistResponse() {
     roomType: "living-room",
     style: "modern-contemporary",
     ai: { provider: "openai", mode: "Test fixture" },
+    recommendationMode: "set",
+    matchLevel: "closest",
+    matchedPreferences: [],
+    unmetPreferences: [],
     selections: slots.map((slot) => {
       const matches = products.filter((product) => product.active && slot.categories.includes(product.category)).slice(0, 3);
       return {
@@ -29,7 +33,10 @@ function stylistResponse() {
         styleMatch: "partial",
         preferenceMatch: "partial",
         matchEvidence: ["Authorized catalogue copy supports the selected direction."],
-        alternatives: matches.slice(1).map((product) => ({ product, reason: "A grounded catalogue alternative.", styleMatch: "partial", preferenceMatch: "partial", matchEvidence: [] }))
+        matchLevel: "closest",
+        matchedPreferences: [],
+        unmetPreferences: [],
+        alternatives: matches.slice(1).map((product) => ({ product, reason: "A grounded catalogue alternative.", styleMatch: "partial", preferenceMatch: "partial", matchEvidence: [], matchLevel: "closest", matchedPreferences: [], unmetPreferences: [] }))
       };
     })
   };
@@ -39,6 +46,10 @@ async function prepareStylistQuiz(page: Page) {
   await page.getByRole("button", { name: /^Living room/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
   await page.getByRole("button", { name: /^Complete living room/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Sofa/ }).click();
+  await page.getByRole("button", { name: /^Coffee table/ }).click();
+  await page.getByRole("button", { name: /^Wall unit/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
   await page.getByRole("button", { name: /^3/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();

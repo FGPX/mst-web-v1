@@ -2,6 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import { ArrowRight, Camera, History, Search, Sparkles, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -17,6 +18,8 @@ const suggestions = [
   "Brown oak storage cabinet",
   "Black minimal coffee table"
 ];
+
+const searchStateKey = "musterring.aiSearchState";
 
 const cutoutSlugs = new Set(["justb-pm100", "justb-pm200", "mr-lucia", "mr-230", "mr-260", "mr-270", "mr-280", "mr-285", "mr-nils", "mr-pamela", "mr-231", "jana", "kanto", "justb-ct100", "nara", "mr-kleo", "mr-281", "mr-5111", "mr-9445"]);
 
@@ -86,6 +89,31 @@ type SearchResponse = {
   ai: { mode: string; fallback: boolean };
 };
 
+type CachedSearchResponse = Omit<SearchResponse, "exactMatches" | "closeAlternatives"> & {
+  exactMatches: Array<{ productId: string; reasons: string[] }>;
+  closeAlternatives: Array<{ productId: string; reasons: string[] }>;
+};
+
+const compactSearchResponse = (response: SearchResponse): CachedSearchResponse => ({
+  ...response,
+  exactMatches: response.exactMatches.map(({ product, reasons }) => ({ productId: product.id, reasons })),
+  closeAlternatives: response.closeAlternatives.map(({ product, reasons }) => ({ productId: product.id, reasons }))
+});
+
+const restoreSearchResponse = (cached: CachedSearchResponse): SearchResponse | null => {
+  const productById = new Map(products.map((product) => [product.id, product]));
+  const restoreMatches = (matches: Array<{ productId: string; reasons: string[] }>) => matches.flatMap((match) => {
+    const product = productById.get(match.productId);
+    return product ? [{ product, reasons: Array.isArray(match.reasons) ? match.reasons : [] }] : [];
+  });
+  if (!cached?.intent || !Array.isArray(cached.exactMatches) || !Array.isArray(cached.closeAlternatives)) return null;
+  return {
+    ...cached,
+    exactMatches: restoreMatches(cached.exactMatches),
+    closeAlternatives: restoreMatches(cached.closeAlternatives)
+  };
+};
+
 type VisualMatch = {
   product: Product;
   score: number;
@@ -95,6 +123,7 @@ type VisualMatch = {
 };
 
 export function SearchExperience({ initialQuery = "" }: { initialQuery?: string }) {
+  const router = useRouter();
   const visualInputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState(initialQuery);
   const [submitted, setSubmitted] = useState(initialQuery);
@@ -123,6 +152,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const submit = async (value = query) => {
     const next = value.trim();
     if (!next) return;
+    router.replace(`/search?q=${encodeURIComponent(next)}`, { scroll: false });
     setQuery(next);
     setSubmitted(next);
     setPending(true);
@@ -142,10 +172,25 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
       return;
     }
     setResponse(payload);
+    try {
+      window.sessionStorage.setItem(searchStateKey, JSON.stringify({ query: next, response: compactSearchResponse(payload) }));
+    } catch { /* Search still works when session storage is unavailable. */ }
     storage.track({ name: "ai_intent_parsed" });
   };
 
-  useEffect(() => { if (initialQuery) void submit(initialQuery); /* URL query runs once */ }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!initialQuery) return;
+    try {
+      const cached = JSON.parse(window.sessionStorage.getItem(searchStateKey) ?? "null") as { query?: unknown; response?: CachedSearchResponse } | null;
+      const restored = cached?.query === initialQuery && cached.response ? restoreSearchResponse(cached.response) : null;
+      if (restored) {
+        setResponse(restored);
+        return;
+      }
+    } catch { /* Invalid or unavailable cache is replaced by a fresh search. */ }
+    void submit(initialQuery);
+    /* URL query/cache restoration runs once when the search page mounts. */
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (response && response.exactMatches.length === 0) storage.track({ name: "search_zero_results" });
   }, [response]);
@@ -193,6 +238,8 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   );
 
   const exact = response?.exactMatches ?? [];
+  const recommendations = response?.closeAlternatives ?? [];
+  const primaryResults = exact.length ? exact : recommendations;
 
   const startVisualUpload = async (file?: File) => {
     if (!file) return;
@@ -251,7 +298,13 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
             <div className="stitch-ai-input-row">
               <Search size={20} />
               <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try: I need a compact beige modular sofa for a small apartment, maximum width 240 cm." aria-label="Describe the furniture you are looking for" />
-              {query ? <button type="button" aria-label="Clear search" onClick={() => { setQuery(""); setSubmitted(""); setResponse(null); }}><X /></button> : null}
+              {query ? <button type="button" aria-label="Clear search" onClick={() => {
+                setQuery("");
+                setSubmitted("");
+                setResponse(null);
+                router.replace("/search", { scroll: false });
+                try { window.sessionStorage.removeItem(searchStateKey); } catch { /* no-op */ }
+              }}><X /></button> : null}
               <button type="submit" aria-label="Search products"><ArrowRight /></button>
             </div>
           </form>
@@ -368,7 +421,11 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
             <div className="stitch-ai-results-head">
               <div>
                 <p className="eyebrow">Your search results</p>
-                <h1 className="h2">{exact.length} exact catalogue {exact.length === 1 ? "match" : "matches"}</h1>
+                <h1 className="h2">{pending
+                  ? "Searching catalogue…"
+                  : exact.length
+                    ? `${exact.length} exact catalogue ${exact.length === 1 ? "match" : "matches"}`
+                    : `${recommendations.length} catalogue ${recommendations.length === 1 ? "recommendation" : "recommendations"}`}</h1>
                 {response ? <details className="search-technical-details"><summary>How these results were prepared</summary><p>{response.ai.mode}{response.ai.fallback ? " · fallback used" : ""} · checked against available catalogue data</p></details> : null}
               </div>
               <div className="chips" aria-label="Editable interpreted request">
@@ -379,8 +436,8 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
             {response && [...exact, ...response.closeAlternatives].some(({ product }) => product.authorizedContent) ? (
               <p className="stitch-search-catalogue-notice">Dimensions and prices vary by configuration and are confirmed by a Musterring retailer.</p>
             ) : null}
-            {pending ? <div className="card card-body" role="status">Interpreting request and searching validated catalogue data…</div> : exact.length ? (
-              <div className="grid grid-3">{exact.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={requestedRed ? (product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish") : undefined} explanation={`Matches: ${reasons.map(compactMatchReason).join(" · ") || "Catalogue relevance"}`} showMeta={false} compareSelected={compareIds.includes(product.id)} onCompare={() => toggleCompare(product.id)} />)}</div>
+            {pending ? <div className="card card-body" role="status">Interpreting request and searching validated catalogue data…</div> : primaryResults.length ? (
+              <div className="grid grid-3">{primaryResults.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={requestedRed ? (product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish") : undefined} explanation={`${exact.length ? "Matches" : "Recommended"}: ${reasons.map(compactMatchReason).join(" · ") || "Catalogue relevance"}`} showMeta={false} compareSelected={compareIds.includes(product.id)} onCompare={() => toggleCompare(product.id)} />)}</div>
             ) : response ? (
               <div className="card card-body">
                 <h2>No exact catalogue match</h2>
@@ -393,7 +450,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                       : "Try removing or changing an interpreted filter."}</p>
               </div>
             ) : null}
-            {response?.closeAlternatives.length ? (
+            {exact.length && response?.closeAlternatives.length ? (
               <div className="stitch-ai-alternatives">
                 <p className="eyebrow">Recommended alternatives</p>
                 <h2>Other products to consider</h2>

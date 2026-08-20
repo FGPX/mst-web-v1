@@ -1,6 +1,6 @@
 # GEO Product Data Coverage
 
-Generated: 2026-08-20T08:40:17.940Z
+Generated: 2026-08-20T09:19:59.040Z
 
 ## Summary
 
@@ -53,6 +53,17 @@ A single-product target needs at least 3 candidates with the relevant exact fiel
 | dining-table | 30 | yes | yes |
 | dining-chair | 26 | yes | yes |
 | dining-bench | 18 | yes | yes |
+
+## Field-level requirement coverage
+
+Exact capability is measured for the target and every hard requirement together, never from subtype coverage alone.
+
+| Target + requirement | Required verified field paths | Exact candidates | Closest candidates | Single-product exact capable | Set-slot capable |
+|---|---|---:|---:|---|---|
+| Wardrobe + sliding doors | productSubtypes<br>specifications.wardrobe.doorType | 2 | 2 | no | yes |
+| Bed + 180 × 200 cm | productSubtypes<br>specifications.bed.sleepingSizes | 3 | 9 | yes | yes |
+| Sofa + 4 seats | productSubtypes<br>specifications.seating.seatCapacityMax | 0 | 36 | no | no |
+| Table + extendable rectangular | productSubtypes<br>specifications.table.extendable<br>specifications.table.tabletopShape | 0 | 0 | no | no |
 
 ## Category coverage
 

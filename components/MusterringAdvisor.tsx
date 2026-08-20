@@ -62,7 +62,7 @@ export function MusterringAdvisor() {
       try {
         const parsed: unknown = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          setMessages(parsed.filter(isStoredMessage).slice(-40));
+          setMessages(parsed.map(restoreStoredMessage).filter((message): message is Message => Boolean(message)).slice(-40));
         }
       } catch { /* discard malformed session conversation */ }
     }
@@ -303,9 +303,8 @@ export function MusterringAdvisor() {
       <div className="advisor-messages" aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><span className="advisor-welcome-kicker">Your home, considered</span><h3>What are you working on?</h3><p>Products, rooms, materials, planning or service—I can help you find the next useful step.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}<ArrowRight /></button>)}</div></div> : null}
         {messages.length ? <div className="advisor-conversation-prompts" aria-label="Suggested questions">{starters(pathname).slice(0, 3).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
-        {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><p>{message.text}</p></div></div>
+        {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><AdvisorReply message={message} /></div></div>
           {message.answer?.productIds.length ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} /> : null}
-          {message.answer?.materialIds.length ? <div className="advisor-materials">{message.answer.materialIds.map((id) => { const material = materials.find((item) => item.id === id); return material ? <span key={id}><i style={{ background: material.colorFamily }} />{material.name}</span> : null; })}</div> : null}
           {message.answer?.proposedAction ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
           {message.answer?.suggestedQuestions.length ? <div className="advisor-followups">{message.answer.suggestedQuestions.map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         </article>)}
@@ -316,6 +315,37 @@ export function MusterringAdvisor() {
       {!confirmNewChat && pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
       <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder={voiceState === "listening" ? "Listening... your speech appears here" : "How can I help?"} /><button type="button" aria-label="Use microphone" aria-pressed={voiceState === "listening"} disabled={voiceState === "processing"} onClick={() => void startVoice()}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending || voiceState === "processing"}><Send /></button></form>
   </aside>;
+}
+
+function AdvisorReply({ message }: { message: Message }) {
+  if (message.role === "customer" || !message.answer) return <p>{message.text}</p>;
+
+  const answer = message.answer;
+  const normalizedText = message.text.toLocaleLowerCase();
+  const referencedMaterials = materials.filter((material) =>
+    answer.materialIds.includes(material.id) || normalizedText.includes(material.name.toLocaleLowerCase())
+  );
+  const hasStructuredRecommendations = answer.productIds.length > 0 || referencedMaterials.length > 0;
+  const firstSentence = message.text.match(/^.*?[.!?](?=\s|$)/s)?.[0]?.trim();
+  // When cards or material facts are available, never repeat the provider's
+  // prose list. The structured sections below are the single source of detail.
+  const summary = hasStructuredRecommendations
+    ? firstSentence ?? `${message.text.slice(0, 220).trim()}${message.text.length > 220 ? "…" : ""}`
+    : message.text;
+  const practicalAdvice = message.text.match(/If you want the safest practical choice,\s*([\s\S]*?)(?=If you(?:'|’)d like|$)/i)?.[1]?.trim();
+
+  return <div className="advisor-answer-copy">
+    <p>{summary}</p>
+    {referencedMaterials.length ? <section className="advisor-answer-section">
+      <h4>Recommended materials</h4>
+      <ul>{referencedMaterials.slice(0, 4).map((material) => {
+        const qualities = [material.easyCare ? "easy-care" : "", material.petFriendly ? "pet-friendly" : "", material.familyFriendly ? "family-friendly" : "", material.durability >= 4 ? "high durability" : ""].filter(Boolean);
+        return <li key={material.id}><strong>{material.name}</strong>{qualities.length ? <span>{qualities.join(" · ")}</span> : null}</li>;
+      })}</ul>
+    </section> : null}
+    {practicalAdvice ? <p className="advisor-practical-note"><strong>Practical choice</strong><span>{practicalAdvice}</span></p> : null}
+    {answer.productIds.length ? <p className="advisor-match-intro"><strong>Top catalogue matches</strong><span>Selected from the current validated Musterring catalogue.</span></p> : null}
+  </div>;
 }
 
 function RecommendationSet({ productIds, requestText }: { productIds: string[]; requestText: string }) {
@@ -352,4 +382,32 @@ function isStoredMessage(value: unknown): value is Message {
     && typeof message.text === "string"
     && message.text.length <= 5000
     && (message.answer === undefined || advisorAnswerSchema.safeParse(message.answer).success);
+}
+
+function restoreStoredMessage(value: unknown): Message | null {
+  if (!isStoredMessage(value)) return null;
+  if (value.answer || value.role !== "advisor") return value;
+
+  // Conversations saved before structured answer persistence contain only the
+  // visible paragraph. Reconnect model codes from that paragraph to active,
+  // validated catalogue entries so recommendation UI survives an upgrade.
+  const normalizedText = value.text.toLocaleLowerCase();
+  const productIds = products
+    .filter((product) => product.active && normalizedText.includes(product.modelCode.toLocaleLowerCase()))
+    .map((product) => product.id)
+    .slice(0, 12);
+  if (!productIds.length) return value;
+
+  return {
+    ...value,
+    answer: {
+      answer: value.text,
+      answerType: "products",
+      productIds,
+      materialIds: [],
+      sources: [],
+      proposedAction: null,
+      suggestedQuestions: []
+    }
+  };
 }

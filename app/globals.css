@@ -12159,3 +12159,24 @@ body,
 body * {
   font-family: FrutigerLTPro, sans-serif !important;
 }
+
+/* Structured advisor response copy. */
+.advisor-answer-copy { display: grid; gap: 15px; }
+.advisor-panel .advisor-answer-copy > p { margin: 9px 0 0; }
+.advisor-answer-section { display: grid; gap: 8px; padding: 13px 0 2px; border-top: 1px solid #ddd8d0; }
+.advisor-answer-section h4 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: .035em; }
+.advisor-answer-section ul { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.advisor-answer-section li { position: relative; display: grid; grid-template-columns: minmax(135px,.8fr) minmax(0,1.2fr); gap: 10px; align-items: baseline; color: #33312d; font-size: 12px; line-height: 1.35; }
+.advisor-answer-section li::before { content: "✓"; grid-column: 1; position: absolute; transform: translateX(-17px); font-weight: 800; }
+.advisor-answer-section li strong { font-size: 12px; }
+.advisor-answer-section li span { color: #716c64; }
+.advisor-panel .advisor-match-intro { display: grid; gap: 3px; margin: 0; }
+.advisor-match-intro strong { font-size: 13px; }
+.advisor-match-intro span { color: #777169; font-size: 11px; line-height: 1.35; }
+.advisor-panel .advisor-practical-note { display: grid; gap: 4px; margin: 0; border-left: 3px solid #9a6245; padding: 9px 11px; background: #f2ede6; }
+.advisor-practical-note strong { color: #8c5135; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+.advisor-practical-note span { color: #34312d; font-size: 12px; line-height: 1.45; }
+@media (max-width:560px) {
+  .advisor-answer-section li { grid-template-columns: 1fr; gap: 2px; padding-left: 17px; }
+  .advisor-answer-section li::before { transform: translateX(-17px); }
+}

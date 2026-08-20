@@ -488,6 +488,19 @@ const subtypeCoverage = Object.fromEntries(gatedSubtypes.map((subtype) => [subty
 for (const [subtype, count] of Object.entries(subtypeCoverage)) {
   if (count < 3) issueRows.push({ product: `Target: ${subtype}`, issue: `Only ${count} verified subtype candidates; single-product exact mode requires 3`, severity: "Medium", fix: "Keep the target in closest-match mode until another official programme is structured and verified." });
 }
+const requirementCoverage = [
+  { requirement: "Wardrobe + sliding doors", paths: ["productSubtypes", "specifications.wardrobe.doorType"], matches: (record) => record.productSubtypes.includes("wardrobe") && record.specifications.wardrobe?.doorType.includes("sliding") },
+  { requirement: "Bed + 180 × 200 cm", paths: ["productSubtypes", "specifications.bed.sleepingSizes"], matches: (record) => record.productSubtypes.some((subtype) => ["bed", "upholstered-bed", "boxspring-bed"].includes(subtype)) && record.specifications.bed?.sleepingSizes.some((size) => size.widthMm === 1800 && size.lengthMm === 2000) },
+  { requirement: "Sofa + 4 seats", paths: ["productSubtypes", "specifications.seating.seatCapacityMax"], matches: (record) => record.productSubtypes.some((subtype) => ["sofa", "sectional-sofa", "recliner-sofa", "sofa-bed"].includes(subtype)) && record.specifications.seating?.seatCapacityMax >= 4 },
+  { requirement: "Table + extendable rectangular", paths: ["productSubtypes", "specifications.table.extendable", "specifications.table.tabletopShape"], matches: (record) => record.productSubtypes.includes("dining-table") && record.specifications.table?.extendable === true && record.specifications.table.tabletopShape.includes("rectangular") }
+].map((scenario) => ({
+  ...scenario,
+  exactCandidates: records.filter((record) => scenario.paths.every((path) => record.dataQuality.verifiedFields.includes(path)) && scenario.matches(record)).length,
+  closestCandidates: records.filter((record) => scenario.matches(record)).length
+}));
+for (const scenario of requirementCoverage) {
+  if (scenario.exactCandidates < 3) issueRows.push({ product: `Requirement: ${scenario.requirement}`, issue: `Only ${scenario.exactCandidates} field-verified candidates`, severity: "Medium", fix: `Keep this requirement in closest mode until at least 3 official products verify: ${scenario.paths.join(", ")}.` });
+}
 
 const quality = `# Musterring Product Data Quality Report\n\nGenerated: ${generatedAt}\n\nThis report audits the immutable authorised catalogue import. It does not silently rewrite source values.\n\n| Product | Issue | Severity | Recommended fix |\n|---|---|---|---|\n${issueRows.map((row) => `| ${row.product.replaceAll("|", "\\|")} | ${row.issue} | ${row.severity} | ${row.fix} |`).join("\n") || "| Catalogue | No automated issues found | Info | Continue PIM validation |"}\n`;
 await writeFile(path.join(root, "docs/product-data-quality-report.md"), quality);
@@ -511,6 +524,15 @@ const usingDemo = records.filter((record) => record.dataQuality.demoFields.lengt
 const missingCritical = records.filter((record) => !record.description?.trim() || !record.sourceUrl || !record.media.images.length || !record.category).length;
 const categoryRows = Object.entries(records.reduce((result, record) => { const entry = result[record.category] ?? { total: 0, verified: 0, mixed: 0, demo: 0 }; entry.total += 1; entry[record.dataQuality.level] += 1; result[record.category] = entry; return result; }, {})).sort();
 const geo = `# GEO Product Data Coverage\n\nGenerated: ${generatedAt}\n\n## Summary\n\n- Total real Musterring products: ${records.length}\n- Products with verified batch enrichment: ${verifiedBatch.products.length - unmatchedVerified.length}\n- Additional official pilot records: ${pilotVerified.products.length}\n- Verified-only products: ${levels.verified ?? 0}\n- Mixed authorised/verified + demo products: ${levels.mixed ?? 0}\n- Demo-only products: ${levels.demo ?? 0}\n- Products using one or more demo-enriched fields: ${usingDemo}\n- Products missing critical public information (description, source, image or category): ${missingCritical}\n- Unmatched verified records: ${unmatchedVerified.length}\n\n## Field coverage\n\n| Field | Products | Coverage |\n|---|---:|---:|\n${coverageRows.map(([field, count, percent]) => `| ${field} | ${count} | ${percent}% |`).join("\n")}\n\n## Exact-capable target gate\n\nA single-product target needs at least 3 candidates with the relevant exact field paths verified. Set slots need at least 2. Unknown and demo values remain searchable for closest-match ranking but cannot satisfy hard filters.\n\n| Product subtype | Verified candidates | Single-product exact capable | Set-slot capable |\n|---|---:|---|---|\n${Object.entries(subtypeCoverage).map(([subtype, count]) => `| ${subtype} | ${count} | ${count >= 3 ? "yes" : "no"} | ${count >= 2 ? "yes" : "no"} |`).join("\n")}\n\n## Category coverage\n\n| Category | Total | Verified | Mixed | Demo |\n|---|---:|---:|---:|---:|\n${categoryRows.map(([category, value]) => `| ${category} | ${value.total} | ${value.verified} | ${value.mixed} | ${value.demo} |`).join("\n")}\n\n## Implemented attributes\n\nIdentity and ProductGroup fields; productSubtypes; room/use/style/colour/material metadata; field-level quality buckets; configuration dimensions; SeriesSpecifications and explicit compatibility; category-specific seating, bedroom, dining, storage, outdoor, carpet and lamp specifications; source documents; safe commerce placeholders; structured search and exact/closest recommendation contracts. Text evidence may improve scoring but does not satisfy a structured hard filter. GTIN, EAN, SKU, MPN, certifications, official prices, legal ratings and real dealer inventory remain null unless supplied by an authorised source.\n\n## Recommended future PIM fields\n\nPersist sellable variants and module IDs, exact variant dimensions, verified capacities, GTIN/EAN/MPN/SKU, cover and finish codes, composition and care tests, package units, configuration rules, lifecycle dates, market-specific dealer offers, verified availability, approved technical documents and variant-specific DAM relationships.\n`;
-await writeFile(path.join(root, "docs/geo-product-data-coverage.md"), geo);
+const requirementCoverageSection = `## Field-level requirement coverage
+
+Exact capability is measured for the target and every hard requirement together, never from subtype coverage alone.
+
+| Target + requirement | Required verified field paths | Exact candidates | Closest candidates | Single-product exact capable | Set-slot capable |
+|---|---|---:|---:|---|---|
+${requirementCoverage.map((scenario) => `| ${scenario.requirement} | ${scenario.paths.join("<br>")} | ${scenario.exactCandidates} | ${scenario.closestCandidates} | ${scenario.exactCandidates >= 3 ? "yes" : "no"} | ${scenario.exactCandidates >= 2 ? "yes" : "no"} |`).join("\n")}
+
+`;
+await writeFile(path.join(root, "docs/geo-product-data-coverage.md"), geo.replace("## Category coverage", `${requirementCoverageSection}## Category coverage`));
 
 console.log(`Generated ${records.length} GEO records; ${verifiedBatch.products.length - unmatchedVerified.length} verified batch matches; ${issueRows.length} quality issues.`);
