@@ -1,0 +1,32 @@
+# Musterring Product Data Quality Report
+
+Generated: 2026-08-20T07:43:19.321Z
+
+This report audits the immutable authorised catalogue import. It does not silently rewrite source values.
+
+| Product | Issue | Severity | Recommended fix |
+|---|---|---|---|
+| JUSTB! PM200 (justb-pm200) | Official description appears truncated | High | Re-import the full meta description or approved editorial copy. |
+| MR KLEO (mr-kleo) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR ALENA (mr-alena) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR LIA (mr-lia) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR NILS (mr-nils) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 281 (mr-281) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 2665 (mr-2665) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 2985 (mr-2985) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 2995 (mr-2995) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |
+| MR 4100 (mr-4100) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 4615 (mr-4615) | Official description appears truncated | High | Re-import the full meta description or approved editorial copy. |
+| MR 5100 (mr-5100) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 5111 (mr-5111) | Official description appears truncated | High | Re-import the full meta description or approved editorial copy. |
+| MR 5111 (mr-5111) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 720 (mr-720) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 9445 (mr-9445) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR 9455 (mr-9455) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| JANA (jana) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MEDIA-SMART (media-smart) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| NARA (nara) | Incomplete image set (1 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| MR IMOLA (mr-imola) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| NICA (nica) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
+| FREILICHT (freilicht) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |
+| HELMOND OUTDOOR (helmond-outdoor) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |

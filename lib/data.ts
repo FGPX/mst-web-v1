@@ -1,9 +1,11 @@
 import type { Dealer, Material, Product, Project, RoomScene } from "./types";
 import { productImages } from "./musterring-assets";
 import authorizedCatalog from "./generated/musterring-catalog.json";
+import geoCatalog from "./generated/musterring-geo-enrichment.json";
 import { categoryDetails } from "./catalog-taxonomy";
 
 const image = (name: string) => `/stitch-assets/${name}.png`;
+const geoByProductId = new Map(geoCatalog.products.map((product) => [product.id, product]));
 
 const materialDetails: Record<string, Pick<Material, "cleaningMethods" | "maintenance" | "recommendedUses" | "cautions">> = {
   "mat-ivory-boucle": { cleaningMethods: ["Vacuum", "Blot spills"], maintenance: "Weekly vacuuming; treat spills immediately", recommendedUses: ["Family living", "Pet households", "Regular use"], cautions: ["Medium light sensitivity", "Do not rub spills"] },
@@ -249,6 +251,7 @@ export const products: Product[] = [
 
     const searchOverride = catalogueSearchOverrides[official.slug] ?? {};
     const dimensionOverride = catalogueDimensionOverrides[official.slug];
+    const geo = geoByProductId.get(official.appProductId);
     const verifiedColors = verifiedRedUpholstery.has(official.slug) ? ["red", "burgundy"] : [];
     const verifiedMaterialTypes: Array<"fabric" | "leather"> = [
       ...(/\bfabric\b/.test(searchableCopy) ? ["fabric" as const] : []),
@@ -260,8 +263,85 @@ export const products: Product[] = [
       ...(/motorised|electric|touch of a button/.test(searchableCopy) ? ["electric"] : []),
       ...(isStorage ? ["storage"] : [])
     ];
+    const legacyDimensions = {
+      widthMm: dimensionOverride?.widthMm ?? (isStorage ? 3000 : template.widthMm),
+      depthMm: dimensionOverride?.depthMm ?? (isStorage ? 450 : template.depthMm),
+      heightMm: dimensionOverride?.heightMm ?? (isStorage ? 2050 : template.heightMm)
+    };
+    const verifiedGeoFields = new Set(geo?.dataQuality.verifiedFields ?? []);
+    const geoDimensionsVerified = verifiedGeoFields.has("dimensions") || verifiedGeoFields.has("referenceConfiguration");
+    const geoSeatHeightVerified = [...verifiedGeoFields].some((field) => field.includes("seatHeight"));
+    const geoSeatDepthVerified = [...verifiedGeoFields].some((field) => field.includes("seatDepth"));
+    const geoFunctions = [...(geo?.manualFunctions ?? []), ...(geo?.electricFunctions ?? []), ...(geo?.comfortFunctions ?? [])];
+    const effectiveDimensionCandidate = geoDimensionsVerified && geo?.dimensions
+      ? geo.dimensions
+      : dimensionOverride ?? geo?.dimensions ?? legacyDimensions;
+    const effectiveDimensions = {
+      widthMm: effectiveDimensionCandidate.widthMm ?? legacyDimensions.widthMm,
+      depthMm: effectiveDimensionCandidate.depthMm ?? legacyDimensions.depthMm,
+      heightMm: effectiveDimensionCandidate.heightMm ?? legacyDimensions.heightMm
+    };
+    const catalogueVerifiedFacts: Product["verifiedFacts"] = {
+      dimensions: Boolean(dimensionOverride) || geoDimensionsVerified,
+      seatHeight: geoSeatHeightVerified,
+      seatDepth: geoSeatDepthVerified,
+      colors: verifiedColors,
+      materialTypes: verifiedMaterialTypes,
+      styles: [],
+      functions: [...new Set([...verifiedFunctions, ...([...verifiedGeoFields].some((field) => field.includes("comfortFunctions") || field.includes("specifications.seating")) ? geoFunctions : [])])],
+      modular: /modular|module/.test(searchableCopy),
+      smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),
+      comfort: false,
+      easyCare: false
+    };
+    const finalVerifiedFacts = searchOverride.verifiedFacts ?? catalogueVerifiedFacts;
+    const finalSeatHeightMm = searchOverride.seatHeightMm
+      ?? geo?.specifications?.seating?.seatHeightMm
+      ?? geo?.specifications?.seating?.seatHeightOptionsMm?.[0]
+      ?? (isSeating ? template.seatHeightMm : 0);
+    const finalSeatDepthMm = searchOverride.seatDepthMm
+      ?? geo?.specifications?.seating?.seatDepthMm
+      ?? geo?.specifications?.seating?.seatDepthOptionsMm?.[0]
+      ?? (isSeating ? template.seatDepthMm : 0);
+    const finalComfortOptions = searchOverride.comfortOptions
+      ?? (geo?.specifications?.seating?.seatFirmnessOptions?.length ? geo.specifications.seating.seatFirmnessOptions : undefined)
+      ?? (isSeating ? template.comfortOptions : []);
+    const synchronizedSpecifications: Product["specifications"] = geo?.specifications
+      ? {
+          ...(geo.specifications as Product["specifications"]),
+          ...(geo.specifications.seating ? {
+            seating: {
+              ...geo.specifications.seating,
+              seatHeightMm: finalSeatHeightMm || null,
+              seatDepthMm: finalSeatDepthMm || null,
+              seatHeightOptionsMm: finalVerifiedFacts.seatHeight ? [finalSeatHeightMm] : geo.specifications.seating.seatHeightOptionsMm,
+              seatDepthOptionsMm: finalVerifiedFacts.seatDepth ? [finalSeatDepthMm] : geo.specifications.seating.seatDepthOptionsMm,
+              seatFirmnessOptions: finalComfortOptions,
+              recliner: finalVerifiedFacts.functions.some((value) => /reclin|relax|electric lounge|seat extension/i.test(value)) || geo.specifications.seating.recliner,
+              manualRecliner: finalVerifiedFacts.functions.some((value) => /manual|relax/i.test(value)) || geo.specifications.seating.manualRecliner,
+              electricRecliner: finalVerifiedFacts.functions.some((value) => /electric|motorized|motorised/i.test(value)) || geo.specifications.seating.electricRecliner
+            }
+          } : {})
+        }
+      : undefined;
+    const repoVerifiedPaths = [
+      ...(dimensionOverride ? ["dimensions", "referenceConfiguration"] : []),
+      ...(finalVerifiedFacts.seatHeight ? ["specifications.seating.seatHeightMm", "specifications.seating.seatHeightOptionsMm"] : []),
+      ...(finalVerifiedFacts.seatDepth ? ["specifications.seating.seatDepthMm", "specifications.seating.seatDepthOptionsMm"] : []),
+      ...(finalVerifiedFacts.colors.length ? ["colors"] : []),
+      ...(finalVerifiedFacts.materialTypes.length ? ["materialTypes"] : []),
+      ...(finalVerifiedFacts.functions.length ? ["functions", ...(geo?.specifications?.seating ? ["specifications.seating.functions"] : [])] : [])
+    ];
+    const synchronizedDataQuality: Product["dataQuality"] = geo?.dataQuality
+      ? {
+          ...geo.dataQuality,
+          level: geo.dataQuality.level as NonNullable<Product["dataQuality"]>["level"],
+          verifiedFields: [...new Set([...geo.dataQuality.verifiedFields, ...repoVerifiedPaths])]
+        }
+      : undefined;
     return {
       ...template,
+      ...(geo as unknown as Partial<Product>),
       id: official.appProductId,
       slug: official.slug,
       modelCode: official.modelCode,
@@ -276,44 +356,37 @@ export const products: Product[] = [
       specificationNote: "Dimensions, configuration options and availability are confirmed by an authorized Musterring retailer.",
       active: !("stale" in official && official.stale === true),
       demoData: false,
-      widthMm: dimensionOverride?.widthMm ?? (isStorage ? 3000 : template.widthMm),
-      depthMm: dimensionOverride?.depthMm ?? (isStorage ? 450 : template.depthMm),
-      heightMm: dimensionOverride?.heightMm ?? (isStorage ? 2050 : template.heightMm),
-      seatHeightMm: isSeating ? template.seatHeightMm : 0,
-      seatDepthMm: isSeating ? template.seatDepthMm : 0,
+      widthMm: effectiveDimensions.widthMm,
+      depthMm: effectiveDimensions.depthMm,
+      heightMm: effectiveDimensions.heightMm,
+      seatHeightMm: finalSeatHeightMm,
+      seatDepthMm: finalSeatDepthMm,
       numberOfSeats: isSeating ? template.numberOfSeats : 0,
       // Template values support internal layout rendering but are not catalogue facts.
       numberOfSeatsVerified: false,
-      verifiedFacts: {
-        dimensions: Boolean(dimensionOverride),
-        seatHeight: false,
-        seatDepth: false,
-        colors: verifiedColors,
-        materialTypes: verifiedMaterialTypes,
-        styles: [],
-        functions: [...new Set(verifiedFunctions)],
-        modular: /modular|module/.test(searchableCopy),
-        smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),
-        comfort: false,
-        easyCare: false
-      },
+      verifiedFacts: finalVerifiedFacts,
       materials: isSeating ? template.materials : [],
-      colors: !isSeating
-        ? template.colors
-        : isStorage
-          ? template.colors
-          : [...new Set([...template.colors, ...(verifiedRedUpholstery.has(official.slug) ? ["red", "burgundy"] : [])])],
-      functions: isStorage ? ["storage", "modular"] : isSeating ? template.functions : [],
-      electricFunctions: isSeating ? template.electricFunctions : [],
-      armrestOptions: isSeating ? template.armrestOptions : [],
-      feetOptions: isSeating ? template.feetOptions : [],
-      comfortOptions: isSeating ? template.comfortOptions : [],
+      colors: geo?.colors?.length ? geo.colors : !isSeating ? template.colors : isStorage ? template.colors : [...new Set([...template.colors, ...(verifiedRedUpholstery.has(official.slug) ? ["red", "burgundy"] : [])])],
+      functions: geoFunctions.length ? [...new Set([...(isStorage ? ["storage"] : []), ...geoFunctions])] : isStorage ? ["storage", "modular"] : isSeating ? template.functions : [],
+      electricFunctions: geo?.electricFunctions?.length ? geo.electricFunctions : isSeating ? template.electricFunctions : [],
+      armrestOptions: geo?.armrestOptions?.length ? geo.armrestOptions : isSeating ? template.armrestOptions : [],
+      feetOptions: geo?.feetOptions?.length ? geo.feetOptions : isSeating ? template.feetOptions : [],
+      comfortOptions: finalComfortOptions,
       collection: official.sourceUrl.includes("/furniture/hallway/")
         ? "Hallway"
         : categoryDetails[category]?.room ?? "Musterring",
       modular: isStorage || (isSeating && /modular|module|configur|system|programme|flexib/.test(searchableCopy)),
-      smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy)
-      , ...searchOverride
+      smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),
+      ...searchOverride,
+      specifications: synchronizedSpecifications,
+      dataQuality: synchronizedDataQuality,
+      referenceConfiguration: dimensionOverride
+        ? {
+            name: "Validated catalogue reference configuration",
+            dimensions: effectiveDimensions,
+            note: "These dimensions describe the validated reference configuration, not every programme variant."
+          }
+        : geo?.referenceConfiguration
     } satisfies Product;
   }),
   ...conceptProducts

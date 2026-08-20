@@ -189,6 +189,10 @@ export async function hybridCatalogueSearch(intent: SearchIntent, semantic: Sema
   ).slice(0, 12);
   const exactIds = new Set(exactMatches.map(({ product }) => product.id));
   const isRelevantAlternative = (product: Product) => {
+    // A clearly verified, materially oversized product is not a useful close
+    // alternative for a hard maximum-width request. Unverified/demo reference
+    // dimensions remain eligible but can never become an exact match.
+    if (intent.maxWidthMm && !exactColorAvailable && product.verifiedFacts.dimensions && product.widthMm > intent.maxWidthMm + 400) return false;
     const checks: boolean[] = [];
     if (requestedColors.length) checks.push(requestedColors.some((color) => product.verifiedFacts.colors.includes(color)));
     if (intent.maxWidthMm) checks.push(product.verifiedFacts.dimensions && product.widthMm <= intent.maxWidthMm);

@@ -10,10 +10,11 @@ import { AlternativeFinderButton } from "./AlternativeFinderButton";
 
 export function ProductGallery({ product, gallery }: { product: Product; gallery: string[] }) {
   const [selected, setSelected] = useState(gallery[0]);
+  const selectedMedia = product.media?.images.find((image) => image.url === selected);
   return (
     <div className="stitch-detail-gallery">
       <div className="stitch-detail-main-image" aria-live="polite">
-        <Image src={selected} alt={`${product.name} selected gallery view`} width={1440} height={1080} priority />
+        <Image src={selected} alt={selectedMedia?.alt ?? `${product.name} ${product.category.replaceAll("-", " ")} product view`} width={1440} height={1080} priority />
       </div>
       <div className="stitch-detail-thumbs" aria-label="Product gallery thumbnails">
         {gallery.slice(0, 4).map((image, index) => (

@@ -4,6 +4,114 @@ export const catalogueCategories = [
 ] as const;
 
 export type Category = (typeof catalogueCategories)[number];
+export type FactStatus = "verified" | "authorized-source" | "derived" | "demo" | "unknown";
+export type DataQualityLevel = "verified" | "mixed" | "demo";
+export type EntityLevel = "programme" | "product" | "variant" | "module" | "set";
+
+export type ProductFact<T> = {
+  value: T | null;
+  status: FactStatus;
+  sourceUrl?: string;
+  sourceDocumentUrl?: string;
+  verifiedAt?: string;
+  note?: string;
+};
+
+export type DataQuality = {
+  level: DataQualityLevel;
+  verifiedFields: string[];
+  authorizedSourceFields: string[];
+  derivedFields: string[];
+  demoFields: string[];
+  unknownFields?: string[];
+  lastVerifiedAt?: string;
+};
+
+export type Dimensions = { widthMm: number; depthMm: number; heightMm: number };
+export type DimensionRange = {
+  minWidthMm?: number | null; maxWidthMm?: number | null;
+  minDepthMm?: number | null; maxDepthMm?: number | null;
+  minHeightMm?: number | null; maxHeightMm?: number | null;
+};
+export type ProductMediaImage = {
+  url: string;
+  alt: string;
+  role: "hero" | "gallery" | "front" | "side" | "rear" | "perspective" | "detail" | "roomset" | "material-swatch" | "technical";
+  variantId?: string;
+};
+export type ProductMedia = { primaryImage: string; images: ProductMediaImage[]; videos: string[]; model3dUrl?: string };
+export type ProductDocuments = {
+  technicalDataSheetUrl?: string; priceListUrl?: string; planningGuideUrl?: string;
+  assemblyInstructionsUrl?: string; careInstructionsUrl?: string; warrantyUrl?: string;
+};
+
+export type SeatingSpecifications = {
+  seatWidthMm?: number | null; seatDepthMm?: number | null; seatHeightMm?: number | null;
+  backrestHeightMm?: number | null; armrestHeightMm?: number | null; armrestWidthMm?: number | null;
+  comfortLevel?: string; seatFirmnessOptions: string[]; seatQualityOptions: string[];
+  seatHeightOptionsMm: number[]; seatDepthOptionsMm: number[]; ergonomicSizes: string[];
+  headrestAdjustable: boolean; seatDepthAdjustable: boolean; backrestAdjustable: boolean; armrestAdjustable: boolean;
+  recliner: boolean; manualRecliner: boolean; electricRecliner: boolean; liftAssist: boolean;
+  swivel: boolean; swivelDegrees?: number | null; sofaBed: boolean; sleepingArea?: { widthMm: number; lengthMm: number } | null;
+  integratedStorage: boolean; chaiseAvailable: boolean; footstoolAvailable: boolean;
+  leftHandAvailable: boolean; rightHandAvailable: boolean; reversible: boolean;
+};
+export type BedSpecifications = {
+  bedType: Array<"bed-frame" | "upholstered-bed" | "boxspring-bed" | "sofa-bed" | "mattress" | "slatted-base">;
+  sleepingWidthsMm: number[]; sleepingLengthsMm: number[]; sleepingSizes: Array<{ widthMm: number; lengthMm: number }>;
+  outerDimensions: Dimensions[]; lyingHeightMm?: number | null; headboardHeightMm?: number | null;
+  mattressIncluded: boolean; mattressTypes: string[]; mattressFirmnessOptions: string[];
+  slattedBaseIncluded: boolean; slattedBaseCompatible: boolean; bedStorage: boolean;
+  storageVolumeLitres?: number | null; motorised: boolean;
+};
+export type WardrobeSpecifications = {
+  wardrobeType: string[]; doorType: Array<"hinged" | "sliding" | "folding" | "corner">; doorCountOptions: number[];
+  widthOptionsMm: number[]; heightOptionsMm: number[]; depthOptionsMm: number[]; interiorModules: string[];
+  shelves?: number | null; drawers?: number | null; clothesRails?: number | null;
+  adjustableShelves: boolean; shoeStorage: boolean; trouserRack: boolean; tieRack: boolean; clothesLift: boolean;
+  mirrorOption: boolean; lightingOption: boolean; cornerConfiguration: boolean;
+};
+export type TableSpecifications = {
+  tabletopShape: string[]; tabletopMaterials: string[]; tabletopThicknessMm?: number | null;
+  widthOptionsMm: number[]; depthOptionsMm: number[]; diameterOptionsMm: number[]; heightMm?: number | null;
+  extendable: boolean; extensionMechanism?: string | null; minLengthMm?: number | null; maxLengthMm?: number | null;
+  capacityMin?: number | null; capacityMax?: number | null; capacityVerified: boolean;
+  demoEstimatedCapacity?: number | null; edgeProfiles: string[]; baseVariants: string[];
+};
+export type DiningChairSpecifications = {
+  chairType: string; seatHeightMm?: number | null; seatWidthMm?: number | null; seatDepthMm?: number | null;
+  armrests: boolean; swivel: boolean; swivelDegrees?: number | null; baseType: string[]; frameMaterial: string[];
+  upholsteryAvailable: boolean; maxLoadKg?: number | null; stackable: boolean;
+};
+export type StorageSpecifications = {
+  storageType: string[]; doors?: number | null; drawers?: number | null; shelves?: number | null; compartments?: number | null;
+  wallMounted: boolean; floorStanding: boolean; mountingType: string[]; mediaCompatible: boolean; cableManagement: boolean;
+  lightingAvailable: boolean; qiChargingAvailable: boolean; internalLayout: string[]; maximumShelfLoadKg?: number | null;
+};
+export type OutdoorSpecifications = {
+  weatherResistant: boolean; uvResistant: boolean; waterResistant: boolean; frostResistant: boolean; corrosionResistant: boolean;
+  outdoorMaterial: string[]; frameMaterial?: string | null; surfaceTreatment?: string | null;
+  protectiveCoverIncluded: boolean; protectiveCoverAvailable: boolean; drainage: boolean; indoorOutdoorUse: boolean; careInstructions: string;
+};
+export type CarpetSpecifications = {
+  carpetShape: string[]; dimensionsAvailable: Array<{ widthMm: number; lengthMm: number }>;
+  widthMm?: number | null; lengthMm?: number | null; diameterMm?: number | null; pileHeightMm?: number | null;
+  composition?: string | null; construction?: string | null; backing?: string | null;
+  underfloorHeatingSuitable: boolean; easyCare: boolean; outdoorSuitable: boolean; colorOptions: string[]; designOptions: string[];
+};
+export type LampSpecifications = {
+  lampType: string[]; dimensions?: Partial<Dimensions> & { diameterMm?: number };
+  material?: string | null; lightSourceType?: string | null; wattageW?: number | null; lumens?: number | null;
+  colourTemperatureKelvin?: number | null; colourTemperatureMinKelvin?: number | null; colourTemperatureMaxKelvin?: number | null;
+  cri?: number | null; dimmable: boolean; dimmingType?: string | null; integratedLed: boolean;
+  batteryPowered: boolean; batteryRuntimeHours?: number | null; usbCharging: boolean; usbC: boolean;
+  protectionRating?: string | null; energyEfficiencyClass?: string | null;
+};
+export type ProductSpecifications = {
+  seating?: SeatingSpecifications; bed?: BedSpecifications; wardrobe?: WardrobeSpecifications;
+  table?: TableSpecifications; diningChair?: DiningChairSpecifications; storage?: StorageSpecifications;
+  outdoor?: OutdoorSpecifications; carpet?: CarpetSpecifications; lamp?: LampSpecifications;
+};
 export const stylistRoomTypes = ["living-room", "bedroom", "dining-room", "bathroom", "hallway", "kitchen", "outdoor", "home-accessories"] as const;
 export type StylistRoomType = (typeof stylistRoomTypes)[number];
 export const stylistStyles = [
@@ -90,19 +198,33 @@ export type ProjectStatus =
   id: string;
   name: string;
   type: "fabric" | "leather";
+  materialCode?: string | null;
+  commercialName?: string;
+  materialType?: string;
   colorFamily: string;
+  colorName?: string;
   texture: string;
   composition: string;
   durability: number;
+  martindaleCycles?: number | null;
+  pillingRating?: number | null;
+  lightFastnessRating?: number | null;
   easyCare: boolean;
+  easyCareReason?: string[];
   petFriendly: boolean;
   familyFriendly: boolean;
+  removableCover?: boolean;
+  washableCover?: boolean;
+  washableTemperatureC?: number | null;
   lightSensitivity: "low" | "medium" | "high";
     care: string;
     cleaningMethods: string[];
     maintenance: string;
     recommendedUses: string[];
     cautions: string[];
+    certifications?: string[];
+    materialImageUrl?: string;
+    dataQuality?: DataQuality;
     demoData: boolean;
 };
 
@@ -117,6 +239,71 @@ export type Product = {
   /** All official memberships when a programme contains multiple product types. */
   categories?: Category[];
   collection: string;
+  brand?: string;
+  manufacturer?: string;
+  entityLevel?: EntityLevel;
+  productGroupId?: string;
+  sku?: string | null;
+  mpn?: string | null;
+  gtin?: string | null;
+  ean?: string | null;
+  canonicalUrl?: string;
+  tagline?: string;
+  shortDescription?: string;
+  productHighlights?: string[];
+  roomTypes?: string[];
+  useCases?: string[];
+  bestFor?: string[];
+  notIdealFor?: string[];
+  styleTags?: string[];
+  keywords?: string[];
+  synonyms?: string[];
+  dimensions?: Dimensions;
+  dimensionRange?: DimensionRange;
+  referenceConfiguration?: { name: string; dimensions: Dimensions; note?: string };
+  weightKg?: number | null;
+  maxLoadKg?: number | null;
+  minDoorOpeningMm?: number | null;
+  requiredWallClearanceMm?: number | null;
+  floorClearanceMm?: number | null;
+  primaryMaterial?: string | null;
+  materialTypes?: string[];
+  materialComposition?: string | null;
+  upholsteryMaterial?: string | null;
+  frameMaterial?: string | null;
+  tabletopMaterial?: string | null;
+  legMaterial?: string | null;
+  finish?: string | null;
+  surfaceTreatment?: string | null;
+  colorFamilies?: string[];
+  configurable?: boolean;
+  availableComponents?: string[];
+  includedItems?: string[];
+  orientationOptions?: string[];
+  seatQualityOptions?: string[];
+  seatHeightOptions?: number[];
+  seatDepthOptions?: number[];
+  manualFunctions?: string[];
+  comfortFunctions?: string[];
+  accessories?: string[];
+  optionalAccessories?: string[];
+  compatibilityRules?: string[];
+  incompatibilityRules?: string[];
+  requirements?: string[];
+  spaceProfile?: "compact" | "medium" | "large" | "configuration-dependent";
+  smallSpaceReason?: string[];
+  comfortProfile?: string;
+  specifications?: ProductSpecifications;
+  media?: ProductMedia;
+  documents?: ProductDocuments;
+  sourceDocumentUrl?: string;
+  sourceDocumentId?: string;
+  lastVerifiedAt?: string;
+  validFrom?: string;
+  validTo?: string;
+  verificationStatus?: string;
+  dataQuality?: DataQuality;
+  variants?: ProductVariant[];
   widthMm: number;
   depthMm: number;
   heightMm: number;
@@ -176,11 +363,22 @@ export function productHasCategory(product: Pick<Product, "category" | "categori
 export type ProductVariant = {
   id: string;
   productId: string;
-  materialId: string;
-  color: string;
-  indicativePriceCents: number;
+  productGroupId?: string;
+  sku?: string | null;
+  gtin?: string | null;
+  mpn?: string | null;
+  configurationName?: string;
+  materialId?: string;
+  color: string | { name: string; family: string; code?: string };
+  dimensions?: Dimensions;
+  layoutShape?: string;
+  price?: number | null;
+  currency?: string | null;
+  imageAssets?: string[];
+  indicativePriceCents?: number;
   active: boolean;
   demoData: boolean;
+  dataQuality?: DataQuality;
 };
 
 export type ProductModule = {
@@ -271,6 +469,16 @@ export type SearchFilters = {
   electricFunctions?: boolean;
   smallSpaceSuitable?: boolean;
   layoutShapes?: Array<"straight" | "l-shaped" | "u-shaped" | "corner" | "island">;
+  tabletopShapes?: Array<"oval" | "round" | "square" | "rectangular">;
+  extendable?: boolean;
+  slidingDoors?: boolean;
+  bedWidthMm?: number;
+  easyCare?: boolean;
+  weatherResistant?: boolean;
+  sofaBed?: boolean;
+  integratedStorage?: boolean;
+  minLumens?: number;
+  maxLumens?: number;
 };
 
 export type Configuration = {
@@ -286,6 +494,7 @@ export type Configuration = {
   electric: boolean;
   dimensions: { widthMm: number; depthMm: number; heightMm: number };
   indicativePriceCents: number;
+  dataQuality?: DataQuality;
   updatedAt: string;
 };
 

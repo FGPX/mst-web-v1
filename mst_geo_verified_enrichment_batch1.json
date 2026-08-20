@@ -1,0 +1,340 @@
+{
+  "generatedFor": "FGPX/mst-web-v1",
+  "purpose": "Verified GEO product enrichment from official Musterring product pages and official 2026 price/type lists",
+  "rules": {
+    "doNotInferMissingFacts": true,
+    "nullMeansNotVerified": true,
+    "storeSeriesAndVariantsSeparately": true,
+    "publishOnlyVerifiedOrAuthorizedFacts": true
+  },
+  "recommendedExtraFields": [
+    "entityLevel",
+    "brand",
+    "manufacturer",
+    "skuOrOrderNumber",
+    "gtinOrEan",
+    "mpn",
+    "productGroupId",
+    "variantId",
+    "canonicalUrl",
+    "sourceDocumentUrl",
+    "sourceValidFrom",
+    "lastVerifiedAt",
+    "verificationStatus",
+    "locale",
+    "market",
+    "dimensionsByVariant",
+    "materialComposition",
+    "finish",
+    "seatWidthMm",
+    "seatHeightMm",
+    "seatDepthMm",
+    "backrestHeightMm",
+    "maxLoadKg",
+    "mountingType",
+    "optionalAccessories",
+    "compatibilityRules",
+    "incompatibilityRules",
+    "availableComponents",
+    "includedItems",
+    "imageRole",
+    "imageAlt",
+    "lifecycleStatus",
+    "rrp",
+    "currency",
+    "priceValidFrom",
+    "dealerAvailability",
+    "showroomAvailability"
+  ],
+  "products": [
+    {
+      "id": "musterring-mr-2875",
+      "modelCode": "MR 2875",
+      "name": "MR 2875",
+      "category": "sofa",
+      "entityLevel": "product-program",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2875",
+      "verificationStatus": "verified-from-official-page",
+      "verifiedData": {
+        "seatHeightOptionsMm": [420, 440, 470],
+        "seatWidthOptionsMm": [600, 700, 800, 900],
+        "seatDepthOptionsMm": [520, 550],
+        "backrestHeightOptionsMm": [800, 850],
+        "armrestOptionCount": 14,
+        "footVariantCount": 7,
+        "seatFirmnessOptions": ["BASIC", "SOFT", "BOXSPRING"],
+        "coverMaterialTypes": ["fabric", "leather"],
+        "jabAnstoetzFabricAvailable": true,
+        "bedFunctionAvailable": true,
+        "optionalAccessories": ["headrests", "side-section cushions"],
+        "availableComponents": ["individual sofas", "corner sofas", "chaise longues", "stools"],
+        "exampleConfiguration": {
+          "widthMm": 2540,
+          "depthMm": 2280,
+          "heightMm": 800,
+          "seatHeightMm": 440,
+          "composition": ["N70L two-seater module", "EG70R corner sofa with fixed stool"],
+          "coverExample": "R 64/21 light grey fabric, 100% polyester"
+        }
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2875"
+      ]
+    },
+    {
+      "id": "musterring-mr-nils",
+      "modelCode": "MR NILS",
+      "name": "MR NILS",
+      "category": "armchair",
+      "entityLevel": "product-program",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-nils",
+      "sourceDocumentUrl": "https://img.musterring.com/1a/0b/56/66c5f6775809b0aa5957/mrnils_pl_mr_de_de_uvp_260401.pdf",
+      "sourceValidFrom": "2026-07-01",
+      "verificationStatus": "verified-from-official-page-and-price-list",
+      "verifiedData": {
+        "ergonomicSizes": ["PICCOLO", "SMALL", "MEDIUM", "LARGE", "XTRALARGE"],
+        "baseVariantCount": 6,
+        "armrestVariantCount": 5,
+        "seatFirmnessOptions": ["soft", "medium", "firm"],
+        "heightAdjustableSpindleSeatHeightRangeMm": [430, 470],
+        "liftAidMaxLoadKg": 120,
+        "dimensionsByVariant": [
+          {"variant": "PICCOLO", "widthMm": 780, "heightMm": 1060, "seatHeightMm": 430, "depthMm": 870, "reclinedDepthMm": 1710, "seatDepthMm": 480},
+          {"variant": "SMALL", "widthMm": 780, "heightMm": 1080, "seatHeightMm": 450, "depthMm": 870, "reclinedDepthMm": 1730, "seatDepthMm": 500},
+          {"variant": "MEDIUM", "widthMm": 780, "heightMm": 1100, "seatHeightMm": 470, "depthMm": 870, "reclinedDepthMm": 1750, "seatDepthMm": 520},
+          {"variant": "LARGE", "widthMm": 780, "heightMm": 1120, "seatHeightMm": 490, "depthMm": 870, "reclinedDepthMm": 1770, "seatDepthMm": 540},
+          {"variant": "XTRALARGE", "widthMm": 780, "heightMm": 1140, "seatHeightMm": 510, "depthMm": 870, "reclinedDepthMm": 1770, "seatDepthMm": 540}
+        ],
+        "functions": ["manual legrest adjustment by body pressure", "continuous backrest adjustment by gas spring", "adjustable head cushion", "motorised relaxation", "heart-balance position", "optional lift aid", "optional motorised head cushion adjustment", "optional Turn & Move"]
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-nils",
+        "https://img.musterring.com/1a/0b/56/66c5f6775809b0aa5957/mrnils_pl_mr_de_de_uvp_260401.pdf"
+      ]
+    },
+    {
+      "id": "musterring-justb-sc100",
+      "modelCode": "JUSTB! SC100",
+      "name": "JUSTB! SC100",
+      "category": "bed",
+      "entityLevel": "product-program",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/bedroom/beds/justb-sc100",
+      "sourceDocumentUrl": "https://img.musterring.com/13/90/fa/48b136e1f4a3b69ad951/justbsc100_pl_mr_de_de_uvp_260401.pdf",
+      "sourceValidFrom": "2026-04-01",
+      "verificationStatus": "verified-from-official-2026-price-list",
+      "verifiedData": {
+        "bedTypes": ["boxspring bed", "upholstered bed"],
+        "sleepingSurfaceOptionsMm": [[1400,2000],[1600,2000],[1800,2000],[2000,2000]],
+        "extendedLengthOptionsMm": [1900, 2100, 2200],
+        "upholsteredFrameExternalDimensionsByWidth": [
+          {"sleepingWidthMm": 1400, "externalWidthMm": 1460, "heightMm": 515, "depthMm": 2030},
+          {"sleepingWidthMm": 1600, "externalWidthMm": 1660, "heightMm": 515, "depthMm": 2030},
+          {"sleepingWidthMm": 1800, "externalWidthMm": 1860, "heightMm": 515, "depthMm": 2030},
+          {"sleepingWidthMm": 2000, "externalWidthMm": 2060, "heightMm": 515, "depthMm": 2030}
+        ],
+        "headboardHeightMm": 1150,
+        "storageVolumeLitresAt180x200": 260,
+        "floorClearanceMm": 150,
+        "compatibleSlattedBases": ["Orthomatic 2.0"],
+        "boxspringBaseHeightMm": 300,
+        "boxspringFloorClearanceMm": 90,
+        "mattressFirmnessOptions": ["Soft", "Medium", "Firm"],
+        "topper": "Comfort cold-foam topper",
+        "motorisedHeadAndFootAdjustmentAvailable": true
+      },
+      "sourceUrls": [
+        "https://img.musterring.com/13/90/fa/48b136e1f4a3b69ad951/justbsc100_pl_mr_de_de_uvp_260401.pdf"
+      ]
+    },
+    {
+      "id": "musterring-mr-imola",
+      "modelCode": "MR IMOLA",
+      "name": "MR IMOLA",
+      "category": "wardrobe",
+      "entityLevel": "product-program",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/bedroom/wardrobes/mr-imola",
+      "sourceDocumentUrl": "https://img.musterring.com/f6/9a/51/4a19be048e7a6b0f7af7/mrimola_pl_mr_de_de_uvp_260401.pdf",
+      "sourceValidFrom": "2026-04-01",
+      "verificationStatus": "verified-from-official-page-and-price-list",
+      "verifiedData": {
+        "doorTypes": ["hinged", "sliding"],
+        "frontFinishes": ["white glass", "graphite glass", "full-length crystal mirror", "decorative mirror"],
+        "exampleWardrobeDimensionsMm": {"widthMm": 3000, "heightMm": 2160, "depthMm": 580},
+        "heightOptionsMm": [2170, 2360],
+        "slidingWardrobeWidthOptionsMm": [1489, 1973, 2463, 2789, 2952, 2963, 3279, 3931],
+        "interiorAccessories": ["clothes lift", "trouser rack", "utensil basket", "tie rack", "shoe rack"],
+        "lightingAvailable": true,
+        "ledPassepartoutAvailable": true
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/bedroom/wardrobes/mr-imola",
+        "https://img.musterring.com/f6/9a/51/4a19be048e7a6b0f7af7/mrimola_pl_mr_de_de_uvp_260401.pdf"
+      ]
+    },
+    {
+      "id": "musterring-nica",
+      "modelCode": "NICA",
+      "name": "NICA",
+      "category": "dining-table",
+      "entityLevel": "product-program",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nica",
+      "sourceDocumentUrl": "https://img.musterring.com/3c/cb/89/435dc1986e9503ee8e4c.pdf",
+      "sourceValidFrom": "2026-04-01",
+      "verificationStatus": "verified-from-official-page-and-price-list",
+      "verifiedData": {
+        "extendable": false,
+        "topShapes": ["rectangular", "boat-shaped", "oval", "flat oval", "round", "rectangular with rounded corners"],
+        "sizeOptionsCm": ["D110", "D120", "D130", "160x100", "180x100", "200x100", "220x100", "240x100", "180x105", "200x110", "220x115", "240x115"],
+        "topMaterials": ["solid natural knotty oak", "knotty walnut", "ceramic 1", "ceramic 2", "Dekton 1", "Dekton 2"],
+        "solidWoodTopThicknessMm": 30,
+        "ceramicTopThicknessMm": 7,
+        "dektonTopThicknessMm": 8,
+        "frameMaterial": "powder-coated metal",
+        "edgeDesignOptionCount": 8,
+        "capacityPeople": null,
+        "capacityVerificationNote": "No official person-capacity value found; do not infer from table dimensions."
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nica",
+        "https://img.musterring.com/3c/cb/89/435dc1986e9503ee8e4c.pdf"
+      ]
+    },
+    {
+      "id": "musterring-q-media-20",
+      "modelCode": "Q-MEDIA 2.0",
+      "name": "Q-MEDIA 2.0",
+      "category": "storage",
+      "entityLevel": "product-program",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/q-media-20",
+      "verificationStatus": "verified-from-official-page",
+      "verifiedData": {
+        "availableComponents": ["sideboards", "glass-fronted cabinets", "wall cabinets", "wall shelves", "coffee tables", "media elements", "lowboards", "highboards"],
+        "mountingTypes": ["wall-mounted", "standing with plinth legs", "standing with metal runners"],
+        "extensionUnitWidthOptionsMm": [400, 600, 800, 1000, 1200],
+        "centreElementWidthOptionsMm": [800, 1000, 1200],
+        "woodVeneers": ["wild oak", "bianco oak beam", "walnut", "beech heartwood"],
+        "handleOptions": ["handle-free push-to-open", "brushed aluminium elbow handles"],
+        "optionalAccessories": ["Qi charging station"]
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/q-media-20"
+      ]
+    },
+    {
+      "id": "musterring-justb-od100",
+      "modelCode": "JUSTB! OD100",
+      "name": "JUSTB! OD100",
+      "category": "outdoor",
+      "entityLevel": "product-program",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/justb-od100",
+      "verificationStatus": "verified-from-official-page",
+      "verifiedData": {
+        "weatherResistanceClaim": "designed to withstand wind and weather",
+        "durableClaim": true,
+        "chair": {
+          "widthMm": 560,
+          "heightMm": 870,
+          "depthMm": 630,
+          "seatConstruction": "cord weave",
+          "frameMaterial": "powder-coated aluminium",
+          "frameColour": "ivory",
+          "cushionColour": "beige"
+        },
+        "table": {
+          "lengthMm": 2000,
+          "widthMm": 1100,
+          "heightMm": 750,
+          "topMaterial": "solid oiled teak",
+          "frameMaterial": "powder-coated aluminium",
+          "frameColour": "ivory"
+        },
+        "protectiveCoversIncluded": true
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/justb-od100",
+        "https://www.musterring.com/en/justb-the-bettina-zimmermann-collection-for-musterring"
+      ]
+    },
+    {
+      "id": "musterring-mr-bergen",
+      "modelCode": "MR BERGEN",
+      "name": "MR BERGEN",
+      "category": "carpet",
+      "entityLevel": "collection",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/home-accessories/carpets/mr-bergen",
+      "verificationStatus": "verified-from-official-page",
+      "verifiedData": {
+        "composition": "100% polyester",
+        "shapes": ["rectangular", "round"],
+        "variousSizes": true,
+        "variousColours": true,
+        "easyToCleanClaim": true,
+        "robustAndDurableClaim": true,
+        "exampleVariant": {
+          "model": "JORIS",
+          "colour": "white",
+          "lengthMm": 3300,
+          "widthMm": 2400,
+          "composition": "100% polyester"
+        },
+        "underfloorHeatingCompatibility": "model-specific; LIVINA is explicitly described as suitable"
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/home-accessories/carpets/mr-bergen"
+      ]
+    },
+    {
+      "id": "musterring-lamps-20-cannon-table-deep-blue",
+      "productGroupId": "musterring-lamps-20",
+      "modelCode": "LEUCHTEN 2.0 / CANNON",
+      "name": "CANNON rechargeable table lamp - deep blue",
+      "category": "lamp",
+      "entityLevel": "variant",
+      "skuOrOrderNumber": "MR54440182",
+      "gtinOrEan": "4017807701944",
+      "sourceDocumentUrl": "https://img.musterring.com/27/af/69/553769fe62d62acb8828/LEUCHTEN20_PL_MR_DE_DE_UVP_260401.pdf",
+      "sourceValidFrom": "2026-04-01",
+      "verificationStatus": "verified-from-official-2026-price-list",
+      "verifiedData": {
+        "lampType": "rechargeable table lamp",
+        "material": "metal",
+        "colour": "deep blue",
+        "diameterMm": 120,
+        "heightMm": 300,
+        "wattageW": 4,
+        "luminousFluxLm": 400,
+        "colourTemperatureRangeK": [2300, 4000],
+        "dimmable": true,
+        "lightDirection": "up and down",
+        "batteryPowered": true,
+        "usbCCharging": true,
+        "batteryRuntimeHoursAtFullBrightness": 12,
+        "chargeTimeHours": 9,
+        "remoteControl": true
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/home-accessories/lamp-collection/lamps-20",
+        "https://img.musterring.com/27/af/69/553769fe62d62acb8828/LEUCHTEN20_PL_MR_DE_DE_UVP_260401.pdf"
+      ]
+    },
+    {
+      "id": "musterring-joern",
+      "modelCode": "JOERN",
+      "name": "JOERN",
+      "category": "bedroom-series",
+      "entityLevel": "product-program",
+      "canonicalUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/joern",
+      "verificationStatus": "verified-from-official-page",
+      "verifiedData": {
+        "availableComponents": ["wardrobes", "chests of drawers", "bedside tables", "coat rack panels", "beds", "wall shelves", "bed bench"],
+        "mainMaterials": ["solid wild oak", "lacquer", "natural split wood"],
+        "lightingAvailableFor": ["wardrobes", "beds", "side tables"],
+        "includedItems": null,
+        "includedItemsNote": "The official page describes a configurable bedroom programme, not one fixed set. Store availableComponents separately from includedItems."
+      },
+      "sourceUrls": [
+        "https://www.musterring.com/en/furniture/bedroom/bedroom-series/joern"
+      ]
+    }
+  ]
+}
