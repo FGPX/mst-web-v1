@@ -16,18 +16,31 @@ export async function POST(request: NextRequest) {
   const simulateProviderError = process.env.NODE_ENV !== "production" && request.headers.get("x-ai-test-provider-error") === "true";
   let firstAttempt = true;
   const interpreted = await withDemoFallback(
-    (provider) => {
+    async (provider) => {
       if (simulateProviderError && firstAttempt) {
         firstAttempt = false;
         throw new Error("Simulated provider failure for fallback contract test.");
       }
-      return provider.parseSearchIntent(parsed.data.query);
+      const [intent, advisorSelection] = await Promise.all([
+        provider.parseSearchIntent(parsed.data.query),
+        provider.answerProductQuestion({
+          question: parsed.data.query,
+          context: {
+            route: "/search",
+            referencedProductIds: [],
+            selectedMaterialIds: [],
+            currentFilters: {},
+            approvedPreferences: {}
+          }
+        })
+      ]);
+      return { intent, advisorProductIds: advisorSelection.productIds };
     },
     { allowOpenAI: true }
   );
-  const intent = groundSearchIntent(parsed.data.query, interpreted.data);
+  const intent = groundSearchIntent(parsed.data.query, interpreted.data.intent);
   const exclusions = parseSearchExclusions(parsed.data.query);
-  const results = await hybridCatalogueSearch(intent, undefined, exclusions);
+  const results = await hybridCatalogueSearch(intent, undefined, exclusions, interpreted.data.advisorProductIds);
   const responseIntent = {
     ...intent,
     ...(exclusions.colors.length ? { excludedColorFamilies: exclusions.colors } : {}),

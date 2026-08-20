@@ -152,6 +152,16 @@ describe("grounded hybrid retrieval", () => {
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
   });
 
+  it("uses the chatbot's grounded product selection as a search ranking signal", async () => {
+    const intent = searchIntentSchema.parse({ ...baseIntent, queryText: "beige sofa", maxWidthMm: null, modular: null, smallSpaceSuitable: null });
+    const baseline = await hybridCatalogueSearch(intent);
+    const preferred = baseline.exactMatches.at(-1)?.product.id;
+    expect(preferred).toBeTruthy();
+
+    const aligned = await hybridCatalogueSearch(intent, undefined, undefined, [preferred!]);
+    expect(aligned.exactMatches[0]?.product.id).toBe(preferred);
+  });
+
   it("never silently substitutes a wrong colour", async () => {
     const result = await hybridCatalogueSearch(searchIntentSchema.parse({ ...baseIntent, queryText: "purple sofa", colorFamilies: ["purple"] }));
     expect(result.exactColorAvailable).toBe(false);
