@@ -15,10 +15,8 @@ const validBody = {
   answers: {
     target: "complete-living-room",
     "seating-capacity": "3",
-    "seating-type": "modular-sofa",
-    "special-functions": "relax-function",
+    "storage-purpose": "mixed-storage",
     space: "compact",
-    material: "fabric",
     "style-colours": "light-neutral"
   },
   notes: {},
@@ -96,7 +94,14 @@ describe("POST /api/ai/stylist", () => {
   });
 
   it("returns one recommendation and several alternatives for a focused product request", async () => {
-    const focusedBody = { ...validBody, answers: { ...validBody.answers, target: "sofa" } };
+    const focusedBody = { ...validBody, answers: {
+      target: "sofa",
+      "seating-capacity": "3",
+      "sofa-format": "modular-sofa",
+      space: "compact",
+      material: "fabric",
+      "style-colours": "light-neutral"
+    } };
     const styleRoomFromPreferences = vi.fn(async ({ candidateFacts }: { candidateFacts: string }) => {
       const facts = JSON.parse(candidateFacts) as { slots: Array<{ slotId: string; candidates: Array<{ id: string }> }> };
       const slot = facts.slots[0];

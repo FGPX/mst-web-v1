@@ -38,8 +38,10 @@ export function SavedRoomScenePreview({ scene, compact = false }: { scene: Previ
       const aspectRatio = item.dimensions
         ? `${item.dimensions.widthMm} / ${item.dimensions.heightMm}`
         : (["sofa", "sectional"].includes(product.category) ? "16 / 7" : "1 / 1");
+      const productImage = roomSceneProductImage(product.id, item);
+      const isCutoutImage = productImage.toLowerCase().split("?")[0].endsWith(".png");
       return <div className="saved-room-scene-item" key={item.id} style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio, zIndex: item.zIndex ?? 2, transform: `translate(-50%, -100%) rotate(${item.rotation}deg)` }}>
-        <Image src={roomSceneProductImage(product.id, item)} alt={product.name} fill sizes={compact ? "20vw" : "45vw"} style={{ objectFit: product.slug === "mr-kleo" ? "contain" : "fill" }} />
+        <Image src={productImage} alt={product.name} fill sizes={compact ? "20vw" : "45vw"} style={{ objectFit: isCutoutImage ? "contain" : "cover" }} />
       </div>;
     })}
     {scene.hasLocalRoomPhoto && !scene.backgroundSrc ? <small>Local room photo is not stored; products are shown on the neutral studio.</small> : null}
