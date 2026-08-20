@@ -2458,25 +2458,20 @@ body:has(.stitch-room-composer.is-upload-flow) {
   position: sticky;
   z-index: 3;
   top: 27px;
-  display: flex;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
   margin: 0 0 14px;
   padding: 0 0 12px;
   background: #fff;
-  scrollbar-width: none;
-}
-
-.stitch-room-composer.is-upload-flow .stitch-composer-tabs::-webkit-scrollbar {
-  display: none;
 }
 
 .stitch-room-composer.is-upload-flow .stitch-composer-tabs button {
-  flex: 0 0 auto;
+  width: 100%;
   min-height: 32px;
   border: 1px solid #dfe1e4;
   border-radius: 999px;
-  padding: 0 12px;
+  padding: 0 8px;
   background: #fff;
   color: #4f5662;
   font-size: 10px;
