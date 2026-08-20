@@ -21,8 +21,8 @@ Every target-specific flow contains at most six questions, including the target,
 
 | Question | Applies to | Answer options |
 | --- | --- | --- |
-| What are you looking for? | All | Bed; Wardrobe; Bedside tables; Dresser; Bedroom series; Complete bedroom |
-| Which pieces should the bedroom include? | Bedroom series; Complete bedroom | Choose 2–4: Bed; Wardrobe; Bedside tables; Dresser |
+| Are you looking for an individual piece or a bedroom solution? | All | Bed; Wardrobe; Bedside tables; Dresser; Bedroom series; Complete bedroom |
+| Which pieces should your bedroom solution include? | Bedroom series; Complete bedroom | Choose 2–4: Bed; Wardrobe; Bedside tables; Dresser |
 | What bed size do you need? | Bed; Complete bedroom when Bed is selected | 140 × 200; 160 × 200; 180 × 200; 200 × 200; Other |
 | What type of bed do you prefer? | Bed | Upholstered; Wooden; Boxspring; No preference |
 | Do you need additional storage? | Bed | Under-bed storage; No |
