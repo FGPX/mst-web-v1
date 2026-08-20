@@ -27,6 +27,11 @@ export type RetailerEmailDelivery = {
   deliveredAt: string;
 };
 
+export type AdvisorProjectBrief = {
+  customerRequests: string[];
+  createdAt: string;
+};
+
 const keys = {
   products: "musterring.savedProducts",
   configurations: "musterring.configurations",
@@ -46,7 +51,8 @@ const keys = {
   consentRecords: "musterring.consentRecords",
   leads: "musterring.leads",
   consultationDraft: "musterring.consultationDraft",
-  retailerEmailDelivery: "musterring.retailerEmailDelivery"
+  retailerEmailDelivery: "musterring.retailerEmailDelivery",
+  advisorProjectBrief: "musterring.advisorProjectBrief"
 };
 
 function read<T>(key: string, fallback: T): T {
@@ -197,6 +203,8 @@ export const storage = {
   saveConsultationDraft: (draft: ConsultationDraft) => write(keys.consultationDraft, draft),
   retailerEmailDelivery: () => read<RetailerEmailDelivery | null>(keys.retailerEmailDelivery, null),
   saveRetailerEmailDelivery: (delivery: RetailerEmailDelivery) => write(keys.retailerEmailDelivery, delivery),
+  advisorProjectBrief: () => read<AdvisorProjectBrief | null>(keys.advisorProjectBrief, null),
+  saveAdvisorProjectBrief: (brief: AdvisorProjectBrief) => write(keys.advisorProjectBrief, brief),
   saveLead: (lead: unknown) => {
     write(keys.lead, lead);
     write(keys.leads, [...read<unknown[]>(keys.leads, []), lead]);

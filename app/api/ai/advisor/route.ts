@@ -4,6 +4,7 @@ import { conversationContextSchema } from "@/lib/ai/assistant-schemas";
 import { allowAssistantRequest } from "@/lib/ai/rate-limit";
 import { configuredProvider } from "@/lib/ai/providers";
 import { materials, products } from "@/lib/data";
+import { groundAdvisorConversationTurn } from "@/lib/ai/conversation-memory";
 
 const requestSchema = z.object({
   question: z.string().trim().min(2).max(2000),
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
   );
   const stateChanging = new Set(["SAVE_PRODUCT", "SAVE_CONFIGURATION", "PREPARE_HANDOVER", "BOOK_CONSULTATION"]);
   const lostProductGrounding = data.productIds.length > 0 && productIds.length === 0;
-  const answer = {
+  const validatedAnswer = {
     ...data,
     answer: lostProductGrounding
       ? "The suggested product could not be verified in the connected Musterring catalogue, so it was not shown. Please refine the product request."
@@ -46,5 +47,6 @@ export async function POST(request: Request) {
       ? null
       : { ...action, requiresConfirmation: action.requiresConfirmation || stateChanging.has(action.type) }
   };
+  const answer = groundAdvisorConversationTurn(input.data.question, input.data.context, validatedAnswer);
   return NextResponse.json({ answer, ai: { mode: provider.name, fallback: false } });
 }
