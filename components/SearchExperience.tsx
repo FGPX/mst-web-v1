@@ -2,6 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import { ArrowRight, Camera, History, Search, Sparkles, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -88,6 +89,31 @@ type SearchResponse = {
   ai: { mode: string; fallback: boolean };
 };
 
+type CachedSearchResponse = Omit<SearchResponse, "exactMatches" | "closeAlternatives"> & {
+  exactMatches: Array<{ productId: string; reasons: string[] }>;
+  closeAlternatives: Array<{ productId: string; reasons: string[] }>;
+};
+
+const compactSearchResponse = (response: SearchResponse): CachedSearchResponse => ({
+  ...response,
+  exactMatches: response.exactMatches.map(({ product, reasons }) => ({ productId: product.id, reasons })),
+  closeAlternatives: response.closeAlternatives.map(({ product, reasons }) => ({ productId: product.id, reasons }))
+});
+
+const restoreSearchResponse = (cached: CachedSearchResponse): SearchResponse | null => {
+  const productById = new Map(products.map((product) => [product.id, product]));
+  const restoreMatches = (matches: Array<{ productId: string; reasons: string[] }>) => matches.flatMap((match) => {
+    const product = productById.get(match.productId);
+    return product ? [{ product, reasons: Array.isArray(match.reasons) ? match.reasons : [] }] : [];
+  });
+  if (!cached?.intent || !Array.isArray(cached.exactMatches) || !Array.isArray(cached.closeAlternatives)) return null;
+  return {
+    ...cached,
+    exactMatches: restoreMatches(cached.exactMatches),
+    closeAlternatives: restoreMatches(cached.closeAlternatives)
+  };
+};
+
 type VisualMatch = {
   product: Product;
   score: number;
@@ -97,6 +123,7 @@ type VisualMatch = {
 };
 
 export function SearchExperience({ initialQuery = "" }: { initialQuery?: string }) {
+  const router = useRouter();
   const visualInputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState(initialQuery);
   const [submitted, setSubmitted] = useState(initialQuery);
@@ -125,7 +152,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const submit = async (value = query) => {
     const next = value.trim();
     if (!next) return;
-    window.history.replaceState(window.history.state, "", `/search?q=${encodeURIComponent(next)}`);
+    router.replace(`/search?q=${encodeURIComponent(next)}`, { scroll: false });
     setQuery(next);
     setSubmitted(next);
     setPending(true);
@@ -146,7 +173,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
     }
     setResponse(payload);
     try {
-      window.sessionStorage.setItem(searchStateKey, JSON.stringify({ query: next, response: payload }));
+      window.sessionStorage.setItem(searchStateKey, JSON.stringify({ query: next, response: compactSearchResponse(payload) }));
     } catch { /* Search still works when session storage is unavailable. */ }
     storage.track({ name: "ai_intent_parsed" });
   };
@@ -154,9 +181,10 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   useEffect(() => {
     if (!initialQuery) return;
     try {
-      const cached = JSON.parse(window.sessionStorage.getItem(searchStateKey) ?? "null") as { query?: unknown; response?: SearchResponse } | null;
-      if (cached?.query === initialQuery && cached.response?.intent && Array.isArray(cached.response.exactMatches) && Array.isArray(cached.response.closeAlternatives)) {
-        setResponse(cached.response);
+      const cached = JSON.parse(window.sessionStorage.getItem(searchStateKey) ?? "null") as { query?: unknown; response?: CachedSearchResponse } | null;
+      const restored = cached?.query === initialQuery && cached.response ? restoreSearchResponse(cached.response) : null;
+      if (restored) {
+        setResponse(restored);
         return;
       }
     } catch { /* Invalid or unavailable cache is replaced by a fresh search. */ }
@@ -274,7 +302,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                 setQuery("");
                 setSubmitted("");
                 setResponse(null);
-                window.history.replaceState(window.history.state, "", "/search");
+                router.replace("/search", { scroll: false });
                 try { window.sessionStorage.removeItem(searchStateKey); } catch { /* no-op */ }
               }}><X /></button> : null}
               <button type="submit" aria-label="Search products"><ArrowRight /></button>

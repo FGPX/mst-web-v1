@@ -6,7 +6,7 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import { useEffect, useRef, type CSSProperties } from "react";
 
 const AUTO_PLAY_DELAY = 700;
-const AUTO_PLAY_DURATION = 3200;
+const AUTO_PLAY_DURATION = 4200;
 const HERO_END_BUFFER = 2;
 
 const assemblyImageStyle = {
@@ -114,9 +114,11 @@ export default function ProductAssemblyStory() {
 
       const animate = (time: number) => {
         const linearProgress = Math.min(1, (time - startTime) / AUTO_PLAY_DURATION);
+        // Quintic easing has a gentler start and landing than the previous
+        // cubic curve, so the individual layers settle without a visible snap.
         const easedProgress = linearProgress < .5
-          ? 4 * linearProgress * linearProgress * linearProgress
-          : 1 - Math.pow(-2 * linearProgress + 2, 3) / 2;
+          ? 16 * Math.pow(linearProgress, 5)
+          : 1 - Math.pow(-2 * linearProgress + 2, 5) / 2;
         const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
         const storyEnd = sectionTop + distance - HERO_END_BUFFER;
 
@@ -202,26 +204,38 @@ export default function ProductAssemblyStory() {
         </div>
 
         <div className="assembly-stage" aria-label="A Musterring living room assembling as you scroll">
-          <div className="assembly-room-plate" aria-hidden="true">
-            <Image
-              src="/assembly-layers/room-empty.webp"
-              alt=""
-              fill
-              priority
-              unoptimized
-              sizes="100vw"
-              style={assemblyImageStyle}
-            />
-          </div>
+          <div className="assembly-canvas">
+            <div className="assembly-room-plate" aria-hidden="true">
+              <Image
+                src="/assembly-layers/room-empty.webp"
+                alt=""
+                fill
+                priority
+                unoptimized
+                sizes="(max-aspect-ratio: 4/3) 100vw, 133vh"
+                style={assemblyImageStyle}
+              />
+            </div>
 
-          <div className="assembly-object assembly-object-sofa" aria-hidden="true">
-            <Image src="/assembly-layers/sofa-layer.png" alt="" fill sizes="100vw" style={assemblyImageStyle} />
-          </div>
+            <div className="assembly-object assembly-object-sofa" aria-hidden="true">
+              <Image src="/assembly-layers/sofa-layer.png" alt="" fill sizes="(max-aspect-ratio: 4/3) 100vw, 133vh" style={assemblyImageStyle} />
+            </div>
 
-          <div className="assembly-object assembly-object-tables" aria-hidden="true">
-            <Image src="/assembly-layers/tables-layer.png" alt="" fill sizes="100vw" style={assemblyImageStyle} />
-          </div>
+            <div className="assembly-object assembly-object-tables" aria-hidden="true">
+              <Image src="/assembly-layers/tables-layer.png" alt="" fill sizes="(max-aspect-ratio: 4/3) 100vw, 133vh" style={assemblyImageStyle} />
+            </div>
 
+            <div className="assembly-final-image">
+              <Image
+                src="/musterring-catalog/justb-pm100/image-01.jpg"
+                alt="Bright Musterring living room with a JUSTB! PM100 sectional sofa"
+                fill
+                priority
+                sizes="(max-aspect-ratio: 4/3) 100vw, 133vh"
+                style={assemblyImageStyle}
+              />
+            </div>
+          </div>
         </div>
 
         <div className="assembly-finale">

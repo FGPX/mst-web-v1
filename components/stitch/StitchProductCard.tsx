@@ -7,6 +7,7 @@ import type { Product } from "@/lib/types";
 import { dimensions } from "@/lib/format";
 import { storage } from "@/lib/persistence";
 import { productImages } from "@/lib/musterring-assets";
+import { roomComposerUploadHref } from "@/lib/room-composer-selection";
 import { AlternativeFinderButton } from "../AlternativeFinderButton";
 
 export function StitchProductCard({ product, explanation, imageOverride, imageNote, showMeta = true, showCompare = true, compareSelected = false, onCompare }: { product: Product; explanation?: string; imageOverride?: string; imageNote?: string; showMeta?: boolean; showCompare?: boolean; compareSelected?: boolean; onCompare?: () => void }) {
@@ -19,7 +20,14 @@ export function StitchProductCard({ product, explanation, imageOverride, imageNo
         storage.track({ name: "search_result_clicked", productId: product.id });
         if (explanation) storage.track({ name: "ai_recommendation_clicked", productId: product.id });
       }}>
-        <Image src={image} alt={`${product.name} furniture photography`} width={900} height={675} sizes="(max-width: 760px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+        <Image
+          src={image}
+          alt={`${product.name} furniture photography`}
+          width={900}
+          height={675}
+          sizes="(max-width: 760px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          style={{ objectFit: "cover" }}
+        />
         <span>View Details</span>
         {imageNote ? <small className="stitch-product-image-note">{imageNote}</small> : null}
       </Link>
@@ -34,10 +42,10 @@ export function StitchProductCard({ product, explanation, imageOverride, imageNo
         </p> : null}
         {explanation ? <p className="stitch-product-explanation">{explanation}</p> : null}
         <div className="stitch-product-actions" aria-label="Product actions">
-          <AlternativeFinderButton productId={product.id} label="Better Match" className="stitch-product-action-match" />
+          <AlternativeFinderButton productId={product.id} label="Discover more" className="stitch-product-action-match" />
           {showCompare ? onCompare ? <button type="button" className={`stitch-product-action-compare${compareSelected ? " is-selected" : ""}`} onClick={onCompare}><GitCompare size={15} /> {compareSelected ? "Selected" : "Compare"}</button> : <Link className="stitch-product-action-compare" href={`/compare?ids=${product.id}`}><GitCompare size={15} /> Compare</Link> : null}
           {isConfigurable ? <Link className="stitch-product-action-configure" href="/handover"><Settings size={15} /> Plan with Retailer</Link> : null}
-          {canPlaceInRoom ? <Link className={`stitch-product-action-room${isConfigurable ? "" : " stitch-product-action-wide"}`} href="/room-composer/upload"><Eye size={15} /> See It in Your Room</Link> : null}
+          {canPlaceInRoom ? <Link className={`stitch-product-action-room${isConfigurable ? "" : " stitch-product-action-wide"}`} href={roomComposerUploadHref([product.id])}><Eye size={15} /> Room Visualizer</Link> : null}
           {!canPlaceInRoom ? <Link className="stitch-product-action-details stitch-product-action-wide" href={`/furniture/${product.slug}`}><ArrowUpRight size={15} /> View Details</Link> : null}
           <Link className="stitch-product-action-dealer" href="/dealers"><MapPin size={15} /> Find Near You</Link>
         </div>

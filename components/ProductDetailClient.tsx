@@ -6,6 +6,7 @@ import { CheckCircle2, ChevronDown, Download, Eye, FileText, MapPin, Star } from
 import { useEffect, useState } from "react";
 import type { Product } from "@/lib/types";
 import { storage } from "@/lib/persistence";
+import { roomComposerUploadHref } from "@/lib/room-composer-selection";
 import { AlternativeFinderButton } from "./AlternativeFinderButton";
 
 export function ProductGallery({ product, gallery }: { product: Product; gallery: string[] }) {
@@ -42,6 +43,7 @@ export function ProductDetailActions({ product }: { product: Product }) {
   return (
     <div className="product-action-panel" aria-label="Product actions">
       <div className="product-primary-actions">
+        <Link className="button primary product-room-visualizer-action" href={roomComposerUploadHref([product.id])}><Eye size={17} /> ROOM VISUALIZER <span>See It in Your Room</span></Link>
         <Link className="button primary" href="/handover">Plan with a Retailer</Link>
         <button className={`button product-save-action${saved ? " is-saved" : ""}`} type="button" aria-pressed={saved} onClick={toggleSaved}>
           {saved ? <CheckCircle2 aria-hidden="true" size={19} /> : <Star aria-hidden="true" size={18} />}
@@ -56,7 +58,6 @@ export function ProductDetailActions({ product }: { product: Product }) {
       <details className="product-more-actions">
         <summary>More planning tools <ChevronDown size={18} /></summary>
         <div>
-          <Link className="button ghost" href="/room-composer/upload"><Eye size={16} /> See It in Your Room</Link>
           <Link className="button ghost" href={`/compare?ids=${product.id}`}>Compare</Link>
           <Link className="button ghost" href={`/handover?request=material&product=${encodeURIComponent(product.id)}&material=${encodeURIComponent(material)}`}><FileText size={16} /> Request Material Sample</Link>
           <button className="button ghost" onClick={() => window.print()}><Download size={16} /> Print Product Summary</button>

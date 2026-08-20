@@ -184,6 +184,24 @@ describe("grounded hybrid retrieval", () => {
     expect([...result.exactMatches, ...result.closeAlternatives].length).toBeGreaterThan(0);
   });
 
+  it("includes a chatbot-selected complementary category in AI Search", async () => {
+    const coffeeTable = products.find((product) => product.active && product.category === "coffee-table");
+    expect(coffeeTable).toBeTruthy();
+    const intent = searchIntentSchema.parse({
+      ...baseIntent,
+      queryText: "family sofa with a matching coffee table",
+      colorFamilies: null,
+      maxWidthMm: null,
+      modular: null,
+      smallSpaceSuitable: null
+    });
+
+    const result = await hybridCatalogueSearch(intent, undefined, undefined, [coffeeTable!.id]);
+
+    expect(result.closeAlternatives.map(({ product }) => product.id)).toContain(coffeeTable!.id);
+    expect(result.closeAlternatives.find(({ product }) => product.id === coffeeTable!.id)?.reasons.join(" ")).toMatch(/coffee table.*another part/i);
+  });
+
   it("never silently substitutes a wrong colour", async () => {
     const result = await hybridCatalogueSearch(searchIntentSchema.parse({ ...baseIntent, queryText: "purple sofa", colorFamilies: ["purple"] }));
     expect(result.exactColorAvailable).toBe(false);
