@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import { z } from "zod";
 import { products } from "../data";
-import { roomSceneProductImage } from "../room-scene-assets";
+import { roomSceneProductFinish, roomSceneProductImage } from "../room-scene-assets";
 import type { Category } from "../types";
 
 export const MAX_VISUALIZATION_ITEMS = 6;
@@ -60,11 +60,6 @@ const categoryMaskSize: Record<Category, { width: number; height: number }> = {
   "home-textile": { width: 26, height: 28 }
 };
 
-function catalogueValue(value: string | undefined, allowed: string[]) {
-  if (!value) return undefined;
-  return allowed.find((candidate) => candidate.toLowerCase() === value.toLowerCase());
-}
-
 export function groundVisualizationItems(items: RoomVisualizationItemInput[]) {
   const references = new Map<string, number>();
 
@@ -77,6 +72,13 @@ export function groundVisualizationItems(items: RoomVisualizationItemInput[]) {
       color: item.color
     });
     if (!assetUrl) throw new Error(`No catalogue image is available for ${product.modelCode}.`);
+    // Browser layout templates include approximate styling values. They are
+    // not evidence of the finish pictured by a fixed catalogue reference.
+    // Only a finish mapped to this exact asset may become a text instruction.
+    const referenceFinish = roomSceneProductFinish(product.id, {
+      materialId: item.materialId,
+      color: item.color
+    });
 
     const assetKey = assetUrl.split("?")[0].toLowerCase();
     let referenceImageIndex = references.get(assetKey);
@@ -92,8 +94,8 @@ export function groundVisualizationItems(items: RoomVisualizationItemInput[]) {
       category: product.category,
       assetUrl,
       referenceImageIndex,
-      verifiedColor: catalogueValue(item.color, product.colors),
-      verifiedMaterialId: catalogueValue(item.materialId, product.materials)
+      verifiedColor: referenceFinish?.color,
+      verifiedMaterialId: referenceFinish?.materialId
     } satisfies GroundedVisualizationItem;
   });
 }
@@ -107,9 +109,11 @@ function horizontalPlacement(x: number) {
 function placementInstructions(items: GroundedVisualizationItem[]) {
   return items.map((item, index) => {
     const verifiedFinish = [item.verifiedColor, item.verifiedMaterialId].filter(Boolean).join(", ");
-    const finish = verifiedFinish ? ` Use the catalogue-verified finish: ${verifiedFinish}.` : "";
+    const finish = verifiedFinish
+      ? ` The required catalogue finish is ${verifiedFinish}; reproduce that exact colour and material, using reference image ${item.referenceImageIndex} as the visual authority.`
+      : ` Copy the exact visible colour, material, texture, and finish from reference image ${item.referenceImageIndex}; do not infer or substitute a finish from the room.`;
     const targetWidth = Math.round(Math.min(88, categoryMaskSize[item.category].width * item.scale));
-    return `${index + 1}. Add one ${item.modelCode} (${item.name}) from reference image ${item.referenceImageIndex}, near the ${horizontalPlacement(item.x)} of the canvas, with its base approximately ${Math.round(item.y)}% from the top and occupying roughly ${targetWidth}% of the image width.${finish}`;
+    return `${index + 1}. Add exactly one ${item.modelCode} (${item.name}) from reference image ${item.referenceImageIndex}, near the ${horizontalPlacement(item.x)} of the canvas, with its base approximately ${Math.round(item.y)}% from the top and occupying roughly ${targetWidth}% of the image width.${finish}`;
   }).join("\n");
 }
 
@@ -120,13 +124,15 @@ export function buildRoomVisualizationPrompt(items: GroundedVisualizationItem[])
 
 Input image 1 is the customer's real room and the high-fidelity source of truth. Keep it unmistakably the same room: preserve the exact camera position, viewing direction, lens perspective, crop, room proportions, wall/floor/ceiling geometry, windows, doors, openings, trim, radiators, built-ins, and exterior view. Do not redesign the architecture, change structural finishes, expand the space, or invent doors or windows. The uploaded original must remain recognizable at a glance.
 
-Create a beautiful, restrained Musterring editorial result across the whole image. Harmonize the full scene with believable natural light, accurate global illumination, consistent colour grading, realistic materials, ambient shadows, contact shadows, reflections, depth, and clean photographic detail. The chosen furniture must feel physically present in the room rather than pasted onto it. Keep the scene minimal and uncluttered. Do not add people, text, logos, decorations, plants, or unselected furniture. Existing fixed room features remain; loose objects may only be subtly tidied where needed for a coherent result.
+Create a beautiful, restrained Musterring editorial result across the whole image. Harmonize the room with believable natural light, accurate global illumination, ambient shadows, contact shadows, reflections, depth, and clean photographic detail. The chosen furniture must feel physically present in the room rather than pasted onto it. Keep the scene minimal and uncluttered. Do not add people, text, logos, decorations, plants, or unselected furniture. Existing fixed room features remain; loose objects may only be subtly tidied where needed for a coherent result.
 
-Add only the catalogue products listed below. Match their reference images faithfully in product identity, silhouette, modules, upholstery, material, colour, feet, cushions, proportions, and visible details. Place them naturally on the visible floor with correct perspective, credible scale, contact, occlusion, and lighting. Never merge products, invent extra modules, or substitute another design.
+PRODUCT LOCK — this requirement outranks room styling and photographic beautification. Add only the catalogue products listed below. Each product reference image is the canonical visual source of truth. Reproduce every selected product without redesign or reinterpretation: identical base colour and colour temperature, upholstery or surface material, weave or grain, silhouette, module count and arrangement, proportions, seams, piping, tufting, cushions and cushion colours, arms, backrests, legs, feet, hardware, and all other visible details. Do not recolour, desaturate, brighten, darken, coordinate with the room palette, swap fabric or material, add or remove cushions, change modules, or substitute a similar design. Room illumination may create physically natural highlights and shadows, but it must not alter the product's underlying colour or finish. If aesthetic styling conflicts with product fidelity, preserve the product exactly and keep the room treatment simpler.
+
+Place the locked products naturally on the visible floor with correct perspective, credible scale, contact, occlusion, and lighting. Never merge products, invent extra modules, or substitute another design.
 
 ${placements}
 
-Return a single polished full-room photograph. Prioritize, in order: the same room architecture and camera; faithful selected products; then beautiful unified photographic rendering.`;
+Before returning the image, compare every rendered product against its numbered reference and correct any difference in colour, material, construction, cushions, modules, or visible details. Return a single polished full-room photograph. Prioritize, in order: exact selected-product appearance; the same room architecture and camera; then beautiful unified photographic rendering.`;
 }
 
 function roundedMultipleOf16(value: number) {

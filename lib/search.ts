@@ -18,14 +18,33 @@ const phraseAliases: Array<[RegExp, string]> = [
   [/\bsettee\b|\bdivan\b/g, "sofa"],
   [/\bloveseat\b/g, "two seat sofa"],
   [/\bcupboard\b|\bside board\b/g, "cabinet"],
+  [/\bledersofa\b/g, "leather sofa"],
+  [/\bledersessel\b/g, "leather armchair"],
+  [/\bstoffsofa\b/g, "fabric sofa"],
+  [/\bstoffsessel\b/g, "fabric armchair"],
+  [/\bzweisitzer\b/g, "two seat"],
+  [/\bdreisitzer\b/g, "three seat"],
+  [/\bviersitzer\b/g, "four seat"],
   [/\bkueche\b|\bküche\b/g, "kitchen"],
   [/\beckküche\b|\beckkueche\b/g, "l shaped kitchen"],
-  [/\bpflegeleicht\b/g, "easy care"],
+  [/\bpflegeleicht(?:e|er|es|en|em)?\b/g, "easy care"],
+  [/\bmodern(?:e|er|es|en|em)?\b/g, "modern"],
+  [/\belegant(?:e|er|es|en|em)?\b/g, "elegant"],
+  [/\bminimalistisch(?:e|er|es|en|em)?\b/g, "minimal"],
+  [/\bzeitgenössisch(?:e|er|es|en|em)?\b|\bzeitgenoessisch(?:e|er|es|en|em)?\b/g, "contemporary"],
+  [/\bklassisch(?:e|er|es|en|em)?\b/g, "classic"],
+  [/\bindustriell(?:e|er|es|en|em)?\b/g, "industrial"],
+  [/\bnatürlich(?:e|er|es|en|em)?\b|\bnatuerlich(?:e|er|es|en|em)?\b/g, "natural"],
   [/\bmindestens\b|\bwenigstens\b/g, "at least"],
   [/\bhöchstens\b|\bhoechstens\b/g, "at most"],
-  [/\bunter\b|\bbis\b/g, "at most"],
-  [/\bmaximale breite\b/g, "maximum width"],
-  [/\büber\b|\bueber\b/g, "above"]
+  [/\bnicht breiter als\b/g, "no wider than"],
+  [/\bweniger als\b/g, "less than"],
+  [/\bmehr als\b/g, "more than"],
+  [/\bunter\b|\bbis(?:\s+zu)?\b/g, "at most"],
+  [/\bmaximale breite\b|\bmaximal\b/g, "maximum width"],
+  [/\büber\b|\bueber\b/g, "above"],
+  [/\betwa\b|\bungefähr\b|\bungefaehr\b|\bca\.?\b/g, "around"],
+  [/\bzwischen\b/g, "between"]
 ];
 
 export function normalizeSearchText(value: string) {
@@ -33,11 +52,16 @@ export function normalizeSearchText(value: string) {
   for (const [pattern, replacement] of phraseAliases) normalized = normalized.replace(pattern, replacement);
   return normalized
     .replace(/\bbeig(?:e|es|er|en|em)?\b/g, "beige")
-    .replace(/\brot(?:es|er|e)?\b/g, "red")
-    .replace(/\bgrau(?:es|er|e)?\b/g, "grey")
-    .replace(/\bbraun(?:es|er|e)?\b/g, "brown")
-    .replace(/\bgr(?:ü|ue)n(?:es|er|e)?\b/g, "green")
-    .replace(/\bwei(?:ß|ss)(?:es|er|e)?\b/g, "white");
+    .replace(/\brot(?:e|er|es|en|em)?\b/g, "red")
+    .replace(/\bgrau(?:e|er|es|en|em)?\b/g, "grey")
+    .replace(/\bschwarz(?:e|er|es|en|em)?\b/g, "black")
+    .replace(/\bbraun(?:e|er|es|en|em)?\b/g, "brown")
+    .replace(/\bgr(?:ü|ue)n(?:e|er|es|en|em)?\b/g, "green")
+    .replace(/\bwei(?:ß|ss)(?:e|er|es|en|em)?\b/g, "white")
+    .replace(/\bblau(?:e|er|es|en|em)?\b/g, "blue")
+    .replace(/\bgelb(?:e|er|es|en|em)?\b/g, "yellow")
+    .replace(/\b(?:lila|violett)(?:e|er|es|en|em)?\b/g, "purple")
+    .replace(/\brosa(?:farben(?:e|er|es|en|em)?)?\b/g, "pink");
 }
 
 function measurementToMm(value: string, unit: string) {
@@ -49,16 +73,17 @@ function measurementToMm(value: string, unit: string) {
 }
 
 function widthConstraints(text: string) {
-  const amount = "(\\d+(?:[.,]\\d+)?)\\s*(mm|millimet(?:er|re)s?|cm|centimet(?:er|re)s?|m|met(?:er|re)s?)";
-  const minimum = text.match(new RegExp(`(?:above|over|more than|at least|minimum|min\\.?|greater than)\\s*${amount}(?:\\s+(?:wide|width))?`, "i"));
-  const maximum = text.match(new RegExp(`(?:under|below|less than|at most|maximum(?: width)?|max\\.?(?: width)?|no wider than|up to)\\s*${amount}(?:\\s+(?:wide|width))?`, "i"));
-  const approximate = text.match(new RegExp(`(?:around|about|approximately|approx\\.?|roughly)\\s*${amount}(?:\\s+(?:wide|width))?`, "i"));
-  const between = text.match(new RegExp(`between\\s*${amount}\\s*(?:and|to|-)\\s*${amount}`, "i"));
+  const amount = "(\\d+(?:[.,]\\d+)?)\\s*(mm|millimet(?:er|re)s?|cm|centimet(?:er|re)s?|zentimeter|m|met(?:er|re)s?)";
+  const widthWord = "(?:wide|width|breit|breite)";
+  const minimum = text.match(new RegExp(`(?:above|over|more than|at least|minimum|min\\.?|greater than)\\s*${amount}(?:\\s+${widthWord})?`, "i"));
+  const maximum = text.match(new RegExp(`(?:under|below|less than|at most|maximum(?: width)?|max\\.?(?: width)?|no wider than|up to)\\s*${amount}(?:\\s+${widthWord})?`, "i"));
+  const approximate = text.match(new RegExp(`(?:around|about|approximately|approx\\.?|roughly)\\s*${amount}(?:\\s+${widthWord})?`, "i"));
+  const between = text.match(new RegExp(`between\\s*${amount}\\s*(?:and|und|to|-)\\s*${amount}`, "i"));
   if (between) return { minWidthMm: measurementToMm(between[1], between[2]), maxWidthMm: measurementToMm(between[3], between[4]) };
   if (minimum) return { minWidthMm: measurementToMm(minimum[1], minimum[2]) };
   if (maximum) return { maxWidthMm: measurementToMm(maximum[1], maximum[2]) };
   if (approximate) return { targetWidthMm: measurementToMm(approximate[1], approximate[2]) };
-  const bare = text.match(new RegExp(`${amount}(?:\\s+(?:wide|width|sofa|couch|kitchen))`, "i"));
+  const bare = text.match(new RegExp(`${amount}(?:\\s+(?:wide|width|breit|breite|sofa|couch|kitchen))`, "i"));
   return bare ? { targetWidthMm: measurementToMm(bare[1], bare[2]) } : {};
 }
 
@@ -118,7 +143,7 @@ export function parseSearchQuery(query: string): SearchFilters {
   else if (/\blamp\b|lighting|leuchte/.test(text)) filters.category = "lamp";
   else if (/home textile|bed linen|bedding|plaid|cushion cover|comforter/.test(text)) filters.category = "home-textile";
   else if (/small furniture|occasional furniture/.test(text)) filters.category = "small-furniture";
-  else if (/hallway|cloakroom|coat rack|shoe cupboard|entrance furniture|living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage/.test(text)) filters.category = "storage";
+  else if (/hallway|cloakroom|coat rack|shoe cupboard|entrance furniture|living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage|wohnwand|schrank/.test(text)) filters.category = "storage";
   const code = text.match(/\bmr\s*-?\s*\d{3,4}\b/i)?.[0]?.replace(/[\s-]+/g, " ").toUpperCase();
   if (code) filters.modelCode = code;
   Object.assign(filters, widthConstraints(text));
@@ -129,7 +154,7 @@ export function parseSearchQuery(query: string): SearchFilters {
   if (/\bstraight(?: line)?\b|\bsingle[- ]wall\b|\bkitchen run\b/.test(text)) layoutShapes.push("straight");
   if (/\bisland\b|\bkitchen island\b/.test(text)) layoutShapes.push("island");
   if (layoutShapes.length) filters.layoutShapes = [...new Set(layoutShapes)];
-  const seats = text.match(/(\d)\s*(?:seat|seater|sitzer)/);
+  const seats = text.match(/(\d)\s*[- ]?\s*(?:seat|seater|sitzer)/);
   const seatWord = text.match(/\b(two|three|four)[- ](?:seat|seater)\b/)?.[1];
   if (seats) filters.seatCount = Number(seats[1]);
   else if (seatWord) filters.seatCount = { two: 2, three: 3, four: 4 }[seatWord];
@@ -137,9 +162,11 @@ export function parseSearchQuery(query: string): SearchFilters {
   if (colors.length) filters.colors = colors;
   const styles = searchStyleTerms.filter((style) => new RegExp(`\\b${style}\\b`).test(text));
   if (styles.length) filters.styles = styles;
+  if (/\b(?:leather|leder)(?:bezug)?\b/.test(text)) filters.materials = ["leather"];
+  else if (/\b(?:fabric|textile?|stoff|polsterstoff)(?:bezug)?\b/.test(text)) filters.materials = ["fabric"];
   if (/modular|module|flexible/.test(text)) filters.modular = true;
   if (/small|compact|apartment|wohnung|klein/.test(text)) filters.smallSpaceSuitable = true;
-  if (/high[- ]seat|tall person|hohe sitzhÃ¶he|hohe sitzhöhe|gro(?:ÃŸ|ß|ss)e person/.test(text)) filters.minSeatHeightMm = 470;
+  if (/high[- ]seat|tall person|hohe(?:r|n|m|s)? sitzh(?:ö|oe)he|gro(?:ß|ss)e(?:r|n|m|s)? person/.test(text)) filters.minSeatHeightMm = 470;
   if (/relax|recline|lounge|entspannungsfunktion/.test(text)) filters.relaxFunction = true;
   if (/electric|elektrisch|motor|power/.test(text)) filters.electricFunctions = true;
   return filters;
