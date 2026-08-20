@@ -15,18 +15,14 @@ test("Demo A launches grounded intelligent search", async ({ page }) => {
   await expect(page.getByText(/checked against available catalogue data/)).toBeVisible();
   await expect(page.getByRole("button", { name: /Save to Project|Saved/ }).first()).toBeVisible();
   await expect(page.getByRole("link", { name: /Compare/ }).first()).toBeVisible();
-  await expect(page.getByRole("link", { name: /Quick Configure/ }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: /Plan with Retailer/ }).first()).toBeVisible();
   await expect(page.getByRole("link", { name: /See It in Your Room/ }).first()).toBeVisible();
 });
 
-test("Demo B launches AI interpretation with deterministic validation", async ({ page }) => {
-  await page.getByRole("button", { name: /Launch Configuration Assistant/ }).click();
-  await expect(page).toHaveURL(/\/configurator\/mr-2875\?request=/);
-  await expect(page.getByLabel("Describe your ideal configuration")).toHaveValue(/four-seat sofa/);
-  await page.getByRole("button", { name: "Build valid proposal" }).click();
-  await expect(page.getByText(/AI interprets the customer request/)).toBeVisible();
-  await expect(page.locator(".ai-config-result")).toContainText("All product rules passed");
-  await expect(page.locator(".ai-config-result")).toContainText("Configuration ID CFG-");
+test("Demo B opens the retailer handover", async ({ page }) => {
+  await page.getByRole("button", { name: /Open Retailer Handover/ }).click();
+  await expect(page).toHaveURL(/\/handover$/);
+  await expect(page.getByRole("heading", { name: /Living Room Project/ })).toBeVisible();
 });
 
 test("Demo C restores room, project and retailer context", async ({ page }) => {

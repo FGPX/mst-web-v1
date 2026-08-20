@@ -2,12 +2,37 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown, ChevronRight, Menu, Search, X } from "lucide-react";
+import {
+  Bath,
+  BedDouble,
+  ChevronDown,
+  ChevronRight,
+  CookingPot,
+  LampFloor,
+  Menu,
+  Search,
+  Sofa,
+  SwatchBook,
+  Trees,
+  UtensilsCrossed,
+  X,
+  type LucideIcon
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { categoryDetails, categoryGroups } from "@/lib/catalog-taxonomy";
 import { StitchLinkButton } from "./StitchButtons";
 import musterringLogo from "../../Logo_MST png.png";
+
+const categoryGroupIcons: Record<string, LucideIcon> = {
+  "Living Room": Sofa,
+  Bedroom: BedDouble,
+  "Dining Room": UtensilsCrossed,
+  Bathroom: Bath,
+  Kitchen: CookingPot,
+  Outdoor: Trees,
+  "Home Accessories": LampFloor
+};
 
 export function StitchHeader() {
   const [open, setOpen] = useState(false);
@@ -53,7 +78,7 @@ export function StitchHeader() {
         </Link>
         <div className="stitch-nav-links">
           <button
-            className={`stitch-furniture-trigger ${active("/furniture") ? "is-active" : ""}`}
+            className={`stitch-furniture-trigger ${active("/furniture") || active("/materials") ? "is-active" : ""}`}
             type="button"
             aria-expanded={furnitureOpen}
             aria-controls="furniture-mega-menu"
@@ -83,16 +108,21 @@ export function StitchHeader() {
             <Link href="/furniture" onClick={close}>View all furniture <ChevronRight size={16} /></Link>
           </div>
           <div className="stitch-furniture-mega-groups">
-            {categoryGroups.map((group) => (
-              <section key={group.name}>
-                <h3>{group.name}</h3>
+            {categoryGroups.map((group) => {
+              const GroupIcon = categoryGroupIcons[group.name];
+              return <section key={group.name}>
+                <h3><GroupIcon aria-hidden="true" />{group.name}</h3>
                 {group.categories.map((category) => (
                   <Link href={`/furniture?category=${category}`} key={category} onClick={close}>
                     {categoryDetails[category].label}
                   </Link>
                 ))}
-              </section>
-            ))}
+              </section>;
+            })}
+            <section>
+              <h3><SwatchBook aria-hidden="true" />Materials &amp; finishes</h3>
+              <Link href="/materials" onClick={close}>Materials</Link>
+            </section>
           </div>
         </div>
       </div>
@@ -108,11 +138,14 @@ export function StitchHeader() {
               ))}
             </div>
           ))}
+          <div>
+            <span>Materials &amp; finishes</span>
+            <Link href="/materials" onClick={close}>Materials</Link>
+          </div>
         </details>
         <Link href="/room-composer/upload" onClick={close}>Room Visualizer</Link>
         <Link href="/ai-stylist" onClick={close}>Style Finder</Link>
         <Link href="/my-musterring" onClick={close}>My Project</Link>
-        <Link href="/materials" onClick={close}>Materials</Link>
         <Link href="/search#visual-search" onClick={close}>Visual Search</Link>
         <Link href="/comfort-match" onClick={close}>Advice</Link>
         <Link href="/about" onClick={close}>About Musterring</Link>

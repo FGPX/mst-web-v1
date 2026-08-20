@@ -104,7 +104,7 @@ export function AlternativeFinderPanel() {
             </div> : null}
             <div className="assistant-card-actions">
               <button className="alternative-save" aria-label="Save to project" onClick={() => { if (!storage.savedProducts().includes(product.id)) storage.toggleProduct(product.id); storage.track({ name: "product_alternative_selected", productId: product.id }); }}><Save size={14} /> Save</button>
-              {["sofa", "armchair", "sectional"].includes(product.category) ? <Link href={`/configurator/${product.slug}`}>Configure</Link> : null}
+              {["sofa", "armchair", "sectional"].includes(product.category) ? <Link href="/handover">Plan with Retailer</Link> : null}
               <Link href="/room-composer/upload" aria-label="See it in your room">View in Room</Link>
               <Link className="alternative-retailer" href={`/handover?product=${product.id}`} aria-label="Continue with a retailer">Retailer <ArrowRight size={14} /></Link>
               <Link href={"/furniture/" + product.slug} onClick={() => setOpen(false)}>View Product</Link>

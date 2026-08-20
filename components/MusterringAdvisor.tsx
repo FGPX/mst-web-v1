@@ -178,7 +178,7 @@ export function MusterringAdvisor() {
     if (action.type === "SEARCH_PRODUCTS") return `/search?q=${encodeURIComponent(String(values.query ?? ""))}`;
     if (action.type === "COMPARE_PRODUCTS") return `/compare?ids=${(values.productIds as string[] ?? []).join(",")}`;
     if (action.type === "OPEN_PRODUCT") return `/furniture/${String(values.slug ?? "")}`;
-    if (action.type === "CONFIGURE_PRODUCT") return `/configurator/${String(values.slug ?? currentProduct?.slug ?? "")}`;
+    if (action.type === "CONFIGURE_PRODUCT") return "/handover";
     if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer";
     if (action.type === "OPEN_FIT_CHECK") return `/will-it-fit/${String(values.slug ?? currentProduct?.slug ?? "")}`;
     if (action.type === "FIND_RETAILER") return "/dealers";

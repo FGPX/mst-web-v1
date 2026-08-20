@@ -62,15 +62,11 @@ test("Search to product to save", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Saved" }).first()).toBeVisible();
 });
 
-test("Product to configure to save configuration", async ({ page }) => {
+test("Product planning continues to retailer handover", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
-  await page.getByText("Configure This Product").first().click();
-  await expect(page.getByText("Configuration ID")).toBeVisible();
-  await page.getByRole("button", { name: "Save", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Saved", exact: true })).toBeVisible();
-  const configurationId = await page.locator(".stitch-config-id strong").textContent();
-  await page.goto(`/configurator/mr-2875?configuration=${encodeURIComponent(configurationId ?? "")}`);
-  await expect(page.locator(".stitch-config-id strong")).toHaveText(configurationId ?? "");
+  await page.getByRole("link", { name: "Plan with a Retailer" }).first().click();
+  await expect(page).toHaveURL(/\/handover$/);
+  await expect(page.getByRole("heading", { name: /Living Room Project/ })).toBeVisible();
 });
 
 test("Compare three products", async ({ page }) => {
@@ -320,12 +316,10 @@ test("No exact colour match is explicitly separated from alternatives", async ({
   await expect(page.getByRole("heading", { name: "Other products to consider" })).toBeVisible();
 });
 
-test("AI configuration request produces a rule-valid deterministic proposal", async ({ page }) => {
+test("Public configurator routes redirect to retailer handover", async ({ page }) => {
   await page.goto("/configurator/mr-2875");
-  await page.getByLabel("Describe your ideal configuration").fill("Build a compact four-seat sofa in beige, maximum 290 cm, with easy-care fabric and relax function.");
-  await page.getByRole("button", { name: "Build valid proposal" }).click();
-  await expect(page.locator(".ai-config-result")).toContainText("All product rules passed");
-  await expect(page.getByText(/Configuration ID CFG-/)).toBeVisible();
+  await expect(page).toHaveURL(/\/handover$/);
+  await expect(page.getByRole("heading", { name: /Living Room Project/ })).toBeVisible();
 });
 
 test("Retailer handover creates summary and retains structured data", async ({ page }) => {

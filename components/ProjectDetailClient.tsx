@@ -49,7 +49,7 @@ export function ProjectDetailClient({ seedProject }: { seedProject: Project }) {
         </div>
         {configurations.length ? <div className="section"><h2>Saved configurations</h2><div className="chips">{configurations.map((configuration) => {
           const product = products.find((item) => item.id === configuration.productId);
-          return product ? <Link className="button ghost" key={configuration.id} href={`/configurator/${product.slug}?configuration=${configuration.id}`}>Reopen {configuration.id}</Link> : null;
+          return product ? <Link className="button ghost" key={configuration.id} href="/handover">Continue {configuration.id} with a retailer</Link> : null;
         })}</div></div> : <div className="card card-body"><h2>No configurations yet</h2><Link href="/furniture">Explore furniture</Link></div>}
         <div className="chips" style={{ marginTop: 24 }}>
           <button className="button ghost" onClick={() => {

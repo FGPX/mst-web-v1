@@ -2,7 +2,6 @@ import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import {
   ArrowRight,
-  Check,
   FolderOpen,
   Heart,
   Leaf,
@@ -61,34 +60,6 @@ export default function HomePage() {
   return (
     <div className="simple-home">
       <ProductAssemblyStory />
-
-      <section className="simple-hero" aria-labelledby="home-heading">
-        <div className="simple-hero-inner">
-          <div className="simple-hero-copy">
-            <span className="simple-kicker">Furniture made personal</span>
-            <h1 id="home-heading">Your home.<br />Planned simply.</h1>
-            <p>Discover furniture, see what works in your room and prepare everything for a personal consultation.</p>
-            <div className="simple-actions">
-              <StitchLinkButton href="/furniture">Discover furniture</StitchLinkButton>
-              <StitchLinkButton variant="ghost" href="/room-composer">Start planning</StitchLinkButton>
-            </div>
-          </div>
-          <div className="simple-hero-visual">
-            <Image
-              src="/musterring-catalog/justb-pm100/image-01.jpg"
-              alt="Bright living room furnished with a Musterring sofa"
-              fill
-              priority
-              sizes="(max-width: 760px) 100vw, 58vw"
-            />
-          </div>
-        </div>
-        <div className="simple-hero-benefits">
-          <span><Check size={15} /> Explore</span>
-          <span><Check size={15} /> Plan</span>
-          <span><Check size={15} /> Consult locally</span>
-        </div>
-      </section>
 
       <section className="simple-start" aria-labelledby="start-heading">
         <div className="simple-container">

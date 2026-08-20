@@ -329,7 +329,7 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
                 <Link className="stitch-view-product-action" href={`/furniture/${product.slug}`}>
                   <Eye size={16} /> View Product
                 </Link>
-                {configurable ? <Link className="stitch-configure-action" href={`/configurator/${product.slug}`}>Configure</Link> : null}
+                {configurable ? <Link className="stitch-configure-action" href="/handover">Plan with Retailer</Link> : null}
               </div>
             </div>
           </div>
