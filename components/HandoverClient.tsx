@@ -5,8 +5,9 @@ import { ArrowRight, Check, Clock, MapPin, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { dealers, products } from "@/lib/data";
 import { storage } from "@/lib/persistence";
+import type { SavedRoomScene } from "@/lib/types";
 
-export function HandoverClient({ initialRequest = "Book a Consultation", productId, materialId }: { initialRequest?: string; productId?: string; materialId?: string }) {
+export function HandoverClient({ initialRequest = "Book a Consultation", productId, materialId, sceneId }: { initialRequest?: string; productId?: string; materialId?: string; sceneId?: string }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -26,7 +27,7 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
   const [reviewReady, setReviewReady] = useState(false);
   const [savedProductIds, setSavedProductIds] = useState<string[]>([]);
   const [savedConfigurations, setSavedConfigurations] = useState<ReturnType<typeof storage.configurations>>([]);
-  const [savedRoomScenes, setSavedRoomScenes] = useState<unknown[]>([]);
+  const [savedRoomScenes, setSavedRoomScenes] = useState<SavedRoomScene[]>([]);
   const [savedFitReports, setSavedFitReports] = useState<Record<string, unknown>[]>([]);
   const [savedMaterialIds, setSavedMaterialIds] = useState<string[]>([]);
   useEffect(() => {
@@ -40,15 +41,16 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
   const selectedDealer = dealers.find((dealer) => dealer.id === dealerId) ?? dealers[0];
   const saved = products.filter((product) => savedProductIds.includes(product.id));
   const latestConfiguration = savedConfigurations.at(-1);
-  const latestRoomScene = savedRoomScenes.at(-1) as { name?: string; roomSize?: { widthMm?: number; lengthMm?: number } } | undefined;
+  const selectedRoomScene = (sceneId ? savedRoomScenes.find((scene) => scene.id === sceneId) : undefined) ?? savedRoomScenes.at(-1);
+  const latestRoomScene = selectedRoomScene;
   const structuredProject = () => {
     const fitReports = storage.fitReports();
     return {
       customerIntent: message || "Customer requests a Musterring retailer consultation.",
-      productIds: [...new Set([...(productId ? [productId] : []), ...storage.savedProducts()])],
+      productIds: [...new Set([...(productId ? [productId] : []), ...storage.savedProducts(), ...(selectedRoomScene?.items.map((item) => item.productId) ?? [])])],
       configurationIds: storage.configurations().map((item) => item.id),
       materialIds: [...new Set([...(materialId ? [materialId] : []), ...storage.savedMaterials()])],
-      roomPlan: (storage.roomScenes().at(-1) as Record<string, unknown> | undefined) ?? null,
+      roomPlan: selectedRoomScene ?? null,
       fitWarnings: fitReports.flatMap((report) => Array.isArray(report.reasons) ? report.reasons.map(String) : []),
       requestedRetailerAction: requestType
     };
@@ -109,7 +111,7 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
         configurationIds: storage.configurations().map((item) => item.id),
         comparisonProductIds: storage.comparisons(),
         materialIds: storage.savedMaterials(),
-        roomScenes: storage.roomScenes(),
+        roomScenes: selectedRoomScene ? [selectedRoomScene] : storage.roomScenes(),
         fitReports: storage.fitReports(),
         consultationSummary: summaryPayload.summary,
         structuredProjectData: summaryPayload.projectData
