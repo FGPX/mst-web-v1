@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
 import { stylistOptionsSchema, stylistProviderResultSchema, stylistProviderResultSchemaForCandidates, type StylistProviderResult } from "@/lib/ai/schemas";
 import { buildStylistCandidates, groundStylistResult, stylistBlueprints, stylistCandidateFacts, stylistPaletteColors, stylistPriorityLabels } from "@/lib/ai/stylist";
-import { normalizeStylistQuiz, stylistQuizByRoom, validateStylistQuizInput } from "@/lib/ai/stylist-quiz";
+import { normalizeStylistQuiz, stylistQuestionsForAnswers, stylistQuizByRoom, validateStylistQuizInput } from "@/lib/ai/stylist-quiz";
 import type { StylistPreferences, StylistQuizInput, StylistRoomType, StylistStyle, StylistTarget } from "@/lib/types";
 
 const roomTypes: StylistRoomType[] = ["living-room", "bedroom", "dining-room", "bathroom", "hallway", "kitchen", "outdoor", "home-accessories"];
@@ -22,7 +22,7 @@ const completeTargets: Record<StylistRoomType, StylistTarget> = {
 };
 
 function quizInput(roomType: StylistRoomType = "living-room", target: StylistTarget = completeTargets[roomType]): StylistQuizInput {
-  const answers = Object.fromEntries(stylistQuizByRoom[roomType].map((question) => [question.id, question.options[0].id]));
+  const answers = Object.fromEntries(stylistQuestionsForAnswers(roomType, { target }).map((question) => [question.id, question.options[0].id]));
   answers.target = target;
   return { roomType, answers, notes: {}, selectedProductIds: [], maxWidthMm: null, maxDepthMm: null };
 }
@@ -84,7 +84,7 @@ describe("Style Finder grounding", () => {
   });
 
   it("passes only grounded saved-product context to accessory matching", () => {
-    const input = quizInput("home-accessories", "small-furniture");
+    const input = quizInput("home-accessories", "several-accessories");
     input.answers["match-selected"] = "yes";
     input.selectedProductIds = [products.find((product) => product.active)!.id];
     const facts = JSON.parse(stylistCandidateFacts(normalizeStylistQuiz(input)));
@@ -135,7 +135,7 @@ describe("Style Finder grounding", () => {
       expect(stylistOptionsSchema.safeParse(input).success).toBe(true);
     }
     const incomplete = quizInput();
-    delete incomplete.answers.material;
+    delete incomplete.answers["storage-purpose"];
     expect(stylistOptionsSchema.safeParse(incomplete).success).toBe(false);
     const dimensions = quizInput();
     dimensions.answers.space = "dimensions";
@@ -146,7 +146,7 @@ describe("Style Finder grounding", () => {
 
     const withWrittenDetails = quizInput();
     withWrittenDetails.notes = Object.fromEntries(
-      stylistQuizByRoom[withWrittenDetails.roomType].map((question) => [question.id, `Additional preference for ${question.id}.`])
+      stylistQuestionsForAnswers(withWrittenDetails.roomType, withWrittenDetails.answers).map((question) => [question.id, `Additional preference for ${question.id}.`])
     );
     expect(validateStylistQuizInput(withWrittenDetails)).toBe(true);
     expect(stylistOptionsSchema.safeParse(withWrittenDetails).success).toBe(true);
@@ -157,15 +157,14 @@ describe("Style Finder grounding", () => {
   });
 
   it("enforces the configured limit for every supported multi-select question", () => {
-    const input = quizInput();
-    input.answers["special-functions"] = ["relax-function", "recliner", "adjustable-headrest"];
+    const input = quizInput("bedroom", "wardrobe");
+    input.answers["wardrobe-interior"] = ["hanging-space", "shelving", "drawers"];
     expect(stylistOptionsSchema.safeParse(input).success).toBe(true);
-    expect(normalizeStylistQuiz(input).priorities).toContain("relax-functions");
 
-    input.answers["special-functions"] = ["relax-function", "recliner", "adjustable-headrest", "sofa-bed"];
+    input.answers["wardrobe-interior"] = ["hanging-space", "shelving", "drawers", "shoe-storage"];
     expect(stylistOptionsSchema.safeParse(input).success).toBe(false);
 
-    input.answers["special-functions"] = ["relax-function", "none"];
+    input.answers["wardrobe-interior"] = ["hanging-space", "no-preference"];
     expect(stylistOptionsSchema.safeParse(input).success).toBe(false);
 
     const singleChoiceQuestion = quizInput();
@@ -176,7 +175,7 @@ describe("Style Finder grounding", () => {
     hallway.answers["store-items"] = ["coats", "shoes", "bags", "accessories"];
     expect(stylistOptionsSchema.safeParse(hallway).success).toBe(true);
 
-    const bedroom = quizInput("bedroom");
+    const bedroom = quizInput("bedroom", "bed");
     bedroom.answers["additional-storage"] = ["under-bed", "wardrobe", "dresser"];
     expect(stylistOptionsSchema.safeParse(bedroom).success).toBe(true);
 
@@ -190,9 +189,35 @@ describe("Style Finder grounding", () => {
     expect(stylistOptionsSchema.safeParse(accessories).success).toBe(true);
   });
 
+  it("uses target-specific bedroom questions and rejects answers from another branch", () => {
+    const wardrobeQuestions = stylistQuestionsForAnswers("bedroom", { target: "wardrobe" });
+    expect(wardrobeQuestions.map((question) => question.id)).toEqual([
+      "target", "wardrobe-capacity", "wardrobe-doors", "wardrobe-interior", "space", "atmosphere"
+    ]);
+    expect(wardrobeQuestions.some((question) => question.id === "bed-size")).toBe(false);
+
+    const wardrobe = quizInput("bedroom", "wardrobe");
+    expect(validateStylistQuizInput(wardrobe)).toBe(true);
+    wardrobe.answers["bed-size"] = "180x200";
+    expect(validateStylistQuizInput(wardrobe)).toBe(false);
+  });
+
+  it("keeps every product-specific flow concise", () => {
+    for (const roomType of roomTypes) {
+      const targetQuestion = stylistQuizByRoom[roomType].find((question) => question.id === "target");
+      expect(targetQuestion).toBeDefined();
+      for (const target of targetQuestion!.options) {
+        const questions = stylistQuestionsForAnswers(roomType, { target: target.id });
+        expect(questions.length, `${roomType} / ${target.id}`).toBeLessThanOrEqual(6);
+        expect(questions.some((question) => question.id === "target")).toBe(true);
+      }
+    }
+  });
+
   it("carries a style direction into another room without overriding an explicit new choice", () => {
     const diningRoom = quizInput("dining-room");
     diningRoom.styleDirection = "warm-natural-rustic";
+    diningRoom.answers["style-colours"] = "not-sure";
     expect(normalizeStylistQuiz(diningRoom).style).toBe("warm-natural-rustic");
 
     const livingRoom = quizInput("living-room");

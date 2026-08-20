@@ -5,9 +5,13 @@ import Link from "next/link";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { useEffect, useRef, type CSSProperties } from "react";
 
+const AUTO_PLAY_DELAY = 700;
+const AUTO_PLAY_DURATION = 3200;
+const HERO_END_BUFFER = 2;
+
 const assemblyImageStyle = {
   objectFit: "var(--assembly-fit)" as CSSProperties["objectFit"],
-  objectPosition: "center"
+  objectPosition: "var(--assembly-position, center)"
 };
 
 export default function ProductAssemblyStory() {
@@ -22,6 +26,10 @@ export default function ProductAssemblyStory() {
     let lastFrameTime = 0;
     let currentProgress = 0;
     let targetProgress = 0;
+    let autoPlayFrame = 0;
+    let autoPlayTimer = 0;
+    let isAutoPlaying = false;
+    let restoreScrollBehavior: (() => void) | undefined;
     const navigationEntry = window.performance
       .getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
     const isPageReload = navigationEntry?.type === "reload";
@@ -29,7 +37,10 @@ export default function ProductAssemblyStory() {
     const measure = () => {
       const rect = section.getBoundingClientRect();
       const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
-      targetProgress = Math.min(1, Math.max(0, -rect.top / distance));
+      const scrolledDistance = -rect.top;
+      targetProgress = distance - scrolledDistance <= HERO_END_BUFFER
+        ? 1
+        : Math.min(1, Math.max(0, scrolledDistance / distance));
     };
 
     const render = (time: number) => {
@@ -51,8 +62,89 @@ export default function ProductAssemblyStory() {
     };
 
     const requestUpdate = () => {
+      if (isAutoPlaying) return;
       measure();
       if (!frame) frame = window.requestAnimationFrame(render);
+    };
+
+    const finishAutoPlay = () => {
+      isAutoPlaying = false;
+      autoPlayFrame = 0;
+      currentProgress = 1;
+      targetProgress = 1;
+      section.style.setProperty("--assembly-progress", "1");
+      restoreScrollBehavior?.();
+      restoreScrollBehavior = undefined;
+    };
+
+    const cancelAutoPlay = () => {
+      window.clearTimeout(autoPlayTimer);
+      if (!isAutoPlaying) return;
+
+      isAutoPlaying = false;
+      if (autoPlayFrame) window.cancelAnimationFrame(autoPlayFrame);
+      autoPlayFrame = 0;
+      restoreScrollBehavior?.();
+      restoreScrollBehavior = undefined;
+      requestUpdate();
+    };
+
+    const startAutoPlay = () => {
+      const rect = section.getBoundingClientRect();
+      const sectionTop = window.scrollY + rect.top;
+
+      // Do not pull someone back into the hero when the browser restores a
+      // position farther down the page.
+      if (Math.abs(window.scrollY - sectionTop) > 2) return;
+
+      if (reduceMotion) {
+        finishAutoPlay();
+        return;
+      }
+
+      const root = document.documentElement;
+      const previousScrollBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = "auto";
+      restoreScrollBehavior = () => {
+        root.style.scrollBehavior = previousScrollBehavior;
+      };
+
+      isAutoPlaying = true;
+      const startTime = window.performance.now();
+
+      const animate = (time: number) => {
+        const linearProgress = Math.min(1, (time - startTime) / AUTO_PLAY_DURATION);
+        const easedProgress = linearProgress < .5
+          ? 4 * linearProgress * linearProgress * linearProgress
+          : 1 - Math.pow(-2 * linearProgress + 2, 3) / 2;
+        const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
+        const storyEnd = sectionTop + distance - HERO_END_BUFFER;
+
+        currentProgress = easedProgress;
+        targetProgress = easedProgress;
+        section.style.setProperty("--assembly-progress", easedProgress.toFixed(4));
+        window.scrollTo({
+          top: sectionTop + (storyEnd - sectionTop) * easedProgress,
+          left: 0,
+          behavior: "auto"
+        });
+
+        if (linearProgress < 1) {
+          autoPlayFrame = window.requestAnimationFrame(animate);
+          return;
+        }
+
+        // Keep a tiny buffer before the sticky boundary so the next section
+        // cannot peek into the completed hero because of pixel rounding.
+        window.scrollTo({ top: storyEnd, left: 0, behavior: "auto" });
+        finishAutoPlay();
+      };
+
+      autoPlayFrame = window.requestAnimationFrame(animate);
+    };
+
+    const scheduleAutoPlay = () => {
+      autoPlayTimer = window.setTimeout(startAutoPlay, AUTO_PLAY_DELAY);
     };
 
     const resetReloadedStory = () => {
@@ -76,11 +168,27 @@ export default function ProductAssemblyStory() {
     window.addEventListener("load", resetReloadedStory, { once: true });
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate, { passive: true });
+    window.addEventListener("wheel", cancelAutoPlay, { passive: true });
+    window.addEventListener("touchstart", cancelAutoPlay, { passive: true });
+    window.addEventListener("pointerdown", cancelAutoPlay, { passive: true });
+    window.addEventListener("keydown", cancelAutoPlay);
+
+    if (document.readyState === "complete") scheduleAutoPlay();
+    else window.addEventListener("load", scheduleAutoPlay, { once: true });
+
     return () => {
+      window.clearTimeout(autoPlayTimer);
       window.removeEventListener("load", resetReloadedStory);
+      window.removeEventListener("load", scheduleAutoPlay);
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
+      window.removeEventListener("wheel", cancelAutoPlay);
+      window.removeEventListener("touchstart", cancelAutoPlay);
+      window.removeEventListener("pointerdown", cancelAutoPlay);
+      window.removeEventListener("keydown", cancelAutoPlay);
       if (frame) window.cancelAnimationFrame(frame);
+      if (autoPlayFrame) window.cancelAnimationFrame(autoPlayFrame);
+      restoreScrollBehavior?.();
     };
   }, []);
 
@@ -112,17 +220,6 @@ export default function ProductAssemblyStory() {
 
           <div className="assembly-object assembly-object-tables" aria-hidden="true">
             <Image src="/assembly-layers/tables-layer.png" alt="" fill sizes="100vw" style={assemblyImageStyle} />
-          </div>
-
-          <div className="assembly-final-seal">
-            <Image
-              src="/musterring-catalog/justb-pm100/image-01.jpg"
-              alt="Bright Musterring living room with a JUSTB! PM100 sectional sofa"
-              fill
-              priority
-              sizes="100vw"
-              style={assemblyImageStyle}
-            />
           </div>
 
           <Link className="assembly-product-link" href="/furniture/justb-pm100">
