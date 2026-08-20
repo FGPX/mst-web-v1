@@ -1,7 +1,7 @@
 import { materials, products } from "./data";
 import { validateConfiguration } from "./configurator";
 import { parseSearchQuery, productMatches, searchColorTerms, searchProductsRanked } from "./search";
-import { productHasCategory, type Configuration, type Material, type Product } from "./types";
+import { productHasCategory, type Category, type Configuration, type Material, type Product, type ProductSubtype } from "./types";
 import {
   advisorAnswerSchema, alternativeRequestSchema, alternativeResponseSchema, materialAdviceSchema,
   voiceCommandSchema, type AdvisorAnswer, type AlternativeRequest, type AlternativeResponse,
@@ -13,6 +13,40 @@ import { hasDemoColourPresentation, hasVerifiedColourPresentation } from "./must
 import { demoFactsFor } from "./demo-search-metadata";
 
 const colors = searchColorTerms;
+
+const alternativeCategorySubtypes: Partial<Record<Category, ProductSubtype[]>> = {
+  sofa: ["sofa", "recliner-sofa", "sofa-bed"],
+  sectional: ["sectional-sofa"],
+  armchair: ["armchair", "recliner-armchair", "swivel-armchair"],
+  storage: ["wall-unit", "sideboard", "media-unit", "display-cabinet", "bedside-table", "dresser", "shoe-storage"],
+  "coffee-table": ["coffee-table", "side-table"],
+  "bedroom-series": ["bedroom-series"],
+  bed: ["bed", "upholstered-bed", "boxspring-bed", "sofa-bed"],
+  wardrobe: ["wardrobe"],
+  "dining-chair": ["dining-chair", "dining-armchair", "dining-bench", "bar-stool"],
+  "dining-table": ["dining-table"],
+  bathroom: ["bathroom-storage"],
+  outdoor: ["outdoor-seating", "outdoor-table"],
+  "small-furniture": ["small-furniture"],
+  carpet: ["carpet"],
+  lamp: ["lamp"],
+  "home-textile": ["home-textile"]
+};
+
+function productSupportsAlternativeCategory(product: Product, category: Category) {
+  if (productHasCategory(product, category)) return true;
+  const subtypes = alternativeCategorySubtypes[category] ?? [];
+  const subtypesAreVerified = product.dataQuality?.verifiedFields.includes("productSubtypes") === true;
+  return subtypesAreVerified && subtypes.some((subtype) => product.productSubtypes?.includes(subtype));
+}
+
+function verifiedTabletopShapes(product: Product) {
+  const legacyShapes = product.tabletopShapes ?? [];
+  const structuredShapes = product.dataQuality?.verifiedFields.includes("specifications.table.tabletopShape")
+    ? product.specifications?.table?.tabletopShape ?? []
+    : [];
+  return [...new Set([...legacyShapes, ...structuredShapes])];
+}
 
 export function materialMatchesNeeds(material: Material, needs: MaterialAdvice["needs"]) {
   if (needs.easyCareRequired && !material.easyCare) return false;
@@ -60,12 +94,16 @@ function requestedAlternative(input: AlternativeRequest, source: Product) {
   const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
   const parsedWidth = search.minWidthMm !== undefined || search.maxWidthMm !== undefined || search.targetWidthMm !== undefined;
   const targetWidthMm = !narrower && !parsedWidth ? requestedTargetWidthMm(text) : search.targetWidthMm;
+  const explicitlyRequestedCategory = search.category ?? input.category;
+  const category = explicitlyRequestedCategory && productSupportsAlternativeCategory(source, explicitlyRequestedCategory)
+    ? explicitlyRequestedCategory
+    : source.category;
   return alternativeRequestSchema.parse({
     ...input,
     // "Discover more like this" is scoped to the product being viewed. A
     // request may refine that category, but it must never switch the panel to
     // sofas, beds or another unrelated catalogue category.
-    category: source.category,
+    category,
     colorFamilies: [...new Set([...(input.colorFamilies ?? []), ...(search.colors ?? [])].map((value) => value.toLowerCase()))],
     styles: [...new Set([...(input.styles ?? []), ...(search.styles ?? [])].map((value) => value.toLowerCase()))],
     layoutShapes: requestedLayoutShapes.length ? requestedLayoutShapes : undefined,
@@ -152,7 +190,7 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
   if (!source) throw new Error("Unknown source Product ID.");
   const request = requestedAlternative(raw, source);
   const requestedCategory = request.category ?? source.category;
-  const candidates = products.filter((product) => product.active && product.id !== source.id && productHasCategory(product, requestedCategory));
+  const candidates = products.filter((product) => product.active && product.id !== source.id && productSupportsAlternativeCategory(product, requestedCategory));
   const preferenceTokens = softPreferenceTokens(request.requestText ?? "");
   const ranked = candidates.map((product) => {
     const demo = demoFactsFor(product.id);
@@ -234,7 +272,7 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       });
     }
     for (const value of request.tabletopShapes ?? []) {
-      const verifiedShapes = product.tabletopShapes ?? [];
+      const verifiedShapes = verifiedTabletopShapes(product);
       const matchesShape = verifiedShapes.includes(value);
       checks.push({
         ok: matchesShape,
@@ -329,13 +367,10 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
   // same-category products are still useful recommendations when they are
   // clearly labelled with every unmet requirement (for example, an unverified
   // requested colour). Keep this group deliberately small and ranked.
-  // A visibly different tabletop shape is not a useful "close" option. When
-  // the catalogue cannot verify the requested shape, show no product cards
-  // instead of presenting square or rectangular tables beneath an oval query.
-  const shapeEligibleAlternatives = request.tabletopShapes?.length
-    ? ranked.filter((item) => request.tabletopShapes!.every((shape) => item.product.tabletopShapes?.includes(shape)))
-    : ranked;
-  const closestAlternatives = request.strict ? [] : shapeEligibleAlternatives.filter((item) => !item.exact).slice(0, 3).map(toMatch);
+  // When the requested tabletop shape is unavailable, keep the best
+  // same-category products visible as clearly labelled alternatives. This is
+  // more useful than an empty result and the unmet shape remains explicit.
+  const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 3).map(toMatch);
   const interpretedRequirements = [
     ...(request.category ? [request.category.replace(/-/g, " ")] : []),
     ...(request.colorFamilies ?? []).map((value) => `${value} colour`),
@@ -361,9 +396,9 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     closestAlternatives,
     message: exactMatches.length
       ? `${exactMatches.length} catalogue alternative${exactMatches.length === 1 ? "" : "s"} satisfy all requirements.`
-      : request.tabletopShapes?.length && !shapeEligibleAlternatives.length
-        ? `No catalogue product has a verified ${request.tabletopShapes.join(" or ")} tabletop shape.`
-        : "No exact alternative was found. The closest catalogue alternatives show their main differences."
+      : closestAlternatives.length
+        ? "No exact alternative was found. The closest catalogue alternatives show their main differences."
+        : "No exact alternative was found in the connected catalogue."
   });
 }
 
