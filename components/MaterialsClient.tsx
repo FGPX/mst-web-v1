@@ -68,7 +68,10 @@ export function MaterialsClient() {
           <header className="materials-catalogue-head">
             <div className="materials-catalogue-label">
               <p id="materials-catalogue-title">{advisorResult ? "Recommended materials" : "Curated selection"}</p>
-              {advisorResult ? <span>{visibleMaterials.length} result{visibleMaterials.length === 1 ? "" : "s"} for “{advisorResult.requestText}”</span> : null}
+              {advisorResult ? <span className="materials-catalogue-result">
+                <strong>{visibleMaterials.length}</strong>
+                <span><b>{visibleMaterials.length === 1 ? "Match" : "Matches"} found</b><small>for “{advisorResult.requestText}”</small></span>
+              </span> : null}
             </div>
             <div className="materials-catalogue-actions">
               {advisorResult ? <button type="button" className="materials-clear-results" onClick={() => setAdvisorResult(null)}>Show all materials</button> : null}
