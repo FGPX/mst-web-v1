@@ -11,6 +11,8 @@ export const roomVisualizationItemSchema = z.object({
   x: z.number().finite().min(0).max(100),
   y: z.number().finite().min(0).max(100),
   rotation: z.number().finite().min(-720).max(720),
+  viewIndex: z.number().int().min(0).max(3).optional(),
+  wallPlacement: z.enum(["free", "west", "back", "east"]).optional(),
   scale: z.number().finite().min(0.4).max(2.5),
   materialId: z.string().trim().min(1).max(160).optional(),
   color: z.string().trim().min(1).max(120).optional()
@@ -68,6 +70,7 @@ export function groundVisualizationItems(items: RoomVisualizationItemInput[]) {
     if (!product) throw new Error(`Unavailable catalogue product: ${item.productId}`);
 
     const assetUrl = roomSceneProductImage(product.id, {
+      viewIndex: item.viewIndex,
       materialId: item.materialId,
       color: item.color
     });
@@ -106,6 +109,26 @@ function horizontalPlacement(x: number) {
   return "centre";
 }
 
+export function normalizedOrientation(rotation: number) {
+  const normalized = ((Math.round(rotation / 90) * 90) % 360 + 360) % 360;
+  return {
+    degrees: normalized,
+    label: normalized === 0
+      ? "front facing toward the camera"
+      : normalized === 90
+        ? "turned 90 degrees clockwise, showing its right-side orientation"
+        : normalized === 180
+          ? "turned away from the camera, showing its back orientation"
+          : "turned 90 degrees counter-clockwise, showing its left-side orientation"
+  };
+}
+
+function wallInstruction(wallPlacement: RoomVisualizationItemInput["wallPlacement"]) {
+  if (!wallPlacement || wallPlacement === "free") return "Keep this item in the user-selected free-standing position; do not move it to the centre by default.";
+  const wall = wallPlacement === "back" ? "back wall" : `${wallPlacement} wall`;
+  return `Place it close to the visible ${wall}, with a realistic residential clearance of approximately 5-15 cm where physically possible. Keep it visibly wall-adjacent; do not pull it toward the middle of the room. Preserve skirting boards, radiators, openings, and other fixed obstacles, and use believable contact shadows and perspective at the wall.`;
+}
+
 function placementInstructions(items: GroundedVisualizationItem[]) {
   return items.map((item, index) => {
     const verifiedFinish = [item.verifiedColor, item.verifiedMaterialId].filter(Boolean).join(", ");
@@ -113,7 +136,8 @@ function placementInstructions(items: GroundedVisualizationItem[]) {
       ? ` The required catalogue finish is ${verifiedFinish}; reproduce that exact colour and material, using reference image ${item.referenceImageIndex} as the visual authority.`
       : ` Copy the exact visible colour, material, texture, and finish from reference image ${item.referenceImageIndex}; do not infer or substitute a finish from the room.`;
     const targetWidth = Math.round(Math.min(88, categoryMaskSize[item.category].width * item.scale));
-    return `${index + 1}. Add exactly one ${item.modelCode} (${item.name}) from reference image ${item.referenceImageIndex}, near the ${horizontalPlacement(item.x)} of the canvas, with its base approximately ${Math.round(item.y)}% from the top and occupying roughly ${targetWidth}% of the image width.${finish}`;
+    const orientation = normalizedOrientation(item.rotation);
+    return `${index + 1}. Add exactly one ${item.modelCode} (${item.name}) from reference image ${item.referenceImageIndex}, near the ${horizontalPlacement(item.x)} of the canvas, with its base approximately ${Math.round(item.y)}% from the top and occupying roughly ${targetWidth}% of the image width. Keep the product upright and rotate it horizontally around its vertical axis to ${orientation.degrees} degrees: ${orientation.label}. Never rotate or tilt the flat image in the picture plane. ${wallInstruction(item.wallPlacement)}${finish}`;
   }).join("\n");
 }
 
@@ -128,7 +152,7 @@ Create a beautiful, restrained Musterring editorial result across the whole imag
 
 PRODUCT LOCK — this requirement outranks room styling and photographic beautification. Add only the catalogue products listed below. Each product reference image is the canonical visual source of truth. Reproduce every selected product without redesign or reinterpretation: identical base colour and colour temperature, upholstery or surface material, weave or grain, silhouette, module count and arrangement, proportions, seams, piping, tufting, cushions and cushion colours, arms, backrests, legs, feet, hardware, and all other visible details. Do not recolour, desaturate, brighten, darken, coordinate with the room palette, swap fabric or material, add or remove cushions, change modules, or substitute a similar design. Room illumination may create physically natural highlights and shadows, but it must not alter the product's underlying colour or finish. If aesthetic styling conflicts with product fidelity, preserve the product exactly and keep the room treatment simpler.
 
-Place the locked products naturally on the visible floor with correct perspective, credible scale, contact, occlusion, and lighting. Never merge products, invent extra modules, or substitute another design.
+Place the locked products naturally on the visible floor with correct perspective, credible scale, contact, occlusion, and lighting. Treat each requested rotation and wall placement as a hard spatial constraint. Do not recenter wall-adjacent furniture for a more symmetrical composition. Never merge products, invent extra modules, or substitute another design.
 
 ${placements}
 

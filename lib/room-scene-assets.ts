@@ -30,7 +30,12 @@ export function roomSceneProductImage(productId: string, options?: { viewIndex?:
   const fallback = images.find((image) => image.toLowerCase().endsWith(".png")) ?? images[0];
   if (!product) return fallback;
   if (product.slug === "justb-pm100") {
-    const views = ["/generated-product-views/justb-pm100/physical-front.png?v=1", "/generated-product-views/justb-pm100/physical-back-v3.png?v=1"];
+    const views = [
+      "/generated-product-views/justb-pm100/physical-front.png?v=1",
+      "/generated-product-views/justb-pm100/illustrative-right-v2.png?v=1",
+      "/generated-product-views/justb-pm100/physical-back-v3.png?v=1",
+      "/generated-product-views/justb-pm100/illustrative-left-v2.png?v=1"
+    ];
     return views[(options?.viewIndex ?? 0) % views.length];
   }
   const finish = roomSceneProductFinish(productId, options);
