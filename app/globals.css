@@ -6607,8 +6607,11 @@ img { max-width: 100%; display: block; }
 .alternative-group > header p { margin: 0; color: var(--stitch-text-secondary); font-size: 13px; line-height: 1.5; }
 .alternative-group > header > span { min-width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #191815; color: #fbf9f4; font-size: 11px; font-weight: 800; }
 .alternative-group.is-exact > header > span { background: #397151; }
-.alternative-group-empty { display: grid; gap: 4px; margin-top: 14px; border-left: 3px solid var(--stitch-accent); background: #f0ede7; padding: 12px 14px; }
-.alternative-group-empty span { color: var(--stitch-text-secondary); font-size: 13px; }
+.alternative-group-empty { display: grid; grid-template-columns: 22px minmax(0,1fr); gap: 11px; align-items: start; margin-top: 14px; border: 1px solid #c43d3d; border-left-width: 4px; border-radius: 4px; background: #fff1f1; color: #8f2020; padding: 13px 14px; }
+.alternative-group-empty > svg { width: 20px; height: 20px; margin-top: 1px; stroke-width: 2.25; }
+.alternative-group-empty > div { display: grid; gap: 4px; }
+.alternative-group-empty strong { font-size: 15px; line-height: 1.25; }
+.alternative-group-empty span { color: #6f3030; font-size: 13px; line-height: 1.45; }
 .alternative-results { display: grid; gap: 16px; padding-top: 16px; }
 .alternative-results > article { display: grid; grid-template-columns: minmax(320px,1.05fr) minmax(0,1.35fr); gap: 22px; border: 1px solid rgba(25,24,21,.16); background: #fffdfa; padding: 16px; }
 .alternative-results > article.is-exact { border-left: 4px solid #397151; }
@@ -11826,14 +11829,10 @@ button.assistant-dock > span:first-child { font-size: 14px; }
 .assembly-object-sofa img { filter: drop-shadow(0 3px 2px rgba(42,34,27,.18)); }
 .assembly-object-tables img { filter: drop-shadow(0 3px 2px rgba(28,24,20,.22)); }
 .assembly-stage::after { content: ""; position: absolute; z-index: 5; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(248,246,241,.9) 0, rgba(248,246,241,.43) 23%, transparent 48%); opacity: clamp(0, calc((var(--assembly-progress) - .72) * 3.6), 1); }
-.assembly-product-link { position: absolute; z-index: 9; right: 5%; bottom: 9%; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 150px; padding: 10px 12px; border: 1px solid rgba(34,33,29,.15); background: rgba(250,248,243,.92); color: #24231f; box-shadow: 0 10px 28px rgba(43,35,27,.1); text-decoration: none; backdrop-filter: blur(10px); opacity: clamp(0, calc((var(--assembly-progress) - .96) * 25), 1); transition: transform .25s ease, background .25s ease; }
-.assembly-product-link:hover { transform: translateY(-3px); background: #fff; }
-.assembly-product-link small { grid-column: 1 / -1; font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
-.assembly-product-link strong { font-size: 13px; }
-.assembly-product-link svg { grid-column: 2; grid-row: 2; }
 
 .assembly-finale { position: absolute; z-index: 8; left: var(--assembly-content-left); top: clamp(104px, 12vh, 126px); color: #27251f; opacity: clamp(0, calc((var(--assembly-progress) - .8) * 5), 1); transform: translateY(calc((1 - var(--assembly-progress)) * 20px)); text-shadow: 0 1px 18px rgba(255,255,255,.35); }
 .assembly-finale > span { display: block; font-family: var(--font-heading, Georgia, serif); font-size: clamp(34px, 4.2vw, 68px); letter-spacing: -.04em; }
+
 .assembly-finale a { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; color: inherit; text-decoration: none; border-bottom: 1px solid; padding-bottom: 4px; }
 .assembly-scroll-cue { position: absolute; z-index: 9; left: 50%; bottom: 27px; display: flex; gap: 8px; align-items: center; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; transform: translateX(-50%); opacity: calc(1 - min(1, var(--assembly-progress) * 5)); }
 .assembly-progress { position: absolute; z-index: 10; right: 25px; top: 50%; width: 2px; height: 110px; background: rgba(36,35,31,.18); transform: translateY(-50%); }
@@ -11853,11 +11852,17 @@ button.assistant-dock > span:first-child { font-size: 14px; }
   .assembly-object-sofa { transform: translate3d(calc((1 - var(--assembly-progress)) * 32vw), 10vh, 0) scale(1.1); }
   .assembly-object-tables { transform: translate3d(calc((1 - var(--assembly-progress)) * -28vw), 6vh, 0) scale(1.1); }
   .assembly-stage::after { background: linear-gradient(180deg, #e7e0d5 0, transparent 18% 84%, #e7e0d5 100%); }
-  .assembly-product-link { display: none; }
   .assembly-progress { right: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .product-assembly { height: 100vh; min-height: 680px; --assembly-progress: 1 !important; }
   .assembly-scroll-cue, .assembly-progress { display: none; }
+}
+
+/* Keep every piece of website text in the Musterring Frutiger typeface. */
+html,
+body,
+body * {
+  font-family: FrutigerLTPro, sans-serif !important;
 }
