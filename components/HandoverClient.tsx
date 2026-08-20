@@ -31,7 +31,13 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
   const [savedFitReports, setSavedFitReports] = useState<Record<string, unknown>[]>([]);
   const [savedMaterialIds, setSavedMaterialIds] = useState<string[]>([]);
   useEffect(() => {
-    setDealerId(storage.selectedDealer() ?? dealers[0].id);
+    const draft = storage.consultationDraft();
+    setDealerId(draft?.dealerId ?? storage.selectedDealer() ?? dealers[0].id);
+    if (draft) {
+      setAppointmentMode(draft.appointmentMode);
+      setAppointmentDate(draft.appointmentDate);
+      setPreferredTime(draft.preferredTime);
+    }
     setSavedProductIds(storage.savedProducts());
     setSavedConfigurations(storage.configurations());
     setSavedRoomScenes(storage.roomScenes());
