@@ -6,6 +6,8 @@ import { comparisonSummaryInput, deterministicComparisonSummary } from "@/lib/ai
 import { groundProjectData } from "@/lib/ai/grounding";
 import { hybridCatalogueSearch, searchCatalogueByVisualTags } from "@/lib/ai/retrieval";
 import { validatedAIAlternativeRequirements } from "@/lib/ai/alternative-intent";
+import { parseSearchExclusions } from "@/lib/search";
+import { groundSearchIntent } from "@/lib/ai/search-intent";
 import {
   configurationRequirementsSchema,
   retailerProjectDataSchema,
@@ -34,6 +36,20 @@ const baseIntent = {
 };
 
 describe("AI schemas and fallbacks", () => {
+  it("does not allow provider-invented hard filters into catalogue matching", () => {
+    const grounded = groundSearchIntent("sofa wider than 300 cm", searchIntentSchema.parse({
+      ...baseIntent,
+      queryText: "sofa wider than 300 cm",
+      colorFamilies: ["beige"],
+      modular: true,
+      functions: ["relax"]
+    }));
+    expect(grounded).toMatchObject({ category: "sofa", minWidthMm: 3000 });
+    expect(grounded.colorFamilies).toBeNull();
+    expect(grounded.modular).toBeNull();
+    expect(grounded.functions).toBeNull();
+  });
+
   it("discards model-invented alternative requirements without request evidence", () => {
     const result = validatedAIAlternativeRequirements(
       { sourceProductId: "musterring-justb-pm200", requestText: "red sofa" },
@@ -115,6 +131,19 @@ describe("AI schemas and fallbacks", () => {
 });
 
 describe("grounded hybrid retrieval", () => {
+  it("excludes explicitly negated catalogue facts from exact and alternative results", async () => {
+    const queryText = "sofa that is not red and without relax function";
+    const exclusions = parseSearchExclusions(queryText);
+    const result = await hybridCatalogueSearch(
+      searchIntentSchema.parse({ ...baseIntent, queryText, colorFamilies: null, maxWidthMm: null, modular: null, smallSpaceSuitable: null }),
+      undefined,
+      exclusions
+    );
+    const matches = [...result.exactMatches, ...result.closeAlternatives];
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every(({ product }) => !product.colors.includes("red") && !product.functions.includes("relax"))).toBe(true);
+  });
+
   it("returns natural-language results only from catalogue data", async () => {
     const result = await hybridCatalogueSearch(searchIntentSchema.parse(baseIntent));
     const ids = new Set(products.map((product) => product.id));

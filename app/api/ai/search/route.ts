@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { checkRateLimit } from "@/lib/server-validation";
-import { LocalDemoAIProvider, withDemoFallback } from "@/lib/ai/providers";
+import { withDemoFallback } from "@/lib/ai/providers";
 import { hybridCatalogueSearch } from "@/lib/ai/retrieval";
-import { canonicalizeSearchIntent } from "@/lib/ai/search-intent";
+import { groundSearchIntent } from "@/lib/ai/search-intent";
+import { parseSearchExclusions } from "@/lib/search";
 
 const requestSchema = z.object({ query: z.string().trim().min(1).max(1000) });
 
@@ -24,32 +25,16 @@ export async function POST(request: NextRequest) {
     },
     { allowOpenAI: true }
   );
-  const providerIntent = canonicalizeSearchIntent(interpreted.data);
-  const deterministic = await new LocalDemoAIProvider().parseSearchIntent(parsed.data.query);
-  const deterministicWidth = deterministic.minWidthMm !== null || deterministic.maxWidthMm !== null || deterministic.targetWidthMm !== null;
-  const intent = {
-    ...providerIntent,
-    queryText: parsed.data.query,
-    category: deterministic.category ?? providerIntent.category,
-    colorFamilies: deterministic.colorFamilies ?? providerIntent.colorFamilies,
-    materials: deterministic.materials ?? providerIntent.materials,
-    // Relational dimensions are safety-critical. When deterministic parsing found
-    // one, use that complete set so "above 300" can never also become "max 300".
-    maxWidthMm: deterministicWidth ? deterministic.maxWidthMm : providerIntent.maxWidthMm,
-    minWidthMm: deterministicWidth ? deterministic.minWidthMm : providerIntent.minWidthMm,
-    targetWidthMm: deterministicWidth ? deterministic.targetWidthMm : providerIntent.targetWidthMm,
-    minSeatHeightMm: deterministic.minSeatHeightMm ?? providerIntent.minSeatHeightMm,
-    maxSeatDepthMm: deterministic.maxSeatDepthMm ?? providerIntent.maxSeatDepthMm,
-    numberOfSeats: deterministic.numberOfSeats ?? providerIntent.numberOfSeats,
-    modular: deterministic.modular ?? providerIntent.modular,
-    functions: deterministic.functions ?? providerIntent.functions,
-    styles: deterministic.styles ?? providerIntent.styles,
-    smallSpaceSuitable: deterministic.smallSpaceSuitable ?? providerIntent.smallSpaceSuitable,
-    layoutShapes: deterministic.layoutShapes ?? providerIntent.layoutShapes
+  const intent = groundSearchIntent(parsed.data.query, interpreted.data);
+  const exclusions = parseSearchExclusions(parsed.data.query);
+  const results = await hybridCatalogueSearch(intent, undefined, exclusions);
+  const responseIntent = {
+    ...intent,
+    ...(exclusions.colors.length ? { excludedColorFamilies: exclusions.colors } : {}),
+    ...(exclusions.functions.length ? { excludedFunctions: exclusions.functions } : {})
   };
-  const results = await hybridCatalogueSearch(intent);
   return NextResponse.json({
-    intent,
+    intent: responseIntent,
     exactMatches: results.exactMatches.map(({ product, reasons }) => ({ product, reasons })),
     closeAlternatives: results.closeAlternatives.map(({ product, reasons }) => ({ product, reasons })),
     exactColorAvailable: results.exactColorAvailable,

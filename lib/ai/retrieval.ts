@@ -1,6 +1,7 @@
 import { materials, products } from "../data";
 import { productHasCategory, type Product } from "../types";
 import type { SearchIntent, VisualTags } from "./schemas";
+import type { SearchExclusions } from "../search";
 import { normalizeSearchText } from "../search";
 
 export type GroundedMatch = { product: Product; score: number; reasons: string[] };
@@ -45,6 +46,14 @@ function hasVerifiedMaterial(product: Product, requested: string) {
   const value = requested.toLowerCase();
   const materialType = materials.find((material) => material.id === requested)?.type ?? value;
   return product.verifiedFacts.materialTypes.includes(materialType as "fabric" | "leather");
+}
+
+const noSearchExclusions: SearchExclusions = { colors: [], functions: [], modular: false };
+
+function violatesExclusions(product: Product, exclusions: SearchExclusions) {
+  return exclusions.colors.some((color) => product.colors.includes(color)) ||
+    exclusions.functions.some((fn) => product.functions.includes(fn)) ||
+    (exclusions.modular && product.modular);
 }
 
 function satisfiesVerifiedIntent(product: Product, intent: SearchIntent) {
@@ -162,7 +171,7 @@ function structuredScore(product: Product, intent: SearchIntent) {
   return { score, reasons };
 }
 
-export async function hybridCatalogueSearch(intent: SearchIntent, semantic: SemanticRetrievalProvider = new LocalSemanticRetrievalProvider()): Promise<GroundedSearch> {
+export async function hybridCatalogueSearch(intent: SearchIntent, semantic: SemanticRetrievalProvider = new LocalSemanticRetrievalProvider(), exclusions: SearchExclusions = noSearchExclusions): Promise<GroundedSearch> {
   const active = products.filter((product) => product.active);
   const categoryProducts = active.filter((product) => !intent.category || productHasCategory(product, intent.category));
   const categoryAvailable = categoryProducts.length > 0;
@@ -185,7 +194,7 @@ export async function hybridCatalogueSearch(intent: SearchIntent, semantic: Sema
     (!intent.category || productHasCategory(product, intent.category)) && requestedColors.some((color) => product.verifiedFacts.colors.includes(color))
   );
   const exactMatches = ranked.filter(({ product, score }) =>
-    score > -100 && satisfiesVerifiedIntent(product, intent)
+    score > -100 && !violatesExclusions(product, exclusions) && satisfiesVerifiedIntent(product, intent)
   ).slice(0, 12);
   const exactIds = new Set(exactMatches.map(({ product }) => product.id));
   const isRelevantAlternative = (product: Product) => {
@@ -216,6 +225,7 @@ export async function hybridCatalogueSearch(intent: SearchIntent, semantic: Sema
   };
   const closeAlternatives = ranked.filter(({ product }) =>
     !exactIds.has(product.id) &&
+    !violatesExclusions(product, exclusions) &&
     (!intent.category || productHasCategory(product, intent.category)) &&
     // Preserve an explicitly requested colour whenever the catalogue has that
     // colour in the requested category. A request such as "red sofa" must not
