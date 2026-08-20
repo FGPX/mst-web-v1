@@ -182,6 +182,17 @@ test("Upload room consent, preview and save", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Saved to project" })).toBeVisible();
 });
 
+test("Room visualizer exposes the wardrobe catalogue", async ({ page }) => {
+  await page.goto("/room-composer/upload");
+  await page.getByRole("button", { name: "Wardrobes", exact: true }).click();
+
+  const products = page.getByRole("region", { name: "Available products" });
+  await expect(products.getByText("MR IMOLA", { exact: true })).toBeVisible();
+  await expect(products.getByText("MR ISABELLE", { exact: true })).toBeVisible();
+  await expect(products.getByText("MONTINO", { exact: true })).toBeVisible();
+  await expect(products.getByRole("article")).toHaveCount(3);
+});
+
 test("Style Finder creates, adjusts and saves a grounded room set", async ({ page }) => {
   await page.route("**/api/ai/stylist", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(stylistResponse()) }));
   await page.goto("/ai-stylist");

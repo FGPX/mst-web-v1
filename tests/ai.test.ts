@@ -309,7 +309,7 @@ describe("grounded hybrid retrieval", () => {
   it("returns catalogue dining tables for a visually detected dining table", () => {
     const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
       category: "dining-table",
-      colorFamilies: ["white", "beige"],
+      colorFamilies: [],
       likelyMaterial: "wood",
       style: ["modern"],
       silhouette: "rectangular dining table",

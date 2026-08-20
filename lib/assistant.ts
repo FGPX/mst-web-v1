@@ -249,7 +249,12 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       const exact = product.verifiedFacts.styles.some((style) => style.toLowerCase().includes(value));
       const related = product.verifiedFacts.styles.some((style) => style.toLowerCase().split(/\s+/).some((term) => value.includes(term)));
       const demoExact = !exact && (demo?.styles?.some((style) => style.toLowerCase().includes(value)) ?? false);
-      checks.push({ ok: exact || demoExact, label: `matches ${value} style`, closeness: exact || demoExact ? 1 : related ? 0.5 : 0, demoFact: demoExact ? `${value} style` : undefined });
+      checks.push({
+        ok: exact || demoExact,
+        label: exact || demoExact ? `matches ${value} style` : `${value} style is not verified for this product`,
+        closeness: exact || demoExact ? 1 : related ? 0.5 : 0,
+        demoFact: demoExact ? `${value} style` : undefined
+      });
     }
     if (request.numberOfSeats) {
       const seatCount = product.numberOfSeatsVerified ? product.numberOfSeats : demo?.numberOfSeats;
@@ -472,7 +477,7 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     exactMatches,
     closestAlternatives,
     message: exactMatches.length
-      ? `${exactMatches.length} catalogue alternative${exactMatches.length === 1 ? "" : "s"} satisfy all requirements.`
+      ? `${exactMatches.length} catalogue alternative${exactMatches.length === 1 ? " satisfies" : "s satisfy"} all requirements.`
       : closestAlternatives.length
         ? "No exact alternative was found. The closest catalogue alternatives show their main differences."
         : "No exact alternative was found in the connected catalogue."

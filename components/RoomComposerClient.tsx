@@ -11,13 +11,14 @@ import { analyzePlacement, type Door, type RoomItem } from "@/lib/fit-simulator"
 import type { RoomAnalysis } from "@/lib/ai/schemas";
 import type { Product, Project, SavedRoomScene } from "@/lib/types";
 
-type ComposerCategory = "all" | "seating" | "armchair" | "storage" | "tables" | "bedroom";
+type ComposerCategory = "all" | "seating" | "armchair" | "storage" | "wardrobe" | "tables" | "bedroom";
 const uploadComposerCategories: { id: ComposerCategory; label: string }[] = [
   { id: "all", label: "All" },
   { id: "seating", label: "Seating" },
   { id: "armchair", label: "Armchairs" },
   { id: "tables", label: "Tables" },
   { id: "storage", label: "Storage" },
+  { id: "wardrobe", label: "Wardrobes" },
   { id: "bedroom", label: "Bedroom" }
 ];
 const maxGeneratedVisualizationItems = 6;
@@ -256,6 +257,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     if (category === "seating") return productCategory === "sofa" || productCategory === "sectional";
     if (category === "armchair") return productCategory === "armchair";
     if (category === "storage") return ["storage", "wardrobe", "bedroom-series"].includes(productCategory);
+    if (category === "wardrobe") return productCategory === "wardrobe";
     if (category === "bedroom") return ["bed", "bedroom-series", "wardrobe", "home-textile"].includes(productCategory);
     return ["coffee-table", "dining-table", "small-furniture"].includes(productCategory);
   };

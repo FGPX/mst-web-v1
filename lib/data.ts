@@ -390,7 +390,7 @@ export const products: Product[] = [
     const geo = geoByProductId.get(official.appProductId);
     const verifiedColors = verifiedRedUpholstery.has(official.slug) ? ["red", "burgundy"] : [];
     const verifiedMaterialTypes: Array<"fabric" | "leather"> = [
-      ...(/\bfabric\b/.test(searchableCopy) ? ["fabric" as const] : []),
+      ...(/\bfabrics?\b/.test(searchableCopy) ? ["fabric" as const] : []),
       ...(/\bleather\b/.test(searchableCopy) ? ["leather" as const] : [])
     ];
     const verifiedFunctions = [
@@ -405,6 +405,16 @@ export const products: Product[] = [
       heightMm: dimensionOverride?.heightMm ?? (isStorage ? 2050 : template.heightMm)
     };
     const verifiedGeoFields = new Set(geo?.dataQuality.verifiedFields ?? []);
+    const verifiedGeoColors = verifiedGeoFields.has("colors") || verifiedGeoFields.has("colorFamilies")
+      ? geo?.colors ?? geo?.colorFamilies ?? []
+      : [];
+    const verifiedGeoMaterialTypes: Array<"fabric" | "leather"> = verifiedGeoFields.has("materialTypes")
+      ? [
+          ...((geo?.materialTypes ?? []).some((value) => /fabric|textile|upholstery/i.test(value)) ? ["fabric" as const] : []),
+          ...((geo?.materialTypes ?? []).some((value) => /leather/i.test(value)) ? ["leather" as const] : [])
+        ]
+      : [];
+    const verifiedGeoStyles = verifiedGeoFields.has("styles") ? geo?.styles ?? [] : [];
     const geoDimensionsVerified = verifiedGeoFields.has("dimensions") || verifiedGeoFields.has("referenceConfiguration");
     const geoSeatHeightVerified = [...verifiedGeoFields].some((field) => field.includes("seatHeight"));
     const geoSeatDepthVerified = [...verifiedGeoFields].some((field) => field.includes("seatDepth"));
@@ -423,9 +433,9 @@ export const products: Product[] = [
       dimensions: Boolean(dimensionOverride) || geoDimensionsVerified,
       seatHeight: geoSeatHeightVerified,
       seatDepth: geoSeatDepthVerified,
-      colors: verifiedColors,
-      materialTypes: verifiedMaterialTypes,
-      styles: [],
+      colors: [...new Set([...verifiedColors, ...verifiedGeoColors])],
+      materialTypes: [...new Set([...verifiedMaterialTypes, ...verifiedGeoMaterialTypes])],
+      styles: [...new Set(verifiedGeoStyles)],
       functions: [...new Set([...verifiedFunctions, ...([...verifiedGeoFields].some((field) => field.includes("comfortFunctions") || field.includes("specifications.seating")) ? geoFunctions : [])])],
       modular: /modular|module/.test(searchableCopy),
       smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),

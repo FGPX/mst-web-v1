@@ -241,7 +241,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const recommendations = response?.closeAlternatives ?? [];
   const primaryResults = exact.length ? exact : recommendations;
 
-  const startVisualUpload = async (file?: File) => {
+  const uploadAndAnalyzeVisual = async (file?: File) => {
     if (!file) return;
     setVisualUploadError("");
     if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
@@ -258,6 +258,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
     setVisualMatches([]);
     setVisualAnalysis("");
     setVisualNoMatchReason("");
+    storage.recordConsent("photo-ai-processing", true);
     storage.track({ name: "visual_search_uploaded" });
     const form = new FormData();
     form.append("image", file);
@@ -334,7 +335,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                 onDrop={(event) => {
                   event.preventDefault();
                   setVisualDragActive(false);
-                  void startVisualUpload(event.dataTransfer.files?.[0]);
+                  void uploadAndAnalyzeVisual(event.dataTransfer.files?.[0]);
                 }}
               >
                 {visualPreview ? (
@@ -353,7 +354,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
                 onClick={(event) => { event.currentTarget.value = ""; }}
-                onChange={(event) => void startVisualUpload(event.target.files?.[0])}
+                onChange={(event) => void uploadAndAnalyzeVisual(event.target.files?.[0])}
               />
             </div>
             {visualPreview ? (
@@ -368,8 +369,10 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                   <div className="stitch-inline-visual-status is-error"><X /><strong>{visualUploadError}</strong></div>
                 ) : visualMatches.length ? (
                   <div className="stitch-inline-visual-status is-ready"><Sparkles /><strong>{visualMatches.length} catalogue recommendations are ready below.</strong></div>
+                ) : visualNoMatchReason ? (
+                  <div className="stitch-inline-visual-status"><Search /><strong>{visualNoMatchReason}</strong></div>
                 ) : (
-                  <div className="stitch-inline-visual-status"><Search /><strong>{visualNoMatchReason || "No grounded catalogue match was found. Try another furniture image."}</strong></div>
+                  <div className="stitch-inline-visual-status"><Search /><strong>No grounded catalogue match was found. Try another furniture image.</strong></div>
                 )}
               </div>
             ) : <div className="stitch-ai-search-lists">

@@ -306,6 +306,21 @@ describe("connected Musterring assistant grounding", () => {
     )).toBe(true);
   });
 
+  it.each([
+    ["Show me a red box-spring bed", "musterring-mr-dubai-red"],
+    ["Show me a grey upholstered bed", "musterring-delphi-light-grey"],
+    ["Show me a grey upholstered bed in 160 × 200 cm", "musterring-delphi-light-grey"],
+    ["Show me a grey upholstered bed with storage in 160 × 200 cm", "musterring-delphi-light-grey"],
+    ["Show me a fabric upholstered bed in 180 × 200 cm", "musterring-justb-sc200"],
+    ["Show me a fabric upholstered bed with storage in 180 × 200 cm", "musterring-justb-sc200"],
+    ["Show me an elegant fabric upholstered bed with storage in 180 × 200 cm", "musterring-justb-sc200"],
+    ["Show me a box-spring bed with storage in 180 × 200 cm", "musterring-justb-sc100-grey"],
+    ["Show me a motorised box-spring bed in 180 × 200 cm", "musterring-justb-sc100-grey"]
+  ])("returns the expected exact product for a compound bed request: %s", (requestText, expectedProductId) => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-sc100", requestText });
+    expect(result.exactMatches.map((match) => match.productId)).toContain(expectedProductId);
+  });
+
   it("shows MR 285 as a black alternative without claiming its unverified width is around 300 cm", () => {
     const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText: "find me a black sofa around 300 cm" });
     const mr285 = result.closestAlternatives.find((match) => match.productId === "musterring-mr-285");

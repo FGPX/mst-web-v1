@@ -13,7 +13,7 @@ import { AlternativeFinderButton } from "../AlternativeFinderButton";
 export function StitchProductCard({ product, explanation, imageOverride, imageNote, showMeta = true, showCompare = true, compareSelected = false, onCompare }: { product: Product; explanation?: string; imageOverride?: string; imageNote?: string; showMeta?: boolean; showCompare?: boolean; compareSelected?: boolean; onCompare?: () => void }) {
   const image = imageOverride ?? productImages(product.id)[0];
   const isConfigurable = ["sofa", "sectional", "armchair"].includes(product.category);
-  const canPlaceInRoom = ["sofa", "sectional", "armchair", "storage", "coffee-table"].includes(product.category);
+  const canPlaceInRoom = ["sofa", "sectional", "armchair", "storage", "wardrobe", "coffee-table"].includes(product.category);
   return (
     <article className="stitch-product-card">
       <Link className="stitch-product-image" href={`/furniture/${product.slug}`} aria-label={`View ${product.name}`} onClick={() => {
