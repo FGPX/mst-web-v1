@@ -8,7 +8,7 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import { useLayoutEffect, useRef, type CSSProperties } from "react";
 
 const HERO_END_BUFFER = 2;
-const AUTO_PLAY_DELAY = 80;
+const AUTO_PLAY_DELAY = 0;
 const AUTO_PLAY_DURATION = 5600;
 
 function smoothPhase(progress: number, start: number, end: number) {
@@ -131,8 +131,9 @@ export default function ProductAssemblyStory() {
 
       const animate = (time: number) => {
         const linearProgress = Math.min(1, (time - startTime) / AUTO_PLAY_DURATION);
-        // Smoothstep accelerates earlier while retaining a soft final landing.
-        const easedProgress = linearProgress * linearProgress * (3 - 2 * linearProgress);
+        // A quadratic ease-out makes the composition visibly start at once,
+        // then settles progressively more gently toward the finished room.
+        const easedProgress = 1 - (1 - linearProgress) ** 2;
         const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
         const storyEnd = sectionTop + distance - HERO_END_BUFFER;
 
