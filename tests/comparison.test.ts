@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { comparisonRows } from "@/components/CompareClient";
+import { comparisonRows, comparisonSummary } from "@/components/CompareClient";
+import { comparisonAwards } from "@/lib/comparison";
 import { products } from "@/lib/data";
 
 describe("product comparison", () => {
@@ -29,5 +30,40 @@ describe("product comparison", () => {
     const rows = comparisonRows(selected, true);
     expect(rows.some((row) => row.name === "Ergonomic sizes")).toBe(true);
     expect(rows.every((row) => new Set(row.values).size > 1)).toBe(true);
+  });
+
+  it("surfaces verified dining-table differences before shared specifications", () => {
+    const tables = ["nica", "justb-sp100"].map((slug) => products.find((product) => product.slug === slug)!);
+    const rows = comparisonRows(tables, false);
+    const shapes = rows.find((row) => row.name === "Tabletop shapes");
+
+    expect(shapes?.values).toEqual([
+      "6 verified shapes, including rectangular, oval and round",
+      "Focused rectangular format"
+    ]);
+    expect(rows.findIndex((row) => row.name === "Tabletop shapes"))
+      .toBeLessThan(rows.findIndex((row) => row.level === "same"));
+  });
+
+  it("compares HELANA counter height with the standard-height JUSTB! table", () => {
+    const tables = ["helana", "justb-sp100"].map((slug) => products.find((product) => product.slug === slug)!);
+    const rows = comparisonRows(tables, true);
+    const value = (name: string) => rows.find((row) => row.name === name)?.values;
+
+    expect(value("Height")).toEqual(["96 cm", "77 cm"]);
+    expect(value("Dining level")).toEqual([
+      "Counter-height ensemble with high table, bar stools and bench",
+      "Standard-height dining table for family meals and social gatherings"
+    ]);
+    expect(value("Visual style")?.[0]).toContain("brown genuine leather");
+    expect(value("Length range")).toEqual(["140–240 cm", "160–240 cm · Indicative"]);
+    expect(value("Materials")?.[0]).toContain("solid oak");
+    expect(rows.some((row) => row.name === "Functions")).toBe(false);
+    expect(rows.some((row) => row.name === "Family friendly")).toBe(false);
+
+    const summary = comparisonSummary(tables, comparisonAwards(tables));
+    expect(summary.products.map((item) => item.summary).join(" ")).not.toContain("200 cm wide");
+    expect(summary.products.find((item) => item.product.slug === "helana")?.summary).toContain("96 cm high");
+    expect(summary.products.find((item) => item.product.slug === "justb-sp100")?.summary).toContain("77 cm high");
   });
 });

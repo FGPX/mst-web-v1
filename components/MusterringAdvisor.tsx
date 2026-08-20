@@ -180,7 +180,7 @@ export function MusterringAdvisor() {
     if (action.type === "OPEN_PRODUCT") return `/furniture/${String(values.slug ?? "")}`;
     if (action.type === "CONFIGURE_PRODUCT") return "/handover";
     if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer";
-    if (action.type === "OPEN_FIT_CHECK") return `/will-it-fit/${String(values.slug ?? currentProduct?.slug ?? "")}`;
+    if (action.type === "OPEN_FIT_CHECK") return "";
     if (action.type === "FIND_RETAILER") return "/dealers";
     if (action.type === "PREPARE_HANDOVER" || action.type === "BOOK_CONSULTATION") return "/handover";
     if (action.type === "SHOW_MATERIALS") return `/materials?advisor=${encodeURIComponent(String(values.query ?? ""))}`;
@@ -305,7 +305,7 @@ export function MusterringAdvisor() {
         {messages.length ? <div className="advisor-conversation-prompts" aria-label="Suggested questions">{starters(pathname).slice(0, 3).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><AdvisorReply message={message} /></div></div>
           {message.answer?.productIds.length ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} /> : null}
-          {message.answer?.proposedAction ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
+          {message.answer?.proposedAction && message.answer.proposedAction.type !== "OPEN_FIT_CHECK" ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
           {message.answer?.suggestedQuestions.length ? <div className="advisor-followups">{message.answer.suggestedQuestions.map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         </article>)}
         {pending ? <p role="status">Consulting available Musterring product data…</p> : null}

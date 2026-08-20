@@ -38,7 +38,7 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
     (best, product) => !best || product.verifiedSeatCount! > best.verifiedSeatCount! ? product : best,
     null
   );
-  const differencePriority = ["Seat construction", "Motorised function", "Seat Height", "Seat Depth", "Reference configuration"];
+  const differencePriority = ["Seat construction", "Motorised function", "Dining level", "Visual style", "Reference format", "Height options", "Tabletop shapes", "Tabletop materials", "Planning range", "Care profile", "Design detail", "Seat Height", "Seat Depth", "Reference configuration"];
   const distinctiveDetailFor = (product: (typeof parsed.products)[number]) => differencePriority
     .map((label) => product.verifiedDetails.find((item) => item.label === label))
     .find((item) => item && parsed.products.some((other) => other.productId !== product.productId
@@ -60,7 +60,10 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
       detail("Seat Height") ? `seat height ${detail("Seat Height")}` : "",
       detail("Seat Depth") ? `seat depth ${detail("Seat Depth")}` : ""
     ].filter(Boolean).join(" · ");
-    const comfortFact = detail("Seat construction") ?? detail("Upholstery choice");
+    const comfortFact = detail("Seat construction") ?? detail("Upholstery choice")
+      ?? detail("Dining level") ?? detail("Visual style") ?? detail("Reference format")
+      ?? detail("Height options") ?? detail("Tabletop shapes") ?? detail("Tabletop materials")
+      ?? detail("Planning range") ?? detail("Care profile") ?? detail("Design detail");
     const functionFact = detail("Motorised function")
       ?? (product.verifiedFunctions.length ? product.verifiedFunctions.join(", ") : "Functions vary by configuration");
     const keyFact = functionFact || comfortFact || specificationFact
@@ -101,10 +104,14 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
       : "";
   };
   const glance = [
-    widths.length > 1 ? `Verified width range: ${Math.min(...widths)}–${Math.max(...widths)} cm` : "",
+    widths.length > 1 && new Set(widths).size > 1 ? `Verified width range: ${Math.min(...widths)}–${Math.max(...widths)} cm` : "",
     seats.length > 1 ? `Verified capacity range: ${Math.min(...seats)}–${Math.max(...seats)} seats` : "",
     detailComparison("Seat Height", "Seat heights"),
     detailComparison("Seat construction", "Seat construction"),
+    detailComparison("Tabletop shapes", "Tabletop formats"),
+    detailComparison("Tabletop materials", "Tabletop materials"),
+    detailComparison("Dining level", "Dining concepts"),
+    detailComparison("Reference format", "Reference formats"),
     modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
     `${parsed.products.filter((product) => product.verifiedFunctions.length).length} with verified function data`
   ].filter(Boolean).slice(0, 2);

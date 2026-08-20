@@ -736,7 +736,7 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
     return advisorAnswerSchema.parse({
       answer: current ? `Available product data lists ${current.modelCode} package guidance, but physical fit cannot be confirmed here. Use Will It Fit? with your measured route and retailer verification.` : "I can help prepare a fit check, but I cannot confirm physical fit without the fit engine. Which product are you considering, and what are the narrowest doorway width and height, stair or lift constraints, and usable room width and depth?",
       answerType: "fit", productIds: current ? [current.id] : referenced, materialIds: [], sources: ["Product package data", "Will It Fit? deterministic service"],
-      proposedAction: current ? { type: "OPEN_FIT_CHECK", label: `Check ${current.modelCode}`, parameters: { slug: current.slug }, requiresConfirmation: false } : null,
+      proposedAction: null,
       suggestedQuestions: current ? ["Which measurements do I need?", "Prepare a technical fit request"] : ["I am considering MR 285", "My doorway is 82 cm wide and 198 cm high", "What measurements does the fit check need?"]
     });
   }
