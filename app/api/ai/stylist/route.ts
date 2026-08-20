@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number) {
   return new Promise<T>((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error("Interior stylist request timed out.")), timeoutMs);
+    const timer = setTimeout(() => reject(new Error("Style Finder request timed out.")), timeoutMs);
     promise.then(
       (value) => { clearTimeout(timer); resolve(value); },
       (error) => { clearTimeout(timer); reject(error); }
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
   const options = stylistOptionsSchema.safeParse(body);
   if (!options.success) {
-    return NextResponse.json({ error: "Complete every stylist question using the supported choices for this room." }, { status: 400 });
+    return NextResponse.json({ error: "Complete every Style Finder question using the supported choices for this room." }, { status: 400 });
   }
 
   const activeIds = new Set(products.filter((product) => product.active).map((product) => product.id));
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
   const provider = configuredProvider();
   if (provider.name !== "openai") {
-    return NextResponse.json({ error: "AI Interior Stylist is not configured. Add a valid server-side OpenAI API key and try again." }, { status: 503 });
+    return NextResponse.json({ error: "Style Finder is not configured. Add a valid server-side OpenAI API key and try again." }, { status: 503 });
   }
 
   try {
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       ai: { provider: "openai", mode: "Single-stage preference-based catalogue grounding" }
     });
   } catch (error) {
-    console.warn("AI Interior Stylist request failed.", providerErrorDetails(error));
+    console.warn("Style Finder request failed.", providerErrorDetails(error));
     return NextResponse.json({ error: "Your product set could not be created right now. Please try again." }, { status: 503 });
   }
 }

@@ -7690,7 +7690,7 @@ img { max-width: 100%; display: block; }
   color: var(--simple-ink);
 }
 
-/* AI Interior Stylist */
+/* Style Finder */
 .stylist-page { padding-top: 80px; background: #f7f5f0; color: #20211f; font-family: FrutigerLTPro, sans-serif; }
 .stylist-hero { overflow: hidden; padding: 28px 0 26px; background: radial-gradient(circle at 74% 45%, #292a28 0, #20211f 36%, #171816 100%); color: #f7f5f0; }
 .stylist-hero-inner { max-width: 1120px; display: block; }
@@ -7851,7 +7851,7 @@ img { max-width: 100%; display: block; }
 .stylist-style-carryover { display: flex; align-items: center; gap: 10px; margin: -2px 0 22px; border: 1px solid #d8c5b7; border-radius: 4px; padding: 12px 14px; background: #faf4ee; color: #5c4a40; font-size: 11px; line-height: 1.45; }
 .stylist-style-carryover svg { flex: 0 0 auto; color: #8f5f43; }
 
-/* Sequential AI Stylist quiz */
+/* Sequential Style Finder quiz */
 .stylist-progress { max-width: 720px; display: grid; grid-template-columns: repeat(6, 1fr); align-items: center; margin: 0 auto 24px; }
 .stylist-progress span { position: relative; width: 32px; height: 32px; display: grid; place-items: center; justify-self: center; z-index: 1; border: 1px solid #c9c5bd; border-radius: 50%; background: #f7f5f0; color: #777771; font-size: 10px; font-weight: 850; }
 .stylist-progress span:not(:first-child)::before { content: ""; position: absolute; top: 50%; right: 100%; width: calc((720px / 6) - 32px); height: 1px; z-index: -1; background: #c9c5bd; }
@@ -7866,17 +7866,15 @@ img { max-width: 100%; display: block; }
 .stylist-question legend > strong { font-family: FrutigerLTPro, sans-serif; font-size: clamp(27px, 3vw, 36px); font-weight: 400; letter-spacing: -.02em; line-height: 1.1; }
 .stylist-question legend > small { color: #6d6d68; font-size: 12px; line-height: 1.5; }
 .stylist-target-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.stylist-target-options button { min-height: 80px; display: grid; grid-template-columns: 42px minmax(0, 1fr) 26px; align-items: center; gap: 13px; border: 1px solid #d6d3cc; border-radius: 5px; padding: 13px 14px; background: #fff; color: inherit; text-align: left; cursor: pointer; transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
+.stylist-target-options button { min-height: 80px; display: grid; grid-template-columns: minmax(0, 1fr) 26px; align-items: center; gap: 13px; border: 1px solid #d6d3cc; border-radius: 5px; padding: 13px 14px; background: #fff; color: inherit; text-align: left; cursor: pointer; transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
 .stylist-target-options button:hover,
 .stylist-target-options button.is-active { border-color: #9a6444; background: #f8f1ea; box-shadow: inset 0 0 0 1px rgba(154,100,68,.14); }
 .stylist-target-options button:hover { transform: translateY(-1px); }
-.stylist-answer-index { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid #d6d3cc; border-radius: 50%; color: #8d624b; font-family: FrutigerLTPro, sans-serif; font-size: 12px; }
 .stylist-answer-copy { min-width: 0; display: grid; gap: 4px; }
 .stylist-answer-copy strong { font-family: FrutigerLTPro, sans-serif; font-size: 14px; font-weight: 500; line-height: 1.2; }
 .stylist-answer-copy small { color: #6d6d68; font-size: 10px; }
 .stylist-answer-action { width: 25px; height: 25px; display: grid; place-items: center; justify-self: end; color: #20211f; }
 .stylist-answer-action.is-selected { border-radius: 50%; background: #8f5f43; color: #fff; }
-.stylist-target-options button.is-active .stylist-answer-index { border-color: #b68a70; background: #fffaf6; }
 .stylist-style-visuals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .stylist-style-visuals button { position: relative; overflow: hidden; display: grid; align-content: start; border: 1px solid #d6d3cc; border-radius: 5px; padding: 0; background: #fff; color: inherit; text-align: left; cursor: pointer; transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
 .stylist-style-visuals button:hover,
@@ -7914,7 +7912,6 @@ img { max-width: 100%; display: block; }
 .stylist-ready { display: grid; justify-items: center; gap: 10px; padding: 8px 0 2px; text-align: center; }
 .stylist-ready > span { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; background: #20211f; color: #fff; }
 .stylist-ready h3 { margin: 8px 0 0; font-family: FrutigerLTPro, sans-serif; font-size: clamp(30px, 4vw, 42px); font-weight: 400; }
-.stylist-ready > p { max-width: 660px; margin: 0; color: #666762; font-size: 13px; line-height: 1.6; }
 .stylist-choice-summary { width: 100%; overflow: hidden; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 14px; border-top: 1px solid #dedbd4; border-left: 1px solid #dedbd4; border-radius: 5px; text-align: left; }
 .stylist-choice-summary > div { min-height: 72px; display: grid; align-content: center; gap: 4px; border-right: 1px solid #dedbd4; border-bottom: 1px solid #dedbd4; padding: 12px 14px; }
 .stylist-choice-summary small { color: #845238; font-size: 8px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
@@ -11723,12 +11720,12 @@ button.assistant-dock:focus-visible { outline: 2px solid #8b553b; outline-offset
 
 /* Bright concierge theme and restrained launcher. */
 button.assistant-dock { border: 1px solid rgba(25,24,21,.24); background: rgba(255,255,255,.96); color: #191815; box-shadow: 0 8px 26px rgba(25,24,21,.14); backdrop-filter: blur(10px); }
-button.assistant-dock { height: 72px; min-height: 72px; gap: 15px; padding: 0 28px 0 18px; }
+button.assistant-dock { height: 72px; min-height: 72px; gap: 15px; padding: 0 18px 0 28px; }
 button.assistant-dock:hover { background: #fff; color: #191815; box-shadow: 0 11px 30px rgba(25,24,21,.18); }
 button.assistant-dock > svg { width: 20px; height: 20px; stroke-width: 1.7; }
 .assistant-mark-crop { position: relative; width: 48px; height: 48px; flex: 0 0 48px; overflow: hidden; }
 button.assistant-dock .assistant-launcher-logo { position: absolute; top: -4px; left: -4px; width: 56px; height: 72px; max-width: none; object-fit: contain; object-position: top center; }
-button.assistant-dock > span:last-child { font-size: 14px; }
+button.assistant-dock > span:first-child { font-size: 14px; }
 
 .advisor-panel { width: min(478px,calc(100vw - 48px)); height: min(750px,calc(100dvh - 160px)); border: 1px solid rgba(25,24,21,.15); background: #fbfaf7; color: #191815; box-shadow: 0 30px 90px rgba(25,24,21,.22); }
 .advisor-panel > header { border-bottom-color: rgba(25,24,21,.12); background: #fff; color: #191815; }
@@ -11765,7 +11762,7 @@ button.assistant-dock > span:last-child { font-size: 14px; }
 .advisor-panel .advisor-input:focus-within { border-color: #955338; box-shadow: 0 14px 34px rgba(25,24,21,.13),0 0 0 1px #955338; }
 
 @media (max-width:520px) {
-  button.assistant-dock { height: 62px; min-height: 62px; padding: 0 21px 0 15px; }
+  button.assistant-dock { height: 62px; min-height: 62px; padding: 0 15px 0 21px; }
   .assistant-mark-crop { width: 40px; height: 40px; flex-basis: 40px; }
   button.assistant-dock .assistant-launcher-logo { width: 48px; height: 62px; }
 }

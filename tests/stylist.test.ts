@@ -50,7 +50,7 @@ function providerResult(input: StylistPreferences): StylistProviderResult {
   });
 }
 
-describe("AI Interior Stylist grounding", () => {
+describe("Style Finder grounding", () => {
   it.each(roomTypes)("builds the configured active catalogue slots for %s", (roomType) => {
     const input = withPreferences({ roomType });
     const groups = buildStylistCandidates(input);
@@ -156,13 +156,13 @@ describe("AI Interior Stylist grounding", () => {
     expect(stylistOptionsSchema.safeParse(withWrittenDetails).success).toBe(false);
   });
 
-  it("accepts up to two answers only for supported multi-select questions", () => {
+  it("enforces the configured limit for every supported multi-select question", () => {
     const input = quizInput();
-    input.answers["special-functions"] = ["relax-function", "adjustable-headrest"];
+    input.answers["special-functions"] = ["relax-function", "recliner", "adjustable-headrest"];
     expect(stylistOptionsSchema.safeParse(input).success).toBe(true);
     expect(normalizeStylistQuiz(input).priorities).toContain("relax-functions");
 
-    input.answers["special-functions"] = ["relax-function", "recliner", "adjustable-headrest"];
+    input.answers["special-functions"] = ["relax-function", "recliner", "adjustable-headrest", "sofa-bed"];
     expect(stylistOptionsSchema.safeParse(input).success).toBe(false);
 
     input.answers["special-functions"] = ["relax-function", "none"];
@@ -171,6 +171,23 @@ describe("AI Interior Stylist grounding", () => {
     const singleChoiceQuestion = quizInput();
     singleChoiceQuestion.answers.target = ["sofa"];
     expect(stylistOptionsSchema.safeParse(singleChoiceQuestion).success).toBe(false);
+
+    const hallway = quizInput("hallway");
+    hallway.answers["store-items"] = ["coats", "shoes", "bags", "accessories"];
+    expect(stylistOptionsSchema.safeParse(hallway).success).toBe(true);
+
+    const bedroom = quizInput("bedroom");
+    bedroom.answers["additional-storage"] = ["under-bed", "wardrobe", "dresser"];
+    expect(stylistOptionsSchema.safeParse(bedroom).success).toBe(true);
+
+    const outdoor = quizInput("outdoor");
+    outdoor.answers["main-use"] = ["relaxing", "dining", "entertaining"];
+    expect(stylistOptionsSchema.safeParse(outdoor).success).toBe(true);
+
+    const accessories = quizInput("home-accessories");
+    accessories.answers.goal = ["cosier", "add-colour", "add-lighting"];
+    accessories.answers["existing-colours"] = ["light-neutral", "warm-natural", "dark"];
+    expect(stylistOptionsSchema.safeParse(accessories).success).toBe(true);
   });
 
   it("carries a style direction into another room without overriding an explicit new choice", () => {

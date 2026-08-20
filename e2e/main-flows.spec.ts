@@ -179,7 +179,7 @@ test("Upload room consent, preview and save", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Saved to project" })).toBeVisible();
 });
 
-test("AI stylist creates, adjusts and saves a grounded room set", async ({ page }) => {
+test("Style Finder creates, adjusts and saves a grounded room set", async ({ page }) => {
   await page.route("**/api/ai/stylist", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(stylistResponse()) }));
   await page.goto("/ai-stylist");
   await prepareStylistQuiz(page);
@@ -191,11 +191,11 @@ test("AI stylist creates, adjusts and saves a grounded room set", async ({ page 
   await page.getByRole("link", { name: /View product/ }).first().click();
   await expect(page).toHaveURL(/\/furniture\//);
   await page.goto("/my-musterring");
-  await expect(page.getByRole("heading", { name: "AI Stylist Sets", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Style Finder Sets", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Warm modern living set" })).toBeVisible();
 });
 
-test("AI stylist shows a retry and never substitutes demo results", async ({ page }) => {
+test("Style Finder shows a retry and never substitutes demo results", async ({ page }) => {
   let attempts = 0;
   await page.route("**/api/ai/stylist", (route) => {
     attempts += 1;
@@ -211,7 +211,7 @@ test("AI stylist shows a retry and never substitutes demo results", async ({ pag
   await expect(page.getByRole("heading", { name: "Warm modern living set" })).toBeVisible();
 });
 
-test("AI stylist adapts its questions and keeps dimension validation usable on mobile", async ({ page }) => {
+test("Style Finder adapts its questions and keeps dimension validation usable on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/ai-stylist");
   await page.getByRole("button", { name: /^Bedroom/ }).click();
