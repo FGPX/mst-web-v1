@@ -176,7 +176,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [roomSize, setRoomSize] = useState({ widthMm: 5600, lengthMm: 4200 });
   const [roomAnalysis, setRoomAnalysis] = useState<RoomAnalysis | null>(null);
   const [composerNotice, setComposerNotice] = useState(() => recommendedProductIds.length
-    ? `${recommendedProductIds.length} Style Finder recommendation${recommendedProductIds.length === 1 ? " is" : "s are"} ready. Choose the products you want to add.`
+    ? `${recommendedProductIds.length === 1 ? "Your selected product is" : "Your selected products are"} ready. Choose the products you want to add.`
     : "");
   const [generatedVisualization, setGeneratedVisualization] = useState("");
   const [generatedForSignature, setGeneratedForSignature] = useState("");
@@ -386,7 +386,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     const alreadyInRoom = items.some((item) => item.productId === product.id);
     return (
       <article key={product.id} className={recommended ? "is-recommended" : undefined}>
-        <div className={`stitch-composer-product-media ${composerImage(product.id).toLowerCase().endsWith(".png") ? "is-cutout" : "is-scene"}`}><Image src={composerImage(product.id)} alt={`${product.modelCode} product crop`} width={280} height={200} /><span>{recommended ? "Style Finder" : "Product focus"}</span></div>
+        <div className={`stitch-composer-product-media ${composerImage(product.id).toLowerCase().endsWith(".png") ? "is-cutout" : "is-scene"}`}><Image src={composerImage(product.id)} alt={`${product.modelCode} product crop`} width={280} height={200} /><span>{recommended ? "Selected product" : "Product focus"}</span></div>
         <div className="stitch-composer-product-copy">
           <span>{product.modelCode}</span>
           {product.name.trim().toLowerCase() !== product.modelCode.trim().toLowerCase() ? <strong>{product.name}</strong> : null}
@@ -696,8 +696,8 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
             </div>
             <div className="stitch-composer-catalog-heading"><p className="eyebrow">Available products</p><span>{catalog.length} models</span></div>
             <input className="stitch-composer-search" type="search" value={productQuery} onChange={(event) => { setProductQuery(event.target.value); setVisibleCount(upload ? 4 : 12); }} placeholder="Search model or product" aria-label="Search products" />
-            {upload && recommendedProducts.length ? <section className="stitch-composer-product-group is-yours" aria-labelledby="style-finder-recommendations-heading">
-              <div className="stitch-composer-product-group-heading"><strong id="style-finder-recommendations-heading">Style Finder recommendations</strong><span>{recommendedProducts.length}</span></div>
+            {upload && recommendedProducts.length ? <section className="stitch-composer-product-group is-yours" aria-labelledby="selected-products-heading">
+              <div className="stitch-composer-product-group-heading"><strong id="selected-products-heading">Selected products</strong><span>{recommendedProducts.length}</span></div>
               <div className="stitch-composer-products">{recommendedProducts.map((product) => productCard(product, true))}</div>
             </section> : null}
             <section className="stitch-composer-product-group" aria-labelledby={upload && recommendedProducts.length ? "other-products-heading" : undefined} aria-label={upload && recommendedProducts.length ? undefined : "Available products"}>

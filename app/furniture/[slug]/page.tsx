@@ -142,7 +142,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
           <div className="product-planning-grid">
             <article><h3>Materials</h3><p>{product.verifiedFacts.materialTypes.length ? `Catalogue mentions ${product.verifiedFacts.materialTypes.join(" and ")} options. Specific covers remain configuration dependent.` : `Presentation material profile: ${product.materialTypes?.join(", ") || product.primaryMaterial || "category-appropriate materials"}. Final cover or finish is selected with the retailer.`}</p></article>
             <article><h3>Functions</h3><p>{product.verifiedFacts.functions.length ? `Verified catalogue functions: ${product.verifiedFacts.functions.join(", ")}.` : `Presentation function profile: ${product.functions.join(", ") || product.useCases?.join(", ") || "standard category functions"}. Final functions depend on the selected configuration.`}</p></article>
-            <article><h3>Check your space</h3><p>Use the fit guide before confirming whether this product works in your room.</p><Link className="button ghost" href={`/will-it-fit/${product.slug}`}>Open “Will It Fit?”</Link></article>
+            <article><h3>Room Visualizer</h3><p>Upload a photo of your room and preview this product in your space using the primary action above.</p></article>
           </div>
         </div>
       </section>
