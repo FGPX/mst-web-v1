@@ -238,7 +238,9 @@ export function analyzePlacement(roomWidth: number, roomLength: number, product:
   return {
     status: issues.some((item) => item.severity === "conflict") ? "conflict" as const : issues.length ? "tight" as const : "safe" as const,
     issues,
-    distances
+    distances,
+    dimensionStatus: product.verifiedFacts.dimensions ? "verified" as const : "demo-reference" as const,
+    referenceConfiguration: product.referenceConfiguration?.name ?? null
   };
 }
 

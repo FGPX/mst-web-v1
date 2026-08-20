@@ -188,6 +188,25 @@ test("Musterring Assistant keeps the conversation after closing and reopening", 
   await expect(page.locator(".advisor-messages article.customer")).toContainText("hello");
 });
 
+test("Musterring Assistant starts a new chat after confirmation", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
+  await page.getByLabel("Ask Musterring about products and your project").fill("hello");
+  await page.getByRole("button", { name: "Send question" }).click();
+  await expect(page.locator(".advisor-messages article.customer")).toContainText("hello");
+
+  await page.getByRole("button", { name: "Start a new chat" }).click();
+  await expect(page.getByRole("heading", { name: "Start a new chat?" })).toBeVisible();
+  await page.getByRole("button", { name: "Start new chat" }).click();
+
+  await expect(page.locator(".advisor-messages article")).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "What are you working on?" })).toBeVisible();
+  await expect(page.getByLabel("Ask Musterring about products and your project")).toBeFocused();
+  await page.getByRole("button", { name: "Close Musterring Assistant" }).click();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
+  await expect(page.locator(".advisor-messages article")).toHaveCount(0);
+});
+
 test("Musterring Assistant closes when navigating to another page", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Open Musterring Assistant" }).click();

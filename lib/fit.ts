@@ -27,6 +27,9 @@ export function checkFit(product: Product, input: FitInputs) {
     status,
     headline: status === "likely" ? "Likely to fit based on the measurements provided." : status === "potential-conflict" ? "Potential conflict based on the measurements provided." : "Unlikely to fit based on the measurements provided.",
     reasons,
-    minimumRequiredClearanceMm: product.packageDimensions.minOpeningMm
+    minimumRequiredClearanceMm: product.packageDimensions.minOpeningMm,
+    dimensionStatus: product.verifiedFacts.dimensions ? "verified" as const : "demo-reference" as const,
+    referenceConfiguration: product.referenceConfiguration?.name ?? null,
+    requiresRetailerConfirmation: !product.verifiedFacts.dimensions || product.entityLevel === "programme"
   };
 }

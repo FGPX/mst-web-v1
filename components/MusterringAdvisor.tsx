@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, Check, Mic, Send, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, MessageSquarePlus, Mic, Send, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { materials, products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -47,9 +47,12 @@ export function MusterringAdvisor() {
   const [conversationReady, setConversationReady] = useState(false);
   const [pending, setPending] = useState(false);
   const [pendingAction, setPendingAction] = useState<AdvisorAction | null>(null);
+  const [confirmNewChat, setConfirmNewChat] = useState(false);
   const [voiceState, setVoiceState] = useState<"idle" | "listening" | "processing" | "recognized" | "error" | "denied">("idle");
   const [context, setContext] = useState<ConversationContext>({ route: pathname, referencedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {} });
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const conversationVersionRef = useRef(0);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const voiceDraftRef = useRef("");
   const voiceParsedRef = useRef(false);
   const currentProduct = productFromPath(pathname);
@@ -127,10 +130,12 @@ export function MusterringAdvisor() {
     }
     setMessages((current) => [...current, { role: "customer", text: clean }]);
     setInput(""); setPending(true);
+    const conversationVersion = conversationVersionRef.current;
     storage.track({ name: "chatbot_question_submitted" });
     const recentMessages = [...messages, { role: "customer" as const, text: clean }].slice(-8).map(({ role, text }) => ({ role, text }));
     const response = await fetch("/api/ai/advisor", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ question: clean, context: { ...context, route: pathname, currentProductId: currentProduct?.id ?? context.currentProductId, recentMessages } }) }).catch(() => null);
     const payload = response ? await response.json().catch(() => null) : null;
+    if (conversationVersion !== conversationVersionRef.current) return;
     setPending(false);
     if (!response?.ok || !payload?.answer) {
       setMessages((current) => [...current, { role: "advisor", text: payload?.error ?? "The Musterring Assistant is temporarily unavailable. Your saved project has not changed." }]);
@@ -141,6 +146,32 @@ export function MusterringAdvisor() {
     setContext((current) => ({ ...current, referencedProductIds: answer.productIds.length ? answer.productIds : current.referencedProductIds }));
     if (answer.productIds.length) storage.track({ name: "chatbot_product_recommended", productId: answer.productIds[0] });
     if (answer.proposedAction) storage.track({ name: "chatbot_action_proposed" });
+  };
+  const startNewChat = () => {
+    conversationVersionRef.current += 1;
+    setMessages([]);
+    setInput("");
+    setPending(false);
+    setPendingAction(null);
+    setConfirmNewChat(false);
+    setVoiceState("idle");
+    voiceDraftRef.current = "";
+    voiceParsedRef.current = true;
+    recognitionRef.current?.abort();
+    recognitionRef.current = null;
+    setContext({
+      route: pathname,
+      currentProductId: currentProduct?.id ?? null,
+      referencedProductIds: [],
+      selectedMaterialIds: [],
+      currentFilters: {},
+      approvedPreferences: {}
+    });
+    try {
+      window.sessionStorage.removeItem(conversationKey);
+      window.sessionStorage.removeItem(memoryKey);
+    } catch { /* the in-memory conversation is still reset when storage is unavailable */ }
+    window.setTimeout(() => inputRef.current?.focus(), 0);
   };
   const actionRoute = (action: AdvisorAction) => {
     const values = action.parameters;
@@ -201,10 +232,12 @@ export function MusterringAdvisor() {
   const parseVoiceText = async (transcript: string) => {
     const cleanTranscript = transcript.trim();
     if (!cleanTranscript) return;
+    const conversationVersion = conversationVersionRef.current;
     setInput(cleanTranscript);
     setVoiceState("processing");
     const response = await fetch("/api/ai/voice-command", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ transcript: cleanTranscript }) }).catch(() => null);
     const payload = response ? await response.json().catch(() => null) : null;
+    if (conversationVersion !== conversationVersionRef.current) return;
     if (!response?.ok || !payload?.command) { setVoiceState("error"); storage.track({ name: "voice_command_failed" }); return; }
     handleVoiceCommand(payload.command, cleanTranscript);
   };
@@ -215,6 +248,7 @@ export function MusterringAdvisor() {
     const Recognition = scope.SpeechRecognition ?? scope.webkitSpeechRecognition;
     if (!Recognition) { setVoiceState("error"); setMessages((current) => [...current, { role: "advisor", text: "Speech recognition is not supported in this browser. Type the command below instead." }]); return; }
     const recognition = new Recognition();
+    recognitionRef.current = recognition;
     voiceDraftRef.current = "";
     voiceParsedRef.current = false;
     setInput("");
@@ -243,6 +277,7 @@ export function MusterringAdvisor() {
     };
     recognition.onerror = (event) => { setVoiceState(event.error === "not-allowed" ? "denied" : "error"); storage.track({ name: "voice_command_failed" }); };
     recognition.onend = () => {
+      if (recognitionRef.current === recognition) recognitionRef.current = null;
       const draft = voiceDraftRef.current.trim();
       if (draft && !voiceParsedRef.current) {
         voiceParsedRef.current = true;
@@ -264,7 +299,7 @@ export function MusterringAdvisor() {
           : "Voice input failed. Try again or type your question.";
   if (!open) return <button className="assistant-dock" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><span>Ask</span><span className="assistant-mark-crop" aria-hidden="true"><Image className="assistant-launcher-logo" src="/brand/musterring-logo.svg" alt="" width={70} height={90} /></span></button>;
   return <aside className="advisor-panel" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
-    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></header>
+    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><div className="advisor-header-actions"><button className="advisor-new-chat" aria-label="Start a new chat" onClick={() => setConfirmNewChat(true)}><MessageSquarePlus /><span>New chat</span></button><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></div></header>
       <div className="advisor-messages" aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><span className="advisor-welcome-kicker">Your home, considered</span><h3>What are you working on?</h3><p>Products, rooms, materials, planning or service—I can help you find the next useful step.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}<ArrowRight /></button>)}</div></div> : null}
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><p>{message.text}</p></div></div>
@@ -284,7 +319,8 @@ export function MusterringAdvisor() {
         {pending ? <p role="status">Consulting available Musterring product data…</p> : null}
         {voiceState !== "idle" ? <p className={`voice-state is-${voiceState}`} role="status">Voice: {voiceStatusText}</p> : null}
       </div>
-      {pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
+      {confirmNewChat ? <section className="advisor-confirmation advisor-new-chat-confirmation" aria-label="Confirm new chat"><MessageSquarePlus /><div><h3>Start a new chat?</h3><p>This clears the current conversation and its context.</p></div><button onClick={startNewChat}>Start new chat</button><button onClick={() => setConfirmNewChat(false)}>Cancel</button></section> : null}
+      {!confirmNewChat && pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
       <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder={voiceState === "listening" ? "Listening... your speech appears here" : "How can I help?"} /><button type="button" aria-label="Use microphone" aria-pressed={voiceState === "listening"} disabled={voiceState === "processing"} onClick={() => void startVoice()}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending || voiceState === "processing"}><Send /></button></form>
   </aside>;
 }

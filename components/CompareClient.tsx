@@ -221,21 +221,27 @@ function comparisonDate(comparison: SavedComparison) {
 }
 
 function comparisonRows(selected: Product[], diffOnly: boolean) {
+  const dimensionValue = (product: Product, axis: "widthMm" | "depthMm" | "heightMm") => product.verifiedFacts.dimensions
+    ? `${Math.round(product[axis] / 10)} cm`
+    : product.referenceConfiguration
+      ? `${Math.round(product.referenceConfiguration.dimensions[axis] / 10)} cm reference`
+      : "Configuration dependent";
   const rows: Array<[string, string[]]> = [
-    ["Width", selected.map((product) => product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} cm` : "Configuration dependent")],
-    ["Depth", selected.map((product) => product.verifiedFacts.dimensions ? `${Math.round(product.depthMm / 10)} cm` : "Configuration dependent")],
-    ["Height", selected.map((product) => verifiedComparisonValue(product, "Height") ?? (product.verifiedFacts.dimensions ? `${Math.round(product.heightMm / 10)} cm` : "Configuration dependent"))],
+    ["Width", selected.map((product) => dimensionValue(product, "widthMm"))],
+    ["Depth", selected.map((product) => dimensionValue(product, "depthMm"))],
+    ["Height", selected.map((product) => verifiedComparisonValue(product, "Height") ?? dimensionValue(product, "heightMm"))],
     ["Seat Height", selected.map((product) => verifiedComparisonValue(product, "Seat Height") ?? (product.verifiedFacts.seatHeight ? `${Math.round(product.seatHeightMm / 10)} cm` : "Configuration dependent"))],
     ["Seat Depth", selected.map((product) => verifiedComparisonValue(product, "Seat Depth") ?? (product.verifiedFacts.seatDepth ? `${Math.round(product.seatDepthMm / 10)} cm` : "Configuration dependent"))],
     ["Seats", selected.map((product) => product.numberOfSeatsVerified ? String(product.numberOfSeats) : "Configuration dependent")],
     ["Modularity", selected.map((product) => product.verifiedFacts.modular ? "Modular system" : "Configuration dependent")],
     ["Functions", selected.map((product) => product.verifiedFacts.functions.join(", ") || "Configuration dependent")],
-    ["Materials", selected.map((product) => product.verifiedFacts.materialTypes.join(", ") || "Configuration dependent")],
+    ["Materials", selected.map((product) => product.verifiedFacts.materialTypes.join(", ") || product.materialTypes?.join(", ") || "Configuration dependent")],
     ["Comfort", selected.map((product) => product.verifiedFacts.comfort ? product.comfortOptions.join(", ") : "Configuration dependent")],
     ["Armrests", selected.map((product) => product.armrestOptions.join(", ") || "Configuration dependent")],
     ["Feet", selected.map((product) => product.feetOptions.join(", ") || "Configuration dependent")],
     ["Configurator", selected.map((product) => product.category === "storage" ? "Retailer planning" : "Available")],
-    ["Overall dimensions", selected.map((product) => product.verifiedFacts.dimensions ? dimensions(product.widthMm, product.depthMm, product.heightMm) : "Configuration dependent")]
+    ["Entity level", selected.map((product) => product.entityLevel ?? "product")],
+    ["Overall dimensions", selected.map((product) => product.verifiedFacts.dimensions ? dimensions(product.widthMm, product.depthMm, product.heightMm) : product.referenceConfiguration ? `${dimensions(product.widthMm, product.depthMm, product.heightMm)} reference` : "Configuration dependent")]
   ];
   const standardLabels = new Set(rows.map(([name]) => name));
   const detailLabels = [...new Set(selected.flatMap((product) => product.verifiedComparisonFacts?.map((fact) => fact.label) ?? []))]

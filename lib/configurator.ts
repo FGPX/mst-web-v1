@@ -2,12 +2,19 @@ import { products } from "./data";
 import type { Configuration, Product } from "./types";
 
 export function createConfiguration(product: Product): Configuration {
+  const demoFields = [
+    ...(product.verifiedFacts.dimensions ? [] : ["dimensions"]),
+    ...(product.verifiedFacts.seatHeight ? [] : ["seatHeightMm"]),
+    ...(product.armrestOptions.length ? [] : ["armrest"]),
+    ...(product.feetOptions.length ? [] : ["feet"]),
+    "indicativePriceCents"
+  ];
   return {
     id: `CFG-${product.modelCode.replace(/\W/g, "")}-2027`,
     productId: product.id,
-    modules: product.category === "armchair" ? ["chair"] : ["left seat", "right seat"],
-    armrest: product.armrestOptions[0],
-    feet: product.feetOptions[0],
+    modules: product.availableComponents?.length ? product.availableComponents.slice(0, 2) : product.category === "armchair" ? ["chair"] : ["left seat", "right seat"],
+    armrest: product.armrestOptions[0] ?? "Configuration dependent",
+    feet: product.feetOptions[0] ?? "Configuration dependent",
     seatHeightMm: product.seatHeightMm,
     materialId: product.materials[0],
     color: product.colors[0],
@@ -15,6 +22,16 @@ export function createConfiguration(product: Product): Configuration {
     electric: false,
     dimensions: { widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm },
     indicativePriceCents: product.indicativePriceCents,
+    dataQuality: {
+      level: demoFields.length ? "mixed" : "verified",
+      verifiedFields: [
+        ...(product.verifiedFacts.dimensions ? ["dimensions"] : []),
+        ...(product.verifiedFacts.seatHeight ? ["seatHeightMm"] : [])
+      ],
+      authorizedSourceFields: ["productId", "modules"],
+      derivedFields: [],
+      demoFields
+    },
     updatedAt: new Date().toISOString()
   };
 }

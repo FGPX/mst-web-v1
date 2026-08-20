@@ -127,7 +127,8 @@ export function parseSearchQuery(query: string): SearchFilters {
   const q = query.trim();
   const text = normalizeSearchText(q);
   const filters: SearchFilters = { q };
-  if (/dining chair|dining seat|esszimmerstuhl|stuhl/.test(text)) filters.category = "dining-chair";
+  if (/outdoor|garden furniture|patio|gartenmoebel|gartenmöbel/.test(text)) filters.category = "outdoor";
+  else if (/dining chair|dining seat|esszimmerstuhl|stuhl/.test(text)) filters.category = "dining-chair";
   else if (/armchair|accent chair|recliner|\bchair\b|sessel/.test(text)) filters.category = "armchair";
   else if (/sectional|corner sofa|corner couch|chaise|ecksofa|wohnlandschaft/.test(text)) filters.category = "sectional";
   else if (/sofa|couch/.test(text)) filters.category = "sofa";
@@ -138,7 +139,6 @@ export function parseSearchQuery(query: string): SearchFilters {
   else if (/\bbed\b|upholstered bed|boxspring|mattress|topper|slatted frame|bett/.test(text)) filters.category = "bed";
   else if (/bathroom|bath furniture|badmoebel|badmöbel/.test(text)) filters.category = "bathroom";
   else if (/\bkitchen\b|\bkitchen unit\b|\bkitchen programme\b/.test(text)) filters.category = "kitchen";
-  else if (/outdoor|garden furniture|patio|gartenmoebel|gartenmöbel/.test(text)) filters.category = "outdoor";
   else if (/carpet|\brug\b|teppich/.test(text)) filters.category = "carpet";
   else if (/\blamp\b|lighting|leuchte/.test(text)) filters.category = "lamp";
   else if (/home textile|bed linen|bedding|plaid|cushion cover|comforter/.test(text)) filters.category = "home-textile";
@@ -169,6 +169,17 @@ export function parseSearchQuery(query: string): SearchFilters {
   if (/high[- ]seat|tall person|hohe(?:r|n|m|s)? sitzh(?:ö|oe)he|gro(?:ß|ss)e(?:r|n|m|s)? person/.test(text)) filters.minSeatHeightMm = 470;
   if (/relax|recline|lounge|entspannungsfunktion/.test(text)) filters.relaxFunction = true;
   if (/electric|elektrisch|motor|power/.test(text)) filters.electricFunctions = true;
+  if (/\bextendable\b|extension table|auszieh/.test(text)) filters.extendable = true;
+  if (/sliding door|sliding wardrobe|schwebet(?:u|ü)r|schiebet(?:u|ü)r/.test(text)) filters.slidingDoors = true;
+  const bedSize = text.match(/\b(90|120|140|160|180|200)\s*[x×]\s*(190|200|210|220)\b/);
+  if (bedSize) filters.bedWidthMm = Number(bedSize[1]) * 10;
+  if (/easy[- ]care|easy to clean|pflegeleicht/.test(text)) filters.easyCare = true;
+  if (/weather[- ]resistant|weatherproof|wind and weather|wetterfest/.test(text)) filters.weatherResistant = true;
+  if (/sofa[- ]bed|sleeper sofa|bed function|schlafsofa/.test(text)) filters.sofaBed = true;
+  if (/with storage|integrated storage|storage compartment|bettkasten/.test(text)) filters.integratedStorage = true;
+  if (/\bround\b|rund/.test(text) && filters.category === "dining-table") filters.tabletopShapes = ["round"];
+  const lumenTarget = text.match(/(?:around|about|approximately|approx\.?|roughly)?\s*(\d{2,4})\s*(?:lm|lumens?)/);
+  if (lumenTarget) { filters.minLumens = Math.max(0, Number(lumenTarget[1]) - 75); filters.maxLumens = Number(lumenTarget[1]) + 75; }
   return filters;
 }
 
@@ -185,6 +196,17 @@ export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.modular && (!product.verifiedFacts.modular || !product.modular)) return false;
   if (filters.smallSpaceSuitable && (!product.verifiedFacts.smallSpaceSuitable || !product.smallSpaceSuitable)) return false;
   if (filters.layoutShapes?.length && !filters.layoutShapes.some((shape) => product.layoutShapes?.includes(shape))) return false;
+  if (filters.tabletopShapes?.length && !filters.tabletopShapes.some((shape) => product.specifications?.table?.tabletopShape.includes(shape))) return false;
+  if (filters.extendable && !product.specifications?.table?.extendable) return false;
+  if (filters.slidingDoors && !product.specifications?.wardrobe?.doorType.includes("sliding")) return false;
+  if (filters.bedWidthMm && !product.specifications?.bed?.sleepingWidthsMm.includes(filters.bedWidthMm)) return false;
+  if (filters.easyCare && !(product.specifications?.carpet?.easyCare || product.verifiedFacts.easyCare)) return false;
+  if (filters.weatherResistant && !product.specifications?.outdoor?.weatherResistant) return false;
+  if (filters.sofaBed && !product.specifications?.seating?.sofaBed) return false;
+  if (filters.integratedStorage && !product.specifications?.seating?.integratedStorage && !product.specifications?.bed?.bedStorage) return false;
+  const lumens = product.specifications?.lamp?.lumens;
+  if (filters.minLumens && (lumens == null || lumens < filters.minLumens)) return false;
+  if (filters.maxLumens && (lumens == null || lumens > filters.maxLumens)) return false;
   if (filters.relaxFunction && !product.verifiedFacts.functions.includes("relax")) return false;
   if (filters.electricFunctions && !product.verifiedFacts.functions.includes("electric")) return false;
   if (filters.colors?.length && !filters.colors.some((color) => product.verifiedFacts.colors.includes(color))) return false;
@@ -195,7 +217,7 @@ export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.styles?.length && !filters.styles.some((style) => product.verifiedFacts.styles.includes(style))) return false;
   if (filters.collections?.length && !filters.collections.includes(product.collection)) return false;
   if (filters.q && !filters.modelCode) {
-    const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${(product.categories ?? [product.category]).join(" ")} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
+    const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${(product.categories ?? [product.category]).join(" ")} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${(product.keywords ?? []).join(" ")} ${(product.synonyms ?? []).join(" ")} ${(product.availableComponents ?? []).join(" ")} ${(product.specifications?.table?.tabletopShape ?? []).join(" ")} ${(product.specifications?.wardrobe?.doorType ?? []).join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
     const usefulTerms = filters.q.toLowerCase().split(/\W+/).filter((term) => term.length > 2 && !["need", "with", "for", "the", "and", "maximum"].includes(term));
     return usefulTerms.length === 0 || usefulTerms.some((term) => haystack.includes(term));
   }
@@ -212,6 +234,10 @@ export function matchExplanation(product: Product, filters: SearchFilters) {
   if (filters.maxWidthMm && product.widthMm <= filters.maxWidthMm) reasons.push(`available below ${Math.round(filters.maxWidthMm / 10)} cm`);
   if (filters.colors?.some((color) => product.colors.includes(color))) reasons.push(`offered in ${filters.colors.join(", ")} tones`);
   if (product.smallSpaceSuitable) reasons.push("suited to smaller rooms");
+  if (filters.extendable && product.specifications?.table?.extendable) reasons.push("extendable table configuration");
+  if (filters.slidingDoors && product.specifications?.wardrobe?.doorType.includes("sliding")) reasons.push("sliding-door wardrobe option");
+  if (filters.bedWidthMm && product.specifications?.bed?.sleepingWidthsMm.includes(filters.bedWidthMm)) reasons.push(`${filters.bedWidthMm / 10} cm sleeping width`);
+  if (filters.weatherResistant && product.specifications?.outdoor?.weatherResistant) reasons.push("weather-resistant outdoor use");
   return reasons.length ? `Strong match because this model is ${reasons.join(", ")}.` : "Recommended from validated product data.";
 }
 

@@ -16,6 +16,7 @@
     "import:musterring-assets": "node scripts/import-musterring-assets.mjs",
     "import:musterring-assets:dry": "node scripts/import-musterring-assets.mjs --dry-run",
     "import:content-manifest": "node scripts/build-content-manifest.mjs",
+    "generate:geo-enrichment": "node scripts/generate-geo-enrichment.mjs",
     "extract:room-planner-colors": "node scripts/extract-room-planner-colors.mjs",
     "generate:room-planner-models": "npm run extract:room-planner-colors && node scripts/generate-room-planner-glbs.mjs",
     "seed": "node -e \"console.log('Demo data is bundled in lib/data.ts')\""

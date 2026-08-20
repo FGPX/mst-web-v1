@@ -2201,63 +2201,16 @@ body:has(.stitch-room-composer.is-upload-flow) .assistant-dock {
   }
 }
 
-/* Premium, compact real-room visualizer. */
+/* Compact real-room visualizer. It intentionally inherits the global site
+   header, navigation typography and container grid so the journey remains
+   visually connected to the rest of the Musterring experience. */
 body:has(.stitch-room-composer.is-upload-flow) {
   background: #f7f5f1;
 }
 
-body:has(.stitch-room-composer.is-upload-flow) .stitch-header {
-  top: 18px;
-  right: 18px;
-  left: 18px;
-  border: 1px solid #dedbd5;
-  border-radius: 14px 14px 0 0;
-  background: rgba(255, 255, 255, .96);
-}
-
-body:has(.stitch-room-composer.is-upload-flow) .stitch-nav {
-  width: min(calc(100% - 64px), 1518px);
-  height: 96px;
-}
-
-body:has(.stitch-room-composer.is-upload-flow) .stitch-brand-logo {
-  display: block;
-  width: auto;
-  height: 64px;
-  object-fit: contain;
-}
-
-body:has(.stitch-room-composer.is-upload-flow) .stitch-nav-links {
-  flex: 1;
-  justify-content: center;
-  gap: clamp(22px, 2.5vw, 42px);
-}
-
-body:has(.stitch-room-composer.is-upload-flow) .stitch-nav-links a,
-body:has(.stitch-room-composer.is-upload-flow) .stitch-furniture-trigger {
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-body:has(.stitch-room-composer.is-upload-flow) .stitch-nav-actions .stitch-button {
-  min-height: 50px;
-  border-radius: 7px;
-  padding-inline: 24px;
-  font-size: 13px;
-  letter-spacing: 0;
-  text-transform: none;
-}
-
-.stitch-room-composer.is-upload-flow .stitch-composer-intro > .container,
-.stitch-room-composer.is-upload-flow .stitch-composer-workspace > .container {
-  width: min(calc(100% - 80px), 1518px);
-}
-
 @media (min-width: 901px) {
   .stitch-room-composer.is-upload-flow .stitch-composer-intro {
-    padding-top: 168px;
+    padding-top: 116px;
   }
 }
 
@@ -2603,10 +2556,6 @@ body:has(.stitch-room-composer.is-upload-flow) .stitch-nav-actions .stitch-butto
 }
 
 @media (max-width: 1100px) {
-  body:has(.stitch-room-composer.is-upload-flow) .stitch-nav {
-    width: calc(100% - 40px);
-  }
-
   .stitch-room-composer.is-upload-flow .stitch-composer-layout {
     grid-template-columns: 270px minmax(0, 1fr);
     gap: 22px;
@@ -2614,18 +2563,6 @@ body:has(.stitch-room-composer.is-upload-flow) .stitch-nav-actions .stitch-butto
 }
 
 @media (max-width: 900px) {
-  body:has(.stitch-room-composer.is-upload-flow) .stitch-header {
-    top: 0;
-    right: 0;
-    left: 0;
-    border-radius: 0;
-  }
-
-  .stitch-room-composer.is-upload-flow .stitch-composer-intro > .container,
-  .stitch-room-composer.is-upload-flow .stitch-composer-workspace > .container {
-    width: min(calc(100% - 32px), 1518px);
-  }
-
   .stitch-room-composer.is-upload-flow .stitch-composer-layout {
     grid-template-columns: 1fr;
   }
@@ -11790,6 +11727,20 @@ button.assistant-dock > span:first-child { font-size: 14px; }
 .advisor-panel > header small { color: #777169; }
 .advisor-panel > header button { color: #191815; }
 .advisor-panel > header button:hover { background: #f1eee8; }
+.advisor-panel > header .advisor-header-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 4px; }
+.advisor-panel > header .advisor-new-chat { width: auto; flex-basis: auto; gap: 7px; padding: 0 11px; border-radius: 999px; color: #5f5a53; font: 700 11px/1 var(--stitch-font-ui); white-space: nowrap; }
+.advisor-panel > header .advisor-new-chat svg { width: 16px; height: 16px; }
+.advisor-panel .advisor-new-chat-confirmation {
+  position: absolute;
+  right: 18px;
+  bottom: 96px;
+  left: 18px;
+  z-index: 5;
+  grid-template-columns: 22px 1fr auto auto;
+  border: 1px solid rgba(25,24,21,.16);
+  border-radius: 4px;
+  box-shadow: 0 16px 36px rgba(25,24,21,.18);
+}
 .advisor-panel .advisor-messages { background: #fbfaf7; color: #191815; }
 .advisor-panel .advisor-welcome h3 { color: #191815; }
 .advisor-panel .advisor-welcome p { color: #68635c; }
@@ -11821,6 +11772,9 @@ button.assistant-dock > span:first-child { font-size: 14px; }
   button.assistant-dock { height: 62px; min-height: 62px; padding: 0 15px 0 21px; }
   .assistant-mark-crop { width: 40px; height: 40px; flex-basis: 40px; }
   button.assistant-dock .assistant-launcher-logo { width: 48px; height: 62px; }
+  .advisor-panel > header .advisor-new-chat { width: 38px; flex-basis: 38px; padding: 0; }
+  .advisor-panel > header .advisor-new-chat span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .advisor-panel .advisor-new-chat-confirmation { right: 12px; bottom: 92px; left: 12px; grid-template-columns: 22px 1fr; }
 }
 /* Scroll-composed living room story */
 .product-assembly {
@@ -11864,13 +11818,13 @@ button.assistant-dock > span:first-child { font-size: 14px; }
 .assembly-stage { --assembly-fit: cover; position: absolute; inset: 0; overflow: hidden; background: #ded6c9; }
 .assembly-stage::before { content: ""; position: absolute; z-index: 6; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(238,233,224,.98) 0%, rgba(238,233,224,.94) 24%, rgba(238,233,224,.64) 39%, rgba(238,233,224,.12) 62%, transparent 76%), linear-gradient(180deg, rgba(28,25,21,.08), transparent 32%); opacity: calc(1 - min(1, var(--assembly-progress) * 2.15)); }
 .assembly-room-plate,
-.assembly-object,
-.assembly-final-seal { position: absolute; inset: 0; }
+.assembly-object { position: absolute; inset: 0; }
 .assembly-room-plate { z-index: 1; opacity: 1; filter: saturate(.82) brightness(.94); transform: scale(calc(1.035 - var(--assembly-progress) * .035)); transform-origin: 58% 55%; will-change: transform; backface-visibility: hidden; }
-.assembly-object { z-index: 2; opacity: clamp(0, calc((var(--assembly-progress) - .18) * 3), 1); transform-origin: center; will-change: transform, opacity; backface-visibility: hidden; contain: layout paint; }
-.assembly-object-sofa { transform: translate3d(calc((1 - var(--assembly-progress)) * 105vw), calc((1 - var(--assembly-progress)) * -13vh), 0) rotate(calc((1 - var(--assembly-progress)) * 5deg)); }
-.assembly-object-tables { z-index: 3; transform: translate3d(calc((1 - var(--assembly-progress)) * -92vw), calc((1 - var(--assembly-progress)) * 22vh), 0) rotate(calc((1 - var(--assembly-progress)) * -7deg)); }
-.assembly-final-seal { z-index: 4; opacity: clamp(0, calc((var(--assembly-progress) - .965) * 28.6), 1); will-change: opacity; backface-visibility: hidden; }
+.assembly-object { --assembly-fit: contain; z-index: 2; opacity: clamp(0, calc((var(--assembly-progress) - .12) * 1.8), 1); transform-origin: center; will-change: transform, opacity; backface-visibility: hidden; contain: layout paint; }
+.assembly-object-sofa { --assembly-position: center top; transform: translate3d(calc((1 - var(--assembly-progress)) * 28vw), 24vh, 0) scale(1.1); }
+.assembly-object-tables { --assembly-position: center top; z-index: 3; transform: translate3d(calc((1 - var(--assembly-progress)) * -24vw), 9vh, 0) scale(1.1); }
+.assembly-object-sofa img { filter: drop-shadow(0 3px 2px rgba(42,34,27,.18)); }
+.assembly-object-tables img { filter: drop-shadow(0 3px 2px rgba(28,24,20,.22)); }
 .assembly-stage::after { content: ""; position: absolute; z-index: 5; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(248,246,241,.9) 0, rgba(248,246,241,.43) 23%, transparent 48%); opacity: clamp(0, calc((var(--assembly-progress) - .72) * 3.6), 1); }
 .assembly-product-link { position: absolute; z-index: 9; right: 5%; bottom: 9%; display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 150px; padding: 10px 12px; border: 1px solid rgba(34,33,29,.15); background: rgba(250,248,243,.92); color: #24231f; box-shadow: 0 10px 28px rgba(43,35,27,.1); text-decoration: none; backdrop-filter: blur(10px); opacity: clamp(0, calc((var(--assembly-progress) - .96) * 25), 1); transition: transform .25s ease, background .25s ease; }
 .assembly-product-link:hover { transform: translateY(-3px); background: #fff; }
@@ -11894,10 +11848,10 @@ button.assistant-dock > span:first-child { font-size: 14px; }
   .assembly-finale { top: 92px; left: 22px; max-width: 280px; }
   .assembly-finale > span { font-size: clamp(38px, 12vw, 54px); line-height: .92; }
   .assembly-stage { --assembly-fit: contain; }
-  .assembly-room-plate, .assembly-object, .assembly-final-seal { inset: 22% 0 4%; background: #e7e0d5; }
+  .assembly-room-plate, .assembly-object { inset: 22% 0 4%; background: #e7e0d5; }
   .assembly-stage::before { background: linear-gradient(180deg, rgba(231,224,213,.98) 0 31%, rgba(231,224,213,.7) 43%, transparent 66%); }
-  .assembly-object-sofa { transform: translate3d(calc((1 - var(--assembly-progress)) * 112vw), calc((1 - var(--assembly-progress)) * -10vh), 0) rotate(calc((1 - var(--assembly-progress)) * 5deg)); }
-  .assembly-object-tables { transform: translate3d(calc((1 - var(--assembly-progress)) * -105vw), calc((1 - var(--assembly-progress)) * 18vh), 0) rotate(calc((1 - var(--assembly-progress)) * -7deg)); }
+  .assembly-object-sofa { transform: translate3d(calc((1 - var(--assembly-progress)) * 32vw), 10vh, 0) scale(1.1); }
+  .assembly-object-tables { transform: translate3d(calc((1 - var(--assembly-progress)) * -28vw), 6vh, 0) scale(1.1); }
   .assembly-stage::after { background: linear-gradient(180deg, #e7e0d5 0, transparent 18% 84%, #e7e0d5 100%); }
   .assembly-product-link { display: none; }
   .assembly-progress { right: 12px; }
