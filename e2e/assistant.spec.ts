@@ -120,14 +120,14 @@ test("Advisor recommends and saves a referenced product after confirmation", asy
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("musterring.savedProducts") ?? "[]").length)).toBeGreaterThan(0);
 });
 
-test("Advisor configuration action continues to deterministic configurator", async ({ page }) => {
+test("Advisor configuration action continues to retailer handover", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
   await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
   await page.getByLabel("Ask Musterring about products and your project").fill("Can I add an electric relax function?");
   await page.getByRole("button", { name: "Send question" }).click();
   await page.getByRole("button", { name: /Validate options/ }).click();
-  await expect(page).toHaveURL(/\/configurator\/mr-2875/);
-  await expect(page.getByText(/configuration engine validates the product rules/i)).toBeVisible();
+  await expect(page).toHaveURL(/\/handover$/);
+  await expect(page.getByRole("heading", { name: /Living Room Project/ })).toBeVisible();
 });
 
 test("Advisor resolves a follow-up against prior products", async ({ page }) => {
