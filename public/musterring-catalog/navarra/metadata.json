@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/navarra",
   "title": "Navarra",
-  "importedAt": "2026-08-03T08:02:40.550Z",
+  "importedAt": "2026-08-19T12:16:46.772Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/navarra/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/4/csm_esszimmer-navarra-esstisch-r_2041-organisch-dekton-stuhl-stoff-coco-liver-musterring_4a87042c5f.jpg",
       "bytes": 676805,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "7b317ce11e86a7329f2c447e9265651a26f2a6d55266eaf2b60fc0709c6e0465"
     },
     {
       "file": "/musterring-catalog/navarra/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/d/csm_esszimmer-navarra-esstisch-dekton-stuhl-stoff-coco-musterring-02_9d9f29899c.jpg",
       "bytes": 1458923,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "63899f1b9c49bd02526088008ac6a02fbf09fa59bde9deb59fab5fe28b747e0f"
     },
     {
       "file": "/musterring-catalog/navarra/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/f/csm_esszimmer-navarra-esstisch-dekton-musterring-02_88ba100987.jpg",
       "bytes": 126591,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4970e60d6ac727e91961bcdaec5fc6225e4cd565f7616cd22032ce114b4a44c2"
     },
     {
       "file": "/musterring-catalog/navarra/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/f/csm_esszimmer-navarra-esstischorganisch-dekton-stuhl-stoff-coco-liver-milieu-musterring-02_9679df590f.jpg",
       "bytes": 880759,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c8e2d0f80bb6ed433a383e1a68d2b0f1ac94efc6c301b7b073b667b3318be08a"
     },
     {
       "file": "/musterring-catalog/navarra/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/5/csm_esszimmer-navarra-armelehnstuhl-esstisch-wildeiche-massiv-ge%C3%B6lt-gestell-stoff-Adore-158-Niagara-Pine-45-swamp-green-musterring_d2188c4b00.jpg",
       "bytes": 966639,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "7c93c3b58930223d9fa168ea5ba5b1eb0d121d0b8ec4698ce8e32017a9e609c3"
     },
     {
       "file": "/musterring-catalog/navarra/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/a/csm_esszimmer-navarra-armlehnstuhl-schlittengestell-anthrazit-stoff-blau-musterring-01_95ee116454.jpg",
       "bytes": 812114,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d2093a31a0f319ab836791f3df97b9108cb377720ef010e28e2e487ecb31bce2"
     },
     {
       "file": "/musterring-catalog/navarra/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/8/csm_esszimmer-navarra-armlehnstuhl-schlittengestell-anthrazit-stoff-blau-musterring_159f91c5ab.jpg",
       "bytes": 436190,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4c8a998b528064cde444bdcc49a47e92f0bbd40b0c4ba95b165eeac06bfd83ab"
     },
     {
       "file": "/musterring-catalog/navarra/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/7/csm_esszimmer-navarra-tisch-holzoptik-musterring_26ef78be4e.jpg",
       "bytes": 503677,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "0d932c3b8b36a865f029785d2de87b09e1f7af93dee27c63813ddf828d7af02a"
     }
   ]
 }

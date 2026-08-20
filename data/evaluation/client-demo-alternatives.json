@@ -1,0 +1,66 @@
+[
+  {
+    "name": "verified beige L-shaped modular sofa",
+    "sourceProductId": "musterring-justb-pm200",
+    "requestText": "beige L sofa under 280 cm with modular fabric",
+    "expectedProductId": "musterring-justb-pm100",
+    "expectedBucket": "exact",
+    "requirements": ["beige colour", "maximum 280 cm wide", "l-shaped layout", "modular function", "fabric material"]
+  },
+  {
+    "name": "verified beige U-shaped modular sofa",
+    "sourceProductId": "musterring-justb-pm100",
+    "requestText": "beige U shaped modular fabric sofa around 315 cm",
+    "expectedProductId": "musterring-justb-pm200",
+    "expectedBucket": "exact",
+    "requirements": ["beige colour", "around 315 cm wide", "u-shaped layout", "modular function", "fabric material"]
+  },
+  {
+    "name": "complex illustrative classic sofa concept",
+    "sourceProductId": "musterring-justb-pm200",
+    "requestText": "beige classic modern three-seat leather sofa under 250 cm with relax function",
+    "expectedProductId": "musterring-mr-280",
+    "expectedBucket": "concept",
+    "requirements": ["beige colour", "modern style", "classic style", "3 seats", "maximum 250 cm wide", "relax function", "leather material"]
+  },
+  {
+    "name": "black typo recovery",
+    "sourceProductId": "musterring-justb-pm200",
+    "requestText": "find me a bleck sofa",
+    "expectedProductId": "musterring-mr-285",
+    "expectedBucket": "exact",
+    "requirements": ["black colour"]
+  },
+  {
+    "name": "red family relax concept",
+    "sourceProductId": "musterring-justb-pm200",
+    "requestText": "red family sofa under 240 cm with relax function",
+    "expectedProductId": "musterring-mr-260",
+    "expectedBucket": "concept",
+    "requirements": ["red colour", "family style", "maximum 240 cm wide", "relax function"]
+  },
+  {
+    "name": "light grey compact MR 230 concept",
+    "sourceProductId": "musterring-mr-710",
+    "requestText": "light grey straight three-seat fabric sofa under 240 cm wide with a modern comfort style and relax function",
+    "expectedProductId": "musterring-mr-230",
+    "expectedBucket": "concept",
+    "requirements": ["grey colour", "modern style", "3 seats", "maximum 240 cm wide", "straight layout", "relax function", "fabric material"]
+  },
+  {
+    "name": "black L-shaped MR 285 concept",
+    "sourceProductId": "musterring-justb-pm100",
+    "requestText": "black L-shaped three-seat leather sofa around 275 cm wide with a modern minimalist style and relax function",
+    "expectedProductId": "musterring-mr-285",
+    "expectedBucket": "concept",
+    "requirements": ["black colour", "modern style", "3 seats", "around 275 cm wide", "l-shaped layout", "relax function", "leather material"]
+  },
+  {
+    "name": "charcoal electric MR 9450 concept",
+    "sourceProductId": "musterring-justb-pm100",
+    "requestText": "charcoal U-shaped four-seat modular leather sofa around 300 cm wide with electric recline and a minimal style",
+    "expectedProductId": "musterring-mr-9450",
+    "expectedBucket": "concept",
+    "requirements": ["charcoal colour", "minimal style", "4 seats", "around 300 cm wide", "u-shaped layout", "electric function", "relax function", "modular function", "leather material"]
+  }
+]

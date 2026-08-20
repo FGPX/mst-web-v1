@@ -1,10 +1,24 @@
 import authorizedCatalog from "./generated/musterring-catalog.json";
+import { demoFactsFor } from "./demo-search-metadata";
 
 const authorizedProductImages = Object.fromEntries(
   authorizedCatalog.products.map((product) => [product.appProductId, product.images])
 ) as Record<string, string[]>;
 
 const verifiedColourImages: Record<string, Record<string, string>> = {
+  "musterring-justb-pm100": {
+    beige: "/musterring-catalog/justb-pm100/image-01.jpg",
+    cream: "/musterring-catalog/justb-pm100/image-01.jpg",
+    white: "/musterring-catalog/justb-pm100/image-01.jpg"
+  },
+  "musterring-justb-pm200": {
+    beige: "/musterring-catalog/justb-pm200/image-01.jpg",
+    cream: "/musterring-catalog/justb-pm200/image-01.jpg",
+    white: "/musterring-catalog/justb-pm200/image-01.jpg"
+  },
+  "musterring-mr-285": {
+    black: "/musterring-catalog/mr-285/image-01.jpg"
+  },
   "musterring-mr-260": {
     red: "/musterring-catalog/mr-260/image-08-hq.jpg",
     burgundy: "/musterring-catalog/mr-260/image-08-hq.jpg"
@@ -71,11 +85,20 @@ export function productImages(productId: string) {
   return authorizedProductImages[productId] ?? legacyProductImages[productId] ?? authorizedProductImages.p1;
 }
 
+export function hasVerifiedColourPresentation(productId: string, color: string) {
+  return Boolean(verifiedColourImages[productId]?.[color.toLowerCase()]);
+}
+
+export function hasDemoColourPresentation(productId: string, color: string) {
+  return Boolean(demoFactsFor(productId)?.colorImages?.[color.toLowerCase()]);
+}
+
 export function productImageForColors(productId: string, requestedColors: string[]) {
   const verified = verifiedColourImages[productId];
-  const matchedColor = requestedColors.find((color) => verified?.[color.toLowerCase()]);
+  const demo = demoFactsFor(productId)?.colorImages;
+  const matchedColor = requestedColors.find((color) => verified?.[color.toLowerCase()] || demo?.[color.toLowerCase()]);
   return {
-    src: matchedColor ? verified[matchedColor.toLowerCase()] : productImages(productId)[0],
+    src: matchedColor ? verified?.[matchedColor.toLowerCase()] ?? demo![matchedColor.toLowerCase()] : productImages(productId)[0],
     matchedColor
   };
 }

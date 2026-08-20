@@ -1,0 +1,45 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-mr-300",
+  "title": "MR 300",
+  "importedAt": "2026-08-19T12:16:39.960Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-300/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/4/csm_sofa_mr300_stoff_grau_relaxfunktion_musterring_6e7b31c1fb.jpg",
+      "bytes": 921197,
+      "contentType": "image/jpeg",
+      "sha256": "354314e62884cd9fe23c58b4467bda0be28570562cbbd38a056d6bdc7c3b1491"
+    },
+    {
+      "file": "/musterring-catalog/mr-300/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/2/csm_sofa_mr300_stoff_grau_handschalter_musterring_020f5503cd.jpg",
+      "bytes": 394464,
+      "contentType": "image/jpeg",
+      "sha256": "5659ca2839c0eb1d670eba33e3aa462a463b127c002347673cd5edca934d69ab"
+    },
+    {
+      "file": "/musterring-catalog/mr-300/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/0/csm_sofa_mr300_stoff_grau_tischelement_musterring_8dc5e98504.jpg",
+      "bytes": 585164,
+      "contentType": "image/jpeg",
+      "sha256": "96be1302699044454cad3b86fa7d09f94c346335e0c0b136ed2a2c7b4805e9bd"
+    },
+    {
+      "file": "/musterring-catalog/mr-300/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/0/csm_sofa_mr300_stoff_grau_fu%C3%9Fteil_musterring_581e7226d5.jpg",
+      "bytes": 813966,
+      "contentType": "image/jpeg",
+      "sha256": "2d4b35c215d9a7f27212644b27e6f5f7f25dcb78e8ea1b7ae79dcf2fbc9cc2c0"
+    },
+    {
+      "file": "/musterring-catalog/mr-300/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_sofa-mr300-leder-beige-relaxfunktion-musterring_8d2414d72d.jpg",
+      "bytes": 328129,
+      "contentType": "image/jpeg",
+      "sha256": "75c239973ab869e694957e8036c845f6579f91f79e419e47b19813a872fd3469"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1370",
   "title": "MR 1370",
-  "importedAt": "2026-08-03T08:01:38.839Z",
+  "importedAt": "2026-08-19T12:16:40.574Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,25 +10,29 @@
       "file": "/musterring-catalog/mr-1370/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/b/5/csm_MR11788_A_MR1370_Print.tif_316b6871e4.jpg",
       "bytes": 656056,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4fc14228c24049465db564b858db8170579bdb4626c9e93c62270bf31fddccef"
     },
     {
       "file": "/musterring-catalog/mr-1370/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/7/e/csm_MR11788_006_MR1370_Print.tif_9d24af27fc.jpg",
       "bytes": 1107963,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4a7e8b5281593fa0b22fdd6a2f1d845a00126f9ed9fba7025b674b2c649a6daf"
     },
     {
       "file": "/musterring-catalog/mr-1370/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/3/3/csm_MR11788_008_MR1370_Print.tif_c2f2b350bc.jpg",
       "bytes": 516615,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3b6953c7adff47ebed1730a8029f6dc13c300880e2c39731d0298d8a3d88c9fe"
     },
     {
       "file": "/musterring-catalog/mr-1370/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/d/c/csm_MR11788_011_MR1370_Print.tif_148a7d3508.jpg",
       "bytes": 1271578,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4ff7f52484e5ca6a0023a15a5efa79e414033ac851ec33bcb53a8f295f7ed942"
     }
   ]
 }

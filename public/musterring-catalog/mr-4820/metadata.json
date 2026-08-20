@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4820",
   "title": "MR 4820",
-  "importedAt": "2026-08-03T08:01:46.011Z",
+  "importedAt": "2026-08-19T12:16:41.622Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/mr-4820/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/5/csm_ecksofa-mr4820-stoff-matrix-oliv-hockerbank-musterring_bdee1d1b7d.jpg",
       "bytes": 726926,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "28bfe4e91403b0364e9504091bb9775e45526f11cb6c6f1fe4a555c6b2eb5f41"
     },
     {
       "file": "/musterring-catalog/mr-4820/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/a/csm_ecksofa-mr4820-stoff-matrix-olive-detailbild-fu%C3%9Fvariante-musterring_8d8e32a305.jpg",
       "bytes": 352116,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bc4dc2869b27a54e53801906594fd936d919e6f2b6c68dcc1443d4b6dc2ad5b2"
     },
     {
       "file": "/musterring-catalog/mr-4820/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/4/csm_ecksofa-mr4820-stoff-matrix-oliv-fu%C3%9Fvariante-musterring_1e9b935bd9.jpg",
       "bytes": 614895,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "849fb08aa600c88067059d2e32d9551278293a7d1e8fc553d2e9eda4a0403a2d"
     },
     {
       "file": "/musterring-catalog/mr-4820/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/7/csm_ecksofa-mr4820-stoff-matrix-oliv-detailbild-musterring_dfcd814533.jpg",
       "bytes": 663530,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9728644902a3dc92dbdc9a486416c18bfb5104025bbe8fd00f42f28713f63dfc"
     },
     {
       "file": "/musterring-catalog/mr-4820/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_MR11679_A_MR4820_Online_-_15_6d0b5d1f14.jpg",
       "bytes": 307432,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fa974a741ae027516d5198af3f670872279752e0c4c0bcffc666c3329d1622a6"
     }
   ]
 }

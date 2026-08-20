@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-376",
   "title": "MR 376",
-  "importedAt": "2026-08-03T08:01:36.116Z",
+  "importedAt": "2026-08-19T12:16:40.352Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,25 +10,29 @@
       "file": "/musterring-catalog/mr-376/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/0/csm_sofa-mr376-leder-schwarz-musterring_1160563fc5.jpg",
       "bytes": 189318,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fc34879c17109cb858b5276f767a2d291df61b3e29ec9813798ef682c5641e29"
     },
     {
       "file": "/musterring-catalog/mr-376/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/5/csm_sofa-sessel-mr376-leder-schwarz-musterring-01_ad849ed280.jpg",
       "bytes": 162771,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "58707f89781483d55680d05409810691b1853dded88b24552438ad0d44d1a6e7"
     },
     {
       "file": "/musterring-catalog/mr-376/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_sofa-sessel-mr376-leder-schwarz-musterring-02_d56f5a3fef.jpg",
       "bytes": 203220,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9630bf6351ea366d1ebd5380c5f0c9184e80d1d0f5d725b009900c4426da6897"
     },
     {
       "file": "/musterring-catalog/mr-376/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/9/csm_sofa-sessel-mr376-leder-schwarz-milieu-musterring_b857562e5d.jpg",
       "bytes": 475473,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8adb912dea2707bb901ac9069a262a6e83ddf62df7fe92647679c0cf850cd729"
     }
   ]
 }

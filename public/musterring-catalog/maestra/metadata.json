@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/maestra",
   "title": "Maestra",
-  "importedAt": "2026-08-03T08:02:01.799Z",
+  "importedAt": "2026-08-19T12:16:43.547Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/maestra/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/b/csm_MR11688_A_Maestra_-_15_470a068c29.jpg",
       "bytes": 532240,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a610a219c61c36314add782e6c246fe07bf089a5fb2ecdf225255bb4cccebe08"
     },
     {
       "file": "/musterring-catalog/maestra/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/7/csm_MR11688_C_Maestra_-_15_ef204df496.jpg",
       "bytes": 328888,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c8546263c44e79d274df49deae8838aade3a2176253b26b5974af546e3b3fb15"
     },
     {
       "file": "/musterring-catalog/maestra/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_MR11688_01_Maestra_-_15_81a54a4e25.jpg",
       "bytes": 360132,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "143732dffc7104985a834434b781768923b3de54ca9a6c4e635f434345538013"
     },
     {
       "file": "/musterring-catalog/maestra/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/4/csm_MR11688_02_Maestra_-_15_45092b99e9.jpg",
       "bytes": 315699,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "84a8a1cb7ee35cf1dba234410bb055b3670d58810ba5c5839aee51798acccdfb"
     },
     {
       "file": "/musterring-catalog/maestra/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/d/csm_MR11690_08_Maestra_Print_-_15_b20489f867.jpg",
       "bytes": 377741,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c2df15c6c71c361f22e72be6a6c3a83b11db58553b307c85d71786875d065a80"
     },
     {
       "file": "/musterring-catalog/maestra/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/a/csm_MR11690_04_Maestra_Print_-_15_2caf55c8a6.jpg",
       "bytes": 261961,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8a73b5b83fa37aec1f54130c9c069c1320c3e1e9f5107db38b24bfb8ebf62dd1"
     },
     {
       "file": "/musterring-catalog/maestra/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/4/csm_MR11690_C_Maestra_Print_-_15_d3b99b021b.jpg",
       "bytes": 309868,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "dd1c4d1be25d59610993ce1890cb08f5d47401483762b0085f3528b61a205382"
     },
     {
       "file": "/musterring-catalog/maestra/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/4/csm_MR11690_01_Maestra_Print_-_15_2f2b0a1728.jpg",
       "bytes": 263477,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "36ce4d044ed1c1ad685eae64c3be0c2056642ad93a9367fafe33bd9dd6417d2a"
     }
   ]
 }

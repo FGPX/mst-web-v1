@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/beds/translate-to-en-eforma",
+  "title": "Eforma",
+  "importedAt": "2026-08-19T12:16:45.494Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/eforma/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/5/csm_MR11553_A_Eforma_Print_-_15_9ae1576305.jpg",
+      "bytes": 610014,
+      "contentType": "image/jpeg",
+      "sha256": "6171ac47128f9e9cf9cfd3f3baaeb78a64ebd2f07fcf28c47e8080126213e0d4"
+    },
+    {
+      "file": "/musterring-catalog/eforma/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/f/csm_MR11553_B_Eforma_Print_-_15_ad28eb283a.jpg",
+      "bytes": 401773,
+      "contentType": "image/jpeg",
+      "sha256": "fc7a696cc5600fed5ca281bac1fb6ac9ad9c6dc11ab13c2a772e101075b7db60"
+    },
+    {
+      "file": "/musterring-catalog/eforma/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/d/csm_MR11553_02_Eforma_Print_-_15_27af3119d9.jpg",
+      "bytes": 504592,
+      "contentType": "image/jpeg",
+      "sha256": "0d257f18c604fe93b83535852a9bd32d3eadb0819656825b787fef38b04932ca"
+    },
+    {
+      "file": "/musterring-catalog/eforma/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/c/csm_MR11553_C01_Eforma_Print_-_15_601e9153f1.jpg",
+      "bytes": 760963,
+      "contentType": "image/jpeg",
+      "sha256": "7dae7123c13aa09f0297904dc6a7bf3264db62284cc4a641e7750d70622767de"
+    },
+    {
+      "file": "/musterring-catalog/eforma/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_MR11347_B_Eforma_-_15_83371aab5d.jpg",
+      "bytes": 248038,
+      "contentType": "image/jpeg",
+      "sha256": "890fbfda8c679ed4900fd7a22625f465fcb82262774286db2da8e168e6e74b8e"
+    },
+    {
+      "file": "/musterring-catalog/eforma/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/0/csm_MR11347_10_Eforma_-_15_464d3a0bb9.jpg",
+      "bytes": 337227,
+      "contentType": "image/jpeg",
+      "sha256": "abfd0ba42fc945bd88f04676f6e9a345b8a336f3895172a97d2c79f0a9f3c757"
+    },
+    {
+      "file": "/musterring-catalog/eforma/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/7/csm_MR11347_08_Eforma_-_15_3c9b4f0277.jpg",
+      "bytes": 241766,
+      "contentType": "image/jpeg",
+      "sha256": "55cb16dfb12746efef579e1861bd1a4ea940d6a12370948287f9e5da18de73c1"
+    },
+    {
+      "file": "/musterring-catalog/eforma/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/2/csm_MR11551_A_Eforma_Print_-_15_ddf07445c4.jpg",
+      "bytes": 512615,
+      "contentType": "image/jpeg",
+      "sha256": "e473572cb797e4f9f716cceb56bfb547975580aaab922da17a2d3bc0db54aa4b"
+    }
+  ]
+}

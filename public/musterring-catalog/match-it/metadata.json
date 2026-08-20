@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-match-it",
+  "title": "Match it!",
+  "importedAt": "2026-08-19T12:16:39.074Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/match-it/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/0/csm_sessel_matchit_stoff_curry_musterring_02_166af8bb06.jpg",
+      "bytes": 722395,
+      "contentType": "image/jpeg",
+      "sha256": "7fac1dd6454aa1c7989cece350744e469067a1dc8f612ffeb9765b4084d65c62"
+    },
+    {
+      "file": "/musterring-catalog/match-it/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/6/csm_sessel_matchit_stoff_curry_musterring_07f60aca3d.jpg",
+      "bytes": 433910,
+      "contentType": "image/jpeg",
+      "sha256": "a7152fab775f6448e46f083f595b9994b8b4c826029efe546e8408e3dd8aa5fb"
+    },
+    {
+      "file": "/musterring-catalog/match-it/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/3/csm_sessel_matchit_stoff_curry_musterring_01_1d5e3cca09.jpg",
+      "bytes": 382023,
+      "contentType": "image/jpeg",
+      "sha256": "400d015f810c11d21f620485df74fbd0371a4841bde7835c0f73f125640fec22"
+    },
+    {
+      "file": "/musterring-catalog/match-it/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/1/csm_sessel_matchit_stoff_grau_musterring_66601695d2.jpg",
+      "bytes": 231814,
+      "contentType": "image/jpeg",
+      "sha256": "a9d9a53b670c92ead6a1343f7378f661e3081d90bef9fbd727f312cbcda8d0cf"
+    },
+    {
+      "file": "/musterring-catalog/match-it/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/5/csm_sessel_matchit_leder_taupe_musterring_b2c7f95003.jpg",
+      "bytes": 42234,
+      "contentType": "image/jpeg",
+      "sha256": "e54edb69acef3a03bc879cb6f8c142a11ab3a8d14161cd11dcf612d1d82330af"
+    },
+    {
+      "file": "/musterring-catalog/match-it/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/9/csm_sessel_matchit_mit_hocker_stoff_anthrazit_musterring_2334956880.jpg",
+      "bytes": 289934,
+      "contentType": "image/jpeg",
+      "sha256": "169d58d69ca9df18e74ebd9f87a2789e30da66cf79723eefb2941f43008bfbc9"
+    },
+    {
+      "file": "/musterring-catalog/match-it/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/3/csm_sessel_matchit_stoff_rosa_beige_musterring_fec5f3aaad.jpg",
+      "bytes": 309253,
+      "contentType": "image/jpeg",
+      "sha256": "8bf4c48180f802582c8d263b15bd62ba4d62071ec97c4c3c319e40c31915d155"
+    },
+    {
+      "file": "/musterring-catalog/match-it/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/7/csm_sessel_matchit_stoff_creme_musterring_fd21f02632.jpg",
+      "bytes": 259456,
+      "contentType": "image/jpeg",
+      "sha256": "6ad00f7bb0aadc81133b8f9d137187abf928f9060952ca34af8891ccc5227a44"
+    }
+  ]
+}

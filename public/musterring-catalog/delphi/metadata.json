@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/beds/delphi",
   "title": "Delphi",
-  "importedAt": "2026-08-03T08:02:24.840Z",
+  "importedAt": "2026-08-19T12:16:45.343Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/delphi/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_polsterbett-delphi-bettkasten-stoff-beige-musterring_19b80f91c2.jpg",
       "bytes": 784823,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2c942dac00998a1a8171eb59ade6e6d704ae91a072e709020954f0b14a13fc1d"
     },
     {
       "file": "/musterring-catalog/delphi/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_polsterbett-delphi-kopfteil-stoff-beige-musterring_1359c52548.jpg",
       "bytes": 618011,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9beb248d80e118a34fa82f95150ff522dc00e9fb5de8ac4b0b56b160e6a93743"
     },
     {
       "file": "/musterring-catalog/delphi/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_polsterbett-delphi-freisteller-stoff-beige-musterring_e45b4aa124.jpg",
       "bytes": 233874,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "13a280e9df031503abf1d62105b3d4cfbf24ac20151676147165ddc63b697613"
     },
     {
       "file": "/musterring-catalog/delphi/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/e/csm_polsterbett-delphi-fu%C3%9Fteil-stoff-beige-musterring_3a12b303e8.jpg",
       "bytes": 757415,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ef33b8d448ce6b8389ed87517c4cbb6988eae7451927f27aeeee3ece2e8cd92b"
     },
     {
       "file": "/musterring-catalog/delphi/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_schlafzimmer-delphi-schrankzusammenstellung-S9060-polsterbett-variante-d-hellgrau-federholzrahmen-musterring_a7af47129e.jpg",
       "bytes": 561429,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bfd1efa8c1a176e7e248b701b66218c26de69504f3da12b9f86100c8c40cfbc2"
     },
     {
       "file": "/musterring-catalog/delphi/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_schlafzimmer-delphi-polsterbett-variante-d-bettkasten-holzrahmen-graphit-hellgrau-musterring_b5c4dd0411.jpg",
       "bytes": 641512,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bfefe285381d5762715a42caef6ec6b77527b4d497696b7e9c3c2b872d64eafc"
     },
     {
       "file": "/musterring-catalog/delphi/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/c/csm_schlafzimmer-delphi-polsterbett-variante-d-musterring_ee3f9eada2.jpg",
       "bytes": 418348,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "af28cfa131d869eb473b9f3268874ff8c59e045cc0b8c7df8de0a08ee571576e"
     },
     {
       "file": "/musterring-catalog/delphi/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/c/csm_schlafzimmer-delphi-polsterbett-variante-d-holzrahmen-metallf%C3%BC%C3%9Fe-graphit-stoffbezug-garai-farbe-hellgrau-detail-fu%C3%9Fteil-musterring_0dc217b842.jpg",
       "bytes": 1014538,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c154a742a2f894d21370b4b40056d49974e73e92e01e07bddee494064362b207"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-lucia",
   "title": "MR LUCIA",
-  "importedAt": "2026-08-03T08:01:20.869Z",
+  "importedAt": "2026-08-19T12:16:38.863Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-lucia/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_sofa-mr-lucia-stoff-grau-musterring_7c4ee565b7.jpg",
       "bytes": 219316,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "30e8867a20ee920fdd191041fd84cae0ac36f7856a8aed4d8ca7b1643babb55b"
     },
     {
       "file": "/musterring-catalog/mr-lucia/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/7/csm_sofa-mr-lucia-stoff-grau-musterring-01_ec9a2c47f2.jpg",
       "bytes": 468956,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "aecc7f805917b1678f7b73ae72132e77f781a0d3054413f9bf61873e5e8b7fc6"
     },
     {
       "file": "/musterring-catalog/mr-lucia/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/b/csm_sofa-mr-lucia-stoff-grau-musterring-02_9457dfd15b.jpg",
       "bytes": 1162922,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4a48286fa07e2457fcdcdaa2649f1eb32a6d9cbbeb70a9d4793c3907c8a1e69b"
     },
     {
       "file": "/musterring-catalog/mr-lucia/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/3/csm_sofa-mr-lucia-stoff-grau-musterring-03_0db3c3abe2.jpg",
       "bytes": 688888,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "cd05a27dd4d25b6ca3ef6ddd57314054273ba1008e0fdf61baee1a890be04fd7"
     },
     {
       "file": "/musterring-catalog/mr-lucia/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/9/csm_sofa-mr-lucia-stoff-cord-wei%C3%9F-musterring-04_a19975a678.jpg",
       "bytes": 486873,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9ba891d0d52f9ac713bdc68ead3d85f9a32f5686233d275b8dc9910a9a29523a"
     },
     {
       "file": "/musterring-catalog/mr-lucia/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/e/csm_sofa-mr-lucia-stoff-cord-wei%C3%9F-musterring_43bffd0023.jpg",
       "bytes": 349716,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8365dd32bf0b12bf3a6e1beed141ac32affc5c05d5332080ad419944c2714149"
     },
     {
       "file": "/musterring-catalog/mr-lucia/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_sofa-mr-lucia-stoff-cord-wei%C3%9F-musterring-05_010f6fd0b6.jpg",
       "bytes": 164134,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3b226b45a05639bd63e926365c909148942b62d69bd60e62e182dc2dea3aa7b1"
     },
     {
       "file": "/musterring-catalog/mr-lucia/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/6/csm_sofa-mr-lucia-stoff-cord-wei%C3%9F-musterring-02_3de34e2d59.jpg",
       "bytes": 341102,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9b29f42258c363022a97cfaa509e8fe909c6de63e8dee6b5db306bf9801ca003"
     }
   ]
 }

@@ -1,52 +1,59 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp500",
-  "title": "JUSTB! SP500",
-  "importedAt": "2026-07-29T07:51:29.922Z",
+  "title": "JustB! SP500",
+  "importedAt": "2026-08-19T12:16:46.227Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
   "assets": [
     {
-      "file": "/musterring-catalog/justb-sp500/image-01.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/a/csm_JustB_Esszimmerstuhl_SP500_Bettina_Zimmermann_Musterring_b47cb74633.jpg",
-      "bytes": 26785,
-      "contentType": "image/jpeg"
+      "file": "/musterring-catalog/justb-sp500/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/c/csm_justb-esszimmerstuhl-esszimmerbank-sp500-stoff-sesam-musterring-0_c878286091.jpg",
+      "bytes": 572235,
+      "contentType": "image/jpeg",
+      "sha256": "73e11932e4fb74906b0a4724e7ca8d8163bd120213f8fb5963f6bad4a154dedd"
     },
     {
-      "file": "/musterring-catalog/justb-sp500/image-02.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/c/csm_justb-esszimmerstuhl-esszimmerbank-sp500-stoff-sesam-musterring-0_b7959d6277.jpg",
-      "bytes": 9001,
-      "contentType": "image/jpeg"
+      "file": "/musterring-catalog/justb-sp500/image-09.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_justb-esszimmerstuhl-esszimmerbank-sp500-stoff-sesam-musterring_e77b430771.jpg",
+      "bytes": 1062571,
+      "contentType": "image/jpeg",
+      "sha256": "b4f0a5ff9c18f09bd7142009fcbae31de73de23d25fb9bb8fec92e8ddcc8ee2d"
     },
     {
-      "file": "/musterring-catalog/justb-sp500/image-03.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_justb-esszimmerstuhl-esszimmerbank-sp500-stoff-sesam-musterring_0531344bf9.jpg",
-      "bytes": 14720,
-      "contentType": "image/jpeg"
+      "file": "/musterring-catalog/justb-sp500/image-10.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_justb-esszimmerstuhl-sp500-stoff-sesam-musterring_28aaf51a0d.jpg",
+      "bytes": 953043,
+      "contentType": "image/jpeg",
+      "sha256": "dfd19c3e17256d3ef49db1edbd17cda8629b36f64685147e37c40a28239f83e5"
     },
     {
-      "file": "/musterring-catalog/justb-sp500/image-04.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_justb-esszimmerstuhl-sp500-stoff-sesam-musterring_9baf015f9e.jpg",
-      "bytes": 9989,
-      "contentType": "image/jpeg"
+      "file": "/musterring-catalog/justb-sp500/image-11.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/9/csm_justb-esszimmerbank-sp500-leder-blau-leder-blau-musterring_2ab6b89e5f.jpg",
+      "bytes": 1002367,
+      "contentType": "image/jpeg",
+      "sha256": "024d6f9f0d324d3f6241d18e30a57c04578352d1af0c39703779300b2d276fba"
     },
     {
-      "file": "/musterring-catalog/justb-sp500/image-05.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/9/csm_justb-esszimmerbank-sp500-leder-blau-leder-blau-musterring_a1a4e74056.jpg",
-      "bytes": 14726,
-      "contentType": "image/jpeg"
+      "file": "/musterring-catalog/justb-sp500/image-12.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_justb-esszimmerst%C3%BChle-sp500-leder-blau-stoff-cognac-musterring_4a8d485383.jpg",
+      "bytes": 882063,
+      "contentType": "image/jpeg",
+      "sha256": "2a5f072d087d0be1703a58a11fc2949b57c017d96d250a865e3360b338de181c"
     },
     {
-      "file": "/musterring-catalog/justb-sp500/image-06.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_justb-esszimmerst%C3%BChle-sp500-leder-blau-stoff-cognac-musterring_7d4f771aaa.jpg",
-      "bytes": 15337,
-      "contentType": "image/jpeg"
+      "file": "/musterring-catalog/justb-sp500/image-13.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/4/csm_justb-esszimmerbank-esszimmerstuhl-sp500-leder-blau-stoff-cognac-musterring_ba8bd76f97.jpg",
+      "bytes": 1549466,
+      "contentType": "image/jpeg",
+      "sha256": "0d9ea37827450274f5b49f22ad2965dfca26b22a2830a88e7fe660b5a57902cc"
     },
     {
-      "file": "/musterring-catalog/justb-sp500/image-07.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/4/csm_justb-esszimmerbank-esszimmerstuhl-sp500-leder-blau-stoff-cognac-musterring_ef94f19dce.jpg",
-      "bytes": 20718,
-      "contentType": "image/jpeg"
+      "file": "/musterring-catalog/justb-sp500/image-14.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/a/csm_JustB_Esszimmerstuhl_SP500_Bettina_Zimmermann_Musterring_d248d1f1df.jpg",
+      "bytes": 493463,
+      "contentType": "image/jpeg",
+      "sha256": "2f715d199633c7a0572a2d9d36d1841a79faa0cad8db07143db1754df0b05a26"
     }
   ]
 }

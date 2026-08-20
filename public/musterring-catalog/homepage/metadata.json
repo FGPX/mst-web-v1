@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/",
   "title": "Musterring homepage",
-  "importedAt": "2026-08-03T08:01:16.509Z",
+  "importedAt": "2026-08-19T12:16:38.414Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/homepage/image-01.png",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/8/csm_APPLE_MR2490_Kopie_f6d76b4bbe.png",
       "bytes": 461432,
-      "contentType": "image/png"
+      "contentType": "image/png",
+      "sha256": "de44e1b4a77953a2ee557d63133c426ff8b2e6e2ce2fa7a9f7b24c43f6d9c979"
     },
     {
       "file": "/musterring-catalog/homepage/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_780f6bc9f8.jpg",
       "bytes": 85611,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ccf15a947f6049cbeed10ebf49dee609979e90e8d43646feda359f551443a3df"
     },
     {
       "file": "/musterring-catalog/homepage/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
       "bytes": 27745,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9f711acfe072b6ba0d938c90a1f54f6a1be3f045e54182d5219c4af090ff3e69"
     },
     {
       "file": "/musterring-catalog/homepage/image-04.png",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/5/csm_MR11614_F_JustB_KM100_fac80c175b.png",
       "bytes": 146598,
-      "contentType": "image/png"
+      "contentType": "image/png",
+      "sha256": "3e32f0f395d4c63345345e3912cdabdc508d18806a286da96d2d540a991d1ed1"
     },
     {
       "file": "/musterring-catalog/homepage/image-05.png",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/8/csm_musterring-bettina-zimmermann-kai-wiesinger-du-bist-zuhause_af7f4d5a6d.png",
       "bytes": 267503,
-      "contentType": "image/png"
+      "contentType": "image/png",
+      "sha256": "8f5a058318b8cbd4b8fba8df2be4b38714958cb2fcf70eec0da6e11a86d336d3"
     },
     {
       "file": "/musterring-catalog/homepage/image-06.png",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/5/csm_MR11648_Teaser_Startseite_EN_c81fbed933.png",
       "bytes": 258043,
-      "contentType": "image/png"
+      "contentType": "image/png",
+      "sha256": "53bae80961d2e1d7fc992c85d27fb6f99683e51f67a9816b76081eee4dad03d3"
     },
     {
       "file": "/musterring-catalog/homepage/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_unsere-qualitaet-musterring-neu-062025_a38dfcd75e.jpg",
       "bytes": 16132,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "f718900f49ca4836faf3d1d38801ed827a846b225af1c5e55b68cbdf58ec6cac"
     },
     {
-      "file": "/musterring-catalog/homepage/image-08.jpg",
-      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/d/csm_unsere-nachhaltigkeit-musterring-neu-062025_b4426b7aa4.jpg",
-      "bytes": 9184,
-      "contentType": "image/jpeg"
+      "file": "/musterring-catalog/homepage/image-09.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_unser-service-musterring-neu-062025_72edbde2f6.jpg",
+      "bytes": 11091,
+      "contentType": "image/jpeg",
+      "sha256": "371f9755f20d0aa178cd0da8597f9602af86e9dbbba5d4589dd9bad3e6f12632"
     }
   ]
 }

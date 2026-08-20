@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-720",
   "title": "MR 720",
-  "importedAt": "2026-08-03T08:01:48.151Z",
+  "importedAt": "2026-08-19T12:16:41.963Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,13 +10,15 @@
       "file": "/musterring-catalog/mr-720/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/2/csm_MR11638_A_MR720_-_15_2b833ee293.jpg",
       "bytes": 396391,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "af830112164ac1ca8416f1cda06856c8d7e2ffd4a2bc19bb05f8d8413860643f"
     },
     {
       "file": "/musterring-catalog/mr-720/image-02.png",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/d/csm_MR11638_D01_MR720_b198eb5787.png",
       "bytes": 1594248,
-      "contentType": "image/png"
+      "contentType": "image/png",
+      "sha256": "024458f22c938b0ea4248eb4c0ea42e4ad4916869f7c440b80c9483b2c194435"
     }
   ]
 }

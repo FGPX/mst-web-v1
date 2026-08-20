@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/coffee-tables-side-tables/nela",
   "title": "Nela",
-  "importedAt": "2026-08-03T08:02:11.122Z",
+  "importedAt": "2026-08-19T12:16:44.225Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/nela/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/9/csm_couchtisch_nela_keramik_musterring_05_16c21218e7.jpg",
       "bytes": 805491,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "84f138c9ac50f74d6844c12d893100b05d3861158af3a8b0d46b6e63322cca36"
     },
     {
       "file": "/musterring-catalog/nela/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/a/csm_couchtisch_nela_keramik_musterring_dfac9510a1.jpg",
       "bytes": 195409,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c919d2b0160ad3611bb4486c79022aa05c441264ed70884adda1b69cbeedc34e"
     },
     {
       "file": "/musterring-catalog/nela/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/1/csm_couchtisch_nela_keramik_musterring_03_2aafb2cdea.jpg",
       "bytes": 690765,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "804e2304dd0aed3c9ff8f90985b5726c39c7fae015ca7382f534d3be96c6e48f"
     },
     {
       "file": "/musterring-catalog/nela/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_couchtisch_nela_keramik_musterring_01_4c46c504b8.jpg",
       "bytes": 204657,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e2f10d97ec00c95ba121bd6cda8c5dfb541376139e2f724ce725414f67825273"
     },
     {
       "file": "/musterring-catalog/nela/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/a/csm_couchtisch_nela_eiche_musterring_03_8a775bcb3c.jpg",
       "bytes": 823969,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "7ce0845197e231879f265bb0dca3045d05ca808bf4d633b040ec1fbfc7da05e1"
     },
     {
       "file": "/musterring-catalog/nela/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/a/csm_couchtisch_nela_eiche_musterring_01_4e5a235765.jpg",
       "bytes": 741521,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1017b64087d7ea59e51c1b2546fd4dfd064e2cbe4a7bcef497480f57ec949602"
     },
     {
       "file": "/musterring-catalog/nela/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/6/csm_couchtisch_nela_eiche_musterring_22c573c42e.jpg",
       "bytes": 1309284,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6554bbb323ef0548a881ca76e18e21a92652419f384b17181e3135f39d339a4e"
     },
     {
       "file": "/musterring-catalog/nela/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/2/csm_couchtisch_nela_eiche_musterring_02_0d341c982b.jpg",
       "bytes": 218982,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "39b3b8dcc829a503e730a82a8db08c32cb58e1175d6cb2f1b6b31a09c7277af5"
     }
   ]
 }

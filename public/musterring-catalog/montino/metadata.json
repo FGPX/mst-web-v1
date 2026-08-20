@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/montino",
+  "title": "Montino",
+  "importedAt": "2026-08-19T12:17:01.482Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/montino/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/b/csm_schlafzimmer-montino-balkeneiche-lack-sand-musterring_12aaab23db.jpg",
+      "bytes": 120085,
+      "contentType": "image/jpeg",
+      "sha256": "c30764a1e295f3374b0e3e0c9c183d9693e0fe3675e35ba62f1a5f98f69f4b98"
+    },
+    {
+      "file": "/musterring-catalog/montino/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/f/csm_schlafzimmer-montino-balkeneiche-lack-beige-musterring_83633be46e.jpg",
+      "bytes": 429956,
+      "contentType": "image/jpeg",
+      "sha256": "55a5586f7d8ca49030a6d8e0856ca72a00271780e38ddce22791575a24aa1379"
+    },
+    {
+      "file": "/musterring-catalog/montino/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/5/csm_schlafzimmer-montino-balkeneiche-lack-beige-musterring_01_ec5e612697.jpg",
+      "bytes": 148838,
+      "contentType": "image/jpeg",
+      "sha256": "1b1f5c21ff7ed8a4efb061de5570a13002e9988575151ebadf3bca907a1b1eeb"
+    },
+    {
+      "file": "/musterring-catalog/montino/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/5/csm_kommode-montino-balkeneiche-lack-beige-musterring_80d158e007.jpg",
+      "bytes": 404410,
+      "contentType": "image/jpeg",
+      "sha256": "dbca74c2ed05993f135079ea749a9a93242d4d7e74abd9730b8169ab7609da55"
+    },
+    {
+      "file": "/musterring-catalog/montino/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/0/csm_schlafzimmer-montino-grau-musterring_bdeaabfded.jpg",
+      "bytes": 372808,
+      "contentType": "image/jpeg",
+      "sha256": "8c9c39a80b93cd2e4a7d7cd6307b01bfebaa9b96e7c3aa98a9a6e17fd1ba36d3"
+    },
+    {
+      "file": "/musterring-catalog/montino/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/b/csm_schlafzimmer-montino-sideboard-grau-musterring_5423e2db10.jpg",
+      "bytes": 361021,
+      "contentType": "image/jpeg",
+      "sha256": "caee48b5542c134dcdccd9dfc2152129e387a3fc3422236f0fce492d6375e7b1"
+    },
+    {
+      "file": "/musterring-catalog/montino/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/3/csm_schlafzimmer-montino-detail-kleiderschrank-grau-musterring_82a52f222b.jpg",
+      "bytes": 251621,
+      "contentType": "image/jpeg",
+      "sha256": "a0475043ac967d6369063efe6a7e1cedc5014299c4bbba79ad0bde0949d31d2b"
+    },
+    {
+      "file": "/musterring-catalog/montino/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/7/csm_schlafzimmer-montino-detail-beleuchtung-grau-musterring_43dbb84a92.jpg",
+      "bytes": 131097,
+      "contentType": "image/jpeg",
+      "sha256": "d1660393d0026c1b4ac59408dfbe0706c1fcb4b4f45ad28b5eb156b539373b34"
+    }
+  ]
+}

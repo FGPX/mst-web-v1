@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-230",
   "title": "MR 230",
-  "importedAt": "2026-08-03T08:01:23.105Z",
+  "importedAt": "2026-08-19T12:16:39.147Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/mr-230/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/d/csm_MR11716_B_MR230_Print_-_15_44d2457d11.jpg",
       "bytes": 489270,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "728d1c60d4edc9a1ef28cd331446ee7e7c0275af9d4eb5778428fa3266433244"
     },
     {
       "file": "/musterring-catalog/mr-230/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/9/csm_MR11716_009_MR230_Print_-_15_50b673cb9e.jpg",
       "bytes": 639507,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "25c467488a336aa971eaea4d78a9b50c7418098d7e96ba78b8842dccd8cad65d"
     },
     {
       "file": "/musterring-catalog/mr-230/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/c/csm_MR11716_001_MR230_Print_-_15_30c3b09445.jpg",
       "bytes": 576507,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fcbef8c0b7674344d2d7fd1446a369a2a163916df6194b43d09ec61ca5ba0dae"
     },
     {
       "file": "/musterring-catalog/mr-230/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/f/csm_MR11716_005_MR230_Print_-_15_b29ce65de4.jpg",
       "bytes": 787934,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "34446dbe7ce21214778819e762992db1e08bc0d2a507f20148ea2eead5d84012"
     },
     {
       "file": "/musterring-catalog/mr-230/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/0/csm_MR11716_A_MR230_Print_-_15_80fea319d1.jpg",
       "bytes": 399039,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "cc28259848b9bde368f582f94bd52428b216966871be52cc0a65af08d89545a2"
     }
   ]
 }

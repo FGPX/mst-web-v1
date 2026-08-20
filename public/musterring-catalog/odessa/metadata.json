@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/hallway/wardrobes/odessa",
+  "title": "Odessa",
+  "importedAt": "2026-08-19T12:16:51.342Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/odessa/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/8/csm_flurmoebel-odessa-lack-alpinwei%C3%9F-musterring_026a409427.jpg",
+      "bytes": 571734,
+      "contentType": "image/jpeg",
+      "sha256": "37a732f85b0c605fe968600c90eb8ffb24c9de2bac9cd0d370d8bf5f12b019cf"
+    },
+    {
+      "file": "/musterring-catalog/odessa/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/3/csm_flurmoebel-odessa-lack-alpinwei%C3%9F-musterring-02_59b91ca0a6.jpg",
+      "bytes": 870322,
+      "contentType": "image/jpeg",
+      "sha256": "4e5821a82649e6e694407e21096acbcde500392da4b3129a8c9765cd3fce9938"
+    },
+    {
+      "file": "/musterring-catalog/odessa/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/7/csm_flurmoebel-odessa-lack-alpinwei%C3%9F-musterring-01_c6cbbdbce9.jpg",
+      "bytes": 813489,
+      "contentType": "image/jpeg",
+      "sha256": "078adf63acaada7b932cfa8a25913ffadd29282b0996b95bf7313a05264f424e"
+    },
+    {
+      "file": "/musterring-catalog/odessa/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/f/csm_flurmoebel-odessa-lack-alpinwei%C3%9F-musterring-03_e8770c32a8.jpg",
+      "bytes": 858356,
+      "contentType": "image/jpeg",
+      "sha256": "bedcf40130161a8e3df7334942d1d25cb152d46c5abad1054eee2b4d25fd95c9"
+    },
+    {
+      "file": "/musterring-catalog/odessa/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/0/csm_flur_diele_odessa_grau_musterring_08_ee67ca5365.jpg",
+      "bytes": 400682,
+      "contentType": "image/jpeg",
+      "sha256": "7d902b8ebd652d52d66e8119f7a7b69cae7be7f0e52bae4ead37e98ea8b9bcee"
+    },
+    {
+      "file": "/musterring-catalog/odessa/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/2/csm_flur_diele_odessa_grau_musterring_07_03e3c6b8f0.jpg",
+      "bytes": 429188,
+      "contentType": "image/jpeg",
+      "sha256": "f02c90a0c8f2e0b985bd7f19bb16c4ab3800f8b727fb5dc2545fccdb1f2e919b"
+    },
+    {
+      "file": "/musterring-catalog/odessa/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/6/csm_flur_diele_odessa_grau_musterring_05_bb980ac25c.jpg",
+      "bytes": 725573,
+      "contentType": "image/jpeg",
+      "sha256": "4856125b86ab9f4b9b8d7c017edd5283c1ee2d6f27ed3fede68af2b9d85e9430"
+    },
+    {
+      "file": "/musterring-catalog/odessa/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/5/csm_flur_diele_odessa_grau_musterring_06_5abb69e06d.jpg",
+      "bytes": 617120,
+      "contentType": "image/jpeg",
+      "sha256": "2b43b6baa2745375274d69f360ebde5a0138066d30c1fc8c682cfc26acdc4d1f"
+    }
+  ]
+}

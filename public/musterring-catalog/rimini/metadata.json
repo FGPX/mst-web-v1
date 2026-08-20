@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bathroom/rimini",
+  "title": "Rimini",
+  "importedAt": "2026-08-19T12:16:57.222Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/rimini/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/2/csm_bad_rimini_wei%C3%9F_grau_musterring_02_e9ce539a83.jpg",
+      "bytes": 714768,
+      "contentType": "image/jpeg",
+      "sha256": "892f92d67900fb251f72bd083cd5c08c3e4072a81b8a2ffe9b58a2289ee8659e"
+    },
+    {
+      "file": "/musterring-catalog/rimini/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/1/csm_bad_rimini_wei%C3%9F_grau_musterring_01_6cab453bb0.jpg",
+      "bytes": 966026,
+      "contentType": "image/jpeg",
+      "sha256": "c894681f6fa3d8574d24bafe787f51f5fd6b2ed3b7f52f91bd851a54f2ce3a00"
+    },
+    {
+      "file": "/musterring-catalog/rimini/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/d/csm_bad_rimini_wei%C3%9F_musterring_01_5c531bdc5f.jpg",
+      "bytes": 1056398,
+      "contentType": "image/jpeg",
+      "sha256": "b0e4cf81a7eff5826d1d18de121db462a435f6682a4c404519e36c5aaab32d84"
+    },
+    {
+      "file": "/musterring-catalog/rimini/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/e/csm_bad_rimini_spiegel_musterring_01_22772a09e7.jpg",
+      "bytes": 494581,
+      "contentType": "image/jpeg",
+      "sha256": "5b74b513a8c53592ca38f4e340238d33427365457896aae224fc36a171f177da"
+    },
+    {
+      "file": "/musterring-catalog/rimini/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/d/csm_bad_rimini_eiche_grau_musterring_04_90a8d0ed32.jpg",
+      "bytes": 434743,
+      "contentType": "image/jpeg",
+      "sha256": "adeb88f7c363227a9b2f3d4e08cbc506371922e77325643b08f4002ed1fede72"
+    },
+    {
+      "file": "/musterring-catalog/rimini/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/2/csm_bad_rimini_eiche_grau_musterring_03_f3f85f2026.jpg",
+      "bytes": 381501,
+      "contentType": "image/jpeg",
+      "sha256": "203ad02f91f3309f6aa98882d7e8aab9efe9f86f4b8ba13ba3b136043add26ec"
+    },
+    {
+      "file": "/musterring-catalog/rimini/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_bad_rimini_eiche_grau_musterring_02_ff66f5d84e.jpg",
+      "bytes": 389841,
+      "contentType": "image/jpeg",
+      "sha256": "a45eb2154e8a3ee7e892352998bed154de90972ba06b196786980b4f7de5f542"
+    },
+    {
+      "file": "/musterring-catalog/rimini/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_bad_rimini_eiche_grau_musterring_01_a0a5aa8cc9.jpg",
+      "bytes": 689020,
+      "contentType": "image/jpeg",
+      "sha256": "3f1796838965ab666182c9df3d0b2900da3b6d3eedf35e5ffb7a394b4d8fa767"
+    }
+  ]
+}

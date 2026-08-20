@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9420",
   "title": "MR 9420",
-  "importedAt": "2026-08-03T08:01:54.580Z",
+  "importedAt": "2026-08-19T12:16:42.452Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-9420/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-offener_Abschluss_links-Modul-Free-Corner-Pure-Longchair-Stoff-Rivano_Denim-Sambia_Stone-Ravenna_Perle-Diva_Stone-Rivano_Perle-Rivoli_Perle-Musterring_cb36f8ffb7.jpg",
       "bytes": 731582,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ee0a9d04bab34250b3dc35715a474d297b757a9d9ea44a0ceccb943399802d11"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_Fu%C3%9Fst%C3%BCtze-R%C3%BCckenlehne-Musterring_a40728b7c5.jpg",
       "bytes": 1122075,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "914180dbec5cfe2f047946c5f7c6f2c908c5bb476ac2ee76fd7345ada97bc860"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-R%C3%BCckenlehne-Musterring_06ca976ed3.jpg",
       "bytes": 1082387,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9fd204b98b9ba090c649d374f43d6b02accd0904fcb80b75ad9dacff3775eca5"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/e/csm_Sofa-Sessel-MR_9420-Ecksofa-340TB410-Detail-manuelle_R%C3%BCckenverstellung-Musterring_db1b09b644.jpg",
       "bytes": 1085627,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3bb22643611c016cbdaa85414ef1fe7d36aaec0d0bc61d3e43a0850e517a1f8f"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_Sofa-Sessel-MR_9420-Gruppe-Modul_Free-Armlehne_links-manuelle_R%C3%BCckenverstellung-Modul_Pure-ohne_R%C3%BCcken-ohne_Armlehne-Modul_Free-Armlehne_rechts-Fu%C3%9Fauflage_motorisch-Stoff-Vivique_Offwhite-Leder-Togo_Grege-Musterring_65fa21df2c.jpg",
       "bytes": 685556,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "36ae388070677673cf57fe4e3f4d136991ddb5ae91e610b16fbff94e4521922e"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sessel-Sofa-MR_9420-Modul_Free-mit_R%C3%BCcken-Armlehne_rechts-Leder-Togo_Grege-Detail-motorische_Fu%C3%9Fauflage-Musterring_4010a965bb.jpg",
       "bytes": 581399,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b8c6fcc9136872efd1289d9839fc7463f1fe28857ec6540f1c06bfe5ed9d5f17"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_Sofa-Sessel-MR_9420-Leder-Togo_Grege-Stoff-Vivique_Offwhite-Ziernaht-Ton_in_Ton-Detail-Musterring_288f661e96.jpg",
       "bytes": 979853,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "0c18bdc984ff774185960334154f0344d831975f1a2d89af818a3f5d1d885fec"
     },
     {
       "file": "/musterring-catalog/mr-9420/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_Sessel-Sofa-MR_9420-Modul_Free-mit_R%C3%BCcken-Armlehne_links-Leder-Togo_Grege-Detail-manuelle_R%C3%BCckenverstellung-Musterring_804b9fc74a.jpg",
       "bytes": 905776,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3e6aa3b084fbc9fb2a0877972a7e5e46927b061c2505292235d0e707a40e2fe4"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/freilicht",
   "title": "Freilicht",
-  "importedAt": "2026-08-03T08:02:57.366Z",
+  "importedAt": "2026-08-19T12:16:48.041Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/freilicht/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/f/csm_gartenmoebel-freilicht-tisch-daenemark-stuhl-kopenhagen-musterring_703b44d5ab.jpg",
       "bytes": 413292,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "332c36058d9cecba121c114d77e539c8a76e7da1c9caf3a0fadf413061a2c724"
     },
     {
       "file": "/musterring-catalog/freilicht/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/a/csm_gartenmoebel-freilich-tisch-daenemark-edelstahl-pulverbeschichetet-beige-musterring_319d4379b3.jpg",
       "bytes": 672578,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3718748133dd1a83831f9d04570b1b6db33e67b31ac335ab8029dacbbafcae75"
     },
     {
       "file": "/musterring-catalog/freilicht/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/2/csm_bank-freilicht-skaagen-teak-massiv-sitzschale-beige-gestell-edelstahl-pulverbeschichet-musterring_1c609adfdb.jpg",
       "bytes": 630736,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6fa0338ee3e68f7dd35bc114319cd04c20c320fdcce2d8e44b8acad53043eeed"
     },
     {
       "file": "/musterring-catalog/freilicht/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/8/csm_gartenmoebel-freilicht-armlehnstuhl-amsterdam-schwarz-esstisch-holland-teak-massiv-bank-rotterdam-teak-massiv-musterring_c13c6c6a38.jpg",
       "bytes": 968257,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "67b3d800b10b84f2dea25e4c445f93f6ea78b50e5c2e2fc445d3841166fb54a8"
     },
     {
       "file": "/musterring-catalog/freilicht/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/7/csm_gartenstuhl-freilicht-amsterdam-musterring-06_e476dc716b.jpg",
       "bytes": 717837,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "793fa27ba64d5970c6c65e1c4983621dcdd5949cbf2c29ebf219dcffd34ac371"
     },
     {
       "file": "/musterring-catalog/freilicht/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/f/csm_gartenmoebel-freilicht-esstisch-holland-teak-massiv_5c2de4d689.jpg",
       "bytes": 792374,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6e175721577d2b0b2d1552eda0de362f2220dd6c03825a6e92818d2d698e64dc"
     },
     {
       "file": "/musterring-catalog/freilicht/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_loungemoebel-freilicht-ibiza-musterring-11_4d36b4d37c.jpg",
       "bytes": 1151674,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fbc24ef377526268d1bc15fa26c8d37514967678a9d4860c8b6ed579367c8a21"
     },
     {
       "file": "/musterring-catalog/freilicht/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/6/csm_gartenmoebel-freilicht-beistelltisch-formentera-musterring_152008c244.jpg",
       "bytes": 2237406,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e6845c2fd6c6b5b0580b8c79c32d10e040124b372fb59e5537bc777d5b2d26e4"
     }
   ]
 }

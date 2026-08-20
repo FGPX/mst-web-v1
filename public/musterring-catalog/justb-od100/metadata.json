@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/justb-od100",
-  "title": "JUSTB! OD100",
-  "importedAt": "2026-08-03T08:02:59.852Z",
+  "title": "JustB! OD100",
+  "importedAt": "2026-08-19T12:16:48.253Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,37 +10,43 @@
       "file": "/musterring-catalog/justb-od100/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/6/csm_justb-outdoorm%C3%B6bel-od100-tisch-stuhl-musterring_84d266ef4e.jpg",
       "bytes": 631399,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9c47cc66c44935dc3d9b7272d4e2779e5a6f543831b41255e76c0223054effb1"
     },
     {
       "file": "/musterring-catalog/justb-od100/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/1/csm_justb-outdoorm%C3%B6bel-od100-ivory-musterring_3b12d032f4.jpg",
       "bytes": 704886,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2cb003aed547edbf8bc62cbc14bbf3a2eeacd5a5c056e706d6c2ca57267bc835"
     },
     {
       "file": "/musterring-catalog/justb-od100/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/4/csm_justb-outdoorm%C3%B6bel-od100-stuhl-ivory-musterring_6a51198bd3.jpg",
       "bytes": 110209,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1b5b3419a623737c6fcd8de21b35ed4be94f2ced5aba5e623e094dbc615894ba"
     },
     {
       "file": "/musterring-catalog/justb-od100/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/f/csm_justb-outdoorm%C3%B6bel-od100-teakholz-musterring_8a5f9c1072.jpg",
       "bytes": 731018,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "030a699245f4dd38feb0fcbb5f5be46cbab85ec120663bc4ff2bd610db5d3931"
     },
     {
       "file": "/musterring-catalog/justb-od100/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_justb-outdoorm%C3%B6bel-od100-tisch-stuhl-musterring-01_64d45a74df.jpg",
       "bytes": 656890,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d4e9f19b5b545f87b1ded8c6b5caa7ee0f807d5a7d82ab8e93441ce80e860ce9"
     },
     {
       "file": "/musterring-catalog/justb-od100/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
       "bytes": 27745,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9f711acfe072b6ba0d938c90a1f54f6a1be3f045e54182d5219c4af090ff3e69"
     }
   ]
 }

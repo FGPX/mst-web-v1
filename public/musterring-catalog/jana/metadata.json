@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/jana",
   "title": "Jana",
-  "importedAt": "2026-08-03T08:01:57.263Z",
+  "importedAt": "2026-08-19T12:16:42.895Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,7 +10,8 @@
       "file": "/musterring-catalog/jana/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/5/csm_wohnmoebel-jana-musterring_d815508590.jpg",
       "bytes": 397144,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "38da982ccd8e80d0165653b4d2d2ad723f8133bff495a532cae81286d869a399"
     }
   ]
 }

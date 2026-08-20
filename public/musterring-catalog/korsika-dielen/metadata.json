@@ -1,0 +1,52 @@
+{
+  "page": "https://www.musterring.com/en/furniture/hallway/wardrobes/korsika-dielen",
+  "title": "Korsika Dielen",
+  "importedAt": "2026-08-19T12:16:52.433Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/korsika-dielen/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/2/csm_flur-diele-korsika-dielen-kirschbaum-lack-beige-musterring-03_03f0d40635.jpg",
+      "bytes": 402400,
+      "contentType": "image/jpeg",
+      "sha256": "e86099bc69572ea7f45d5b8f4dcd9d20a7ae15a5612d1dc26a9be6a3694fcac2"
+    },
+    {
+      "file": "/musterring-catalog/korsika-dielen/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_flur-diele-korsika-dielen-kirschbaum-lack-beige-musterring-02_7d4c46d2a8.jpg",
+      "bytes": 671574,
+      "contentType": "image/jpeg",
+      "sha256": "2f48c9877b6d4a218ac3707185e6279bb5e21031bc49fbc9594024ef04faf598"
+    },
+    {
+      "file": "/musterring-catalog/korsika-dielen/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/a/csm_flur-diele-korsika-dielen-kirschbaum-lack-beige-musterring-01_9a96ae38eb.jpg",
+      "bytes": 210568,
+      "contentType": "image/jpeg",
+      "sha256": "d2c541f75b8368235fb9789239557d33702aeb74d06000535e54bd60bc68344d"
+    },
+    {
+      "file": "/musterring-catalog/korsika-dielen/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/c/csm_flurmoebel-korsika-dielen-eiche-sand-musterring_9cad16ff3e.jpg",
+      "bytes": 703095,
+      "contentType": "image/jpeg",
+      "sha256": "5f70a2dd6241c8422590e3f7934a1f433b278823bef230e953cb5af7e2a9e6f2"
+    },
+    {
+      "file": "/musterring-catalog/korsika-dielen/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/5/csm_flurmoebel-korsika-dielen-eiche-sand-detail-musterring_311b908603.jpg",
+      "bytes": 703509,
+      "contentType": "image/jpeg",
+      "sha256": "3db8cc1cc26a30210ed90a8d2335f68aedcd5efab703bb8da4654ac884e05cf4"
+    },
+    {
+      "file": "/musterring-catalog/korsika-dielen/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/c/csm_flurmoebel-schuhschrank-korsika-dielen-eiche-sand-musterring_6601574e51.jpg",
+      "bytes": 548494,
+      "contentType": "image/jpeg",
+      "sha256": "ddb86bd5f19fa9555cdd9742506eaf1634ca5110303c76d58d89676e2da37f4b"
+    }
+  ]
+}

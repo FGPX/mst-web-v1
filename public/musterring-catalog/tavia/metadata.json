@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tavia",
   "title": "Tavia",
-  "importedAt": "2026-08-03T08:02:51.862Z",
+  "importedAt": "2026-08-19T12:16:47.613Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/tavia/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/d/csm_esszimmer-tavia-stuhl-stoff-wollwei%C3%9F-esstisch-charakter-eiche-gestell-edelstahl-geb%C3%BCrstet-musterring_40e1004f9f.jpg",
       "bytes": 470116,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "deffbc15adc352d032daffda00be7675c574fbfd3ee71fa2fa0dae92e1867d5d"
     },
     {
       "file": "/musterring-catalog/tavia/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/3/csm_esszimmer-tavia-stuhl-stoff-wollwei%C3%9F-gestell-eiche-bianco-musterring_07673c8838.jpg",
       "bytes": 817127,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "94b26ccc633f8cc0db9be9b2f56cd9c8fbc90d66e6c803325113841ea4bfb4ca"
     },
     {
       "file": "/musterring-catalog/tavia/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/2/csm_esszimmer-tavia-schalenstuhl-stoff-jab-creme-musterring_c5aed265d0.jpg",
       "bytes": 580859,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e24d4b5552ad5e3889cfadcd888cdb1f23126d3099cf022430971c737dc8bd7a"
     },
     {
       "file": "/musterring-catalog/tavia/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/2/csm_esszimmer-tavia-esstisch-charakter-eiche-musterring_01_b0469a6bb6.jpg",
       "bytes": 633131,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bf7d30f5288ebd2e1a308238256e6cffba8a1b9ef366702d0dec0223c1ec217b"
     },
     {
       "file": "/musterring-catalog/tavia/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_esszimmer-tavia-esstisch-wildnussbaum-stuhl-leder-florenz-dunkelgrau-stoff-florida-silver-musterring_3e2ee9aafa.jpg",
       "bytes": 839166,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "14dfc77fe8b43b762c34e2ec97bfc397fcd300389e36d8888a27b90287f272fa"
     },
     {
       "file": "/musterring-catalog/tavia/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/0/csm_esszimmer-tavia-esstisch-holzoptik-musterring_02_dc141334d1.jpg",
       "bytes": 368113,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6e6aa8dc70e6fdac5762b7d5bf35f16498c33545a0cbc88a4256d865ad88f2bd"
     },
     {
       "file": "/musterring-catalog/tavia/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/6/csm_esszimmer-tavia-bank-stoff-florida-silver-schlittengestell-eisen-schwarz-musterring_9714ff6c5e.jpg",
       "bytes": 321112,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8ede714c6dd60acb8aeee7ef6b0735c2e05fa679935ad087e7d44a3b54ec51e9"
     },
     {
       "file": "/musterring-catalog/tavia/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/5/csm_esszimmer-tavia-esstisch-wildnussbaum-stuhl-leder-florenz-dunkelgrau-musterring_5f54fc3620.jpg",
       "bytes": 853633,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "90edee6331c36e55bc384816b5a24e6f0469f61270d6840d555a9873861d658e"
     }
   ]
 }

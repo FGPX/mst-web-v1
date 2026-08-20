@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/san-francisco",
   "title": "San Francisco",
-  "importedAt": "2026-08-03T08:02:16.865Z",
+  "importedAt": "2026-08-19T12:16:44.842Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/san-francisco/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_schlafzimmerserie-san-francisco-detailbild-nachttisch-musterring_199f81970a.jpg",
       "bytes": 241675,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "632a09b2fccfea7d9b1316e0b113dc88f322b21f97edf60f6e63c408fed67a2d"
     },
     {
       "file": "/musterring-catalog/san-francisco/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/5/csm_bett-san-francisco-detailbild-fu%C3%9Fteil-musterring_baa4e84aa5.jpg",
       "bytes": 676443,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "751cb80cfb09587f30e93bf35caabe7dde7f9cf1defe953cb9a6addc55e75afb"
     },
     {
       "file": "/musterring-catalog/san-francisco/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/4/csm_schlafzimmerserie-san-francisco-detailbild-kopfteil-musterring_4b41ce5c8e.jpg",
       "bytes": 596505,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4243b074eaf70d9147ff6f00c7d8c610beb2d9056c73f69a413c751598a3c6d3"
     },
     {
       "file": "/musterring-catalog/san-francisco/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/c/csm_kleiderschrank-san-francisco-beleuchtung-musterring_b29697d96d.jpg",
       "bytes": 261214,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "98c240e4024f7454c47759018cbfc3bf111b240123ff5c3fab007dd717e302b7"
     },
     {
       "file": "/musterring-catalog/san-francisco/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/4/csm_schlafzimmerserie-san-francisco-musterring_bee065b9df.jpg",
       "bytes": 303281,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9872200ba08fdd46c8433e4b0584af2e302f08fd926251befb559f2954b6f60c"
     }
   ]
 }

@@ -1,13 +1,12 @@
 "use client";
 
 import Image from "@/components/HighQualityImage";
-import Link from "next/link";
 import { ArrowRight, Camera, History, Search, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
-import type { Product } from "@/lib/types";
+import { productHasCategory, type Product } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
 import { CompareSelectionBar } from "./CompareSelectionBar";
 
@@ -25,9 +24,20 @@ const autocompleteCategories: Array<{ category: Product["category"]; aliases: st
   { category: "sofa", aliases: ["sofa", "couch"] },
   { category: "armchair", aliases: ["armchair"] },
   { category: "sectional", aliases: ["sectional", "corner"] },
-  { category: "storage", aliases: ["storage", "cabinet", "sideboard"] },
+  { category: "storage", aliases: ["storage", "cabinet", "sideboard", "hallway", "cloakroom"] },
   { category: "coffee-table", aliases: ["coffee"] },
-  { category: "dining-table", aliases: ["dining"] }
+  { category: "dining-table", aliases: ["dining", "table"] },
+  { category: "dining-chair", aliases: ["dining chair"] },
+  { category: "bedroom-series", aliases: ["bedroom"] },
+  { category: "bed", aliases: ["bed", "mattress", "topper"] },
+  { category: "wardrobe", aliases: ["wardrobe", "closet"] },
+  { category: "bathroom", aliases: ["bathroom"] },
+  { category: "kitchen", aliases: ["kitchen"] },
+  { category: "outdoor", aliases: ["outdoor", "garden"] },
+  { category: "carpet", aliases: ["carpet", "rug"] },
+  { category: "lamp", aliases: ["lamp", "lighting"] },
+  { category: "small-furniture", aliases: ["occasional"] },
+  { category: "home-textile", aliases: ["textile", "bedding", "linen"] }
 ];
 
 const compactMatchReason = (reason: string) => {
@@ -152,8 +162,8 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
     ))?.category;
 
     return products.filter((product) => {
-      if (!product.active || (inferredCategory && product.category !== inferredCategory)) return false;
-      const words = `${product.modelCode} ${product.name} ${product.subtitle} ${product.category} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm wide ${Math.round(product.depthMm / 10)} cm deep ${Math.round(product.heightMm / 10)} cm high`.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+      if (!product.active || (inferredCategory && !productHasCategory(product, inferredCategory))) return false;
+      const words = `${product.modelCode} ${product.name} ${product.subtitle} ${(product.categories ?? [product.category]).join(" ")} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm wide ${Math.round(product.depthMm / 10)} cm deep ${Math.round(product.heightMm / 10)} cm high`.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
       return terms.every((term) => categoryTerms.has(term) || words.some((word) => word.startsWith(term)));
     }).slice(0, 5);
   }, [query, submitted]);

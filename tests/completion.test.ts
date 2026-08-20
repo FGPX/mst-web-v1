@@ -9,7 +9,7 @@ beforeEach(() => window.localStorage.clear());
 
 describe("comparison normalization", () => {
   it("assigns deterministic comparison awards from verified catalogue facts", () => {
-    const selected = products.filter((product) => product.active && product.category !== "storage").slice(0, 3);
+    const selected = products.filter((product) => product.active && product.category !== "storage" && !product.verifiedFacts.comfort).slice(0, 3);
     const awards = comparisonAwards(selected);
     expect(awards).toHaveLength(3);
     expect(awards.flatMap((award) => award.labels)).toContain("Best for Small Spaces");

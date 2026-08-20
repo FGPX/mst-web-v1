@@ -230,7 +230,8 @@ export function MusterringAdvisor() {
 }
 
 function LinkCard({ product, imageOverride }: { product: typeof products[number]; imageOverride?: string }) {
-  return <a href={`/furniture/${product.slug}`}><Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={260} height={180} /><span><strong>{product.modelCode}</strong><small>{product.category.replaceAll("-", " ")}</small><em>{product.subtitle}</em><b>View details <ArrowRight size={15} /></b></span></a>;
+  const categories = (product.categories ?? [product.category]).map((category) => category.replaceAll("-", " ")).join(" · ");
+  return <a href={`/furniture/${product.slug}`}><Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={260} height={180} /><span><strong>{product.modelCode}</strong><small>{categories}</small><em>{product.subtitle}</em><b>View details <ArrowRight size={15} /></b></span></a>;
 }
 
 function isStoredMessage(value: unknown): value is Message {

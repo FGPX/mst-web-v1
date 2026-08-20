@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2986",
   "title": "MR 2986",
-  "importedAt": "2026-08-03T08:01:43.129Z",
+  "importedAt": "2026-08-19T12:16:41.264Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,19 +10,22 @@
       "file": "/musterring-catalog/mr-2986/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_sofa-mr2985-stoff-blush-musterring_ba0971e123.jpg",
       "bytes": 484884,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1701544c53c5ad1aeecb4cc04ceb5c428171a23908e52ddb39602d5423a3f46b"
     },
     {
       "file": "/musterring-catalog/mr-2986/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_af10072ce6.jpg",
       "bytes": 86228,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "47605ecffd7a61da0db24553d86797f418e467d5837800eae5cd19f5e9e36962"
     },
     {
       "file": "/musterring-catalog/mr-2986/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
       "bytes": 27745,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9f711acfe072b6ba0d938c90a1f54f6a1be3f045e54182d5219c4af090ff3e69"
     }
   ]
 }

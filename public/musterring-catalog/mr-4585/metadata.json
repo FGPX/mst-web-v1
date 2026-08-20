@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4585",
   "title": "MR 4585",
-  "importedAt": "2026-08-03T08:01:44.326Z",
+  "importedAt": "2026-08-19T12:16:41.470Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-4585/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_Sofa-Sessel-MR_4585-Einzelsessel_5997-Sternfu%C3%9F-schwarz-matt-Stoff-goldgelb-Musterring_0fcc1e3158.jpg",
       "bytes": 507280,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "00c4d6554c2daea678fe06e4dafe024b5aefd9cbd71cb4f26a1f3408044f6b59"
     },
     {
       "file": "/musterring-catalog/mr-4585/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/f/csm_Sofa-Sessel-MR_4585-Einzelsessel_5997-drehbar-Sternfu%C3%9F-chrom-gl%C3%A4nzend-Stoff-Mono-light_grey-freigestellt-Schr%C3%A4gansicht-Musterring_939aceb791.jpg",
       "bytes": 599287,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e503fafb06c65e5c5deb2bc37d4d70683475650fbe2ab93c1ce963b1add9ee82"
     },
     {
       "file": "/musterring-catalog/mr-4585/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/c/csm_Sofa-Sessel-MR_4585-Hocker_1056-Sternfu%C3%9F-chrom-gl%C3%A4nzend-Stoff-Mono-light_grey-freigestellt-Musterring_290691cd07.jpg",
       "bytes": 383202,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c3a6df5f153df36d20b5e21ec8b50ad079255f04ec9b548192066207e3c3b619"
     },
     {
       "file": "/musterring-catalog/mr-4585/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/1/csm_Sofa-Sessel-MR_4585-Einzelsessel_5997-drehbar-4_Sternfu%C3%9F-schwarz-matt-Stoff-Rot-freigestellt-Musterring_e60d836d7a.jpg",
       "bytes": 924426,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c28838c569b25ae7b0cc961cdf19b6fd57ce5e3688de8de095cce6ade5825180"
     },
     {
       "file": "/musterring-catalog/mr-4585/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/9/csm_Sofa-Sessel-MR_4585-drehbar-R%C3%BCcken-niedrig-mit_Wippfunktion-4_Sternfu%C3%9F-Metall-schwarz-matt-Stoff_11082-dunkelgrau-freigestellt-Musterring_c63f0ac17c.jpg",
       "bytes": 821307,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c6b171b9d7f419e93b40a085f5b60df64d6474d06e8af9210cc3ee3eb37a8129"
     },
     {
       "file": "/musterring-catalog/mr-4585/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_Sofa-Sessel-MR_4585-Einzelsessel_5995-drehbar-R%C3%BCcken_hoch-4_Sternfu%C3%9F-schwarz-matt-Stoff-Velvet-blue_grey-freigestellt-Musterring_66aefe49ac.jpg",
       "bytes": 306871,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b9d334418bcc067625856d1a3275478da78cb5fd5d770742746e40f7aba9adae"
     },
     {
       "file": "/musterring-catalog/mr-4585/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/c/csm_Sofa-Sessel-MR_4585-Einzelsessel_5997-drehbar-Sternfu%C3%9F-chrom-gl%C3%A4nzend-Stoff-Mono-light_grey-freigestellt-Musterring_ddeea26caf.jpg",
       "bytes": 550646,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "0f68a90b051ac1975b2de24e09ca469dc4a4e4f56e82d2dfbd42f9cffa92adc0"
     },
     {
       "file": "/musterring-catalog/mr-4585/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/c/csm_Sofa-Sessel-MR_4585-Sofa_3002-3_sitzig-Candy-Einzelsessel_5996-drehbar-R%C3%BCcken_hoch-Metallfu%C3%9F-schwarz-matt-Chrom-Stoff-goldgelb-Stoff_25040-Musterring_c25aef22ac.jpg",
       "bytes": 489872,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d281d79e652a2c389a2c053bc9825d0e003bbe05bfa0f04724ae77772d343c61"
     }
   ]
 }

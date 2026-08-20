@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2665",
   "title": "MR 2665",
-  "importedAt": "2026-08-03T08:01:41.672Z",
+  "importedAt": "2026-08-19T12:16:40.983Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,7 +10,8 @@
       "file": "/musterring-catalog/mr-2665/image-01.png",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/5/csm_MR2665_Titelfoto__1__fbc9c233ae.png",
       "bytes": 1102727,
-      "contentType": "image/png"
+      "contentType": "image/png",
+      "sha256": "d0b3783fa9de913399361608280994603bd038f5124766f7e818068d448b3bfd"
     }
   ]
 }

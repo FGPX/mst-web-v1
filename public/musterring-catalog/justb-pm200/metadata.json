@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/justb-pm200",
   "title": "JUSTB! PM200",
-  "importedAt": "2026-08-03T08:01:18.843Z",
+  "importedAt": "2026-08-19T12:16:38.598Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/justb-pm200/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/5/csm_sofa-justb-pm200-stoff-cord-beige-musterring_cdb990c380.jpg",
       "bytes": 736536,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9436835dfee07504e623dea00ef678a116fd5933dd652928c635a43e7821279b"
     },
     {
       "file": "/musterring-catalog/justb-pm200/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/2/csm_sofa-justb-pm200-stoff-cord-beige-detail-armlehne-musterring_8d67e74d63.jpg",
       "bytes": 780215,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b3d5062a665413ba2ddbc42ec53082b277ad6e3d33265f7018594742c8d13963"
     },
     {
       "file": "/musterring-catalog/justb-pm200/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/f/csm_sofa-justb-pm200-stoff-cord-beige-detail-sitztiefe-musterring_1075f1ce28.jpg",
       "bytes": 893626,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "712680dd22df4e3dea3ce0a699c34952e27f5843f7166f9fe4cf049648531a0f"
     },
     {
       "file": "/musterring-catalog/justb-pm200/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/f/csm_sofa-justb-pm200-leder-wei%C3%9F-musterring_42e2100992.jpg",
       "bytes": 501332,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a9ef6bc02b12fab276c0419c9ef09be62484bb037f5eb38696a331a2e4f36617"
     },
     {
       "file": "/musterring-catalog/justb-pm200/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/f/csm_sofa-justb-pm200-leder-wei%C3%9F-detail-armlehne-musterring_aa7134ba28.jpg",
       "bytes": 528002,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3516bfa02d6b04e12122cc0b6ebd417a32c3736915395b218a14ff028cc890e6"
     },
     {
       "file": "/musterring-catalog/justb-pm200/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_sofa-justb-pm200-leder-wei%C3%9F-detail-musterring_2ef92d0554.jpg",
       "bytes": 272937,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ab497a6e475934fcd85873aa2085fdd164705fda637ab1b15a87d343e24249e1"
     },
     {
       "file": "/musterring-catalog/justb-pm200/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/2/csm_sofa-justb-pm200-leder-wei%C3%9F-details-musterring_dfc7bd28d0.jpg",
       "bytes": 417387,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "7a116fd92f49cdc205a34af398c88f37fd0cda99e9258d0cb0aa4281c728de2e"
     },
     {
       "file": "/musterring-catalog/justb-pm200/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_sofa-justb-pm200-hocker-stoff-grau-musterring_260f84349a.jpg",
       "bytes": 149704,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "f7ac4f34822a8a6f5fc05c4d7c3727ece37e4399b7e15f6811695d3425a1c7c7"
     }
   ]
 }

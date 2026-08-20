@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-281",
   "title": "MR 281",
-  "importedAt": "2026-08-03T08:01:28.725Z",
+  "importedAt": "2026-08-19T12:16:39.751Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,7 +10,8 @@
       "file": "/musterring-catalog/mr-281/image-01.png",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/e/csm_relaxsessel-mr-281-leder-motorische-verstellung-musterring_2f191c4920.png",
       "bytes": 722344,
-      "contentType": "image/png"
+      "contentType": "image/png",
+      "sha256": "19c5f23909cf314c538d2ac33069a0317e84529bb04f39355a26149fb0281815"
     }
   ]
 }

@@ -306,7 +306,7 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
         <Link href={`/furniture/${product.slug}`} aria-label={`View ${product.name}`}>
           <Image
             src={image}
-            alt={`${product.name} ${categoryDetails[product.category].label.toLowerCase()}`}
+            alt={`${product.name} ${(product.categories ?? [product.category]).map((category) => categoryDetails[category].label.toLowerCase()).join(" and ")}`}
             fill
             sizes="(max-width: 760px) 100vw, 50vw"
           />

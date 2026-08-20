@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-260",
   "title": "MR 260",
-  "importedAt": "2026-08-03T08:01:24.689Z",
+  "importedAt": "2026-08-19T12:16:39.317Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-260/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_sofa_mr260_stoff_silver_grau_musterring_21_6b5f6a7340.jpg",
       "bytes": 1030689,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4c869554f7bb200d026daae37cb593b1e0714dcb02cd0399ae64963e47b54e4f"
     },
     {
       "file": "/musterring-catalog/mr-260/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/6/csm_sofa_mr260_stoff_silver_grau_musterring_22_21bed63ebf.jpg",
       "bytes": 803398,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "57bd0bcf956ff09b4a8aeba28e8b7ae84a0eb45acf963da1644934757033eeeb"
     },
     {
       "file": "/musterring-catalog/mr-260/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/9/csm_sofa_mr260_stoff_silver_grau_musterring_23_5f5bb89c81.jpg",
       "bytes": 606625,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4400def363326735bd460cee9a1da4af810129d87f88288f2329802e6f223235"
     },
     {
       "file": "/musterring-catalog/mr-260/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/4/csm_sofa_mr260_stoff_silver_grau_musterring_13_fdfee4921e.jpg",
       "bytes": 547357,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "40590afb140fcab0d2f3665067017a2db04949e3f21e3ffc317e54d369757532"
     },
     {
       "file": "/musterring-catalog/mr-260/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/c/csm_sofa_mr260_echtleder_moosgruen_musterring_06_42f73426ed.jpg",
       "bytes": 691728,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "32fe7878d7ab665982b3c6f2ccd8083e7efaa2a3ef13369478003b413cb00857"
     },
     {
       "file": "/musterring-catalog/mr-260/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/a/csm_sofa_mr260_echtleder_moosgruen_musterring_10_c235e393c9.jpg",
       "bytes": 183814,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "746fb721ce6aaa8472b22df9f8b94b8e272531756ed0707a538bb50570f3b2c8"
     },
     {
       "file": "/musterring-catalog/mr-260/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/4/csm_sofa_mr260_echtleder_moosgruen_musterring_09_67307709ca.jpg",
       "bytes": 555195,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "501442a83d3ecdb7eff9dfdf4f9f64a36f48a2d2b51a5613f797db29069b2d69"
     },
     {
       "file": "/musterring-catalog/mr-260/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/9/csm_sofa_mr260_echtleder_rot_musterring_35259552c0.jpg",
       "bytes": 11099,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "eb51c7a28f2ea0bb77ca49186876c5a687f1c7e6602c43a3865d2dbbfe6159cc"
     }
   ]
 }

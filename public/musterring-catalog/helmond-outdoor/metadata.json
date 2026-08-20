@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/helmond-outdoor",
   "title": "Helmond Outdoor",
-  "importedAt": "2026-08-03T08:02:58.539Z",
+  "importedAt": "2026-08-19T12:16:48.184Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,25 +10,29 @@
       "file": "/musterring-catalog/helmond-outdoor/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/6/csm_gartentisch-schweden-helmond-outdoor-teak-massiv-aluminium-pulverbeschichtet-natur-anthrazit-musterring-02_8fa23ad613.jpg",
       "bytes": 983227,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bb6052836dbbacf9477157e509e575efa98221cf2d58b5729f6ecc6e7de97c68"
     },
     {
       "file": "/musterring-catalog/helmond-outdoor/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/6/csm_gartenstuhl-helmond-outdoor-pulverbeschichtet-schwarz-kunstgeflecht-onyxschwarz-musterring_4044f65787.jpg",
       "bytes": 636541,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9a980d9c68b0ce2a2415046cfae3420eb6df9b2f53afda09f75beea749f49cab"
     },
     {
       "file": "/musterring-catalog/helmond-outdoor/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_gartentisch-schweden-helmond-outdoor-teak-massiv-aluminium-pulverbeschichtet-natur-anthrazit-musterring-01_af10f50668.jpg",
       "bytes": 518654,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "77b0383e3ba852fac8fa276c05302a82f1bd7ff055973f630ed6bc3cf4b31a75"
     },
     {
       "file": "/musterring-catalog/helmond-outdoor/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/4/csm_gartentisch-belgien-helmond-outdoor-edelstahl-geb%C3%BCrstet-zementoptik-musterring_c7be540f2f.jpg",
       "bytes": 645001,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "f17179f3109cb579f2872c0777f4cf1ab124c285ed7e881eb3b7e1476d287ea8"
     }
   ]
 }

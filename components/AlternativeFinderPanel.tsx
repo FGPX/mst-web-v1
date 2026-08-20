@@ -11,6 +11,19 @@ import type { AlternativeResponse } from "@/lib/ai/assistant-schemas";
 
 type AlternativePanelResult = AlternativeResponse & { ai?: { mode: "openai" | "demo"; fallback: boolean } };
 const cm = (value: number) => `${Math.round(value / 10)} cm`;
+const conciseDifference = (requirement: string) => requirement
+  .replace(/ colour is not verified for this product$/i, " colour not verified")
+  .replace(/^requires (.+) material metadata$/i, "$1 material not verified")
+  .replace(/^requires (.+) layout$/i, "$1 layout not verified")
+  .replace(/^requires (.+)$/i, "$1 not verified")
+  .replace(/^a non-(.+) layout is not verified for this product$/i, "non-$1 layout not verified")
+  .replace(/ is not verified for this product$/i, " not verified");
+
+const mainDifferences = (requirements: string[]) => [...new Set(requirements)]
+  .filter((requirement) => !/illustrative concept data|retailer confirmation/i.test(requirement))
+  .map(conciseDifference)
+  .filter((requirement, index, all) => all.indexOf(requirement) === index)
+  .slice(0, 3);
 
 export function AlternativeFinderPanel() {
   const [sourceId, setSourceId] = useState("");
@@ -19,6 +32,7 @@ export function AlternativeFinderPanel() {
   const [strict, setStrict] = useState(false);
   const [result, setResult] = useState<AlternativePanelResult | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const panelRef = useRef<HTMLDivElement>(null);
   const source = products.find((product) => product.id === sourceId);
   useEffect(() => {
@@ -28,6 +42,7 @@ export function AlternativeFinderPanel() {
       setRequestText(detail.requestText ?? "");
       setResult(null);
       setStatus("idle");
+      setErrorMessage("");
       setOpen(true);
       window.setTimeout(() => panelRef.current?.querySelector<HTMLTextAreaElement>("textarea")?.focus(), 0);
     };
@@ -43,13 +58,19 @@ export function AlternativeFinderPanel() {
   const submit = async () => {
     if (!requestText.trim()) return;
     setStatus("loading");
+    setResult(null);
+    setErrorMessage("");
     storage.track({ name: "product_alternative_requested", productId: sourceId });
     const response = await fetch("/api/ai/alternatives", {
       method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ sourceProductId: sourceId, requestText, strict })
     }).catch(() => null);
     const payload = response ? await response.json().catch(() => null) : null;
-    if (!response?.ok || !payload?.sourceProductId) { setStatus("error"); return; }
+    if (!response?.ok || !payload?.sourceProductId) {
+      setErrorMessage(typeof payload?.error === "string" ? payload.error : "OpenAI product search is temporarily unavailable.");
+      setStatus("error");
+      return;
+    }
     setResult(payload);
     setStatus("idle");
   };
@@ -61,21 +82,24 @@ export function AlternativeFinderPanel() {
         if (!product) return null;
         const presentation = productImageForColors(product.id, result?.requestedColorFamilies ?? []);
         const benefits = [...new Set(match.benefits)];
-        const unmetRequirements = [...new Set(match.unmetRequirements)];
-        const inlineBenefits = benefits
+        const unmetRequirements = mainDifferences(match.unmetRequirements);
+        const usesConceptData = match.demoFactsUsed.length > 0;
+        const requestSpecificBenefits = benefits
           .filter((benefit) => !/^same\s/i.test(benefit) && !/^catalogue description matches/i.test(benefit))
-          .slice(0, 2);
+          .slice(0, 3);
+        const displayedBenefits = requestSpecificBenefits.length ? requestSpecificBenefits : benefits.slice(0, 2);
+        const inlineBenefits = displayedBenefits.slice(0, 2);
         return <article key={product.id} className={exact ? "is-exact" : "is-alternative"}>
           <div className="alternative-product-image"><Image src={presentation.src} alt={`${product.name}${presentation.matchedColor ? ` shown in ${presentation.matchedColor}` : ""}`} width={960} height={720} quality={90} sizes="(max-width: 768px) calc(100vw - 68px), 420px" style={{ width: "100%", height: "100%", objectFit: "cover", imageRendering: "auto" }} />{presentation.matchedColor ? <span>Shown in {presentation.matchedColor}</span> : null}</div>
           <div className="alternative-product-content">
-            <div className="alternative-product-heading"><div><div className="alternative-product-match-line"><span className={`alternative-match-badge ${exact ? "is-exact" : "is-other"}`}>{exact ? "Exact match" : "Alternative option"}</span>{exact && inlineBenefits.length ? <span className="alternative-inline-benefits">{inlineBenefits.join(" · ")}</span> : null}</div><h4>{product.name}</h4></div></div>
+            <div className="alternative-product-heading"><div><div className="alternative-product-match-line"><span className={`alternative-match-badge ${exact ? "is-exact" : "is-other"}`}>{exact ? "Exact match" : usesConceptData ? "Concept option" : "Alternative option"}</span>{exact && inlineBenefits.length ? <span className="alternative-inline-benefits">{inlineBenefits.join(" · ")}</span> : null}</div><h4>{product.name}</h4></div></div>
             {product.verifiedFacts.dimensions ? <div className="alternative-product-specs" aria-label={`${product.name} key information`}>
               <div><small>Width</small><strong>{cm(product.widthMm)}</strong></div>
               <div><small>Depth</small><strong>{cm(product.depthMm)}</strong></div>
               <div><small>Height</small><strong>{cm(product.heightMm)}</strong></div>
             </div> : null}
             {!exact ? <div className="alternative-match-details">
-              <div className="is-match"><strong>Why it’s relevant</strong><ul>{benefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul></div>
+              <div className="is-match"><strong>Why it’s relevant</strong><ul>{displayedBenefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul></div>
               {unmetRequirements.length ? <div className="alternative-unmet"><strong>Differs from request</strong><ul>{unmetRequirements.map((requirement) => <li key={requirement}>{requirement}</li>)}</ul></div> : null}
             </div> : null}
             <div className="assistant-card-actions">
@@ -113,17 +137,13 @@ export function AlternativeFinderPanel() {
           <span><strong>Exact matches only</strong><small>Show only products that match all selected criteria exactly.</small></span>
         </label>
         <button className="assistant-primary" onClick={() => void submit()} disabled={status === "loading" || !requestText.trim()}><Search size={19} aria-hidden="true" />{status === "loading" ? "Finding matches…" : "Show matches"}</button>
-        {status === "error" ? <p role="alert">Alternatives are temporarily unavailable. The source product remains saved and no catalogue facts were changed.</p> : null}
+        {status === "error" ? <p role="alert">{errorMessage} Please try again; no unverified fallback matches are shown.</p> : null}
       </div>
       {result ? <section className="alternative-response" aria-live="polite">
-        {result.interpretedRequirements.length ? <div className="alternative-requirements">
-          <strong>We understood</strong>
-          <div>{result.interpretedRequirements.map((requirement) => <span key={requirement}>{requirement}</span>)}</div>
-        </div> : null}
         {result.exactMatches.length ? <div className="alternative-group is-exact" aria-labelledby="exact-match-heading">
           <header><CheckCircle2 aria-hidden="true" /><div><h4 id="exact-match-heading">Exact matches</h4></div><span>{result.exactMatches.length}</span></header>
           {renderMatches(result.exactMatches, true)}
-        </div> : <div className="alternative-group-empty"><strong>No exact matches</strong><span>No catalogue product satisfies every selected requirement.</span></div>}
+        </div> : <div className="alternative-group-empty"><strong>No fully verified matches</strong><span>{result.message}</span></div>}
         {result.closestAlternatives.length ? <div className="alternative-group is-other" aria-labelledby="other-options-heading">
           <header><Compass aria-hidden="true" /><div><h4 id="other-options-heading">Other options</h4></div><span>{result.closestAlternatives.length}</span></header>
           {renderMatches(result.closestAlternatives, false)}

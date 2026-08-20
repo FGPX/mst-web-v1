@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tario",
   "title": "Tario",
-  "importedAt": "2026-08-03T08:02:50.252Z",
+  "importedAt": "2026-08-19T12:16:47.529Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/tario/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/4/csm_MR11699_A_Tario_Print_-_15_094781e731.jpg",
       "bytes": 720462,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "66513fb1bc36454005af27d1e2a7beb3365346bfb80bea991f740f5b04acdd14"
     },
     {
       "file": "/musterring-catalog/tario/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/2/csm_MR11699_02_Tario_Print_-_15_e9309a7b2b.jpg",
       "bytes": 784571,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d701fd5ca7303c947e325282a38c090fe8e3cfab04a9dc2f9321fde02583c105"
     },
     {
       "file": "/musterring-catalog/tario/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/4/csm_MR11699_01_Tario_Print_-_15_3ce6f83f75.jpg",
       "bytes": 762309,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3f6e60c928b9590570fe1324d70b307b987c27a48aab51066641fb878b1de3d2"
     },
     {
       "file": "/musterring-catalog/tario/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_MR11699_03_Tario_Print_-_15_89fd25b141.jpg",
       "bytes": 800054,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "852e83e31c36c66eaef203456897fae4510d0078a3364acf2ebc6f3bcf1fa1b4"
     },
     {
       "file": "/musterring-catalog/tario/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/8/csm_MR11698_A_Tario_Print_-_15_cc3b417814.jpg",
       "bytes": 959481,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ea0fcd636e362f5bebdf4cebab1df8d8042aadd96139a4cb6571d1aa3cc5dc6f"
     },
     {
       "file": "/musterring-catalog/tario/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/f/csm_MR11698_B_009_Tario_Print_-_15_05e57d736d.jpg",
       "bytes": 231255,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "72199e6fd38b555daa6661efdc12bbaabe9e1ac0ba0019e00d4b82e3fde107d3"
     },
     {
       "file": "/musterring-catalog/tario/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/9/csm_MR11698_B_011_Tario_Print_-_15_84dac6898f.jpg",
       "bytes": 231097,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "18e7119f5c9ab45c39bdb3bef4a679904b85a6748530cb7302f682f92942d788"
     },
     {
       "file": "/musterring-catalog/tario/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/5/csm_MR11698_B_002_Tario_Print_-_15_cd3cd2fd23.jpg",
       "bytes": 110522,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6319bb622fd294217caf0c7ae34a28fe5117db2e76c06c8824cd0cac6d34c096"
     }
   ]
 }

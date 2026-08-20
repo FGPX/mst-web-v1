@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/home-accessories/carpets/deluxe-collection",
   "title": "Deluxe Collection",
-  "importedAt": "2026-08-03T08:03:03.213Z",
+  "importedAt": "2026-08-19T12:16:48.727Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/deluxe-collection/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/5/csm_MR11707_B_DeluxeCollection_Print_-_15_77f63d93a6.jpg",
       "bytes": 531954,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a6344cea9f9ffd4f88604937d49d0863cbadd22fe167529fe4fac9258b215051"
     },
     {
       "file": "/musterring-catalog/deluxe-collection/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/c/csm_MR11707_006_DeluxeCollection_Print_-_15_e5fc137954.jpg",
       "bytes": 669158,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2ab877aedce48246949a76cb4818369e62a8ad85c604555b1c6ca1a5d7e543b7"
     },
     {
       "file": "/musterring-catalog/deluxe-collection/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_MR11707_001_DeluxeCollection_Print_-_15_524dd6969e.jpg",
       "bytes": 999684,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9cab79286ea4e7e22e1a871afb7342754b39eb4ac315546fcac86916408eaab6"
     },
     {
       "file": "/musterring-catalog/deluxe-collection/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/a/csm_MR11707_003_DeluxeCollection_Print_-_15_3fc1e171ad.jpg",
       "bytes": 1482017,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "7dff288866fb9594768d61b36a1c389febada69544386e3eb8773966f0395580"
     },
     {
       "file": "/musterring-catalog/deluxe-collection/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_sofa-mr9420-stoff-grau-blau-milieu-teppich-deluxe-collection-colorado-classic-beige-grau-musterring_279ddabc06.jpg",
       "bytes": 731582,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ee0a9d04bab34250b3dc35715a474d297b757a9d9ea44a0ceccb943399802d11"
     },
     {
       "file": "/musterring-catalog/deluxe-collection/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/9/csm_teppich-deluxe-collection-colorado-flower-grau-schwarz-musterring_f035840941.jpg",
       "bytes": 2901249,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9eaf26602e0e257c14e76e6b35c610a577486f8a7bfcd9a0a4551971485a429e"
     },
     {
       "file": "/musterring-catalog/deluxe-collection/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/2/csm_teppich-deluxe-collection-colorado-point-grau-multicolor-musterring-01_ea899f9e4f.jpg",
       "bytes": 2046618,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "00dca2668c017fdf108833127e60d459bb5daf9dc872f0f734076654fb1d2b48"
     },
     {
       "file": "/musterring-catalog/deluxe-collection/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/5/csm_teppich-deluxe-collection-colorado-stripe-beige-schwarz-musterring_f2e947931f.jpg",
       "bytes": 962368,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1a0fd5440ecfe878a5610b4bb185acf0551a804e8d7f6c5d6f88bf7e30ff71c6"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9450",
   "title": "MR 9450",
-  "importedAt": "2026-08-03T08:01:57.001Z",
+  "importedAt": "2026-08-19T12:16:42.784Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/mr-9450/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_ecksofa-mr9450-relaxfunktion-stoff-beige-musterring_92d41cf274.jpg",
       "bytes": 553146,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ba840fbe138a548f58eb6842c9a0359c356be50959c5ace061b2ee15c02ac2bc"
     },
     {
       "file": "/musterring-catalog/mr-9450/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/7/csm_ecksofa-mr9450-verstellbare-kopfstuetze-musterring_af841a5e9b.jpg",
       "bytes": 354206,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "91e5a78275ac223fee94ea919d4a9495fbc83df04951ec2bd16a3d6b330f22cb"
     },
     {
       "file": "/musterring-catalog/mr-9450/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/f/csm_ecksofa-mr9450-verstellbare-kopfstuetze-musterring-01_e4ed236c74.jpg",
       "bytes": 287208,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b9eac173b6b69000ce45cdcba9136c7c96450010bad5c5d6ac3008d120fb95b9"
     },
     {
       "file": "/musterring-catalog/mr-9450/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/3/csm_ecksofa-mr9450-kufenfu%C3%9F-gebuerstet-musterring_e7c81a2f52.jpg",
       "bytes": 260205,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3c87daadebefbadd5faaba66db56a83d6f06d1e70ba5e894fc8512c878c01a69"
     },
     {
       "file": "/musterring-catalog/mr-9450/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/7/csm_ecksofa-mr9450-stoff-beige-musterring_1e4d690d99.jpg",
       "bytes": 419790,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "48b5fd62d85025ed73fceffc6596b560b65a90724f869362b1151708e0c2a3d7"
     }
   ]
 }

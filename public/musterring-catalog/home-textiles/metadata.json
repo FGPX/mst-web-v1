@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/home-accessories/home-textiles",
+  "title": "Musterring Home Textiles",
+  "importedAt": "2026-08-19T12:16:59.371Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/home-textiles/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/8/csm_MR11520_D_MusterringHeimtextilien_Slow_Print_7b8fc9837f.jpg",
+      "bytes": 679142,
+      "contentType": "image/jpeg",
+      "sha256": "2070479dba3a5867756b43f34a86065d0bfe822ca23cc09915b896662999241e"
+    },
+    {
+      "file": "/musterring-catalog/home-textiles/image-02.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/5/csm_MR11520_102_Musterring_Heimtextilien_71281-070-45-45_32f470d34c.png",
+      "bytes": 2040219,
+      "contentType": "image/png",
+      "sha256": "ed68e30fe52de3f2d8aa37ce1f157cc9e99434a77db613bb5e8b377b221d91fb"
+    },
+    {
+      "file": "/musterring-catalog/home-textiles/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_MR11520_A_MusterringHeimtextilien_Trent_Print_8c9312be3b.jpg",
+      "bytes": 549087,
+      "contentType": "image/jpeg",
+      "sha256": "1ab0923773ec7c8468c202da20365c2c39b2a746e756e96e6b3317653b3c4cf0"
+    },
+    {
+      "file": "/musterring-catalog/home-textiles/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/b/csm_MR11520_B_MusterringHeimtextilien_Slow_Print_023d01eaad.jpg",
+      "bytes": 815284,
+      "contentType": "image/jpeg",
+      "sha256": "2ceb7d60b95eb4389f5e61e180276e5847ff60d444a9e11f321d67fb4bd2389e"
+    },
+    {
+      "file": "/musterring-catalog/home-textiles/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/5/csm_MR11520_A_MusterringHeimtextilien_Heimtex_Print_09fa0d34c4.jpg",
+      "bytes": 513901,
+      "contentType": "image/jpeg",
+      "sha256": "8fd7f977e78166178282b81200a29db79dc30757a74d3607d703744e5591aa5d"
+    },
+    {
+      "file": "/musterring-catalog/home-textiles/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_MR11724_003_MusterringHeimtextilien_Print_21ef5e70d5.jpg",
+      "bytes": 567058,
+      "contentType": "image/jpeg",
+      "sha256": "789380179c42e73f32129a1a8091d10d65ca699024bf72d0bcfe4821e7959092"
+    },
+    {
+      "file": "/musterring-catalog/home-textiles/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_MR11520_48_Musterring_Heimtextilien_71283-002-45-45_1_d348a7cbda.jpg",
+      "bytes": 1169151,
+      "contentType": "image/jpeg",
+      "sha256": "ba284635c2b4498657488eef6e8312fcb058f15adf1c6b72e25971f888093ed5"
+    },
+    {
+      "file": "/musterring-catalog/home-textiles/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/0/csm_MR11724_D_MusterringHeimtextilien_Print_6a6b369315.jpg",
+      "bytes": 562309,
+      "contentType": "image/jpeg",
+      "sha256": "f2a75676d52ac0711046a01ffcc2c243c68de235682298e47991ad052da14be6"
+    }
+  ]
+}

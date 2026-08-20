@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kara-frame",
-  "title": "Kara Frame",
-  "importedAt": "2026-08-03T08:01:58.795Z",
+  "title": "Kara-Frame",
+  "importedAt": "2026-08-19T12:16:43.084Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/kara-frame/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/4/csm_wohnmoebel-kara-frame-lack-cashmere-asteiche-musterring_129efae3f9.jpg",
       "bytes": 514531,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "10b4083bce1d0f2da856fc5f7c71521d85b932114c416522c6f240a1678e7616"
     },
     {
       "file": "/musterring-catalog/kara-frame/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_detailbild-sideboard-kara-frame-asteiche-musterring_3d7dbca990.jpg",
       "bytes": 444953,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "414636dbe5bdb646e2663cc3b0e291d63a72592cac139a7c04575021983fa584"
     },
     {
       "file": "/musterring-catalog/kara-frame/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/3/csm_detailbild-sideboard-kara-frame-lack-cashmere-asteiche-musterring_b346ae7407.jpg",
       "bytes": 378434,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2011fb861058cac4fb809cbe0603b38c26ebc9725624e6f79fa1891c0a91c52b"
     },
     {
       "file": "/musterring-catalog/kara-frame/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/6/csm_sideboard-kara-frame-lack-chashmere-asteiche-musterring_1d16f9a833.jpg",
       "bytes": 182039,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3275dda061b58b1dd2e9d796fc3abc804c2b0e54c33b8911366985578ea8284d"
     },
     {
       "file": "/musterring-catalog/kara-frame/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_wohnmoebel_kara-frame_lack_espresso_musterring_03_87c514434e.jpg",
       "bytes": 672755,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5e9ef6f4030ab0121857d827d451c95afd04165336e31d345f7825b0222e7860"
     },
     {
       "file": "/musterring-catalog/kara-frame/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/b/csm_wohnmoebel_kara-frame_lack_espresso_musterring_01_c1d8e4927e.jpg",
       "bytes": 336884,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a85d35b419bd9be2fea898c9825327a793339407b4f0189b93767fdb62275416"
     },
     {
       "file": "/musterring-catalog/kara-frame/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/d/csm_wohnmoebel_kara-frame_lack_espresso_musterring_583ee33134.jpg",
       "bytes": 371867,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4d31e7f81650bd3545b47b051dc07500d9586ba3b6140c9f2b732328f96340d8"
     },
     {
       "file": "/musterring-catalog/kara-frame/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/e/csm_wohnmoebel_kara-frame_lack_espresso_musterring_02_2daafe9d3b.jpg",
       "bytes": 406060,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bc8b5fc20e820041d58c6885faff0bfe3925764dd15f1647473ceb165982560d"
     }
   ]
 }

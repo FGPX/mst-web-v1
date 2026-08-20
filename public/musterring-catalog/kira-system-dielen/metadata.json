@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/hallway/wardrobes/kira-system-dielen",
+  "title": "Kira System Dielen",
+  "importedAt": "2026-08-19T12:16:53.681Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/kira-system-dielen/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/5/csm_flurmoebel-kira-system-dielen-eiche-musterring-02_b17782f467.jpg",
+      "bytes": 642902,
+      "contentType": "image/jpeg",
+      "sha256": "a70b0be25e961bcabe4238823a18ef12657ef59bbc98510aa5e8984481b14bef"
+    },
+    {
+      "file": "/musterring-catalog/kira-system-dielen/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/1/csm_flurmoebel-kira-system-dielen-eiche-musterring_9c751c32d8.jpg",
+      "bytes": 566540,
+      "contentType": "image/jpeg",
+      "sha256": "1e676a0306a86feec913fb6cd9705630ed9a020e727db66d32dd5c845e2d11ed"
+    },
+    {
+      "file": "/musterring-catalog/kira-system-dielen/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/6/csm_flurmoebel-kira-system-dielen-eiche-musterring-04_6112fe38ab.jpg",
+      "bytes": 435848,
+      "contentType": "image/jpeg",
+      "sha256": "a21d132816f01a06edb56425effa245628818428558b79014337d670222ebe85"
+    },
+    {
+      "file": "/musterring-catalog/kira-system-dielen/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/1/csm_flurmoebel-kira-system-dielen-eiche-musterring-01_820e4b2bb9.jpg",
+      "bytes": 645190,
+      "contentType": "image/jpeg",
+      "sha256": "b78d77669b10c2141c7524da02a5a4418245bd6cd4ede1d813948b57db65c9e2"
+    },
+    {
+      "file": "/musterring-catalog/kira-system-dielen/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/e/csm_flurmoebel-kira-system-dielen-eiche-graphit-lack-grau-musterring_6ed040d34c.jpg",
+      "bytes": 752229,
+      "contentType": "image/jpeg",
+      "sha256": "8ac24952fa217feec11dc5fa86b7e13e9651e1c2a75a5c48f2460980d76105f9"
+    },
+    {
+      "file": "/musterring-catalog/kira-system-dielen/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/7/csm_schuhschrank-kira-system-dielen-eiche-graphit-lack-grau-musterring_7906b723ee.jpg",
+      "bytes": 634748,
+      "contentType": "image/jpeg",
+      "sha256": "e6bbb4d58f9ed18d4b70f9fe1a93ce9054021e8fefbd86999eca7e614c020855"
+    },
+    {
+      "file": "/musterring-catalog/kira-system-dielen/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_flurmoebel-kira-system-dielen-eiche-graphit-lack-grau-musterring-01_3633fcd94c.jpg",
+      "bytes": 642415,
+      "contentType": "image/jpeg",
+      "sha256": "15e935ef8c5b9943b3b91be89ad3f4afec8d2026cd7d8dced78b4cd5ebc3e40a"
+    },
+    {
+      "file": "/musterring-catalog/kira-system-dielen/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_sideboard-kira-system-dielen-eiche-graphit-lack-grau-musterring_844624f5a7.jpg",
+      "bytes": 685904,
+      "contentType": "image/jpeg",
+      "sha256": "56e07f372c4e092ef3e81dbbfc5f57777df69005de7af058d4c6a76e23c9839b"
+    }
+  ]
+}

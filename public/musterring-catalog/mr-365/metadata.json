@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-365",
   "title": "MR 365",
-  "importedAt": "2026-08-03T08:01:33.610Z",
+  "importedAt": "2026-08-19T12:16:40.197Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-365/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/0/csm_Sofa-Sessel-MR_365-Eckgruppe_4797-manuelle_Relaxfunktion-Stauraum-Relaxsessel-MR_367-Stoff-Yelda_natur-Echtleder-Soft_Line-light_grey-Metallfu%C3%9F-chrom-beschichtet-frontal-Musterring_a61528230e.jpg",
       "bytes": 802466,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "063068f6cd0ab4a615eff5a3aecd8d5f1b6bc5746614f105c49723c190fa239f"
     },
     {
       "file": "/musterring-catalog/mr-365/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/d/csm_Sofa-Sessel-MR_365-Eckgruppe_4797-manuelle-Relaxfunktion-Stauraum-Relaxsessel_MR_367-Stoff-Yelda_natur-Echtleder-Soft_Line-light_grey-Metallfu%C3%9F-chrom-beschichtet-frontal-Musterring_759f4038b5.jpg",
       "bytes": 834047,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "27acd56d18b460785a1d8867457e191594261974809ea253b1dc730cb3df7466"
     },
     {
       "file": "/musterring-catalog/mr-365/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/f/csm_Sofa-Sessel-MR_365-Eckgruppe_4797-Stauraum-Echtleder-Soft_line-light_grey-Detail-Musterring_93aaf95953.jpg",
       "bytes": 578004,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "15df538fee7c18bfc95ae87d837a44d106a13e1bdb159a8fd4514284d9444b98"
     },
     {
       "file": "/musterring-catalog/mr-365/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/8/csm_Sofa-Sessel-MR_365-Eckgruppe_4797-manuelle_Relaxfunktion-Stauraum-Relaxsessel-MR_367-Stoff-Yelda_natur-Echtleder-Soft_Line-light_grey-Metallfu%C3%9F-chrom-beschichtet-Musterring_34fc25ee1c.jpg",
       "bytes": 646221,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bba73a59c59520d6f067d7aff25c707220995aa09bf046d02d2e3900dddb0342"
     },
     {
       "file": "/musterring-catalog/mr-365/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_365-Sofa_3002-3_sitzig-Armlehne-Metallfu%C3%9F-chrom-beschichtet-Stoff-hellbeige-freigestellt-Musterring_48eb0c34cc.jpg",
       "bytes": 325718,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "49f521f533f706f5f8ad04734ef27c76dfefc5e375b131e477f0b170435a461e"
     },
     {
       "file": "/musterring-catalog/mr-365/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/0/csm_Sofa-Sessel-MR_365-Sofa_3002-3_sitzig-Armlehne-Metallfu%C3%9F-chrom-beschichtet-Stoff-hellbeige-seitlich-Musterring_278d5fb2ae.jpg",
       "bytes": 1425818,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1a57553060bd84b9725edf334766c70336af136944b34bca85d37d205b03d78c"
     },
     {
       "file": "/musterring-catalog/mr-365/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/e/csm_Sofa-Sessel-MR_365-Detail-Couchtisch-Platte-Oxido_ice-Musterring_2745c8f28a.jpg",
       "bytes": 1094521,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "be3c4be8d67b3036d07c11d45bfc5def5dd9cb4ef103eb7bf4ce11f39688b380"
     },
     {
       "file": "/musterring-catalog/mr-365/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/b/csm_Sofa-Sessel-MR_365-Vorschlag-Wohnzimmer-Sofa-Einzelsessel-Schalenstuhl-Esstisch-Farbwelt-beige-Musterring_1849c624ed.jpg",
       "bytes": 495729,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fd7eb9ee49bf9465efb18702901195a62606d2176350881191aa6d9cbb1b133a"
     }
   ]
 }

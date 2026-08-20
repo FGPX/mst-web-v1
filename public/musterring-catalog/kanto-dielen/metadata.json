@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/hallway/wardrobes/kanto-dielen",
+  "title": "KANTO-DIELEN",
+  "importedAt": "2026-08-19T12:16:56.175Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/kanto-dielen/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/e/csm_flur_diele_kanto_dielen_eiche_musterring_04_948ec731ab.jpg",
+      "bytes": 654321,
+      "contentType": "image/jpeg",
+      "sha256": "1f6b736456ed108420ac081c66e230a88a437bfec0758f36f079e9deab5ea18e"
+    },
+    {
+      "file": "/musterring-catalog/kanto-dielen/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/b/csm_flur_diele_kanto_dielen_eiche_musterring_03_1d628a9393.jpg",
+      "bytes": 1218944,
+      "contentType": "image/jpeg",
+      "sha256": "507e84e688dd61b932a32f34eb600812b5d72a62846c0207efdc3cd1c913918b"
+    },
+    {
+      "file": "/musterring-catalog/kanto-dielen/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/2/csm_flur_diele_kanto_dielen_eiche_musterring_01_b7b61e62e0.jpg",
+      "bytes": 1672706,
+      "contentType": "image/jpeg",
+      "sha256": "6d21bb11b333cf756715342ab699acbc5f64f3cac959f82bd53af389d60a2f28"
+    },
+    {
+      "file": "/musterring-catalog/kanto-dielen/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/1/csm_flur_diele_kanto_dielen_eiche_musterring_02_78cd96094c.jpg",
+      "bytes": 712440,
+      "contentType": "image/jpeg",
+      "sha256": "9786221c437f09644f1dd5a16d592b07f54a06f775c6cf78470a24f4bcbcec5c"
+    },
+    {
+      "file": "/musterring-catalog/kanto-dielen/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/e/csm_flur_diele_kanto_dielen_eiche_musterring_08_0050685a79.jpg",
+      "bytes": 567939,
+      "contentType": "image/jpeg",
+      "sha256": "2a4e07bc7153a8fd3390c3476674366e9e1961f9198312efda24ad12ad3c2fab"
+    },
+    {
+      "file": "/musterring-catalog/kanto-dielen/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/0/csm_flur_diele_kanto_dielen_eiche_musterring_07_993df2db10.jpg",
+      "bytes": 764464,
+      "contentType": "image/jpeg",
+      "sha256": "e2b8d392d5fb827df8901b64b4330856d6477f9f8ecaf49f684312737797a25f"
+    },
+    {
+      "file": "/musterring-catalog/kanto-dielen/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/3/csm_flur_diele_kanto_dielen_eiche_musterring_06_d3c043a145.jpg",
+      "bytes": 513940,
+      "contentType": "image/jpeg",
+      "sha256": "17bd8cc84c1fc5b8cc755e41438463fc04fcd87aba3b6d3640e3132fabcdb6a4"
+    },
+    {
+      "file": "/musterring-catalog/kanto-dielen/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/a/csm_flur_diele_kanto_dielen_eiche_musterring_05_03855f0e16.jpg",
+      "bytes": 833879,
+      "contentType": "image/jpeg",
+      "sha256": "ea5d3203b2186bfc35acbeab9b851b146f7fcea6c0bf4aa3851b0e5615748fc0"
+    }
+  ]
+}

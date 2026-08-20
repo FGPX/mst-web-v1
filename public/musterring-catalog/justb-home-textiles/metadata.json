@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/home-accessories/home-textiles-1/justb-home-textiles",
+  "title": "JUSTB! HOME-TEXTILES",
+  "importedAt": "2026-08-19T12:17:00.342Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/justb-home-textiles/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/a/csm_MR11598_B_JustB_Heimtextilien_Scribble_-_15_513f8ca13a.jpg",
+      "bytes": 296223,
+      "contentType": "image/jpeg",
+      "sha256": "938fc5047507604855fb10bc4fb394710fde3c43daa06595e343fb66db143665"
+    },
+    {
+      "file": "/musterring-catalog/justb-home-textiles/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/3/csm_MR11625_F_JustB_HeimTextilien_Print_-_15_5017020dd0.jpg",
+      "bytes": 567516,
+      "contentType": "image/jpeg",
+      "sha256": "07c9aa867ca3d945e62564eb97a96dee37b08ea6e461d4d88834d17abc3a9eb8"
+    },
+    {
+      "file": "/musterring-catalog/justb-home-textiles/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/a/csm_MR11598_Q_JustB_Heimtextilien_Waves_-_15_d91e14cc23.jpg",
+      "bytes": 478181,
+      "contentType": "image/jpeg",
+      "sha256": "bfe8ada843069443c8513d71392d3eb30dff9c9da5d44df1ef4de3f7c793774c"
+    },
+    {
+      "file": "/musterring-catalog/justb-home-textiles/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/a/csm_MR11622_I_Heimtex_Print_-_15_fdf2e1264d.jpg",
+      "bytes": 192737,
+      "contentType": "image/jpeg",
+      "sha256": "6d1d6a60d7ce77fbb590945343f4b45c01c41b5966ec250350d62be3cc807105"
+    },
+    {
+      "file": "/musterring-catalog/justb-home-textiles/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/0/csm_MR11598_F3_JustB_Heimtextilien_Cord_-_15_bd4d2ae4d2.jpg",
+      "bytes": 562189,
+      "contentType": "image/jpeg",
+      "sha256": "9708e1da5b30a6bd77bff33dbd88bf129102fef9c3c2c6d602ee48c9e2469109"
+    },
+    {
+      "file": "/musterring-catalog/justb-home-textiles/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/3/csm_MR11598_O_JustB_Heimtextilien_Waves_Visage_-_15_671f64ef60.jpg",
+      "bytes": 553156,
+      "contentType": "image/jpeg",
+      "sha256": "d5d33edebfaced0fa1e0b560effdde8e407b2e00593294a05f6fe0b3a8ae21a5"
+    },
+    {
+      "file": "/musterring-catalog/justb-home-textiles/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/a/csm_MR11648_E06_MRLucia_Print_-_15_b51f42d264.jpg",
+      "bytes": 520359,
+      "contentType": "image/jpeg",
+      "sha256": "564e9d706d1287f19155801f406b159a7b03eb590fd787baf96985334da47ad5"
+    },
+    {
+      "file": "/musterring-catalog/justb-home-textiles/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/e/csm_MR11648_C_MRLucia_Print_-_15_054cd5d3b4.jpg",
+      "bytes": 341685,
+      "contentType": "image/jpeg",
+      "sha256": "3cf097f1df069a4ca9ea2e7dee2393849b7028660d80f9074ce56fb4a2785ee1"
+    }
+  ]
+}

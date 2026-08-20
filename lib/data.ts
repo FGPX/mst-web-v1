@@ -138,7 +138,7 @@ const catalogueSearchOverrides: Record<string, Partial<Product>> = {
     seatHeightMm: 460,
     seatDepthMm: 620,
     modular: true,
-    layoutShapes: ["straight", "corner"],
+    layoutShapes: ["straight", "l-shaped", "corner"],
     verifiedFacts: {
       dimensions: true,
       seatHeight: true,
@@ -209,7 +209,24 @@ const catalogueSearchOverrides: Record<string, Partial<Product>> = {
   "mr-260": { colors: ["light grey", "grey", "beige", "red", "burgundy"], styles: ["modern", "family"], functions: ["modular", "relax"], modular: true },
   "mr-270": { colors: ["yellow", "mustard", "cognac"], styles: ["modern", "contemporary"], functions: ["relax"], modular: false },
   "mr-280": { colors: ["beige", "taupe", "cream"], styles: ["classic modern", "comfort"], functions: ["relax"], modular: false },
-  "mr-285": { colors: ["black", "charcoal"], styles: ["modern", "minimal"], functions: ["relax"], modular: false },
+  "mr-285": {
+    colors: ["black", "charcoal"], styles: ["modern", "minimal"], functions: ["relax"], modular: false,
+    // The authorized MR 285 catalogue hero is a black upholstery presentation.
+    // Width and the remaining configurable facts are still retailer-dependent.
+    verifiedFacts: {
+      dimensions: false,
+      seatHeight: false,
+      seatDepth: false,
+      colors: ["black"],
+      materialTypes: [],
+      styles: [],
+      functions: [],
+      modular: false,
+      smallSpaceSuitable: false,
+      comfort: false,
+      easyCare: false
+    }
+  },
   "mr-nils": { colors: ["taupe", "beige"], styles: ["modern", "ergonomic"], functions: ["relax", "swivel"], modular: false },
   "mr-pamela": { colors: ["cream", "ivory", "beige"], styles: ["soft modern", "lounge"], functions: ["relax"], modular: false },
   "mr-231": { colors: ["light grey", "grey"], styles: ["modern", "ergonomic"], functions: ["relax", "swivel"], modular: false },
@@ -222,6 +239,7 @@ const catalogueSearchOverrides: Record<string, Partial<Product>> = {
 export const products: Product[] = [
   ...authorizedCatalog.products.map((official, index) => {
     const category = official.category as Product["category"];
+    const categories = (("categories" in official ? official.categories : undefined) ?? [category]) as Product["category"][];
     const chairLike = category === "armchair" || category === "dining-chair";
     const templates = chairLike ? armchairTemplates : sofaTemplates;
     const template = conceptProductsById.get(official.appProductId) ?? templates[index % templates.length];
@@ -251,11 +269,12 @@ export const products: Product[] = [
       subtitle: official.tagline,
       description: official.description,
       category,
+      categories,
       imageAssets: official.images,
       sourceUrl: official.sourceUrl,
       authorizedContent: true,
       specificationNote: "Dimensions, configuration options and availability are confirmed by an authorized Musterring retailer.",
-      active: true,
+      active: !("stale" in official && official.stale === true),
       demoData: false,
       widthMm: dimensionOverride?.widthMm ?? (isStorage ? 3000 : template.widthMm),
       depthMm: dimensionOverride?.depthMm ?? (isStorage ? 450 : template.depthMm),
@@ -289,7 +308,9 @@ export const products: Product[] = [
       armrestOptions: isSeating ? template.armrestOptions : [],
       feetOptions: isSeating ? template.feetOptions : [],
       comfortOptions: isSeating ? template.comfortOptions : [],
-      collection: categoryDetails[category]?.room ?? "Musterring",
+      collection: official.sourceUrl.includes("/furniture/hallway/")
+        ? "Hallway"
+        : categoryDetails[category]?.room ?? "Musterring",
       modular: isStorage || (isSeating && /modular|module|configur|system|programme|flexib/.test(searchableCopy)),
       smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy)
       , ...searchOverride

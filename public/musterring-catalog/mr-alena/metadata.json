@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-alena",
   "title": "MR ALENA",
-  "importedAt": "2026-08-03T08:01:19.145Z",
+  "importedAt": "2026-08-19T12:16:38.716Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,7 +10,8 @@
       "file": "/musterring-catalog/mr-alena/image-01.png",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/c/csm_MR11781_A01_MRAlena_Online_7116fdb94d.png",
       "bytes": 597029,
-      "contentType": "image/png"
+      "contentType": "image/png",
+      "sha256": "9bec37e46f6e284c36914634bf39a1d3ce1bed3f98e15302b236b4ac3ed1efc2"
     }
   ]
 }

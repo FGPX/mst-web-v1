@@ -1,5 +1,5 @@
 import { materials, products } from "../data";
-import type { Product } from "../types";
+import { productHasCategory, type Product } from "../types";
 import type { SearchIntent, VisualTags } from "./schemas";
 import { normalizeSearchText } from "../search";
 
@@ -21,7 +21,7 @@ export class LocalSemanticRetrievalProvider implements SemanticRetrievalProvider
     const normalizedQuery = normalizeSearchText(query);
     const terms = [...new Set(normalizedQuery.split(/[^a-z0-9]+/).filter((term) => term.length > 2))];
     return candidates.map((product) => {
-      const text = normalizeSearchText([product.modelCode, product.name, product.subtitle, product.description, product.category, ...product.colors, ...product.styles, ...product.functions, ...(product.layoutShapes ?? [])].join(" "));
+      const text = normalizeSearchText([product.modelCode, product.name, product.subtitle, product.description, ...(product.categories ?? [product.category]), ...product.colors, ...product.styles, ...product.functions, ...(product.layoutShapes ?? [])].join(" "));
       const overlap = terms.filter((term) => text.includes(term)).length;
       const trigrams = new Set(Array.from({ length: Math.max(0, normalizedQuery.length - 2) }, (_, index) => normalizedQuery.slice(index, index + 3)));
       const candidateTrigrams = new Set(Array.from({ length: Math.max(0, text.length - 2) }, (_, index) => text.slice(index, index + 3)));
@@ -50,7 +50,7 @@ function hasVerifiedMaterial(product: Product, requested: string) {
 function satisfiesVerifiedIntent(product: Product, intent: SearchIntent) {
   const colors = intent.colorFamilies?.map((color) => color.toLowerCase()) ?? [];
   return (
-    (!intent.category || product.category === intent.category) &&
+    (!intent.category || productHasCategory(product, intent.category)) &&
     (!colors.length || colors.some((color) => product.verifiedFacts.colors.includes(color))) &&
     (!intent.maxWidthMm || (product.verifiedFacts.dimensions && product.widthMm <= intent.maxWidthMm)) &&
     (!intent.minWidthMm || (product.verifiedFacts.dimensions && product.widthMm >= intent.minWidthMm)) &&
@@ -71,7 +71,7 @@ function satisfiesVerifiedIntent(product: Product, intent: SearchIntent) {
 
 function verifiedMatchReasons(product: Product, intent: SearchIntent) {
   const reasons: string[] = [];
-  if (intent.category && product.category === intent.category) reasons.push(`requested ${intent.category}`);
+  if (intent.category && productHasCategory(product, intent.category)) reasons.push(`requested ${intent.category}`);
   if (intent.colorFamilies?.some((color) => product.verifiedFacts.colors.includes(color.toLowerCase()))) reasons.push(`verified colour: ${intent.colorFamilies.join(", ")}`);
   if (intent.maxWidthMm && product.verifiedFacts.dimensions && product.widthMm <= intent.maxWidthMm) reasons.push("verified width is within the requested limit");
   if (intent.minWidthMm && product.verifiedFacts.dimensions && product.widthMm >= intent.minWidthMm) reasons.push("verified width meets the requested minimum");
@@ -87,7 +87,7 @@ function structuredScore(product: Product, intent: SearchIntent) {
   let score = 0;
   const reasons: string[] = [];
   if (intent.category) {
-    if (product.category !== intent.category) return { score: -1000, reasons };
+    if (!productHasCategory(product, intent.category)) return { score: -1000, reasons };
     score += 25; reasons.push(`requested ${intent.category}`);
   }
   if (intent.colorFamilies?.length) {
@@ -164,7 +164,7 @@ function structuredScore(product: Product, intent: SearchIntent) {
 
 export async function hybridCatalogueSearch(intent: SearchIntent, semantic: SemanticRetrievalProvider = new LocalSemanticRetrievalProvider()): Promise<GroundedSearch> {
   const active = products.filter((product) => product.active);
-  const categoryProducts = active.filter((product) => !intent.category || product.category === intent.category);
+  const categoryProducts = active.filter((product) => !intent.category || productHasCategory(product, intent.category));
   const categoryAvailable = categoryProducts.length > 0;
   const unverifiedRequirements = intent.layoutShapes?.filter((shape) =>
     !categoryProducts.some((product) => product.layoutShapes?.includes(shape))
@@ -182,7 +182,7 @@ export async function hybridCatalogueSearch(intent: SearchIntent, semantic: Sema
   }).sort((left, right) => right.score - left.score || left.product.modelCode.localeCompare(right.product.modelCode));
   const requestedColors = intent.colorFamilies?.map((color) => color.toLowerCase()) ?? [];
   const exactColorAvailable = !requestedColors.length || active.some((product) =>
-    (!intent.category || product.category === intent.category) && requestedColors.some((color) => product.verifiedFacts.colors.includes(color))
+    (!intent.category || productHasCategory(product, intent.category)) && requestedColors.some((color) => product.verifiedFacts.colors.includes(color))
   );
   const exactMatches = ranked.filter(({ product, score }) =>
     score > -100 && satisfiesVerifiedIntent(product, intent)
@@ -212,7 +212,7 @@ export async function hybridCatalogueSearch(intent: SearchIntent, semantic: Sema
   };
   const closeAlternatives = ranked.filter(({ product }) =>
     !exactIds.has(product.id) &&
-    (!intent.category || product.category === intent.category) &&
+    (!intent.category || productHasCategory(product, intent.category)) &&
     // Preserve an explicitly requested colour whenever the catalogue has that
     // colour in the requested category. A request such as "red sofa" must not
     // be followed by a wall of beige and grey sofas. Wrong-colour alternatives

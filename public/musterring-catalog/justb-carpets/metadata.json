@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/home-accessories/carpets/justb-carpets",
-  "title": "JUSTB! CARPETS",
-  "importedAt": "2026-08-03T08:03:05.218Z",
+  "title": "JustB! Carpets",
+  "importedAt": "2026-08-19T12:16:48.891Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/justb-carpets/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/b/csm_justb-te100-teppich-grau-musterring-02_53657714e5.jpg",
       "bytes": 721689,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2c85ef67fd4fc370846075a06fb5d87da7adb182348d8e77f977e8f2ff000554"
     },
     {
       "file": "/musterring-catalog/justb-carpets/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/6/csm_justb-te100-teppich-grau-musterring_1d20d3cecc.jpg",
       "bytes": 487352,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "96e4e7a610bc6985c136b2c0a1f4405bac30bb844b65d2ca78d04a6829d9e0e3"
     },
     {
       "file": "/musterring-catalog/justb-carpets/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/0/csm_justb-te100-teppich-grau-musterring-03_07569fe02b.jpg",
       "bytes": 791297,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5ea7fb87629679a0271597c44b99444cbca40d50131c38cff388e58652fc9ba4"
     },
     {
       "file": "/musterring-catalog/justb-carpets/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/2/csm_justb-te100-teppich-grau-musterring-01_3a6b979c74.jpg",
       "bytes": 285950,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5b98a36641232c1a9e850f20aec7d725ae8b8b48326d4e4698478db6686a806d"
     },
     {
       "file": "/musterring-catalog/justb-carpets/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/c/csm_justb-te150-teppich-musterring-02_75a9efb574.jpg",
       "bytes": 734843,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "524cc98ecefeeae04fa69e6612d37906c749e0a84b08efa51cfa28a41b761dfa"
     },
     {
       "file": "/musterring-catalog/justb-carpets/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/a/csm_justb-te150-teppich-musterring-03_362602bb28.jpg",
       "bytes": 2315151,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "38e7a99e8a0b84610dcb8e8ce6f2b21210ff6acd89635f6408575ccfff7309a5"
     },
     {
       "file": "/musterring-catalog/justb-carpets/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/e/csm_justb-te150-teppich-musterring-01_c7db45ef11.jpg",
       "bytes": 587226,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "cf78fdc186b8de7214986b033961dd84a581ed0a97ed80df4280780976d39a84"
     },
     {
       "file": "/musterring-catalog/justb-carpets/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/4/csm_justb-te150-teppich-musterring_be2253c366.jpg",
       "bytes": 958612,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e3f421fe843d0c1fc0f437aa4cd3f70fad47d3b978693def1bdaf812f624f695"
     }
   ]
 }

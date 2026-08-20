@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-6550",
   "title": "MR 6550",
-  "importedAt": "2026-08-03T08:01:50.280Z",
+  "importedAt": "2026-08-19T12:16:42.234Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/mr-6550/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/b/csm_sessel-mr6550-stoff-rostrot-wei%C3%9F-musterring_759be6c6bc.jpg",
       "bytes": 698605,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5e87f16f45ed9598c62f4ddb2983676f28c8af8fc805934a2457b75524c5b281"
     },
     {
       "file": "/musterring-catalog/mr-6550/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/e/csm_sessel-mr6550-leder-stoff-hellgrau-musterring_53c0f91f1b.jpg",
       "bytes": 529597,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "39ce58535c016de5e47f695027647773a938b079eea38f1f0962a3cd6ba11a37"
     },
     {
       "file": "/musterring-catalog/mr-6550/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/1/csm_sessel-mr6550-leder-cognac-musterring_8e56db26c2.jpg",
       "bytes": 334383,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "17f6d2601deabf3719f4359132ed6b8f16174f32f147cd7bd9cf90349e841d5e"
     },
     {
       "file": "/musterring-catalog/mr-6550/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/1/csm_sessel-hocker-mr6550-leder-stoff-hellgrau-musterring_fe37847a9f.jpg",
       "bytes": 335634,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "aa3119baa48c945090476df1d138ac9970897c8c40aef1625c17adde286f362f"
     },
     {
       "file": "/musterring-catalog/mr-6550/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/1/csm_sessel-mr6550-leder-cognac-stoff-rostrot-wei%C3%9F-milieu-musterring_c68ac8a74c.jpg",
       "bytes": 633094,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e49c214bd7c10bd39425df2098f642c8251e12289f028ca46c8074404312e177"
     }
   ]
 }

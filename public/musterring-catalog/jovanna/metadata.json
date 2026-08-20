@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/jovanna",
   "title": "Jovanna",
-  "importedAt": "2026-08-03T08:02:14.368Z",
+  "importedAt": "2026-08-19T12:16:44.534Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/jovanna/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/8/csm_schlafzimmer-jovanna-lack-braun-wildeiche-musterring_01_fa65a0907a.jpg",
       "bytes": 612350,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d659803c4e062439cb5a424c4d381553588bf6c1f058a2b648c3002bbd69692a"
     },
     {
       "file": "/musterring-catalog/jovanna/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/8/csm_schlafzimmer-jovanna-fu%C3%9Fteil-lack-titan-musterring_fc471fb53b.jpg",
       "bytes": 926159,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8c9745eaa111e4c72c0b405d19ccd3311ab297661f2876557ae3ece61221059e"
     },
     {
       "file": "/musterring-catalog/jovanna/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_schlafzimmer-jovanna-standkristallspiegel-musterring_7055f848c1.jpg",
       "bytes": 807031,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4a8001e734130ed35082b835a428d0e9221e6f1cb44f3488b71ca5712d5670e2"
     },
     {
       "file": "/musterring-catalog/jovanna/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/1/csm_schlafzimmer-jovanna-lack-braun-wildeiche-musterring_cfb82366df.jpg",
       "bytes": 507603,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ca80d714801f198e217d32cc007266d2c685e3616df115ec3c2529aa2a5e604a"
     },
     {
       "file": "/musterring-catalog/jovanna/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/1/csm_schlafzimmer-jovanna-holzkopfteil-lack-wei%C3%9F-absetzung-wildeiche-massiv-musterring_658c6da8bb.jpg",
       "bytes": 756396,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "dc881667b2d9ee8d84d062e320dc04dfd1fdc64b99eb3ccdb929f842ced4d438"
     },
     {
       "file": "/musterring-catalog/jovanna/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/4/csm_schlafzimmer-jovanna-kopteil-lack-wei%C3%9F-wildeiche-musterring_2b66bbc1d5.jpg",
       "bytes": 903028,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1fea01d60e1f886bb4b295fe362c1365a222e0fa70913b2faf96b3a8002909d6"
     },
     {
       "file": "/musterring-catalog/jovanna/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_schlafzimmer-jovanna-inneneinteilung-kleiderschrank-musterring_3116a2844f.jpg",
       "bytes": 1255621,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3895b58f23b39296e10d8c74c30ecf31d277e201bea9e048a6b5323be81978f3"
     },
     {
       "file": "/musterring-catalog/jovanna/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/7/csm_schlafzimmer-jovanna-inneneinteilung-musterring_61b2a1f883.jpg",
       "bytes": 837600,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c9361ef94e54009353b508767e111af2ced96cd1974562197340d3627594069f"
     }
   ]
 }

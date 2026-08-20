@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tiama",
   "title": "Tiama",
-  "importedAt": "2026-08-03T08:02:52.931Z",
+  "importedAt": "2026-08-19T12:16:47.703Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/tiama/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/0/csm_esszimmerserie_tiama_creme_millieubild_musterring_b552c95e4f.jpg",
       "bytes": 685372,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "00bbf75709e1e049d2dfc89b65e7a4897005f5e4ec0d12cf26b594476507d004"
     },
     {
       "file": "/musterring-catalog/tiama/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/5/csm_esszimmerserie_tiama_creme_moodbild_musterring_80edf359b7.jpg",
       "bytes": 553479,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "775fb1f7dad981a453ef60cfb2ef6455cef8e89da9ceaf715bee2ce674497fb2"
     },
     {
       "file": "/musterring-catalog/tiama/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/0/csm_esszimmerserie_tiama_creme_musterring_e92bb936a8.jpg",
       "bytes": 857275,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "f118cf4b050f9cc8c46c6b76d2269c4041fe3e915da7eb432cf8df44267d5085"
     },
     {
       "file": "/musterring-catalog/tiama/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/6/csm_esszimmerserie_tiama_creme_detailbild_musterring_ec889a20c3.jpg",
       "bytes": 461736,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "75c0b034302d14c4c8095a366fba2df42f118da1742903b60002ffcaeaf3b69e"
     },
     {
       "file": "/musterring-catalog/tiama/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/5/csm_MR11597_A_Tiama_Print_-_15_22c359d655.jpg",
       "bytes": 594557,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6e382bbeaea9492eda915e56c7caa2af452b62675d251082a617fe55f63bd00b"
     },
     {
       "file": "/musterring-catalog/tiama/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/3/csm_MR11597_001_Tiama_Print_-_15_4d85513c69.jpg",
       "bytes": 424807,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fd5d6ae402ad5cea6526b08b065e78bda65160cb53845721bf4cf0c0df38885a"
     },
     {
       "file": "/musterring-catalog/tiama/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/7/csm_MR11597_D_02_Tiama_Print_-_15_0f6e705008.jpg",
       "bytes": 126591,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8bc71520764e76472ae7ba598310fc88bcafcaef03568f820e8c799a6b2dc729"
     },
     {
       "file": "/musterring-catalog/tiama/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/4/csm_MR11597_003_Tiama_Print_-_15_c4d02212ec.jpg",
       "bytes": 624476,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "94aa98de00b367db284031ad7dceb29ba1bc42490688cbb5a38644880ecfe50c"
     }
   ]
 }

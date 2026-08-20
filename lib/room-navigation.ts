@@ -9,7 +9,7 @@ export const roomNavigation = [
       ["Sofas", "/furniture?category=sofa"],
       ["Armchairs", "/furniture?category=armchair"],
       ["Sectional sofas", "/furniture?category=sectional"],
-      ["Living walls, sideboards & co.", "/furniture?category=storage"],
+      ["Living walls, sideboards & co.", "/furniture?category=storage&collections=Living%20Room"],
       ["Coffee tables & side tables", "/furniture?category=coffee-table"]
     ]
   },
@@ -39,7 +39,7 @@ export const roomNavigation = [
     name: "Hallway",
     image: "/musterring-catalog/mr-isabelle/image-01.jpg",
     source: "https://www.musterring.com/en/furniture/hallway",
-    categories: [["Wardrobes", "/furniture?category=wardrobe"]]
+    categories: [["Hallway furniture", "/furniture?category=storage&collections=Hallway"]]
   },
   {
     id: "kitchen",
