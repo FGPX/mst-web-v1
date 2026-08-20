@@ -6,41 +6,35 @@ import { ChevronDown, ChevronRight, Menu, Search, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { categoryDetails, categoryGroups } from "@/lib/catalog-taxonomy";
-import { roomNavigation } from "@/lib/room-navigation";
 import { StitchLinkButton } from "./StitchButtons";
 import musterringLogo from "../../Logo_MST png.png";
 
 export function StitchHeader() {
   const [open, setOpen] = useState(false);
   const [furnitureOpen, setFurnitureOpen] = useState(false);
-  const [roomsOpen, setRoomsOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const close = () => {
     setOpen(false);
     setFurnitureOpen(false);
-    setRoomsOpen(false);
   };
   const active = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   useEffect(() => {
     setOpen(false);
     setFurnitureOpen(false);
-    setRoomsOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    if (!furnitureOpen && !roomsOpen) return;
+    if (!furnitureOpen) return;
     const closeOnOutsideClick = (event: PointerEvent) => {
       if (!headerRef.current?.contains(event.target as Node)) {
         setFurnitureOpen(false);
-        setRoomsOpen(false);
       }
     };
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setFurnitureOpen(false);
-        setRoomsOpen(false);
       }
     };
     document.addEventListener("pointerdown", closeOnOutsideClick);
@@ -49,7 +43,7 @@ export function StitchHeader() {
       document.removeEventListener("pointerdown", closeOnOutsideClick);
       document.removeEventListener("keydown", closeOnEscape);
     };
-  }, [furnitureOpen, roomsOpen]);
+  }, [furnitureOpen]);
 
   return (
     <header className="stitch-header" role="banner" ref={headerRef}>
@@ -63,20 +57,10 @@ export function StitchHeader() {
             type="button"
             aria-expanded={furnitureOpen}
             aria-controls="furniture-mega-menu"
-            onClick={() => { setRoomsOpen(false); setFurnitureOpen((value) => !value); }}
+            onClick={() => setFurnitureOpen((value) => !value)}
           >
             Furniture <ChevronDown size={14} aria-hidden="true" />
           </button>
-          <button
-            className={`stitch-furniture-trigger ${active("/inspiration/rooms") ? "is-active" : ""}`}
-            type="button"
-            aria-expanded={roomsOpen}
-            aria-controls="rooms-mega-menu"
-            onClick={() => { setFurnitureOpen(false); setRoomsOpen((value) => !value); }}
-          >
-            Rooms <ChevronDown size={14} aria-hidden="true" />
-          </button>
-          <Link className={pathname === "/room-composer" ? "is-active" : ""} href="/room-composer">Plan a Room</Link>
           <Link className={pathname === "/room-composer/upload" ? "is-active" : ""} href="/room-composer/upload">Room Visualizer</Link>
           <Link className={active("/ai-stylist") ? "is-active" : ""} href="/ai-stylist">Style Finder</Link>
           <Link className={active("/about") ? "is-active" : ""} href="/about">About</Link>
@@ -112,26 +96,6 @@ export function StitchHeader() {
           </div>
         </div>
       </div>
-      <div className={`stitch-furniture-mega ${roomsOpen ? "is-open" : ""}`} id="rooms-mega-menu">
-        <div className="stitch-furniture-mega-inner">
-          <div className="stitch-furniture-mega-intro">
-            <span>Furniture by room</span>
-            <h2>Find your living world.</h2>
-            <p>Start with a room, then go directly to its available furniture categories.</p>
-            <Link href="/inspiration/rooms" onClick={close}>View all rooms <ChevronRight size={16} /></Link>
-          </div>
-          <div className="stitch-furniture-mega-groups">
-            {roomNavigation.map((room) => (
-              <section key={room.id}>
-                <h3><Link href={`/inspiration/rooms#${room.id}`} onClick={close}>{room.name}</Link></h3>
-                {room.categories.map(([label, href]) => (
-                  <Link href={href} key={label} onClick={close}>{label}</Link>
-                ))}
-              </section>
-            ))}
-          </div>
-        </div>
-      </div>
       <div className={`stitch-mobile-panel ${open ? "is-open" : ""}`} id="mobile-navigation">
         <details className="stitch-mobile-furniture">
           <summary>Furniture <ChevronDown size={16} /></summary>
@@ -145,14 +109,6 @@ export function StitchHeader() {
             </div>
           ))}
         </details>
-        <details className="stitch-mobile-furniture">
-          <summary>Rooms <ChevronDown size={16} /></summary>
-          <Link href="/inspiration/rooms" onClick={close}>All rooms</Link>
-          {roomNavigation.map((room) => (
-            <Link href={`/inspiration/rooms#${room.id}`} key={room.id} onClick={close}>{room.name}</Link>
-          ))}
-        </details>
-        <Link href="/room-composer" onClick={close}>Plan a Room</Link>
         <Link href="/room-composer/upload" onClick={close}>Room Visualizer</Link>
         <Link href="/ai-stylist" onClick={close}>Style Finder</Link>
         <Link href="/my-musterring" onClick={close}>My Project</Link>
