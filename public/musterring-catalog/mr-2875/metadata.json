@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2875",
   "title": "MR 2875",
-  "importedAt": "2026-08-03T08:01:42.769Z",
+  "importedAt": "2026-08-19T12:16:41.139Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-2875/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_Sofa-Sessel-MR_2875-Sofa_N90-Seitenteil_SA-Echtleder-Schwarz-Musterring_017d70e481.jpg",
       "bytes": 511275,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ef3b5b823e8b9e1c6c848a6f9612b703048a6a06cdd1457087824480be51f6a1"
     },
     {
       "file": "/musterring-catalog/mr-2875/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/5/csm_MR8952_A_MR2875_-_15_1b18817701.jpg",
       "bytes": 870627,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e3c50d387a68433b2e458c926cc7024c7a1bacb5176aa27eaffcd41ef77271a3"
     },
     {
       "file": "/musterring-catalog/mr-2875/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/7/csm_Sofa-Sessel-MR_2875-Eckgruppe-Anreihsofa-N70L-mit_Bettfunktion-Armlehne_links-Ecksofa-mit_festem_Hocker-EG70R-Holzfu%C3%9F-wengefarbig-Stoff-Elfenbein-freigestellt-Musterring_94e82f6488.jpg",
       "bytes": 255347,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c9380e9367a951ec16e991c388bc97ab289d4012367e1393dc4de88b604e48a5"
     },
     {
       "file": "/musterring-catalog/mr-2875/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/1/csm_Sofa-Sessel-MR_2875-Eckgruppe-Anreihsofa-Armteil_links-Armteil_rechts-N80L-N90R-Stoff-marine-Fu%C3%9F-schwarz-Musterring_925a0e9766.jpg",
       "bytes": 893346,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9a05faaf0d692792bac10915f4440ce127c172850a3e6f500f65a1fd71323659"
     },
     {
       "file": "/musterring-catalog/mr-2875/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/1/csm_Sofa-Sessel-MR_2875-Eckgruppe-Stoff-marine-Fu%C3%9F-schwarz-Detail-Produktkennzeichen-Musterring_9ff9975183.jpg",
       "bytes": 933059,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "004ef298f7168f486071693d86898bbdd128105857dc56f35b33209d991461c5"
     },
     {
       "file": "/musterring-catalog/mr-2875/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/7/csm_Sofa-Sessel-MR_2875-Sofa-N90-Seitenteil-SE-Kopfst%C3%BCtze-U92-Stoff-stone-Fu%C3%9F-wenge-Musterring_09addabc17.jpg",
       "bytes": 538088,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c7d919e1b287cdd2b9ca0dc8894ddd4fcd78abfcae30a78fe4ab05a25a35ef08"
     },
     {
       "file": "/musterring-catalog/mr-2875/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/8/csm_Sofa-Sessel-MR_2875-Eckgruppe-Anreihsofa-N70L-Armlehne_links-Ecksofa-mit_festem_Hocker-EG70R-Stoff-dolphin-Detail-klappbares_Seitenteil-Musterring_235a93956f.jpg",
       "bytes": 1040669,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "997d7ff7df3a4541534539571e06a22ddeae276fa753b1e890fd30af467c5eca"
     },
     {
       "file": "/musterring-catalog/mr-2875/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/6/csm_Sofa-Sessel-MR_2875-Eckgruppe-Anreihsofa-N70L-Armlehne_links-Ecksofa-mit_festem_Hocker-EG70R-Stoff-dolphin-Musterring_af5c7c90e4.jpg",
       "bytes": 454647,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b7fd725e8f592fecab9bdf1ee311cc26626d8e65033e096f5f0fbaaaa325c482"
     }
   ]
 }

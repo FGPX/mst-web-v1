@@ -1,0 +1,52 @@
+{
+  "page": "https://www.musterring.com/en/furniture/kitchen",
+  "title": "Musterring Kitchens",
+  "importedAt": "2026-08-19T12:16:49.781Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/kitchen/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/6/csm_MR11154_01_Cerina_MR220_Mod_195_-_15_8f87081d7d.jpg",
+      "bytes": 396088,
+      "contentType": "image/jpeg",
+      "sha256": "45ecdf5500e9ddbccbcbf1ab63f31024791984b945e0fb3c0c60d818a50938bd"
+    },
+    {
+      "file": "/musterring-catalog/kitchen/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_81dd8c8f96.jpg",
+      "bytes": 22984,
+      "contentType": "image/jpeg",
+      "sha256": "05479eed739d8e2e46b2c36f0d3f6fca3362a1f9cf5fe01ff38bb43796188b1d"
+    },
+    {
+      "file": "/musterring-catalog/kitchen/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
+      "bytes": 27745,
+      "contentType": "image/jpeg",
+      "sha256": "9f711acfe072b6ba0d938c90a1f54f6a1be3f045e54182d5219c4af090ff3e69"
+    },
+    {
+      "file": "/musterring-catalog/kitchen/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/d/csm__DSC0055a_6b96ad8260.jpg",
+      "bytes": 882089,
+      "contentType": "image/jpeg",
+      "sha256": "90c2220407e9d15c5fcb82e6254c0aa48f8082b21c14d9ff3ae3111162b62a07"
+    },
+    {
+      "file": "/musterring-catalog/kitchen/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm__DSC0086a_ce21b742ea.jpg",
+      "bytes": 268841,
+      "contentType": "image/jpeg",
+      "sha256": "204840390751e63fbd96069ad8af67f8c761f38d8c8c0f968f65e7ff2da236b1"
+    },
+    {
+      "file": "/musterring-catalog/kitchen/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/a/csm__DSC7449a-2_564350e3c3.jpg",
+      "bytes": 249368,
+      "contentType": "image/jpeg",
+      "sha256": "59a9a9a27b606ec348ca597c1211eb555d73e00c3529339fa29ac053d533baf3"
+    }
+  ]
+}

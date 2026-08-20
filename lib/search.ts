@@ -1,8 +1,8 @@
 import { materials, products } from "./data";
-import type { Product, SearchFilters } from "./types";
+import { productHasCategory, type Product, type SearchFilters } from "./types";
 
 export const searchColorTerms = ["beige", "ivory", "taupe", "stone", "charcoal", "black", "white", "brown", "oak", "natural", "cream", "green", "grey", "graphite", "red", "burgundy", "barolo", "purple", "blue", "orange", "pink", "yellow", "mustard", "cognac", "sand"];
-export const searchStyleTerms = ["modern", "minimal", "contemporary", "classic", "industrial", "natural", "elegant"];
+export const searchStyleTerms = ["modern", "minimal", "contemporary", "classic", "industrial", "natural", "elegant", "family"];
 const stopWords = new Set(["want", "something", "like", "this", "that", "with", "from", "have", "need", "looking", "product", "piece", "please", "show", "find", "furniture", "maximum", "about"]);
 const corrections: Record<string, string> = {
   wnat: "want",
@@ -14,6 +14,7 @@ const corrections: Record<string, string> = {
 };
 
 const phraseAliases: Array<[RegExp, string]> = [
+  [/\bbleck\b|\bblak\b/g, "black"],
   [/\bsettee\b|\bdivan\b/g, "sofa"],
   [/\bloveseat\b/g, "two seat sofa"],
   [/\bcupboard\b|\bside board\b/g, "cabinet"],
@@ -134,18 +135,20 @@ export function parseSearchQuery(query: string): SearchFilters {
   else if (/dining table|esstisch/.test(text)) filters.category = "dining-table";
   else if (/wardrobe|closet|kleiderschrank/.test(text)) filters.category = "wardrobe";
   else if (/bedroom series|bedroom furniture|schlafzimmerprogramm/.test(text)) filters.category = "bedroom-series";
-  else if (/\bbed\b|upholstered bed|boxspring|bett/.test(text)) filters.category = "bed";
+  else if (/\bbed\b|upholstered bed|boxspring|mattress|topper|slatted frame|bett/.test(text)) filters.category = "bed";
   else if (/bathroom|bath furniture|badmoebel|badmöbel/.test(text)) filters.category = "bathroom";
   else if (/\bkitchen\b|\bkitchen unit\b|\bkitchen programme\b/.test(text)) filters.category = "kitchen";
   else if (/outdoor|garden furniture|patio|gartenmoebel|gartenmöbel/.test(text)) filters.category = "outdoor";
   else if (/carpet|\brug\b|teppich/.test(text)) filters.category = "carpet";
   else if (/\blamp\b|lighting|leuchte/.test(text)) filters.category = "lamp";
+  else if (/home textile|bed linen|bedding|plaid|cushion cover|comforter/.test(text)) filters.category = "home-textile";
   else if (/small furniture|occasional furniture/.test(text)) filters.category = "small-furniture";
-  else if (/living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage|wohnwand|schrank/.test(text)) filters.category = "storage";
+  else if (/hallway|cloakroom|coat rack|shoe cupboard|entrance furniture|living wall|wall unit|media unit|tv unit|sideboard|cabinet|storage|wohnwand|schrank/.test(text)) filters.category = "storage";
   const code = text.match(/\bmr\s*-?\s*\d{3,4}\b/i)?.[0]?.replace(/[\s-]+/g, " ").toUpperCase();
   if (code) filters.modelCode = code;
   Object.assign(filters, widthConstraints(text));
   const layoutShapes: NonNullable<SearchFilters["layoutShapes"]> = [];
+  if (/\bl[- ](?:shaped[- ]?)?(?:sofa|couch)\b/.test(text)) layoutShapes.push("l-shaped");
   if (/\bl[- ]shaped\b|\bl shape\b|\bcorner kitchen\b|\bwinkelk(?:ü|ue)che\b/.test(text)) layoutShapes.push("l-shaped");
   if (/\bu[- ]shaped\b|\bu shape\b/.test(text)) layoutShapes.push("u-shaped");
   if (/\bstraight(?: line)?\b|\bsingle[- ]wall\b|\bkitchen run\b/.test(text)) layoutShapes.push("straight");
@@ -171,7 +174,7 @@ export function parseSearchQuery(query: string): SearchFilters {
 
 export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.modelCode && product.modelCode !== filters.modelCode) return false;
-  if (filters.category && product.category !== filters.category) return false;
+  if (filters.category && !productHasCategory(product, filters.category)) return false;
   if (filters.maxWidthMm && (!product.verifiedFacts.dimensions || product.widthMm > filters.maxWidthMm)) return false;
   if (filters.minWidthMm && (!product.verifiedFacts.dimensions || product.widthMm < filters.minWidthMm)) return false;
   if (filters.targetWidthMm && (!product.verifiedFacts.dimensions || Math.abs(product.widthMm - filters.targetWidthMm) > Math.max(100, Math.round(filters.targetWidthMm * 0.03)))) return false;
@@ -192,7 +195,7 @@ export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.styles?.length && !filters.styles.some((style) => product.verifiedFacts.styles.includes(style))) return false;
   if (filters.collections?.length && !filters.collections.includes(product.collection)) return false;
   if (filters.q && !filters.modelCode) {
-    const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${product.category} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
+    const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${(product.categories ?? [product.category]).join(" ")} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
     const usefulTerms = filters.q.toLowerCase().split(/\W+/).filter((term) => term.length > 2 && !["need", "with", "for", "the", "and", "maximum"].includes(term));
     return usefulTerms.length === 0 || usefulTerms.some((term) => haystack.includes(term));
   }
@@ -224,7 +227,7 @@ export function searchProductsRanked(query: string, limit = 12): RankedProduct[]
   const active = products.filter((product) => product.active);
   const verifiedMatches = active.filter((product) => productMatches(product, { ...parsed, q: undefined }));
   const candidates = verifiedMatches.length ? verifiedMatches : active.filter((product) =>
-    (!requestedCategory || product.category === requestedCategory) &&
+    (!requestedCategory || productHasCategory(product, requestedCategory)) &&
     (!parsed.modelCode || product.modelCode === parsed.modelCode)
   );
 
@@ -235,7 +238,7 @@ export function searchProductsRanked(query: string, limit = 12): RankedProduct[]
         product.name,
         product.subtitle,
         product.description,
-        product.category,
+        ...(product.categories ?? [product.category]),
         ...product.colors,
         ...product.styles,
         ...product.functions
@@ -245,7 +248,7 @@ export function searchProductsRanked(query: string, limit = 12): RankedProduct[]
       let score = 1;
 
       if (requestedCategory) {
-        if (product.category !== requestedCategory) score -= 30;
+        if (!productHasCategory(product, requestedCategory)) score -= 30;
         else { score += 25; reasons.push(`matches the requested ${requestedCategory}`); }
       }
       const modelDigits = normalized.match(/\b\d{3,4}\b/)?.[0];

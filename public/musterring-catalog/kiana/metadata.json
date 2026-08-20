@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kiana",
   "title": "Kiana",
-  "importedAt": "2026-08-03T08:02:00.705Z",
+  "importedAt": "2026-08-19T12:16:43.349Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/kiana/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_wohnmoebel-kiana-stuhl-picara-musterring_b398dd5e21.jpg",
       "bytes": 960952,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6e1072e91bffdf60d06c5d380b4aca8ac6845d918e6f6e76b660d119e5fecf95"
     },
     {
       "file": "/musterring-catalog/kiana/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/f/csm_regal-kiana-musterring_b6bee40aed.jpg",
       "bytes": 1067901,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "972798b1869f3bdca6bef78d8037215ede01274ff341761a3980f5a672304060"
     },
     {
       "file": "/musterring-catalog/kiana/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/e/csm_wohnm%C3%B6bel-kiana-detailbild-musterring_e802867394.jpg",
       "bytes": 886691,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b37d8d5a85ef8a63715212d9b6f7b1f6d28839d24678e475c38b4dd3619a75ab"
     },
     {
       "file": "/musterring-catalog/kiana/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_wohnmoebel-kiana-moodbild-musterring_6dd62e5717.jpg",
       "bytes": 570657,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "0d724e0b4cd8c7fb7f639035bbb7f76e7929306400d476cbab4581a1e9a143ee"
     },
     {
       "file": "/musterring-catalog/kiana/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/0/csm_MR11583_12_Kiana_Mood_Print_-_15_715c13cc7c.jpg",
       "bytes": 388023,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "72f6868bdf5a9c4dc005c17482aec0585999caede36dff90e0dcbfe41d5f48ab"
     },
     {
       "file": "/musterring-catalog/kiana/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/4/csm_MR11583_02_Kiana_Print_-_15_6aed21b1b9.jpg",
       "bytes": 337600,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4327cc36e9110ce7d8a5904f48aac4847544ce5f5d780d1189065aa45e6ed52e"
     },
     {
       "file": "/musterring-catalog/kiana/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/c/csm_MR11583_05_Kiana_Print_-_15_e412d77c15.jpg",
       "bytes": 371118,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a4e8a7f31ba67a049a0ad8253a35afdee1c7f3508f248075c7810d3002ad8f85"
     },
     {
       "file": "/musterring-catalog/kiana/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/7/csm_MR11583_B_Kiana_Print_-_15_de9e1b2625.jpg",
       "bytes": 297658,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "489363acd278121b224caf61622fa2ac025e598753a84fc7c1ecc5389f5fca43"
     }
   ]
 }

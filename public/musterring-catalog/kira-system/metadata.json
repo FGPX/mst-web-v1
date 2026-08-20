@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kira-system",
-  "title": "Kira System",
-  "importedAt": "2026-08-03T08:02:00.040Z",
+  "title": "Kira-System",
+  "importedAt": "2026-08-19T12:16:43.265Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/kira-system/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/0/csm_MR11581_A_KiraSystem_Print_-_15_8cf0f8c0aa.jpg",
       "bytes": 609754,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "abea9881e18a588287906e50b1c193c4ab308a1d7d501c2b76df50b527da8026"
     },
     {
       "file": "/musterring-catalog/kira-system/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/b/csm_MR11581_096_KiraSystem_Mood_Print_-_15_311c8afab5.jpg",
       "bytes": 454459,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b8c8d49d3f394ab6644bcbfba24fce2b70aebe5728e17c19a6774fdcefa84f45"
     },
     {
       "file": "/musterring-catalog/kira-system/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/2/csm_MR11581_018_KiraSystem_Mood_Print_-_15_11829ff4d1.jpg",
       "bytes": 358502,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "585466bf598725ca3146d848dfb970aae2bdd4f648e470dbd6520aa7dc803b4f"
     },
     {
       "file": "/musterring-catalog/kira-system/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_MR11581_035_KiraSystem_Mood_Print_-_15_12666d67aa.jpg",
       "bytes": 420760,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a37857493f2c0748a6d5075808adf3c9afbda8b6855d07e3a2d919df46b60482"
     },
     {
       "file": "/musterring-catalog/kira-system/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/1/csm_MR11582_D_KiraSystem_Print_-_15_bfd5e62e65.jpg",
       "bytes": 211723,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5757c61df2f3f8f1587e22357f4ff6e57ba9c3aff7bd230383aa08bcf202e77a"
     },
     {
       "file": "/musterring-catalog/kira-system/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/5/csm_MR11582_008_KiraSystem_Print_-_15_61afa4037a.jpg",
       "bytes": 433218,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "74a9a798ad04cdef62b1ca5b6b8585e95db92896e282a2b7fc3aaa82dbccbe36"
     },
     {
       "file": "/musterring-catalog/kira-system/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_MR11582_022_KiraSystem_Mood_Print_-_15_67d517ef22.jpg",
       "bytes": 191125,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4582c11d5746d75905f5b0659c13bb9fa8e8aa83e476698fb6b7dc279bd42c4b"
     },
     {
       "file": "/musterring-catalog/kira-system/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/c/csm_MR11582_B_KiraSystem_Print_-_15_9fb6393249.jpg",
       "bytes": 172892,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6ee7f1233ff24daa8b4e066361613d1aa7a65fabbaa851b3ce0d000e317568c6"
     }
   ]
 }

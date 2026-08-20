@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-nils",
   "title": "MR NILS",
-  "importedAt": "2026-08-03T08:01:21.034Z",
+  "importedAt": "2026-08-19T12:16:38.921Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,7 +10,8 @@
       "file": "/musterring-catalog/mr-nils/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/d/csm_sessel-nils-leder-beige-metallfu%C3%9F-schwarz-musterring-01_b63ee90596.jpg",
       "bytes": 259629,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2175d74208b43be00976f7fad3b15c732c2e1542796c84574cea1f9022c58da7"
     }
   ]
 }

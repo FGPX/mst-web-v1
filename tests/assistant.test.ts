@@ -7,7 +7,9 @@ import {
 import { createConfiguration } from "@/lib/configurator";
 import { productImageForColors } from "@/lib/musterring-assets";
 import { groundAlternativeRequest } from "@/lib/ai/alternative-grounding";
+import { validatedAIAlternativeRequirements } from "@/lib/ai/alternative-intent";
 import { voiceCommandSchema, type ConversationContext } from "@/lib/ai/assistant-schemas";
+import { productHasCategory } from "@/lib/types";
 
 const context: ConversationContext = {
   route: "/search", referencedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {}
@@ -102,6 +104,46 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.exactMatches.some((match) => products.find((product) => product.id === match.productId)?.modelCode === "MR 260")).toBe(true);
   });
 
+  it("normalizes verbose AI material phrases to catalogue material tags", () => {
+    const request = groundAlternativeRequest(
+      { sourceProductId: "musterring-mr-710", requestText: "three-seat fabric sofa" },
+      { materialTags: ["fabric sofa", "fabric material"] }
+    );
+    expect(request.materialTags).toEqual(["fabric"]);
+  });
+
+  it("normalizes verbose AI function phrases and rejects material functions", () => {
+    const request = groundAlternativeRequest(
+      { sourceProductId: "musterring-mr-710", requestText: "fabric sofa with relax function" },
+      { requiredFunctions: ["relax function", "fabric function"] }
+    );
+    expect(request.requiredFunctions).toEqual(["relax"]);
+  });
+
+  it("rejects AI tags placed in the wrong product-data domain", () => {
+    const request = groundAlternativeRequest(
+      { sourceProductId: "musterring-justb-pm200", requestText: "beige L-shaped modular fabric sofa under 280 cm" },
+      { requiredFunctions: ["beige"], materialTags: ["modular"] }
+    );
+    expect(request.requiredFunctions).toEqual([]);
+    expect(request.materialTags).toEqual([]);
+  });
+
+  it("does not mistake three-seat width wording for a seat-height request", () => {
+    const requestText = "three-seat fabric sofa under 240 cm";
+    const inferred = validatedAIAlternativeRequirements(
+      { sourceProductId: "musterring-mr-710", requestText },
+      {
+        category: "sofa", colorFamilies: [], styles: [], numberOfSeats: 3,
+        maxWidthMm: 2400, minWidthMm: null, targetWidthMm: null,
+        layoutShapes: [], excludedLayoutShapes: [], minSeatHeightMm: 460,
+        requiredFunctions: [], excludedFunctions: [], materialTags: ["fabric"],
+        preserveStyle: null, preserveComfort: null
+      }
+    );
+    expect(inferred.minSeatHeightMm).toBeUndefined();
+  });
+
   it("classifies catalogue recliners as armchairs rather than sofas", () => {
     expect(products.find((product) => product.id === "musterring-mr-2665")?.category).toBe("armchair");
     expect(products.find((product) => product.id === "musterring-mr-4100")?.category).toBe("armchair");
@@ -171,6 +213,36 @@ describe("connected Musterring assistant grounding", () => {
     expect(matches.every((match) => products.find((product) => product.id === match.productId)?.category === "dining-table")).toBe(true);
   });
 
+  it.each(["find me a black sofa", "find me a bleck sofa"])("returns MR 285 for a black-sofa request using its verified black catalogue presentation: %s", (requestText) => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText });
+    expect(result.interpretedRequirements).toContain("black colour");
+    expect(result.exactMatches.map((match) => match.productId)).toContain("musterring-mr-285");
+    expect(result.exactMatches.map((match) => match.productId)).not.toContain("musterring-justb-pm100");
+    expect(result.closestAlternatives.find((match) => match.productId === "musterring-justb-pm100")?.unmetRequirements)
+      .toContain("black colour is available, but no matching catalogue image is verified");
+    expect(productImageForColors("musterring-mr-285", ["black"])).toEqual({
+      src: "/musterring-catalog/mr-285/image-01.jpg",
+      matchedColor: "black"
+    });
+  });
+
+  it("shows MR 285 as a black alternative without claiming its unverified width is around 300 cm", () => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText: "find me a black sofa around 300 cm" });
+    const mr285 = result.closestAlternatives.find((match) => match.productId === "musterring-mr-285");
+    expect(mr285?.benefits).toContain("verified in black");
+    expect(mr285?.unmetRequirements.some((requirement) => /width is not verified.*illustrative value 274 cm.*retailer confirmation/.test(requirement))).toBe(true);
+    expect(result.exactMatches.map((match) => match.productId)).not.toContain("musterring-mr-285");
+  });
+
+  it.each(["find me some oval tables", "find me some oven tables"])("does not present unverified tabletop shapes as exact matches: %s", (requestText) => {
+    const source = products.find((product) => product.id === "musterring-pinero")!;
+    const result = findGroundedAlternatives({ sourceProductId: source.id, requestText });
+    expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["dining table", "oval tabletop"]));
+    expect(result.exactMatches).toHaveLength(0);
+    expect(result.closestAlternatives).toHaveLength(0);
+    expect(result.message).toBe("No catalogue product has a verified oval tabletop shape.");
+  });
+
   it("treats not L-shaped as an exclusion rather than a positive layout requirement", () => {
     const result = findGroundedAlternatives({
       sourceProductId: "musterring-justb-pm200",
@@ -182,6 +254,20 @@ describe("connected Musterring assistant grounding", () => {
       const layouts = products.find((product) => product.id === match.productId)?.layoutShapes ?? [];
       return layouts.length > 0 && !layouts.includes("l-shaped");
     })).toBe(true);
+  });
+
+  it("recognizes 'L sofa' and returns the verified beige L-shaped PM100 presentation", () => {
+    const result = findGroundedAlternatives({
+      sourceProductId: "musterring-justb-pm200",
+      requestText: "find me a L sofa with beige color",
+      strict: true
+    });
+    expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["sofa", "beige colour", "l-shaped layout"]));
+    expect(result.exactMatches.map((match) => match.productId)).toContain("musterring-justb-pm100");
+    expect(productImageForColors("musterring-justb-pm100", ["beige"])).toEqual({
+      src: "/musterring-catalog/justb-pm100/image-01.jpg",
+      matchedColor: "beige"
+    });
   });
 
   it("understands the easier-care quick request as a material requirement", () => {
@@ -302,15 +388,23 @@ describe("connected Musterring assistant grounding", () => {
     ["I need a dining table", "dining-table"],
     ["Find a dining chair", "dining-chair"],
     ["Show me a bed", "bed"],
+    ["Find a mattress", "bed"],
     ["I want a wardrobe", "wardrobe"],
+    ["Show me a kitchen", "kitchen"],
+    ["Find bathroom furniture", "bathroom"],
+    ["Find hallway furniture", "storage"],
     ["Find outdoor garden furniture", "outdoor"],
     ["Show me a rug", "carpet"],
-    ["I need a lamp", "lamp"]
+    ["I need a lamp", "lamp"],
+    ["Show me home textiles", "home-textile"]
   ] as const)("grounds catalogue category query: %s", (query, category) => {
     const answer = answerGroundedQuestion(query, context);
     expect(answer.answerType).toBe("products");
     expect(answer.productIds.length).toBeGreaterThan(0);
-    expect(answer.productIds.every((id) => products.find((product) => product.id === id)?.category === category)).toBe(true);
+    expect(answer.productIds.every((id) => {
+      const product = products.find((item) => item.id === id);
+      return product ? productHasCategory(product, category) : false;
+    })).toBe(true);
   });
 
   it.each(["I want a black sofa", "I want a chair", "Show me a coffee table"])("interprets voice product discovery: %s", (transcript) => {

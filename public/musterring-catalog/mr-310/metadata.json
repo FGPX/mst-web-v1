@@ -1,0 +1,45 @@
+{
+  "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-mr-310",
+  "title": "MR 310",
+  "importedAt": "2026-08-19T12:16:40.027Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-310/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/b/csm_sofa-mr310-leder-beige-motorische-funktion-musterring_5dff4f135b.jpg",
+      "bytes": 713927,
+      "contentType": "image/jpeg",
+      "sha256": "aea31401bacc61fb7e931382c813f4f7ec1138ce85adfc2acb4a959405eb9221"
+    },
+    {
+      "file": "/musterring-catalog/mr-310/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/2/csm_sofa-mr310-leder-beige-kopfteil-musterring_c247dc70c4.jpg",
+      "bytes": 634311,
+      "contentType": "image/jpeg",
+      "sha256": "2d88024567e1cff1873bb1c6cad3c04f3415fa139e834b05e00dd35a3141d221"
+    },
+    {
+      "file": "/musterring-catalog/mr-310/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/9/csm_sofa-mr310-leder-beige-armteil-musterring_566bfa635e.jpg",
+      "bytes": 385336,
+      "contentType": "image/jpeg",
+      "sha256": "318eb158f47596bab979694af82d5adcd93f2cddabeebcbcf34de4d59c224f3b"
+    },
+    {
+      "file": "/musterring-catalog/mr-310/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_sofa-mr310-leder-beige-motorische-funktionen-musterring_2384fe3a45.jpg",
+      "bytes": 702326,
+      "contentType": "image/jpeg",
+      "sha256": "f20c2323e4842089a2840e188502978a092bde984ee3e354b0afa5c95731f1e9"
+    },
+    {
+      "file": "/musterring-catalog/mr-310/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/4/9/csm_MR11323_A_MR310_Print.tif_5c96ba5f32.jpg",
+      "bytes": 358912,
+      "contentType": "image/jpeg",
+      "sha256": "0b9ec76c79d9d449eb68aac14c3465a7083db54a671894f0d2f1cdb07c922687"
+    }
+  ]
+}

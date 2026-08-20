@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/helvin",
   "title": "Helvin",
-  "importedAt": "2026-08-03T08:02:38.636Z",
+  "importedAt": "2026-08-19T12:16:46.527Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/helvin/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/4/csm_esszimmerserie_helvin_stuhl_stoff_gold_tisch_keramik_schwarz_musterring_01_15e508893d.jpg",
       "bytes": 288126,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "cad45cd65dcded115a839a85ce8d9a892006fa61d6e1d62c036ed09b06c8d6b2"
     },
     {
       "file": "/musterring-catalog/helvin/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/3/csm_esszimmerserie_helvin_stuhl_stoff_gold_tisch_keramik_schwarz_musterring_5a55fde230.jpg",
       "bytes": 302138,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d58fee54ec0ce3078456c261b60ed4862c2aa5d4081e8a95a499ab2d61a050ea"
     },
     {
       "file": "/musterring-catalog/helvin/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/a/csm_esszimmerserie_helvin_stuhl_stoff_gold_tisch_keramik_schwarz_musterring_02_53ab92b605.jpg",
       "bytes": 243909,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fbbec1a41913aa5e32bb397f845343d21234342561942cf342e813f89b5cc5a5"
     },
     {
       "file": "/musterring-catalog/helvin/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/e/csm_esszimmerserie_helvin_stuhl_stoff_gold_tisch_keramik_schwarz_musterring_03_1708d0781b.jpg",
       "bytes": 579354,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c9a9bab8527d39c4740d66e57a740fb5d591a53c03688ed58e4126379891dfdb"
     },
     {
       "file": "/musterring-catalog/helvin/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/f/csm_esszimmer-helvin-esstisch-keramik-schwarz-gold-stuhl-gold-musterring_0cca261fce.jpg",
       "bytes": 424552,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5432fa89556186b65a33e84e4b276d2aa8359a6a815dcc73e16e0a6fe2c8b850"
     }
   ]
 }

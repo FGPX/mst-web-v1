@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nilan",
   "title": "Nilan",
-  "importedAt": "2026-08-03T08:02:42.914Z",
+  "importedAt": "2026-08-19T12:16:47.085Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/nilan/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/d/csm_esszimmermoebel-nilan-tisch-stuehle-musterring-01_07e2bc1fbe.jpg",
       "bytes": 629631,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bb21c95058c9eb56bd735b979608dfa8a422ff4df1187266e52e47f3268326d3"
     },
     {
       "file": "/musterring-catalog/nilan/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/b/csm_esstisch-nilan-detailbild-musterring_92276b0ee9.jpg",
       "bytes": 157101,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "f8092fbbb74f609e1d239d97846b75618a29e8b4e3df8c22fb018b0ebe8dd27f"
     },
     {
       "file": "/musterring-catalog/nilan/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/d/csm_armlehnstuhl-nilan-stoff-sand-musterring_83ba08038a.jpg",
       "bytes": 236115,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "00f4f5a956f5d30e22663a3f4a962ff1588f96fbd88eafaaaa752a33b74a94de"
     },
     {
       "file": "/musterring-catalog/nilan/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/9/csm_esstisch-nilan-detailbild-harzf%C3%BCllung-musterring_4574688399.jpg",
       "bytes": 364292,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "469474b4420b64bcc14d671ad80fe258b6f42beddf82db5b8e11404993dbae7a"
     },
     {
       "file": "/musterring-catalog/nilan/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/8/csm_esszimmermoebel-nilan-tisch-stuehel-musterring_275c753b53.jpg",
       "bytes": 441581,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d42114f7a83c018a9e6798dc447a3589c2cb5c72834717922f0575080a0cdf9e"
     }
   ]
 }

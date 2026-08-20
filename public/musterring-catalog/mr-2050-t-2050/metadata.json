@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/mr-2050-/-t-2050",
+  "title": "MR 2050 / T 2050",
+  "importedAt": "2026-08-19T12:16:46.608Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr-2050-t-2050/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/b/csm_esszimmer-mr2050-t2050-stuhl-stoff-braun-tisch-wildnussbaum-metallkufe-bronze-musterring_04d7e77c25.jpg",
+      "bytes": 835160,
+      "contentType": "image/jpeg",
+      "sha256": "5e328f1bfcbfbef233869c9963e10ecaae90f628d90d889d2fba2714df09aa73"
+    },
+    {
+      "file": "/musterring-catalog/mr-2050-t-2050/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/8/csm_esszimmer-mr2050-t2050-Stuhl-bronze-stoff-baumwolle-musterring_f582f968bf.jpg",
+      "bytes": 533965,
+      "contentType": "image/jpeg",
+      "sha256": "33ff06a3269fad7bbfa2b8089f2cc1ecf0471832bef7264a0abf77030a163a47"
+    },
+    {
+      "file": "/musterring-catalog/mr-2050-t-2050/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/f/csm_esszimmer-mr2050-t2050-bank-metallkufe-bronze-stoff-braun-detail-musterring_bca2bedeb1.jpg",
+      "bytes": 1256102,
+      "contentType": "image/jpeg",
+      "sha256": "3a245eb0a2f649d0ea857b1e5bf6ff33870cab9489ecee15204858da7bc563b2"
+    },
+    {
+      "file": "/musterring-catalog/mr-2050-t-2050/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_esszimmer-mr2050-t2050-esstisch-wildnussbaum-musterring_3c66414829.jpg",
+      "bytes": 514356,
+      "contentType": "image/jpeg",
+      "sha256": "5e1cbb038d2a489369b3af3f1e9526aa94777e3c1a8fd88bb26348591a9e8a14"
+    },
+    {
+      "file": "/musterring-catalog/mr-2050-t-2050/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_esszimmer-mr2050-t2050-hpl-grau-stoff-leder-schwarz-musterring_701a0df225.jpg",
+      "bytes": 1035263,
+      "contentType": "image/jpeg",
+      "sha256": "8dd0aebb38e883c7d7b3c14c28170cd0fe03740a16b6666ac7ec399dfb6d5e38"
+    },
+    {
+      "file": "/musterring-catalog/mr-2050-t-2050/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_esszimmer-mr2050-t2050-esstisch-hpl-beton-grau-musterring_ca2a935e26.jpg",
+      "bytes": 441225,
+      "contentType": "image/jpeg",
+      "sha256": "a87748c6074e33cb616ac21c746eff615b870797ae33463a1f564c91ec14ae48"
+    },
+    {
+      "file": "/musterring-catalog/mr-2050-t-2050/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/8/csm_esszimmer-mr2050-t2050-esstisch-hpl-grau-stoff-musterring_566da494d3.jpg",
+      "bytes": 845318,
+      "contentType": "image/jpeg",
+      "sha256": "f5bcfeacb80d3818f1eb8af11fcfc15cf0affba2558d7ebc308bc57d891bdfe4"
+    },
+    {
+      "file": "/musterring-catalog/mr-2050-t-2050/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/6/csm_esszimmer-mr2050-t2050-stoff-grau-musterring_842234cd84.jpg",
+      "bytes": 460951,
+      "contentType": "image/jpeg",
+      "sha256": "2302e79f61ae79909490eaa7ebc81d8a46ef9e22574b042801cfe8f93b1febdd"
+    }
+  ]
+}

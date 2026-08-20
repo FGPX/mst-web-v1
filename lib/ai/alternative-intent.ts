@@ -1,5 +1,6 @@
 import type { AlternativeRequest } from "./assistant-schemas";
 import { normalizeSearchText, parseSearchQuery } from "../search";
+import { canonicalFunctionTags, canonicalMaterialTag } from "./alternative-grounding";
 
 type ExtractedAlternativeRequirements = {
   category: AlternativeRequest["category"] | null;
@@ -38,7 +39,7 @@ function explicitFunction(text: string, value: string) {
   if (normalized === "relax") return /\brelax|\brecline|\blounge\b/.test(text);
   if (normalized === "electric") return /\belectric|\bmotor|\bpower\b/.test(text);
   if (normalized === "easy-care") return /\beasy[- ]care|\beasy to clean|\blow[- ]maintenance\b/.test(text);
-  return new RegExp(`\\b${normalized.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text);
+  return false;
 }
 
 function explicitlyExcludedFunction(text: string, value: string) {
@@ -53,7 +54,7 @@ function explicitMaterial(text: string, value: string) {
   if (normalized === "easy-care") return /\beasy[- ]care|\beasy to clean|\blow[- ]maintenance\b/.test(text);
   if (normalized === "family") return /\bfamily|\bchildren|\bkids?\b/.test(text);
   if (normalized === "pet") return /\bpets?|\bdogs?|\bcats?\b/.test(text);
-  return new RegExp(`\\b${normalized.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text);
+  return false;
 }
 
 /**
@@ -98,18 +99,26 @@ export function validatedAIAlternativeRequirements(
   // Relative wording such as "higher seat" is resolved against the source
   // product by the deterministic matcher. AI may only supply an absolute seat
   // height when the user wrote an explicit number.
-  if (extracted.minSeatHeightMm && /(?:seat height|seat)[^0-9]{0,20}\d{2,3}\s*(?:cm|mm)\b/.test(text)) {
+  const hasExplicitSeatHeight = /\bseat height\s*(?:(?:of|at least|minimum|min\.?|over|above)\s*)?\d{2,3}\s*(?:cm|mm)\b/.test(text)
+    || /\b\d{2,3}\s*(?:cm|mm)\s+seat height\b/.test(text);
+  if (extracted.minSeatHeightMm && hasExplicitSeatHeight) {
     result.minSeatHeightMm = extracted.minSeatHeightMm;
   }
 
-  const requiredFunctions = extracted.requiredFunctions.filter((value) => explicitFunction(text, value));
-  if (requiredFunctions.length) result.requiredFunctions = [...new Set(requiredFunctions.map((value) => value.toLowerCase()))];
+  const requiredFunctions = extracted.requiredFunctions
+    .flatMap(canonicalFunctionTags)
+    .filter((value) => explicitFunction(text, value));
+  if (requiredFunctions.length) result.requiredFunctions = [...new Set(requiredFunctions)];
 
-  const excludedFunctions = extracted.excludedFunctions.filter((value) => explicitlyExcludedFunction(text, value));
-  if (excludedFunctions.length) result.excludedFunctions = [...new Set(excludedFunctions.map((value) => value.toLowerCase()))];
+  const excludedFunctions = extracted.excludedFunctions
+    .flatMap(canonicalFunctionTags)
+    .filter((value) => explicitlyExcludedFunction(text, value));
+  if (excludedFunctions.length) result.excludedFunctions = [...new Set(excludedFunctions)];
 
-  const materialTags = extracted.materialTags.filter((value) => explicitMaterial(text, value));
-  if (materialTags.length) result.materialTags = [...new Set(materialTags.map((value) => value.toLowerCase()))];
+  const materialTags = extracted.materialTags
+    .map(canonicalMaterialTag)
+    .filter((value) => explicitMaterial(text, value));
+  if (materialTags.length) result.materialTags = [...new Set(materialTags)];
 
   if (extracted.preserveStyle && /\b(?:same|similar|preserve|keep)\s+(?:the\s+)?style\b/.test(text)) result.preserveStyle = true;
   if (extracted.preserveComfort && /\b(?:same|similar|preserve|keep)\s+(?:the\s+)?comfort\b/.test(text)) result.preserveComfort = true;

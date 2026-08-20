@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/madiva",
   "title": "Madiva",
-  "importedAt": "2026-08-03T08:02:16.519Z",
+  "importedAt": "2026-08-19T12:16:44.770Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/madiva/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_schlafzimmer-madiva-kopfteil-doppelbett-mit-lisenen-anthrazit-led-beleuchtung-balkeneiche-furniert-detail-musterring_e3ebf8155d.jpg",
       "bytes": 507809,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "abaa0462891ddd4c2b00260359c2933c19954020e2f65b67426c654d4b12d73f"
     },
     {
       "file": "/musterring-catalog/madiva/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/6/csm_schlafzimmer-madiva-kopfteil-doppelbett-mit-lisenen-anthrazit-led-beleuchtung-balkeneiche-furniert-musterring_fe07855377.jpg",
       "bytes": 710746,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8a210df31e2cff7a4ea1dca3e8a6b2fa3edbb7d559b6d9979e97db3dcd5e8329"
     },
     {
       "file": "/musterring-catalog/madiva/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/d/csm_schlafzimmer-madiva-dreht%C3%BCrenschrank-bauchbinde-mit-lisenen-anthrazit-balkeneiche-furniert-absetzung-lack-wei%C3%9F-detail-musterring_3e4591f7bc.jpg",
       "bytes": 311690,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1259eec4dd14b10ad417db2c5f9c66f532de86e4ce1b7c38c47cdee87bd7536c"
     },
     {
       "file": "/musterring-catalog/madiva/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/b/csm_schlafzimmer-madiva-bett-fu%C3%9Fteil-mit-kufe-mit-lisenen-anthrazit-detail-musterring_f6dd7a5814.jpg",
       "bytes": 423715,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b45ad111f3bf3ca4b6cd65d19288e8fa80ca81beab6aa79a34d44e353101fabc"
     },
     {
       "file": "/musterring-catalog/madiva/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/2/csm_schlafzimmer-madiva-kopfteil-doppelbett-mit-lisenen-anthrazit-led-beleuchtung-balkeneiche-furniert-aufsatzpaneel-mit-glasboden-h%C3%A4ngekonsole-detail-musterring_051d1c933a.jpg",
       "bytes": 629328,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c8150c1ef51391736bc67814f230a47bf174ce318825a97fc9cfae757f70be74"
     },
     {
       "file": "/musterring-catalog/madiva/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/f/csm_schlafzimmer-madiva-kommode-balkeneiche-furniert-absetzung-lack-manhattan-frontal-musterring_2626cb8629.jpg",
       "bytes": 660843,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "97975ded7b29fcc00d87682f4271f295dbe58460d43d3f31e51ac25ae0b919bc"
     },
     {
       "file": "/musterring-catalog/madiva/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/f/csm_schlafzimmer-madiva-aufsatzpaneel-mit-glasboden-led-beleuchtung-detail-musterring_a73647c6c5.jpg",
       "bytes": 1063372,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "025314eddb880d8ee404730f38c5c114226856747c6e19aded4d5cb1f4f2a64b"
     },
     {
       "file": "/musterring-catalog/madiva/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/3/csm_schlafzimmer-madiva-bettfu%C3%9Fteil-mit-lisenen-anthrazit-schwebendes-Liegenfu%C3%9Fteil-balkeneiche-furniert-absetzung-lack-manhattan-detail-musterring_8d0bf530bc.jpg",
       "bytes": 862570,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3b81bfe0305a1217566d19058be82e8ecf2a3ed18e3429d1dc8043791e16709e"
     }
   ]
 }

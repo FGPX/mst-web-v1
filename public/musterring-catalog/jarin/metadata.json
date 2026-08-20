@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bathroom/jarin",
+  "title": "Jarin",
+  "importedAt": "2026-08-19T12:16:58.191Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/jarin/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/3/csm_badezimmermoebel_jarin_wildeiche_musterring_04_0bb8e3e615.jpg",
+      "bytes": 393429,
+      "contentType": "image/jpeg",
+      "sha256": "c6487b40564c95072fe34dbabb54d133cca00aecd9575b2ffd6158a3c1661895"
+    },
+    {
+      "file": "/musterring-catalog/jarin/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/0/csm_badezimmermoebel_jarin_wildeiche_musterring_03_bc2831f591.jpg",
+      "bytes": 498844,
+      "contentType": "image/jpeg",
+      "sha256": "1730c780fa44d3ea5f17bb5d740b2b017f73b12a2d95b4fc713325906af3f0c0"
+    },
+    {
+      "file": "/musterring-catalog/jarin/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/2/csm_badezimmermoebel_jarin_wildeiche_musterring_bf544faf13.jpg",
+      "bytes": 563465,
+      "contentType": "image/jpeg",
+      "sha256": "f70d5c1054437531874467526a9a7cffb7c4e7f27b2b3d77f7be9adb6d02abe2"
+    },
+    {
+      "file": "/musterring-catalog/jarin/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/a/csm_badezimmermoebel_jarin_wildeiche_musterring_02_a863e49833.jpg",
+      "bytes": 484892,
+      "contentType": "image/jpeg",
+      "sha256": "779515563f1423893b4b203314b2e7d554f6f2680f31311ba2ad1432a96f472e"
+    },
+    {
+      "file": "/musterring-catalog/jarin/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_badezimmermoebel_jarin_eiche_musterring_04_f90e38532c.jpg",
+      "bytes": 512201,
+      "contentType": "image/jpeg",
+      "sha256": "0c434d822d244fdcc6205a201e3406df73631379dd5f42d802ebfe9e28a2e16e"
+    },
+    {
+      "file": "/musterring-catalog/jarin/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/8/csm_badezimmermoebel_jarin_eiche_musterring_05_eb83d2d1af.jpg",
+      "bytes": 592381,
+      "contentType": "image/jpeg",
+      "sha256": "ac0431bd40613fbd718085bd87b409cef12f001ac6a1e09af1b649a573b6072e"
+    },
+    {
+      "file": "/musterring-catalog/jarin/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_badezimmermoebel_jarin_eiche_musterring_01_e8f568aeb0.jpg",
+      "bytes": 662667,
+      "contentType": "image/jpeg",
+      "sha256": "73f05808d1690fd898e981cf86214ef9a4d3d455ec81f2df56e0d5d5d2a1b88c"
+    },
+    {
+      "file": "/musterring-catalog/jarin/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/9/csm_badezimmermoebel_jarin_eiche_musterring_ff62af5cd5.jpg",
+      "bytes": 393990,
+      "contentType": "image/jpeg",
+      "sha256": "390b29e1d716b082e3413e7cd6c78eb7ded6132dbaf9bad6991e96bd6ff61f1c"
+    }
+  ]
+}

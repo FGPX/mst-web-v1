@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/coffee-tables-side-tables/justb-ct100",
-  "title": "JUSTB! CT100",
-  "importedAt": "2026-08-03T08:02:09.274Z",
+  "title": "JustB! CT100",
+  "importedAt": "2026-08-19T12:16:44.009Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/justb-ct100/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/a/csm_justb-ct100-couchtisch-wildeicher-musterring_4c69c39caa.jpg",
       "bytes": 351922,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2047a6ce2542599a1613cfc560a7687766dabb2c026560597d9d7d94a51d4059"
     },
     {
       "file": "/musterring-catalog/justb-ct100/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/3/csm_justb-ct100-couchtische-eiche-schwarz-wildeiche-musterring_4061a992a1.jpg",
       "bytes": 1109927,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2f512d885808b462613c37743f2012fd393e07990ddd03a5a4612eb94250903f"
     },
     {
       "file": "/musterring-catalog/justb-ct100/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/d/csm_justb-ct100-couchtisch-tablett-eiche-schwarz-musterring_69263fc96a.jpg",
       "bytes": 1281229,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e98babca53d852ef4ae85bdfd69a6722272213ad78184bfa77b089341a806dad"
     },
     {
       "file": "/musterring-catalog/justb-ct100/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/9/csm_justb-ct100-couchtisch-wildeiche-eiche-schwarz-musterring_93ef01195e.jpg",
       "bytes": 210433,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "be01ef911807eadcc6ff335bfbb435c1332aaba823b314dbbe64f78ff8260415"
     },
     {
       "file": "/musterring-catalog/justb-ct100/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_justb-couchtische-ct100-eiche-schwarz-musterring_6a974e4c05.jpg",
       "bytes": 690328,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "bbc404ed3f765323865062e7a34ca7d3c7b81f63d3782167eea9733bf2a94eb8"
     },
     {
       "file": "/musterring-catalog/justb-ct100/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/0/csm_justb-couchtische-ct100-eiche-schwarz-musterring-02_7c40be7033.jpg",
       "bytes": 256056,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d3c93113403bd200bce83295f2363109a1e3c2fa214423fa63c6e966b1ff3c69"
     },
     {
       "file": "/musterring-catalog/justb-ct100/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/8/csm_justb-couchtische-ct100-eiche-schwarz-musterring-01_e99d5bd27b.jpg",
       "bytes": 377466,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c41069932d8000d0f7297bedb9792b48cb6445b68a94bf4a982866ec51eba193"
     },
     {
       "file": "/musterring-catalog/justb-ct100/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/3/csm_justb-couchtische-ct100-musterring_b2ded70657.jpg",
       "bytes": 178656,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "dcf4d5b13ded65206972da460bc9524903070f83d5945eaf07c5461d9565e329"
     }
   ]
 }

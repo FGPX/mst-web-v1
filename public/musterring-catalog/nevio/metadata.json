@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nevio",
   "title": "Nevio",
-  "importedAt": "2026-08-03T08:02:42.234Z",
+  "importedAt": "2026-08-19T12:16:46.934Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/nevio/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_esszimmer-nevio-stuhl-rosa-musterring_577e7a8d0e.jpg",
       "bytes": 676956,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2df440cac9bc1e13b7f6f9a082ebb133a5feb3ebc2f5cd5f2665ec97f72d5453"
     },
     {
       "file": "/musterring-catalog/nevio/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/7/csm_esszimmer-nevio-stuhl-beige-musterring_02_4221c617e5.jpg",
       "bytes": 787995,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9493c92ba0973a0f19c4a97b8beaad2941b76dc608d7b6671376b1c499daeb48"
     },
     {
       "file": "/musterring-catalog/nevio/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_esszimmer-nevio-stuhl-beige-orange-esstisch-wei%C3%9F-musterring_433b40f945.jpg",
       "bytes": 518101,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "da045472e24dd7d778d7d6b750061b0326b0eee4ac25e57ff45edb4e06aaeb9f"
     },
     {
       "file": "/musterring-catalog/nevio/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/4/csm_esszimmer-nevio-stuhl-beige-musterring_95e08d1074.jpg",
       "bytes": 884135,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4b826e9ac41e01f9395d66aa4810cd7672bacfcaf4d38f7036207a602cd61b92"
     },
     {
       "file": "/musterring-catalog/nevio/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/a/csm_esszimmer-nevio-stuhl-beige-musterring_01_20057347f9.jpg",
       "bytes": 710913,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "738860235ab7eba9e3dd4051ac3fd0098eb7ed3b8b71def9b164da661e92993f"
     },
     {
       "file": "/musterring-catalog/nevio/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/d/csm_esszimmer-nevio-esstisch-wei%C3%9F-stuhl-beige-musterring_ecaaa815ca.jpg",
       "bytes": 592723,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a8b7d3d1ab50ab35a8a2b748c9c6f14e92f5de726e13233325c757b67ff89c3d"
     },
     {
       "file": "/musterring-catalog/nevio/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/6/csm_esszimmer-nevio-stuhl-stoff-blau-grau-leder-grau-musterring_3fe4320f3b.jpg",
       "bytes": 1189851,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4fdb520ec18e0a6794af8b0dbc005d8c944d456b9945a99bd0e251aeec5580bc"
     },
     {
       "file": "/musterring-catalog/nevio/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/e/csm_esszimmer-nevio-armlehnstuhl-stoff-leder-grau-musterring_af9ed96f33.jpg",
       "bytes": 449198,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1310c9cdbab83123e776a3fb16cc3b15973e4f6ca54ec5cc6378282544c2cc35"
     }
   ]
 }

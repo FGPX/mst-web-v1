@@ -17,6 +17,7 @@ export const alternativeRequestSchema = z.object({
   targetWidthMm: z.number().int().positive().optional(),
   layoutShapes: z.array(z.enum(["straight", "l-shaped", "u-shaped", "corner", "island"])).max(5).optional(),
   excludedLayoutShapes: z.array(z.enum(["straight", "l-shaped", "u-shaped", "corner", "island"])).max(5).optional(),
+  tabletopShapes: z.array(z.enum(["oval", "round", "square", "rectangular"])).max(4).optional(),
   minSeatHeightMm: z.number().int().nonnegative().optional(),
   requiredFunctions: z.array(z.string()).max(20).optional(),
   excludedFunctions: z.array(z.string()).max(20).optional(),
@@ -34,6 +35,7 @@ export const alternativeMatchSchema = z.object({
   benefits: z.array(z.string()),
   tradeOffs: z.array(z.string()),
   unmetRequirements: z.array(z.string()),
+  demoFactsUsed: z.array(z.string()),
   explanation: z.string()
 });
 

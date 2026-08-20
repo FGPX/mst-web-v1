@@ -1,13 +1,16 @@
 import { materials, products } from "./data";
 import { validateConfiguration } from "./configurator";
 import { parseSearchQuery, productMatches, searchColorTerms, searchProductsRanked } from "./search";
-import type { Configuration, Material, Product } from "./types";
+import { productHasCategory, type Configuration, type Material, type Product } from "./types";
 import {
   advisorAnswerSchema, alternativeRequestSchema, alternativeResponseSchema, materialAdviceSchema,
   voiceCommandSchema, type AdvisorAnswer, type AlternativeRequest, type AlternativeResponse,
   type ConversationContext, type MaterialAdvice, type VoiceCommand
 } from "./ai/assistant-schemas";
 import { extractExcludedLayoutShapes } from "./ai/alternative-intent";
+import { extractTabletopShapes } from "./ai/alternative-grounding";
+import { hasDemoColourPresentation, hasVerifiedColourPresentation } from "./musterring-assets";
+import { demoFactsFor } from "./demo-search-metadata";
 
 const colors = searchColorTerms;
 
@@ -52,6 +55,7 @@ function requestedAlternative(input: AlternativeRequest, source: Product) {
   const search = parseSearchQuery(input.requestText ?? "");
   const excludedLayoutShapes = extractExcludedLayoutShapes(input.requestText ?? "");
   const requestedLayoutShapes = (search.layoutShapes ?? input.layoutShapes ?? []).filter((shape) => !excludedLayoutShapes.includes(shape));
+  const parsedTabletopShapes = extractTabletopShapes(input.requestText ?? "");
   const easyCareRequested = /\b(?:easy|easier|easiest)[- ](?:care|clean)|easy to (?:care for|clean)|low[- ]maintenance\b/.test(text);
   const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
   const parsedWidth = search.minWidthMm !== undefined || search.maxWidthMm !== undefined || search.targetWidthMm !== undefined;
@@ -66,14 +70,20 @@ function requestedAlternative(input: AlternativeRequest, source: Product) {
     styles: [...new Set([...(input.styles ?? []), ...(search.styles ?? [])].map((value) => value.toLowerCase()))],
     layoutShapes: requestedLayoutShapes.length ? requestedLayoutShapes : undefined,
     excludedLayoutShapes: [...new Set([...(input.excludedLayoutShapes ?? []), ...excludedLayoutShapes])],
+    tabletopShapes: input.tabletopShapes ?? (parsedTabletopShapes.length ? parsedTabletopShapes : undefined),
     numberOfSeats: search.seatCount ?? input.numberOfSeats,
     maxWidthMm: narrower ? source.widthMm - Number(narrower[1]) * 10 : parsedWidth ? search.maxWidthMm : input.maxWidthMm ?? (/\b(?:smaller|more compact|narrower)\b/.test(text) ? source.widthMm - 10 : undefined),
     minWidthMm: parsedWidth ? search.minWidthMm : input.minWidthMm,
     targetWidthMm: parsedWidth ? targetWidthMm : input.targetWidthMm ?? targetWidthMm,
     minSeatHeightMm: input.minSeatHeightMm ?? (/higher seat|high[- ]seat|tall/.test(text) ? source.seatHeightMm + 10 : undefined),
-    requiredFunctions: [...new Set([...(input.requiredFunctions ?? []), ...(/relax/.test(text) ? ["relax"] : []), ...(/modular/.test(text) ? ["modular"] : [])])],
+    requiredFunctions: [...new Set([
+      ...(input.requiredFunctions ?? []),
+      ...(/\b(?:relax|recline|lounge)\b/.test(text) ? ["relax"] : []),
+      ...(/\b(?:electric|motor(?:ized|ised)?|power)\b/.test(text) ? ["electric"] : []),
+      ...(/\b(?:modular|module|flexible)\b/.test(text) ? ["modular"] : [])
+    ])],
     excludedFunctions: [...new Set([...(input.excludedFunctions ?? []), ...(/without electric|non-electric|no electric/.test(text) ? ["electric"] : [])])],
-    materialTags: [...new Set([...(input.materialTags ?? []), ...(/\bleather\b/.test(text) ? ["leather"] : []), ...(/\b(?:fabric|textile|boucle|chenille|velvet)\b/.test(text) ? ["fabric"] : []), ...(easyCareRequested || /children|family|pets?|dog/.test(text) ? ["easy-care"] : [])])],
+    materialTags: [...new Set([...(input.materialTags ?? []), ...(/\bleather\b/.test(text) ? ["leather"] : []), ...(/\b(?:fabric|textile|boucle|chenille|velvet)\b/.test(text) ? ["fabric"] : []), ...(easyCareRequested || /children|family[- ]friendly|family household|pets?|dog/.test(text) ? ["easy-care"] : [])])],
     preserveStyle: input.preserveStyle ?? /same style|similar style/.test(text),
     preserveComfort: input.preserveComfort ?? /same comfort/.test(text)
   });
@@ -84,9 +94,25 @@ function hasFunction(product: Product, value: string) {
   return product.verifiedFacts.functions.some((item) => item.toLowerCase().includes(value.toLowerCase()));
 }
 
+function functionMatch(product: Product, value: string) {
+  if (hasFunction(product, value)) return { ok: true, demo: false };
+  const functions = demoFactsFor(product.id)?.functions ?? [];
+  const ok = functions.some((item) => item.toLowerCase().includes(value.toLowerCase()));
+  return { ok, demo: ok };
+}
+
 function hasMaterialTag(product: Product, tag: string) {
   if (tag === "easy-care" || tag === "family" || tag === "pet") return product.verifiedFacts.easyCare;
   return product.verifiedFacts.materialTypes.includes(tag as "fabric" | "leather");
+}
+
+function materialTagMatch(product: Product, tag: string) {
+  if (hasMaterialTag(product, tag)) return { ok: true, demo: false };
+  const demo = demoFactsFor(product.id);
+  const ok = tag === "easy-care" || tag === "family" || tag === "pet"
+    ? demo?.easyCare === true
+    : demo?.materialTypes?.includes(tag as "fabric" | "leather") ?? false;
+  return { ok, demo: ok };
 }
 
 const relatedColourGroups = [
@@ -101,9 +127,13 @@ function clampScore(value: number) {
 }
 
 function colourCloseness(requested: string, available: string[]) {
-  if (available.includes(requested)) return 1;
+  if (available.some((color) => color === requested || color.split(/[^a-z]+/).includes(requested))) return 1;
   const group = relatedColourGroups.find((values) => values.includes(requested));
   return group && available.some((color) => group.includes(color)) ? 0.55 : 0;
+}
+
+function hasVerifiedColour(product: Product, requested: string) {
+  return product.verifiedFacts.colors.some((color) => color === requested || color.split(/[^a-z]+/).includes(requested));
 }
 
 function softPreferenceTokens(text: string) {
@@ -122,56 +152,76 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
   if (!source) throw new Error("Unknown source Product ID.");
   const request = requestedAlternative(raw, source);
   const requestedCategory = request.category ?? source.category;
-  const candidates = products.filter((product) => product.active && product.id !== source.id && product.category === requestedCategory);
+  const candidates = products.filter((product) => product.active && product.id !== source.id && productHasCategory(product, requestedCategory));
   const preferenceTokens = softPreferenceTokens(request.requestText ?? "");
   const ranked = candidates.map((product) => {
-    const checks: Array<{ ok: boolean; label: string; closeness: number }> = [];
+    const demo = demoFactsFor(product.id);
+    const checks: Array<{ ok: boolean; label: string; closeness: number; demoFact?: string }> = [];
     for (const value of request.colorFamilies ?? []) {
       const closeness = colourCloseness(value, product.verifiedFacts.colors);
-      const verified = product.verifiedFacts.colors.includes(value);
+      const verified = hasVerifiedColour(product, value);
+      const hasMatchingPresentation = verified && hasVerifiedColourPresentation(product.id, value);
+      const demoColor = demo?.colors?.some((color) => color === value || color.split(/[^a-z]+/).includes(value)) ?? false;
+      const hasDemoPresentation = !hasMatchingPresentation && demoColor && hasDemoColourPresentation(product.id, value);
       checks.push({
-        ok: verified,
-        label: verified ? `verified in ${value}` : `${value} colour is not verified for this product`,
-        closeness
+        ok: hasMatchingPresentation || hasDemoPresentation,
+        label: hasMatchingPresentation
+          ? `verified in ${value}`
+          : hasDemoPresentation
+            ? `illustrative ${value} presentation`
+          : verified
+            ? `${value} colour is available, but no matching catalogue image is verified`
+            : `${value} colour is not verified for this product`,
+        closeness: hasMatchingPresentation || hasDemoPresentation ? 1 : verified ? 0.75 : closeness,
+        demoFact: hasDemoPresentation ? `${value} colour presentation` : undefined
       });
     }
     for (const value of request.styles ?? []) {
       const exact = product.verifiedFacts.styles.some((style) => style.toLowerCase().includes(value));
       const related = product.verifiedFacts.styles.some((style) => style.toLowerCase().split(/\s+/).some((term) => value.includes(term)));
-      checks.push({ ok: exact, label: `matches ${value} style`, closeness: exact ? 1 : related ? 0.5 : 0 });
+      const demoExact = !exact && (demo?.styles?.some((style) => style.toLowerCase().includes(value)) ?? false);
+      checks.push({ ok: exact || demoExact, label: `matches ${value} style`, closeness: exact || demoExact ? 1 : related ? 0.5 : 0, demoFact: demoExact ? `${value} style` : undefined });
     }
     if (request.numberOfSeats) {
-      const difference = Math.abs(product.numberOfSeats - request.numberOfSeats);
+      const seatCount = product.numberOfSeatsVerified ? product.numberOfSeats : demo?.numberOfSeats;
+      const difference = seatCount === undefined ? request.numberOfSeats : Math.abs(seatCount - request.numberOfSeats);
       checks.push({
-        ok: product.numberOfSeatsVerified && difference === 0,
-        label: product.numberOfSeatsVerified ? `must have ${request.numberOfSeats} seats` : "seat count is not verified in the connected catalogue",
-        closeness: product.numberOfSeatsVerified ? clampScore(1 - difference / Math.max(2, request.numberOfSeats)) : 0
+        ok: seatCount !== undefined && difference === 0,
+        label: seatCount !== undefined ? `must have ${request.numberOfSeats} seats` : "seat count is not verified in the connected catalogue",
+        closeness: seatCount !== undefined ? clampScore(1 - difference / Math.max(2, request.numberOfSeats)) : 0,
+        demoFact: !product.numberOfSeatsVerified && seatCount !== undefined ? `${request.numberOfSeats}-seat configuration` : undefined
       });
     }
     if (request.maxWidthMm) {
-      const excess = Math.max(0, product.widthMm - request.maxWidthMm);
-      checks.push({ ok: product.verifiedFacts.dimensions && excess === 0, label: product.verifiedFacts.dimensions ? `width must be at most ${Math.round(request.maxWidthMm / 10)} cm` : "width is not verified in the connected catalogue", closeness: product.verifiedFacts.dimensions ? clampScore(1 - excess / Math.max(500, request.maxWidthMm * 0.35)) : 0 });
+      const width = product.verifiedFacts.dimensions ? product.widthMm : demo?.widthMm;
+      const excess = width === undefined ? request.maxWidthMm : Math.max(0, width - request.maxWidthMm);
+      checks.push({ ok: width !== undefined && excess === 0, label: width !== undefined ? `width must be at most ${Math.round(request.maxWidthMm / 10)} cm` : "width is not verified in the connected catalogue", closeness: width !== undefined ? clampScore(1 - excess / Math.max(500, request.maxWidthMm * 0.35)) : 0, demoFact: !product.verifiedFacts.dimensions && width !== undefined ? `width is not verified in the connected catalogue; illustrative value ${Math.round(width / 10)} cm` : undefined });
     }
     if (request.minWidthMm) {
-      const deficit = Math.max(0, request.minWidthMm - product.widthMm);
-      checks.push({ ok: product.verifiedFacts.dimensions && deficit === 0, label: product.verifiedFacts.dimensions ? `width must be at least ${Math.round(request.minWidthMm / 10)} cm` : "width is not verified in the connected catalogue", closeness: product.verifiedFacts.dimensions ? clampScore(1 - deficit / Math.max(500, request.minWidthMm * 0.35)) : 0 });
+      const width = product.verifiedFacts.dimensions ? product.widthMm : demo?.widthMm;
+      const deficit = width === undefined ? request.minWidthMm : Math.max(0, request.minWidthMm - width);
+      checks.push({ ok: width !== undefined && deficit === 0, label: width !== undefined ? `width must be at least ${Math.round(request.minWidthMm / 10)} cm` : "width is not verified in the connected catalogue", closeness: width !== undefined ? clampScore(1 - deficit / Math.max(500, request.minWidthMm * 0.35)) : 0, demoFact: !product.verifiedFacts.dimensions && width !== undefined ? `width is not verified in the connected catalogue; illustrative value ${Math.round(width / 10)} cm` : undefined });
     }
     if (request.targetWidthMm) {
-      const difference = Math.abs(product.widthMm - request.targetWidthMm);
+      const width = product.verifiedFacts.dimensions ? product.widthMm : demo?.widthMm;
+      const difference = width === undefined ? request.targetWidthMm : Math.abs(width - request.targetWidthMm);
       const tolerance = Math.max(100, Math.round(request.targetWidthMm * 0.03));
       checks.push({
-        ok: product.verifiedFacts.dimensions && difference <= tolerance,
-        label: product.verifiedFacts.dimensions ? `width should be around ${Math.round(request.targetWidthMm / 10)} cm` : "width is not verified in the connected catalogue",
-        closeness: product.verifiedFacts.dimensions ? clampScore(1 - difference / Math.max(500, request.targetWidthMm * 0.25)) : 0
+        ok: width !== undefined && difference <= tolerance,
+        label: width !== undefined ? `width should be around ${Math.round(request.targetWidthMm / 10)} cm` : "width is not verified in the connected catalogue",
+        closeness: width !== undefined ? clampScore(1 - difference / Math.max(500, request.targetWidthMm * 0.25)) : 0,
+        demoFact: !product.verifiedFacts.dimensions && width !== undefined ? `width is not verified in the connected catalogue; illustrative value ${Math.round(width / 10)} cm` : undefined
       });
     }
     if (request.minSeatHeightMm) {
-      const deficit = Math.max(0, request.minSeatHeightMm - product.seatHeightMm);
-      checks.push({ ok: product.verifiedFacts.seatHeight && deficit === 0, label: product.verifiedFacts.seatHeight ? `seat height must be at least ${request.minSeatHeightMm} mm` : "seat height is not verified in the connected catalogue", closeness: product.verifiedFacts.seatHeight ? clampScore(1 - deficit / 120) : 0 });
+      const seatHeight = product.verifiedFacts.seatHeight ? product.seatHeightMm : demo?.seatHeightMm;
+      const deficit = seatHeight === undefined ? request.minSeatHeightMm : Math.max(0, request.minSeatHeightMm - seatHeight);
+      checks.push({ ok: seatHeight !== undefined && deficit === 0, label: seatHeight !== undefined ? `seat height must be at least ${request.minSeatHeightMm} mm` : "seat height is not verified in the connected catalogue", closeness: seatHeight !== undefined ? clampScore(1 - deficit / 120) : 0, demoFact: !product.verifiedFacts.seatHeight && seatHeight !== undefined ? `illustrative ${Math.round(seatHeight / 10)} cm seat height` : undefined });
     }
     for (const value of request.layoutShapes ?? []) {
-      const matchesShape = product.layoutShapes?.includes(value) ?? false;
-      checks.push({ ok: matchesShape, label: `requires verified ${value} layout`, closeness: matchesShape ? 1 : 0 });
+      const verifiedShape = product.layoutShapes?.includes(value) ?? false;
+      const demoShape = !verifiedShape && (demo?.layoutShapes?.includes(value) ?? false);
+      checks.push({ ok: verifiedShape || demoShape, label: `requires ${value} layout`, closeness: verifiedShape || demoShape ? 1 : 0, demoFact: demoShape ? `${value} layout` : undefined });
     }
     for (const value of request.excludedLayoutShapes ?? []) {
       const verifiedLayouts = product.layoutShapes ?? [];
@@ -183,9 +233,27 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
         closeness: hasVerifiedLayout && !hasExcludedLayout ? 1 : 0
       });
     }
-    for (const value of request.requiredFunctions ?? []) checks.push({ ok: hasFunction(product, value), label: `requires ${value}`, closeness: hasFunction(product, value) ? 1 : 0 });
-    for (const value of request.excludedFunctions ?? []) checks.push({ ok: !hasFunction(product, value), label: `must not include ${value}`, closeness: !hasFunction(product, value) ? 1 : 0 });
-    for (const value of request.materialTags ?? []) checks.push({ ok: hasMaterialTag(product, value), label: `requires ${value} material metadata`, closeness: hasMaterialTag(product, value) ? 1 : 0 });
+    for (const value of request.tabletopShapes ?? []) {
+      const verifiedShapes = product.tabletopShapes ?? [];
+      const matchesShape = verifiedShapes.includes(value);
+      checks.push({
+        ok: matchesShape,
+        label: matchesShape ? `verified ${value} tabletop` : `${value} tabletop shape is not verified for this product`,
+        closeness: matchesShape ? 1 : 0
+      });
+    }
+    for (const value of request.requiredFunctions ?? []) {
+      const match = functionMatch(product, value);
+      checks.push({ ok: match.ok, label: `requires ${value}`, closeness: match.ok ? 1 : 0, demoFact: match.demo ? `${value} function` : undefined });
+    }
+    for (const value of request.excludedFunctions ?? []) {
+      const match = functionMatch(product, value);
+      checks.push({ ok: !match.ok, label: `must not include ${value}`, closeness: !match.ok ? 1 : 0 });
+    }
+    for (const value of request.materialTags ?? []) {
+      const match = materialTagMatch(product, value);
+      checks.push({ ok: match.ok, label: `requires ${value} material metadata`, closeness: match.ok ? 1 : 0, demoFact: match.demo ? `${value} material` : undefined });
+    }
     if (request.preserveStyle) {
       const overlap = source.verifiedFacts.styles.filter((style) => product.verifiedFacts.styles.includes(style)).length;
       checks.push({ ok: overlap > 0, label: "style is not verified as equivalent", closeness: clampScore(overlap / Math.max(1, source.verifiedFacts.styles.length)) });
@@ -194,14 +262,20 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       const overlap = source.verifiedFacts.comfort && product.verifiedFacts.comfort ? source.comfortOptions.filter((option) => product.comfortOptions.includes(option)).length : 0;
       checks.push({ ok: overlap > 0, label: "comfort equivalence is not verified", closeness: clampScore(overlap / Math.max(1, source.comfortOptions.length)) });
     }
-    const unmet = checks.filter((check) => !check.ok).map((check) => check.label);
+    const demoFactsUsed = [...new Set(checks.filter((check) => check.demoFact).map((check) => check.demoFact!))];
+    const unmet = [
+      ...checks.filter((check) => !check.ok).map((check) => check.label),
+      ...demoFactsUsed.map((fact) => `${fact} uses illustrative concept data and requires retailer confirmation`)
+    ];
     const productCopy = [product.name, product.subtitle, product.description].join(" ").toLowerCase();
     const keywordMatches = preferenceTokens.filter((token) => productCopy.includes(token));
     const requestReasons = [
       `same ${requestedCategory.replace(/-/g, " ")} category`,
-      ...((request.colorFamilies ?? []).filter((color) => product.verifiedFacts.colors.includes(color)).map((color) => `verified in ${color}`)),
+      ...((request.colorFamilies ?? []).filter((color) => hasVerifiedColour(product, color)).map((color) =>
+        hasVerifiedColourPresentation(product.id, color) ? `verified in ${color}` : `available in ${color}`
+      )),
       ...((request.colorFamilies ?? []).flatMap((color) => {
-        if (product.verifiedFacts.colors.includes(color) || colourCloseness(color, product.verifiedFacts.colors) === 0) return [];
+        if (hasVerifiedColour(product, color) || colourCloseness(color, product.verifiedFacts.colors) === 0) return [];
         const group = relatedColourGroups.find((values) => values.includes(color));
         const related = product.verifiedFacts.colors.find((available) => group?.includes(available));
         return related ? [`related recorded colour: ${related}`] : [];
@@ -211,7 +285,9 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       ...keywordMatches.slice(0, 2).map((token) => `catalogue description matches “${token}”`)
     ];
     const benefits = [
-      ...((request.colorFamilies ?? []).filter((color) => product.verifiedFacts.colors.includes(color)).map((color) => `verified in ${color}`)),
+      ...((request.colorFamilies ?? []).filter((color) => hasVerifiedColour(product, color)).map((color) =>
+        hasVerifiedColourPresentation(product.id, color) ? `verified in ${color}` : `available in ${color}`
+      )),
       ...((request.styles ?? []).filter((style) => product.verifiedFacts.styles.some((productStyle) => productStyle.toLowerCase().includes(style))).map((style) => `${style} style`))
     ];
     const tradeOffs = [
@@ -221,13 +297,19 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     return {
       product,
       exact: unmet.length === 0,
+      failedRequirementCount: checks.filter((check) => !check.ok).length,
       unmet,
       score: checks.filter((check) => check.ok).length * 100 + checks.reduce((total, check) => total + check.closeness * 50, 0) - unmet.length * 25 + keywordMatches.length * 12 - Math.abs(product.widthMm - (request.targetWidthMm ?? source.widthMm)) / 1000,
       differences: [],
       benefits: [...new Set([...benefits, ...requestReasons])],
-      tradeOffs
+      tradeOffs,
+      demoFactsUsed
     };
-  }).sort((left, right) => right.score - left.score);
+  }).sort((left, right) =>
+    Number(right.exact) - Number(left.exact) ||
+    left.failedRequirementCount - right.failedRequirementCount ||
+    right.score - left.score
+  );
   const toMatch = (item: typeof ranked[number]) => ({
     productId: item.product.id,
     exact: item.exact,
@@ -235,8 +317,11 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     benefits: item.benefits.length ? item.benefits : ["similar catalogue category and product character"],
     tradeOffs: item.tradeOffs.length ? item.tradeOffs : ["No additional trade-off is established in the connected data."],
     unmetRequirements: item.unmet,
+    demoFactsUsed: item.demoFactsUsed,
     explanation: item.exact
       ? `${item.product.modelCode} satisfies all selected requirements using available catalogue and material data.`
+      : item.demoFactsUsed.length && item.unmet.every((requirement) => requirement.includes("illustrative concept data"))
+        ? `${item.product.modelCode} is a concept match using illustrative attributes that require retailer confirmation.`
       : `${item.product.modelCode} is a close alternative, but ${item.unmet.join("; ")}.`
   });
   const exactMatches = ranked.filter((item) => item.exact).slice(0, 6).map(toMatch);
@@ -244,7 +329,13 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
   // same-category products are still useful recommendations when they are
   // clearly labelled with every unmet requirement (for example, an unverified
   // requested colour). Keep this group deliberately small and ranked.
-  const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 3).map(toMatch);
+  // A visibly different tabletop shape is not a useful "close" option. When
+  // the catalogue cannot verify the requested shape, show no product cards
+  // instead of presenting square or rectangular tables beneath an oval query.
+  const shapeEligibleAlternatives = request.tabletopShapes?.length
+    ? ranked.filter((item) => request.tabletopShapes!.every((shape) => item.product.tabletopShapes?.includes(shape)))
+    : ranked;
+  const closestAlternatives = request.strict ? [] : shapeEligibleAlternatives.filter((item) => !item.exact).slice(0, 3).map(toMatch);
   const interpretedRequirements = [
     ...(request.category ? [request.category.replace(/-/g, " ")] : []),
     ...(request.colorFamilies ?? []).map((value) => `${value} colour`),
@@ -255,6 +346,7 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     ...(request.targetWidthMm ? [`around ${Math.round(request.targetWidthMm / 10)} cm wide`] : []),
     ...(request.layoutShapes ?? []).map((value) => `${value} layout`),
     ...(request.excludedLayoutShapes ?? []).map((value) => `not ${value} layout`),
+    ...(request.tabletopShapes ?? []).map((value) => `${value} tabletop`),
     ...(request.minSeatHeightMm ? [`seat height at least ${Math.round(request.minSeatHeightMm / 10)} cm`] : []),
     ...(request.requiredFunctions ?? []).map((value) => `${value} function`),
     ...(request.materialTags ?? []).map((value) => `${value} material`),
@@ -267,7 +359,11 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     requestedColorFamilies: request.colorFamilies ?? [],
     exactMatches,
     closestAlternatives,
-    message: exactMatches.length ? `${exactMatches.length} catalogue alternative${exactMatches.length === 1 ? "" : "s"} satisfy all requirements.` : "No exact alternative was found. The closest catalogue alternatives are labelled with every unmet condition."
+    message: exactMatches.length
+      ? `${exactMatches.length} catalogue alternative${exactMatches.length === 1 ? "" : "s"} satisfy all requirements.`
+      : request.tabletopShapes?.length && !shapeEligibleAlternatives.length
+        ? `No catalogue product has a verified ${request.tabletopShapes.join(" or ")} tabletop shape.`
+        : "No exact alternative was found. The closest catalogue alternatives show their main differences."
   });
 }
 
@@ -360,7 +456,7 @@ function groundedProductIds(ids: string[]) {
   return [...new Set(ids)].filter((id) => active.has(id));
 }
 
-const productDiscoveryPattern = /\b(sofa|couch|armchair|chair|recliner|sectional|table|storage|cabinet|sideboard|wardrobe|bed|bathroom|outdoor|garden|carpet|rug|lamp|furniture)\b/;
+const productDiscoveryPattern = /\b(sofa|couch|armchair|chair|recliner|sectional|table|storage|cabinet|sideboard|wardrobe|bed|mattress|topper|bathroom|kitchen|hallway|outdoor|garden|carpet|rug|lamp|textile|bedding|furniture)\b/;
 
 function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
   const text = question.toLowerCase();
@@ -404,7 +500,7 @@ function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
     const wantsComparison = /compare/.test(text);
     const comparisonAlternatives = wantsComparison && exactIds.length < 2
       ? products
-          .filter((product) => product.active && product.category === exact[0].category && !exactIds.includes(product.id))
+          .filter((product) => product.active && productHasCategory(product, exact[0].category) && !exactIds.includes(product.id))
           .sort((left, right) => (rankOrder.get(left.id) ?? 9999) - (rankOrder.get(right.id) ?? 9999))
           .slice(0, 2)
       : [];
@@ -425,7 +521,7 @@ function productDiscoveryAnswer(question: string): AdvisorAnswer | null {
     });
   }
 
-  const sameCategory = products.filter((product) => product.active && (!catalogueCategory || product.category === catalogueCategory));
+  const sameCategory = products.filter((product) => product.active && (!catalogueCategory || productHasCategory(product, catalogueCategory)));
   const alternatives = sameCategory.map((product) => {
     let score = rankOrder.has(product.id) ? Math.max(0, 30 - (rankOrder.get(product.id) ?? 30)) : 0;
     if (filters.colors?.length && filters.colors.some((color) => product.verifiedFacts.colors.includes(color))) score += 20;
@@ -592,7 +688,7 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
       suggestedQuestions: ["We have children and a dog", "The room has strong afternoon sun", "I prefer the feel of fabric"]
     });
   }
-  if (/material|dog|pet|children|care/.test(text) && !/sofa|couch|armchair|chair|sectional|table|bed|wardrobe|outdoor|carpet|rug|lamp|compare|find|show me|i need|i want/.test(text)) {
+  if (/material|dog|pet|children|care/.test(text) && !/sofa|couch|armchair|chair|sectional|table|bed|mattress|topper|wardrobe|bathroom|kitchen|hallway|outdoor|carpet|rug|lamp|textile|bedding|compare|find|show me|i need|i want/.test(text)) {
     const advice = parseMaterialNeeds(question);
     return advisorAnswerSchema.parse({
       answer: "These recommendations use only recorded material durability, easy-care, family, pet and light-sensitivity attributes. No material is described as stain-proof, scratch-proof or allergy-safe.",
@@ -660,7 +756,7 @@ export function answerGroundedQuestion(question: string, context: ConversationCo
   const discovery = productDiscoveryAnswer(question);
   if (discovery) return discovery;
   return advisorAnswerSchema.parse({
-    answer: "I can help with anything across your Musterring journey: products, rooms, materials, configuration, fit preparation, saved projects, retailers and customer-service handover. I do not have enough verified information to answer that request yet, so tell me what you are trying to achieve and I will guide you to the right next step.",
+    answer: "I can help with anything across your Musterring journey: products, rooms, materials, configuration, fit preparation, saved projects, retailers and customer-service handover. Verified information for that request is not currently available, so tell me what you are trying to achieve and I will guide you to the right next step.",
     answerType: "missing-data", productIds: [], materialIds: [], sources: [],
     proposedAction: null, suggestedQuestions: ["Help me find the right sofa", "Choose a material", "Prepare my project for a retailer"]
   });

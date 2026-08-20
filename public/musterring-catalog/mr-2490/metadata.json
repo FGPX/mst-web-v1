@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2490",
   "title": "MR 2490",
-  "importedAt": "2026-08-03T08:01:41.536Z",
+  "importedAt": "2026-08-19T12:16:40.905Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-2490/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_sofa-mr2490-beige-musterring_3923b3b526.jpg",
       "bytes": 810141,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c3e96aa97e0397ff313573d52515c93bea7b11af968a9a649b2a1ac879d9440b"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/e/csm_sofa-mr2490-beige-gestell-bronze-musterring_b9a55f1edb.jpg",
       "bytes": 577670,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "21672449faa9aeb33c200b8c7dc718a44cbb70a322cd4b44e148da1fdf2c9fce"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/7/csm_sofa-mr2490-beige-musterring-01_77c438c52f.jpg",
       "bytes": 455234,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "7ac702705e375b03bf39a2e6d37e9231092e0e0bed5296f326c89be8fa91f9a8"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/1/csm_sofa-mr2490-beige-gestell-schwarz-musterring_b6ecdec2c3.jpg",
       "bytes": 209965,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2cd12018f9afe571a318a950741ff6e650258011c661c7d6059448262fc1e4df"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/d/csm_sofa-sessel-mr-2490-eckgruppe-anreihsofa-armlehne-links-n80L-longchair-armlehne-rechts-K105R-echtleder-kurkuma-musterring_03700a4fd8.jpg",
       "bytes": 752405,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b08eea006f3fc0b42697f82eb11a9323180b1f710dec2f42cb04b11409f18a5d"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/b/csm_sofa-sessel-mr-2490-eckgruppe-echtleder-kurkuma-detail-kopfteilverstellung-musterring_c4a635a4c2.jpg",
       "bytes": 587922,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6d8549c26810e5862755a51b4ff588030c4b2672acf962afbe791a398f545eda"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/2/csm_sofa-sessel--mr-2490-eckgruppe-echtleder-kurkuma-detail-metallfu%C3%9F-bronze-musterring_12190bcf6d.jpg",
       "bytes": 365649,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "912022292dd52d75fb16b94ba5c7bbe1c8074f112f27a80000f4688afacfd63d"
     },
     {
       "file": "/musterring-catalog/mr-2490/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/5/csm_sofa-sessel-mr-2490-eckgruppe-echtleder-kurkuma-detail-musterring-produktkennzeichen-musterring_6e6b585f2f.jpg",
       "bytes": 652422,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "af1c16b4e8be82835984b93f2e83af0be9bf361c174e0bd13bd908d190005679"
     }
   ]
 }

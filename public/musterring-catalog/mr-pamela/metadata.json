@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-pamela",
   "title": "MR PAMELA",
-  "importedAt": "2026-08-03T08:01:21.870Z",
+  "importedAt": "2026-08-19T12:16:39.002Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/mr-pamela/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/d/csm_sofa-sitzsack-mr-pamela-stoff-cord-beige-musterring_5cce9af2d9.jpg",
       "bytes": 549821,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8e31c80ead2e564762f79572f3405cd1b07c59ff969fbd8bc216ffc9b6b92c5a"
     },
     {
       "file": "/musterring-catalog/mr-pamela/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_sofa-hocker-mr-pamela-stoff-cord-sand-musterring-01_5f810b22f4.jpg",
       "bytes": 635024,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b02ac70865c9ede71e3de0dd605e98ebeb4961c3bdc70989e7ff585fd7eb61bb"
     },
     {
       "file": "/musterring-catalog/mr-pamela/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/2/csm_sofa-hocker-mr-pamela-leder-hellbraun-beige-gelb-musterring_77640dcacd.jpg",
       "bytes": 453421,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "1c15bfc555f71c9b5f5d63565404ff77fcb4bb697605a1a8dc5bb5c3b1bf8c90"
     },
     {
       "file": "/musterring-catalog/mr-pamela/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/8/csm_sofa-sitzsack-mr-pamela-stoff-cord-sand-musterring_b63b27e980.jpg",
       "bytes": 425347,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "28085cf676358217b293a420a77245d143a68aea495216f51f2abe92e619aacc"
     },
     {
       "file": "/musterring-catalog/mr-pamela/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/3/5/csm_MR11787_A_Pamela_Print.tif_1da9e58720.jpg",
       "bytes": 482059,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "56e613ec1f63296806b97d94c4a44865ffd2e1d9dd5a89c005a06e3dda491924"
     }
   ]
 }

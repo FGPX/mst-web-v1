@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tamina",
   "title": "Tamina",
-  "importedAt": "2026-08-03T08:02:47.689Z",
+  "importedAt": "2026-08-19T12:16:47.440Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/tamina/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/8/csm_esszimmer-tamina-esstisch-charakter-eiche-ge%C3%B6lt-stuhl-leder-florenz-dunkelgrau-musterring_2b90404b39.jpg",
       "bytes": 779027,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5dd9826809e5e9029141d572b8a7ea80d7f2ff2dd42771a46db9f0511c0b00cc"
     },
     {
       "file": "/musterring-catalog/tamina/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/7/csm_esszimmer-tamina-stuhl-leder-florenz-dunkelgrau-stativgestell-eisen-schwarz-musterring_e7d4e2c213.jpg",
       "bytes": 465508,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e7e975802098ea173caa0e6bbd8fe9114737a07d4a36bad02f09a627b653f3d8"
     },
     {
       "file": "/musterring-catalog/tamina/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/6/csm_esszimmer-tamina-stuhl-leder-florenz_dunkelgrau-stativgestell-wildeiche-massiv-musterring_be54551276.jpg",
       "bytes": 848979,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "f6254e792b3ab4ed2201786197b296f44f5a3162d5df1fe882791faac30f7231"
     },
     {
       "file": "/musterring-catalog/tamina/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/d/csm_esszimmer-tamina-esstisch-platte-charakter-eiche-massiv-ge%C3%B6lt-gestell-eisen-schwarz-musterring_61b913aa7a.jpg",
       "bytes": 717482,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "722409337456c8d534c13228188e7975db239ae6eb228f18ac893d70a4b342c2"
     },
     {
       "file": "/musterring-catalog/tamina/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/4/csm_esszimmer-tamina-eiche-massiv-ge%C3%B6lt-microfaser-aberdeen-anthrazit-musterring_280827e72a.jpg",
       "bytes": 1162139,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d476e982221f40dc7a5dccbb5aedd7aebd3f0a29e59bd4a80549d5a7494e439f"
     },
     {
       "file": "/musterring-catalog/tamina/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_esszimmer-tamina-holzoptik-musterring_55e0ae97b7.jpg",
       "bytes": 544454,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e01baafbdfb989313eb395f345955487e3ecd3ace7236d49ce70fbb0347e8485"
     },
     {
       "file": "/musterring-catalog/tamina/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/e/csm_esszimmer-tamina-sessel-gestell-wildeiche-massiv-ge%C3%B6lt-microfaser-aberdeen-stone-musterring_c05e2988c1.jpg",
       "bytes": 490413,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4cee215bfc46c2e380b6b3153a57ddf4aedd4436711d74fd5e273e21a3433890"
     },
     {
       "file": "/musterring-catalog/tamina/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/c/csm_esszimmer-tamina-esstisch-charakter-eiche-massiv-ge%C3%B6lt-musterring_9967007c52.jpg",
       "bytes": 951843,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "f4b1d00a4800b4a87039e0c974b1aa257981950e6c19ec81468a18baba0050e1"
     }
   ]
 }

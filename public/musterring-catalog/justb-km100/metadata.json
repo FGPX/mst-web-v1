@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/home-accessories/small-furniture/justb-km100",
-  "title": "JUSTB! KM100",
-  "importedAt": "2026-08-03T08:03:00.748Z",
+  "title": "JustB! KM100",
+  "importedAt": "2026-08-19T12:16:48.335Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/justb-km100/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/2/csm_MR11614_A_JustB_KM100_-_15_a82e434e3b.jpg",
       "bytes": 392765,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c1c8624f58feb7e53aa2d98572dac744fc92cb18c5263b53980e38f8536cbdfa"
     },
     {
       "file": "/musterring-catalog/justb-km100/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/b/csm_MR11614_F_JustB_KM100_-_15_e6fcbd4b34.jpg",
       "bytes": 120248,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2cc0ed079d129eb424c6a2df675ea2d97269feb1bfbfc6ffcfa7b8d0c1e5e99b"
     },
     {
       "file": "/musterring-catalog/justb-km100/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/b/csm_MR11614_M_JustB_KM100_-_15_1c1827cf9f.jpg",
       "bytes": 501346,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ac1dd483ab1fa22f264bed37ac096d186c2145800078875f88d492a8032e9e63"
     },
     {
       "file": "/musterring-catalog/justb-km100/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/d/csm_MR11614_Q_JustB_KM100_-_15_c25ae7d8fa.jpg",
       "bytes": 293638,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b3a15751bc083444c4e684d3c7cf2b2363f81339ded93d197579cd92267be8d9"
     },
     {
       "file": "/musterring-catalog/justb-km100/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/5/csm_MR11614_P_002_JustB_KM100_-_15_669c7b9391.jpg",
       "bytes": 414719,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "603a3d12fdf90b2c955cf49ac0947ce65f2949fbfb036d28d68dfe9fd6c24247"
     },
     {
       "file": "/musterring-catalog/justb-km100/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/1/csm_MR11614_E_JustB_KM100_-_15_367d685f6d.jpg",
       "bytes": 114569,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "cf337f1d14f2dc6ddc8f917e34f7f8a361914d81cea5a317c616a4a75c348ba9"
     },
     {
       "file": "/musterring-catalog/justb-km100/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_MR11614_015_JustB_KM100_-_15_3800d826b0.jpg",
       "bytes": 386963,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5d1c1f3288d1b26e17151db2b23193ecd967e0070b74b2378ff157bb181f45d8"
     },
     {
       "file": "/musterring-catalog/justb-km100/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/d/csm_MR11614_L_JustB_KM100_-_15_0ce2dc0678.jpg",
       "bytes": 373140,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "edd9b40ce6efb09c022ec7dc11154268d86c2fe7a802665dceb27713959f5e99"
     }
   ]
 }

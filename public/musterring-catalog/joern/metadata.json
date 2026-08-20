@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/joern",
-  "title": "Joern",
-  "importedAt": "2026-08-03T08:02:15.084Z",
+  "title": "Jörn",
+  "importedAt": "2026-08-19T12:16:44.609Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/joern/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/d/3/csm_MR11799_C_J%C3%B6rn_Print.tif_022ca4c379.jpg",
       "bytes": 541357,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "502cc51b957dcf2c0fd5e6fe6d2e2c7d899baddc1aac31e670a34db244044ef4"
     },
     {
       "file": "/musterring-catalog/joern/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/a/0/csm_MR11799_006_J%C3%B6rn_Print.tif_b7b772fc15.jpg",
       "bytes": 418763,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "03e5c82f56213fd4059550fff5b60a9d3495ea5d92971e3c966450f0ff15de2f"
     },
     {
       "file": "/musterring-catalog/joern/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/f/2/csm_MR11799_002_J%C3%B6rn_Print.tif_acabac9e21.jpg",
       "bytes": 879813,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5c9e92e6c1b084d638101ccaa2913ec6534999dfef40d8be744d4fb2f3405169"
     },
     {
       "file": "/musterring-catalog/joern/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/e/2/csm_MR11799_G_J%C3%B6rn_Print.tif_2d8778e343.jpg",
       "bytes": 473925,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d4264d4bad0e36945ba0214532c5ebac82fa4cc1d43e63cce4e096a22859155a"
     },
     {
       "file": "/musterring-catalog/joern/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_MR11726_B_J%C3%B6rn_-_15_f8166cc8ff.jpg",
       "bytes": 558877,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c54cbb81c076807f4837f2ebf3d6fd73f5b40b051e24473e9b3d923da2bbe8d6"
     },
     {
       "file": "/musterring-catalog/joern/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/a/csm_MR11726_C_J%C3%B6rn_-_15_a3a2b35825.jpg",
       "bytes": 433727,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "45ca25060fc92608d3370e4cab6f7dd95887cdc47fa4345e22401d95eeab3558"
     },
     {
       "file": "/musterring-catalog/joern/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_MR11726_3_J%C3%B6rn_-_15_dd5ebf3854.jpg",
       "bytes": 159918,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "305e79e2a2ce82a2d65e4986581349e6ad21d40ca4259a4ee732da81fb7b48e0"
     },
     {
       "file": "/musterring-catalog/joern/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/0/csm_MR11726_2_J%C3%B6rn_-_15_18d74d08a1.jpg",
       "bytes": 425108,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6f8ce7a272a59fe13eca2f0d7ab1d6df2f5f5a2e4893c883ef76a2a39b4d1161"
     }
   ]
 }

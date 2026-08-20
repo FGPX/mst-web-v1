@@ -1,8 +1,11 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 const outputRoot = path.resolve("public/musterring-catalog");
 const catalogOutput = path.resolve("lib/generated/musterring-catalog.json");
+const reportOutput = path.resolve("content-import/normalized/musterring-catalog-report.json");
+const englishSitemapUrl = "https://www.musterring.com/en/s/pages/sitemap.xml";
 const dryRun = process.argv.includes("--dry-run");
 const maxImagesPerPage = Number(process.env.MUSTERRING_MAX_IMAGES ?? 8);
 const verifiedVariantImages = {
@@ -217,44 +220,123 @@ function titleFromSlug(slug) {
   return slug.replaceAll("-", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+function canonicalProductSlug(value) {
+  if (value === "mr4010-/-t4010-1") return "hannis";
+  return value
+    .replace(/^translate-to-en-/, "")
+    .replace(/^translate-to-english-/, "")
+    .replace(/-\/-/g, "-")
+    .replace(/[^a-z0-9-]/gi, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase();
+}
+
+function sitemapCategory(pathname) {
+  if (/\/living-room\/sofas-armchairs\//.test(pathname)) return "auto";
+  if (/\/living-room\/living-walls-sideboards-co\//.test(pathname)) return "storage";
+  if (/\/living-room\/coffee-tables-side-tables\//.test(pathname)) return "coffee-table";
+  if (/\/bedroom\/bedroom-series\//.test(pathname)) return "bedroom-series";
+  if (/\/bedroom\/beds\//.test(pathname)) return "bed";
+  if (/\/bedroom\/wardrobes\//.test(pathname)) return "wardrobe";
+  if (/\/hallway\/wardrobes\//.test(pathname)) return "storage";
+  if (/\/dining-room\/chairs-tables\//.test(pathname)) return "auto-dining";
+  if (/\/bathroom\//.test(pathname)) return "bathroom";
+  if (pathname === "/en/furniture/kitchen") return "kitchen";
+  if (/\/outdoor\/outdoor-furniture\//.test(pathname)) return "outdoor";
+  if (/\/home-accessories\/small-furniture\//.test(pathname)) return "small-furniture";
+  if (/\/home-accessories\/carpets\//.test(pathname)) return "carpet";
+  if (/\/home-accessories\/lamp-collection\//.test(pathname)) return "lamp";
+  if (/\/home-accessories\/home-textiles(?:-1)?(?:\/|$)/.test(pathname)) return "home-textile";
+  return null;
+}
+
+function sitemapProductTitle(slug) {
+  if (slug === "kitchen") return "Musterring Kitchens";
+  if (slug === "home-textiles") return "Musterring Home Textiles";
+  if (slug === "kanto-dielen") return "KANTO-DIELEN";
+  return titleFromSlug(slug);
+}
+
 async function discoverProductPages() {
   const seededProducts = new Map(
     seedPages.filter((page) => page.kind === "product").map((page) => [page.slug, page])
   );
-  const discoveredProducts = [];
+  const discoveredProducts = new Map();
 
   for (const collection of catalogCollections) {
     const html = decodeHtml(await fetchText(collection.url));
     const pathname = new URL(collection.url).pathname.replace(/\/$/, "");
     const prefix = `${pathname}/`;
-    const discoveredSlugs = new Set();
+    const discoveredSlugs = new Map();
 
-    for (const match of html.matchAll(/href=["']([^"'#?]+)["']/gi)) {
+    for (const match of html.matchAll(/<a\b[^>]*href=["']([^"'#?]+)["'][^>]*>([\s\S]*?)<\/a>/gi)) {
       try {
         const url = new URL(match[1], collection.url);
         if (!url.pathname.startsWith(prefix)) continue;
-        const slug = url.pathname.slice(prefix.length).replace(/\/$/, "");
-        if (slug && !slug.includes("/")) discoveredSlugs.add(slug);
+        const rawSlug = url.pathname.slice(prefix.length).replace(/\/$/, "");
+        if (!rawSlug || rawSlug.split("/").length > 3) continue;
+        const cardTitle = stripHtml(match[2].match(/<span\b[^>]*class=["'][^"']*text-link["'][^>]*>([\s\S]*?)<\/span>/i)?.[1] ?? "")
+          .replace(/\s*\|\s*NEW\s*$/i, "")
+          .trim();
+        discoveredSlugs.set(rawSlug, cardTitle);
       } catch {
         // Ignore malformed navigation URLs.
       }
     }
 
-    for (const slug of discoveredSlugs) {
-      discoveredProducts.push(seededProducts.get(slug) ?? {
+    for (const [rawSlug, cardTitle] of discoveredSlugs) {
+      const slug = canonicalProductSlug(rawSlug);
+      const seeded = seededProducts.get(slug) ?? seededProducts.get(rawSlug);
+      const page = seeded ?? {
         slug,
-        url: `${collection.url}/${slug}`,
-        title: titleFromSlug(slug),
+        url: `${collection.url}/${rawSlug}`,
+        title: cardTitle || titleFromSlug(slug),
         kind: "product",
         appProductId: `musterring-${slug}`,
         category: collection.category
-      });
+      };
+      const existing = discoveredProducts.get(slug);
+      if (!existing || (existing.url.includes("translate-to-en-") && !page.url.includes("translate-to-en-"))) {
+        discoveredProducts.set(slug, page);
+      }
     }
+  }
+
+  const sitemapXml = await fetchText(englishSitemapUrl);
+  const sitemapUrls = [...sitemapXml.matchAll(/<loc>([\s\S]*?)<\/loc>/gi)]
+    .map((match) => decodeHtml(match[1]).trim().replace(/\/$/, ""))
+    .filter((value) => {
+      try {
+        return new URL(value).pathname.startsWith("/en/furniture/");
+      } catch {
+        return false;
+      }
+    });
+  const sitemapLeaves = sitemapUrls.filter((url) => !sitemapUrls.some((candidate) => candidate !== url && candidate.startsWith(`${url}/`)));
+
+  for (const url of sitemapLeaves) {
+    const parsed = new URL(url);
+    if (parsed.pathname === "/en/furniture/extras") continue;
+    if ([...discoveredProducts.values()].some((page) => page.url.replace(/\/$/, "") === url)) continue;
+    const category = sitemapCategory(parsed.pathname);
+    if (!category) continue;
+    const rawSlug = parsed.pathname.split("/").filter(Boolean).at(-1) ?? "";
+    const slug = canonicalProductSlug(rawSlug);
+    if (!slug || discoveredProducts.has(slug)) continue;
+    discoveredProducts.set(slug, {
+      slug,
+      url,
+      title: sitemapProductTitle(slug),
+      kind: "product",
+      appProductId: `musterring-${slug}`,
+      category
+    });
   }
 
   return [
     ...seedPages.filter((page) => page.kind !== "product"),
-    ...discoveredProducts
+    ...discoveredProducts.values()
   ];
 }
 
@@ -301,6 +383,36 @@ function stripHtml(value) {
     .trim();
 }
 
+function extractProductOverview(html) {
+  const marker = html.search(/data-name=["']Product overview["']/i);
+  if (marker < 0) return [];
+  const section = html.slice(marker, marker + 8_000);
+  const list = section.match(/<ul\b[^>]*>([\s\S]*?)<\/ul>/i)?.[1] ?? "";
+  return [...list.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)]
+    .map((match) => stripHtml(match[1]))
+    .filter(Boolean);
+}
+
+function categoriesFromOverview(overview, fallbackCategory, categoryCopy) {
+  const copy = overview.join(" ").toLowerCase();
+  const categories = [];
+  const add = (category) => { if (!categories.includes(category)) categories.push(category); };
+
+  if (fallbackCategory === "auto") {
+    add(/armchair|recliner|reclining chair|easy chair|beanbag/.test(categoryCopy) ? "armchair" : "sofa");
+  } else if (fallbackCategory === "auto-dining") {
+    if (/dining tables?|tables?|standing tables?|high tables?/.test(copy)) add("dining-table");
+    if (/chairs?|armchairs?|cantilever chairs?|benches?|stools?|bar\/counter stools?/.test(copy)) add("dining-chair");
+    if (categories.length === 0) {
+      add(/chair|armchair|stool|bench/.test(categoryCopy) ? "dining-chair" : "dining-table");
+    }
+  } else {
+    add(fallbackCategory);
+  }
+
+  return categories;
+}
+
 function metaContent(html, key, value) {
   for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
     const attributes = Object.fromEntries(
@@ -320,7 +432,8 @@ function extractProductContent(html, page) {
   const detectedModel =
     h1.match(/^(JUSTB!?\s*PM\s?\d+|MATCH IT!|MR\s+\d+)/i)?.[1] ||
     (page.category !== "auto" && h1.toLowerCase().startsWith(page.title.toLowerCase()) ? page.title : "") ||
-    h1.match(/^(MR\s+[A-Z][A-Z-]*)/)?.[1];
+    h1.match(/^(MR\s+[A-Z][A-Z-]*)/)?.[1] ||
+    h1.match(/^([A-ZÄÖÜ0-9][A-ZÄÖÜ0-9! .&/-]*[A-ZÄÖÜ0-9!])(?=\s+[A-ZÄÖÜ][a-zäöüß])/)?.[1];
   const modelCode = detectedModel?.replace(/\s+/g, " ").toUpperCase() ?? page.title;
   const tagline = h1.toLowerCase().startsWith(modelCode.toLowerCase())
     ? h1.slice(modelCode.length).replace(/^[\s–—:|-]+/, "").trim()
@@ -328,11 +441,9 @@ function extractProductContent(html, page) {
       ? h1.slice(page.title.length).replace(/^[\s–—:|-]+/, "").trim()
       : h1;
   const categoryCopy = `${h1} ${description}`.toLowerCase();
-  const category = page.category === "auto"
-    ? (/armchair|recliner|reclining chair|easy chair|beanbag/.test(categoryCopy) ? "armchair" : "sofa")
-    : page.category === "auto-dining"
-      ? (/chair|armchair|stool|bench/.test(categoryCopy) ? "dining-chair" : "dining-table")
-      : page.category;
+  const productOverview = extractProductOverview(html);
+  const categories = categoriesFromOverview(productOverview, page.category, categoryCopy);
+  const category = categories[0];
 
   return {
     appProductId: page.appProductId,
@@ -342,8 +453,31 @@ function extractProductContent(html, page) {
     tagline,
     description: decodeHtml(description),
     category,
+    categories,
+    productOverview,
     sourceUrl: page.url
   };
+}
+
+function contentHash(value) {
+  return createHash("sha256").update(JSON.stringify(value)).digest("hex");
+}
+
+async function readJsonIfPresent(filePath, fallback) {
+  try {
+    return JSON.parse(await readFile(filePath, "utf8"));
+  } catch {
+    return fallback;
+  }
+}
+
+async function pathExists(filePath) {
+  try {
+    await access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function extractImageUrls(html, pageUrl) {
@@ -462,18 +596,37 @@ async function importPage(page) {
   const pageDir = path.join(outputRoot, page.slug);
   if (!dryRun) await mkdir(pageDir, { recursive: true });
 
+  const previousMetadata = await readJsonIfPresent(path.join(pageDir, "metadata.json"), { assets: [] });
+  const previousAssetsBySource = new Map((previousMetadata.assets ?? []).map((asset) => [asset.sourceUrl, asset]));
+  const usedFiles = new Set((previousMetadata.assets ?? []).map((asset) => asset.file));
+
   const assets = [];
   for (const [index, url] of imageUrls.entries()) {
     const extension = extensionFrom("", url);
-    const fileName = `image-${String(index + 1).padStart(2, "0")}${extension}`;
-    const relativePath = `/musterring-catalog/${page.slug}/${fileName}`;
+    const previous = previousAssetsBySource.get(url);
+    let fileName = previous?.file?.split("/").at(-1) ?? `image-${String(index + 1).padStart(2, "0")}${extension}`;
+    let relativePath = `/musterring-catalog/${page.slug}/${fileName}`;
+    let suffix = index + 1;
+    while (!previous && usedFiles.has(relativePath)) {
+      suffix += 1;
+      fileName = `image-${String(suffix).padStart(2, "0")}${extension}`;
+      relativePath = `/musterring-catalog/${page.slug}/${fileName}`;
+    }
+    usedFiles.add(relativePath);
     console.log(`  ${dryRun ? "would save" : "saving"} ${relativePath}`);
-    let info = { bytes: 0, contentType: "" };
+    let info = previous ? { bytes: previous.bytes ?? 0, contentType: previous.contentType ?? "" } : { bytes: 0, contentType: "" };
     if (!dryRun) {
       const filePath = path.join(pageDir, fileName);
-      info = await downloadImage(url, filePath);
+      if (!previous || !(await pathExists(filePath))) info = await downloadImage(url, filePath);
     }
-    assets.push({ file: relativePath, sourceUrl: url, ...info });
+    assets.push({ file: relativePath, sourceUrl: url, ...info, sha256: previous?.sha256 ?? null });
+  }
+
+  if (!dryRun) {
+    for (const asset of assets) {
+      const filePath = path.join(process.cwd(), asset.file.replace(/^\//, "public/"));
+      if (await pathExists(filePath)) asset.sha256 = createHash("sha256").update(await readFile(filePath)).digest("hex");
+    }
   }
 
   const metadata = {
@@ -492,13 +645,62 @@ async function importPage(page) {
   return {
     metadata,
     product: page.kind === "product"
-      ? { ...extractProductContent(html, page), images: assets.map((asset) => asset.file) }
+      ? (() => {
+          const product = { ...extractProductContent(html, page), images: assets.map((asset) => asset.file), stale: false };
+          return { ...product, contentHash: contentHash(product) };
+        })()
       : null
   };
 }
 
+function buildCatalogReport(previousProducts, currentProducts) {
+  const previous = new Map(previousProducts.map((product) => [product.slug, product]));
+  const current = new Map(currentProducts.map((product) => [product.slug, product]));
+  const renamed = [...previous.keys()].flatMap((slug) => {
+    const canonical = canonicalProductSlug(slug);
+    return slug !== canonical && !current.has(slug) && current.has(canonical) ? [{ from: slug, to: canonical }] : [];
+  });
+  const renamedTargets = new Set(renamed.map((item) => item.to));
+  const renamedSources = new Set(renamed.map((item) => item.from));
+  const previousByCanonicalSlug = new Map(previousProducts.map((product) => [canonicalProductSlug(product.slug), product]));
+  const added = [...current.keys()].filter((slug) => !previous.has(slug) && !renamedTargets.has(slug)).sort();
+  const missing = [...previous.keys()].filter((slug) => !current.has(slug) && !renamedSources.has(slug)).sort();
+  const categoryChanges = [...current.values()].flatMap((product) => {
+    const old = previous.get(product.slug) ?? previousByCanonicalSlug.get(product.slug);
+    if (!old) return [];
+    const before = old.categories ?? [old.category];
+    const after = product.categories ?? [product.category];
+    return JSON.stringify(before) === JSON.stringify(after) ? [] : [{ slug: product.slug, before, after }];
+  });
+  return { generatedAt: new Date().toISOString(), previousCount: previousProducts.length, discoveredCount: currentProducts.length, added, renamed, missing, categoryChanges };
+}
+
+function validateCatalog(products) {
+  const allowedCategories = new Set([
+    "sofa", "armchair", "sectional", "storage", "coffee-table", "bedroom-series", "bed", "wardrobe",
+    "dining-chair", "dining-table", "bathroom", "kitchen", "outdoor", "small-furniture", "carpet", "lamp", "home-textile"
+  ]);
+  const ids = new Set();
+  const slugs = new Set();
+  const errors = [];
+  for (const product of products) {
+    if (!product.appProductId || ids.has(product.appProductId)) errors.push(`duplicate or empty product id: ${product.appProductId}`);
+    if (!product.slug || slugs.has(product.slug)) errors.push(`duplicate or empty product slug: ${product.slug}`);
+    ids.add(product.appProductId);
+    slugs.add(product.slug);
+    if (!product.name?.trim()) errors.push(`${product.slug}: missing product name`);
+    if (!product.sourceUrl?.startsWith("https://www.musterring.com/")) errors.push(`${product.slug}: invalid official source URL`);
+    if (!product.images?.length) errors.push(`${product.slug}: no product image was imported`);
+    for (const category of product.categories ?? [product.category]) {
+      if (!allowedCategories.has(category)) errors.push(`${product.slug}: unsupported category ${category}`);
+    }
+  }
+  if (errors.length) throw new Error(`Catalogue validation failed:\n- ${errors.join("\n- ")}`);
+}
+
 async function main() {
   if (!dryRun) await mkdir(outputRoot, { recursive: true });
+  const previousCatalog = await readJsonIfPresent(catalogOutput, { products: [] });
   const pages = await discoverProductPages();
   console.log(`Discovered ${pages.filter((page) => page.kind === "product").length} authorized product pages.`);
   const imported = [];
@@ -513,6 +715,16 @@ async function main() {
       imported.push({ page: page.url, title: page.title, error: String(error), assets: [] });
     }
   }
+
+  const report = buildCatalogReport(previousCatalog.products ?? [], catalog);
+  if (!dryRun) validateCatalog(catalog);
+  const discoveredSlugs = new Set(catalog.map((product) => product.slug));
+  const staleProducts = (previousCatalog.products ?? [])
+    .filter((product) => !discoveredSlugs.has(canonicalProductSlug(product.slug)))
+    .map((product) => ({ ...product, stale: true }));
+  console.log(`\nCatalogue diff: +${report.added.length} added, ${report.missing.length} missing from the live site, ${report.categoryChanges.length} category changes.`);
+  if (report.added.length) console.log(`  added: ${report.added.join(", ")}`);
+  if (report.missing.length) console.log(`  retained as stale: ${report.missing.join(", ")}`);
 
   const manifest = {
     importedAt: new Date().toISOString(),
@@ -529,8 +741,10 @@ async function main() {
       importedAt: manifest.importedAt,
       authorizedForProduction: true,
       permissionBasis: manifest.permissionBasis,
-      products: catalog
+      products: [...catalog, ...staleProducts]
     }, null, 2)}\n`);
+    await mkdir(path.dirname(reportOutput), { recursive: true });
+    await writeFile(reportOutput, `${JSON.stringify(report, null, 2)}\n`);
   }
 
   const total = imported.reduce((sum, page) => sum + (page.assets?.length ?? 0), 0);

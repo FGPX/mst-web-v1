@@ -1,0 +1,52 @@
+{
+  "page": "https://www.musterring.com/en/furniture/bedroom/beds/orthomatic-20",
+  "title": "Orthomatic 20",
+  "importedAt": "2026-08-19T12:16:50.278Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/orthomatic-20/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/8/csm_orthomatic-2.0-topper-musterring_b4b3730a65.jpg",
+      "bytes": 153114,
+      "contentType": "image/jpeg",
+      "sha256": "c57390647d1a4dee6dfd2671216be9aae22ee649aba78f4c1ddc41da4606498f"
+    },
+    {
+      "file": "/musterring-catalog/orthomatic-20/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/d/csm_orthomatic-2.0-matratze-wei%C3%9F-musterring_33ad3051ed.jpg",
+      "bytes": 150021,
+      "contentType": "image/jpeg",
+      "sha256": "e1fb5ea17e3299d1c14a621ec83accb2b70abf8edc8f98e6f0bbe84f679de5d5"
+    },
+    {
+      "file": "/musterring-catalog/orthomatic-20/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/a/csm_orthomatic-2.0-matrazte-gesteppt-silberausr%C3%BCstung-musterring_bd28302016.jpg",
+      "bytes": 153568,
+      "contentType": "image/jpeg",
+      "sha256": "e008b5445042b4fd98f0b1d7d089333695e932c4424f6e6402edfc1292dbab99"
+    },
+    {
+      "file": "/musterring-catalog/orthomatic-20/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/4/csm_orthomatic-2.0-federholzrahmen-musterring_d5b7d2dfde.jpg",
+      "bytes": 215229,
+      "contentType": "image/jpeg",
+      "sha256": "0453dd5b6b38332931ccb1a8d533a0f39c1658ffd5758ee5b9617c86c2bfc72b"
+    },
+    {
+      "file": "/musterring-catalog/orthomatic-20/image-05.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/b/csm_MR10998_A_Orthomatic2.0_91_d32bea9e7c.png",
+      "bytes": 568748,
+      "contentType": "image/png",
+      "sha256": "74bcb219bcf048726832288d620035ac4199669f58bf49c67571f5ccf9d1a26c"
+    },
+    {
+      "file": "/musterring-catalog/orthomatic-20/image-06.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/5/csm_orthomatic-2.0-nackenkissen-musterring_d5fdf30d09.png",
+      "bytes": 203033,
+      "contentType": "image/png",
+      "sha256": "1b990e0c43addbf2a5a97a7491db49b7ce7764508cec230cc1fe4b04a3e8ad0d"
+    }
+  ]
+}

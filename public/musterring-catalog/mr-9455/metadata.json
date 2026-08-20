@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9455",
   "title": "MR 9455",
-  "importedAt": "2026-08-03T08:01:57.134Z",
+  "importedAt": "2026-08-19T12:16:42.838Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,7 +10,8 @@
       "file": "/musterring-catalog/mr-9455/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/6/csm_sessel-mr9455-drehbar-stoff-luando-camel-musterring_8d553ff84d.jpg",
       "bytes": 491905,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "2744d811688e8e60e33b1dda4f1eef82239254c57fc3e04e44a8b067a228bc2e"
     }
   ]
 }

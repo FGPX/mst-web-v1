@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2342",
   "title": "MR 2342",
-  "importedAt": "2026-08-03T08:01:40.580Z",
+  "importedAt": "2026-08-19T12:16:40.812Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,25 +10,29 @@
       "file": "/musterring-catalog/mr-2342/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/1/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-musterring-01_7e890ad388.jpg",
       "bytes": 652042,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e469f8dc94df397d0e6e91c111d0b58493dca19e4fd4280f63b968722b535ed1"
     },
     {
       "file": "/musterring-catalog/mr-2342/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/a/csm_sessel-mr2342-leder-dunkelgruen-kopfteilverstellung-musterring_b33faf0314.jpg",
       "bytes": 872186,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "254a8e7916b6b54cbef03c24b11a501b85ef2f6c4d04eccd4ad70b286f9265a6"
     },
     {
       "file": "/musterring-catalog/mr-2342/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-detail-musterring_2c8b0877b1.jpg",
       "bytes": 688166,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3eaccb178676fb073f39718b94a9302ca3c88a4e5fd9083c180134a3ba322e9b"
     },
     {
       "file": "/musterring-catalog/mr-2342/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/0/csm_sessel-mr2342-leder-dunkelgruen-relaxfunktion-musterring_c195a092ed.jpg",
       "bytes": 402013,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5f3ae5fb2ed24a530a63f9a2ac4d985b7eec25dc69cd252451a221e8c89b2c96"
     }
   ]
 }

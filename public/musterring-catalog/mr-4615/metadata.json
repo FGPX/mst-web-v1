@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4615",
   "title": "MR 4615",
-  "importedAt": "2026-08-03T08:01:45.532Z",
+  "importedAt": "2026-08-19T12:16:41.552Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/mr-4615/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/9/csm_sofa-mr4615-stoff-hellgrau-querschlaeferfunktion-musterring_cf4161b0a5.jpg",
       "bytes": 1031106,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "30b32e92f35a3833d5fec5e1c7d8240ef10425d9f90a2b9887787141e4fd3bf0"
     },
     {
       "file": "/musterring-catalog/mr-4615/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/c/csm_sofa-mr4615-stoff-hellgrau-sitztiefenverstellung-musterring-01_542b96bda6.jpg",
       "bytes": 1602320,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "214a1cac336d165556ba24fffac42536251d0118dfd2e5bad77cfa4c8d2a5e56"
     },
     {
       "file": "/musterring-catalog/mr-4615/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/2/csm_sofa-mr4615-stoff-hellgrau-sitztiefenverstellung-musterring_4da82e4659.jpg",
       "bytes": 1555257,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "18b72bbf3ac2d1adebbeae186c156d3c1f0b6a9b163b9611be5fcb9b872d16f9"
     },
     {
       "file": "/musterring-catalog/mr-4615/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/d/csm_sofa-mr4615-stoff-hellgrau-kopfteilverstellung-musterring_bf35085aff.jpg",
       "bytes": 761994,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "75c95e3bea6627439347108b57923f04f6f497be32df5875cbe2eb065f0fb4b0"
     },
     {
       "file": "/musterring-catalog/mr-4615/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/3/csm_sofa-mr4615-stoff-hellgrau-milieu-musterring_bc93e3c00d.jpg",
       "bytes": 436861,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "7dfb2b7355cf30e7b09933fd5ea088bc4c7b17150078f597bcb65ae82be3bb32"
     }
   ]
 }

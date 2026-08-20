@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/hallway/wardrobes/ovida",
+  "title": "Ovida",
+  "importedAt": "2026-08-19T12:17:02.981Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/ovida/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/c/csm_MR11801_A_Ovida_AVZ05_Print_b6ea4319c6.jpg",
+      "bytes": 557486,
+      "contentType": "image/jpeg",
+      "sha256": "b1c1b67fa1c82ed59e2debf425265a7e6851bf5d572d8df3d41aa2301f984589"
+    },
+    {
+      "file": "/musterring-catalog/ovida/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/e/csm_MR11801_008_Ovida_AVZ05_Print_f51746e6e8.jpg",
+      "bytes": 620627,
+      "contentType": "image/jpeg",
+      "sha256": "43994a6532c92363814d15bbdf80d5ec07d5597ab3f83bbbafb9c9054e47c101"
+    },
+    {
+      "file": "/musterring-catalog/ovida/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/7/csm_MR11801_001_Ovida_AVZ05_Print_3c539b13a4.jpg",
+      "bytes": 846236,
+      "contentType": "image/jpeg",
+      "sha256": "2d351c15b873206ae22f8274c605eecdce5c684709fb069149c33708736f11e7"
+    },
+    {
+      "file": "/musterring-catalog/ovida/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/d/csm_MR11801_010_Ovida_AVZ05_Print_9243427edb.jpg",
+      "bytes": 343342,
+      "contentType": "image/jpeg",
+      "sha256": "319ed2317e65e8dd6f51943f7e01b40bdba4dd932286efa3b4519548a3259825"
+    },
+    {
+      "file": "/musterring-catalog/ovida/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/0/csm_MR11801_A_Ovida_AVZ01_Print__2__fdb1be27e3.jpg",
+      "bytes": 478345,
+      "contentType": "image/jpeg",
+      "sha256": "8f1a3ebdffffc9eae11c817db4f8da171487d08fac66d40abfb8d644556b9e81"
+    },
+    {
+      "file": "/musterring-catalog/ovida/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/f/csm_MR11801_001_Ovida_AVZ01_Print_5699b3bda0.jpg",
+      "bytes": 522200,
+      "contentType": "image/jpeg",
+      "sha256": "2499729b58464bf29e1afd4dc6d973937fa2c65b81bd8cceb7063f2133c90412"
+    },
+    {
+      "file": "/musterring-catalog/ovida/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_MR11801_002_Ovida_AVZ01_Print__1__6302a73cb1.jpg",
+      "bytes": 323239,
+      "contentType": "image/jpeg",
+      "sha256": "dbc516789e6b2267eb0a0841a4eca6778431bce719ca41521dc0dbd831e35ead"
+    },
+    {
+      "file": "/musterring-catalog/ovida/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/1/csm_MR11801_003_Ovida_AVZ01_Print_dfa69fcb34.jpg",
+      "bytes": 368061,
+      "contentType": "image/jpeg",
+      "sha256": "29c3041c561fe3c572d1892ccaffb4f0ea6a9918c6073ef8bb776b1f8a04eaf5"
+    }
+  ]
+}

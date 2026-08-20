@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/joline",
   "title": "Joline",
-  "importedAt": "2026-08-03T08:02:11.777Z",
+  "importedAt": "2026-08-19T12:16:44.310Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/joline/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_schlafzimmer-joline-lack-wei%C3%9F-eiche-musterring-01_fd814cc663.jpg",
       "bytes": 565192,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a3192081049262aa4d7e729db9fec99284a0ca376f98a0aa5f55b03295d7c998"
     },
     {
       "file": "/musterring-catalog/joline/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/8/csm_schlafzimmer-joline-lack-wei%C3%9F-eiche-musterring-02_75e204dd6a.jpg",
       "bytes": 292536,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "73a4f6edd7dad24f0b9529769dca99c5617e4831c92d9d6e47e7267bae386217"
     },
     {
       "file": "/musterring-catalog/joline/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/9/csm_schlafzimmer-joline-lack-wei%C3%9F-eiche-musterring-03_f6dd52d112.jpg",
       "bytes": 574640,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5b24b07adf1373995cc561f8c42431a20f7299f2f49ba44ed6523672056deb7c"
     },
     {
       "file": "/musterring-catalog/joline/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/e/csm_schlafzimmer-joline-lack-wei%C3%9F-eiche-musterring-04_3560d3d3f8.jpg",
       "bytes": 683376,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "6884850d66f9dd13de07bf7aea17f0e797ae108ba9a6594b023133514f18a88b"
     },
     {
       "file": "/musterring-catalog/joline/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/3/csm_schlafzimmer-joline-lack-grau-eiche-musterring-05_aadcf19614.jpg",
       "bytes": 596975,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "00feab15e0c5bd4ff72f1274c8c92181ad1687386bd5595468b7317e1929d174"
     },
     {
       "file": "/musterring-catalog/joline/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/a/csm_schlafzimmer-joline-lack-grau-eiche-musterring-06_7e65e01fe2.jpg",
       "bytes": 607370,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ac5ca2f225368c311c2b69a208e8e6034ab4738bd9d645a3a274655376b6f2b6"
     },
     {
       "file": "/musterring-catalog/joline/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_schlafzimmer-joline-lack-grau-musterring-01_9a106914b5.jpg",
       "bytes": 348328,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a36085b9d948a521eba1ed21cf51b6662c75ea20cbe8a9268d39cb67f7613644"
     },
     {
       "file": "/musterring-catalog/joline/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/d/csm_schlafzimmer-joline-lack-grau-eiche-musterring-04_f05824589a.jpg",
       "bytes": 435109,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "55e22ac6dfb605ca5a4df32b72b2fe37406f38c3865cc023f26677737400cd2e"
     }
   ]
 }

@@ -338,6 +338,9 @@ export class OpenAIProvider implements AIProvider {
     image = false,
     options: { model?: string; maxOutputTokens?: number; reasoningEffort?: "low" } = {}
   ): Promise<T> {
+    const requestOptions = options.maxOutputTokens
+      ? { timeout: 45_000, maxRetries: 0 }
+      : {};
     const response = await this.client.responses.parse({
       model: options.model ?? (image ? this.imageModel : this.model),
       input,
@@ -345,7 +348,7 @@ export class OpenAIProvider implements AIProvider {
       max_output_tokens: options.maxOutputTokens,
       reasoning: options.reasoningEffort ? { effort: options.reasoningEffort } : undefined,
       text: { format: zodTextFormat(schema, name), verbosity: options.maxOutputTokens ? "low" : undefined }
-    }, { timeout: options.maxOutputTokens ? 45_000 : undefined, maxRetries: options.maxOutputTokens ? 0 : undefined });
+    }, requestOptions);
     return schema.parse(response.output_parsed);
   }
 
@@ -447,6 +450,7 @@ export class OpenAIProvider implements AIProvider {
       targetWidthMm: shape.targetWidthMm.unwrap().nullable(),
       layoutShapes: shape.layoutShapes.unwrap(),
       excludedLayoutShapes: shape.excludedLayoutShapes.unwrap(),
+      tabletopShapes: shape.tabletopShapes.unwrap(),
       minSeatHeightMm: shape.minSeatHeightMm.unwrap().nullable(),
       requiredFunctions: shape.requiredFunctions.unwrap(),
       excludedFunctions: shape.excludedFunctions.unwrap(),
@@ -455,13 +459,14 @@ export class OpenAIProvider implements AIProvider {
       preserveComfort: shape.preserveComfort.unwrap().nullable()
     });
     const extracted = await this.parse(extractionSchema, "alternative_requirements",
-      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, included and excluded layout shapes, materials and functions. Put negated layouts such as 'not L-shaped' only in excludedLayoutShapes, never in layoutShapes. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories and layout shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
+      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, included and excluded layout shapes, tabletop shapes, materials and functions. Put negated layouts such as 'not L-shaped' only in excludedLayoutShapes, never in layoutShapes. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories, layout shapes and tabletop shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
       [{ role: "user", content: JSON.stringify(input) }]);
     const inferred = validatedAIAlternativeRequirements(input, extracted);
+    const grounded = groundAlternativeRequest(input, extracted);
     // Explicit structured filters from the UI are authoritative; AI only fills
     // constraints that can be verified in the free text. IDs and request text
     // never come from AI.
-    const parsed = alternativeRequestSchema.parse({ ...inferred, ...input });
+    const parsed = alternativeRequestSchema.parse({ ...grounded, ...inferred, ...input });
     return alternativeResponseSchema.parse(findGroundedAlternatives(parsed));
   }
 

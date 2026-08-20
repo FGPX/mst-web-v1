@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/mr4010-/-t4010",
+  "title": "MR4010 / T4010",
+  "importedAt": "2026-08-19T12:16:46.684Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/mr4010-t4010/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/2/csm_esszimmer-mr4010-t4010-esstisch-eiche-bank-gelb-musterring_c752fa725c.jpg",
+      "bytes": 559663,
+      "contentType": "image/jpeg",
+      "sha256": "47e2a97575bbbdeeda76bd3f84deba65eb24f924899534e9185bae642df21c47"
+    },
+    {
+      "file": "/musterring-catalog/mr4010-t4010/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/2/csm_esszimmer-mr4010-t4010-bank-gelb-musterring_98905b9616.jpg",
+      "bytes": 447578,
+      "contentType": "image/jpeg",
+      "sha256": "ab1394fff0f52a4b2f2941527000e776b3ae09a95a63c44bc564a2b68f773f5d"
+    },
+    {
+      "file": "/musterring-catalog/mr4010-t4010/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_esszimmer-mr4010-t4010-tisch-eiche-musterring_9fd1f3e729.jpg",
+      "bytes": 283067,
+      "contentType": "image/jpeg",
+      "sha256": "62faf0bfd3999927b13d8c0e66a369f974ea33c2d0f76d19ac363fc735b8bd44"
+    },
+    {
+      "file": "/musterring-catalog/mr4010-t4010/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/c/csm_esszimmer-mr4010-t4010-bank-gelb-musterring_01_b677ec60f7.jpg",
+      "bytes": 336688,
+      "contentType": "image/jpeg",
+      "sha256": "a39e7549ad3605d78465a9cf244db900054e16f0a258e2a40786c486e86dfca6"
+    },
+    {
+      "file": "/musterring-catalog/mr4010-t4010/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/9/csm_esszimmer-mr4010-t4010-esstisch-stuhl-beige-musterring_6858271449.jpg",
+      "bytes": 537380,
+      "contentType": "image/jpeg",
+      "sha256": "eb4cc0160038615cb2348a74d6363bc8d8b723811db1075b76b6e1907f8ff4ca"
+    },
+    {
+      "file": "/musterring-catalog/mr4010-t4010/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/3/csm_esszimmer-mr4010-t-4010-stuhl-beige-musterring_f8bfb28871.jpg",
+      "bytes": 356805,
+      "contentType": "image/jpeg",
+      "sha256": "7bf277e2e80db33802177c08a5b04ec7290b5fcf803d7ba493cb3662a419bf86"
+    },
+    {
+      "file": "/musterring-catalog/mr4010-t4010/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/a/csm_esszimmer-mr4010-t4010-detail-bank-musterring_2efc34c0e7.jpg",
+      "bytes": 365055,
+      "contentType": "image/jpeg",
+      "sha256": "12ae7d23fc217e77b82cdadb0e8c25c4497d53b12873b2474e99e7af54831945"
+    },
+    {
+      "file": "/musterring-catalog/mr4010-t4010/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/e/csm_esszimmer-mr4010-t4010-detail-esstisch-musterring_ccd2cc991e.jpg",
+      "bytes": 696933,
+      "contentType": "image/jpeg",
+      "sha256": "2a80cbf6b18ce9e047d1b3d4200e311a7a8a4581d88406daeafaabf31ca96e76"
+    }
+  ]
+}

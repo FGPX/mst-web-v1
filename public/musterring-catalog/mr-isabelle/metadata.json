@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/wardrobes/mr-isabelle",
-  "title": "MR ISABELLE",
-  "importedAt": "2026-08-03T08:02:31.233Z",
+  "title": "MR Isabelle",
+  "importedAt": "2026-08-19T12:16:45.887Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-isabelle/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/0/csm_MR11218_F2_MRIsabelle_-_15_457880c8a0.jpg",
       "bytes": 392084,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "aee6310ebf2bc87a14302494aa08cf30e9ebff5a5af8eb37a515b1105095108f"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/b/csm_kleiderschrank-isabelle-dekor-graphit-eiche-bianco-musterring_1d24b1a8ac.jpg",
       "bytes": 491039,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "372cf73c2cd960b583abfb41bceaa6d9b5a3a6f3b35d4e19361182f86a6d8161"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_kommode-isabelle-dekor-graphit-eiche-bianco-musterring_9aacdeec95.jpg",
       "bytes": 625870,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "05c4c4d1c541c18ecb26cea885674cea3551e0cc50c7a06c7fd93e4bd2c34f09"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/f/csm_kleiderschrank-isabelle-dekor-graphit-eiche-bianco-musterring-01_0db4b6fd45.jpg",
       "bytes": 312856,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "60fef07056ffa2e6986784fe6ccdecf53d8760b29a3c6f283a5b156d58059415"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/4/csm_nachtkonsole-isabelle-dekor-graphit-eiche-bianco-musterring_2a7e01c067.jpg",
       "bytes": 412004,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fb5f08cd093e49995c05e19ad092b3a20d4bd8f51a7908268ec9cb275ba4cd84"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/b/csm_kommode-isabelle-dekor-graphit-eiche-bianco-musterring-01_440c8e5c19.jpg",
       "bytes": 233030,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5e85e7198bcd3f3065499a5a984c5a7255e32461b8920bc98bd2b2fef4a9118e"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/3/csm_kleiderschrank-isabelle-dekor-champagner-eiche-bianco-musterring_02_41ee6a7260.jpg",
       "bytes": 447744,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8f254ae61fa5dc68a2f82b25f6339754bfb12b3ea977e87cc9ac8b7ece59a976"
     },
     {
       "file": "/musterring-catalog/mr-isabelle/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/a/csm_kleiderschrank-isabelle-innenausstattung-dekor-champagner-eiche-bianco-musterring_ca2ef63e9a.jpg",
       "bytes": 650133,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "31b6a40b631c0aef06c77dbab652f50c1d6dec622e7854217ce92640703c8351"
     }
   ]
 }

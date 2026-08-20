@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9425",
   "title": "MR 9425",
-  "importedAt": "2026-08-03T08:01:55.361Z",
+  "importedAt": "2026-08-19T12:16:42.581Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/mr-9425/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/1/csm_Sofa-Sessel-MR_9425-Einzelsessel-MR_9420-Hocker-Model-Pure-Beistelltisch-BAR-Stoff-Diva_Ocean-Ravenna_Marine-Metall-schwarz-Musterring_6057182804.jpg",
       "bytes": 781649,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "499a916eccb29c0ccfd11f32243c78c7f22b60276b1a71130014fd3a7168c8ee"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/8/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Detail-Zierband-Musterring_b892b4eb1a.jpg",
       "bytes": 304866,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "53b8758035d790a3461346c969394543c6ea104d424f808412dd1f98ff430147"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/6/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Vogelperspektive-Musterring_fcd096ade4.jpg",
       "bytes": 537414,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4f7446d4efddebd10eb1fc85101a562fabec3c0c0e8d40b702881478abf061bf"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Diva_Ocean-Fu%C3%9F-Black-Musterring_af70269d2e.jpg",
       "bytes": 221033,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "afb78e5dad47976e5fbf7417a505658c67456bbc9a278c536bf62c0d96dfee4c"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/0/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Gelb-Fu%C3%9F-Black-freigestellt-Musterring_65be978258.jpg",
       "bytes": 926333,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e705918f70df27c14a3010c84572bde3a11190192664a517f57789599ee52d3b"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/b/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Gelb-Fu%C3%9F-Black-freigestellt-seitlich-Musterring_cf1a7996d0.jpg",
       "bytes": 774510,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "491de02eeda85711493aaa7e7c31c11e688eaac6c24e9c027b5eea81d8c65516"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/4/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Velluti_Whiskey-Fu%C3%9F-Black-Musterring_7d88c2c2cd.jpg",
       "bytes": 1183022,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "77306b0f2a75a0d46fe605ed82a91fde879e6d98f5e7ac9560cb06c3f60207ad"
     },
     {
       "file": "/musterring-catalog/mr-9425/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/e/csm_Sofa-Sessel-MR_9425-Einzelsessel-Zierband-Ton_in_Ton-Stoff-Velluti_Whiskey-Fu%C3%9F-Black-freigestellt-Musterring_237b47af7d.jpg",
       "bytes": 382568,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "04d5df514a90c4d11f9b9c8acb673287adf7f64d3dd077fbf2670c4e4c170af1"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/home-accessories/lamp-collection/lamps-20",
-  "title": "Lamps 20",
-  "importedAt": "2026-08-03T08:03:05.835Z",
+  "title": "Lamps 2.0",
+  "importedAt": "2026-08-19T12:16:48.977Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/lamps-20/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/3/csm_MR11554_A_CANNON_Print_-_15_6cbd1318ae.jpg",
       "bytes": 208870,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d866b5edbf3874db3831fa613d9a30874976d8d642ac05cd793a27be8f829ec3"
     },
     {
       "file": "/musterring-catalog/lamps-20/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/4/csm_MR11554_D_002_CANNON_Print_Print_-_15_6992c0bec8.jpg",
       "bytes": 182559,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9e5e91667928f9a52e9c99fe8168c643c6c2a95b2531347735edc32ca8af1254"
     },
     {
       "file": "/musterring-catalog/lamps-20/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/9/csm_MR11554_E_CANNON_kalt_Print_-_15_41ee2ce608.jpg",
       "bytes": 213687,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d0307750a8333ce9957540da39b31076d352ec5f188318689444663fe7d1be6f"
     },
     {
       "file": "/musterring-catalog/lamps-20/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/7/csm_MR11554_S_CANNON_warm_Print_-_15_4e40330fbf.jpg",
       "bytes": 371778,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b1d6d511667b284eb01681015ded6331e5dea2b754dbe4a77277742d887b3988"
     },
     {
       "file": "/musterring-catalog/lamps-20/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/0/csm_MR11614_F_JustB_KM100_-_15_ccb7f83c83.jpg",
       "bytes": 85386,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "051dc6b6912f393a1d973b02e01e4c85e2f9dbe854f316b408e3724f0c79ddff"
     },
     {
       "file": "/musterring-catalog/lamps-20/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/3/csm_MR11554_M_Marisa_warm_Print_-_15_8eb5c29e69.jpg",
       "bytes": 176411,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "54b0f9ed646d00e437c990ce5203f5324f9696d3014910d204821c6ce03e1ff2"
     },
     {
       "file": "/musterring-catalog/lamps-20/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/9/csm_MR11554_J_Marisa_kalt_Print_-_15_1f90bc961e.jpg",
       "bytes": 210304,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "26f30ec7ee9bbf143c716e39aba1a985796da8132ba0e348f4d37394752266d6"
     },
     {
       "file": "/musterring-catalog/lamps-20/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/5/csm_MR11554_D_MARISA_warm_Print_-_15_c3b836ef70.jpg",
       "bytes": 273391,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c3cc00f50f34e5cb802738bb78b62bef72699fb99e79235a42e99ecad0c397fe"
     }
   ]
 }

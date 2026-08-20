@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/san-antonio",
   "title": "San Antonio",
-  "importedAt": "2026-08-03T08:02:12.318Z",
+  "importedAt": "2026-08-19T12:16:44.380Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/san-antonio/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/6/csm_MR11634_A_SanAntonio_-_15_bc004b7f9e.jpg",
       "bytes": 689232,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5e0932282711b2bb3a25b51e8f238c94726e81f94306d489177523964aace6a6"
     },
     {
       "file": "/musterring-catalog/san-antonio/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/d/csm_MR11634_3_SanAntonio_-_15_541658e011.jpg",
       "bytes": 443266,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "390b4155fe2857376a17f92081fd40de4f418c93c8c08d60d736b795e7b31017"
     },
     {
       "file": "/musterring-catalog/san-antonio/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/8/csm_MR11634_2_SanAntonio_-_15_06ae836cf2.jpg",
       "bytes": 605589,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d2547b43fbcfd9999f80762fcf81b7f6e2946a59191d6f40e035e2c822ea0067"
     },
     {
       "file": "/musterring-catalog/san-antonio/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/7/csm_MR11634_4_SanAntonio_-_15_7405d2c456.jpg",
       "bytes": 444355,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "aa6137c04b29fccf5b817ed6fc3c62b93b151b58c9b8a26aadaa955f121327c3"
     },
     {
       "file": "/musterring-catalog/san-antonio/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/9/csm_MR11634_A_SanAntonio_RET_champagner_-_15_a0e585727e.jpg",
       "bytes": 329323,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c288d670a0f69b2e53c91a5b0962351f0e53fdd73cd9c327309d155782673abc"
     }
   ]
 }

@@ -1,0 +1,52 @@
+{
+  "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/mr4010-/-t4010-1",
+  "title": "Hannis",
+  "importedAt": "2026-08-19T12:16:46.292Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/hannis/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/f/csm_MR11694_A_Hannis_Print_-_15_201c74e787.jpg",
+      "bytes": 734296,
+      "contentType": "image/jpeg",
+      "sha256": "225a389a0d826d90727583a3bf9920e165c65e7d63e16b598fde1a0c211a0de2"
+    },
+    {
+      "file": "/musterring-catalog/hannis/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/b/csm_MR11694_002_Hannis_Print_-_15_7e75de3380.jpg",
+      "bytes": 354115,
+      "contentType": "image/jpeg",
+      "sha256": "dbc7bebaad9c15f0ccdab3a5cbf5d42c431067acf0ecb5850c3dd996c4e61486"
+    },
+    {
+      "file": "/musterring-catalog/hannis/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/8/csm_MR11694_B_Hannis_Print_-_15_07b9c08756.jpg",
+      "bytes": 490037,
+      "contentType": "image/jpeg",
+      "sha256": "31e69930bde268ad0424eca4990433dc3a77ce0bc76614063a6b0e4e40ef0f60"
+    },
+    {
+      "file": "/musterring-catalog/hannis/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/0/csm_MR11694_D_003_Hannis_Print_-_15_ee10e0a7a5.jpg",
+      "bytes": 873462,
+      "contentType": "image/jpeg",
+      "sha256": "9ab3c474bcb4ca3ef91fcc24458c0347264a72ff0becff14a562fb87eafea251"
+    },
+    {
+      "file": "/musterring-catalog/hannis/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/d/csm_esszimmer-hannis-esstisch-platte-hpl-st%C3%BChle-braun-beige-musterring_5fcd75cf27.jpg",
+      "bytes": 530573,
+      "contentType": "image/jpeg",
+      "sha256": "a8d3ee5098b480887f79da80e206c3adb47f89238422cdf32b5278d35fcab756"
+    },
+    {
+      "file": "/musterring-catalog/hannis/image-06.png",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/5/csm_MR11695_D_012_Hannis_Ret_Print_3_f7fa45f58e.png",
+      "bytes": 366681,
+      "contentType": "image/png",
+      "sha256": "6861132ffcda8b6145f04db1327da0e3e997e714b02723571ad0fad37e4e810a"
+    }
+  ]
+}

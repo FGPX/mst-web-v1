@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-231",
   "title": "MR 231",
-  "importedAt": "2026-08-03T08:01:23.849Z",
+  "importedAt": "2026-08-19T12:16:39.224Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,37 +10,43 @@
       "file": "/musterring-catalog/mr-231/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/1/csm_MR11716_012_MR231_Print_-_15_dda31f53a7.jpg",
       "bytes": 761268,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8289112dc60efb1aeb7b581d89feb0f9235239a2a726c014bf3fde5fa5622ac5"
     },
     {
       "file": "/musterring-catalog/mr-231/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/f/csm_MR11716_011_MR231_Print_-_15_3786748a92.jpg",
       "bytes": 503632,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4b6a5a52b49438c9c8e95e840fa93a66c71728d6aa4ad405d135383411687185"
     },
     {
       "file": "/musterring-catalog/mr-231/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/d/csm_MR11716_010_MR231_Print_-_15_634ce4d234.jpg",
       "bytes": 568677,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "0ed4f273c16344bda9d5217edc53c4630bee2735a93226ce9eedcea3501ebeb5"
     },
     {
       "file": "/musterring-catalog/mr-231/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/celum/bildmaterial/programmseiten/sessel/mr231/sessel-mr231-beige-grau-musterring.jpg",
       "bytes": 869720,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5deb1f22d250d359cca06a7ab2c3be7f88abead22dd2c88cd2e9425fab678486"
     },
     {
       "file": "/musterring-catalog/mr-231/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/1/csm_MR11716_C_MR231_Print_-_15_e20314ef28.jpg",
       "bytes": 360601,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "62c7c907ce2767fb7a60c998cd9ae84591b0fd9e9b72ea8d828a340a618359eb"
     },
     {
       "file": "/musterring-catalog/mr-231/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/celum/bildmaterial/programmseiten/sessel/mr231/sessel-mr231-beige-grau-musterring-01.jpg",
       "bytes": 769617,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "afe1ee5a81ab44faea4ec88945d3ea32002dad418a50963841fef06335748e42"
     }
   ]
 }

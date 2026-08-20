@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2995",
   "title": "MR 2995",
-  "importedAt": "2026-08-03T08:01:43.535Z",
+  "importedAt": "2026-08-19T12:16:41.329Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,37 +10,43 @@
       "file": "/musterring-catalog/mr-2995/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/c/csm_19150_Z73-43_N148-N222_PK_U69_EKS_O58-95_SA_C08-35_O58-95_RK_C08-35_ME17860_O58-35_12-03-09-MTA5_306afb4414.jpeg",
       "bytes": 713664,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "5309e38ff05cb1e43e7cef0dd152dc6d5f06c78fd200e953f5a535bbd04cb7fa"
     },
     {
       "file": "/musterring-catalog/mr-2995/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/b/csm_19150_12-03-01-FFA6a_Z62-54_N185_N222_Q111_U69_EK_PK_SA_O58-26_U62_RK_Z74-55_C08-26_Kissen_im_Eck_40d65f48f2.jpeg",
       "bytes": 512430,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a3b458377189aabcdfaf15455671d17d830b22fa6a8f2cf4c1e3600d73eb66c9"
     },
     {
       "file": "/musterring-catalog/mr-2995/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/0/csm_19150_Z73-43_EKS_CloseUp_19150maxx_MG_0209_6de584a744.jpeg",
       "bytes": 346522,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e9c9a4ab4f2c65d6f381f8978f42ee730ed9e40d324604e70828bc2d49ed7ff5"
     },
     {
       "file": "/musterring-catalog/mr-2995/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/1/csm_Gro%C3%9F__19150_12-02-14-FFA1_Z73-43_N148_N222_SA_O58-95_RK_D56-21_EK_PK_U69_U59_D56-21__b578cedf79.jpeg",
       "bytes": 187211,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8652f4f7b3bbedcb3aa22dc4f8494a6574642c2aa6e049b3b63303cad88ec01c"
     },
     {
       "file": "/musterring-catalog/mr-2995/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_haendlerfinder_musterring_af10072ce6.jpg",
       "bytes": 86228,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "47605ecffd7a61da0db24553d86797f418e467d5837800eae5cd19f5e9e36962"
     },
     {
       "file": "/musterring-catalog/mr-2995/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/3/csm_MR11139_04_JustB_-PM100_Mood_-_15_8b6717c4be.jpg",
       "bytes": 27745,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "9f711acfe072b6ba0d938c90a1f54f6a1be3f045e54182d5219c4af090ff3e69"
     }
   ]
 }

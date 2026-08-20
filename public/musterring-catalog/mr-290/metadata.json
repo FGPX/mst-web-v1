@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-290",
   "title": "MR 290",
-  "importedAt": "2026-08-03T08:01:29.671Z",
+  "importedAt": "2026-08-19T12:16:39.894Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/mr-290/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/c/csm_sofa-mr290-leder-vivre-alu-musterring_c92e4fc3f2.jpg",
       "bytes": 548333,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "fb5776026708d322d2d13b6c10bfcf49dbfbb02f4dd68890c3894d1495a653f4"
     },
     {
       "file": "/musterring-catalog/mr-290/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/a/csm_sofa-mr290-leder-vivre-alu-modelaufnahme-musterring_80ea54b584.jpg",
       "bytes": 349333,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ab01ecd5ea895e9c51f154457f0cf2ea1aaf76474bbffa7bd271fd492f1360be"
     },
     {
       "file": "/musterring-catalog/mr-290/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/c/a/csm_sofa-mr290-leder-vivre-alu-detail-sitztiefenverstellung-musterring_8ce5a87b9d.jpg",
       "bytes": 246430,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "507c15e7efbd53a30908dd70a675b4d6e99d2afaaf89323501037377786710e8"
     },
     {
       "file": "/musterring-catalog/mr-290/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/0/csm_sofa-mr290-leder-vivre-alu-kopfst%C3%BCtze-musterring_ec1e645a0a.jpg",
       "bytes": 289622,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "31f22630d07cf34cfc3ef5e42ab0513e3b15867e9ff93e08036d6fb55ea33a63"
     },
     {
       "file": "/musterring-catalog/mr-290/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/0/csm_MR11574_A_MR290_MR261_Print_-_15_9c38368dc8.jpg",
       "bytes": 473560,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "524e80800b0010c0146752ba55523d65fc0ad7ba30b891e4132bf1dae1260d73"
     }
   ]
 }

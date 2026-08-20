@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-6510",
   "title": "MR 6510",
-  "importedAt": "2026-08-03T08:01:48.911Z",
+  "importedAt": "2026-08-19T12:16:42.094Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,31 +10,36 @@
       "file": "/musterring-catalog/mr-6510/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/6/csm_MR11627_C_MR6510_Print_-_15_b3e3f1ee14.jpg",
       "bytes": 419244,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "8c1546edc8969eab51a23b4cef8bcfa204af5639def391bb3d3ba2c424399780"
     },
     {
       "file": "/musterring-catalog/mr-6510/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/8/csm_MR11627_005_MR6510_Print_-_15_62f421fc7c.jpg",
       "bytes": 568488,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4958d40f98f4040f5263fd1e5b12796f2b28515140a7db1b0d7702523e375369"
     },
     {
       "file": "/musterring-catalog/mr-6510/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/1/csm_MR11627_007_MR6510_Print_-_15_002c0a18ba.jpg",
       "bytes": 482844,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "33c03c4293f0768d3aa70c5c2717e50d5de510168bb1565bc3bb895f3fdc9db2"
     },
     {
       "file": "/musterring-catalog/mr-6510/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/d/csm_MR11627_009_MR6510_Print_-_15_32b03dcb2e.jpg",
       "bytes": 241798,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a24ecfe9c0c2e1215982110adb886953f838774384d438d207bef4cde0bc44e8"
     },
     {
       "file": "/musterring-catalog/mr-6510/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/0/a/csm_Musterring-Sofa-MR6510_9efcdc1489.jpg",
       "bytes": 389235,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "62c43782ed040fa9cb5011a6134ee4a19a1d94414ce41310ab7e047a6059d957"
     }
   ]
 }

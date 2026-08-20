@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/bedroom/beds/elos",
   "title": "Elos",
-  "importedAt": "2026-08-03T08:02:29.067Z",
+  "importedAt": "2026-08-19T12:16:45.669Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/elos/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/8/5/csm_schlafzimmer-elos-polsterbett-stoff-jab-musterring_02_bc0ddff0ee.jpg",
       "bytes": 842643,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "dc0ae8f0c367ecd6ecea335bbc3a77f322135426dec497924676a83b5d7e4766"
     },
     {
       "file": "/musterring-catalog/elos/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/4/csm_schlafzimmer-elos-polsterbett-stoff-jab-9895-musterring_1dd43854fb.jpg",
       "bytes": 630279,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c0a2afd0dcda8334d831256d36d4db246331b8cf36c450f5a72f782aa3e075c3"
     },
     {
       "file": "/musterring-catalog/elos/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/f/csm_schlafzimmer-elos-polsterbett-stoff-jab-musterring_15ef060bc1.jpg",
       "bytes": 1241917,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "010bdafa6be87d4aaeb238bb64044e38ff768dba7721a4f618f0269ee146679b"
     },
     {
       "file": "/musterring-catalog/elos/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/7/f/csm_schlafzimmer-elos-polsterbett-stoff-jab-musterring_01_2c0c966b1c.jpg",
       "bytes": 411996,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a6ccf87c23ad0529018d7f74701bc398d61aecfdf02cac21721f2ab812717bb2"
     },
     {
       "file": "/musterring-catalog/elos/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/d/csm_schlafzimmer-elos-polsterbett-beige-musterring_9c1a873cac.jpg",
       "bytes": 651943,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "cd85bdffb7420f8c69db6b5cb4bac00029f2d1c4805878b76d372888bc1aac96"
     },
     {
       "file": "/musterring-catalog/elos/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/6/csm_schlafzimmer-elos-polsterbett-kopfteilg-beige-musterring_6f79ca3391.jpg",
       "bytes": 694165,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "430a0c42814a2fccc0466197fe5bfd891d8dbe17b7689d3e3df56d45959e8afe"
     },
     {
       "file": "/musterring-catalog/elos/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/9/csm_schlafzimmer-elos-polsterbett-detail-fu%C3%9Fteil-beige-musterring_5b0d1d9604.jpg",
       "bytes": 318710,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "d1970e65781454a8131c7630f0ec218ec12cb0911e4ba2cfd9211b98c7b6555c"
     },
     {
       "file": "/musterring-catalog/elos/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_schlafzimmer-elos-polsterbett-beige-musterring_01_12116ebdad.jpg",
       "bytes": 1037817,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "a7a6f5dc4898b2e2b9e0eb94cf87db7895388229893c447a3d7f53f220c8e97a"
     }
   ]
 }

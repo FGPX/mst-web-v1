@@ -114,6 +114,8 @@ export type Product = {
   subtitle: string;
   description: string;
   category: Category;
+  /** All official memberships when a programme contains multiple product types. */
+  categories?: Category[];
   collection: string;
   widthMm: number;
   depthMm: number;
@@ -161,9 +163,15 @@ export type Product = {
   smallSpaceSuitable: boolean;
   /** Catalogue-verified plan shapes only; never infer these from an image. */
   layoutShapes?: Array<"straight" | "l-shaped" | "u-shaped" | "corner" | "island">;
+  /** Catalogue-verified tabletop shapes only; never infer these from an image. */
+  tabletopShapes?: Array<"oval" | "round" | "square" | "rectangular">;
   indicativePriceCents: number;
   packageDimensions: { widthMm: number; depthMm: number; heightMm: number; minOpeningMm: number };
 };
+
+export function productHasCategory(product: Pick<Product, "category" | "categories">, category: Category) {
+  return (product.categories ?? [product.category]).includes(category);
+}
 
 export type ProductVariant = {
   id: string;

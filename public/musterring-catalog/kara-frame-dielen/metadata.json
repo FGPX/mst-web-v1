@@ -1,0 +1,66 @@
+{
+  "page": "https://www.musterring.com/en/furniture/hallway/wardrobes/kara-frame-dielen",
+  "title": "Kara Frame Dielen",
+  "importedAt": "2026-08-19T12:16:54.648Z",
+  "authorizedForProduction": true,
+  "permissionBasis": "Client-confirmed Musterring rebranding authorization",
+  "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
+  "assets": [
+    {
+      "file": "/musterring-catalog/kara-frame-dielen/image-01.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/0/csm_garderobe-kara-frame-dielen-lack-brilliantgrau-musterring-01_7ee0fa44fb.jpg",
+      "bytes": 327531,
+      "contentType": "image/jpeg",
+      "sha256": "992b00b6b944d0f98036960a6d29c0384a90d4946982eddf86d52ebb4ed8a594"
+    },
+    {
+      "file": "/musterring-catalog/kara-frame-dielen/image-02.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/2/3/csm_garderobe-kara-frame-dielen-lack-brilliantgrau-musterring_a746ea4133.jpg",
+      "bytes": 317667,
+      "contentType": "image/jpeg",
+      "sha256": "d476b5b40d42e88c06b7ae60ee70df319cbcd8ff6814eef769be1bde404a0872"
+    },
+    {
+      "file": "/musterring-catalog/kara-frame-dielen/image-03.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/6/csm_garderobe-kara-frame-dielen-wandpaneel-detail-musterring_982d598578.jpg",
+      "bytes": 434430,
+      "contentType": "image/jpeg",
+      "sha256": "a5c8b4d05223e1ce8c36eda5a699648c30729ce567ee8714029886a8570e03f8"
+    },
+    {
+      "file": "/musterring-catalog/kara-frame-dielen/image-04.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/f/6/csm_garderobe-kara-frame-dielen-wandpaneel-musterring_ec5a1d351a.jpg",
+      "bytes": 752137,
+      "contentType": "image/jpeg",
+      "sha256": "373035b54a797e66e607abc84d570862d241873ce3dbf495c8c6700a049d9e3a"
+    },
+    {
+      "file": "/musterring-catalog/kara-frame-dielen/image-05.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/1/csm_schuhschrank-kara-frame-dielen-lack-grau-musterring-01_ddad408e32.jpg",
+      "bytes": 411357,
+      "contentType": "image/jpeg",
+      "sha256": "f495a150a7a665807d786f7fa6cac8576d4f9d734e0949756bd8058de33759e0"
+    },
+    {
+      "file": "/musterring-catalog/kara-frame-dielen/image-06.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/6/4/csm_schuhschrank-kara-frame-dielen-lack-grau-musterring_62125f53f8.jpg",
+      "bytes": 814710,
+      "contentType": "image/jpeg",
+      "sha256": "7dc159e95e17be2678349abaa087ad6858d2703ea744a976b74300a29ede1641"
+    },
+    {
+      "file": "/musterring-catalog/kara-frame-dielen/image-07.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/8/csm_spiegel-kara-frame-dielen-musterring_8462981961.jpg",
+      "bytes": 525454,
+      "contentType": "image/jpeg",
+      "sha256": "c134065db3f78efc9337624dcaa0a0d81004c099ed983bf5aef40627adc877bd"
+    },
+    {
+      "file": "/musterring-catalog/kara-frame-dielen/image-08.jpg",
+      "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/5/f/csm_schuhschrank-kara-frame-dielen-lack-grau-musterring-02_799939b735.jpg",
+      "bytes": 317077,
+      "contentType": "image/jpeg",
+      "sha256": "2f75d49d44100bbbb7bfc08fbe42194c4cc501f255ea5d72c04fec85b80bbc44"
+    }
+  ]
+}

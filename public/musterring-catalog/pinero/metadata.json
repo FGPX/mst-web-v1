@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/pinero",
   "title": "Pinero",
-  "importedAt": "2026-08-03T08:02:46.715Z",
+  "importedAt": "2026-08-19T12:16:47.351Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,49 +10,57 @@
       "file": "/musterring-catalog/pinero/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/e/3/csm_MR11765_B_Pinero_Print.tif_26ec5e83fe.jpg",
       "bytes": 766701,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "0218c65de8f638754efcfa4bdf5eab0e725c47aba8a9463b6f526a916257d53a"
     },
     {
       "file": "/musterring-catalog/pinero/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/e/b/csm_MR11765_006_Pinero_Print.tif_d05dfd1f00.jpg",
       "bytes": 992782,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e476499ceab144df7c0794ba614139f37ce231a997377e9c57311a5ed0d8073b"
     },
     {
       "file": "/musterring-catalog/pinero/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/7/5/csm_MR11765_018_Pinero_Print.tif_64b2ebb81d.jpg",
       "bytes": 1235309,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "b2128ceb5e2a142428274d175a5c90dc46e342c320b15219806ff391ae3f97de"
     },
     {
       "file": "/musterring-catalog/pinero/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_cavok/4/a/csm_MR11765_K01_Pinero_Print.tif_ff429b935c.jpg",
       "bytes": 110859,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "f46f37a234048729ae0a88824a7a3fbd116849298f29b6d2935127afdc9f79d0"
     },
     {
       "file": "/musterring-catalog/pinero/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/1/0/csm_esszimmer-pinero-esstisch-musterring_01_ddff5f8e8a.jpg",
       "bytes": 1412377,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "4f8f8fd5deb2b33a52f9512263c294f12e913ce4bb7bf9f469050abee6348c9f"
     },
     {
       "file": "/musterring-catalog/pinero/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/0/csm_esszimmer-pinero-esstisch-eiche-stuhl-stoff-rosa-musterring_d4d0949524.jpg",
       "bytes": 1105004,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "e5dcc57426419d85e485cedb730804023f02ee3e9e01aabbf75262673a07780b"
     },
     {
       "file": "/musterring-catalog/pinero/image-07.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/a/5/csm_esszimmer-pinero-eiche-schwarz-matt-stuhl-rosa-musterring_03698f9bb4.jpg",
       "bytes": 1189219,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "c699f04de7114885ebbefaa27d82dd9d4c476ae7eed73c009c74e138175309c9"
     },
     {
       "file": "/musterring-catalog/pinero/image-08.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/e/csm_esszimmer-pinero-esstisch-eiche-wei%C3%9F-gekreidet-matt-musterring_8c6a7b6051.jpg",
       "bytes": 710868,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "3e3e504348e0173936740c91966be67f84eb823166a01031f9d97aca080d9a00"
     }
   ]
 }

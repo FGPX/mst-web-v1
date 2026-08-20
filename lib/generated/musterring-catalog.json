@@ -1,5 +1,5 @@
 {
-  "importedAt": "2026-08-03T08:03:05.835Z",
+  "importedAt": "2026-08-19T12:17:02.984Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "products": [
@@ -11,6 +11,22 @@
       "tagline": "The sofa as the centre of life",
       "description": "As a flexible modular sofa, the JustB! PM100 adapts to your needs. Discover and configure it now.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Chaise longues",
+        "Cushions",
+        "Add-on elements",
+        "Add-on sofas",
+        "Corner sofas",
+        "Individual sofas",
+        "Foot variants",
+        "Stools",
+        "Sofas",
+        "Corner piece",
+        "Motorised functions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/justb-pm100",
       "images": [
         "/musterring-catalog/justb-pm100/image-01.jpg",
@@ -21,7 +37,9 @@
         "/musterring-catalog/justb-pm100/image-06.jpg",
         "/musterring-catalog/justb-pm100/image-07.jpg",
         "/musterring-catalog/justb-pm100/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "c6fceb1073dba47a8077a0bd068402629e2dd8e60fb4652e59fed2a53012507f"
     },
     {
       "appProductId": "musterring-justb-pm200",
@@ -31,6 +49,18 @@
       "tagline": "In perfect shape!",
       "description": "More space is not possible. Our JustB! PM200 sofa is the ideal model for anyone who doesn",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Stools",
+        "Add-on sofas",
+        "Add-on elements",
+        "Corner sofas",
+        "Individual sofas",
+        "Motorised functions",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/justb-pm200",
       "images": [
         "/musterring-catalog/justb-pm200/image-01.jpg",
@@ -41,7 +71,9 @@
         "/musterring-catalog/justb-pm200/image-06.jpg",
         "/musterring-catalog/justb-pm200/image-07.jpg",
         "/musterring-catalog/justb-pm200/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "b39426af357bf8adc3a845c17503986e344a8e54d8238c0784744efac1ac0a3a"
     },
     {
       "appProductId": "musterring-mr-kleo",
@@ -51,11 +83,20 @@
       "tagline": "Royal seating pleasure",
       "description": "Musterring: Do you like it extravagant? Then take a seat on the MR KLEO designer armchair from the Gallery M collection.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-kleo",
       "images": [
         "/musterring-catalog/mr-kleo/image-01.jpg",
         "/musterring-catalog/mr-kleo/image-02.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "12f54e7e5719ca54de1be55f57b8cadef8ab1fb3e632577b6754ee2925fb55f3"
     },
     {
       "appProductId": "musterring-mr-alena",
@@ -65,10 +106,24 @@
       "tagline": "Relaxation at the touch of a button",
       "description": "The MR ALENA sofa range from Musterring is available in fabric or leather, can be fitted with metal legs or runners, and can be complemented with a longchair, footstool and cushions.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on elements",
+        "Add-on sofas",
+        "Corner sofas",
+        "Individual sofas",
+        "Foot variants",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-alena",
       "images": [
         "/musterring-catalog/mr-alena/image-01.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "85b1e8dc1ca4bdf53eb35ec8ce41ed184dcb309fb5c598af85c0815830be219e"
     },
     {
       "appProductId": "musterring-mr-lia",
@@ -78,10 +133,21 @@
       "tagline": "Open to life",
       "description": "With its open seating areas, the minimalist MR LIA sofa range offers plenty of space to relax, whilst comfortable rolled back cushions provide the necessary support.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Individual sofas",
+        "Foot variants",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-lia",
       "images": [
         "/musterring-catalog/mr-lia/image-01.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "746e59466624ca1b40873111ced2be06b483d0cbb0a6858cea2f937fdece4d32"
     },
     {
       "appProductId": "musterring-mr-lucia",
@@ -91,6 +157,17 @@
       "tagline": "Sofas as unique as you are!",
       "description": "Casual, elegant or minimalist? The MR LUCIA sofa programme by Gallery M adapts to your preferences. Discover it now.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on sofas",
+        "Chaise longues",
+        "Add-on elements",
+        "Cushions",
+        "Stools",
+        "Corner piece"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-lucia",
       "images": [
         "/musterring-catalog/mr-lucia/image-01.jpg",
@@ -101,7 +178,9 @@
         "/musterring-catalog/mr-lucia/image-06.jpg",
         "/musterring-catalog/mr-lucia/image-07.jpg",
         "/musterring-catalog/mr-lucia/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "ef54410795dc7f2ccf3fe1eb4522ac0b29650f43d3e89a36948f72fd7a1a547d"
     },
     {
       "appProductId": "musterring-mr-nils",
@@ -111,10 +190,21 @@
       "tagline": "Relax weightlessly",
       "description": "The MR NILS recliner can be equipped with manual and motorised functions and offers a choice of 5 sizes, 6 leg shapes, 5 armrest variants and 3 seat qualities.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Ergonomic sizes",
+        "Reclining armchairs",
+        "Motorised relaxation function",
+        "Armchairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-nils",
       "images": [
         "/musterring-catalog/mr-nils/image-01.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "6bdc6d6a6a9da2fbc79a91f35aeecaa68eaa596389540414320f8e19f02d8395"
     },
     {
       "appProductId": "musterring-mr-pamela",
@@ -124,6 +214,13 @@
       "tagline": "Relaxed design for cosy hours",
       "description": "Musterring: Time to relax! Our MR PAMELA beanbag is both comfortable and stylish. Find out more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Beanbag",
+        "Stools"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-pamela",
       "images": [
         "/musterring-catalog/mr-pamela/image-01.jpg",
@@ -131,27 +228,35 @@
         "/musterring-catalog/mr-pamela/image-03.jpg",
         "/musterring-catalog/mr-pamela/image-04.jpg",
         "/musterring-catalog/mr-pamela/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "2cf2495f1abe42ce648ad6818a8be8134984943fae83552602fb53dba41d875c"
     },
     {
-      "appProductId": "musterring-translate-to-en-match-it",
-      "slug": "translate-to-en-match-it",
+      "appProductId": "musterring-match-it",
+      "slug": "match-it",
       "modelCode": "MATCH IT!",
       "name": "MATCH IT!",
       "tagline": "Retro charm for your home",
       "description": "Fancy a real lounge feeling? Then our MATCH IT! armchair is the right choice. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-match-it",
       "images": [
-        "/musterring-catalog/translate-to-en-match-it/image-01.jpg",
-        "/musterring-catalog/translate-to-en-match-it/image-02.jpg",
-        "/musterring-catalog/translate-to-en-match-it/image-03.jpg",
-        "/musterring-catalog/translate-to-en-match-it/image-04.jpg",
-        "/musterring-catalog/translate-to-en-match-it/image-05.jpg",
-        "/musterring-catalog/translate-to-en-match-it/image-06.jpg",
-        "/musterring-catalog/translate-to-en-match-it/image-07.jpg",
-        "/musterring-catalog/translate-to-en-match-it/image-08.jpg"
-      ]
+        "/musterring-catalog/match-it/image-01.jpg",
+        "/musterring-catalog/match-it/image-02.jpg",
+        "/musterring-catalog/match-it/image-03.jpg",
+        "/musterring-catalog/match-it/image-04.jpg",
+        "/musterring-catalog/match-it/image-05.jpg",
+        "/musterring-catalog/match-it/image-06.jpg",
+        "/musterring-catalog/match-it/image-07.jpg",
+        "/musterring-catalog/match-it/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "634eda68662d6919e0261a3bc90cbcb5723e9936b34159e1cee33bc1be8eb1c4"
     },
     {
       "appProductId": "musterring-mr-230",
@@ -161,6 +266,19 @@
       "tagline": "The most beautiful spot in the living room",
       "description": "Musterring: The models in this series adapt to your body contours and offer unparalleled seating comfort.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on sofas",
+        "Add-on elements",
+        "Foot variants",
+        "Sofas",
+        "Rounded corner piece",
+        "Corner piece",
+        "Armchairs",
+        "Various seat qualities"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-230",
       "images": [
         "/musterring-catalog/mr-230/image-01.jpg",
@@ -168,7 +286,9 @@
         "/musterring-catalog/mr-230/image-03.jpg",
         "/musterring-catalog/mr-230/image-04.jpg",
         "/musterring-catalog/mr-230/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "1340da57b5c861533b8658393c17fab32d9f272b37bb6001699ec92b8800678b"
     },
     {
       "appProductId": "musterring-mr-231",
@@ -178,6 +298,15 @@
       "tagline": "Comfort in its most relaxed form",
       "description": "Musterring: Time to relax – our MR 231 recliner armchair lets you unwind and recharge your batteries for everyday life.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Foot variants",
+        "Cushions",
+        "Various seat qualities"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-231",
       "images": [
         "/musterring-catalog/mr-231/image-01.jpg",
@@ -186,7 +315,9 @@
         "/musterring-catalog/mr-231/image-04.jpg",
         "/musterring-catalog/mr-231/image-05.jpg",
         "/musterring-catalog/mr-231/image-06.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "f2607664e5ee38977ccf4d01a1e25467a4d41beed28ed9aeec776e04abbe5d23"
     },
     {
       "appProductId": "musterring-mr-260",
@@ -196,6 +327,21 @@
       "tagline": "Relaxation in style and comfort",
       "description": "Cosy upholstered furniture for your home: with MR 260, Musterring combines the utmost comfort and elegant design in one product range. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Individual sofas",
+        "Corner sofas",
+        "Add-on sofas",
+        "Add-on elements",
+        "Various seat qualities",
+        "Armrest options",
+        "Foot variants",
+        "Motorised functions",
+        "Stools",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-260",
       "images": [
         "/musterring-catalog/mr-260/image-01.jpg",
@@ -205,8 +351,10 @@
         "/musterring-catalog/mr-260/image-05.jpg",
         "/musterring-catalog/mr-260/image-06.jpg",
         "/musterring-catalog/mr-260/image-07.jpg",
-        "/musterring-catalog/mr-260/image-08-hq.jpg"
-      ]
+        "/musterring-catalog/mr-260/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "2251d5d4d87cdbd91ee93cc7c55afd4b0c7b2e2041e44379c996d44823499f4e"
     },
     {
       "appProductId": "musterring-mr-261",
@@ -216,6 +364,16 @@
       "tagline": "Enjoy real high-backed comfort",
       "description": "The MR 261 reclining armchair offers many clever functions, including a fold-out back cushion for even more seating depth and incredible reclining comfort. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Foot variants",
+        "Various seat qualities",
+        "Seam designs",
+        "Motorised functions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-261",
       "images": [
         "/musterring-catalog/mr-261/image-01.jpg",
@@ -226,7 +384,9 @@
         "/musterring-catalog/mr-261/image-06.jpg",
         "/musterring-catalog/mr-261/image-07.jpg",
         "/musterring-catalog/mr-261/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "34b07e400ead0a57fcc9715857a7d1653ed4591da2f26bb494c247f9d20deb6f"
     },
     {
       "appProductId": "p6",
@@ -236,6 +396,23 @@
       "tagline": "Comfort oasis in a trendy look",
       "description": "The MR 270 sofa range features an on-trend design and a variety of comfort functions. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Add-on sofas",
+        "Add-on elements",
+        "Corner piece",
+        "Chaise longues",
+        "Foot variants",
+        "Armrest options",
+        "Various seat qualities",
+        "Motorised functions",
+        "Manual functions",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-270",
       "images": [
         "/musterring-catalog/mr-270/image-01.jpg",
@@ -246,7 +423,9 @@
         "/musterring-catalog/mr-270/image-06.jpg",
         "/musterring-catalog/mr-270/image-07.jpg",
         "/musterring-catalog/mr-270/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "00d9cd80301208d826adeb1a2c40a0d455cad7149eeac875906e0679acd4d893"
     },
     {
       "appProductId": "musterring-mr-276",
@@ -256,6 +435,15 @@
       "tagline": "As beautiful as any design classic!",
       "description": "The comfortable MR 276 reclining armchair has a distinctive appearance, thanks to its elegant, rounded wooden shell. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Reclining armchairs",
+        "Stools",
+        "Foot variants",
+        "Various seat qualities"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-276",
       "images": [
         "/musterring-catalog/mr-276/image-01.jpg",
@@ -266,7 +454,9 @@
         "/musterring-catalog/mr-276/image-06.jpg",
         "/musterring-catalog/mr-276/image-07.jpg",
         "/musterring-catalog/mr-276/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "78d3562f328a684740b59847ddea951464b1eb165c2ae12505d248b8995c18c3"
     },
     {
       "appProductId": "musterring-mr-280",
@@ -276,6 +466,23 @@
       "tagline": "Intelligent sofa",
       "description": "Height-adjustable headrests and a flexible pull-out seat are just two highlights of this clever sofa from Musterring. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Individual sofas",
+        "Corner sofas",
+        "Add-on elements",
+        "Add-on sofas",
+        "Corner piece",
+        "Chaise longues",
+        "Stools",
+        "Foot variants",
+        "Various seat qualities",
+        "Motorised functions",
+        "Manual functions",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-280",
       "images": [
         "/musterring-catalog/mr-280/image-01.jpg",
@@ -286,7 +493,9 @@
         "/musterring-catalog/mr-280/image-06.jpg",
         "/musterring-catalog/mr-280/image-07.jpg",
         "/musterring-catalog/mr-280/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "d88bb24fa0de20ee767d2d56995a0382fb6f0bb5e52eab6f47ff1f0f033bddd3"
     },
     {
       "appProductId": "musterring-mr-281",
@@ -296,10 +505,21 @@
       "tagline": "Relaxation at the touch of a button",
       "description": "The MR 281 reclining armchair from Musterring has an adjustable backrest, legrest and head cushion. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Reclining armchairs",
+        "Armchairs",
+        "Height-adjustable spindles",
+        "Motorised relaxation function"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-281",
       "images": [
         "/musterring-catalog/mr-281/image-01.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "d05b7189927b1cbe91996d90aef8ca28e0441e2c4699d3b8a7231745720793d3"
     },
     {
       "appProductId": "musterring-mr-285",
@@ -309,6 +529,19 @@
       "tagline": "The king of comfort",
       "description": "The MR 285 sofa series from Musterring offers a wealth of building blocks and comfort functions for putting together individual sets. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on sofas",
+        "Add-on elements",
+        "Armrest options",
+        "Corner sofas",
+        "Individual sofas",
+        "Foot variants",
+        "Chaise longues",
+        "Sofas"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-285",
       "images": [
         "/musterring-catalog/mr-285/image-01.jpg",
@@ -316,7 +549,9 @@
         "/musterring-catalog/mr-285/image-03.jpg",
         "/musterring-catalog/mr-285/image-04.jpg",
         "/musterring-catalog/mr-285/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "92087eef8ad9438aacbbb596d376ff04582ba9a003d67652f486be4dfa5c04cc"
     },
     {
       "appProductId": "musterring-mr-290",
@@ -326,6 +561,22 @@
       "tagline": "For a wonderfully soft end-of-day feeling",
       "description": "The MR 290 upholstery series from Musterring features practical seat depth and headrest adjustment, along with an especially soft and relaxed seating experience. Discover it now.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Corner sofas",
+        "Add-on sofas",
+        "Add-on elements",
+        "Rounded corner piece",
+        "Chaise longues",
+        "Cushions",
+        "Foot variants",
+        "Various seat heights",
+        "Manual functions",
+        "Motorised functions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-290",
       "images": [
         "/musterring-catalog/mr-290/image-01.jpg",
@@ -333,41 +584,75 @@
         "/musterring-catalog/mr-290/image-03.jpg",
         "/musterring-catalog/mr-290/image-04.jpg",
         "/musterring-catalog/mr-290/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "5dfcbaae016ce89a55d40f8e2471693584e8bbd71a6c107123800dd41111c2e5"
     },
     {
-      "appProductId": "musterring-translate-to-en-mr-300",
-      "slug": "translate-to-en-mr-300",
+      "appProductId": "musterring-mr-300",
+      "slug": "mr-300",
       "modelCode": "MR 300",
       "name": "MR 300",
       "tagline": "High backrest, maximum comfort",
       "description": "With an extra high backrest and sophisticated comfort functions, the MR 300 sofa ensures a particularly pleasant sitting experience. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on elements",
+        "Armrest options",
+        "Foot variants",
+        "Manual functions",
+        "Motorised functions",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-mr-300",
       "images": [
-        "/musterring-catalog/translate-to-en-mr-300/image-01.jpg",
-        "/musterring-catalog/translate-to-en-mr-300/image-02.jpg",
-        "/musterring-catalog/translate-to-en-mr-300/image-03.jpg",
-        "/musterring-catalog/translate-to-en-mr-300/image-04.jpg",
-        "/musterring-catalog/translate-to-en-mr-300/image-05.jpg"
-      ]
+        "/musterring-catalog/mr-300/image-01.jpg",
+        "/musterring-catalog/mr-300/image-02.jpg",
+        "/musterring-catalog/mr-300/image-03.jpg",
+        "/musterring-catalog/mr-300/image-04.jpg",
+        "/musterring-catalog/mr-300/image-05.jpg"
+      ],
+      "stale": false,
+      "contentHash": "089e9e1c4d6d283ffc2d4fae83288a737c2007a241f454d08a56acdad4824c50"
     },
     {
-      "appProductId": "musterring-translate-to-en-mr-310",
-      "slug": "translate-to-en-mr-310",
+      "appProductId": "musterring-mr-310",
+      "slug": "mr-310",
       "modelCode": "MR 310",
       "name": "MR 310",
       "tagline": "Haven of peace for the most beautiful hours",
       "description": "The couch series MR 310 by Musterring offers clever comfort features and can be flexibly configured. Learn more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Individual sofas",
+        "Add-on elements",
+        "Add-on sofas",
+        "Chaise longues",
+        "Motorised functions",
+        "Various seat qualities",
+        "Armrest options",
+        "Foot variants",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/translate-to-en-mr-310",
       "images": [
-        "/musterring-catalog/translate-to-en-mr-310/image-01.jpg",
-        "/musterring-catalog/translate-to-en-mr-310/image-02.jpg",
-        "/musterring-catalog/translate-to-en-mr-310/image-03.jpg",
-        "/musterring-catalog/translate-to-en-mr-310/image-04.jpg",
-        "/musterring-catalog/translate-to-en-mr-310/image-05.jpg"
-      ]
+        "/musterring-catalog/mr-310/image-01.jpg",
+        "/musterring-catalog/mr-310/image-02.jpg",
+        "/musterring-catalog/mr-310/image-03.jpg",
+        "/musterring-catalog/mr-310/image-04.jpg",
+        "/musterring-catalog/mr-310/image-05.jpg"
+      ],
+      "stale": false,
+      "contentHash": "98e8ff8941f3252823d8d3579e0a49e85492c2bd1db1705e8e54cd5ad7fd9f4c"
     },
     {
       "appProductId": "musterring-mr-315",
@@ -377,6 +662,18 @@
       "tagline": "Minimalist design for maximum comfort",
       "description": "Are you looking for a sofa that is both comfortable and elegant? Our MR 315 offers you a wide range of variants, add-on elements, footstools and cushions.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on elements",
+        "Add-on sofas",
+        "Foot variants",
+        "Stools",
+        "Cushions",
+        "Armrest options",
+        "Trapezoid corner"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-315",
       "images": [
         "/musterring-catalog/mr-315/image-01.jpg",
@@ -387,7 +684,9 @@
         "/musterring-catalog/mr-315/image-06.jpg",
         "/musterring-catalog/mr-315/image-07.jpg",
         "/musterring-catalog/mr-315/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "4e64b0fc26d666f6516ff1a5c218281a1769eaea39bb1a0444a9300390057b36"
     },
     {
       "appProductId": "musterring-mr-365",
@@ -397,6 +696,19 @@
       "tagline": "The clever sofa trend from Musterring",
       "description": "Musterring: Our MR 365 series combines modern design with intelligent functions for optimal seating and reclining comfort. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Corner sofas",
+        "Add-on sofas",
+        "Add-on elements",
+        "Chaise longues",
+        "Armchairs",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-365",
       "images": [
         "/musterring-catalog/mr-365/image-01.jpg",
@@ -407,7 +719,9 @@
         "/musterring-catalog/mr-365/image-06.jpg",
         "/musterring-catalog/mr-365/image-07.jpg",
         "/musterring-catalog/mr-365/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "66b9cfc2870f56bdb8d2c2c23ccd242221ae016c7df8888ed4e180d54266389e"
     },
     {
       "appProductId": "musterring-mr-370",
@@ -417,6 +731,21 @@
       "tagline": "Welcome to the comfort zone",
       "description": "Comfort has a name: MR 370 is our sofa range for anyone looking for rest and relaxation. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Corner sofas",
+        "Add-on sofas",
+        "Add-on elements",
+        "Chaise longues",
+        "Armrest options",
+        "Foot variants",
+        "Various seat qualities",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-370",
       "images": [
         "/musterring-catalog/mr-370/image-01.jpg",
@@ -427,7 +756,9 @@
         "/musterring-catalog/mr-370/image-06.jpg",
         "/musterring-catalog/mr-370/image-07.jpg",
         "/musterring-catalog/mr-370/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "fef1fbd10f61116d277877d075442c85ca7ff093b615883b29d04b90ce7dfe7e"
     },
     {
       "appProductId": "musterring-mr-376",
@@ -437,13 +768,24 @@
       "tagline": "Sitting becomes lying",
       "description": "The seat, leg rest and back of the MR 376 functional armchair from Musterring can be moved into the reclining position. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Reclining armchairs",
+        "Foot variants",
+        "Motorised functions",
+        "Various seat heights"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-376",
       "images": [
         "/musterring-catalog/mr-376/image-01.jpg",
         "/musterring-catalog/mr-376/image-02.jpg",
         "/musterring-catalog/mr-376/image-03.jpg",
         "/musterring-catalog/mr-376/image-04.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "37474e11eeba21ea406c80daeab9b2c4fddf148c87125b253d7da20eb4831343"
     },
     {
       "appProductId": "musterring-mr-385",
@@ -453,6 +795,23 @@
       "tagline": "Seating comfort without compromise",
       "description": "From couch to armchair to footstool, our MR 385 series offers everything you need for a cosy night in. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Add-on elements",
+        "Add-on sofas",
+        "Armrest options",
+        "Corner sofas",
+        "Individual sofas",
+        "Foot variants",
+        "Stools",
+        "Cushions",
+        "Chaise longues",
+        "Manual functions",
+        "Motorised functions",
+        "Various seat qualities"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-385",
       "images": [
         "/musterring-catalog/mr-385/image-01.jpg",
@@ -463,7 +822,9 @@
         "/musterring-catalog/mr-385/image-06.jpg",
         "/musterring-catalog/mr-385/image-07.jpg",
         "/musterring-catalog/mr-385/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "ff02ad5bbd7fcdfa95566f83eee1dcf97e0f63718b9c7c96b7312db9b46946a9"
     },
     {
       "appProductId": "musterring-mr-1320",
@@ -473,6 +834,21 @@
       "tagline": "A completely new seating experience",
       "description": "The MR 1320 sofa series offers headrest adjustment as standard, additional comfort functions and two seat qualities, including an innovative soft seat. Learn more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Corner sofas",
+        "Individual sofas",
+        "Add-on elements",
+        "Rounded corner piece",
+        "Corner piece",
+        "Chaise longues",
+        "Foot variants",
+        "Various seat qualities",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1320",
       "images": [
         "/musterring-catalog/mr-1320/image-01.jpg",
@@ -480,7 +856,9 @@
         "/musterring-catalog/mr-1320/image-03.jpg",
         "/musterring-catalog/mr-1320/image-04.jpg",
         "/musterring-catalog/mr-1320/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "2b1918bce7d22d1edafaf720a07c622dc63d526143da0a84b078b02a92c75302"
     },
     {
       "appProductId": "p2",
@@ -490,13 +868,26 @@
       "tagline": "A compact sofa for wonderful moments",
       "description": "Musterring: MR 1370 offers enough space for cosy evenings and still fits into any living room. Learn more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Add-on sofas",
+        "Add-on elements",
+        "Corner piece",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1370",
       "images": [
         "/musterring-catalog/mr-1370/image-01.jpg",
         "/musterring-catalog/mr-1370/image-02.jpg",
         "/musterring-catalog/mr-1370/image-03.jpg",
         "/musterring-catalog/mr-1370/image-04.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "87cbf15bddf65ce737cd1d4d23ab024d92d3aa303a7f2257b10b6379ceeb08c8"
     },
     {
       "appProductId": "musterring-mr-1390",
@@ -506,6 +897,16 @@
       "tagline": "Comfort sofa with high quality fabric cover",
       "description": "The comprehensive MR 1380 upholstery series from Musterring offers high-quality fabric upholstery and sophisticated comfort functions. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on elements",
+        "Armrest options",
+        "Corner sofas",
+        "Foot variants",
+        "Chaise longues"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1390",
       "images": [
         "/musterring-catalog/mr-1390/image-01.jpg",
@@ -516,7 +917,9 @@
         "/musterring-catalog/mr-1390/image-06.jpg",
         "/musterring-catalog/mr-1390/image-07.jpg",
         "/musterring-catalog/mr-1390/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "9c2e53443bd896120fa1cfde31d9fa4c000e36b3b6721606586cac046304745f"
     },
     {
       "appProductId": "musterring-mr-1391",
@@ -526,13 +929,23 @@
       "tagline": "MR 1391 – has the knack",
       "description": "Our MR 1391 is the comfortable swivel armchair for maximum seating comfort in the living room at home. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Motorised relaxation function",
+        "Reclining armchairs",
+        "Foot variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-1391",
       "images": [
         "/musterring-catalog/mr-1391/image-01.jpg",
         "/musterring-catalog/mr-1391/image-02.jpg",
         "/musterring-catalog/mr-1391/image-03.jpg",
         "/musterring-catalog/mr-1391/image-04.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "d969888b80553366ce4f6968f36a743d2c9f0854d97abc1eeaa6a4bb6b30f5da"
     },
     {
       "appProductId": "musterring-mr-2342",
@@ -542,13 +955,22 @@
       "tagline": "Comfort has a name",
       "description": "The MR 2342 feel-good armchair from Musterring is flexible, stylish and cozy at the same time. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Reclining armchairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2342",
       "images": [
         "/musterring-catalog/mr-2342/image-01.jpg",
         "/musterring-catalog/mr-2342/image-02.jpg",
         "/musterring-catalog/mr-2342/image-03.jpg",
         "/musterring-catalog/mr-2342/image-04.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "83ecb0610e238fca137bd575f0dcc052c30f6dd7150ac88fc20a1130984bb05e"
     },
     {
       "appProductId": "p4",
@@ -558,6 +980,19 @@
       "tagline": "Seating comfort is a top priority here",
       "description": "Plenty of space and comfort: our sofa series for everyone who wants maximum freedom to relax. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on sofas",
+        "Corner sofas",
+        "Chaise longues",
+        "Stools",
+        "Armchairs",
+        "Cushions",
+        "Foot variants",
+        "Motorised functions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2490",
       "images": [
         "/musterring-catalog/mr-2490/image-01.jpg",
@@ -568,7 +1003,9 @@
         "/musterring-catalog/mr-2490/image-06.jpg",
         "/musterring-catalog/mr-2490/image-07.jpg",
         "/musterring-catalog/mr-2490/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "f5f26a44a5a9494f1e9ec78fcb8f814047a8adeefa67b65d6893e192f637fb30"
     },
     {
       "appProductId": "musterring-mr-2665",
@@ -578,10 +1015,20 @@
       "tagline": "Sitting as if floating",
       "description": "Musterring: Treat yourself to a break from the daily grind and make yourself comfortable in the MR2665 recliner. Find out more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Reclining armchairs",
+        "Motorised relaxation function"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2665",
       "images": [
         "/musterring-catalog/mr-2665/image-01.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "bf4102ff14e15aaf56589fc7fbf1c508f117b4fe698a48e3e936c7b7bb25bce4"
     },
     {
       "appProductId": "musterring-mr-2795",
@@ -591,6 +1038,16 @@
       "tagline": "A cuddle couch at its best",
       "description": "The MR 2795 sofa series impresses with its weightless design, adjustable seat depth, and optional headrest and side section adjustment. Learn more now.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Motorised functions",
+        "Sofas",
+        "Corner sofas",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2795",
       "images": [
         "/musterring-catalog/mr-2795/image-01.jpg",
@@ -598,7 +1055,9 @@
         "/musterring-catalog/mr-2795/image-03.jpg",
         "/musterring-catalog/mr-2795/image-04.jpg",
         "/musterring-catalog/mr-2795/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "70b2157044dbfcc38b930e5db592a792df8a39bae8292036cba4067e3691af09"
     },
     {
       "appProductId": "p1",
@@ -608,6 +1067,19 @@
       "tagline": "Configure your dream sofa yourself",
       "description": "Discover the versatility of the MR 2875 series and be your own furniture designer with our sofa configurator. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Individual sofas",
+        "Corner sofas",
+        "Chaise longues",
+        "Various seat qualities",
+        "Armrest options",
+        "Foot variants",
+        "Seam designs",
+        "Stools"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2875",
       "images": [
         "/musterring-catalog/mr-2875/image-01.jpg",
@@ -618,7 +1090,9 @@
         "/musterring-catalog/mr-2875/image-06.jpg",
         "/musterring-catalog/mr-2875/image-07.jpg",
         "/musterring-catalog/mr-2875/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "d8473fdde6221862ae5c05b1e7997a1b0702caf09602c127e1afeda955587644"
     },
     {
       "appProductId": "musterring-mr-2985",
@@ -628,10 +1102,23 @@
       "tagline": "plenty of room to feel good",
       "description": "The design-orientated MR 2985 upholstered range scores points with its wide side sections, practical seat depth adjustment and attractive piping on the outer edges of the upholstery.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Add-on elements",
+        "Chaise longues",
+        "Cushions",
+        "Stools",
+        "Foot variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2985",
       "images": [
         "/musterring-catalog/mr-2985/image-01.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "183c8aaa2cd69b7cd08ee5ee59a0a0a75b32cb9633031a38f9e747ed6d06f32b"
     },
     {
       "appProductId": "musterring-mr-2986",
@@ -641,12 +1128,21 @@
       "tagline": "An armchair with style and class",
       "description": "The chic MR 2986 armchair is the perfect complement to the MR 2985 sofa and impresses with its delicate metal frame and attractive piping.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2986",
       "images": [
         "/musterring-catalog/mr-2986/image-01.jpg",
         "/musterring-catalog/mr-2986/image-02.jpg",
         "/musterring-catalog/mr-2986/image-03.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "cd83a182536288dc728ff3b5b8f647e34125ecd6b78d56224f3e1d96523a3717"
     },
     {
       "appProductId": "musterring-mr-2995",
@@ -656,6 +1152,17 @@
       "tagline": "Go to MR 2995!",
       "description": "",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Foot variants",
+        "Individual sofas",
+        "Corner sofas",
+        "Add-on elements",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2995",
       "images": [
         "/musterring-catalog/mr-2995/image-01.jpg",
@@ -664,7 +1171,9 @@
         "/musterring-catalog/mr-2995/image-04.jpg",
         "/musterring-catalog/mr-2995/image-05.jpg",
         "/musterring-catalog/mr-2995/image-06.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "12ed24dd6ade6b0c8619a85a51dc451ff02778eade15fb90e4cad09eaa93f28a"
     },
     {
       "appProductId": "musterring-mr-4100",
@@ -674,10 +1183,21 @@
       "tagline": "Recliner",
       "description": "Musterring: Sit back, take a deep breath and close your eyes – in the MR 4100 recliner, everyday life takes a break.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Reclining armchairs",
+        "Armrest options",
+        "Foot variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4100",
       "images": [
         "/musterring-catalog/mr-4100/image-01.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "7545db1693ebda5ea76256eea70b2626f761ca36172d1937124aac5fc469372c"
     },
     {
       "appProductId": "musterring-mr-4585",
@@ -687,6 +1207,14 @@
       "tagline": "Time for a change",
       "description": "Do you like to see things from different perspectives? The MR 4585 swivelling armchairs and footstools provide a whole new level of flexibility. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Stools",
+        "Foot variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4585",
       "images": [
         "/musterring-catalog/mr-4585/image-01.jpg",
@@ -697,7 +1225,9 @@
         "/musterring-catalog/mr-4585/image-06.jpg",
         "/musterring-catalog/mr-4585/image-07.jpg",
         "/musterring-catalog/mr-4585/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "83bf5ac8c60d7dd5a31fc12c4e973a6925289c21da762d88c8c30b0ffc0a43c6"
     },
     {
       "appProductId": "musterring-mr-4615",
@@ -707,6 +1237,17 @@
       "tagline": "A sofa for life",
       "description": "Whether it",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on elements",
+        "Add-on sofas",
+        "Armrest options",
+        "Corner sofas",
+        "Foot variants",
+        "Manual functions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4615",
       "images": [
         "/musterring-catalog/mr-4615/image-01.jpg",
@@ -714,7 +1255,9 @@
         "/musterring-catalog/mr-4615/image-03.jpg",
         "/musterring-catalog/mr-4615/image-04.jpg",
         "/musterring-catalog/mr-4615/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "e98ea378270638772cc1a644010b49c224dd1d84e479826493bd895ebcd67c58"
     },
     {
       "appProductId": "musterring-mr-4820",
@@ -724,6 +1267,18 @@
       "tagline": "Loose, casual and incredibly cosy",
       "description": "The MR 4820 upholstery range scores with a loose upholstery structure and offers, in addition to sofas, ottomans, footstools and a large selection of cushions. Discover more now.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Corner sofas",
+        "Add-on sofas",
+        "Stools",
+        "Chaise longues",
+        "Cushions",
+        "Foot variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-4820",
       "images": [
         "/musterring-catalog/mr-4820/image-01.jpg",
@@ -731,7 +1286,9 @@
         "/musterring-catalog/mr-4820/image-03.jpg",
         "/musterring-catalog/mr-4820/image-04.jpg",
         "/musterring-catalog/mr-4820/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "e55c394eadaf30599b1faec15b122f3ef7a249b8ddb179b1ceead9e3abe7ee3d"
     },
     {
       "appProductId": "musterring-mr-5100",
@@ -741,11 +1298,23 @@
       "tagline": "Because true elegance does not follow trends",
       "description": "Musterring: Classic. Timeless. Elegant. Our MR 5100 sofa range redefines style while offering maximum seating comfort.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Individual sofas",
+        "Add-on sofas",
+        "Cushions",
+        "Chaise longues",
+        "Add-on elements"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-5100",
       "images": [
         "/musterring-catalog/mr-5100/image-01.jpg",
         "/musterring-catalog/mr-5100/image-02.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "57eaf5afb073f73a818dcfe0e75f9ad6eebc26b762e8836810e51bd77577efc8"
     },
     {
       "appProductId": "musterring-mr-5111",
@@ -755,11 +1324,20 @@
       "tagline": "This swivel armchair is addictive",
       "description": "Musterring: It doesn",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Foot variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-5111",
       "images": [
         "/musterring-catalog/mr-5111/image-01.png",
         "/musterring-catalog/mr-5111/image-02.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "4ab1730bc0091868733b83fadfb1c943f9105fe2054c0d1ccc637a9abc412d2d"
     },
     {
       "appProductId": "musterring-mr-700",
@@ -769,6 +1347,20 @@
       "tagline": "Sofa or bed? Both in one!",
       "description": "The comfortable MR 700 sofa bed easily transforms into a bed. You can choose from 10 armrest styles, 6 leg designs, and an optional longchair.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Sofa bed",
+        "Corner sofas",
+        "Chaise longues",
+        "Armrest options",
+        "Foot variants",
+        "Storage box",
+        "Mattresses",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-700",
       "images": [
         "/musterring-catalog/mr-700/image-01.jpg",
@@ -779,7 +1371,9 @@
         "/musterring-catalog/mr-700/image-06.jpg",
         "/musterring-catalog/mr-700/image-07.jpg",
         "/musterring-catalog/mr-700/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "69f85d2ab71437e9d11eeb943c602d0845dfe6baa38bc689119cb1b9de18f2e2"
     },
     {
       "appProductId": "musterring-mr-710",
@@ -789,6 +1383,16 @@
       "tagline": "With a single motion from sofa to bed!",
       "description": "The MR 700 sofa bed with integrated mattress offers excellent seating and sleeping comfort thanks to high-quality cold foam and Nosag suspension. Learn more now.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofa bed",
+        "Chaise longues",
+        "Armrest options",
+        "Foot variants",
+        "Storage box"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-710",
       "images": [
         "/musterring-catalog/mr-710/image-01.jpg",
@@ -796,7 +1400,9 @@
         "/musterring-catalog/mr-710/image-03.jpg",
         "/musterring-catalog/mr-710/image-04.jpg",
         "/musterring-catalog/mr-710/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "53ff67f9b0c8ff90d8ca20b1eb5f5a50dfb37848c1e4e294660d8f9d1e3fd7a5"
     },
     {
       "appProductId": "musterring-mr-720",
@@ -806,11 +1412,21 @@
       "tagline": "From sofa to bed with ease",
       "description": "The elegant MR 720 sofa scores points with its high ground clearance, three foot options and a fold-down armrest, allowing it to be used as a bed.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Individual sofas",
+        "Foot variants",
+        "Sofa bed"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-720",
       "images": [
         "/musterring-catalog/mr-720/image-01.jpg",
         "/musterring-catalog/mr-720/image-02.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "81936f9a65c5abe7d1161185dd90c1544b0f79f0a4f49b27226b5395f2364902"
     },
     {
       "appProductId": "musterring-mr-6500",
@@ -820,6 +1436,19 @@
       "tagline": "Where elegance and comfort meet",
       "description": "The MR 6500 sofa programme from Musterring impresses with its classic design language and a wide range of armrest and foot variants. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Corner piece",
+        "Add-on sofas",
+        "Chaise longues",
+        "Stools",
+        "Armrest options",
+        "Foot variants",
+        "Various seat qualities",
+        "Various seat heights"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-6500",
       "images": [
         "/musterring-catalog/mr-6500/image-01.jpg",
@@ -827,7 +1456,9 @@
         "/musterring-catalog/mr-6500/image-03.jpg",
         "/musterring-catalog/mr-6500/image-04.jpg",
         "/musterring-catalog/mr-6500/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "a9ba6d366a30635bd300fa6b5aa693e3466abad16715860d83e617ab9b49c7bf"
     },
     {
       "appProductId": "musterring-mr-6510",
@@ -837,6 +1468,19 @@
       "tagline": "Timeless beauty with the highest standards of comfort",
       "description": "The extensive MR 6510 sofa programme combines modern elegance with a distinctive seating design and can be flexibly adapted to individual requirements.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on sofas",
+        "Stools",
+        "Cushions",
+        "Chaise longues",
+        "Foot variants",
+        "Various seat heights",
+        "Various seat qualities",
+        "Armchairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-6510",
       "images": [
         "/musterring-catalog/mr-6510/image-01.jpg",
@@ -844,7 +1488,9 @@
         "/musterring-catalog/mr-6510/image-03.jpg",
         "/musterring-catalog/mr-6510/image-04.jpg",
         "/musterring-catalog/mr-6510/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "e75e614e4f0a444eb8bf547cb943f8b62f2bbd1b64a60e911c3dc53fadcb1093"
     },
     {
       "appProductId": "musterring-mr-6540",
@@ -854,6 +1500,13 @@
       "tagline": "An armchair as a statement",
       "description": "Whether as a fully upholstered chair or with leather covers: This seating sets accents and offers unique comfort. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Stools"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-6540",
       "images": [
         "/musterring-catalog/mr-6540/image-01.jpg",
@@ -861,7 +1514,9 @@
         "/musterring-catalog/mr-6540/image-03.jpg",
         "/musterring-catalog/mr-6540/image-04.jpg",
         "/musterring-catalog/mr-6540/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "ee4c4b347b0c2990cf12743d5fb3e286d4b445b732935c10dd2aaf525f964b6d"
     },
     {
       "appProductId": "musterring-mr-6550",
@@ -871,6 +1526,15 @@
       "tagline": "For real seat comfort",
       "description": "At Musterring you will find comfortable chairs and armchairs with a wide variety of covers for your home. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Stools",
+        "Foot variants",
+        "Ergonomic sizes"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-6550",
       "images": [
         "/musterring-catalog/mr-6550/image-01.jpg",
@@ -878,7 +1542,9 @@
         "/musterring-catalog/mr-6550/image-03.jpg",
         "/musterring-catalog/mr-6550/image-04.jpg",
         "/musterring-catalog/mr-6550/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "54b0c537eb25a5de4f614a546781d6912d86c78e96af65346a5ee9d1564826be"
     },
     {
       "appProductId": "musterring-mr-9120",
@@ -888,6 +1554,23 @@
       "tagline": "Your personal comfort zone",
       "description": "With this upholstered furniture series, we have taken seating and reclining comfort to the next level. See for yourself. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on elements",
+        "Add-on sofas",
+        "Chaise longues",
+        "Armrest options",
+        "Various seat heights",
+        "Various seat qualities",
+        "Motorised functions",
+        "Cushions",
+        "Foot variants",
+        "Trim variants",
+        "Individual sofas",
+        "Corner sofas"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9120",
       "images": [
         "/musterring-catalog/mr-9120/image-01.jpg",
@@ -898,7 +1581,9 @@
         "/musterring-catalog/mr-9120/image-06.jpg",
         "/musterring-catalog/mr-9120/image-07.jpg",
         "/musterring-catalog/mr-9120/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "eb756bb86cdb836f63bd259f3a2001968ab5f512ebbdef82da18003628a0fac7"
     },
     {
       "appProductId": "p3",
@@ -908,6 +1593,17 @@
       "tagline": "The modular world of furniture for your home",
       "description": "Musterring MR 9420: The modular upholstered seating for anyone who wants maximum flexibility in the selection of their furniture. Discover more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Add-on sofas",
+        "Corner sofas",
+        "Chaise longues",
+        "Cushions",
+        "Seam designs",
+        "Various seat qualities"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9420",
       "images": [
         "/musterring-catalog/mr-9420/image-01.jpg",
@@ -918,7 +1614,9 @@
         "/musterring-catalog/mr-9420/image-06.jpg",
         "/musterring-catalog/mr-9420/image-07.jpg",
         "/musterring-catalog/mr-9420/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "a8998cd5f6f281fab716c50fd1045c36be86ec37c5d0e01ca04010ad88041469"
     },
     {
       "appProductId": "musterring-mr-9425",
@@ -928,6 +1626,14 @@
       "tagline": "Design that fits",
       "description": "With its retro design, this comfortable armchair is a real eye-catcher in your living room. Discover more.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Foot variants",
+        "Trim variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9425",
       "images": [
         "/musterring-catalog/mr-9425/image-01.jpg",
@@ -938,7 +1644,9 @@
         "/musterring-catalog/mr-9425/image-06.jpg",
         "/musterring-catalog/mr-9425/image-07.jpg",
         "/musterring-catalog/mr-9425/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "428f165843a14fb5d347f62ac99a58f9b34c500c629c365b9c82d6288822870d"
     },
     {
       "appProductId": "musterring-mr-9440",
@@ -948,6 +1656,20 @@
       "tagline": "The island of cosiness",
       "description": "The versatile MR 9440 sofa series can be planned in 10 cm increments up to a width of four metres and can be equipped with various functions.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Armrest options",
+        "Add-on sofas",
+        "Individual sofas",
+        "Foot variants",
+        "Chaise longues",
+        "Various seat qualities",
+        "Add-on elements",
+        "Various seat heights",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9440",
       "images": [
         "/musterring-catalog/mr-9440/image-01.jpg",
@@ -955,7 +1677,9 @@
         "/musterring-catalog/mr-9440/image-03.jpg",
         "/musterring-catalog/mr-9440/image-04.jpg",
         "/musterring-catalog/mr-9440/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "1d856d2ed4cdbed312a8a11f9ea225beebdd3488747dc940a04c476924637b1f"
     },
     {
       "appProductId": "musterring-mr-9445",
@@ -965,11 +1689,21 @@
       "tagline": "The casual way of sitting",
       "description": "The MR 9445 single armchair from Musterring can be rotated 360 degrees and is the perfect match for the MR 9440 sofa series. It is available with fabric or leather upholstery.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs",
+        "Trim variants",
+        "Stools"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9445",
       "images": [
         "/musterring-catalog/mr-9445/image-01.jpg",
         "/musterring-catalog/mr-9445/image-02.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "f59e40bed5b5cd0dd936a2ead17a555c229feb47a3fda459136c09432ebf846b"
     },
     {
       "appProductId": "musterring-mr-9450",
@@ -979,6 +1713,18 @@
       "tagline": "Your customised comfort sofa is already waiting",
       "description": "The extensive MR 9450 sofa range from Musterring scores highly with its wide variety of models, planning flexibility and manual and motorised comfort functions. Find out more.",
       "category": "sofa",
+      "categories": [
+        "sofa"
+      ],
+      "productOverview": [
+        "Sofas",
+        "Corner sofas",
+        "Chaise longues",
+        "Armrest options",
+        "Foot variants",
+        "Stools",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9450",
       "images": [
         "/musterring-catalog/mr-9450/image-01.jpg",
@@ -986,7 +1732,9 @@
         "/musterring-catalog/mr-9450/image-03.jpg",
         "/musterring-catalog/mr-9450/image-04.jpg",
         "/musterring-catalog/mr-9450/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "1d0e0359acdb503832711e49395b366e9fd4565d1f7b0c2ba00cecc8077c7351"
     },
     {
       "appProductId": "musterring-mr-9455",
@@ -996,10 +1744,18 @@
       "tagline": "An armchair that turns and twists",
       "description": "The organically shaped MR 9455 armchair from Musterring can be swivelled through 360 degrees and is an excellent addition to the MR 9450 sofa series. Find out more now.",
       "category": "armchair",
+      "categories": [
+        "armchair"
+      ],
+      "productOverview": [
+        "Armchairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-9455",
       "images": [
         "/musterring-catalog/mr-9455/image-01.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "ebb9769bfb0ae7600d79bf8230a1431c12bc6a0da10388bdbb15c3015f6a3a15"
     },
     {
       "appProductId": "musterring-jana",
@@ -1009,10 +1765,25 @@
       "tagline": "Welcome to a wonderful living ambience",
       "description": "The first-class JANA living series from Musterring combines modern lacquered fronts in the colour graphite with striking split wood trim in reclaimed oak. Find out more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Lowboards",
+        "Dining tables",
+        "Wall cabinets",
+        "Sideboards",
+        "Glass-fronted cabinets",
+        "Wall boards",
+        "Coffee table",
+        "Lighting"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/jana",
       "images": [
         "/musterring-catalog/jana/image-01.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "1f651712d19172e45e1257c73f3792edeb64e8f334020cc4a7bc63286813706d"
     },
     {
       "appProductId": "musterring-kanto",
@@ -1022,6 +1793,25 @@
       "tagline": "for creative living ideas",
       "description": "From the dining room to the living room to the home office: you will find just the right furniture in the KANTO series. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Wall units",
+        "Highboards",
+        "Sideboards",
+        "Lowboards",
+        "Media elements",
+        "Wall cabinets",
+        "Shelves",
+        "Glass-fronted cabinets",
+        "Wall boards",
+        "Wardrobes",
+        "Coffee table",
+        "Dining tables",
+        "Chairs",
+        "Lighting"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kanto",
       "images": [
         "/musterring-catalog/kanto/image-01.jpg",
@@ -1032,16 +1822,39 @@
         "/musterring-catalog/kanto/image-06.jpg",
         "/musterring-catalog/kanto/image-07.jpg",
         "/musterring-catalog/kanto/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "5080afa2c535c6a57b13828dceacac49ab673b127622ad992e56e44d4716c839"
     },
     {
       "appProductId": "musterring-kara-frame",
       "slug": "kara-frame",
-      "modelCode": "Kara Frame",
-      "name": "Kara Frame",
-      "tagline": "KARA-FRAME Made by you",
+      "modelCode": "KARA-FRAME",
+      "name": "KARA-FRAME",
+      "tagline": "Made by you",
       "description": "Play with shapes, colours and functions and be your very own furniture designer with KARA-FRAME. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Wall units",
+        "Highboards",
+        "Sideboards",
+        "Lowboards",
+        "Media elements",
+        "Sliding door systems",
+        "Shelves",
+        "Glass-fronted cabinets",
+        "Wall cabinets",
+        "Wall boards",
+        "Wardrobes",
+        "Dining tables",
+        "Coffee table",
+        "Desks",
+        "Lighting",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kara-frame",
       "images": [
         "/musterring-catalog/kara-frame/image-01.jpg",
@@ -1052,16 +1865,40 @@
         "/musterring-catalog/kara-frame/image-06.jpg",
         "/musterring-catalog/kara-frame/image-07.jpg",
         "/musterring-catalog/kara-frame/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "a5be6006c648f654c79422a4120970264f623df566b08bc647be21e047f021e4"
     },
     {
       "appProductId": "musterring-kara-system",
       "slug": "kara-system",
-      "modelCode": "Kara System",
-      "name": "Kara System",
-      "tagline": "KARA-SYSTEM Make the system change",
+      "modelCode": "KARA-SYSTEM",
+      "name": "KARA-SYSTEM",
+      "tagline": "Make the system change",
       "description": "At home or at the office: bring order to chaos with KARA-SYSTEM and create new freedom for a comfortable home and work life. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Wall units",
+        "Highboards",
+        "Sideboards",
+        "Lowboards",
+        "Media elements",
+        "Wall cabinets",
+        "Shelves",
+        "Glass-fronted cabinets",
+        "Wall boards",
+        "Sliding door systems",
+        "Wardrobes",
+        "Dining tables",
+        "Coffee table",
+        "Desks",
+        "Chairs",
+        "Lighting",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kara-system",
       "images": [
         "/musterring-catalog/kara-system/image-01.jpg",
@@ -1072,16 +1909,31 @@
         "/musterring-catalog/kara-system/image-06.jpg",
         "/musterring-catalog/kara-system/image-07.jpg",
         "/musterring-catalog/kara-system/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "38a46a192586541603bcd8a45abd236e2f293594fb08f92bdf6d6cbba5982308"
     },
     {
       "appProductId": "musterring-kira-system",
       "slug": "kira-system",
-      "modelCode": "Kira System",
-      "name": "Kira System",
-      "tagline": "KIRA-SYSTEM Welcome home!",
+      "modelCode": "KIRA-SYSTEM",
+      "name": "KIRA-SYSTEM",
+      "tagline": "Welcome home!",
       "description": "Creativity knows no bounds. That’s why we have created KIRA-SYSTEM, a furniture series that offers maximum flexibility. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Coffee table",
+        "Dining tables",
+        "Wall boards",
+        "Glass-fronted cabinets",
+        "Wall units",
+        "Lowboards",
+        "Sideboards",
+        "Highboards"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kira-system",
       "images": [
         "/musterring-catalog/kira-system/image-01.jpg",
@@ -1092,7 +1944,9 @@
         "/musterring-catalog/kira-system/image-06.jpg",
         "/musterring-catalog/kira-system/image-07.jpg",
         "/musterring-catalog/kira-system/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "e6b20d37c89cd3a250d4878ccf4e5802da64242bb9983757f4aa42eca927364b"
     },
     {
       "appProductId": "musterring-kiana",
@@ -1102,6 +1956,25 @@
       "tagline": "All-rounder in a solid wood look",
       "description": "The adaptable living and dining furniture in the KIANA series from Musterring creates a cosy interior with its softly rounded solid-wood fronts. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Wall cabinets",
+        "Sideboards",
+        "Highboards",
+        "Dining tables",
+        "Coffee table",
+        "Lighting",
+        "Wall units",
+        "Chairs",
+        "Wardrobes",
+        "Media elements",
+        "Shelves",
+        "Desks",
+        "Glass-fronted cabinets",
+        "Wall boards"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/kiana",
       "images": [
         "/musterring-catalog/kiana/image-01.jpg",
@@ -1112,7 +1985,9 @@
         "/musterring-catalog/kiana/image-06.jpg",
         "/musterring-catalog/kiana/image-07.jpg",
         "/musterring-catalog/kiana/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "70a8692cd1d0c665cc5a86379fe01b895feb800d532925d7e688d3ea7a3fe925"
     },
     {
       "appProductId": "musterring-korsika",
@@ -1122,6 +1997,22 @@
       "tagline": "WOHNEN Mediterranean-style living",
       "description": "The KORSIKA living and dining room furniture series brings home that holiday feeling with its Mediterranean-inspired design. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Wall units",
+        "Wall boards",
+        "Glass-fronted cabinets",
+        "Sideboards",
+        "Desks",
+        "Shelves",
+        "Lowboards",
+        "Highboards",
+        "Wall cabinets",
+        "Coffee table",
+        "Dining tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/korsika",
       "images": [
         "/musterring-catalog/korsika/image-01.jpg",
@@ -1132,7 +2023,9 @@
         "/musterring-catalog/korsika/image-06.jpg",
         "/musterring-catalog/korsika/image-07.jpg",
         "/musterring-catalog/korsika/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "3678ec381dad0bf26f627a5f8e991568659e8a9c186196f9e58feec4a928e900"
     },
     {
       "appProductId": "musterring-maestra",
@@ -1142,6 +2035,14 @@
       "tagline": "A new approach to living and television",
       "description": "The sophisticated MAESTRA living room series impresses with a sliding panel for flat screens and an exclusive light design front with depth offset.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Highboards",
+        "Lowboards",
+        "Media elements"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/maestra",
       "images": [
         "/musterring-catalog/maestra/image-01.jpg",
@@ -1152,7 +2053,9 @@
         "/musterring-catalog/maestra/image-06.jpg",
         "/musterring-catalog/maestra/image-07.jpg",
         "/musterring-catalog/maestra/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "ec5b4311bc15a1745e448d1db4a6fbf99ff016b802c39c589e13667840e7c6e7"
     },
     {
       "appProductId": "musterring-simea",
@@ -1162,6 +2065,15 @@
       "tagline": "Style is systematic with us",
       "description": "Musterring: SIMEA offers plenty of space for your home cinema, decorations or books. Discover design that thinks for itself.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Lowboards",
+        "Sideboards",
+        "Highboards",
+        "Coffee table"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/simea",
       "images": [
         "/musterring-catalog/simea/image-01.jpg",
@@ -1169,20 +2081,28 @@
         "/musterring-catalog/simea/image-03.jpg",
         "/musterring-catalog/simea/image-04.jpg",
         "/musterring-catalog/simea/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "116f3eaac69be2ccf81004e0fe1fc158b87d3e7cb5c5286d520414d53e747033"
     },
     {
       "appProductId": "musterring-media-smart",
       "slug": "media-smart",
-      "modelCode": "Media Smart",
-      "name": "Media Smart",
-      "tagline": "MEDIA-SMART Cinema fun even in small spaces",
+      "modelCode": "MEDIA-SMART",
+      "name": "MEDIA-SMART",
+      "tagline": "Cinema fun even in small spaces",
       "description": "Find out how MEDIA-SMART can help you set up a home cinema in just a few square metres that leaves nothing to be desired. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/media-smart",
       "images": [
         "/musterring-catalog/media-smart/image-01.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "9df4f61fe0260339dab7f98863011a64d92cf56e4533ba1c935688d962df397c"
     },
     {
       "appProductId": "musterring-portland",
@@ -1192,6 +2112,20 @@
       "tagline": "Perfectly crafted natural beauties",
       "description": "Enjoy the many benefits of high-quality solid-wood furniture with our PORTLAND furniture series. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Wall units",
+        "Wall boards",
+        "Sideboards",
+        "Highboards",
+        "Lowboards",
+        "Wall cabinets",
+        "Coffee table",
+        "Dining tables",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/portland",
       "images": [
         "/musterring-catalog/portland/image-01.jpg",
@@ -1202,16 +2136,32 @@
         "/musterring-catalog/portland/image-06.jpg",
         "/musterring-catalog/portland/image-07.jpg",
         "/musterring-catalog/portland/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "cbf8e7fd63dc57a5a5c5da4dddde2559f452ade6f02f9934c25e74f7f672b728"
     },
     {
       "appProductId": "musterring-q-media-20",
       "slug": "q-media-20",
-      "modelCode": "Q Media 20",
-      "name": "Q Media 20",
-      "tagline": "Q-MEDIA 2.0 Entertainment for your home",
+      "modelCode": "Q-MEDIA 2.0",
+      "name": "Q-MEDIA 2.0",
+      "tagline": "Entertainment for your home",
       "description": "The new version of our bestseller: experience the next generation in media consoles from Musterring with the Q-MEDIA 2.0. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Lowboards",
+        "Highboards",
+        "Sideboards",
+        "Glass-fronted cabinets",
+        "Wall boards",
+        "Wall units",
+        "Media elements",
+        "Coffee table",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/q-media-20",
       "images": [
         "/musterring-catalog/q-media-20/image-01.jpg",
@@ -1222,7 +2172,9 @@
         "/musterring-catalog/q-media-20/image-06.jpg",
         "/musterring-catalog/q-media-20/image-07.jpg",
         "/musterring-catalog/q-media-20/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "e9d46fda30a15e2aabec036c11b2fbe28436cd531ecd4f45e111f414d689debb"
     },
     {
       "appProductId": "musterring-trevio",
@@ -1232,6 +2184,21 @@
       "tagline": "Ideas are the best raw material",
       "description": "Solid oak core, wood grain and lacquer are just a few of the components that make our TREVIO furniture series so special. Discover more.",
       "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Coffee table",
+        "Dining tables",
+        "Highboards",
+        "Lowboards",
+        "Bureau",
+        "Sideboards",
+        "Chairs",
+        "Glass-fronted cabinets",
+        "Wall boards",
+        "Wall units"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/trevio",
       "images": [
         "/musterring-catalog/trevio/image-01.jpg",
@@ -1242,7 +2209,9 @@
         "/musterring-catalog/trevio/image-06.jpg",
         "/musterring-catalog/trevio/image-07.jpg",
         "/musterring-catalog/trevio/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "840be5fd435af304994e74b45358bd430e8f2a89850ddbb7b42049005c096348"
     },
     {
       "appProductId": "musterring-justb-ct100",
@@ -1252,6 +2221,15 @@
       "tagline": "Versatile couch companions",
       "description": "Discover the couch and side table from the current collection of Bettina Zimmermann.",
       "category": "coffee-table",
+      "categories": [
+        "coffee-table"
+      ],
+      "productOverview": [
+        "Coffee tables and side tables",
+        "Solid wood tabletop",
+        "Angular coffee tables",
+        "Round coffee tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/coffee-tables-side-tables/justb-ct100",
       "images": [
         "/musterring-catalog/justb-ct100/image-01.jpg",
@@ -1262,7 +2240,9 @@
         "/musterring-catalog/justb-ct100/image-06.jpg",
         "/musterring-catalog/justb-ct100/image-07.jpg",
         "/musterring-catalog/justb-ct100/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "51a2e21b98894a87b85155478e17342df3703011aca31c2a19a1717531173bf0"
     },
     {
       "appProductId": "musterring-nara",
@@ -1272,10 +2252,18 @@
       "tagline": "When the coffee table becomes a piece of jewellery",
       "description": "The modern NARA coffee and side table series from Musterring offers tables in two heights and table tops in two shapes and different sizes.",
       "category": "coffee-table",
+      "categories": [
+        "coffee-table"
+      ],
+      "productOverview": [
+        "Coffee tables and side tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/coffee-tables-side-tables/nara",
       "images": [
         "/musterring-catalog/nara/image-01.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "7a9f5438c44ea86e7ba29065cc3d6ab9af48c9a7942d30b0537b020e2666ac7c"
     },
     {
       "appProductId": "musterring-nara-new-kopie-1",
@@ -1285,6 +2273,15 @@
       "tagline": "Italian flair for your living room",
       "description": "Musterring: Simple elegance meets first-class materials - coffee tables from MR TOSCANA will inspire you too.",
       "category": "coffee-table",
+      "categories": [
+        "coffee-table"
+      ],
+      "productOverview": [
+        "Coffee tables and side tables",
+        "Round coffee tables",
+        "Shelves",
+        "Angular coffee tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/coffee-tables-side-tables/nara-new-kopie-1",
       "images": [
         "/musterring-catalog/nara-new-kopie-1/image-01.jpg",
@@ -1295,7 +2292,9 @@
         "/musterring-catalog/nara-new-kopie-1/image-06.jpg",
         "/musterring-catalog/nara-new-kopie-1/image-07.jpg",
         "/musterring-catalog/nara-new-kopie-1/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "8f387efed00027848430454c64a7a68548ce64863083f2ab658f1db303920427"
     },
     {
       "appProductId": "musterring-nela",
@@ -1305,6 +2304,16 @@
       "tagline": "Modern coffee tables in Bauhaus chic",
       "description": "The minimalistic design of our NELA coffee tables features straight lines and right angles throughout. Discover more.",
       "category": "coffee-table",
+      "categories": [
+        "coffee-table"
+      ],
+      "productOverview": [
+        "Coffee tables and side tables",
+        "Angular coffee tables",
+        "Solid wood tabletop",
+        "Ceramic tabletop",
+        "Dekton tabletop"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/coffee-tables-side-tables/nela",
       "images": [
         "/musterring-catalog/nela/image-01.jpg",
@@ -1315,7 +2324,9 @@
         "/musterring-catalog/nela/image-06.jpg",
         "/musterring-catalog/nela/image-07.jpg",
         "/musterring-catalog/nela/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "304f0a0771b380dfc3e02e07bc4e5f78b34eaeaacb4f304cfd9fbf3b6375fed2"
     },
     {
       "appProductId": "musterring-joline",
@@ -1325,6 +2336,19 @@
       "tagline": "Carved from a very special wood",
       "description": "Solid oak wood gives this bedroom series from Musterring an extra cosy feel. Discover more.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Hinged-door wardrobes",
+        "Beds",
+        "Bedside tables",
+        "Front design",
+        "Customised designs",
+        "Upholstered bench",
+        "Chests of drawers",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/joline",
       "images": [
         "/musterring-catalog/joline/image-01.jpg",
@@ -1335,7 +2359,9 @@
         "/musterring-catalog/joline/image-06.jpg",
         "/musterring-catalog/joline/image-07.jpg",
         "/musterring-catalog/joline/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "a157710518120ed3f6307cc4c0810cf7e4ad2707f74db78795b59936f411a9fa"
     },
     {
       "appProductId": "musterring-san-antonio",
@@ -1345,6 +2371,14 @@
       "tagline": "Where glamour and cosiness meet",
       "description": "The SAN ANTONIO series from Musterring brings a fresh look to the bedroom with a sporty, modern futon bed and glossy glass fronts.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Wardrobes",
+        "Beds",
+        "Bedside tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/san-antonio",
       "images": [
         "/musterring-catalog/san-antonio/image-01.jpg",
@@ -1352,7 +2386,9 @@
         "/musterring-catalog/san-antonio/image-03.jpg",
         "/musterring-catalog/san-antonio/image-04.jpg",
         "/musterring-catalog/san-antonio/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "23342fbdb9598398228ecfa4b716c1e48e5827a21ff2fc20bd5801536dca9283"
     },
     {
       "appProductId": "musterring-malin",
@@ -1362,6 +2398,16 @@
       "tagline": "Your retreat for pure relaxation",
       "description": "The extensive MALIN wardrobe system combines real wood veneers made of beamed oak with modern lacquer finishes; beds and occasional furniture round off the range.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Wardrobes",
+        "Beds",
+        "Chests of drawers",
+        "Front design",
+        "Bedside tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/malin",
       "images": [
         "/musterring-catalog/malin/image-01.jpg",
@@ -1372,7 +2418,9 @@
         "/musterring-catalog/malin/image-06.jpg",
         "/musterring-catalog/malin/image-07.jpg",
         "/musterring-catalog/malin/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "28f6674169e1a6f181c771ef413b80240ac0ede9a00678b440cc9dde7b64738f"
     },
     {
       "appProductId": "musterring-jovanna",
@@ -1382,6 +2430,19 @@
       "tagline": "When furniture dreams come true",
       "description": "Transform your bedroom into a cosy sanctuary with the beds, chests of drawers and wardrobes in our JOVANNA series. Discover more.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Beds",
+        "Wardrobes",
+        "Sliding door wardrobes",
+        "Hinged-door wardrobes",
+        "Chests of drawers",
+        "Bedside tables",
+        "Customised designs",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/jovanna",
       "images": [
         "/musterring-catalog/jovanna/image-01.jpg",
@@ -1392,16 +2453,28 @@
         "/musterring-catalog/jovanna/image-06.jpg",
         "/musterring-catalog/jovanna/image-07.jpg",
         "/musterring-catalog/jovanna/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "809bcb35a503285e5ffb6bd2bbe63a0f6c026fd4e0a5969308b6aa0b56ff9bc1"
     },
     {
       "appProductId": "musterring-joern",
       "slug": "joern",
-      "modelCode": "Joern",
-      "name": "Joern",
-      "tagline": "JÖRN Order starts with the design",
+      "modelCode": "JÖRN",
+      "name": "JÖRN",
+      "tagline": "Order starts with the design",
       "description": "Musterring: The JÖRN bedroom range from Musterring impresses with its clean design, high-quality finishes in lacquer or solid wood, and accents in natural split wood.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Wardrobes",
+        "Chests of drawers",
+        "Bedside tables",
+        "Coat rack panels",
+        "Beds"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/joern",
       "images": [
         "/musterring-catalog/joern/image-01.jpg",
@@ -1412,16 +2485,26 @@
         "/musterring-catalog/joern/image-06.jpg",
         "/musterring-catalog/joern/image-07.jpg",
         "/musterring-catalog/joern/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "de348e14d41be2350f760495783d7f5bfbe4e179b58f7e34c67034ece5470928"
     },
     {
       "appProductId": "musterring-kara-frame-schlafen",
       "slug": "kara-frame-schlafen",
-      "modelCode": "Kara Frame Schlafen",
-      "name": "Kara Frame Schlafen",
-      "tagline": "KARA-FRAME-SCHLAFEN turns design dreams into reality",
+      "modelCode": "KARA-FRAME-SCHLAFEN",
+      "name": "KARA-FRAME-SCHLAFEN",
+      "tagline": "turns design dreams into reality",
       "description": "Musterring: With this furniture programme, you can bring real variety into your bedroom and enjoy beautiful design. Find out more.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Wardrobes",
+        "Bedside tables",
+        "Beds"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/kara-frame-schlafen",
       "images": [
         "/musterring-catalog/kara-frame-schlafen/image-01.jpg",
@@ -1432,7 +2515,9 @@
         "/musterring-catalog/kara-frame-schlafen/image-06.jpg",
         "/musterring-catalog/kara-frame-schlafen/image-07.jpg",
         "/musterring-catalog/kara-frame-schlafen/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "88477e57bd72910d698948efa968a3f54cd0f1e1033bfd77a7b2a39077dd1082"
     },
     {
       "appProductId": "musterring-madiva",
@@ -1442,6 +2527,18 @@
       "tagline": "Makes dreams come true",
       "description": "From the bed to the wardrobe to the bedside table: the MADIVA bedroom series Musterring stands out for its wide range of products.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Beds",
+        "Wardrobes",
+        "Chests of drawers",
+        "Bedside tables",
+        "Hinged-door wardrobes",
+        "Foot variants",
+        "Customised designs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/madiva",
       "images": [
         "/musterring-catalog/madiva/image-01.jpg",
@@ -1452,7 +2549,9 @@
         "/musterring-catalog/madiva/image-06.jpg",
         "/musterring-catalog/madiva/image-07.jpg",
         "/musterring-catalog/madiva/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "d51ddab22ed0c5cde37bef6e5812cf3d1f747894a3ae135e953f53dbfbcb8519"
     },
     {
       "appProductId": "musterring-san-francisco",
@@ -1462,6 +2561,15 @@
       "tagline": "Glamorous and cosy",
       "description": "The SAN FRANCISCO bedroom combines Bianco oak with modern glass fronts and an expressive crossbar in different textures.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Sideboards",
+        "Beds",
+        "Folding-door wardrobes",
+        "Wardrobes"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/san-francisco",
       "images": [
         "/musterring-catalog/san-francisco/image-01.jpg",
@@ -1469,7 +2577,9 @@
         "/musterring-catalog/san-francisco/image-03.jpg",
         "/musterring-catalog/san-francisco/image-04.jpg",
         "/musterring-catalog/san-francisco/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "499e93411bd96f4cea3ef3f4fb4131a3fe7adb104861825c12f6ee73432b67ff"
     },
     {
       "appProductId": "musterring-san-diego",
@@ -1479,6 +2589,16 @@
       "tagline": "Glamorous appearance",
       "description": "The SAN DIEGO series from Musterring injects fresh style into your bedroom with shiny glass fronts and delicate chrome handles.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Hinged-door wardrobes",
+        "Sliding door wardrobes",
+        "Corner wardrobes",
+        "Beds",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/san-diego",
       "images": [
         "/musterring-catalog/san-diego/image-01.jpg",
@@ -1489,16 +2609,28 @@
         "/musterring-catalog/san-diego/image-06.jpg",
         "/musterring-catalog/san-diego/image-07.jpg",
         "/musterring-catalog/san-diego/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "c7a86f5bb4df0857d00abf26a34c0dfdac1fe3c68c6cb37884e62ea34e9cb4e7"
     },
     {
       "appProductId": "musterring-savona-20",
       "slug": "savona-20",
-      "modelCode": "Savona 20",
-      "name": "Savona 20",
-      "tagline": "SAVONA 2.0 Dream bedroom with a feel-good guarantee",
+      "modelCode": "SAVONA 2.0",
+      "name": "SAVONA 2.0",
+      "tagline": "Dream bedroom with a feel-good guarantee",
       "description": "The SAVONA 2.0 bedroom series combines solid-wood fronts in bianco oak with glass surfaces in the colour shade champagne.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Hinged-door wardrobes",
+        "Sliding door wardrobes",
+        "Beds",
+        "Bedside tables",
+        "Chests of drawers"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/savona-20",
       "images": [
         "/musterring-catalog/savona-20/image-01.jpg",
@@ -1509,7 +2641,9 @@
         "/musterring-catalog/savona-20/image-06.jpg",
         "/musterring-catalog/savona-20/image-07.jpg",
         "/musterring-catalog/savona-20/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "520393489e1541936248c95ca7336aed5083c05d9bcd3885d33b4f269e4b8128"
     },
     {
       "appProductId": "musterring-sorrent",
@@ -1519,6 +2653,20 @@
       "tagline": "An oasis of comfort",
       "description": "The SORRENT bedroom series combines solid oak fronts with details in a slate look.",
       "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Hinged-door wardrobes",
+        "Sliding door wardrobes",
+        "Wardrobes",
+        "Beds",
+        "Bedside tables",
+        "Chests of drawers",
+        "Upholstered bench",
+        "Wall mirrors",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/sorrent",
       "images": [
         "/musterring-catalog/sorrent/image-01.jpg",
@@ -1529,7 +2677,9 @@
         "/musterring-catalog/sorrent/image-06.jpg",
         "/musterring-catalog/sorrent/image-07.jpg",
         "/musterring-catalog/sorrent/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "32c2ec4e0a792d29a54f2a10fb5a96c588e32463f5c3fe4d626ce8ede35bde8f"
     },
     {
       "appProductId": "musterring-justb-sc100",
@@ -1539,6 +2689,16 @@
       "tagline": "the stuff dreams are made of",
       "description": "[Translate to en:] Die gemütlichen Polster- und Boxspringbetten aus unserer JustB!-Kollektion stehen für echten Liege- und Schlafkomfort. Mehr erfahren.",
       "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Beds",
+        "Bed frames",
+        "Box spring beds",
+        "Upholstered beds",
+        "Motorised functions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/justb-sc100",
       "images": [
         "/musterring-catalog/justb-sc100/image-01.jpg",
@@ -1549,7 +2709,9 @@
         "/musterring-catalog/justb-sc100/image-06.jpg",
         "/musterring-catalog/justb-sc100/image-07.jpg",
         "/musterring-catalog/justb-sc100/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "b7ee2dda490c8bc0777501148268f90afbe07eea2d888297acf041f5493fe2e5"
     },
     {
       "appProductId": "musterring-justb-sc200",
@@ -1559,6 +2721,15 @@
       "tagline": "Das Bett deiner Träume",
       "description": "Musterring: Discover the JustB! SC200 upholstered bed from our collection, designed by Bettina Zimmermann. Explore it now!",
       "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Upholstered beds",
+        "Lighting",
+        "Mattresses",
+        "Cushions"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/justb-sc200",
       "images": [
         "/musterring-catalog/justb-sc200/image-01.jpg",
@@ -1566,7 +2737,9 @@
         "/musterring-catalog/justb-sc200/image-03.jpg",
         "/musterring-catalog/justb-sc200/image-04.jpg",
         "/musterring-catalog/justb-sc200/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "924e3dd8cff9a82a7bf97ffa7a840c592ace48f57a81d63977bf58df30244e98"
     },
     {
       "appProductId": "musterring-delphi",
@@ -1576,6 +2749,14 @@
       "tagline": "The perfect symbiosis of aesthetics and comfort",
       "description": "Simply sleep well: the comfortable DELPHI upholstered bed is available in many different colours and with three different headboards. Discover more.",
       "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Beds",
+        "Foot variants",
+        "Headboard variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/delphi",
       "images": [
         "/musterring-catalog/delphi/image-01.jpg",
@@ -1586,7 +2767,9 @@
         "/musterring-catalog/delphi/image-06.jpg",
         "/musterring-catalog/delphi/image-07.jpg",
         "/musterring-catalog/delphi/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "28dfea2401868d00a73dcbef5c427a3f0ec1f23155fadc4588304c3bf160de24"
     },
     {
       "appProductId": "musterring-mr-dubai",
@@ -1596,6 +2779,16 @@
       "tagline": "Sleep like in paradise",
       "description": "The MR DUBAI bed range stands for maximum box-spring comfort, offers a choice of five system structures and includes toppers, plaids and cushions as accessories",
       "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Box spring beds",
+        "Headboard variants",
+        "Topper",
+        "Mattresses",
+        "Foot variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/mr-dubai",
       "images": [
         "/musterring-catalog/mr-dubai/image-01.jpg",
@@ -1606,27 +2799,40 @@
         "/musterring-catalog/mr-dubai/image-06.jpg",
         "/musterring-catalog/mr-dubai/image-07.jpg",
         "/musterring-catalog/mr-dubai/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "3fa51ebd439891a6d3fad46228c222534bb1d86ae3f593099e96e4ce859313fc"
     },
     {
-      "appProductId": "musterring-translate-to-en-eforma",
-      "slug": "translate-to-en-eforma",
-      "modelCode": "Translate To En Eforma",
-      "name": "Translate To En Eforma",
-      "tagline": "EFORMA So that a good night's sleep is not just a dream",
+      "appProductId": "musterring-eforma",
+      "slug": "eforma",
+      "modelCode": "EFORMA",
+      "name": "EFORMA",
+      "tagline": "So that a good night's sleep is not just a dream",
       "description": "Good design for good sleep: our EFORMA box-spring bed combines comfort and aesthetics in one model. Discover more.",
       "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Box spring beds",
+        "Headboard variants",
+        "Foot variants",
+        "Spring wood frames"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/translate-to-en-eforma",
       "images": [
-        "/musterring-catalog/translate-to-en-eforma/image-01.jpg",
-        "/musterring-catalog/translate-to-en-eforma/image-02.jpg",
-        "/musterring-catalog/translate-to-en-eforma/image-03.jpg",
-        "/musterring-catalog/translate-to-en-eforma/image-04.jpg",
-        "/musterring-catalog/translate-to-en-eforma/image-05.jpg",
-        "/musterring-catalog/translate-to-en-eforma/image-06.jpg",
-        "/musterring-catalog/translate-to-en-eforma/image-07.jpg",
-        "/musterring-catalog/translate-to-en-eforma/image-08.jpg"
-      ]
+        "/musterring-catalog/eforma/image-01.jpg",
+        "/musterring-catalog/eforma/image-02.jpg",
+        "/musterring-catalog/eforma/image-03.jpg",
+        "/musterring-catalog/eforma/image-04.jpg",
+        "/musterring-catalog/eforma/image-05.jpg",
+        "/musterring-catalog/eforma/image-06.jpg",
+        "/musterring-catalog/eforma/image-07.jpg",
+        "/musterring-catalog/eforma/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "e6804a6d5fb52ce4c84dcc6df8b054f5522968b8b48eac191d672dc6ddad170f"
     },
     {
       "appProductId": "musterring-elias",
@@ -1636,6 +2842,19 @@
       "tagline": "For uniquely restorative sleep",
       "description": "Restful sleep and real lying comfort: the ELIAS box-spring bed from Musterring offers you this and much more.",
       "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Accessories",
+        "Beds",
+        "Box spring beds",
+        "Upholstered beds",
+        "Topper",
+        "Mattresses",
+        "Foot variants",
+        "Spring wood frames"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/elias",
       "images": [
         "/musterring-catalog/elias/image-01.jpg",
@@ -1646,7 +2865,9 @@
         "/musterring-catalog/elias/image-06.jpg",
         "/musterring-catalog/elias/image-07.jpg",
         "/musterring-catalog/elias/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "bb0689fb4536fcadadce7906b342c5a5f5262d24ee9f5ccf8ccb4abc1818f1cd"
     },
     {
       "appProductId": "musterring-elos",
@@ -1656,6 +2877,15 @@
       "tagline": "More variety in the bedroom",
       "description": "With the ELOS upholstered bed, Musterring offers you a huge selection of fabrics from the renowned brand JAB ANSTOETZ. Discover it now.",
       "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Upholstered beds",
+        "Beds",
+        "Foot variants",
+        "Headboard variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/elos",
       "images": [
         "/musterring-catalog/elos/image-01.jpg",
@@ -1666,7 +2896,9 @@
         "/musterring-catalog/elos/image-06.jpg",
         "/musterring-catalog/elos/image-07.jpg",
         "/musterring-catalog/elos/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "f3959094fdd11ce656ed41faaf4f214ad4dede0cbc46757c61ec793813afc8ec"
     },
     {
       "appProductId": "musterring-bari",
@@ -1676,6 +2908,13 @@
       "tagline": "Fully customisable from top to bottom",
       "description": "The fabric-covered BARI upholstered bed combines the finest cosy comfort with practical accessories – from a spacious bed base to a clever tuck-away table.",
       "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Upholstered beds",
+        "Upholstered bench"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/bari",
       "images": [
         "/musterring-catalog/bari/image-01.jpg",
@@ -1686,7 +2925,9 @@
         "/musterring-catalog/bari/image-06.jpg",
         "/musterring-catalog/bari/image-07.jpg",
         "/musterring-catalog/bari/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "e6756bb7c4a2e3ce592217b19510ac752c6f91a42bcce895843a124cc796b04b"
     },
     {
       "appProductId": "musterring-mr-imola",
@@ -1696,11 +2937,23 @@
       "tagline": "The radiant storage space miracle",
       "description": "The MR IMOLA wardrobe range brings a breath of fresh air into the bedroom with its radiant glass fronts, crystal mirrors, decorative mirrors and decorative chrome elements.",
       "category": "wardrobe",
+      "categories": [
+        "wardrobe"
+      ],
+      "productOverview": [
+        "Hinged-door wardrobes",
+        "Sliding door wardrobes",
+        "Wall mirrors",
+        "Chests of drawers",
+        "Bedside tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/wardrobes/mr-imola",
       "images": [
         "/musterring-catalog/mr-imola/image-01.jpg",
         "/musterring-catalog/mr-imola/image-02.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "115ae10114b8f0e64b19a8a44f423080d8b9d09059c2ceb8b4ce0d776fc3e6a7"
     },
     {
       "appProductId": "musterring-mr-isabelle",
@@ -1710,6 +2963,16 @@
       "tagline": "A wardrobe for life",
       "description": "The modern MR ISABELLE wardrobe range scores with high-quality decors, functional accessories and a large selection of chests of drawers and bedside cabinets.",
       "category": "wardrobe",
+      "categories": [
+        "wardrobe"
+      ],
+      "productOverview": [
+        "Wardrobes",
+        "Front design",
+        "Hinged-door wardrobes",
+        "Sliding door wardrobes",
+        "Bedside tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/wardrobes/mr-isabelle",
       "images": [
         "/musterring-catalog/mr-isabelle/image-01.jpg",
@@ -1720,7 +2983,9 @@
         "/musterring-catalog/mr-isabelle/image-06.jpg",
         "/musterring-catalog/mr-isabelle/image-07.jpg",
         "/musterring-catalog/mr-isabelle/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "6f35605e58a4901b1b03fe01ad836c35dd4cd28ceeae9b23f589d5b2e147b533"
     },
     {
       "appProductId": "musterring-justb-sp100",
@@ -1730,6 +2995,14 @@
       "tagline": "the dining table for sociable get-togethers",
       "description": "With the dining table variants from our JustB! collection, we have developed a design that is sure to suit your taste. Discover more.",
       "category": "dining-table",
+      "categories": [
+        "dining-table"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "HPL tabletop",
+        "Solid wood tabletop"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp100",
       "images": [
         "/musterring-catalog/justb-sp100/image-01.jpg",
@@ -1740,7 +3013,9 @@
         "/musterring-catalog/justb-sp100/image-06.jpg",
         "/musterring-catalog/justb-sp100/image-07.jpg",
         "/musterring-catalog/justb-sp100/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "1ffdc1332b9f659cf0ee8daff57e29713b461208de4f9c57926ff692b031bc22"
     },
     {
       "appProductId": "musterring-justb-sp150",
@@ -1749,7 +3024,14 @@
       "name": "JUSTB! SP150",
       "tagline": "the best of the simple",
       "description": "Musterring: Stil und Komfort sind die Zutaten, aus denen wir dieses Möbelprogramm für Ihr Esszimmer entwickelt haben. Erfahren Sie mehr.",
-      "category": "dining-table",
+      "category": "dining-chair",
+      "categories": [
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Chairs",
+        "Armchair"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp150",
       "images": [
         "/musterring-catalog/justb-sp150/image-01.jpg",
@@ -1758,7 +3040,74 @@
         "/musterring-catalog/justb-sp150/image-04.jpg",
         "/musterring-catalog/justb-sp150/image-05.jpg",
         "/musterring-catalog/justb-sp150/image-06.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "e80f9f0b9d90f1de633a8367710e54cfab84c04f9ab73072a8c89955ed0d83c7"
+    },
+    {
+      "appProductId": "musterring-justb-sp500",
+      "slug": "justb-sp500",
+      "modelCode": "JUSTB! SP500",
+      "name": "JUSTB! SP500",
+      "tagline": "whets the appetite for more",
+      "description": "Tasteful design: our dining chairs and benches bring the JustB! flair to your home. Discover more.",
+      "category": "dining-chair",
+      "categories": [
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Benches",
+        "Cantilever chairs",
+        "Chairs",
+        "Chairs with quadpod base",
+        "Armchair",
+        "Chairs with retaining spring"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp500",
+      "images": [
+        "/musterring-catalog/justb-sp500/image-08.jpg",
+        "/musterring-catalog/justb-sp500/image-09.jpg",
+        "/musterring-catalog/justb-sp500/image-10.jpg",
+        "/musterring-catalog/justb-sp500/image-11.jpg",
+        "/musterring-catalog/justb-sp500/image-12.jpg",
+        "/musterring-catalog/justb-sp500/image-13.jpg",
+        "/musterring-catalog/justb-sp500/image-14.jpg"
+      ],
+      "stale": false,
+      "contentHash": "c0dbcb6a3a9a010e374feb87bc9a9b52bb4f2187810e1ec54457b81ae2269a35"
+    },
+    {
+      "appProductId": "musterring-hannis",
+      "slug": "hannis",
+      "modelCode": "HANNIS",
+      "name": "HANNIS",
+      "tagline": "Your stage for perfect moments of enjoyment",
+      "description": "With HANNIS, Musterring brings exquisite tables and comfortable chairs to the dining room, which form a harmonious whole thanks to perfectly coordinated frames.",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Foot variants",
+        "Dining tables",
+        "Chairs with quadpod base",
+        "Chairs",
+        "Four-legged chairs",
+        "Bar/counter stools",
+        "Armchair"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/mr4010-/-t4010-1",
+      "images": [
+        "/musterring-catalog/hannis/image-01.jpg",
+        "/musterring-catalog/hannis/image-02.jpg",
+        "/musterring-catalog/hannis/image-03.jpg",
+        "/musterring-catalog/hannis/image-04.jpg",
+        "/musterring-catalog/hannis/image-05.jpg",
+        "/musterring-catalog/hannis/image-06.png"
+      ],
+      "stale": false,
+      "contentHash": "0ce6e7416db8ad8203ea9ea56d0b829c549f689d05e79532784f4b8e0ca932b3"
     },
     {
       "appProductId": "musterring-helana",
@@ -1767,7 +3116,16 @@
       "name": "HELANA",
       "tagline": "Comfortable seating at counter height",
       "description": "The HELANA dining room range offers perfectly coordinated barstools, benches and standing tables. Discover more.",
-      "category": "dining-chair",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Bar/counter stools",
+        "Benches",
+        "High tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/helana",
       "images": [
         "/musterring-catalog/helana/image-01.jpg",
@@ -1778,7 +3136,9 @@
         "/musterring-catalog/helana/image-06.jpg",
         "/musterring-catalog/helana/image-07.jpg",
         "/musterring-catalog/helana/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "cf6a085e98fdc9d2211e19be1de7e013b20928b590b36a866000407354a4559b"
     },
     {
       "appProductId": "musterring-helmond",
@@ -1787,7 +3147,17 @@
       "name": "HELMOND",
       "tagline": "Sophisticated ideas for your dining room",
       "description": "Whet your appetite for stylish design: the dining tables and chairs in this series show what modern furniture design can do. Discover more.",
-      "category": "dining-chair",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "High tables",
+        "Chairs",
+        "Bar/counter stools"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/helmond",
       "images": [
         "/musterring-catalog/helmond/image-01.jpg",
@@ -1798,7 +3168,9 @@
         "/musterring-catalog/helmond/image-06.jpg",
         "/musterring-catalog/helmond/image-07.jpg",
         "/musterring-catalog/helmond/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "a148b7230709f4b74eec560c7bade717b9ffaa17af63aed467c39d71f4bff52f"
     },
     {
       "appProductId": "musterring-helvin",
@@ -1807,7 +3179,16 @@
       "name": "HELVIN",
       "tagline": "Makes you hungry for more",
       "description": "Comfortable dining chairs and tasteful table options are part of this dining room range from Musterring. Find out more about the HELVIN range.",
-      "category": "dining-chair",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Chairs",
+        "Armchair",
+        "Dining tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/helvin",
       "images": [
         "/musterring-catalog/helvin/image-01.jpg",
@@ -1815,7 +3196,76 @@
         "/musterring-catalog/helvin/image-03.jpg",
         "/musterring-catalog/helvin/image-04.jpg",
         "/musterring-catalog/helvin/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "d238a78cb24ba167a981ce607237757183acef7ba781e9e6198e0ac81a642462"
+    },
+    {
+      "appProductId": "musterring-mr-2050-t-2050",
+      "slug": "mr-2050-t-2050",
+      "modelCode": "MR 2050",
+      "name": "MR 2050",
+      "tagline": "When sitting is a pleasure",
+      "description": "Our MR 2050 offers a fine selection of beautiful tables and chairs for your home. Discover more.",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Chairs",
+        "Benches",
+        "Stools",
+        "Armchairs",
+        "Foot variants"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/mr-2050-/-t-2050",
+      "images": [
+        "/musterring-catalog/mr-2050-t-2050/image-01.jpg",
+        "/musterring-catalog/mr-2050-t-2050/image-02.jpg",
+        "/musterring-catalog/mr-2050-t-2050/image-03.jpg",
+        "/musterring-catalog/mr-2050-t-2050/image-04.jpg",
+        "/musterring-catalog/mr-2050-t-2050/image-05.jpg",
+        "/musterring-catalog/mr-2050-t-2050/image-06.jpg",
+        "/musterring-catalog/mr-2050-t-2050/image-07.jpg",
+        "/musterring-catalog/mr-2050-t-2050/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "427218dd2e381834a80aab6fab4cb019d4ce315ffdca46c85978e52f5ee2f92d"
+    },
+    {
+      "appProductId": "musterring-mr4010-t4010",
+      "slug": "mr4010-t4010",
+      "modelCode": "MR 4010",
+      "name": "MR 4010",
+      "tagline": "STüHLE A seating set to fall in love with",
+      "description": "The comfortable MR 4010 benches and chairs are available with three frame variants and go perfectly with the high-quality T 4010 solid wood dining tables.",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Armchair",
+        "Benches",
+        "Chairs",
+        "Foot variants"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/mr4010-/-t4010",
+      "images": [
+        "/musterring-catalog/mr4010-t4010/image-01.jpg",
+        "/musterring-catalog/mr4010-t4010/image-02.jpg",
+        "/musterring-catalog/mr4010-t4010/image-03.jpg",
+        "/musterring-catalog/mr4010-t4010/image-04.jpg",
+        "/musterring-catalog/mr4010-t4010/image-05.jpg",
+        "/musterring-catalog/mr4010-t4010/image-06.jpg",
+        "/musterring-catalog/mr4010-t4010/image-07.jpg",
+        "/musterring-catalog/mr4010-t4010/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "47e5200910e9c3172475bef1bf6be6e97f21fbed6373d5f23f7a9458776c1fa2"
     },
     {
       "appProductId": "musterring-navarra",
@@ -1824,7 +3274,17 @@
       "name": "NAVARRA",
       "tagline": "Just sitting really well",
       "description": "Are you looking for modern tables and chairs for your dining room? Then NAVARRA is the perfect furniture series for you. Discover more.",
-      "category": "dining-chair",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Chairs with sled base",
+        "Four-legged chairs",
+        "Chairs with quadpod base"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/navarra",
       "images": [
         "/musterring-catalog/navarra/image-01.jpg",
@@ -1835,7 +3295,9 @@
         "/musterring-catalog/navarra/image-06.jpg",
         "/musterring-catalog/navarra/image-07.jpg",
         "/musterring-catalog/navarra/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "54a86dcb2175c65e7351b600a1f769a1183410aadd9a3ffd11ccd1116a42a77d"
     },
     {
       "appProductId": "musterring-nerina",
@@ -1845,6 +3307,14 @@
       "tagline": "Everything revolves around cosiness here",
       "description": "The comfortable NERINA dining chairs from Musterring have an attractive tripod frame with swivel function and can be upholstered in two colours. Find out more.",
       "category": "dining-chair",
+      "categories": [
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Chairs",
+        "Chairs with spider base",
+        "Armchair"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nerina",
       "images": [
         "/musterring-catalog/nerina/image-01.jpg",
@@ -1853,7 +3323,9 @@
         "/musterring-catalog/nerina/image-04.jpg",
         "/musterring-catalog/nerina/image-05.jpg",
         "/musterring-catalog/nerina/image-06.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "d1b341e0645b41e75d7cb8a21ec61423e54d0a4e7ee342487ef29c3511d8e610"
     },
     {
       "appProductId": "musterring-nevio",
@@ -1863,6 +3335,17 @@
       "tagline": "For more variety in the dining room",
       "description": "With its light, yet distinctive look, NEVIO is the modern dining room series from Musterring. Discover more.",
       "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Cantilever chairs",
+        "Chairs with sled base",
+        "Chairs with spider base",
+        "Four-legged chairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nevio",
       "images": [
         "/musterring-catalog/nevio/image-01.jpg",
@@ -1873,7 +3356,9 @@
         "/musterring-catalog/nevio/image-06.jpg",
         "/musterring-catalog/nevio/image-07.jpg",
         "/musterring-catalog/nevio/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "5158464c2556d0fffe21fdc4e184ab015c21b2fc382d38c6bc14839357dfd7be"
     },
     {
       "appProductId": "musterring-nica",
@@ -1883,11 +3368,20 @@
       "tagline": "enjoy good design together",
       "description": "The eye eats with you. That is why with NICA we offer you a particularly shapely dining room table for a tasteful interior.",
       "category": "dining-table",
+      "categories": [
+        "dining-table"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Foot variants"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nica",
       "images": [
         "/musterring-catalog/nica/image-01.jpg",
         "/musterring-catalog/nica/image-02.png"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "b36a0b331fa31c6b4b3da2d2057de211f6c3238224ca9b3722e3a1e0f2e40fee"
     },
     {
       "appProductId": "musterring-nilan",
@@ -1896,7 +3390,17 @@
       "name": "NILAN",
       "tagline": "The perfect choice for gourmets and aesthetes",
       "description": "The modern NILAN dining room range includes comfortable chairs with a four-legged or tripod base and dining tables with a solid wood top and decorative resin panelling. Find out more now.",
-      "category": "dining-chair",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Chairs with spider base",
+        "Armchair",
+        "Four-legged chairs",
+        "Dining tables"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nilan",
       "images": [
         "/musterring-catalog/nilan/image-01.jpg",
@@ -1904,7 +3408,9 @@
         "/musterring-catalog/nilan/image-03.jpg",
         "/musterring-catalog/nilan/image-04.jpg",
         "/musterring-catalog/nilan/image-05.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "03ac00e36e2f251075025dbf89149ef982a169f19ee4c0310d5e5e453c70da57"
     },
     {
       "appProductId": "musterring-nova",
@@ -1914,6 +3420,19 @@
       "tagline": "A feast for the eyes",
       "description": "Modern dining room furniture from Musterring: discover our NOVA range now and experience authentic high quality. Discover more.",
       "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Benches",
+        "Chairs",
+        "Cantilever chairs",
+        "Four-legged chairs",
+        "High tables",
+        "Bar/counter stools"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nova",
       "images": [
         "/musterring-catalog/nova/image-01.jpg",
@@ -1924,7 +3443,9 @@
         "/musterring-catalog/nova/image-06.jpg",
         "/musterring-catalog/nova/image-07.jpg",
         "/musterring-catalog/nova/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "48805ef3c1ae5edc7b905b1381c6caa6fd2310e402029a1bb7f6a2c96a7780d7"
     },
     {
       "appProductId": "musterring-picara",
@@ -1934,6 +3455,19 @@
       "tagline": "Set the table",
       "description": "PICARA is the modular furniture series for your dining or living room from Musterring. Discover more.",
       "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Benches",
+        "Dining tables",
+        "Foot variants",
+        "Chairs",
+        "Four-legged chairs",
+        "Chairs with sled base",
+        "Armchairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/picara",
       "images": [
         "/musterring-catalog/picara/image-01.jpg",
@@ -1944,7 +3478,9 @@
         "/musterring-catalog/picara/image-06.jpg",
         "/musterring-catalog/picara/image-07.jpg",
         "/musterring-catalog/picara/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "460fb9af0dd232a3e5976c49f8980d2841601b77e203b6fdd8bcc1257bda9aa8"
     },
     {
       "appProductId": "musterring-pinero",
@@ -1954,6 +3490,15 @@
       "tagline": "Slim furniture for your dining room",
       "description": "Do you want to redesign your dining room? PINERO from Musterring is the perfect choice for anyone who prefers a light, modern look. Discover more.",
       "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Chairs",
+        "Benches"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/pinero",
       "images": [
         "/musterring-catalog/pinero/image-01.jpg",
@@ -1964,7 +3509,9 @@
         "/musterring-catalog/pinero/image-06.jpg",
         "/musterring-catalog/pinero/image-07.jpg",
         "/musterring-catalog/pinero/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "7684d5a4eff7c5e29d705edb3c2ae340b291e8c4c535024be119233097e4d5e4"
     },
     {
       "appProductId": "musterring-tamina",
@@ -1973,7 +3520,17 @@
       "name": "TAMINA",
       "tagline": "Dining room furniture with a clear edge",
       "description": "The stylish dining tables and chairs in our TAMINA range are rustic yet modern. Discover more.",
-      "category": "dining-chair",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Chairs",
+        "Benches",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tamina",
       "images": [
         "/musterring-catalog/tamina/image-01.jpg",
@@ -1984,7 +3541,9 @@
         "/musterring-catalog/tamina/image-06.jpg",
         "/musterring-catalog/tamina/image-07.jpg",
         "/musterring-catalog/tamina/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "ede003a189b2fdc03ee3ad48f31199233f7390c7ebc4765fdc2c27be68c97df7"
     },
     {
       "appProductId": "musterring-tario",
@@ -1993,7 +3552,17 @@
       "name": "TARIO",
       "tagline": "Take a seat and enjoy",
       "description": "The stylish TARIO dining room series offers comfortable shell chairs upholstered in bouclé or microfibre, as well as modern tables with solid oak tops.",
-      "category": "dining-chair",
+      "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Armchair",
+        "Dining tables",
+        "Foot variants",
+        "Chairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tario",
       "images": [
         "/musterring-catalog/tario/image-01.jpg",
@@ -2004,7 +3573,9 @@
         "/musterring-catalog/tario/image-06.jpg",
         "/musterring-catalog/tario/image-07.jpg",
         "/musterring-catalog/tario/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "3585acca8f45f2750ffd8f63aad6b486b2f15c38af2c602c81a27360cb4022cc"
     },
     {
       "appProductId": "musterring-tavia",
@@ -2014,6 +3585,15 @@
       "tagline": "Diversity wins",
       "description": "Are you looking for new dining room furniture? End your search and enjoy the utmost comfort with TAVIA from Musterring. Discover more.",
       "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Benches",
+        "Dining tables",
+        "Chairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tavia",
       "images": [
         "/musterring-catalog/tavia/image-01.jpg",
@@ -2024,7 +3604,9 @@
         "/musterring-catalog/tavia/image-06.jpg",
         "/musterring-catalog/tavia/image-07.jpg",
         "/musterring-catalog/tavia/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "9074633d0c9b0ae3bdeecdf3441e15a437ae015f5040a6b2fe612fdd97549b75"
     },
     {
       "appProductId": "musterring-tiama",
@@ -2034,6 +3616,15 @@
       "tagline": "Our dining room furniture proves taste",
       "description": "At Musterring you will find stylish furniture for your dining room. Because good taste can be furnished.",
       "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Foot variants",
+        "Chairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tiama",
       "images": [
         "/musterring-catalog/tiama/image-01.jpg",
@@ -2044,7 +3635,9 @@
         "/musterring-catalog/tiama/image-06.jpg",
         "/musterring-catalog/tiama/image-07.jpg",
         "/musterring-catalog/tiama/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "354d3aef605617f44acf4293e16d75ea4ff3a2e6438e565e63994cfd41a35852"
     },
     {
       "appProductId": "musterring-tjark",
@@ -2054,6 +3647,16 @@
       "tagline": "Scandinavian simplicity for your dining room",
       "description": "Musterring: With TJARK, you can bring a touch of Nordic style into your home and enjoy the natural beauty of delicate dining room furniture.",
       "category": "dining-table",
+      "categories": [
+        "dining-table",
+        "dining-chair"
+      ],
+      "productOverview": [
+        "Armchair",
+        "Dining tables",
+        "Chairs",
+        "Four-legged chairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/tjark",
       "images": [
         "/musterring-catalog/tjark/image-01.jpg",
@@ -2064,7 +3667,9 @@
         "/musterring-catalog/tjark/image-06.jpg",
         "/musterring-catalog/tjark/image-07.jpg",
         "/musterring-catalog/tjark/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "aecf9d48cbe3ce9498c4dd62f86549d79fd63eb0d4acdfed59fecfd962ec509f"
     },
     {
       "appProductId": "musterring-revento-line",
@@ -2074,6 +3679,15 @@
       "tagline": "Bathroom furniture rethought",
       "description": "Stylish design and well thought-out storage solutions characterise this popular furniture series for your bathroom. Discover it now.",
       "category": "bathroom",
+      "categories": [
+        "bathroom"
+      ],
+      "productOverview": [
+        "Hanging elements",
+        "Mirrored cabinets",
+        "Washstands",
+        "Accessories"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bathroom/bathroom-series/revento-line",
       "images": [
         "/musterring-catalog/revento-line/image-01.jpg",
@@ -2084,7 +3698,9 @@
         "/musterring-catalog/revento-line/image-06.jpg",
         "/musterring-catalog/revento-line/image-07.jpg",
         "/musterring-catalog/revento-line/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "dd27b28281f8a550e4204f899de66f3b7e59ef338ea723c6ad44d91ee609bdd1"
     },
     {
       "appProductId": "musterring-riana",
@@ -2094,6 +3710,15 @@
       "tagline": "A new world of bathroom design",
       "description": "The modern RIANA bathroom furniture series impresses with its clear design, eight different versions and washbasins made of easy-care Duratek granite. Find out more now.",
       "category": "bathroom",
+      "categories": [
+        "bathroom"
+      ],
+      "productOverview": [
+        "Washstands",
+        "Mirrored cabinets",
+        "Hanging elements",
+        "Lighting"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/bathroom/bathroom-series/riana",
       "images": [
         "/musterring-catalog/riana/image-01.jpg",
@@ -2104,7 +3729,9 @@
         "/musterring-catalog/riana/image-06.jpg",
         "/musterring-catalog/riana/image-07.jpg",
         "/musterring-catalog/riana/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "57c7344378eff3035bd769cf8894c0f6fa9f255598df9c48a79ca738248fcc79"
     },
     {
       "appProductId": "musterring-freilicht",
@@ -2114,6 +3741,18 @@
       "tagline": "A place under the stars",
       "description": "",
       "category": "outdoor",
+      "categories": [
+        "outdoor"
+      ],
+      "productOverview": [
+        "Garden table",
+        "Chairs",
+        "Armchairs",
+        "Lounge furniture",
+        "Lounge group",
+        "Daybed",
+        "Side table"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/freilicht",
       "images": [
         "/musterring-catalog/freilicht/image-01.jpg",
@@ -2124,7 +3763,9 @@
         "/musterring-catalog/freilicht/image-06.jpg",
         "/musterring-catalog/freilicht/image-07.jpg",
         "/musterring-catalog/freilicht/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "2eda6de62d8f3f8c40ef8756132dab462e49934fa357dd0fd314e93ef51713fb"
     },
     {
       "appProductId": "musterring-summertime",
@@ -2134,6 +3775,15 @@
       "tagline": "Bring the summer home",
       "description": "Musterring: SUMMERTIME takes you into the beautiful season with a charming retro design. Find out more.",
       "category": "outdoor",
+      "categories": [
+        "outdoor"
+      ],
+      "productOverview": [
+        "Chairs",
+        "Armchairs",
+        "Garden table",
+        "Side table"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/summertime",
       "images": [
         "/musterring-catalog/summertime/image-01.jpg",
@@ -2144,7 +3794,9 @@
         "/musterring-catalog/summertime/image-06.jpg",
         "/musterring-catalog/summertime/image-07.jpg",
         "/musterring-catalog/summertime/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "558483c171da18e9e4c4801ec5fa6705a1c3281eccdde508eae14b3275116280"
     },
     {
       "appProductId": "musterring-helmond-outdoor",
@@ -2154,13 +3806,21 @@
       "tagline": "The weatherproof chair with a clever function",
       "description": "",
       "category": "outdoor",
+      "categories": [
+        "outdoor"
+      ],
+      "productOverview": [
+        "Chairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/helmond-outdoor",
       "images": [
         "/musterring-catalog/helmond-outdoor/image-01.jpg",
         "/musterring-catalog/helmond-outdoor/image-02.jpg",
         "/musterring-catalog/helmond-outdoor/image-03.jpg",
         "/musterring-catalog/helmond-outdoor/image-04.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "934a5580a49698e204e53ab97a424e69fa517638249e317442820b51f7cc5499"
     },
     {
       "appProductId": "musterring-justb-od100",
@@ -2170,6 +3830,13 @@
       "tagline": "Outdoor furniture in an airy design",
       "description": "Musterring: Robust. Durable. Aesthetic. Enjoy the beautiful season with outdoor furniture from JustB! OD100.",
       "category": "outdoor",
+      "categories": [
+        "outdoor"
+      ],
+      "productOverview": [
+        "Dining tables",
+        "Armchairs"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/justb-od100",
       "images": [
         "/musterring-catalog/justb-od100/image-01.jpg",
@@ -2178,7 +3845,9 @@
         "/musterring-catalog/justb-od100/image-04.jpg",
         "/musterring-catalog/justb-od100/image-05.jpg",
         "/musterring-catalog/justb-od100/image-06.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "540555590e45a76dfa20809d8a04f94c22f6a09f1bf91b13cbe4da9721ceeded"
     },
     {
       "appProductId": "musterring-justb-km100",
@@ -2188,6 +3857,13 @@
       "tagline": "Setting strong accents",
       "description": "The small furniture series JustB! KM100 small furniture range includes desks, coffee tables, side tables, seat cushions, chests of drawers, plant stands, mirrors, wall coat racks and wall shelves.",
       "category": "small-furniture",
+      "categories": [
+        "small-furniture"
+      ],
+      "productOverview": [
+        "Coffee tables and side tables",
+        "Wall mirrors"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/home-accessories/small-furniture/justb-km100",
       "images": [
         "/musterring-catalog/justb-km100/image-01.jpg",
@@ -2198,7 +3874,9 @@
         "/musterring-catalog/justb-km100/image-06.jpg",
         "/musterring-catalog/justb-km100/image-07.jpg",
         "/musterring-catalog/justb-km100/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "8eb359d0996af6d82d409882539481104f78f4bb3b50e9950938c5206aa62a35"
     },
     {
       "appProductId": "musterring-deluxe-collection",
@@ -2208,6 +3886,15 @@
       "tagline": "Carpets from the Arabian Nights",
       "description": "The DELUXE COLLECTION by Musterring puts a modern twist on oriental carpets. Choose from a wide range of patterns, colours, shapes and sizes. Discover more.",
       "category": "carpet",
+      "categories": [
+        "carpet"
+      ],
+      "productOverview": [
+        "Angular",
+        "Various designs",
+        "Various colours",
+        "Various sizes"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/home-accessories/carpets/deluxe-collection",
       "images": [
         "/musterring-catalog/deluxe-collection/image-01.jpg",
@@ -2218,7 +3905,9 @@
         "/musterring-catalog/deluxe-collection/image-06.jpg",
         "/musterring-catalog/deluxe-collection/image-07.jpg",
         "/musterring-catalog/deluxe-collection/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "58bb85e60d890d1a970352b7931a278e8888cf9d61bab1c73239e895920ed3de"
     },
     {
       "appProductId": "musterring-mr-bergen",
@@ -2228,6 +3917,16 @@
       "tagline": "The stuff dreams are made of.",
       "description": "Musterring: Find stylish rugs in various colours, shapes and sizes. Find out more.",
       "category": "carpet",
+      "categories": [
+        "carpet"
+      ],
+      "productOverview": [
+        "Angular",
+        "Circular",
+        "Various designs",
+        "Various colours",
+        "Various sizes"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/home-accessories/carpets/mr-bergen",
       "images": [
         "/musterring-catalog/mr-bergen/image-01.jpg",
@@ -2238,7 +3937,9 @@
         "/musterring-catalog/mr-bergen/image-06.jpg",
         "/musterring-catalog/mr-bergen/image-07.jpg",
         "/musterring-catalog/mr-bergen/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "ae03b88b0ed16284dc28355bce97f34645458f885679c9f69973e6ecf9791dd8"
     },
     {
       "appProductId": "musterring-justb-carpets",
@@ -2248,6 +3949,10 @@
       "tagline": "distinctive corduroy look",
       "description": "With her carpet collection, actress Bettina Zimmermann combines modern design with high-quality materials.",
       "category": "carpet",
+      "categories": [
+        "carpet"
+      ],
+      "productOverview": [],
       "sourceUrl": "https://www.musterring.com/en/furniture/home-accessories/carpets/justb-carpets",
       "images": [
         "/musterring-catalog/justb-carpets/image-01.jpg",
@@ -2258,16 +3963,30 @@
         "/musterring-catalog/justb-carpets/image-06.jpg",
         "/musterring-catalog/justb-carpets/image-07.jpg",
         "/musterring-catalog/justb-carpets/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "e794a1f47e5d9c684fe9ff3d5fd211a2c22b9282eebe99305ac42da01ba30a2d"
     },
     {
       "appProductId": "musterring-lamps-20",
       "slug": "lamps-20",
-      "modelCode": "Lamps 20",
-      "name": "Lamps 20",
-      "tagline": "LEUCHTEN 2.0 Top-class lighting design",
+      "modelCode": "LEUCHTEN 2.0",
+      "name": "LEUCHTEN 2.0",
+      "tagline": "Top-class lighting design",
       "description": "The LEUCHTEN 2.0 collection from Musterring comprises three high-quality product families that impress with both their atmospheric light and their design. Find out more.",
       "category": "lamp",
+      "categories": [
+        "lamp"
+      ],
+      "productOverview": [
+        "Table lamps",
+        "Ceiling lights",
+        "Pendant lights",
+        "Arc lamps",
+        "Floor lamps",
+        "Wall lights",
+        "Light source"
+      ],
       "sourceUrl": "https://www.musterring.com/en/furniture/home-accessories/lamp-collection/lamps-20",
       "images": [
         "/musterring-catalog/lamps-20/image-01.jpg",
@@ -2278,7 +3997,418 @@
         "/musterring-catalog/lamps-20/image-06.jpg",
         "/musterring-catalog/lamps-20/image-07.jpg",
         "/musterring-catalog/lamps-20/image-08.jpg"
-      ]
+      ],
+      "stale": false,
+      "contentHash": "b29c5c7aed80472f3468b743fa5afb30eac6ae6f7ccc99c0e878ee98216d1e60"
+    },
+    {
+      "appProductId": "musterring-kitchen",
+      "slug": "kitchen",
+      "modelCode": "Musterring Kitchens",
+      "name": "Musterring Kitchens",
+      "tagline": "Kitchens for all who want more than a kitchen",
+      "description": "Own-brand kitchen from Musterring are sold exclusively by Küchen Aktuell and Segmüller in Germany.",
+      "category": "kitchen",
+      "categories": [
+        "kitchen"
+      ],
+      "productOverview": [],
+      "sourceUrl": "https://www.musterring.com/en/furniture/kitchen",
+      "images": [
+        "/musterring-catalog/kitchen/image-01.jpg",
+        "/musterring-catalog/kitchen/image-02.jpg",
+        "/musterring-catalog/kitchen/image-03.jpg",
+        "/musterring-catalog/kitchen/image-04.jpg",
+        "/musterring-catalog/kitchen/image-05.jpg",
+        "/musterring-catalog/kitchen/image-06.jpg"
+      ],
+      "stale": false,
+      "contentHash": "305e56b6c2faf4061bd9bfc9efba539a720363525f9fadb8c7c8d5f8b2abc491"
+    },
+    {
+      "appProductId": "musterring-orthomatic-20",
+      "slug": "orthomatic-20",
+      "modelCode": "ORTHOMATIC 2.0",
+      "name": "ORTHOMATIC 2.0",
+      "tagline": "Start the day well refreshed",
+      "description": "The ORTHOMATIC 2.0 series encompasses a wide variety of comfortable mattresses and matching slatted bed bases.",
+      "category": "bed",
+      "categories": [
+        "bed"
+      ],
+      "productOverview": [
+        "Mattresses",
+        "Accessories",
+        "Spring wood frames",
+        "Cold foam mattresses",
+        "Barrel spring core mattresses",
+        "Topper"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/beds/orthomatic-20",
+      "images": [
+        "/musterring-catalog/orthomatic-20/image-01.jpg",
+        "/musterring-catalog/orthomatic-20/image-02.jpg",
+        "/musterring-catalog/orthomatic-20/image-03.jpg",
+        "/musterring-catalog/orthomatic-20/image-04.jpg",
+        "/musterring-catalog/orthomatic-20/image-05.png",
+        "/musterring-catalog/orthomatic-20/image-06.png"
+      ],
+      "stale": false,
+      "contentHash": "8d259b2eeb51e4112ee2be74007e0abad9cf102ac5b46604a744d3baf4d25f41"
+    },
+    {
+      "appProductId": "musterring-odessa",
+      "slug": "odessa",
+      "modelCode": "ODESSA",
+      "name": "ODESSA",
+      "tagline": "The all-round talent for your hallway",
+      "description": "With ODESSA, you have a choice of 100 different elements to add character to your entrance area.",
+      "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Cloakroom benches",
+        "Coat rack panels",
+        "Hanging elements",
+        "Wall mirrors",
+        "Shoe cupboards",
+        "Wall boards",
+        "Wardrobes"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/hallway/wardrobes/odessa",
+      "images": [
+        "/musterring-catalog/odessa/image-01.jpg",
+        "/musterring-catalog/odessa/image-02.jpg",
+        "/musterring-catalog/odessa/image-03.jpg",
+        "/musterring-catalog/odessa/image-04.jpg",
+        "/musterring-catalog/odessa/image-05.jpg",
+        "/musterring-catalog/odessa/image-06.jpg",
+        "/musterring-catalog/odessa/image-07.jpg",
+        "/musterring-catalog/odessa/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "7f1a17dbe284c8870b5fd78a421a2c95d0c1f82b6e223bddfe5e1912ab674206"
+    },
+    {
+      "appProductId": "musterring-korsika-dielen",
+      "slug": "korsika-dielen",
+      "modelCode": "KORSIKA-DIELEN",
+      "name": "KORSIKA-DIELEN",
+      "tagline": "Mediterranean country style for the hallway",
+      "description": "The extensive KORSIKA-DIELEN series from Musterring comprises cloakroom furniture in a rustic Mediterranean style – for that holiday feeling in your entrance area.",
+      "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Cloakroom benches",
+        "Coat rack panels",
+        "Hanging elements",
+        "Wall mirrors",
+        "Wardrobes",
+        "Shoe cupboards",
+        "Wall boards",
+        "Accessories"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/hallway/wardrobes/korsika-dielen",
+      "images": [
+        "/musterring-catalog/korsika-dielen/image-01.jpg",
+        "/musterring-catalog/korsika-dielen/image-02.jpg",
+        "/musterring-catalog/korsika-dielen/image-03.jpg",
+        "/musterring-catalog/korsika-dielen/image-04.jpg",
+        "/musterring-catalog/korsika-dielen/image-05.jpg",
+        "/musterring-catalog/korsika-dielen/image-06.jpg"
+      ],
+      "stale": false,
+      "contentHash": "4e668b70cdaa5ac5993cd3bfc4de946c98dcc0cb0db0163edb0f9f63c87d529e"
+    },
+    {
+      "appProductId": "musterring-kira-system-dielen",
+      "slug": "kira-system-dielen",
+      "modelCode": "KIRA-SYSTEM-DIELEN",
+      "name": "KIRA-SYSTEM-DIELEN",
+      "tagline": "Furniture ideas for your hallway",
+      "description": "High-quality craftsmanship and modern design – get inspired by the KIRA-SYSTEM hallway furniture. Discover more.",
+      "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Cloakroom benches",
+        "Coat rack panels",
+        "Hanging elements",
+        "Wall mirrors",
+        "Wardrobes",
+        "Shoe cupboards",
+        "Wall boards"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/hallway/wardrobes/kira-system-dielen",
+      "images": [
+        "/musterring-catalog/kira-system-dielen/image-01.jpg",
+        "/musterring-catalog/kira-system-dielen/image-02.jpg",
+        "/musterring-catalog/kira-system-dielen/image-03.jpg",
+        "/musterring-catalog/kira-system-dielen/image-04.jpg",
+        "/musterring-catalog/kira-system-dielen/image-05.jpg",
+        "/musterring-catalog/kira-system-dielen/image-06.jpg",
+        "/musterring-catalog/kira-system-dielen/image-07.jpg",
+        "/musterring-catalog/kira-system-dielen/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "ebc60a8084e06b9053a9a80474ca0d0d06b708638442d9c1a9f7e98664d61499"
+    },
+    {
+      "appProductId": "musterring-kara-frame-dielen",
+      "slug": "kara-frame-dielen",
+      "modelCode": "KARA-FRAME-DIELEN",
+      "name": "KARA-FRAME-DIELEN",
+      "tagline": "Welcome home!",
+      "description": "The furniture range for your hallway and entrance area: KARA-FRAME DIELEN offers surprisingly creative ideas for your home. Discover more.",
+      "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Cloakroom benches",
+        "Coat rack panels",
+        "Hanging elements",
+        "Wall mirrors",
+        "Wardrobes",
+        "Shoe cupboards",
+        "Wall boards"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/hallway/wardrobes/kara-frame-dielen",
+      "images": [
+        "/musterring-catalog/kara-frame-dielen/image-01.jpg",
+        "/musterring-catalog/kara-frame-dielen/image-02.jpg",
+        "/musterring-catalog/kara-frame-dielen/image-03.jpg",
+        "/musterring-catalog/kara-frame-dielen/image-04.jpg",
+        "/musterring-catalog/kara-frame-dielen/image-05.jpg",
+        "/musterring-catalog/kara-frame-dielen/image-06.jpg",
+        "/musterring-catalog/kara-frame-dielen/image-07.jpg",
+        "/musterring-catalog/kara-frame-dielen/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "0d8cd129bde9a7a1cf0baa2a9c4a806d20dba3ce8081321ba9bbe6576ec7be51"
+    },
+    {
+      "appProductId": "musterring-kanto-dielen",
+      "slug": "kanto-dielen",
+      "modelCode": "KANTO-DIELEN",
+      "name": "KANTO-DIELEN",
+      "tagline": "KANTO-DIELEN A versatile cloakroom system with solid wood fronts",
+      "description": "The comprehensive KANTO-DIELEN cloakroom series features solid wood fronts and flexibly adapts to the room.",
+      "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Coat rack panels",
+        "Cloakroom benches",
+        "Hanging elements",
+        "Wall mirrors",
+        "Wardrobes",
+        "Shoe cupboards",
+        "Wall boards"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/hallway/wardrobes/kanto-dielen",
+      "images": [
+        "/musterring-catalog/kanto-dielen/image-01.jpg",
+        "/musterring-catalog/kanto-dielen/image-02.jpg",
+        "/musterring-catalog/kanto-dielen/image-03.jpg",
+        "/musterring-catalog/kanto-dielen/image-04.jpg",
+        "/musterring-catalog/kanto-dielen/image-05.jpg",
+        "/musterring-catalog/kanto-dielen/image-06.jpg",
+        "/musterring-catalog/kanto-dielen/image-07.jpg",
+        "/musterring-catalog/kanto-dielen/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "5cea44097c637d2a729c0fd04ae0b955c4bd64b4311f4007340bc268b427d082"
+    },
+    {
+      "appProductId": "musterring-rimini",
+      "slug": "rimini",
+      "modelCode": "RIMINI",
+      "name": "RIMINI",
+      "tagline": "For a wonderfully fresh feeling",
+      "description": "The modern Musterring bathroom furniture series with the distinctive accent lines offers high-quality materials and lots of practical functions.",
+      "category": "bathroom",
+      "categories": [
+        "bathroom"
+      ],
+      "productOverview": [
+        "Washstands",
+        "Mirrored cabinets",
+        "Hanging elements",
+        "Accessories"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/bathroom/rimini",
+      "images": [
+        "/musterring-catalog/rimini/image-01.jpg",
+        "/musterring-catalog/rimini/image-02.jpg",
+        "/musterring-catalog/rimini/image-03.jpg",
+        "/musterring-catalog/rimini/image-04.jpg",
+        "/musterring-catalog/rimini/image-05.jpg",
+        "/musterring-catalog/rimini/image-06.jpg",
+        "/musterring-catalog/rimini/image-07.jpg",
+        "/musterring-catalog/rimini/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "ffeae85cdc15de3dd839300f54e9cae214161af215fa66026d7dc093f27a26d6"
+    },
+    {
+      "appProductId": "musterring-jarin",
+      "slug": "jarin",
+      "modelCode": "JARIN",
+      "name": "JARIN",
+      "tagline": "The full pampering programme",
+      "description": "The JARIN range from Musterring transforms your bathroom into an oasis of wellbeing. Discover more.",
+      "category": "bathroom",
+      "categories": [
+        "bathroom"
+      ],
+      "productOverview": [
+        "Washstands",
+        "Mirrored cabinets",
+        "Hanging elements",
+        "Lighting",
+        "Custom designs"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/bathroom/jarin",
+      "images": [
+        "/musterring-catalog/jarin/image-01.jpg",
+        "/musterring-catalog/jarin/image-02.jpg",
+        "/musterring-catalog/jarin/image-03.jpg",
+        "/musterring-catalog/jarin/image-04.jpg",
+        "/musterring-catalog/jarin/image-05.jpg",
+        "/musterring-catalog/jarin/image-06.jpg",
+        "/musterring-catalog/jarin/image-07.jpg",
+        "/musterring-catalog/jarin/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "9234439b999536a8ea4f635fd42fe40e6d1a1ebcc11eb0211d18ff91a523b377"
+    },
+    {
+      "appProductId": "musterring-home-textiles",
+      "slug": "home-textiles",
+      "modelCode": "MUSTERRING HEIMTEXTILIEN",
+      "name": "MUSTERRING HEIMTEXTILIEN",
+      "tagline": "That’s what home feels like",
+      "description": "Cozy pillows, colorful comforter covers or plaids in stylish patterns: discover the whole variety of our home textiles.",
+      "category": "home-textile",
+      "categories": [
+        "home-textile"
+      ],
+      "productOverview": [
+        "Quilts",
+        "Plaids",
+        "Bed linen",
+        "Cushions",
+        "Cushion covers",
+        "Pillows"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/home-accessories/home-textiles",
+      "images": [
+        "/musterring-catalog/home-textiles/image-01.jpg",
+        "/musterring-catalog/home-textiles/image-02.png",
+        "/musterring-catalog/home-textiles/image-03.jpg",
+        "/musterring-catalog/home-textiles/image-04.jpg",
+        "/musterring-catalog/home-textiles/image-05.jpg",
+        "/musterring-catalog/home-textiles/image-06.jpg",
+        "/musterring-catalog/home-textiles/image-07.jpg",
+        "/musterring-catalog/home-textiles/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "cd1d6398f7920a80b7922d2d7344aebcf0c51beaac6ee1beade4ee05bc19de0a"
+    },
+    {
+      "appProductId": "musterring-justb-home-textiles",
+      "slug": "justb-home-textiles",
+      "modelCode": "JUSTB! HEIMTEXTILIEN",
+      "name": "JUSTB! HEIMTEXTILIEN",
+      "tagline": "By Bettina Zimmermann",
+      "description": "Designs by Bettina Zimmermann give the cushion covers, plaids and blankets from our collection that special touch. Find out more.",
+      "category": "home-textile",
+      "categories": [
+        "home-textile"
+      ],
+      "productOverview": [],
+      "sourceUrl": "https://www.musterring.com/en/furniture/home-accessories/home-textiles-1/justb-home-textiles",
+      "images": [
+        "/musterring-catalog/justb-home-textiles/image-01.jpg",
+        "/musterring-catalog/justb-home-textiles/image-02.jpg",
+        "/musterring-catalog/justb-home-textiles/image-03.jpg",
+        "/musterring-catalog/justb-home-textiles/image-04.jpg",
+        "/musterring-catalog/justb-home-textiles/image-05.jpg",
+        "/musterring-catalog/justb-home-textiles/image-06.jpg",
+        "/musterring-catalog/justb-home-textiles/image-07.jpg",
+        "/musterring-catalog/justb-home-textiles/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "61fd3ad8eadbe9ab96e1e07b17ad7565d5c1323977c122bf03eebc6656cb7967"
+    },
+    {
+      "appProductId": "musterring-montino",
+      "slug": "montino",
+      "modelCode": "MONTINO",
+      "name": "MONTINO",
+      "tagline": "Much more than just a wardrobe",
+      "description": "The extensive MONTINO bedroom range from Musterring combines modern lacquered fronts with a high-quality real wood veneer made of beamed oak.",
+      "category": "bedroom-series",
+      "categories": [
+        "bedroom-series"
+      ],
+      "productOverview": [
+        "Wardrobes",
+        "Chests of drawers",
+        "Bedside tables",
+        "Front design"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/montino",
+      "images": [
+        "/musterring-catalog/montino/image-01.jpg",
+        "/musterring-catalog/montino/image-02.jpg",
+        "/musterring-catalog/montino/image-03.jpg",
+        "/musterring-catalog/montino/image-04.jpg",
+        "/musterring-catalog/montino/image-05.jpg",
+        "/musterring-catalog/montino/image-06.jpg",
+        "/musterring-catalog/montino/image-07.jpg",
+        "/musterring-catalog/montino/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "5639f978a03c967e3b416ce32e8e4a5586763bf9aa5b744dbe8a524e64f12988"
+    },
+    {
+      "appProductId": "musterring-ovida",
+      "slug": "ovida",
+      "modelCode": "OVIDA",
+      "name": "OVIDA",
+      "tagline": "This is where your home begins",
+      "description": "Musterring: Wall mirrors, shoe cupboards or coat rack units – our OVIDA range will make your home look both tidy and inviting.",
+      "category": "storage",
+      "categories": [
+        "storage"
+      ],
+      "productOverview": [
+        "Coat rack panels",
+        "Hanging elements",
+        "Wall mirrors",
+        "Shoe cupboards",
+        "Cloakroom benches"
+      ],
+      "sourceUrl": "https://www.musterring.com/en/furniture/hallway/wardrobes/ovida",
+      "images": [
+        "/musterring-catalog/ovida/image-01.jpg",
+        "/musterring-catalog/ovida/image-02.jpg",
+        "/musterring-catalog/ovida/image-03.jpg",
+        "/musterring-catalog/ovida/image-04.jpg",
+        "/musterring-catalog/ovida/image-05.jpg",
+        "/musterring-catalog/ovida/image-06.jpg",
+        "/musterring-catalog/ovida/image-07.jpg",
+        "/musterring-catalog/ovida/image-08.jpg"
+      ],
+      "stale": false,
+      "contentHash": "8c7453757d3eed9eb40cbb24f8f56bf86724e089ca276800c761b86373fdf6a4"
     }
   ]
 }

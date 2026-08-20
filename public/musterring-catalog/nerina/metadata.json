@@ -1,7 +1,7 @@
 {
   "page": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nerina",
   "title": "Nerina",
-  "importedAt": "2026-08-03T08:02:41.178Z",
+  "importedAt": "2026-08-19T12:16:46.843Z",
   "authorizedForProduction": true,
   "permissionBasis": "Client-confirmed Musterring rebranding authorization",
   "usageNote": "Authorized Musterring rebrand content. Preserve source URLs and refresh through this importer.",
@@ -10,37 +10,43 @@
       "file": "/musterring-catalog/nerina/image-01.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/9/b/csm_esszimmer-nerina-stuhl-gr%C3%BCn-esstisch-nica-asteiche-musterring_cf4cbc4be3.jpg",
       "bytes": 528799,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "938759c14da2d2da923a12dfb9b2ef926573978aea8c56920c40bdf271b669ce"
     },
     {
       "file": "/musterring-catalog/nerina/image-02.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/b/5/csm_esszimmer-nerina-stuhl-gr%C3%BCn-musterring-01_f0c18158f2.jpg",
       "bytes": 499059,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "45080520a33964786c322d5fe98d22035671bbb1a9a83ba5ac236fa855dbf4a1"
     },
     {
       "file": "/musterring-catalog/nerina/image-03.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/3/a/csm_esszimmer-nerina-stuhl-stoff-gr%C3%BCn-musterring_78645f7414.jpg",
       "bytes": 244967,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "64b6725cec0a2327722e5d83e8ae0af4c063bad2dcee7d98ab0d80eef368faeb"
     },
     {
       "file": "/musterring-catalog/nerina/image-04.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/d/c/csm_esszimmer-nerina-stuhl-gr%C3%BCn-musterring-02_f0616296f2.jpg",
       "bytes": 333809,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ec06e1b1b41f5c3061067edcb07b60350a1b676c9301c0d1145efff7c251bfeb"
     },
     {
       "file": "/musterring-catalog/nerina/image-05.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/e/b/csm_MR11583_13_Nerina_Mood_Print_-_15_d50aabb5c4.jpg",
       "bytes": 321573,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "cb12bf5ad5da0c1ddc96381643c1045cc99110ee30f0ee3971e38c11a07990b9"
     },
     {
       "file": "/musterring-catalog/nerina/image-06.jpg",
       "sourceUrl": "https://www.musterring.com/fileadmin/_processed_/4/4/csm_esszimmer-nerina-stuhl-gr%C3%BCn-esstisch-nica-dekton-musterring_84caa8a061.jpg",
       "bytes": 387998,
-      "contentType": "image/jpeg"
+      "contentType": "image/jpeg",
+      "sha256": "ec77631f1e9563954b4b15cc1a9a177ef27e251a840940ec6a2d594fd29ecdfc"
     }
   ]
 }
