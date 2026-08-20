@@ -11743,13 +11743,13 @@ button.assistant-dock > svg { width: 20px; height: 20px; stroke-width: 1.7; }
 button.assistant-dock .assistant-launcher-logo { position: absolute; top: -4px; left: -4px; width: 56px; height: 72px; max-width: none; object-fit: contain; object-position: top center; }
 button.assistant-dock > span:first-child { font-size: 14px; }
 
-.advisor-panel { width: min(478px,calc(100vw - 48px)); height: min(750px,calc(100dvh - 160px)); border: 1px solid rgba(25,24,21,.15); background: #fbfaf7; color: #191815; box-shadow: 0 30px 90px rgba(25,24,21,.22); }
-.advisor-panel > header { border-bottom-color: rgba(25,24,21,.12); background: #fff; color: #191815; }
-.advisor-panel .advisor-brand-icon { border-color: rgba(25,24,21,.15); background: #f1eee8; color: #191815; }
+.advisor-panel { width: min(478px,calc(100vw - 48px)); height: min(750px,calc(100dvh - 160px)); border: 1px solid #d8d3cb; border-radius: 10px; background: #fbf9f4; color: #191815; box-shadow: 0 24px 64px rgba(25,24,21,.18); }
+.advisor-panel > header { border-bottom-color: #ded9d1; background: #f7f4ee; color: #191815; }
+.advisor-panel .advisor-brand-icon { border-color: #d4cec5; background: #fbf9f4; color: #191815; }
 .advisor-panel > header p.advisor-header-title { color: #191815; }
 .advisor-panel > header small { color: #777169; }
 .advisor-panel > header button { color: #191815; }
-.advisor-panel > header button:hover { background: #f1eee8; }
+.advisor-panel > header button:hover { background: #ebe7df; }
 .advisor-panel > header .advisor-header-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 4px; }
 .advisor-panel > header .advisor-new-chat { width: auto; flex-basis: auto; gap: 7px; padding: 0 11px; border-radius: 999px; color: #5f5a53; font: 700 11px/1 var(--stitch-font-ui); white-space: nowrap; }
 .advisor-panel > header .advisor-new-chat svg { width: 16px; height: 16px; }
@@ -11764,14 +11764,14 @@ button.assistant-dock > span:first-child { font-size: 14px; }
   border-radius: 4px;
   box-shadow: 0 16px 36px rgba(25,24,21,.18);
 }
-.advisor-panel .advisor-messages { background: #fbfaf7; color: #191815; }
+.advisor-panel .advisor-messages { background: #fbf9f4; color: #191815; }
 .advisor-panel .advisor-welcome h3 { color: #191815; }
 .advisor-panel .advisor-welcome p { color: #68635c; }
-.advisor-panel .advisor-welcome-kicker { color: #955338; }
+.advisor-panel .advisor-welcome-kicker { color: var(--stitch-accent, #845238); }
 .advisor-panel .advisor-starters { border-top-color: rgba(25,24,21,.14); }
-.advisor-panel .advisor-welcome .advisor-starters button { border-bottom-color: rgba(25,24,21,.14); color: #191815; }
-.advisor-panel .advisor-welcome .advisor-starters button svg { color: #955338; }
-.advisor-panel .advisor-welcome .advisor-starters button:hover { border-color: #955338; color: #955338; }
+.advisor-panel .advisor-welcome .advisor-starters button { border-bottom-color: #ded9d1; color: #191815; padding-inline: 8px; transition: background-color 160ms ease, color 160ms ease, padding 160ms ease; }
+.advisor-panel .advisor-welcome .advisor-starters button svg { color: var(--stitch-accent, #845238); }
+.advisor-panel .advisor-welcome .advisor-starters button:hover { border-color: #ded9d1; background: #f1ede6; color: #191815; padding-inline: 12px 6px; }
 .advisor-panel .advisor-messages article,.advisor-panel .advisor-messages article.customer { color: #191815; }
 .advisor-panel .advisor-message-icon { border-color: rgba(25,24,21,.14); background: #fff; color: #191815; }
 .advisor-panel .advisor-messages article small { color: #777169; }
@@ -11780,16 +11780,18 @@ button.assistant-dock > span:first-child { font-size: 14px; }
 .advisor-panel .advisor-messages article.customer small { color: #955338; }
 .advisor-panel .advisor-sources { color: #817b73; }
 .advisor-panel .advisor-followups button { border-color: rgba(25,24,21,.17); background: #fff; color: #35332f; }
-.advisor-panel .advisor-followups button:hover { border-color: #955338; color: #955338; }
+.advisor-panel .advisor-followups button:hover { border-color: var(--stitch-accent, #845238); color: var(--stitch-accent, #845238); }
 .advisor-panel .advisor-products a { border-color: rgba(25,24,21,.14); background: #fff; color: #191815; }
 .advisor-panel .advisor-products span > small,.advisor-panel .advisor-products em { color: #777169; }
 .advisor-panel .advisor-products b { border-top-color: rgba(25,24,21,.12); }
 .advisor-panel .advisor-materials span { border-color: rgba(25,24,21,.16); }
-.advisor-panel .advisor-proposal { border-color: #955338; background: #191815; color: #fff; }
+.advisor-panel .advisor-proposal { border-color: #191815; background: #191815; color: #fff; }
 .advisor-panel .advisor-confirmation { border-top-color: rgba(25,24,21,.14); background: #ece8df; color: #191815; }
 .advisor-panel .advisor-confirmation small { color: #68635c; }
-.advisor-panel .advisor-input { border-color: rgba(25,24,21,.2); background: #fff; box-shadow: 0 14px 34px rgba(25,24,21,.13); }
-.advisor-panel .advisor-input:focus-within { border-color: #955338; box-shadow: 0 14px 34px rgba(25,24,21,.13),0 0 0 1px #955338; }
+.advisor-panel .advisor-input { border-color: #cbc5bc; border-radius: 10px; background: #fff; box-shadow: 0 10px 26px rgba(25,24,21,.1); }
+.advisor-panel .advisor-input:focus-within { border-color: #191815; box-shadow: 0 10px 26px rgba(25,24,21,.1),0 0 0 1px #191815; }
+.advisor-panel .advisor-input button:last-child { border-radius: 7px; background: #191815; }
+.advisor-panel .advisor-input button:last-child:hover:not(:disabled) { background: #34332f; }
 
 @media (max-width:520px) {
   button.assistant-dock { height: 62px; min-height: 62px; padding: 0 15px 0 21px; }
