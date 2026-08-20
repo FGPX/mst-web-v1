@@ -4,9 +4,10 @@ import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { ArrowRight, Bot, Check, CheckCircle2, Clock, FileText, Mail, MapPin, PackageCheck, Send, ShieldCheck, Sparkles, UserRound, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { dealers, products } from "@/lib/data";
+import { dealers, materials, products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
+import { normalizeAppointmentDescription } from "@/lib/appointment";
 import type { AdvisorAnswer, ConversationContext } from "@/lib/ai/assistant-schemas";
 
 type DealerMessage = { role: "dealer" | "assistant"; text: string; answer?: AdvisorAnswer };
@@ -19,7 +20,15 @@ type Lead = Record<string, unknown> & {
   requestType?: string;
   dealerId?: string;
   appointment?: string;
-  project?: { consultationSummary?: string; productIds?: string[]; roomScenes?: unknown[]; fitReports?: unknown[] };
+  project?: {
+    consultationSummary?: string;
+    productIds?: string[];
+    materialIds?: string[];
+    configurationIds?: string[];
+    roomScenes?: unknown[];
+    fitReports?: unknown[];
+    advisorProjectBrief?: { customerRequests?: string[] } | null;
+  };
 };
 
 const quickQuestions = [
@@ -28,6 +37,25 @@ const quickQuestions = [
   "What still needs retailer confirmation?",
   "Prepare consultation talking points"
 ];
+
+function conversationRequestsFromSession() {
+  if (typeof window === "undefined") return [];
+  try {
+    const parsed: unknown = JSON.parse(window.sessionStorage.getItem("musterring.assistantConversation") ?? "[]");
+    if (!Array.isArray(parsed)) return [];
+    return [...new Set(parsed.flatMap((entry) => {
+      if (!entry || typeof entry !== "object") return [];
+      const message = entry as { role?: unknown; text?: unknown };
+      if (message.role !== "customer" || typeof message.text !== "string") return [];
+      const text = message.text.trim();
+      if (text.length <= 8 || /^(?:hello|hi|thanks|thank you|okay|yes|no)[.!\s]*$/i.test(text)) return [];
+      if (/^(?:my room photo|product inspiration):/i.test(text) || /^save\b.*\bproject\b/i.test(text)) return [];
+      return [text];
+    }))].slice(-8);
+  } catch {
+    return [];
+  }
+}
 
 export function DealerAiAssistantClient() {
   const [lead, setLead] = useState<Lead | null>(null);
@@ -94,23 +122,57 @@ export function DealerAiAssistantClient() {
   const prepareEmail = () => {
     const customer = lead?.name || "Customer";
     const draft = storage.consultationDraft();
-    const appointment = lead?.appointment ?? (draft
+    const appointment = normalizeAppointmentDescription(lead?.appointment) || normalizeAppointmentDescription(draft
       ? `${draft.appointmentMode} · ${draft.appointmentDate || "date to confirm"} · ${draft.preferredTime}`
       : "To be confirmed");
+    const brief = lead?.project?.advisorProjectBrief ?? storage.advisorProjectBrief();
+    const requests = brief?.customerRequests?.filter(Boolean).length
+      ? brief.customerRequests.filter(Boolean)
+      : conversationRequestsFromSession();
+    const selectedMaterialIds = [...new Set([...(lead?.project?.materialIds ?? []), ...storage.savedMaterials()])];
+    const selectedMaterials = materials.filter((material) => selectedMaterialIds.includes(material.id));
+    const configurationIds = new Set(lead?.project?.configurationIds ?? []);
+    const configurations = storage.configurations().filter((configuration) => !configurationIds.size || configurationIds.has(configuration.id));
+    const requestSection = [
+      "WHAT THE CUSTOMER ASKED FOR",
+      ...(requests.length ? requests.map((request) => `- ${request}`) : [lead?.message ? `- ${lead.message}` : "- No separate chatbot request was saved."])
+    ].join("\n");
+    const selectionSection = [
+      "WHAT THE CUSTOMER SELECTED",
+      "Products:",
+      ...(selectedProducts.length ? selectedProducts.map((product) => {
+        const dimensions = product.verifiedFacts.dimensions
+          ? `${Math.round(product.widthMm / 10)} × ${Math.round(product.depthMm / 10)} × ${Math.round(product.heightMm / 10)} cm (verified catalogue dimensions)`
+          : "dimensions depend on the final configuration";
+        return `- ${product.modelCode} — ${product.name} (${product.category}); ${dimensions}`;
+      }) : ["- No products saved"]),
+      "Materials:",
+      ...(selectedMaterials.length ? selectedMaterials.map((material) => `- ${material.name} (${material.type}, ${material.colorFamily})`) : ["- No material selected"]),
+      "Configurations:",
+      ...(configurations.length ? configurations.map((configuration) => {
+        const product = products.find((candidate) => candidate.id === configuration.productId);
+        const material = materials.find((candidate) => candidate.id === configuration.materialId);
+        return `- ${configuration.id}: ${product?.modelCode ?? configuration.productId}; ${material?.name ?? configuration.materialId}; ${configuration.color}; ${Math.round(configuration.dimensions.widthMm / 10)} × ${Math.round(configuration.dimensions.depthMm / 10)} × ${Math.round(configuration.dimensions.heightMm / 10)} cm (saved configuration)`;
+      }) : ["- No saved configuration"]),
+      `Saved room visualizations: ${roomViews}`,
+      `Saved fit reports: ${fitReports}`
+    ].join("\n");
     setEmailDraft([
       `New Musterring consultation handover${lead?.reference ? ` · ${lead.reference}` : ""}`,
       "",
       `Customer: ${customer}`,
       `Request: ${lead?.requestType ?? "Retailer consultation"}`,
       `Appointment preference: ${appointment}`,
-      `Products: ${selectedProducts.map((product) => product.modelCode).join(", ") || "No products saved"}`,
-      `Room views: ${roomViews}`,
-      `Fit reports: ${fitReports}`,
       "",
-      "Project summary:",
+      requestSection,
+      "",
+      selectionSection,
+      "",
+      "PROJECT SUMMARY",
       projectSummary,
       "",
-      `Customer notes: ${lead?.message || "No additional notes."}`,
+      "CUSTOMER NOTES",
+      lead?.message || "No additional notes.",
       "",
       "Price, availability, final configuration, delivery feasibility, physical fit and appointment time require retailer confirmation."
     ].join("\n"));

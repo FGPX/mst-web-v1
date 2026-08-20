@@ -35,10 +35,10 @@ const quickStarts = [
   {
     number: "03",
     icon: Ruler,
-    title: "Plan a room",
-    text: "Arrange products in your room and check measurements step by step.",
+    title: "Room Visualizer",
+    text: "Upload a photo of your room and preview Musterring products in your space.",
     href: "/room-composer/upload",
-    action: "Plan your room"
+    action: "Open room visualizer"
   },
   {
     number: "04",

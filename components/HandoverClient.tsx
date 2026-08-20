@@ -5,6 +5,7 @@ import { ArrowRight, Check, Clock, MapPin, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { dealers, products } from "@/lib/data";
 import { storage } from "@/lib/persistence";
+import { normalizeAppointmentTime } from "@/lib/appointment";
 import type { SavedRoomScene } from "@/lib/types";
 
 export function HandoverClient({ initialRequest = "Book a Consultation", productId, materialId, sceneId }: { initialRequest?: string; productId?: string; materialId?: string; sceneId?: string }) {
@@ -16,7 +17,7 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
   const [message, setMessage] = useState("");
   const [requestType, setRequestType] = useState(initialRequest);
   const [appointmentMode, setAppointmentMode] = useState("Showroom consultation");
-  const [preferredTime, setPreferredTime] = useState("Weekday morning");
+  const [preferredTime, setPreferredTime] = useState("10:00");
   const [appointmentDate, setAppointmentDate] = useState("");
   const [consent, setConsent] = useState(false);
   const [dealerId, setDealerId] = useState(dealers[0].id);
@@ -36,7 +37,7 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
     if (draft) {
       setAppointmentMode(draft.appointmentMode);
       setAppointmentDate(draft.appointmentDate);
-      setPreferredTime(draft.preferredTime);
+      setPreferredTime(normalizeAppointmentTime(draft.preferredTime));
     }
     setSavedProductIds(storage.savedProducts());
     setSavedConfigurations(storage.configurations());
@@ -52,7 +53,7 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
   const structuredProject = () => {
     const fitReports = storage.fitReports();
     return {
-      customerIntent: message || "Customer requests a Musterring retailer consultation.",
+      customerIntent: message || storage.advisorProjectBrief()?.customerRequests.join(" | ") || "Customer requests a Musterring retailer consultation.",
       productIds: [...new Set([...(productId ? [productId] : []), ...storage.savedProducts(), ...(selectedRoomScene?.items.map((item) => item.productId) ?? [])])],
       configurationIds: storage.configurations().map((item) => item.id),
       materialIds: [...new Set([...(materialId ? [materialId] : []), ...storage.savedMaterials()])],
@@ -120,7 +121,8 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
         roomScenes: selectedRoomScene ? [selectedRoomScene] : storage.roomScenes(),
         fitReports: storage.fitReports(),
         consultationSummary: summaryPayload.summary,
-        structuredProjectData: summaryPayload.projectData
+        structuredProjectData: summaryPayload.projectData,
+        advisorProjectBrief: storage.advisorProjectBrief()
       },
       createdAt: new Date().toISOString()
     });
@@ -186,7 +188,7 @@ export function HandoverClient({ initialRequest = "Book a Consultation", product
                 <label>Request type<select value={requestType} onChange={(event) => setRequestType(event.target.value)}><option>Book a Consultation</option><option>Request a Quote</option><option>Check Showroom Availability</option><option>Request a Material Sample</option><option>Request Material Consultation</option><option>Request Technical Fit Check</option><option>Delivery Planning</option></select></label>
                 <label>Appointment mode<select value={appointmentMode} onChange={(event) => setAppointmentMode(event.target.value)}><option>Showroom consultation</option><option>Video consultation</option><option>Phone consultation</option><option>Home planning visit</option></select></label>
                 <label>Preferred date<input type="date" value={appointmentDate} onChange={(event) => setAppointmentDate(event.target.value)} /></label>
-                <label>Preferred time<select value={preferredTime} onChange={(event) => setPreferredTime(event.target.value)}><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option></select></label>
+                <label>Preferred time<input type="time" value={preferredTime} onChange={(event) => setPreferredTime(event.target.value)} /></label>
               </div>
             </fieldset>
             <fieldset className="is-wide consultation-fieldset">
