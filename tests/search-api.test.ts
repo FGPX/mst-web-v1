@@ -59,4 +59,21 @@ describe("POST /api/ai/search", () => {
       match.reasons.every((reason: string) => !/angefragt|farbe|breite|verifiziert/i.test(reason))
     )).toBe(true);
   });
+
+  it("applies explicit negations instead of provider-positive filters", async () => {
+    const response = await POST(new NextRequest("http://localhost/api/ai/search", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": crypto.randomUUID() },
+      body: JSON.stringify({ query: "sofa that is not red and without relax function" })
+    }));
+    const payload = await response.json();
+    const matches = [...payload.exactMatches, ...payload.closeAlternatives];
+
+    expect(response.status).toBe(200);
+    expect(payload.intent).toMatchObject({ excludedColorFamilies: ["red"], excludedFunctions: ["relax"] });
+    expect(payload.intent.colorFamilies).toBeNull();
+    expect(payload.intent.functions).toBeNull();
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every((match) => !match.product.colors.includes("red") && !match.product.functions.includes("relax"))).toBe(true);
+  });
 });
