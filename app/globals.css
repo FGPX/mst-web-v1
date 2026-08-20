@@ -11730,7 +11730,17 @@ button.assistant-dock > span:first-child { font-size: 14px; }
 .advisor-panel > header .advisor-header-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 4px; }
 .advisor-panel > header .advisor-new-chat { width: auto; flex-basis: auto; gap: 7px; padding: 0 11px; border-radius: 999px; color: #5f5a53; font: 700 11px/1 var(--stitch-font-ui); white-space: nowrap; }
 .advisor-panel > header .advisor-new-chat svg { width: 16px; height: 16px; }
-.advisor-panel .advisor-new-chat-confirmation { grid-template-columns: 22px 1fr auto auto; }
+.advisor-panel .advisor-new-chat-confirmation {
+  position: absolute;
+  right: 18px;
+  bottom: 96px;
+  left: 18px;
+  z-index: 5;
+  grid-template-columns: 22px 1fr auto auto;
+  border: 1px solid rgba(25,24,21,.16);
+  border-radius: 4px;
+  box-shadow: 0 16px 36px rgba(25,24,21,.18);
+}
 .advisor-panel .advisor-messages { background: #fbfaf7; color: #191815; }
 .advisor-panel .advisor-welcome h3 { color: #191815; }
 .advisor-panel .advisor-welcome p { color: #68635c; }
@@ -11764,7 +11774,7 @@ button.assistant-dock > span:first-child { font-size: 14px; }
   button.assistant-dock .assistant-launcher-logo { width: 48px; height: 62px; }
   .advisor-panel > header .advisor-new-chat { width: 38px; flex-basis: 38px; padding: 0; }
   .advisor-panel > header .advisor-new-chat span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .advisor-panel .advisor-new-chat-confirmation { grid-template-columns: 22px 1fr; }
+  .advisor-panel .advisor-new-chat-confirmation { right: 12px; bottom: 92px; left: 12px; grid-template-columns: 22px 1fr; }
 }
 /* Scroll-composed living room story */
 .product-assembly {
