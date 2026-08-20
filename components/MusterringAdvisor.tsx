@@ -62,7 +62,7 @@ export function MusterringAdvisor() {
       try {
         const parsed: unknown = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          setMessages(parsed.filter(isStoredMessage).slice(-40));
+          setMessages(parsed.map(restoreStoredMessage).filter((message): message is Message => Boolean(message)).slice(-40));
         }
       } catch { /* discard malformed session conversation */ }
     }
@@ -352,4 +352,32 @@ function isStoredMessage(value: unknown): value is Message {
     && typeof message.text === "string"
     && message.text.length <= 5000
     && (message.answer === undefined || advisorAnswerSchema.safeParse(message.answer).success);
+}
+
+function restoreStoredMessage(value: unknown): Message | null {
+  if (!isStoredMessage(value)) return null;
+  if (value.answer || value.role !== "advisor") return value;
+
+  // Conversations saved before structured answer persistence contain only the
+  // visible paragraph. Reconnect model codes from that paragraph to active,
+  // validated catalogue entries so recommendation UI survives an upgrade.
+  const normalizedText = value.text.toLocaleLowerCase();
+  const productIds = products
+    .filter((product) => product.active && normalizedText.includes(product.modelCode.toLocaleLowerCase()))
+    .map((product) => product.id)
+    .slice(0, 12);
+  if (!productIds.length) return value;
+
+  return {
+    ...value,
+    answer: {
+      answer: value.text,
+      answerType: "products",
+      productIds,
+      materialIds: [],
+      sources: [],
+      proposedAction: null,
+      suggestedQuestions: []
+    }
+  };
 }
