@@ -152,6 +152,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [generatedForSignature, setGeneratedForSignature] = useState("");
   const [generationStatus, setGenerationStatus] = useState<"idle" | "loading" | "error">("idle");
   const [generationError, setGenerationError] = useState("");
+  const [generationProgress, setGenerationProgress] = useState(0);
   const [showGenerated, setShowGenerated] = useState(false);
   const [comparisonPosition, setComparisonPosition] = useState(50);
   const [fitOpen, setFitOpen] = useState(false);
@@ -175,6 +176,21 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
       }
     }
   }, [openPresentationScene]);
+
+  useEffect(() => {
+    if (generationStatus !== "loading") return;
+
+    const startedAt = Date.now();
+    setGenerationProgress(4);
+    const timer = window.setInterval(() => {
+      const elapsedSeconds = (Date.now() - startedAt) / 1000;
+      // Image generation does not stream progress, so advance an honest estimate
+      // and wait below 100% until the request has actually completed.
+      setGenerationProgress(Math.min(92, Math.round(4 + 88 * (1 - Math.exp(-elapsedSeconds / 55)))));
+    }, 750);
+
+    return () => window.clearInterval(timer);
+  }, [generationStatus]);
 
   const categoryMatches = (productCategory: string) => {
     if (category === "all") return true;
@@ -438,6 +454,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     setGeneratedVisualization(payload.image);
     setGeneratedForSignature(signature);
     setComparisonPosition(50);
+    setGenerationProgress(100);
     setGenerationStatus("idle");
     setShowBefore(false);
     setShowGenerated(true);
@@ -788,6 +805,15 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 </div>
               </div> : null}
             </section> : null}
+
+            {generationStatus === "loading" ? <div className="stitch-generation-progress" role="progressbar" aria-label="Estimated room visualization progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={generationProgress}>
+              <div className="stitch-generation-progress__copy">
+                <span>{generationProgress < 20 ? "Preparing your room and product references" : generationProgress < 78 ? "Generating your realistic room view" : "Finalizing lighting and product details"}</span>
+                <strong>{generationProgress}%</strong>
+              </div>
+              <div className="stitch-generation-progress__track" aria-hidden="true"><span style={{ width: `${generationProgress}%` }} /></div>
+              <small>Estimated progress — this usually takes 1–3 minutes. Please keep this page open.</small>
+            </div> : null}
 
             <div className="stitch-composer-ai-panel" aria-busy={generationStatus === "loading"}>
               <div>
