@@ -12,6 +12,14 @@ import type { RoomAnalysis } from "@/lib/ai/schemas";
 import type { Product, Project, SavedRoomScene } from "@/lib/types";
 
 type ComposerCategory = "all" | "seating" | "armchair" | "storage" | "tables" | "bedroom";
+const uploadComposerCategories: { id: ComposerCategory; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "seating", label: "Seating" },
+  { id: "armchair", label: "Armchairs" },
+  { id: "tables", label: "Tables" },
+  { id: "storage", label: "Storage" },
+  { id: "bedroom", label: "Bedroom" }
+];
 const maxGeneratedVisualizationItems = 6;
 
 const roomBackgrounds = [
@@ -107,6 +115,11 @@ type SceneItem = {
 type Wall = Door["wall"];
 type MeasuredOpening = { id: string; wall: Wall; positionCm: number; widthCm: number; heightCm: number; sillHeightCm?: number; hinge?: Door["hinge"]; opens?: Door["opens"] };
 type FixedFeature = { id: string; kind: "radiator" | "built-in" | "column" | "other"; name: string; xCm: number; yCm: number; widthCm: number; depthCm: number; heightCm: number };
+type RoomSizeRecommendation = {
+  calculation: { minimumWidthMm: number; minimumLengthMm: number; recommendedWidthMm: number; recommendedLengthMm: number; furnitureSpanWidthMm: number; furnitureSpanLengthMm: number; circulationClearanceMm: number; method: "vision" | "footprint-fallback"; products: { productId: string; modelCode: string; category: string; widthMm: number; depthMm: number; heightMm: number; dimensionStatus: "verified" | "local-reference" }[] };
+  explanation: { summary: string; minimumSummary: string; recommendedSummary: string; considerations: string[]; confidence?: "medium" | "high" };
+  ai: { mode: string; fallback: boolean };
+};
 
 async function compressImageSource(source: string, maxSide = 1600, quality = .78) {
   const image = new window.Image();
@@ -186,6 +199,10 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [generationStatus, setGenerationStatus] = useState<"idle" | "loading" | "error">("idle");
   const [generationError, setGenerationError] = useState("");
   const [generationProgress, setGenerationProgress] = useState(0);
+  const [roomSizeRecommendation, setRoomSizeRecommendation] = useState<RoomSizeRecommendation | null>(null);
+  const [roomSizeRecommendationSignature, setRoomSizeRecommendationSignature] = useState("");
+  const [roomSizeRecommendationStatus, setRoomSizeRecommendationStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [roomSizeRecommendationError, setRoomSizeRecommendationError] = useState("");
   const [showGenerated, setShowGenerated] = useState(false);
   const [comparisonPosition, setComparisonPosition] = useState(50);
   const [fitOpen, setFitOpen] = useState(false);
@@ -251,12 +268,18 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     if (category === "bedroom") return ["bed", "bedroom-series", "wardrobe", "home-textile"].includes(productCategory);
     return ["coffee-table", "dining-table", "small-furniture"].includes(productCategory);
   };
+  const catalogCategoryOrder = ["sofa", "sectional", "armchair", "coffee-table", "dining-table", "small-furniture", "storage", "wardrobe", "bed", "bedroom-series", "home-textile"];
   const catalog = activeProducts.filter((product) => categoryMatches(product.category)
     && (upload || generatedCutoutSlugs.has(product.slug))
     && `${product.modelCode} ${product.name} ${product.subtitle}`.toLowerCase().includes(productQuery.toLowerCase()))
-    .sort((left, right) => category === "bedroom"
-      ? Number(left.category !== "bed") - Number(right.category !== "bed")
-      : 0);
+    .sort((left, right) => {
+      const categoryDifference = category === "all"
+        ? catalogCategoryOrder.indexOf(left.category) - catalogCategoryOrder.indexOf(right.category)
+        : category === "bedroom"
+          ? Number(left.category !== "bed") - Number(right.category !== "bed")
+          : 0;
+      return categoryDifference || left.modelCode.localeCompare(right.modelCode, undefined, { numeric: true });
+    });
   const recommendedProductIdSet = useMemo(() => new Set(recommendedProductIds), [recommendedProductIds]);
   const recommendedProducts = recommendedProductIds
     .map((productId) => activeProducts.find((product) => product.id === productId))
@@ -589,6 +612,9 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     if (!confirmed) return;
 
     setGenerationStatus("loading");
+    setRoomSizeRecommendation(null);
+    setRoomSizeRecommendationSignature("");
+    setRoomSizeRecommendationError("");
     const signature = sceneSignature;
     const form = new FormData();
     form.append("image", roomPhoto);
@@ -622,6 +648,25 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     setShowBefore(false);
     setShowGenerated(true);
     storage.track({ name: "room_visualization_generated" });
+
+    setRoomSizeRecommendationStatus("loading");
+    const sizeForm = new FormData();
+    const generatedImageBlob = await fetch(payload.image).then((result) => result.blob()).catch(() => null);
+    if (generatedImageBlob) sizeForm.append("image", generatedImageBlob, `generated-room.${generatedImageBlob.type === "image/png" ? "png" : "jpg"}`);
+    sizeForm.append("consent", "true");
+    sizeForm.append("items", JSON.stringify(items.map(({ productId, x, y, rotation }) => ({ productId, x, y, rotation }))));
+    sizeForm.append("referenceRoom", JSON.stringify(roomSize));
+    const sizeResponse = generatedImageBlob ? await fetch("/api/ai/room-size", { method: "POST", body: sizeForm }).catch(() => null) : null;
+    const sizePayload = sizeResponse ? await sizeResponse.json().catch(() => null) : null;
+    if (!sizeResponse?.ok || !sizePayload?.calculation || !sizePayload?.explanation) {
+      setRoomSizeRecommendationStatus("error");
+      setRoomSizeRecommendationError(sizePayload?.error ?? "The room-size recommendation could not be calculated.");
+      return;
+    }
+    setRoomSizeRecommendation(sizePayload);
+    setRoomSizeRecommendationSignature(signature);
+    setRoomSizeRecommendationStatus("idle");
+    storage.track({ name: "room_size_recommendation_generated" });
   };
 
   return (
@@ -735,13 +780,18 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               {roomPreview ? <button type="button" className="is-active"><span className="stitch-uploaded-swatch"><Upload size={18} /></span><small>Imported photo</small></button> : null}
             </div>
             <p className="eyebrow">{upload ? "Choose products" : "Module categories"}</p>
-            <div className="stitch-composer-tabs">
-              {upload ? <button className={category === "all" ? "is-active" : ""} onClick={() => { setCategory("all"); setVisibleCount(8); }}>All</button> : null}
-              <button className={category === "seating" ? "is-active" : ""} onClick={() => { setCategory("seating"); setVisibleCount(upload ? 8 : 12); }}>Seating</button>
-              {upload ? <button className={category === "bedroom" ? "is-active" : ""} onClick={() => { setCategory("bedroom"); setVisibleCount(8); }}>Bedroom</button> : null}
-              <button className={category === "armchair" ? "is-active" : ""} onClick={() => setCategory("armchair")}>Armchairs</button>
-              <button className={category === "storage" ? "is-active" : ""} onClick={() => setCategory("storage")}>Storage</button>
-              <button className={category === "tables" ? "is-active" : ""} onClick={() => setCategory("tables")}>Tables</button>
+            <div className="stitch-composer-tabs" aria-label="Product categories">
+              {(upload ? uploadComposerCategories : uploadComposerCategories.filter(({ id }) => id !== "all" && id !== "bedroom")).map(({ id, label }) => (
+                <button
+                  type="button"
+                  key={id}
+                  className={category === id ? "is-active" : ""}
+                  aria-pressed={category === id}
+                  onClick={() => { setCategory(id); setVisibleCount(upload ? 8 : 12); }}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
             <div className="stitch-composer-catalog-heading"><p className="eyebrow">Available products</p><span>{catalog.length} models</span></div>
             <input className="stitch-composer-search" type="search" value={productQuery} onChange={(event) => { setProductQuery(event.target.value); setVisibleCount(upload ? 4 : 12); }} placeholder="Search model or product" aria-label="Search products" />
@@ -1041,6 +1091,26 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 }} /> <span>I agree to temporary AI processing. <Link href="/privacy">See privacy policy.</Link></span></label> : null}
               </div>
             </div>
+
+            {generatedIsCurrent && (roomSizeRecommendationStatus !== "idle" || roomSizeRecommendation) ? <section className="stitch-room-size-recommendation" aria-busy={roomSizeRecommendationStatus === "loading"}>
+              <div>
+                <p className="eyebrow"><Box size={15} /> AI space recommendation</p>
+                <strong>{roomSizeRecommendationStatus === "loading" ? "Calculating a sensible room size…" : "Suggested clear room size"}</strong>
+                {roomSizeRecommendation && roomSizeRecommendationSignature === sceneSignature ? <>
+                  <div className="stitch-room-size-recommendation__options">
+                    <div><small>Compact planning minimum</small><div className="stitch-room-size-recommendation__dimensions"><span>{(roomSizeRecommendation.calculation.minimumWidthMm / 1000).toFixed(1)} m</span><small>wide</small><b>×</b><span>{(roomSizeRecommendation.calculation.minimumLengthMm / 1000).toFixed(1)} m</span><small>long</small></div><p>{roomSizeRecommendation.explanation.minimumSummary}</p></div>
+                    <div className="is-comfortable"><small>Comfortable recommendation</small><div className="stitch-room-size-recommendation__dimensions"><span>{(roomSizeRecommendation.calculation.recommendedWidthMm / 1000).toFixed(1)} m</span><small>wide</small><b>×</b><span>{(roomSizeRecommendation.calculation.recommendedLengthMm / 1000).toFixed(1)} m</span><small>long</small></div><p>{roomSizeRecommendation.explanation.recommendedSummary}</p></div>
+                  </div>
+                  <p>{roomSizeRecommendation.explanation.summary}</p>
+                  <strong className="stitch-room-size-recommendation__why">Why this size</strong>
+                  <ul>{roomSizeRecommendation.explanation.considerations.map((item) => <li key={item}>{item}</li>)}</ul>
+                  <small>Method: {roomSizeRecommendation.calculation.method === "vision" ? "AI analysis of the generated layout and grounded product dimensions" : "Product-footprint fallback"}{roomSizeRecommendation.explanation.confidence ? ` · ${roomSizeRecommendation.explanation.confidence} confidence` : ""}</small>
+                  <details><summary>Product dimensions used</summary>{roomSizeRecommendation.calculation.products.map((product, index) => <div key={`${product.productId}-${index}`}><span>{product.modelCode} <em>{product.dimensionStatus === "verified" ? "Verified" : "Local reference"}</em></span><span>{Math.round(product.widthMm / 10)} × {Math.round(product.depthMm / 10)} × {Math.round(product.heightMm / 10)} cm</span></div>)}</details>
+                </> : null}
+                {roomSizeRecommendationStatus === "error" ? <small className="form-error" role="alert">{roomSizeRecommendationError}</small> : null}
+              </div>
+              <small>This is an arrangement-based planning estimate, not a physical-fit confirmation. Use Will It Fit with measured doors and fixed obstacles before ordering.</small>
+            </section> : null}
 
             <div className="stitch-composer-summary">
                 <div><small>Total items</small><strong>{String(items.length).padStart(2, "0")} Modules</strong></div>

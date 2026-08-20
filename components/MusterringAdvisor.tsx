@@ -723,7 +723,7 @@ function AdvisorReply({ message }: { message: Message }) {
     {referencedMaterials.length ? <section className="advisor-answer-section">
       <h4>Recommended materials</h4>
       <ul>{referencedMaterials.slice(0, 4).map((material) => {
-        const qualities = [material.easyCare ? "easy-care" : "", material.petFriendly ? "pet-friendly" : "", material.familyFriendly ? "family-friendly" : "", material.durability >= 4 ? "high durability" : ""].filter(Boolean);
+        const qualities = [material.easyCare === true ? "easy-care" : "", material.petFriendly === true ? "pet-friendly" : "", material.familyFriendly === true ? "family-friendly" : "", material.durability != null && material.durability >= 4 ? "high durability" : ""].filter(Boolean);
         return <li key={material.id}><strong>{material.name}</strong>{qualities.length ? <span>{qualities.join(" · ")}</span> : null}</li>;
       })}</ul>
     </section> : null}

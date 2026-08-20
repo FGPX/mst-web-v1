@@ -7,37 +7,70 @@ import { categoryDetails } from "./catalog-taxonomy";
 const image = (name: string) => `/stitch-assets/${name}.png`;
 const geoByProductId = new Map(geoCatalog.products.map((product) => [product.id, product]));
 
-const materialDetails: Record<string, Pick<Material, "cleaningMethods" | "maintenance" | "recommendedUses" | "cautions">> = {
-  "mat-ivory-boucle": { cleaningMethods: ["Vacuum", "Blot spills"], maintenance: "Weekly vacuuming; treat spills immediately", recommendedUses: ["Family living", "Pet households", "Regular use"], cautions: ["Medium light sensitivity", "Do not rub spills"] },
-  "mat-sand-weave": { cleaningMethods: ["Soft brush", "pH-neutral cleaner"], maintenance: "Brush and spot-clean as needed", recommendedUses: ["Busy households", "Children", "Pets", "Sunny rooms"], cautions: ["Use only pH-neutral cleaner"] },
-  "mat-taupe-chenille": { cleaningMethods: ["Directional brushing", "Spot cleaning"], maintenance: "Restore the pile after cleaning", recommendedUses: ["Family living", "Regular use"], cautions: ["Not recorded as pet friendly", "Medium light sensitivity"] },
-  "mat-walnut-leather": { cleaningMethods: ["Approved leather care"], maintenance: "Condition twice per year", recommendedUses: ["Family living", "High-use seating"], cautions: ["Specialist care", "High light sensitivity", "Not recorded as pet friendly"] },
-  "mat-charcoal-wool": { cleaningMethods: ["Professional cleaning", "Gentle vacuuming"], maintenance: "Professional cleaning when required", recommendedUses: ["Pet households", "High-use seating", "Sunny rooms"], cautions: ["Not easy-care", "Not recorded as family friendly"] },
-  "mat-stone-micro": { cleaningMethods: ["Damp cloth", "Gentle wiping"], maintenance: "Wipe marks as needed", recommendedUses: ["Busy households", "Children", "Pets", "Sunny rooms"], cautions: ["Follow the recorded damp-cloth care instruction"] },
-  "mat-moss-weave": { cleaningMethods: ["Water-based spot cleaner", "Spot cleaning"], maintenance: "Spot-clean marks as needed", recommendedUses: ["Family living", "Pet households", "Regular use"], cautions: ["Medium light sensitivity"] },
-  "mat-clay-linen": { cleaningMethods: ["Gentle spot cleaning"], maintenance: "Follow specialist fabric guidance", recommendedUses: ["Lower-traffic rooms"], cautions: ["Avoid direct sunlight", "Not easy-care", "Not recorded as pet or family friendly"] },
-  "mat-cream-leather": { cleaningMethods: ["Approved leather milk"], maintenance: "Clean with approved leather care products", recommendedUses: ["Family living"], cautions: ["Specialist care", "High light sensitivity", "Not recorded as pet friendly"] },
-  "mat-smoke-velvet": { cleaningMethods: ["Gentle brushing"], maintenance: "Brush gently and keep the pile dry", recommendedUses: ["Lower-traffic rooms"], cautions: ["Avoid soaking", "Not easy-care", "Not recorded as pet or family friendly"] },
-  "mat-graphite-easy": { cleaningMethods: ["Machine-clean removable covers", "Routine vacuuming"], maintenance: "Clean removable covers only where applicable", recommendedUses: ["Busy households", "Children", "Pets", "Sunny rooms"], cautions: ["Confirm that the selected product has removable covers"] },
-  "mat-oat-performance": { cleaningMethods: ["Blot spills", "Spot cleaning"], maintenance: "Treat spills promptly without rubbing", recommendedUses: ["Busy households", "Children", "Pets", "Sunny rooms"], cautions: ["Blot rather than rub"] }
+const MUSTERRING_CARE_URL = "https://www.musterring.com/en/service/faq";
+const ACT_PERFORMANCE_URL = "https://contracttextiles.org/performance-guidelines/";
+
+const fabricGuidance = {
+  cleaningMethods: ["Low-power vacuuming", "Cover-specific care instructions"],
+  maintenance: "Vacuum regularly with an upholstery nozzle; confirm the exact cover care code before spot cleaning.",
+  recommendedUses: [],
+  cautions: ["Durability, cleanability, family, pet and lightfastness performance require supplier test data for the exact cover."],
+  sourceUrls: [MUSTERRING_CARE_URL, ACT_PERFORMANCE_URL]
+};
+
+const leatherGuidance = {
+  cleaningMethods: ["Dry dusting", "Leather-category-specific care product"],
+  maintenance: "Confirm whether the cover is pigmented, semi-aniline, aniline, nubuck or saddle leather before treatment.",
+  recommendedUses: [],
+  cautions: ["Avoid direct sunlight.", "Family, pet and cleanability performance are unverified until the leather finish is known."],
+  sourceUrls: [MUSTERRING_CARE_URL]
+};
+
+const materialDetails: Record<string, Pick<Material, "cleaningMethods" | "maintenance" | "recommendedUses" | "cautions" | "sourceUrls">> = {
+  "mat-ivory-boucle": fabricGuidance,
+  "mat-sand-weave": fabricGuidance,
+  "mat-taupe-chenille": fabricGuidance,
+  "mat-walnut-leather": leatherGuidance,
+  "mat-charcoal-wool": fabricGuidance,
+  "mat-stone-micro": {
+    ...fabricGuidance,
+    recommendedUses: ["General indoor upholstery where the exact cover specification confirms suitability"],
+    cautions: ["Musterring describes microfibre generally as robust and easy-care; family, pet and lightfastness performance still require exact-cover evidence."]
+  },
+  "mat-moss-weave": fabricGuidance,
+  "mat-clay-linen": fabricGuidance,
+  "mat-cream-leather": leatherGuidance,
+  "mat-smoke-velvet": fabricGuidance,
+  "mat-graphite-easy": fabricGuidance,
+  "mat-oat-performance": fabricGuidance
 };
 
 export const materials: Material[] = [
-  ["mat-ivory-boucle", "Ivory Boucle", "fabric", "ivory", "soft loop", "polyester blend", 4, true, true, true, "medium", "Vacuum weekly, dab spills immediately."],
-  ["mat-sand-weave", "Sand Structured Weave", "fabric", "beige", "woven", "recycled polyester blend", 5, true, true, true, "low", "Use a soft brush and pH-neutral cleaner."],
-  ["mat-taupe-chenille", "Taupe Chenille", "fabric", "taupe", "velvet touch", "chenille blend", 4, true, false, true, "medium", "Brush with pile direction after cleaning."],
-  ["mat-walnut-leather", "Walnut Leather", "leather", "brown", "natural grain", "leather", 5, false, false, true, "high", "Condition with leather care twice a year."],
-  ["mat-charcoal-wool", "Charcoal Wool Blend", "fabric", "charcoal", "dry wool", "wool blend", 5, false, true, false, "low", "Professional cleaning recommended."],
-  ["mat-stone-micro", "Stone Microfiber", "fabric", "stone", "fine matte", "microfiber", 5, true, true, true, "low", "Wipe with damp cloth."],
-  ["mat-moss-weave", "Moss Performance Weave", "fabric", "green", "structured", "polyester", 4, true, true, true, "medium", "Spot clean with water-based cleaner."],
-  ["mat-clay-linen", "Clay Linen Look", "fabric", "terracotta", "linen look", "linen-viscose blend", 3, false, false, false, "high", "Avoid direct sunlight."],
-  ["mat-cream-leather", "Cream Smooth Leather", "leather", "cream", "smooth", "leather", 4, false, false, true, "high", "Clean with approved leather milk."],
-  ["mat-smoke-velvet", "Smoke Velvet", "fabric", "grey", "velvet", "polyester velvet", 3, false, false, false, "medium", "Brush gently and avoid soaking."],
-  ["mat-graphite-easy", "Graphite Easy-Care", "fabric", "graphite", "flat weave", "polyester", 5, true, true, true, "low", "Machine-clean removable covers when applicable."],
-  ["mat-oat-performance", "Oat Performance Cloth", "fabric", "beige", "fine weave", "polyester blend", 5, true, true, true, "low", "Blot, do not rub."]
+  ["mat-ivory-boucle", "Ivory Boucle", "fabric", "ivory", "soft loop", "polyester blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-sand-weave", "Sand Structured Weave", "fabric", "beige", "woven", "recycled polyester blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-taupe-chenille", "Taupe Chenille", "fabric", "taupe", "velvet touch", "chenille blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-walnut-leather", "Walnut Leather", "leather", "brown", "natural grain", "leather", null, null, null, null, "high", leatherGuidance.maintenance],
+  ["mat-charcoal-wool", "Charcoal Wool Blend", "fabric", "charcoal", "dry wool", "wool blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-stone-micro", "Stone Microfiber", "fabric", "stone", "fine matte", "microfiber", null, true, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-moss-weave", "Moss Performance Weave", "fabric", "green", "structured", "polyester", null, null, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-clay-linen", "Clay Linen Look", "fabric", "terracotta", "linen look", "linen-viscose blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-cream-leather", "Cream Smooth Leather", "leather", "cream", "smooth", "leather", null, null, null, null, "high", leatherGuidance.maintenance],
+  ["mat-smoke-velvet", "Smoke Velvet", "fabric", "grey", "velvet", "polyester velvet", null, null, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-graphite-easy", "Graphite Easy-Care", "fabric", "graphite", "flat weave", "polyester", null, null, null, null, "unknown", fabricGuidance.maintenance],
+  ["mat-oat-performance", "Oat Performance Cloth", "fabric", "beige", "fine weave", "polyester blend", null, null, null, null, "unknown", fabricGuidance.maintenance]
 ].map(([id, name, type, colorFamily, texture, composition, durability, easyCare, petFriendly, familyFriendly, lightSensitivity, care]) => ({
   id, name, type, colorFamily, texture, composition, durability, easyCare, petFriendly, familyFriendly, lightSensitivity, care,
-  ...materialDetails[String(id)], demoData: true
+  ...materialDetails[String(id)],
+  dataQuality: {
+    level: "demo",
+    verifiedFields: [],
+    authorizedSourceFields: type === "leather" ? ["care", "lightSensitivity"] : id === "mat-stone-micro" ? ["care", "easyCare"] : ["care"],
+    derivedFields: [],
+    demoFields: ["name", "colorFamily", "texture", "composition", "materialImageUrl"],
+    unknownFields: ["durability", "martindaleCycles", "pillingRating", "lightFastnessRating", "petFriendly", "familyFriendly", ...(easyCare == null ? ["easyCare"] : []), ...(lightSensitivity === "unknown" ? ["lightSensitivity"] : [])],
+    lastVerifiedAt: "2026-08-20"
+  },
+  demoData: true
 } as Material));
 
 const base: Omit<Product, "id" | "slug" | "modelCode" | "name" | "subtitle" | "widthMm" | "depthMm" | "numberOfSeats" | "category" | "imageAssets" | "indicativePriceCents"> = {
@@ -233,9 +266,11 @@ const catalogueSearchOverrides: Record<string, Partial<Product>> = {
       { label: "Dining level", value: "Standard-height dining table for family meals and social gatherings" },
       { label: "Visual style", value: "Clear-cut modern: concrete-look top with matt black metal base, or solid oak" },
       { label: "Reference format", value: "200 × 100 cm tabletop; 77 cm high reference configuration" },
+      { label: "Height options", value: "77 cm standard-height reference configuration" },
+      { label: "Planning range", value: "Featured 200 × 100 cm dining configuration" },
+      { label: "Design detail", value: "Concrete-look or solid-oak top with matt black metal base" },
       { label: "Tabletop shapes", value: "Focused rectangular format" },
-      { label: "Tabletop materials", value: "HPL or solid oak" },
-      { label: "Care profile", value: "Concrete-look version is described as easy-care" }
+      { label: "Tabletop materials", value: "HPL or solid oak" }
     ]
   },
   "helana": {
@@ -502,6 +537,85 @@ export const products: Product[] = [
     .filter((product) => !authorizedCatalog.products.some((official) => official.appProductId === product.id))
     .map((product) => ({ ...product, active: false }))
 ];
+
+const authorizedBedColourVariants = [
+  {
+    baseSlug: "justb-sc100",
+    id: "musterring-justb-sc100-grey",
+    slug: "justb-sc100-grey",
+    label: "Grey upholstery presentation",
+    colors: ["grey"],
+    images: [
+      "/musterring-catalog/justb-sc100/image-05.jpg",
+      "/musterring-catalog/justb-sc100/image-06.jpg",
+      "/musterring-catalog/justb-sc100/image-07.jpg",
+      "/musterring-catalog/justb-sc100/image-08.jpg"
+    ]
+  },
+  {
+    baseSlug: "delphi",
+    id: "musterring-delphi-light-grey",
+    slug: "delphi-light-grey",
+    label: "Light-grey and graphite presentation",
+    colors: ["light grey", "graphite"],
+    images: [
+      "/musterring-catalog/delphi/image-05.jpg",
+      "/musterring-catalog/delphi/image-06.jpg",
+      "/musterring-catalog/delphi/image-07.jpg",
+      "/musterring-catalog/delphi/image-08.jpg"
+    ]
+  },
+  {
+    baseSlug: "mr-dubai",
+    id: "musterring-mr-dubai-red",
+    slug: "mr-dubai-red",
+    label: "Red upholstery presentation",
+    colors: ["red"],
+    images: [
+      "/musterring-catalog/mr-dubai/image-05.jpg",
+      "/musterring-catalog/mr-dubai/image-06.jpg",
+      "/musterring-catalog/mr-dubai/image-07.jpg",
+      "/musterring-catalog/mr-dubai/image-08.jpg"
+    ]
+  }
+] as const;
+
+for (const variant of authorizedBedColourVariants) {
+  const baseIndex = products.findIndex((product) => product.slug === variant.baseSlug);
+  const base = products[baseIndex];
+  if (!base) continue;
+  const variantProduct: Product = {
+    ...base,
+    id: variant.id,
+    slug: variant.slug,
+    name: `${base.name} — ${variant.label}`,
+    subtitle: variant.label,
+    description: `${base.description} This card shows an official Musterring ${variant.label.toLowerCase()}.`,
+    entityLevel: "variant",
+    productGroupId: base.id,
+    colors: [...variant.colors],
+    colorFamilies: [...variant.colors],
+    imageAssets: [...variant.images],
+    media: {
+      primaryImage: variant.images[0],
+      images: variant.images.map((url, index) => ({
+        url,
+        alt: `${base.name} ${variant.label.toLowerCase()}${index ? ` view ${index + 1}` : ""}`,
+        role: index === 0 ? "hero" : "gallery"
+      })),
+      videos: []
+    },
+    variants: undefined,
+    verifiedFacts: { ...base.verifiedFacts, colors: [...variant.colors] },
+    dataQuality: base.dataQuality ? {
+      ...base.dataQuality,
+      verifiedFields: [...new Set([...base.dataQuality.verifiedFields, "colors", "media"])],
+      demoFields: base.dataQuality.demoFields.filter((field) => field !== "colors" && field !== "media")
+    } : base.dataQuality,
+    specificationNote: "This is an official colour presentation of the parent Musterring model. Dimensions, configuration options and availability require retailer confirmation."
+  };
+  products.splice(baseIndex + 1, 0, variantProduct);
+}
 
 export const dealers: Dealer[] = [
   ["d1", "Musterring Partner Hannover", "Hannover", "30159", "Georgstrasse 12", 4.2],

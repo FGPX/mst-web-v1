@@ -42,7 +42,10 @@ describe("catalogue-grounded room visualization", () => {
     expect(prompt).toContain("one complete, cohesive, photorealistic premium interior photograph");
     expect(prompt).toContain("16:9 landscape composition");
     expect(prompt).toContain("Keep it unmistakably the same room");
-    expect(prompt).toContain("Do not add people, text, logos, decorations, plants, or unselected furniture");
+    expect(prompt).toContain("believable, lived-in Musterring editorial result");
+    expect(prompt).toContain("ordinary, unbranded, non-catalogue styling accessories");
+    expect(prompt).toContain("These accessories are decorative context only, not Musterring products");
+    expect(prompt).toContain("Do not add people, pets, televisions, or additional unselected seating");
     expect(prompt).toContain("PRODUCT LOCK");
     expect(prompt).toContain("Do not recolour, desaturate, brighten, darken");
     expect(prompt).toContain("exact selected-product appearance");
@@ -83,9 +86,27 @@ describe("catalogue-grounded room visualization", () => {
     expect(grounded[0].assetUrl).toContain("illustrative-right-v2.png");
     expect(prompt).toContain("90 degrees clockwise");
     expect(prompt).toContain("west wall");
-    expect(prompt).toContain("5-15 cm");
-    expect(prompt).toContain("do not pull it toward the middle of the room");
+    expect(prompt).toContain("3-8 cm");
+    expect(prompt).toContain("Align the main rear run of the seating parallel to that wall");
+    expect(prompt).toContain("Do not apply a decorative angle");
+    expect(prompt).toContain("Do not pull it toward the middle of the room");
     expect(prompt).toContain("Never rotate or tilt the flat image");
+  });
+
+  it("keeps wall-assigned storage straight and flush with its selected wall", () => {
+    const storage = products.find((candidate) => candidate.category === "storage")!;
+    const prompt = buildRoomVisualizationPrompt(groundVisualizationItems([{
+      productId: storage.id,
+      x: 18,
+      y: 76,
+      rotation: 0,
+      wallPlacement: "back",
+      scale: 1
+    }]));
+
+    expect(prompt).toContain("entire rear face of the storage unit straight and parallel");
+    expect(prompt).toContain("must not sit diagonally");
+    expect(prompt).toContain("selected wall placement and alignment");
   });
 
   it("normalizes rotations to the four horizontal product orientations", () => {

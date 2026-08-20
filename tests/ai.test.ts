@@ -259,6 +259,34 @@ describe("grounded hybrid retrieval", () => {
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
   });
 
+  it("does not leak wrong-colour beds into white visual-search results", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "bed",
+      colorFamilies: ["white", "cream"],
+      likelyMaterial: "fabric",
+      style: ["modern"],
+      silhouette: "upholstered bed",
+      notableVisualFeatures: []
+    }));
+    const accepted = new Set(["white", "warm white", "off white", "ivory", "cream"]);
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every(({ product }) => product.colors.some((color) => accepted.has(color)))).toBe(true);
+  });
+
+  it("does not leak light sofas into charcoal visual-search results", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "sofa",
+      colorFamilies: ["charcoal"],
+      likelyMaterial: "fabric",
+      style: ["modern"],
+      silhouette: "wide low sofa",
+      notableVisualFeatures: []
+    }));
+    const accepted = new Set(["black", "charcoal", "graphite", "anthracite", "onyx", "dark grey"]);
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every(({ product }) => product.colors.some((color) => accepted.has(color)))).toBe(true);
+  });
+
   it("accepts every catalogue category for visual search", () => {
     for (const category of catalogueCategories) {
       expect(visualTagsSchema.safeParse({ category, colorFamilies: [], likelyMaterial: null, style: [], silhouette: "visible object", notableVisualFeatures: [] }).success).toBe(true);
