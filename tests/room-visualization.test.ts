@@ -40,11 +40,14 @@ describe("catalogue-grounded room visualization", () => {
     const prompt = buildRoomVisualizationPrompt(groundVisualizationItems([item]));
     expect(prompt).toContain(product.modelCode);
     expect(prompt).toContain("one complete, cohesive, photorealistic premium interior photograph");
+    expect(prompt).toContain("16:9 landscape composition");
     expect(prompt).toContain("Keep it unmistakably the same room");
     expect(prompt).toContain("Do not add people, text, logos, decorations, plants, or unselected furniture");
     expect(prompt).toContain("PRODUCT LOCK");
     expect(prompt).toContain("Do not recolour, desaturate, brighten, darken");
     expect(prompt).toContain("exact selected-product appearance");
+    expect(prompt).toContain("single chair must never appear larger than a sofa or sectional");
+    expect(prompt).toContain("Product size is adaptive rather than a hard percentage");
   });
 
   it("keeps quarter-turn orientation and wall placement as hard generation constraints", () => {
