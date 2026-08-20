@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { materials, products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
-import type { AdvisorAction, AdvisorAnswer, ConversationContext, VoiceCommand } from "@/lib/ai/assistant-schemas";
+import { advisorAnswerSchema, type AdvisorAction, type AdvisorAnswer, type ConversationContext, type VoiceCommand } from "@/lib/ai/assistant-schemas";
 
 type Message = { role: "customer" | "advisor"; text: string; answer?: AdvisorAnswer };
 const memoryKey = "musterring.assistantContext";
@@ -71,7 +71,7 @@ export function MusterringAdvisor() {
   useEffect(() => {
     if (!conversationReady) return;
     try {
-      const sessionMessages = messages.slice(-40).map(({ role, text }) => ({ role, text }));
+      const sessionMessages = messages.slice(-40).map(({ role, text, answer }) => ({ role, text, answer }));
       window.sessionStorage.setItem(conversationKey, JSON.stringify(sessionMessages));
     } catch { /* keep the current in-memory conversation if browser storage is unavailable */ }
   }, [conversationReady, messages]);
@@ -350,5 +350,6 @@ function isStoredMessage(value: unknown): value is Message {
   const message = value as Partial<Message>;
   return (message.role === "customer" || message.role === "advisor")
     && typeof message.text === "string"
-    && message.text.length <= 5000;
+    && message.text.length <= 5000
+    && (message.answer === undefined || advisorAnswerSchema.safeParse(message.answer).success);
 }

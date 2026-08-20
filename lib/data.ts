@@ -310,7 +310,7 @@ export const products: Product[] = [
       ? {
           ...(geo.specifications as Product["specifications"]),
           ...(geo.specifications.seating ? {
-            seating: {
+            seating: ({
               ...geo.specifications.seating,
               seatHeightMm: finalSeatHeightMm || null,
               seatDepthMm: finalSeatDepthMm || null,
@@ -320,7 +320,7 @@ export const products: Product[] = [
               recliner: finalVerifiedFacts.functions.some((value) => /reclin|relax|electric lounge|seat extension/i.test(value)) || geo.specifications.seating.recliner,
               manualRecliner: finalVerifiedFacts.functions.some((value) => /manual|relax/i.test(value)) || geo.specifications.seating.manualRecliner,
               electricRecliner: finalVerifiedFacts.functions.some((value) => /electric|motorized|motorised/i.test(value)) || geo.specifications.seating.electricRecliner
-            }
+            } as NonNullable<Product["specifications"]>["seating"])
           } : {})
         }
       : undefined;
@@ -330,7 +330,11 @@ export const products: Product[] = [
       ...(finalVerifiedFacts.seatDepth ? ["specifications.seating.seatDepthMm", "specifications.seating.seatDepthOptionsMm"] : []),
       ...(finalVerifiedFacts.colors.length ? ["colors"] : []),
       ...(finalVerifiedFacts.materialTypes.length ? ["materialTypes"] : []),
-      ...(finalVerifiedFacts.functions.length ? ["functions", ...(geo?.specifications?.seating ? ["specifications.seating.functions"] : [])] : [])
+      ...(finalVerifiedFacts.functions.length ? [
+        "functions",
+        ...(geo?.specifications?.seating && finalVerifiedFacts.functions.some((value) => /electric|motorized|motorised/i.test(value)) ? ["specifications.seating.electricRecliner", "specifications.seating.recliner"] : []),
+        ...(geo?.specifications?.seating && finalVerifiedFacts.functions.some((value) => /manual|relax/i.test(value)) ? ["specifications.seating.manualRecliner", "specifications.seating.recliner"] : [])
+      ] : [])
     ];
     const synchronizedDataQuality: Product["dataQuality"] = geo?.dataQuality
       ? {

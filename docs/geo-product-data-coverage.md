@@ -1,11 +1,12 @@
 # GEO Product Data Coverage
 
-Generated: 2026-08-20T07:43:19.321Z
+Generated: 2026-08-20T08:40:17.940Z
 
 ## Summary
 
 - Total real Musterring products: 142
 - Products with verified batch enrichment: 10
+- Additional official pilot records: 7
 - Verified-only products: 0
 - Mixed authorised/verified + demo products: 142
 - Demo-only products: 0
@@ -26,8 +27,32 @@ Generated: 2026-08-20T07:43:19.321Z
 | structuredMedia | 142 | 100% |
 | productGroupIdentity | 142 | 100% |
 | provenance | 142 | 100% |
-| verifiedDimensions | 6 | 4% |
-| verifiedBatchFacts | 10 | 7% |
+| verifiedDimensions | 8 | 6% |
+| verifiedOrAuthorisedFacts | 142 | 100% |
+| productSubtypes | 142 | 100% |
+| verifiedProductSubtypes | 142 | 100% |
+| structuredConfigurations | 142 | 100% |
+| seriesSpecifications | 112 | 79% |
+
+## Exact-capable target gate
+
+A single-product target needs at least 3 candidates with the relevant exact field paths verified. Set slots need at least 2. Unknown and demo values remain searchable for closest-match ranking but cannot satisfy hard filters.
+
+| Product subtype | Verified candidates | Single-product exact capable | Set-slot capable |
+|---|---:|---|---|
+| sofa | 37 | yes | yes |
+| armchair | 37 | yes | yes |
+| coffee-table | 16 | yes | yes |
+| side-table | 2 | no | yes |
+| wall-unit | 9 | yes | yes |
+| sideboard | 20 | yes | yes |
+| bed | 24 | yes | yes |
+| wardrobe | 23 | yes | yes |
+| bedside-table | 12 | yes | yes |
+| dresser | 10 | yes | yes |
+| dining-table | 30 | yes | yes |
+| dining-chair | 26 | yes | yes |
+| dining-bench | 18 | yes | yes |
 
 ## Category coverage
 
@@ -52,8 +77,8 @@ Generated: 2026-08-20T07:43:19.321Z
 
 ## Implemented attributes
 
-Identity and ProductGroup fields; field-level quality buckets; semantic content; reference and range dimensions; structured materials, colours, configuration and compatibility; category-specific specifications; variant-ready media; source documents; safe commerce placeholders; structured search fields. GTIN, EAN, SKU, MPN, certifications, official prices, legal ratings and real dealer inventory remain null unless supplied by an authorised source.
+Identity and ProductGroup fields; productSubtypes; room/use/style/colour/material metadata; field-level quality buckets; configuration dimensions; SeriesSpecifications and explicit compatibility; category-specific seating, bedroom, dining, storage, outdoor, carpet and lamp specifications; source documents; safe commerce placeholders; structured search and exact/closest recommendation contracts. Text evidence may improve scoring but does not satisfy a structured hard filter. GTIN, EAN, SKU, MPN, certifications, official prices, legal ratings and real dealer inventory remain null unless supplied by an authorised source.
 
 ## Recommended future PIM fields
 
-Persist sellable variants and module IDs, exact variant dimensions, GTIN/EAN/MPN/SKU, cover and finish codes, composition and care tests, package units, configuration rules, lifecycle dates, market-specific dealer offers, verified availability, approved technical documents and variant-specific DAM relationships.
+Persist sellable variants and module IDs, exact variant dimensions, verified capacities, GTIN/EAN/MPN/SKU, cover and finish codes, composition and care tests, package units, configuration rules, lifecycle dates, market-specific dealer offers, verified availability, approved technical documents and variant-specific DAM relationships.

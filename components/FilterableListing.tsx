@@ -36,6 +36,7 @@ export function FilterableListing() {
   const [sort, setSort] = useState<"recommended" | "width" | "name">("recommended");
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [openFilterMenu, setOpenFilterMenu] = useState<"width" | "material" | "more" | null>(null);
   const selectedCategory = filters.category ? categoryDetails[filters.category] : null;
 
   const results = useMemo(
@@ -69,11 +70,9 @@ export function FilterableListing() {
 
   const set = (patch: SearchFilters) => {
     storage.track({ name: "filter_applied" });
-    setFilters((current) => {
-      const next = { ...current, ...patch };
-      syncUrl(next);
-      return next;
-    });
+    const next = { ...filters, ...patch };
+    setFilters(next);
+    syncUrl(next);
   };
 
   const clear = () => {
@@ -88,6 +87,10 @@ export function FilterableListing() {
       ? Array.from(new Set([...current, materialId]))
       : current.filter((id) => id !== materialId);
     set({ materials: materials.length ? materials : undefined });
+  };
+
+  const toggleFilterMenu = (menu: "width" | "material" | "more", open: boolean) => {
+    setOpenFilterMenu((current) => open ? menu : current === menu ? null : current);
   };
 
   return (
@@ -133,7 +136,7 @@ export function FilterableListing() {
           <div className={`stitch-filter-controls ${filterOpen ? "is-open" : ""}`} id="catalog-filter-controls">
             <button className="stitch-mobile-filter-close" onClick={() => setFilterOpen(false)}>Close filters</button>
             <span className="stitch-filter-label">Filter by</span>
-            <details className="stitch-filter-menu">
+            <details className="stitch-filter-menu" open={openFilterMenu === "width"} onToggle={(event) => toggleFilterMenu("width", event.currentTarget.open)}>
               <summary>
                 Width{filters.maxWidthMm ? ` · ≤ ${Math.round(filters.maxWidthMm / 10)} cm` : ""}
                 <ChevronDown size={15} />
@@ -153,7 +156,7 @@ export function FilterableListing() {
                 />
               </div>
             </details>
-            <details className="stitch-filter-menu">
+            <details className="stitch-filter-menu" open={openFilterMenu === "material"} onToggle={(event) => toggleFilterMenu("material", event.currentTarget.open)}>
               <summary>
                 Material{filters.materials?.length ? ` · ${filters.materials.length}` : ""}
                 <ChevronDown size={15} />
@@ -192,7 +195,7 @@ export function FilterableListing() {
               />
               Modular
             </label>
-            <details className="stitch-filter-menu">
+            <details className="stitch-filter-menu" open={openFilterMenu === "more"} onToggle={(event) => toggleFilterMenu("more", event.currentTarget.open)}>
               <summary>More filters <ChevronDown size={15} /></summary>
               <div className="stitch-filter-popover stitch-filter-options stitch-advanced-filters">
                 <label>Category<select value={filters.category ?? ""} onChange={(event) => set({ category: event.target.value ? event.target.value as Category : undefined })}><option value="">All furniture</option>{categoryGroups.flatMap((group) => group.categories).map((item) => <option value={item} key={item}>{categoryDetails[item].label}</option>)}</select></label>

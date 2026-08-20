@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Compass, Save, Search, X } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, Compass, Save, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImageForColors } from "@/lib/musterring-assets";
@@ -143,7 +143,10 @@ export function AlternativeFinderPanel() {
         {result.exactMatches.length ? <div className="alternative-group is-exact" aria-labelledby="exact-match-heading">
           <header><CheckCircle2 aria-hidden="true" /><div><h4 id="exact-match-heading">Exact matches</h4></div><span>{result.exactMatches.length}</span></header>
           {renderMatches(result.exactMatches, true)}
-        </div> : <div className="alternative-group-empty"><strong>No fully verified matches</strong><span>{result.message}</span></div>}
+        </div> : <div className="alternative-group-empty" role="status">
+          <AlertCircle aria-hidden="true" />
+          <div><strong>No exact match found</strong><span>{result.message}</span></div>
+        </div>}
         {result.closestAlternatives.length ? <div className="alternative-group is-other" aria-labelledby="other-options-heading">
           <header><Compass aria-hidden="true" /><div><h4 id="other-options-heading">Other options</h4></div><span>{result.closestAlternatives.length}</span></header>
           {renderMatches(result.closestAlternatives, false)}

@@ -34,6 +34,7 @@ export function StitchFooter() {
             <li><Link href="/my-musterring">My Musterring</Link></li>
             <li><Link href="/handover">Project handover</Link></li>
             <li><Link href="/dealers">Find a retailer</Link></li>
+            <li><Link href="/analytics">Analytics overview</Link></li>
             <li><Link href="/partner/login">Partner Portal</Link></li>
           </ul>
         </div>

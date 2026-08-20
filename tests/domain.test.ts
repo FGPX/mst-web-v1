@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
 import { formatEuro } from "@/lib/format";
-import { parseSearchQuery, searchProducts, searchProductsRanked } from "@/lib/search";
+import { parseSearchExclusions, parseSearchQuery, searchProducts, searchProductsRanked } from "@/lib/search";
 import { createConfiguration, validateConfiguration } from "@/lib/configurator";
 import { checkFit } from "@/lib/fit";
 import { scoreComfortMatch } from "@/lib/comfort";
@@ -44,6 +44,35 @@ describe("search query parsing", () => {
   it("keeps maximum and approximate widths distinct", () => {
     expect(parseSearchQuery("sofa under 240 cm")).toMatchObject({ maxWidthMm: 2400 });
     expect(parseSearchQuery("sofa around 240 cm")).toMatchObject({ targetWidthMm: 2400 });
+  });
+
+  it("treats 'smaller sofa than' as a width limit, not a small-space flag", () => {
+    const filters = parseSearchQuery("find me a smaller sofa than 300cm");
+    expect(filters).toMatchObject({ category: "sofa", maxWidthMm: 3000 });
+    expect(filters.smallSpaceSuitable).toBeUndefined();
+
+    const results = searchProducts(filters);
+    expect(results.length).toBeGreaterThan(0);
+    expect(results.every((product) => product.widthMm <= 3000)).toBe(true);
+  });
+
+  it.each([
+    ["sofa that is not modular", { modular: true }],
+    ["sofa without relax function", { functions: ["relax"] }],
+    ["non-electric sofa", { functions: ["electric"] }],
+    ["sofa that is not red", { colors: ["red"] }]
+  ])("keeps negated requirements out of positive filters: %s", (query, expectedExclusion) => {
+    const filters = parseSearchQuery(query);
+    expect(filters.modular).toBeUndefined();
+    expect(filters.relaxFunction).toBeUndefined();
+    expect(filters.electricFunctions).toBeUndefined();
+    expect(filters.colors).toBeUndefined();
+    expect(parseSearchExclusions(query)).toMatchObject(expectedExclusion);
+  });
+
+  it("parses comparative minimum widths without provider help", () => {
+    expect(parseSearchQuery("find me a larger sofa than 300cm")).toMatchObject({ minWidthMm: 3000 });
+    expect(parseSearchQuery("sofa wider than 300 cm")).toMatchObject({ minWidthMm: 3000 });
   });
 
   it("ranks conversational and misspelled product requests", () => {
