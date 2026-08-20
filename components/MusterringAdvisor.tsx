@@ -62,7 +62,7 @@ export function MusterringAdvisor() {
       try {
         const parsed: unknown = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          setMessages(parsed.filter(isStoredMessage).slice(-40));
+          setMessages(parsed.map(restoreStoredMessage).filter((message): message is Message => Boolean(message)).slice(-40));
         }
       } catch { /* discard malformed session conversation */ }
     }
@@ -178,7 +178,7 @@ export function MusterringAdvisor() {
     if (action.type === "SEARCH_PRODUCTS") return `/search?q=${encodeURIComponent(String(values.query ?? ""))}`;
     if (action.type === "COMPARE_PRODUCTS") return `/compare?ids=${(values.productIds as string[] ?? []).join(",")}`;
     if (action.type === "OPEN_PRODUCT") return `/furniture/${String(values.slug ?? "")}`;
-    if (action.type === "CONFIGURE_PRODUCT") return `/configurator/${String(values.slug ?? currentProduct?.slug ?? "")}`;
+    if (action.type === "CONFIGURE_PRODUCT") return "/handover";
     if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer";
     if (action.type === "OPEN_FIT_CHECK") return `/will-it-fit/${String(values.slug ?? currentProduct?.slug ?? "")}`;
     if (action.type === "FIND_RETAILER") return "/dealers";
@@ -302,17 +302,9 @@ export function MusterringAdvisor() {
     <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><div className="advisor-header-actions"><button className="advisor-new-chat" aria-label="Start a new chat" onClick={() => setConfirmNewChat(true)}><MessageSquarePlus /><span>New chat</span></button><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></div></header>
       <div className="advisor-messages" aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><span className="advisor-welcome-kicker">Your home, considered</span><h3>What are you working on?</h3><p>Products, rooms, materials, planning or service—I can help you find the next useful step.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}<ArrowRight /></button>)}</div></div> : null}
-        {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><p>{message.text}</p></div></div>
-          {message.answer?.productIds.length ? <div className="advisor-products">
-            {message.answer.answerType === "missing-data" ? <small className="advisor-product-group-label">Closest recommendations — requested option unavailable</small> : null}
-            {message.answer.productIds.map((id) => {
-            const product = products.find((item) => item.id === id); if (!product) return null;
-            const requestText = messages[index - 1]?.role === "customer" ? messages[index - 1].text : "";
-            const imageOverride = /\bred\b/i.test(requestText) && product.slug === "mr-260" ? "/musterring-catalog/mr-260/image-08-hq.jpg?v=4" : undefined;
-            return <LinkCard key={id} product={product} imageOverride={imageOverride} />;
-          })}</div> : null}
-          {message.answer?.materialIds.length ? <div className="advisor-materials">{message.answer.materialIds.map((id) => { const material = materials.find((item) => item.id === id); return material ? <span key={id}><i style={{ background: material.colorFamily }} />{material.name}</span> : null; })}</div> : null}
-          {message.answer?.sources.length ? <p className="advisor-sources">Source: {message.answer.sources.join(" · ")}</p> : null}
+        {messages.length ? <div className="advisor-conversation-prompts" aria-label="Suggested questions">{starters(pathname).slice(0, 3).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
+        {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><AdvisorReply message={message} /></div></div>
+          {message.answer?.productIds.length ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} /> : null}
           {message.answer?.proposedAction ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
           {message.answer?.suggestedQuestions.length ? <div className="advisor-followups">{message.answer.suggestedQuestions.map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         </article>)}
@@ -325,9 +317,62 @@ export function MusterringAdvisor() {
   </aside>;
 }
 
-function LinkCard({ product, imageOverride }: { product: typeof products[number]; imageOverride?: string }) {
+function AdvisorReply({ message }: { message: Message }) {
+  if (message.role === "customer" || !message.answer) return <p>{message.text}</p>;
+
+  const answer = message.answer;
+  const normalizedText = message.text.toLocaleLowerCase();
+  const referencedMaterials = materials.filter((material) =>
+    answer.materialIds.includes(material.id) || normalizedText.includes(material.name.toLocaleLowerCase())
+  );
+  const hasStructuredRecommendations = answer.productIds.length > 0 || referencedMaterials.length > 0;
+  const firstSentence = message.text.match(/^.*?[.!?](?=\s|$)/s)?.[0]?.trim();
+  // When cards or material facts are available, never repeat the provider's
+  // prose list. The structured sections below are the single source of detail.
+  const summary = hasStructuredRecommendations
+    ? firstSentence ?? `${message.text.slice(0, 220).trim()}${message.text.length > 220 ? "…" : ""}`
+    : message.text;
+  const practicalAdvice = message.text.match(/If you want the safest practical choice,\s*([\s\S]*?)(?=If you(?:'|’)d like|$)/i)?.[1]?.trim();
+
+  return <div className="advisor-answer-copy">
+    <p>{summary}</p>
+    {referencedMaterials.length ? <section className="advisor-answer-section">
+      <h4>Recommended materials</h4>
+      <ul>{referencedMaterials.slice(0, 4).map((material) => {
+        const qualities = [material.easyCare ? "easy-care" : "", material.petFriendly ? "pet-friendly" : "", material.familyFriendly ? "family-friendly" : "", material.durability >= 4 ? "high durability" : ""].filter(Boolean);
+        return <li key={material.id}><strong>{material.name}</strong>{qualities.length ? <span>{qualities.join(" · ")}</span> : null}</li>;
+      })}</ul>
+    </section> : null}
+    {practicalAdvice ? <p className="advisor-practical-note"><strong>Practical choice</strong><span>{practicalAdvice}</span></p> : null}
+    {answer.productIds.length ? <p className="advisor-match-intro"><strong>Top catalogue matches</strong><span>Selected from the current validated Musterring catalogue.</span></p> : null}
+  </div>;
+}
+
+function RecommendationSet({ productIds, requestText }: { productIds: string[]; requestText: string }) {
+  const matches = productIds.map((id) => products.find((product) => product.id === id)).filter((product): product is typeof products[number] => Boolean(product));
+  const best = matches[0];
+  if (!best) return null;
+  const reasons = recommendationReasons(best);
+  const imageOverride = /\bred\b/i.test(requestText) && best.slug === "mr-260" ? "/musterring-catalog/mr-260/image-08-hq.jpg?v=4" : undefined;
+  return <div className="advisor-recommendation">
+    <div className="advisor-products"><LinkCard product={best} imageOverride={imageOverride} featured /></div>
+    {reasons.length ? <section className="advisor-reasons"><h4>Why it works</h4><ul>{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></section> : null}
+    {matches.length > 1 ? <section className="advisor-other-matches"><h4>Other good matches</h4><p>{matches.slice(1).map((product) => product.modelCode).join(" · ")}</p><div className="advisor-products">{matches.slice(1).map((product) => <LinkCard key={product.id} product={product} />)}</div></section> : null}
+  </div>;
+}
+
+function recommendationReasons(product: typeof products[number]) {
+  const reasons: string[] = [];
+  if (product.verifiedFacts.styles.length) reasons.push(`Matches ${product.verifiedFacts.styles.slice(0, 2).join(" and ")} interiors`);
+  if (product.verifiedFacts.dimensions) reasons.push(`Verified ${Math.round(product.widthMm / 10)} × ${Math.round(product.depthMm / 10)} cm footprint`);
+  if (product.verifiedFacts.modular && product.modular) reasons.push("Offers a verified modular configuration");
+  else if (product.verifiedFacts.materialTypes.length) reasons.push(`Available in verified ${product.verifiedFacts.materialTypes.slice(0, 2).join(" and ")} options`);
+  return reasons.slice(0, 3);
+}
+
+function LinkCard({ product, imageOverride, featured = false }: { product: typeof products[number]; imageOverride?: string; featured?: boolean }) {
   const categories = (product.categories ?? [product.category]).map((category) => category.replaceAll("-", " ")).join(" · ");
-  return <a href={`/furniture/${product.slug}`}><Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={260} height={180} /><span><strong>{product.modelCode}</strong><small>{categories}</small><em>{product.subtitle}</em><b>View details <ArrowRight size={15} /></b></span></a>;
+  return <a href={`/furniture/${product.slug}`}>{featured ? <i className="advisor-best-match">Best match</i> : null}<Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={260} height={180} /><span><strong>{product.modelCode}</strong><small>{categories}</small><em>{product.subtitle}</em><b>View details <ArrowRight size={15} /></b></span></a>;
 }
 
 function isStoredMessage(value: unknown): value is Message {
@@ -337,4 +382,32 @@ function isStoredMessage(value: unknown): value is Message {
     && typeof message.text === "string"
     && message.text.length <= 5000
     && (message.answer === undefined || advisorAnswerSchema.safeParse(message.answer).success);
+}
+
+function restoreStoredMessage(value: unknown): Message | null {
+  if (!isStoredMessage(value)) return null;
+  if (value.answer || value.role !== "advisor") return value;
+
+  // Conversations saved before structured answer persistence contain only the
+  // visible paragraph. Reconnect model codes from that paragraph to active,
+  // validated catalogue entries so recommendation UI survives an upgrade.
+  const normalizedText = value.text.toLocaleLowerCase();
+  const productIds = products
+    .filter((product) => product.active && normalizedText.includes(product.modelCode.toLocaleLowerCase()))
+    .map((product) => product.id)
+    .slice(0, 12);
+  if (!productIds.length) return value;
+
+  return {
+    ...value,
+    answer: {
+      answer: value.text,
+      answerType: "products",
+      productIds,
+      materialIds: [],
+      sources: [],
+      proposedAction: null,
+      suggestedQuestions: []
+    }
+  };
 }

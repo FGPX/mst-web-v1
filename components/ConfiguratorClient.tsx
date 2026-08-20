@@ -166,7 +166,7 @@ export function ConfiguratorClient({ product, configurationId, initialAssistantR
               <p><strong>Proposed configuration:</strong> {assistantResult.product.modelCode} · {assistantResult.configuration.modules.join(", ")} · {Math.round(assistantResult.configuration.dimensions.widthMm / 10)} cm wide · Configuration ID {assistantResult.configuration.id}</p>
               <p><strong>Configuration check:</strong> {assistantResult.validation.valid ? "All product rules passed" : assistantResult.validation.issues.join(" ")}</p>
               {assistantResult.corrections.length ? <p><strong>Corrections:</strong> {assistantResult.corrections.join(" ")}</p> : null}
-              {assistantResult.product.id !== product.id ? <Link href={`/configurator/${assistantResult.product.slug}`}>Open the proposed {assistantResult.product.modelCode}</Link> : null}
+              {assistantResult.product.id !== product.id ? <Link href="/handover">Continue with a retailer for {assistantResult.product.modelCode}</Link> : null}
             </div>
           ) : null}
         </div>
@@ -258,7 +258,7 @@ export function ConfiguratorClient({ product, configurationId, initialAssistantR
           <details className="stitch-config-more-actions">
             <summary>Share and more options</summary>
             <div>
-              <button onClick={async () => { await navigator.clipboard?.writeText(`${location.origin}/configurator/${product.slug}?configuration=${config.id}`); setShared(true); }}><Share2 /> {shared ? "Copied" : "Share"}</button>
+              <button onClick={async () => { await navigator.clipboard?.writeText(`${location.origin}/handover`); setShared(true); }}><Share2 /> {shared ? "Copied" : "Share"}</button>
               <button onClick={() => {
                 const duplicate = { ...config, id: `CFG-${product.modelCode.replace(/\W/g, "")}-${Date.now()}`, updatedAt: new Date().toISOString() };
                 storage.saveConfiguration(duplicate);

@@ -8,7 +8,6 @@ import { storage } from "@/lib/persistence";
 import { ExperienceStatus } from "./ExperienceStatus";
 
 const searchQuery = "I need a compact beige modular sofa for a small apartment, maximum width 240 cm, with relax function.";
-const configurationRequest = "Build a four-seat sofa under 290 cm in an easy-care beige fabric with relax function.";
 
 export function PresentationClient({ realAiActive }: { realAiActive: boolean }) {
   const router = useRouter();
@@ -59,7 +58,7 @@ export function PresentationClient({ realAiActive }: { realAiActive: boolean }) 
             <span>02</span><Database />
             <h3>Configure a valid solution</h3>
             <p>AI interprets the request. The deterministic engine validates modules, options, dimensions and a retailer-ready Configuration ID.</p>
-            <button onClick={() => launch(`/configurator/mr-2875?request=${encodeURIComponent(configurationRequest)}`)}>Launch Configuration Assistant <ArrowRight size={16} /></button>
+            <button onClick={() => launch("/handover")}>Open Retailer Handover <ArrowRight size={16} /></button>
           </article>
           <article>
             <span>03</span><Store />
