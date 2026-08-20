@@ -64,6 +64,8 @@ const intentLabels: Record<string, string> = {
   styles: "Style",
   roomType: "Room",
   smallSpaceSuitable: "Small-space suitable",
+  excludedColorFamilies: "Exclude colour",
+  excludedFunctions: "Without functions",
   layoutShapes: "Layout"
 };
 
@@ -172,7 +174,10 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
     const replacements: Record<string, RegExp> = {
       category: /\b(sofa|couch|armchair|chair|sectional|corner|storage|cabinet|coffee table|side table|dining table|dining chair|bed|wardrobe|outdoor|garden furniture|carpet|rug|lamp|bathroom|kitchen|kitchen unit)\b/gi,
       colorFamilies: /\b(beige|ivory|taupe|stone|charcoal|brown|cream|green|grey|graphite|red|burgundy|barolo)\b/gi,
-      modular: /\b(modular|module|flexible)\b/gi,
+      modular: /\b(?:(?:not|no|without|non[- ]?)\s+)?(?:modular|module|flexible)\b/gi,
+      functions: /\b(?:relax|recline|lounge|electric|motor|power)(?:\s+function)?\b/gi,
+      excludedFunctions: /\b(?:not|no|without|non[- ]?)\s+(?:relax|recline|lounge|electric|motor|power)(?:\s+function)?\b/gi,
+      excludedColorFamilies: /\b(?:(?:not|no|without)\s+(?:an?\s+)?|non[- ]|anything\s+but\s+)(?:beige|ivory|taupe|stone|charcoal|black|white|brown|oak|natural|cream|green|grey|graphite|red|burgundy|barolo|purple|blue|orange|pink|yellow|mustard|cognac|sand)\b/gi,
       smallSpaceSuitable: /\b(small|compact|apartment)\b/gi,
       maxWidthMm: /\b(?:maximum width|max|under|below|less than|at most|no wider than|up to)\s*\d+(?:[.,]\d+)?\s*(?:mm|cm|m|millimeters?|centimeters?|meters?)\b/gi,
       minWidthMm: /\b(?:minimum width|min|above|over|more than|at least|greater than)\s*\d+(?:[.,]\d+)?\s*(?:mm|cm|m|millimeters?|centimeters?|meters?)\b/gi,

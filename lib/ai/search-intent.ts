@@ -1,5 +1,5 @@
 import { products } from "../data";
-import { searchColorTerms, searchStyleTerms } from "../search";
+import { parseSearchExclusions, parseSearchQuery, searchColorTerms, searchStyleTerms } from "../search";
 import type { SearchIntent } from "./schemas";
 
 const catalogueColors = new Set([
@@ -95,5 +95,38 @@ export function canonicalizeSearchIntent(intent: SearchIntent): SearchIntent {
     functions: canonicalList(intent.functions, canonicalFunction),
     styles: canonicalList(intent.styles, canonicalStyle),
     roomType: canonicalRoomType(intent.roomType)
+  };
+}
+
+/**
+ * Grounds every catalogue-filtering field in deterministic query evidence.
+ * Provider output may improve language understanding, but it cannot silently
+ * add a colour, function, dimension or suitability requirement.
+ */
+export function groundSearchIntent(query: string, providerIntent: SearchIntent): SearchIntent {
+  const parsed = parseSearchQuery(query);
+  const exclusions = parseSearchExclusions(query);
+  const functions = [
+    ...(parsed.relaxFunction ? ["relax"] : []),
+    ...(parsed.electricFunctions ? ["electric"] : []),
+    ...(parsed.easyCare ? ["easy-care"] : [])
+  ];
+  return {
+    ...canonicalizeSearchIntent(providerIntent),
+    queryText: query,
+    category: parsed.category ?? providerIntent.category,
+    colorFamilies: parsed.colors ?? null,
+    materials: parsed.materials ?? null,
+    maxWidthMm: parsed.maxWidthMm ?? null,
+    minWidthMm: parsed.minWidthMm ?? null,
+    targetWidthMm: parsed.targetWidthMm ?? null,
+    minSeatHeightMm: parsed.minSeatHeightMm ?? null,
+    maxSeatDepthMm: parsed.maxSeatDepthMm ?? null,
+    numberOfSeats: parsed.seatCount ?? null,
+    modular: exclusions.modular ? false : parsed.modular ?? null,
+    functions: functions.length ? functions : null,
+    styles: parsed.styles ?? null,
+    smallSpaceSuitable: parsed.smallSpaceSuitable ?? null,
+    layoutShapes: parsed.layoutShapes ?? null
   };
 }
