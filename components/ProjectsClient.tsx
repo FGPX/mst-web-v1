@@ -64,7 +64,6 @@ export function ProjectsClient() {
   const project = projects.find((item) => item.id === "project-room-composer") ?? projects.at(-1);
   const displayed = products.filter((product) => savedIds.includes(product.id));
   const preferredDealer = dealers.find((dealer) => dealer.id === dealerId);
-  const fitHref = displayed[0] ? `/will-it-fit/${displayed[0].slug}` : "/room-composer";
   const savedMaterials = materials.filter((material) => savedMaterialIds.includes(material.id));
   const latestScenes = [...savedScenes.reduce((groups, scene) => {
     const key = scene.rootSceneId || scene.id;
@@ -156,7 +155,6 @@ export function ProjectsClient() {
           <Link href="/room-composer"><strong>{resourceCounts.roomScenes}</strong><span>Room scenes</span></Link>
           <Link href="/ai-stylist"><strong>{resourceCounts.stylistSets}</strong><span>Style Finder sets</span></Link>
           <Link href="/materials"><strong>{resourceCounts.materials}</strong><span>Materials</span></Link>
-          <Link href={fitHref}><strong>{resourceCounts.fitReports}</strong><span>Fit reports</span></Link>
           <Link href="/dealers"><strong>{preferredDealer?.name ?? "Select"}</strong><span>Preferred retailer</span></Link>
           <Link href="/handover"><strong>{resourceCounts.requests}</strong><span>Retailer requests</span></Link>
           <Link href="/analytics"><strong>View</strong><span>Website analytics</span></Link>
