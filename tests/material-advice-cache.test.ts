@@ -15,6 +15,24 @@ describe("material advice fast path", () => {
     expect(result.data.recommendedMaterialIds.length).toBeGreaterThan(0);
   });
 
+  it("recognizes superlative cleaning wording without calling AI", async () => {
+    const analyze = vi.fn();
+    const result = await resolveMaterialAdvice("Which materials are easiest to clean and maintain?", analyze);
+
+    expect(analyze).not.toHaveBeenCalled();
+    expect(result.source).toBe("catalogue");
+    expect(result.data.needs.easyCareRequired).toBe(true);
+  });
+
+  it("returns no recommendations for unsupported material comfort without calling AI", async () => {
+    const analyze = vi.fn();
+    const result = await resolveMaterialAdvice("How does the upholstery material affect seating comfort?", analyze);
+
+    expect(analyze).not.toHaveBeenCalled();
+    expect(result.source).toBe("catalogue");
+    expect(result.data.recommendedMaterialIds).toEqual([]);
+  });
+
   it("uses AI only for an ambiguous request and caches the result", async () => {
     const analyze = vi.fn(async () => ({
       data: parseMaterialNeeds("easy to wash"),
