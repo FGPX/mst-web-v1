@@ -265,13 +265,46 @@ export function searchCatalogueByVisualTags(tags: VisualTags) {
     productCategory === tags.category ||
     ((tags.category === "sectional" || tags.category === "sofa") &&
       (productCategory === "sectional" || productCategory === "sofa"));
-  const active = products.filter((product) => product.active);
+  const normalizeVisualColor = (value: string) => value
+    .toLowerCase()
+    .replace(/gray/g, "grey")
+    .replace(/[^a-z]+/g, " ")
+    .trim();
+  const visualColorGroups = [
+    ["white", "warm white", "off white", "ivory", "cream"],
+    ["beige", "sand", "taupe", "stone", "greige", "warm neutral"],
+    ["black", "charcoal", "graphite", "anthracite", "onyx", "dark grey"],
+    ["grey", "silver", "cool neutral"],
+    ["brown", "cognac", "walnut", "oak", "natural oak"],
+    ["red", "burgundy", "barolo", "wine"],
+    ["blue", "navy", "aqua"],
+    ["green", "sage", "olive"],
+    ["yellow", "mustard", "gold"],
+    ["pink", "rose", "blush"]
+  ].map((group) => group.map(normalizeVisualColor));
+  const compatibleVisualColor = (detected: string, available: string) => {
+    const wanted = normalizeVisualColor(detected);
+    const candidate = normalizeVisualColor(available);
+    if (!wanted || !candidate) return false;
+    if (wanted === candidate || wanted.includes(candidate) || candidate.includes(wanted)) return true;
+    return visualColorGroups.some((group) => group.includes(wanted) && group.includes(candidate));
+  };
+  const detectedColors = tags.colorFamilies.map(normalizeVisualColor).filter(Boolean);
+  const active = products.filter((product) =>
+    product.active &&
+    isCompatibleCategory(product.category) &&
+    (!detectedColors.length || product.colors.some((available) =>
+      detectedColors.some((detected) => compatibleVisualColor(detected, available))
+    ))
+  );
   return active.map((product) => {
     let score = 0;
     const reasons: string[] = [];
     if (product.category === tags.category) { score += 35; reasons.push("same furniture category"); }
     else if (isCompatibleCategory(product.category)) { score += 30; reasons.push("same sofa family"); }
-    const colors = tags.colorFamilies.filter((color) => product.colors.includes(color.toLowerCase()));
+    const colors = tags.colorFamilies.filter((color) =>
+      product.colors.some((available) => compatibleVisualColor(color, available))
+    );
     if (colors.length) { score += 30; reasons.push(`similar ${colors.join(", ")} colour family`); }
     const styles = tags.style.filter((style) => product.styles.some((candidate) => candidate.includes(style) || style.includes(candidate)));
     if (styles.length) { score += 20; reasons.push("related style"); }

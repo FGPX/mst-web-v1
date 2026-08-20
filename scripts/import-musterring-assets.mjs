@@ -406,6 +406,10 @@ function categoriesFromOverview(overview, fallbackCategory, categoryCopy) {
     if (categories.length === 0) {
       add(/chair|armchair|stool|bench/.test(categoryCopy) ? "dining-chair" : "dining-table");
     }
+  } else if (fallbackCategory === "bedroom-series") {
+    // Keep complete bedroom programmes out of the dedicated bed and wardrobe
+    // listings. A wardrobe-only programme such as MONTINO belongs in Wardrobes.
+    add(!/\bbeds?\b/.test(copy) && /\bwardrobes?\b/.test(copy) ? "wardrobe" : "bedroom-series");
   } else {
     add(fallbackCategory);
   }

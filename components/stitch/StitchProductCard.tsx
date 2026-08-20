@@ -25,6 +25,7 @@ export function StitchProductCard({ product, explanation, imageOverride, imageNo
           alt={`${product.name} furniture photography`}
           width={900}
           height={675}
+          quality={90}
           sizes="(max-width: 760px) 100vw, (max-width: 1024px) 50vw, 33vw"
           style={{ objectFit: "cover" }}
         />

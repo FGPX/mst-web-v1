@@ -118,7 +118,9 @@ export async function POST(request: NextRequest) {
     }),
     noMatchReason: !tags.category
       ? "No supported catalogue object was clearly detected. Try a closer photo with one furniture or home-accessory item as the main subject."
-      : matches.length === 0 ? "No sufficiently grounded catalogue recommendation is available for this image." : null,
+      : matches.length === 0 && tags.colorFamilies.length
+        ? `No ${tags.colorFamilies.join(" or ")} ${tags.category.replaceAll("-", " ")} is recorded in the current catalogue. Try another photo or a different colour.`
+        : matches.length === 0 ? "No sufficiently grounded catalogue recommendation is available for this image." : null,
     ai: { provider: analysis?.provider ?? "catalogue", fallback: analysis?.fallback ?? false, mode: exactProduct ? "Exact catalogue image match" : analysis?.provider === "gemini" ? "Gemini visual analysis" : analysis?.provider === "openai" ? "OpenAI visual analysis" : "Deterministic demo AI" }
   });
 }

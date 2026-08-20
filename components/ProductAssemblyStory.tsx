@@ -1,13 +1,20 @@
 "use client";
 
 import Image from "@/components/HighQualityImage";
+import assembledRoomImage from "@/4.jpg";
+import emptyRoomImage from "@/3.jpg";
 import Link from "next/link";
 import { ArrowDown, ArrowRight } from "lucide-react";
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useLayoutEffect, useRef, type CSSProperties } from "react";
 
-const AUTO_PLAY_DELAY = 700;
-const AUTO_PLAY_DURATION = 4200;
 const HERO_END_BUFFER = 2;
+const AUTO_PLAY_DELAY = 0;
+const AUTO_PLAY_DURATION = 5600;
+
+function smoothPhase(progress: number, start: number, end: number) {
+  const normalized = Math.min(1, Math.max(0, (progress - start) / (end - start)));
+  return normalized * normalized * (3 - 2 * normalized);
+}
 
 const assemblyImageStyle = {
   objectFit: "var(--assembly-fit)" as CSSProperties["objectFit"],
@@ -17,7 +24,7 @@ const assemblyImageStyle = {
 export default function ProductAssemblyStory() {
   const sectionRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
@@ -32,7 +39,21 @@ export default function ProductAssemblyStory() {
     let restoreScrollBehavior: (() => void) | undefined;
     const navigationEntry = window.performance
       .getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
-    const isPageReload = navigationEntry?.type === "reload";
+    const isPageReload = navigationEntry?.type === "reload"
+      || window.performance.navigation?.type === 1;
+    const previousScrollRestoration = window.history.scrollRestoration;
+
+    if (isPageReload) window.history.scrollRestoration = "manual";
+
+    const setVisualProgress = (progress: number) => {
+      section.style.setProperty("--assembly-progress", progress.toFixed(4));
+      section.style.setProperty("--assembly-room-progress", smoothPhase(progress, 0, .58).toFixed(4));
+      // 1.png (tables) arrives first, followed by 2.png (sofa).
+      section.style.setProperty("--assembly-tables-progress", smoothPhase(progress, .08, .58).toFixed(4));
+      section.style.setProperty("--assembly-sofa-progress", smoothPhase(progress, .24, .74).toFixed(4));
+      section.style.setProperty("--assembly-final-progress", smoothPhase(progress, .64, .8).toFixed(4));
+      section.style.setProperty("--assembly-layer-fade-progress", smoothPhase(progress, .82, .995).toFixed(4));
+    };
 
     const measure = () => {
       const rect = section.getBoundingClientRect();
@@ -46,12 +67,14 @@ export default function ProductAssemblyStory() {
     const render = (time: number) => {
       const delta = targetProgress - currentProgress;
       const elapsed = lastFrameTime ? Math.min(time - lastFrameTime, 64) : 16.7;
-      const ease = 1 - Math.exp(-elapsed / 85);
+      // Follow the user's gesture closely, while filtering the tiny jumps
+      // produced by trackpads and high-resolution mouse wheels.
+      const ease = 1 - Math.exp(-elapsed / 105);
       lastFrameTime = time;
       currentProgress = reduceMotion || Math.abs(delta) < 0.0002
         ? targetProgress
         : currentProgress + delta * ease;
-      section.style.setProperty("--assembly-progress", currentProgress.toFixed(4));
+      setVisualProgress(currentProgress);
 
       if (Math.abs(targetProgress - currentProgress) >= 0.0002) {
         frame = window.requestAnimationFrame(render);
@@ -72,7 +95,7 @@ export default function ProductAssemblyStory() {
       autoPlayFrame = 0;
       currentProgress = 1;
       targetProgress = 1;
-      section.style.setProperty("--assembly-progress", "1");
+      setVisualProgress(1);
       restoreScrollBehavior?.();
       restoreScrollBehavior = undefined;
     };
@@ -90,17 +113,11 @@ export default function ProductAssemblyStory() {
     };
 
     const startAutoPlay = () => {
+      if (reduceMotion) return;
+
       const rect = section.getBoundingClientRect();
       const sectionTop = window.scrollY + rect.top;
-
-      // Do not pull someone back into the hero when the browser restores a
-      // position farther down the page.
       if (Math.abs(window.scrollY - sectionTop) > 2) return;
-
-      if (reduceMotion) {
-        finishAutoPlay();
-        return;
-      }
 
       const root = document.documentElement;
       const previousScrollBehavior = root.style.scrollBehavior;
@@ -114,17 +131,15 @@ export default function ProductAssemblyStory() {
 
       const animate = (time: number) => {
         const linearProgress = Math.min(1, (time - startTime) / AUTO_PLAY_DURATION);
-        // Quintic easing has a gentler start and landing than the previous
-        // cubic curve, so the individual layers settle without a visible snap.
-        const easedProgress = linearProgress < .5
-          ? 16 * Math.pow(linearProgress, 5)
-          : 1 - Math.pow(-2 * linearProgress + 2, 5) / 2;
+        // A quadratic ease-out makes the composition visibly start at once,
+        // then settles progressively more gently toward the finished room.
+        const easedProgress = 1 - (1 - linearProgress) ** 2;
         const distance = Math.max(section.offsetHeight - window.innerHeight, 1);
         const storyEnd = sectionTop + distance - HERO_END_BUFFER;
 
         currentProgress = easedProgress;
         targetProgress = easedProgress;
-        section.style.setProperty("--assembly-progress", easedProgress.toFixed(4));
+        setVisualProgress(easedProgress);
         window.scrollTo({
           top: sectionTop + (storyEnd - sectionTop) * easedProgress,
           left: 0,
@@ -136,17 +151,11 @@ export default function ProductAssemblyStory() {
           return;
         }
 
-        // Keep a tiny buffer before the sticky boundary so the next section
-        // cannot peek into the completed hero because of pixel rounding.
         window.scrollTo({ top: storyEnd, left: 0, behavior: "auto" });
         finishAutoPlay();
       };
 
       autoPlayFrame = window.requestAnimationFrame(animate);
-    };
-
-    const scheduleAutoPlay = () => {
-      autoPlayTimer = window.setTimeout(startAutoPlay, AUTO_PLAY_DELAY);
     };
 
     const resetReloadedStory = () => {
@@ -156,41 +165,40 @@ export default function ProductAssemblyStory() {
       const sectionTop = window.scrollY + rect.top;
       const sectionEnd = sectionTop + Math.max(section.offsetHeight - window.innerHeight, 1);
 
-      if (window.scrollY > sectionTop && window.scrollY <= sectionEnd) {
+      if (window.scrollY >= sectionTop && window.scrollY <= sectionEnd) {
         window.scrollTo({ top: sectionTop, left: 0, behavior: "auto" });
+        currentProgress = 0;
+        targetProgress = 0;
+        setVisualProgress(0);
       }
-
-      requestUpdate();
     };
 
     resetReloadedStory();
     measure();
     currentProgress = targetProgress;
-    section.style.setProperty("--assembly-progress", currentProgress.toFixed(4));
-    window.addEventListener("load", resetReloadedStory, { once: true });
+    setVisualProgress(currentProgress);
     window.addEventListener("scroll", requestUpdate, { passive: true });
     window.addEventListener("resize", requestUpdate, { passive: true });
     window.addEventListener("wheel", cancelAutoPlay, { passive: true });
     window.addEventListener("touchstart", cancelAutoPlay, { passive: true });
     window.addEventListener("pointerdown", cancelAutoPlay, { passive: true });
     window.addEventListener("keydown", cancelAutoPlay);
-
-    if (document.readyState === "complete") scheduleAutoPlay();
-    else window.addEventListener("load", scheduleAutoPlay, { once: true });
+    window.addEventListener("load", resetReloadedStory, { once: true });
+    autoPlayTimer = window.setTimeout(startAutoPlay, AUTO_PLAY_DELAY);
 
     return () => {
       window.clearTimeout(autoPlayTimer);
-      window.removeEventListener("load", resetReloadedStory);
-      window.removeEventListener("load", scheduleAutoPlay);
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
       window.removeEventListener("wheel", cancelAutoPlay);
       window.removeEventListener("touchstart", cancelAutoPlay);
       window.removeEventListener("pointerdown", cancelAutoPlay);
       window.removeEventListener("keydown", cancelAutoPlay);
+      window.removeEventListener("load", resetReloadedStory);
       if (frame) window.cancelAnimationFrame(frame);
       if (autoPlayFrame) window.cancelAnimationFrame(autoPlayFrame);
       restoreScrollBehavior?.();
+      window.history.scrollRestoration = previousScrollRestoration;
     };
   }, []);
 
@@ -205,35 +213,38 @@ export default function ProductAssemblyStory() {
 
         <div className="assembly-stage" aria-label="A Musterring living room assembling as you scroll">
           <div className="assembly-canvas">
-            <div className="assembly-room-plate" aria-hidden="true">
-              <Image
-                src="/assembly-layers/room-empty.webp"
-                alt=""
-                fill
-                priority
-                unoptimized
-                sizes="(max-aspect-ratio: 4/3) 100vw, 133vh"
-                style={assemblyImageStyle}
-              />
-            </div>
+            <div className="assembly-artboard">
+              <div className="assembly-room-plate" aria-hidden="true">
+                <Image
+                  src={emptyRoomImage}
+                  alt=""
+                  fill
+                  priority
+                  unoptimized
+                  sizes="(max-aspect-ratio: 4/3) 100vw, 133vh"
+                  style={assemblyImageStyle}
+                />
+              </div>
 
-            <div className="assembly-object assembly-object-sofa" aria-hidden="true">
-              <Image src="/assembly-layers/sofa-layer.png" alt="" fill sizes="(max-aspect-ratio: 4/3) 100vw, 133vh" style={assemblyImageStyle} />
-            </div>
+              <div className="assembly-object assembly-object-sofa" aria-hidden="true">
+                <Image src="/assembly-layers/sofa-layer-exact.png" alt="" fill unoptimized sizes="(max-aspect-ratio: 4/3) 100vw, 133vh" style={assemblyImageStyle} />
+              </div>
 
-            <div className="assembly-object assembly-object-tables" aria-hidden="true">
-              <Image src="/assembly-layers/tables-layer.png" alt="" fill sizes="(max-aspect-ratio: 4/3) 100vw, 133vh" style={assemblyImageStyle} />
-            </div>
+              <div className="assembly-object assembly-object-tables" aria-hidden="true">
+                <Image src="/assembly-layers/tables-layer-exact.png" alt="" fill unoptimized sizes="(max-aspect-ratio: 4/3) 100vw, 133vh" style={assemblyImageStyle} />
+              </div>
 
-            <div className="assembly-final-image">
-              <Image
-                src="/musterring-catalog/justb-pm100/image-01.jpg"
-                alt="Bright Musterring living room with a JUSTB! PM100 sectional sofa"
-                fill
-                priority
-                sizes="(max-aspect-ratio: 4/3) 100vw, 133vh"
-                style={assemblyImageStyle}
-              />
+              <div className="assembly-final-image">
+                <Image
+                  src={assembledRoomImage}
+                  alt="Bright Musterring living room with a JUSTB! PM100 sectional sofa"
+                  fill
+                  priority
+                  unoptimized
+                  sizes="(max-aspect-ratio: 4/3) 100vw, 133vh"
+                  style={assemblyImageStyle}
+                />
+              </div>
             </div>
           </div>
         </div>

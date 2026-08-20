@@ -1,5 +1,5 @@
 import { materials } from "../data";
-import { materialMetadataMatches, parseMaterialNeeds } from "../assistant";
+import { isUnsupportedMaterialComfortQuestion, materialMetadataMatches, parseMaterialNeeds } from "../assistant";
 import type { MaterialAdvice } from "./assistant-schemas";
 
 type MaterialAdviceSource = "catalogue" | "openai" | "gemini" | "demo";
@@ -61,7 +61,7 @@ function localAdvice(requestText: string) {
     advice.needs.avoidMaterialGroups?.length
   );
   const metadataMatches = materialMetadataMatches(requestText);
-  return { advice, canAnswerLocally: hasStructuredNeed || metadataMatches.length > 0 };
+  return { advice, canAnswerLocally: hasStructuredNeed || metadataMatches.length > 0 || isUnsupportedMaterialComfortQuestion(requestText) };
 }
 
 function cacheKey(requestText: string, advice: MaterialAdvice, canAnswerLocally: boolean) {

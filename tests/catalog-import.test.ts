@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
 import { productMatches } from "@/lib/search";
 import { catalogueCategories, productHasCategory } from "@/lib/types";
+import { productImages } from "@/lib/musterring-assets";
 
 type ImportedProduct = {
   appProductId: string;
@@ -76,6 +77,46 @@ describe("authorized Musterring catalogue import", () => {
       expect(productHasCategory(product, "dining-chair"), slug).toBe(true);
       expect(productMatches(product, { category: "dining-table" }), slug).toBe(true);
       expect(productMatches(product, { category: "dining-chair" }), slug).toBe(true);
+    }
+  });
+
+  it("keeps dedicated bed, wardrobe, and bedroom-series listings distinct", () => {
+    const montino = products.find((item) => item.slug === "montino")!;
+    expect(productHasCategory(montino, "wardrobe")).toBe(true);
+    expect(productHasCategory(montino, "bedroom-series")).toBe(false);
+    expect(productHasCategory(montino, "bed")).toBe(false);
+    expect(productMatches(montino, { category: "wardrobe" })).toBe(true);
+
+    for (const slug of [
+      "joline", "san-antonio", "malin", "jovanna", "joern", "kara-frame-schlafen",
+      "madiva", "san-francisco", "san-diego", "savona-20", "sorrent"
+    ]) {
+      const product = products.find((item) => item.slug === slug)!;
+      expect(productHasCategory(product, "bedroom-series"), slug).toBe(true);
+      expect(productHasCategory(product, "bed"), slug).toBe(false);
+      expect(productHasCategory(product, "wardrobe"), slug).toBe(false);
+    }
+
+    const bedProducts = products.filter((product) => productHasCategory(product, "bed"));
+    expect(bedProducts.filter((product) => product.entityLevel !== "variant")).toHaveLength(9);
+    expect(bedProducts).toHaveLength(12);
+  });
+
+  it("adds official coloured bed presentations without replacing parent products", () => {
+    const variants = [
+      ["justb-sc100-grey", "justb-sc100", "grey", "/musterring-catalog/justb-sc100/image-05.jpg"],
+      ["delphi-light-grey", "delphi", "light grey", "/musterring-catalog/delphi/image-05.jpg"],
+      ["mr-dubai-red", "mr-dubai", "red", "/musterring-catalog/mr-dubai/image-05.jpg"]
+    ] as const;
+
+    for (const [slug, parentSlug, color, hero] of variants) {
+      const parent = products.find((product) => product.slug === parentSlug)!;
+      const variant = products.find((product) => product.slug === slug)!;
+      expect(parent).toBeDefined();
+      expect(variant).toMatchObject({ entityLevel: "variant", productGroupId: parent.id, category: "bed" });
+      expect(variant.verifiedFacts.colors).toContain(color);
+      expect(productImages(variant.id)[0]).toBe(hero);
+      expect(variant.sourceUrl).toBe(parent.sourceUrl);
     }
   });
 

@@ -4354,9 +4354,9 @@
       "name": "MONTINO",
       "tagline": "Much more than just a wardrobe",
       "description": "The extensive MONTINO bedroom range from Musterring combines modern lacquered fronts with a high-quality real wood veneer made of beamed oak.",
-      "category": "bedroom-series",
+      "category": "wardrobe",
       "categories": [
-        "bedroom-series"
+        "wardrobe"
       ],
       "productOverview": [
         "Wardrobes",
@@ -4376,7 +4376,7 @@
         "/musterring-catalog/montino/image-08.jpg"
       ],
       "stale": false,
-      "contentHash": "5639f978a03c967e3b416ce32e8e4a5586763bf9aa5b744dbe8a524e64f12988"
+      "contentHash": "ef54200f8369fc9984581fff7ba8e8fade71cb9ebf49d43d3e3f8c5b78667af8"
     },
     {
       "appProductId": "musterring-ovida",

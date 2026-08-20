@@ -40,7 +40,7 @@ import {
 import { deterministicComparisonSummary, validateComparisonSummary } from "./comparison-summary";
 import { groundAlternativeRequest } from "./alternative-grounding";
 import { validatedAIAlternativeRequirements } from "./alternative-intent";
-import { answerGroundedQuestion, findGroundedAlternatives, materialMatchesNeeds, materialMetadataMatches, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
+import { answerGroundedQuestion, findGroundedAlternatives, isUnsupportedMaterialComfortQuestion, materialMatchesNeeds, materialMetadataMatches, parseMaterialNeeds, parseVoiceCommandDeterministic } from "../assistant";
 import { materials, products } from "../data";
 import { catalogueCategories } from "../types";
 import type { RoomSizeCalculation } from "./room-size";
@@ -598,7 +598,9 @@ Return a practical comfortable target, not a bare minimum and not an oversized l
       const material = materials.find((item) => item.id === id);
       return Boolean(material && materialMatchesNeeds(material, deterministic.needs) && (!metadataMatchIds.length || metadataMatchIds.includes(material.id)));
     });
-    const recommendedMaterialIds = [...new Set([...aiMaterialIds, ...deterministic.recommendedMaterialIds, ...metadataMatchIds])];
+    const recommendedMaterialIds = isUnsupportedMaterialComfortQuestion(input.requestText)
+      ? []
+      : [...new Set([...aiMaterialIds, ...deterministic.recommendedMaterialIds, ...metadataMatchIds])];
     return materialAdviceSchema.parse({
       ...result,
       needs: {
