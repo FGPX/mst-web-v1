@@ -127,6 +127,12 @@ export function parseSearchQuery(query: string): SearchFilters {
   const q = query.trim();
   const text = normalizeSearchText(q);
   const filters: SearchFilters = { q };
+  if (/dining bench|upholstered bench/.test(text)) filters.productSubtypes = ["dining-bench"];
+  else if (/bedside table|nightstand/.test(text)) filters.productSubtypes = ["bedside-table"];
+  else if (/dresser|chest of drawers/.test(text)) filters.productSubtypes = ["dresser"];
+  else if (/side table/.test(text)) filters.productSubtypes = ["side-table"];
+  else if (/wall unit|living wall/.test(text)) filters.productSubtypes = ["wall-unit"];
+  else if (/sideboard/.test(text)) filters.productSubtypes = ["sideboard"];
   if (/outdoor|garden furniture|patio|gartenmoebel|gartenmöbel/.test(text)) filters.category = "outdoor";
   else if (/dining chair|dining seat|esszimmerstuhl|stuhl/.test(text)) filters.category = "dining-chair";
   else if (/armchair|accent chair|recliner|\bchair\b|sessel/.test(text)) filters.category = "armchair";
@@ -184,11 +190,24 @@ export function parseSearchQuery(query: string): SearchFilters {
 }
 
 export function productMatches(product: Product, filters: SearchFilters) {
+  const categorySubtype =
+    filters.category === "dining-table"
+      ? "dining-table"
+      : filters.category === "dining-chair"
+        ? "dining-chair"
+        : null;
+  const verified = (path: string) => product.dataQuality?.verifiedFields.includes(path) === true;
+  const verifiedConfigurations = (product.configurations ?? []).filter((configuration) => configuration.dimensions && configuration.dataQuality.verifiedFields.includes("dimensions"));
   if (filters.modelCode && product.modelCode !== filters.modelCode) return false;
-  if (filters.category && !productHasCategory(product, filters.category)) return false;
-  if (filters.maxWidthMm && (!product.verifiedFacts.dimensions || product.widthMm > filters.maxWidthMm)) return false;
-  if (filters.minWidthMm && (!product.verifiedFacts.dimensions || product.widthMm < filters.minWidthMm)) return false;
-  if (filters.targetWidthMm && (!product.verifiedFacts.dimensions || Math.abs(product.widthMm - filters.targetWidthMm) > Math.max(100, Math.round(filters.targetWidthMm * 0.03)))) return false;
+  if (
+    filters.category &&
+    !productHasCategory(product, filters.category) &&
+    !(categorySubtype && product.productSubtypes?.includes(categorySubtype))
+  ) return false;
+  if (filters.productSubtypes?.length && (!verified("productSubtypes") || !filters.productSubtypes.some((subtype) => product.productSubtypes?.includes(subtype)))) return false;
+  if (filters.maxWidthMm && !(product.verifiedFacts.dimensions ? product.widthMm <= filters.maxWidthMm : verifiedConfigurations.some((configuration) => configuration.dimensions!.widthMm <= filters.maxWidthMm!))) return false;
+  if (filters.minWidthMm && !(product.verifiedFacts.dimensions ? product.widthMm >= filters.minWidthMm : verifiedConfigurations.some((configuration) => configuration.dimensions!.widthMm >= filters.minWidthMm!))) return false;
+  if (filters.targetWidthMm && !(product.verifiedFacts.dimensions ? Math.abs(product.widthMm - filters.targetWidthMm) <= Math.max(100, Math.round(filters.targetWidthMm * 0.03)) : verifiedConfigurations.some((configuration) => Math.abs(configuration.dimensions!.widthMm - filters.targetWidthMm!) <= Math.max(100, Math.round(filters.targetWidthMm! * 0.03))))) return false;
   if (filters.maxDepthMm && (!product.verifiedFacts.dimensions || product.depthMm > filters.maxDepthMm)) return false;
   if (filters.minSeatHeightMm && (!product.verifiedFacts.seatHeight || product.seatHeightMm < filters.minSeatHeightMm)) return false;
   if (filters.maxSeatDepthMm && (!product.verifiedFacts.seatDepth || product.seatDepthMm > filters.maxSeatDepthMm)) return false;
@@ -196,17 +215,17 @@ export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.modular && (!product.verifiedFacts.modular || !product.modular)) return false;
   if (filters.smallSpaceSuitable && (!product.verifiedFacts.smallSpaceSuitable || !product.smallSpaceSuitable)) return false;
   if (filters.layoutShapes?.length && !filters.layoutShapes.some((shape) => product.layoutShapes?.includes(shape))) return false;
-  if (filters.tabletopShapes?.length && !filters.tabletopShapes.some((shape) => product.specifications?.table?.tabletopShape.includes(shape))) return false;
-  if (filters.extendable && !product.specifications?.table?.extendable) return false;
-  if (filters.slidingDoors && !product.specifications?.wardrobe?.doorType.includes("sliding")) return false;
-  if (filters.bedWidthMm && !product.specifications?.bed?.sleepingWidthsMm.includes(filters.bedWidthMm)) return false;
-  if (filters.easyCare && !(product.specifications?.carpet?.easyCare || product.verifiedFacts.easyCare)) return false;
-  if (filters.weatherResistant && !product.specifications?.outdoor?.weatherResistant) return false;
-  if (filters.sofaBed && !product.specifications?.seating?.sofaBed) return false;
-  if (filters.integratedStorage && !product.specifications?.seating?.integratedStorage && !product.specifications?.bed?.bedStorage) return false;
+  if (filters.tabletopShapes?.length && (!verified("specifications.table.tabletopShape") || !filters.tabletopShapes.some((shape) => product.specifications?.table?.tabletopShape.includes(shape)))) return false;
+  if (filters.extendable && (!verified("specifications.table.extendable") || !product.specifications?.table?.extendable)) return false;
+  if (filters.slidingDoors && (!verified("specifications.wardrobe.doorType") || !product.specifications?.wardrobe?.doorType.includes("sliding"))) return false;
+  if (filters.bedWidthMm && (!verified("specifications.bed.sleepingWidthsMm") || !product.specifications?.bed?.sleepingWidthsMm.includes(filters.bedWidthMm))) return false;
+  if (filters.easyCare && !((verified("specifications.carpet.easyCare") && product.specifications?.carpet?.easyCare) || product.verifiedFacts.easyCare || (verified("easyCare") && product.easyCare))) return false;
+  if (filters.weatherResistant && (!verified("specifications.outdoor.weatherResistant") || !product.specifications?.outdoor?.weatherResistant)) return false;
+  if (filters.sofaBed && (!verified("specifications.seating.sofaBed") || !product.specifications?.seating?.sofaBed)) return false;
+  if (filters.integratedStorage && !((verified("specifications.seating.integratedStorage") && product.specifications?.seating?.integratedStorage) || (verified("specifications.bed.bedStorage") && product.specifications?.bed?.bedStorage))) return false;
   const lumens = product.specifications?.lamp?.lumens;
-  if (filters.minLumens && (lumens == null || lumens < filters.minLumens)) return false;
-  if (filters.maxLumens && (lumens == null || lumens > filters.maxLumens)) return false;
+  if (filters.minLumens && (!verified("specifications.lamp.lumens") || lumens == null || lumens < filters.minLumens)) return false;
+  if (filters.maxLumens && (!verified("specifications.lamp.lumens") || lumens == null || lumens > filters.maxLumens)) return false;
   if (filters.relaxFunction && !product.verifiedFacts.functions.includes("relax")) return false;
   if (filters.electricFunctions && !product.verifiedFacts.functions.includes("electric")) return false;
   if (filters.colors?.length && !filters.colors.some((color) => product.verifiedFacts.colors.includes(color))) return false;
@@ -217,7 +236,7 @@ export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.styles?.length && !filters.styles.some((style) => product.verifiedFacts.styles.includes(style))) return false;
   if (filters.collections?.length && !filters.collections.includes(product.collection)) return false;
   if (filters.q && !filters.modelCode) {
-    const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${(product.categories ?? [product.category]).join(" ")} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${(product.keywords ?? []).join(" ")} ${(product.synonyms ?? []).join(" ")} ${(product.availableComponents ?? []).join(" ")} ${(product.specifications?.table?.tabletopShape ?? []).join(" ")} ${(product.specifications?.wardrobe?.doorType ?? []).join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
+    const haystack = `${product.name} ${product.subtitle} ${product.description} ${product.modelCode} ${(product.categories ?? [product.category]).join(" ")} ${(product.productSubtypes ?? []).join(" ")} ${product.seriesId ?? ""} ${(product.roomTypes ?? []).join(" ")} ${(product.useCases ?? []).join(" ")} ${product.colors.join(" ")} ${product.styles.join(" ")} ${product.functions.join(" ")} ${(product.keywords ?? []).join(" ")} ${(product.synonyms ?? []).join(" ")} ${(product.availableComponents ?? []).join(" ")} ${(product.specifications?.table?.tabletopShape ?? []).join(" ")} ${(product.specifications?.wardrobe?.doorType ?? []).join(" ")} ${Math.round(product.widthMm / 10)} cm`.toLowerCase();
     const usefulTerms = filters.q.toLowerCase().split(/\W+/).filter((term) => term.length > 2 && !["need", "with", "for", "the", "and", "maximum"].includes(term));
     return usefulTerms.length === 0 || usefulTerms.some((term) => haystack.includes(term));
   }

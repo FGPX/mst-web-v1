@@ -164,8 +164,8 @@ export const stylistOptionsSchema = z.object({
 
 export const stylistSlotIds = [
   "living-seating", "living-table", "living-storage",
-  "bedroom-bed", "bedroom-wardrobe", "bedroom-series",
-  "dining-table", "dining-chair", "dining-storage",
+  "bedroom-bed", "bedroom-wardrobe", "bedroom-series", "bedroom-bedside", "bedroom-dresser",
+  "dining-table", "dining-chair", "dining-bench", "dining-storage",
   "single-product", "hallway-wardrobe", "hallway-storage",
   "kitchen-table", "kitchen-seating", "kitchen-storage",
   "accessory-small", "accessory-carpet", "accessory-lamp",
@@ -183,7 +183,7 @@ export const stylistProviderResultSchema = z.object({
       productId: z.string().trim().min(1).max(180),
       reason: z.string().trim().min(1).max(260)
     })).max(5)
-  })).min(1).max(3)
+  })).min(1).max(4)
 });
 
 export type StylistProviderResult = z.infer<typeof stylistProviderResultSchema>;
@@ -192,7 +192,7 @@ export function stylistProviderResultSchemaForCandidates(constraints: Array<{
   slotId: (typeof stylistSlotIds)[number];
   candidateIds: string[];
 }>) {
-  if (constraints.length < 1 || constraints.length > 3 || constraints.some((constraint) => constraint.candidateIds.length < 1)) {
+  if (constraints.length < 1 || constraints.length > 4 || constraints.some((constraint) => constraint.candidateIds.length < 1)) {
     throw new Error("Every stylist slot requires at least one catalogue candidate.");
   }
   const variants = constraints.map((constraint) => {
