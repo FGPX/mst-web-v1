@@ -126,7 +126,22 @@ const catalogueDimensionOverrides: Record<string, { widthMm: number; depthMm: nu
   "jana": { widthMm: 2560, depthMm: 530, heightMm: 770 },
   "kanto": { widthMm: 2100, depthMm: 490, heightMm: 940 },
   "justb-ct100": { widthMm: 600, depthMm: 600, heightMm: 360 },
-  "nara": { widthMm: 890, depthMm: 780, heightMm: 440 }
+  "nara": { widthMm: 890, depthMm: 780, heightMm: 440 },
+  // HELANA standing-table reference shown with the 70 cm seat-height programme:
+  // 200 x 100 cm tabletop, 96 cm table height (official 2026 type list).
+  "helana": { widthMm: 2000, depthMm: 1000, heightMm: 960 }
+};
+const catalogueVerifiedFieldOverrides: Record<string, string[]> = {
+  "helana": [
+    "styles", "colors", "materialTypes",
+    "specifications.table.tableSubtype", "specifications.table.tabletopShape",
+    "specifications.table.tabletopMaterials", "specifications.table.tabletopThicknessMm",
+    "specifications.table.widthOptionsMm", "specifications.table.depthOptionsMm",
+    "specifications.table.heightMm", "specifications.table.extendable",
+    "specifications.table.minLengthMm", "specifications.table.maxLengthMm",
+    "specifications.table.edgeProfiles", "specifications.table.baseVariants",
+    "specifications.diningChair.chairSubtype", "specifications.diningChair.seatHeightMm"
+  ]
 };
 const catalogueSearchOverrides: Record<string, Partial<Product>> = {
   "justb-pm100": {
@@ -204,6 +219,92 @@ const catalogueSearchOverrides: Record<string, Partial<Product>> = {
       { label: "Back cushions", value: "Loose feather-blend cushions; spaced or flush variants" },
       { label: "Module choice", value: "Individual sofas, add-on elements, longchair, corners and stools" },
       { label: "Warranty", value: "5 years" }
+    ]
+  },
+  "nica": {
+    verifiedComparisonFacts: [
+      { label: "Tabletop shapes", value: "6 verified shapes, including rectangular, oval and round" },
+      { label: "Tabletop materials", value: "Solid oak, walnut, ceramic and Dekton options" },
+      { label: "Planning range", value: "Verified widths from 160 to 240 cm, plus round formats" }
+    ]
+  },
+  "justb-sp100": {
+    verifiedComparisonFacts: [
+      { label: "Dining level", value: "Standard-height dining table for family meals and social gatherings" },
+      { label: "Visual style", value: "Clear-cut modern: concrete-look top with matt black metal base, or solid oak" },
+      { label: "Reference format", value: "200 × 100 cm tabletop; 77 cm high reference configuration" },
+      { label: "Tabletop shapes", value: "Focused rectangular format" },
+      { label: "Tabletop materials", value: "HPL or solid oak" },
+      { label: "Care profile", value: "Concrete-look version is described as easy-care" }
+    ]
+  },
+  "helana": {
+    styles: ["counter-height", "natural", "industrial", "elegant"],
+    colors: ["natural oak", "brown leather", "black"],
+    materialTypes: ["solid oak", "genuine leather", "metal", "ceramic", "HPL"],
+    functions: ["coordinated high-table programme"],
+    modular: false,
+    verifiedFacts: {
+      dimensions: true,
+      seatHeight: false,
+      seatDepth: false,
+      colors: ["natural oak", "brown leather", "black"],
+      materialTypes: ["leather"],
+      styles: ["counter-height", "natural", "industrial", "elegant"],
+      functions: [],
+      modular: false,
+      smallSpaceSuitable: false,
+      comfort: false,
+      easyCare: false
+    },
+    specifications: {
+      table: {
+        tableSubtype: "dining-table",
+        tabletopShape: ["rectangular", "boat-shaped", "freeform rectangular"],
+        tabletopMaterials: ["HPL on multiplex", "wild oak", "bianco oak", "walnut", "ceramic"],
+        tabletopThicknessMm: 30,
+        widthOptionsMm: [1400, 1600, 1800, 2000, 2200, 2400],
+        depthOptionsMm: [800, 900, 1000],
+        diameterOptionsMm: [],
+        heightMm: 960,
+        extendable: false,
+        extensionMechanism: null,
+        minLengthMm: 1400,
+        maxLengthMm: 2400,
+        capacityMin: null,
+        capacityMax: null,
+        capacityVerified: false,
+        demoEstimatedCapacity: null,
+        edgeProfiles: ["70° bevelled edge", "bevelled edge"],
+        baseVariants: ["square-tube metal frame"]
+      },
+      diningChair: {
+        chairSubtype: "bar-stool",
+        seatCapacityMin: 1,
+        seatCapacityMax: 1,
+        chairType: "counter-height bar stool",
+        seatHeightMm: 700,
+        seatWidthMm: 400,
+        seatDepthMm: 380,
+        armrests: false,
+        swivel: false,
+        swivelDegrees: null,
+        baseType: ["square-tube metal frame"],
+        frameMaterial: ["metal"],
+        upholsteryAvailable: true,
+        maxLoadKg: null,
+        stackable: false,
+        comfortProfile: "coordinated counter-height seating",
+        easyCare: null
+      }
+    },
+    verifiedComparisonFacts: [
+      { label: "Dining level", value: "Counter-height ensemble with high table, bar stools and bench" },
+      { label: "Visual style", value: "Warm oak, brown genuine leather and black square-tube metal" },
+      { label: "Reference format", value: "200 × 100 cm tabletop; 96 cm high counter configuration" },
+      { label: "Height options", value: "89, 96 or 106 cm to match 63, 70 or 80 cm seat heights" },
+      { label: "Planning range", value: "High tables from 140 × 80 to 240 × 100 cm" },
+      { label: "Design detail", value: "Bevelled tabletop edge with coordinated bar seating" }
     ]
   },
   "mr-lucia": { colors: ["light grey", "grey", "cream"], styles: ["soft modern", "casual", "minimal"], functions: ["modular"], modular: true },
@@ -332,11 +433,13 @@ export const products: Product[] = [
       ...(finalVerifiedFacts.seatDepth ? ["specifications.seating.seatDepthMm", "specifications.seating.seatDepthOptionsMm"] : []),
       ...(finalVerifiedFacts.colors.length ? ["colors"] : []),
       ...(finalVerifiedFacts.materialTypes.length ? ["materialTypes"] : []),
+      ...(finalVerifiedFacts.styles.length ? ["styles"] : []),
       ...(finalVerifiedFacts.functions.length ? [
         "functions",
         ...(geo?.specifications?.seating && finalVerifiedFacts.functions.some((value) => /electric|motorized|motorised/i.test(value)) ? ["specifications.seating.electricRecliner", "specifications.seating.recliner"] : []),
         ...(geo?.specifications?.seating && finalVerifiedFacts.functions.some((value) => /manual|relax/i.test(value)) ? ["specifications.seating.manualRecliner", "specifications.seating.recliner"] : [])
-      ] : [])
+      ] : []),
+      ...(catalogueVerifiedFieldOverrides[official.slug] ?? [])
     ];
     const synchronizedDataQuality: Product["dataQuality"] = geo?.dataQuality
       ? {
@@ -384,7 +487,7 @@ export const products: Product[] = [
       modular: isStorage || (isSeating && /modular|module|configur|system|programme|flexib/.test(searchableCopy)),
       smallSpaceSuitable: /compact|small|little floor space|any living room/.test(searchableCopy),
       ...searchOverride,
-      specifications: synchronizedSpecifications,
+      specifications: searchOverride.specifications ?? synchronizedSpecifications,
       dataQuality: synchronizedDataQuality,
       referenceConfiguration: dimensionOverride
         ? {

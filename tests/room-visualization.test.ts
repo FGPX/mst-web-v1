@@ -40,11 +40,32 @@ describe("catalogue-grounded room visualization", () => {
     const prompt = buildRoomVisualizationPrompt(groundVisualizationItems([item]));
     expect(prompt).toContain(product.modelCode);
     expect(prompt).toContain("one complete, cohesive, photorealistic premium interior photograph");
+    expect(prompt).toContain("16:9 landscape composition");
     expect(prompt).toContain("Keep it unmistakably the same room");
     expect(prompt).toContain("Do not add people, text, logos, decorations, plants, or unselected furniture");
     expect(prompt).toContain("PRODUCT LOCK");
     expect(prompt).toContain("Do not recolour, desaturate, brighten, darken");
     expect(prompt).toContain("exact selected-product appearance");
+    expect(prompt).toContain("single chair must never appear larger than a sofa or sectional");
+    expect(prompt).toContain("Product size is adaptive rather than a hard percentage");
+    expect(prompt).toContain("nearby anchor zone, not an exact pixel lock");
+  });
+
+  it("organizes selected products into a coherent furniture grouping", () => {
+    const sofa = products.find((candidate) => ["sofa", "sectional"].includes(candidate.category))!;
+    const table = products.find((candidate) => candidate.category === "coffee-table")!;
+    const armchair = products.find((candidate) => candidate.category === "armchair")!;
+    const prompt = buildRoomVisualizationPrompt(groundVisualizationItems([
+      { ...item, productId: sofa.id, x: 28, y: 72 },
+      { ...item, productId: table.id, x: 58, y: 84 },
+      { ...item, productId: armchair.id, x: 78, y: 82 }
+    ]));
+    expect(prompt).toContain("approximately 25-35 cm from the nearest sofa seat edge");
+    expect(prompt).toContain("this relationship outranks the table's editor anchor");
+    expect(prompt).toContain("Never leave a coffee table isolated");
+    expect(prompt).toContain("Integrate each selected armchair into the conversation area");
+    expect(prompt).toContain("Add one understated, unbranded, neutral low-pile area rug");
+    expect(prompt).toContain("coffee table must sit fully on it");
   });
 
   it("keeps quarter-turn orientation and wall placement as hard generation constraints", () => {
@@ -88,6 +109,19 @@ describe("catalogue-grounded room visualization", () => {
     const prompt = buildRoomVisualizationPrompt(grounded);
     expect(prompt).not.toContain("required catalogue finish is beige");
     expect(prompt).toContain("Copy the exact visible colour, material, texture, and finish from reference image 2");
+  });
+
+  it("uses NELA's isolated catalogue product photograph instead of its editorial room scene", () => {
+    const nela = products.find((candidate) => candidate.slug === "nela")!;
+    const [grounded] = groundVisualizationItems([{
+      productId: nela.id,
+      x: 50,
+      y: 84,
+      rotation: 0,
+      scale: 1
+    }]);
+
+    expect(grounded.assetUrl).toBe("/musterring-catalog/nela/image-02.jpg");
   });
 
   it("normalizes room photos to an API-safe size without changing their aspect materially", async () => {

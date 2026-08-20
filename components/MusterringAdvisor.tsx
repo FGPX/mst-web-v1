@@ -287,7 +287,7 @@ export function MusterringAdvisor() {
     if (action.type === "OPEN_PRODUCT") return `/furniture/${String(values.slug ?? "")}`;
     if (action.type === "CONFIGURE_PRODUCT") return "/handover";
     if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer";
-    if (action.type === "OPEN_FIT_CHECK") return `/will-it-fit/${String(values.slug ?? currentProduct?.slug ?? "")}`;
+    if (action.type === "OPEN_FIT_CHECK") return "";
     if (action.type === "FIND_RETAILER") return "/dealers";
     if (action.type === "PREPARE_HANDOVER" || action.type === "BOOK_CONSULTATION") return "/handover";
     if (action.type === "SHOW_MATERIALS") return `/materials?advisor=${encodeURIComponent(String(values.query ?? ""))}`;
@@ -543,7 +543,7 @@ export function MusterringAdvisor() {
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><AdvisorReply message={message} /></div></div>
           {message.answer?.productIds.length ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} visualMatches={message.visualMatches} savedProductIds={savedProductIds} pendingSaveProductId={pendingAction?.type === "SAVE_PRODUCT" ? String(pendingAction.parameters.productId ?? "") : ""} onSave={(productId) => propose({ type: "SAVE_PRODUCT", label: `Save ${products.find((product) => product.id === productId)?.modelCode ?? "this product"} to My Musterring`, parameters: { productId }, requiresConfirmation: true })} onConfirmSave={() => pendingAction?.type === "SAVE_PRODUCT" && execute(pendingAction)} onCancelSave={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }} /> : null}
           {message.roomImage ? <div className="advisor-room-result"><Image src={message.roomImage} alt="AI-generated visualization of the customer's room" width={900} height={600} unoptimized /><span>Inspirational visualization · fit not confirmed</span><button type="button" onClick={() => setPendingRoomSave(true)}><Save /> Save room view</button></div> : null}
-          {message.answer?.proposedAction && !["SAVE_PRODUCT", "OPEN_FIT_CHECK"].includes(message.answer.proposedAction.type) ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
+          {message.answer?.proposedAction && !["SAVE_PRODUCT", "OPEN_FIT_CHECK"].includes(message.answer.proposedAction.type) && message.answer.proposedAction.type !== "OPEN_FIT_CHECK" ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
           {message.answer?.suggestedQuestions.length && customerQuickReplies(message.answer.suggestedQuestions, message.answer.productIds).length ? <div className="advisor-followups">{customerQuickReplies(message.answer.suggestedQuestions, message.answer.productIds).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         </article>)}
         {pending && roomGenerationStatus === "idle" ? <p role="status">Consulting available Musterring product data…</p> : null}
