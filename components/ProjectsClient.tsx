@@ -127,15 +127,12 @@ export function ProjectsClient() {
         </section>
         <div className="stitch-project-title"><div><h2>Saved Products</h2><p>Select products, then create a room view with them already placed.</p></div>{createRoomHref ? <Link href={createRoomHref}>Create Room View ({selectedProductIds.length})</Link> : <span className="stitch-project-selection-hint">Select at least one product</span>}</div>
         <section className="stitch-project-products">
-<<<<<<< HEAD
-          {displayed.length ? displayed.map((product) => <article className={selectedProductIds.includes(product.id) ? "is-selected" : ""} key={product.id}><label className="stitch-project-product-select"><input type="checkbox" checked={selectedProductIds.includes(product.id)} onChange={(event) => setSelectedProductIds((current) => event.target.checked ? [...new Set([...current, product.id])] : current.filter((id) => id !== product.id))} /><span>{selectedProductIds.includes(product.id) ? "Selected" : "Select for room"}</span></label><Link href={`/furniture/${product.slug}`}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={520} height={360} /><small>{product.modelCode}</small><strong>{product.name}</strong><span>Saved by you</span></Link><AlternativeFinderButton productId={product.id} label="Discover More Like This" className="" /></article>) : <div className="stitch-project-empty"><h3>No products saved yet</h3><p>Only products you explicitly save will appear here.</p><Link href="/furniture">Explore furniture</Link></div>}
-=======
-          {displayed.length ? displayed.map((product) => <article key={product.id}>
+          {displayed.length ? displayed.map((product) => <article className={selectedProductIds.includes(product.id) ? "is-selected" : ""} key={product.id}>
+            <label className="stitch-project-product-select"><input type="checkbox" checked={selectedProductIds.includes(product.id)} onChange={(event) => setSelectedProductIds((current) => event.target.checked ? [...new Set([...current, product.id])] : current.filter((id) => id !== product.id))} /><span>{selectedProductIds.includes(product.id) ? "Selected" : "Select for room"}</span></label>
             <Link href={`/furniture/${product.slug}`}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={520} height={360} /><small>{product.modelCode}</small><strong>{product.name}</strong><span>Saved by you</span></Link>
             <button className="stitch-project-product-delete" type="button" aria-label={`Remove ${product.name} from saved products`} onClick={() => removeProduct(product.id, product.name)}><Trash2 aria-hidden="true" size={19} /></button>
             <AlternativeFinderButton productId={product.id} label="Discover More Like This" className="" />
           </article>) : <div className="stitch-project-empty"><h3>No products saved yet</h3><p>Only products you explicitly save will appear here.</p><Link href="/furniture">Explore furniture</Link></div>}
->>>>>>> de0a230cda0d2199a4a92e509cf0b44fd3d0a1a6
         </section>
         <div className="stitch-project-title" id="saved-materials"><h2>Saved Materials</h2><Link href="/materials"><Heart size={16} /> Explore materials</Link></div>
         <section className="stitch-saved-materials">
