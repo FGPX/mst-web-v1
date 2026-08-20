@@ -210,7 +210,13 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.interpretedRequirements).toContain("dining table");
     expect(result.interpretedRequirements).not.toContain("sofa");
     expect(matches.length).toBeGreaterThan(0);
-    expect(matches.every((match) => products.find((product) => product.id === match.productId)?.category === "dining-table")).toBe(true);
+    expect(matches.every((match) => {
+      const product = products.find((item) => item.id === match.productId);
+      return product?.category === "dining-table" || (
+        product?.dataQuality?.verifiedFields.includes("productSubtypes") === true &&
+        product.productSubtypes?.includes("dining-table")
+      );
+    })).toBe(true);
   });
 
   it.each(["find me a black sofa", "find me a bleck sofa"])("returns MR 285 for a black-sofa request using its verified black catalogue presentation: %s", (requestText) => {
@@ -234,13 +240,33 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.exactMatches.map((match) => match.productId)).not.toContain("musterring-mr-285");
   });
 
-  it.each(["find me some oval tables", "find me some oven tables"])("does not present unverified tabletop shapes as exact matches: %s", (requestText) => {
+  it.each(["find me some oval tables", "find me some oven tables"])("uses verified structured tabletop shapes for exact matches: %s", (requestText) => {
     const source = products.find((product) => product.id === "musterring-pinero")!;
     const result = findGroundedAlternatives({ sourceProductId: source.id, requestText });
     expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["dining table", "oval tabletop"]));
+    expect(result.exactMatches.map((match) => match.productId)).toContain("musterring-nica");
+  });
+
+  it("can switch a multi-product series to its verified dining-table subtype and return a round table", () => {
+    const result = findGroundedAlternatives({
+      sourceProductId: "musterring-kiana",
+      requestText: "Show me a round dining table."
+    });
+    expect(result.interpretedRequirements).toEqual(expect.arrayContaining(["dining table", "round tabletop"]));
+    expect(result.exactMatches.map((match) => match.productId)).toContain("musterring-nica");
+  });
+
+  it("shows clearly labelled closest table alternatives when no exact shape is available", () => {
+    const result = findGroundedAlternatives({
+      sourceProductId: "musterring-kiana",
+      requestText: "Show me a square dining table."
+    });
     expect(result.exactMatches).toHaveLength(0);
-    expect(result.closestAlternatives).toHaveLength(0);
-    expect(result.message).toBe("No catalogue product has a verified oval tabletop shape.");
+    expect(result.closestAlternatives.length).toBeGreaterThan(0);
+    expect(result.closestAlternatives.every((match) =>
+      match.unmetRequirements.includes("square tabletop shape is not verified for this product")
+    )).toBe(true);
+    expect(result.message).toContain("closest catalogue alternatives");
   });
 
   it("treats not L-shaped as an exclusion rather than a positive layout requirement", () => {

@@ -18,7 +18,7 @@ import {
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { productMatches } from "@/lib/search";
-import type { Category, Product, SearchFilters } from "@/lib/types";
+import { productHasCategory, type Category, type Product, type SearchFilters } from "@/lib/types";
 import { storage } from "@/lib/persistence";
 import { categoryDetails, categoryGroups } from "@/lib/catalog-taxonomy";
 import { CompareSelectionBar } from "./CompareSelectionBar";
@@ -40,7 +40,11 @@ export function FilterableListing() {
   const selectedCategory = filters.category ? categoryDetails[filters.category] : null;
 
   const results = useMemo(
-    () => products.filter((product) => product.active && productMatches(product, filters)).sort((left, right) =>
+    () => products.filter((product) =>
+      product.active &&
+      (!filters.category || productHasCategory(product, filters.category)) &&
+      productMatches(product, filters)
+    ).sort((left, right) =>
       sort === "width" ? left.widthMm - right.widthMm : sort === "name" ? left.modelCode.localeCompare(right.modelCode) : 0
     ),
     [filters, sort]
@@ -311,7 +315,9 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
             src={image}
             alt={`${product.name} ${(product.categories ?? [product.category]).map((category) => categoryDetails[category].label.toLowerCase()).join(" and ")}`}
             fill
+            unoptimized
             sizes="(max-width: 760px) 100vw, 50vw"
+            style={{ objectFit: "cover" }}
           />
         </Link>
         <div className="stitch-config-preview stitch-config-preview-compact">
