@@ -129,6 +129,43 @@ describe("AI schemas and fallbacks", () => {
     expect(summary.recommendation).toContain("JUSTB! PM100");
     expect(summary.recommendation).toContain("JUSTB! PM200");
   });
+
+  it("grounds dining-table summaries in verified format and material differences", () => {
+    const selected = ["musterring-nica", "musterring-justb-sp100"]
+      .map((id) => products.find((product) => product.id === id))
+      .filter((product): product is (typeof products)[number] => Boolean(product));
+    const input = comparisonSummaryInput(selected);
+    const summary = deterministicComparisonSummary(input);
+
+    expect(input.products.find((product) => product.modelCode === "NICA")?.verifiedDetails)
+      .toContainEqual({ label: "Tabletop shapes", value: "6 verified shapes, including rectangular, oval and round" });
+    expect(input.products.find((product) => product.modelCode === "JUSTB! SP100")?.verifiedDetails)
+      .toContainEqual({ label: "Tabletop materials", value: "HPL or solid oak" });
+    expect(summary.glance.join(" ")).toContain("Tabletop formats");
+    expect(summary.recommendation).toContain("NICA");
+    expect(summary.recommendation).toContain("JUSTB! SP100");
+  });
+
+  it("grounds HELANA versus JUSTB! SP100 in dining level, style and reference height", () => {
+    const selected = ["musterring-helana", "musterring-justb-sp100"]
+      .map((id) => products.find((product) => product.id === id))
+      .filter((product): product is (typeof products)[number] => Boolean(product));
+    const input = comparisonSummaryInput(selected);
+    const summary = deterministicComparisonSummary(input);
+
+    expect(input.products.find((product) => product.modelCode === "HELANA")?.verifiedDetails)
+      .toContainEqual({ label: "Reference format", value: "200 × 100 cm tabletop; 96 cm high counter configuration" });
+    expect(input.products.find((product) => product.modelCode === "JUSTB! SP100")?.verifiedDetails)
+      .toContainEqual({ label: "Dining level", value: "Standard-height dining table for family meals and social gatherings" });
+    expect(summary.glance.join(" ")).toContain("Dining concepts");
+    expect(summary.glance.join(" ")).not.toContain("200–200");
+    expect(summary.products.find((product) => product.productId === "musterring-helana")?.bestFor)
+      .toBe("Best for Counter-Height Dining");
+    expect(summary.products.find((product) => product.productId === "musterring-justb-sp100")?.bestFor)
+      .toBe("Best for Standard Dining");
+    expect(summary.recommendation).toContain("HELANA");
+    expect(summary.recommendation).toContain("JUSTB! SP100");
+  });
 });
 
 describe("grounded hybrid retrieval", () => {

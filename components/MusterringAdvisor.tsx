@@ -2,14 +2,17 @@
 
 import Image from "@/components/HighQualityImage";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, Check, MessageSquarePlus, Mic, Send, Sparkles, X } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, ImagePlus, MapPin, MessageSquarePlus, Mic, Paperclip, Save, Send, Sparkles, Upload, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { materials, products } from "@/lib/data";
+import { dealers, materials, products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
 import { advisorAnswerSchema, type AdvisorAction, type AdvisorAnswer, type ConversationContext, type VoiceCommand } from "@/lib/ai/assistant-schemas";
 
-type Message = { role: "customer" | "advisor"; text: string; answer?: AdvisorAnswer };
+type VisualMatch = { productId: string; score: number; label: string; reasons: string[]; differences: string[] };
+type Message = { role: "customer" | "advisor"; text: string; answer?: AdvisorAnswer; visualMatches?: VisualMatch[]; roomImage?: string };
+type AttachmentPurpose = "reference" | "room";
+const journeySteps = ["Describe", "Discover", "Save", "Visualize", "Retailer", "Consultation"];
 const memoryKey = "musterring.assistantContext";
 const conversationKey = "musterring.assistantConversation";
 type SpeechRecognitionResultLike = { 0: { transcript: string }; isFinal?: boolean };
@@ -38,6 +41,40 @@ function productFromPath(pathname: string) {
   return products.find((product) => product.slug === slug);
 }
 
+function customerQuickReplies(questions: string[], productIds: string[]) {
+  const matchedProducts = productIds.map((id) => products.find((product) => product.id === id)).filter(Boolean);
+  const noun = matchedProducts.length && matchedProducts.every((product) => product?.category === "sofa" || product?.category === "sectional")
+    ? "sofas"
+    : "products";
+  return [...new Set(questions.flatMap((question) => {
+    const clean = question.trim();
+    if (!clean) return [];
+    if (/^would you like me to compare\b/i.test(clean) || /^do you want me to compare\b/i.test(clean)) {
+      return [`Compare these ${productIds.length || 3} ${noun} side by side`];
+    }
+    if (productIds.length && /\b(?:save|saved project)\b/i.test(clean)) return [];
+    if (/\b(?:check|confirm|test)\b.*\bfit\b|\bfit\b.*\broom\b/i.test(clean)) return [];
+    // These are questions the assistant should ask in prose, not utterances
+    // that should be placed in the customer's mouth as clickable replies.
+    if (/^(?:do you want|would you|how much|do you have|are you|is your)\b/i.test(clean)) return [];
+    return [clean.replace(/\?$/, "")];
+  }))].slice(0, 4);
+}
+
+async function compactGeneratedRoom(source: string) {
+  const image = new window.Image();
+  image.src = source;
+  await image.decode();
+  const scale = Math.min(1, 1400 / Math.max(image.naturalWidth, image.naturalHeight));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+  canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+  const context = canvas.getContext("2d");
+  if (!context) return source;
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL("image/jpeg", .8);
+}
+
 export function MusterringAdvisor() {
   const pathname = usePathname();
   const router = useRouter();
@@ -47,10 +84,29 @@ export function MusterringAdvisor() {
   const [conversationReady, setConversationReady] = useState(false);
   const [pending, setPending] = useState(false);
   const [pendingAction, setPendingAction] = useState<AdvisorAction | null>(null);
+  const [savedProductIds, setSavedProductIds] = useState<string[]>([]);
   const [confirmNewChat, setConfirmNewChat] = useState(false);
   const [voiceState, setVoiceState] = useState<"idle" | "listening" | "processing" | "recognized" | "error" | "denied">("idle");
+  const [journeyStep, setJourneyStep] = useState(1);
+  const [attachmentMenu, setAttachmentMenu] = useState(false);
+  const [attachmentPurpose, setAttachmentPurpose] = useState<AttachmentPurpose>("reference");
+  const [attachmentFile, setAttachmentFile] = useState<File | null>(null);
+  const [attachmentPreview, setAttachmentPreview] = useState("");
+  const [attachmentPending, setAttachmentPending] = useState(false);
+  const [attachmentError, setAttachmentError] = useState("");
+  const [roomGenerationStatus, setRoomGenerationStatus] = useState<"idle" | "loading" | "complete">("idle");
+  const [roomGenerationProgress, setRoomGenerationProgress] = useState(0);
+  const [pendingRoomSave, setPendingRoomSave] = useState(false);
+  const [generatedRoom, setGeneratedRoom] = useState<{ image: string; productIds: string[] } | null>(null);
+  const [dealerLocation, setDealerLocation] = useState("");
+  const [pendingDealerId, setPendingDealerId] = useState("");
+  const [appointmentDate, setAppointmentDate] = useState("");
+  const [appointmentMode, setAppointmentMode] = useState("Showroom consultation");
+  const [appointmentTime, setAppointmentTime] = useState("Weekday morning");
+  const [pendingAppointment, setPendingAppointment] = useState(false);
   const [context, setContext] = useState<ConversationContext>({ route: pathname, referencedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {} });
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const conversationVersionRef = useRef(0);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const voiceDraftRef = useRef("");
@@ -58,15 +114,26 @@ export function MusterringAdvisor() {
   const currentProduct = productFromPath(pathname);
   useEffect(() => {
     const stored = window.sessionStorage.getItem(conversationKey);
+    let restoredJourneyStep = 1;
     if (stored) {
       try {
         const parsed: unknown = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          setMessages(parsed.map(restoreStoredMessage).filter((message): message is Message => Boolean(message)).slice(-40));
+          const restoredMessages = parsed.map(restoreStoredMessage).filter((message): message is Message => Boolean(message)).slice(-40);
+          setMessages(restoredMessages);
+          if (restoredMessages.some((message) => message.answer?.productIds.length)) restoredJourneyStep = 2;
         }
       } catch { /* discard malformed session conversation */ }
     }
+    setJourneyStep(restoredJourneyStep);
     setConversationReady(true);
+    setSavedProductIds(storage.savedProducts());
+    const draft = storage.consultationDraft();
+    if (draft) {
+      setAppointmentDate(draft.appointmentDate);
+      setAppointmentMode(draft.appointmentMode);
+      setAppointmentTime(draft.preferredTime);
+    }
   }, []);
   useEffect(() => {
     if (!conversationReady) return;
@@ -85,10 +152,26 @@ export function MusterringAdvisor() {
     setOpen(false);
     setPendingAction(null);
     setVoiceState("idle");
+    setAttachmentMenu(false);
   }, [pathname]);
   useEffect(() => {
     window.sessionStorage.setItem(memoryKey, JSON.stringify(context));
   }, [context]);
+  useEffect(() => {
+    if (roomGenerationStatus !== "loading") return;
+    const startedAt = Date.now();
+    setRoomGenerationProgress(4);
+    const timer = window.setInterval(() => {
+      const elapsedSeconds = (Date.now() - startedAt) / 1000;
+      setRoomGenerationProgress(Math.min(94, Math.round(4 + 90 * (1 - Math.exp(-elapsedSeconds / 55)))));
+    }, 750);
+    return () => window.clearInterval(timer);
+  }, [roomGenerationStatus]);
+  useEffect(() => {
+    if (roomGenerationStatus !== "complete") return;
+    const timer = window.setTimeout(() => setRoomGenerationStatus("idle"), 900);
+    return () => window.clearTimeout(timer);
+  }, [roomGenerationStatus]);
   useEffect(() => {
     const show = (event: Event) => {
       const detail = (event as CustomEvent<{ mode?: "voice"; prompt?: string }>).detail;
@@ -101,6 +184,20 @@ export function MusterringAdvisor() {
     window.addEventListener("musterring:advisor", show);
     return () => window.removeEventListener("musterring:advisor", show);
   });
+  useEffect(() => {
+    const emailSent = (event: Event) => {
+      const detail = (event as CustomEvent<{ provider?: string }>).detail;
+      setJourneyStep(6);
+      setMessages((current) => [...current, {
+        role: "advisor",
+        text: `The confirmed retailer handover email was delivered successfully${detail?.provider ? ` through ${detail.provider.toUpperCase()}` : ""}. The retailer now has the saved products, room view, appointment preference and consultation summary.`
+      }]);
+      storage.track({ name: "retailer_email_delivered" });
+      setOpen(true);
+    };
+    window.addEventListener("musterring:retailer-email-sent", emailSent);
+    return () => window.removeEventListener("musterring:retailer-email-sent", emailSent);
+  }, []);
   useEffect(() => {
     if (!open) return;
     const focusFrame = window.requestAnimationFrame(() => inputRef.current?.focus());
@@ -144,7 +241,10 @@ export function MusterringAdvisor() {
     const answer = payload.answer as AdvisorAnswer;
     setMessages((current) => [...current, { role: "advisor", text: answer.answer, answer }]);
     setContext((current) => ({ ...current, referencedProductIds: answer.productIds.length ? answer.productIds : current.referencedProductIds }));
-    if (answer.productIds.length) storage.track({ name: "chatbot_product_recommended", productId: answer.productIds[0] });
+    if (answer.productIds.length) {
+      setJourneyStep((current) => Math.max(current, 2));
+      storage.track({ name: "chatbot_product_recommended", productId: answer.productIds[0] });
+    }
     if (answer.proposedAction) storage.track({ name: "chatbot_action_proposed" });
   };
   const startNewChat = () => {
@@ -155,6 +255,13 @@ export function MusterringAdvisor() {
     setPendingAction(null);
     setConfirmNewChat(false);
     setVoiceState("idle");
+    setJourneyStep(1);
+    setAttachmentFile(null);
+    setAttachmentPreview("");
+    setAttachmentPending(false);
+    setGeneratedRoom(null);
+    setRoomGenerationStatus("idle");
+    setRoomGenerationProgress(0);
     voiceDraftRef.current = "";
     voiceParsedRef.current = true;
     recognitionRef.current?.abort();
@@ -180,7 +287,7 @@ export function MusterringAdvisor() {
     if (action.type === "OPEN_PRODUCT") return `/furniture/${String(values.slug ?? "")}`;
     if (action.type === "CONFIGURE_PRODUCT") return "/handover";
     if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer";
-    if (action.type === "OPEN_FIT_CHECK") return `/will-it-fit/${String(values.slug ?? currentProduct?.slug ?? "")}`;
+    if (action.type === "OPEN_FIT_CHECK") return "";
     if (action.type === "FIND_RETAILER") return "/dealers";
     if (action.type === "PREPARE_HANDOVER" || action.type === "BOOK_CONSULTATION") return "/handover";
     if (action.type === "SHOW_MATERIALS") return `/materials?advisor=${encodeURIComponent(String(values.query ?? ""))}`;
@@ -190,7 +297,10 @@ export function MusterringAdvisor() {
     if (action.type === "SAVE_PRODUCT") {
       const id = String(action.parameters.productId ?? "");
       if (products.some((product) => product.id === id) && !storage.savedProducts().includes(id)) storage.toggleProduct(id);
-      setMessages((current) => [...current, { role: "advisor", text: "The catalogue product was saved to My Musterring." }]);
+      setSavedProductIds(storage.savedProducts());
+      const product = products.find((candidate) => candidate.id === id);
+      setJourneyStep((current) => Math.max(current, 3));
+      setMessages((current) => [...current, { role: "advisor", text: `${product?.modelCode ?? "The catalogue product"} was saved to My Musterring. Next, upload a photo of your room and I can create a catalogue-grounded visualization after you confirm the image processing.` }]);
     } else if (action.type === "SHOW_ALTERNATIVES") {
       window.dispatchEvent(new CustomEvent("musterring:alternatives", { detail: { productId: String(action.parameters.productId), requestText: String(action.parameters.requestText ?? "") } }));
       setOpen(false);
@@ -202,9 +312,129 @@ export function MusterringAdvisor() {
     storage.track({ name: "chatbot_action_confirmed" });
     setPendingAction(null);
   };
+
+  const chooseAttachment = (purpose: AttachmentPurpose) => {
+    setAttachmentPurpose(purpose);
+    setAttachmentMenu(false);
+    fileInputRef.current?.click();
+  };
+
+  const selectAttachment = (file?: File) => {
+    if (!file) return;
+    setAttachmentError("");
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 10 * 1024 * 1024) {
+      setAttachmentError("Choose a JPG, PNG or WebP image up to 10 MB.");
+      return;
+    }
+    if (attachmentPreview) URL.revokeObjectURL(attachmentPreview);
+    setAttachmentFile(file);
+    setAttachmentPreview(URL.createObjectURL(file));
+    setAttachmentPending(true);
+    setMessages((current) => [...current, { role: "customer", text: `${attachmentPurpose === "reference" ? "Product inspiration" : "My room photo"}: ${file.name}` }]);
+  };
+
+  const analyzeAttachment = async () => {
+    if (!attachmentFile) return;
+    setAttachmentPending(false);
+    setPending(true);
+    setAttachmentError("");
+    storage.recordConsent("photo-ai-processing", true);
+    const form = new FormData();
+    form.append("image", attachmentFile);
+    form.append("consent", "true");
+    if (attachmentPurpose === "reference") {
+      form.append("crop", JSON.stringify({ x: 0, y: 0, size: 100 }));
+      const response = await fetch("/api/ai/image", { method: "POST", body: form }).catch(() => null);
+      const payload = response ? await response.json().catch(() => null) : null;
+      setPending(false);
+      if (!response?.ok || !Array.isArray(payload?.matches)) {
+        setAttachmentError(payload?.error ?? "The image could not be analyzed. Your project has not changed.");
+        return;
+      }
+      const visualMatches: VisualMatch[] = payload.matches.slice(0, 6).map((match: { product: { id: string }; score: number; label: string; reasons: string[]; differences: string[] }) => ({
+        productId: match.product.id, score: match.score, label: match.label, reasons: match.reasons, differences: match.differences
+      }));
+      const ids = visualMatches.map((match) => match.productId).filter((id) => products.some((product) => product.id === id));
+      const answer: AdvisorAnswer = {
+        answer: ids.length ? "I analyzed the visible shape, palette and style, then matched them only against available Musterring catalogue products." : payload?.noMatchReason ?? "No grounded catalogue match is available for this image.",
+        answerType: ids.length ? "products" : "missing-data",
+        productIds: ids, materialIds: [], sources: ["Uploaded reference image", "Validated Musterring catalogue"], proposedAction: null,
+        suggestedQuestions: ids.length > 1 ? ["Compare the top matches", "Which one is more compact?"] : []
+      };
+      setMessages((current) => [...current, { role: "advisor", text: answer.answer, answer, visualMatches }]);
+      setContext((current) => ({ ...current, referencedProductIds: ids }));
+      setJourneyStep((current) => Math.max(current, 2));
+      storage.track({ name: "visual_search_analyzed" });
+    } else {
+      setRoomGenerationStatus("loading");
+      const productIds = [...new Set([...storage.savedProducts(), ...context.referencedProductIds])].filter((id) => products.some((product) => product.id === id)).slice(0, 6);
+      if (!productIds.length) {
+        setPending(false);
+        setRoomGenerationStatus("idle");
+        setRoomGenerationProgress(0);
+        setAttachmentError("Save at least one catalogue product before visualizing your room.");
+        return;
+      }
+      form.append("confirmed", "true");
+      form.append("items", JSON.stringify(productIds.map((productId, index) => ({
+        productId, x: productIds.length === 1 ? 50 : 25 + (index * 50) / Math.max(1, productIds.length - 1), y: 78, rotation: 0, scale: productIds.length > 3 ? .75 : 1
+      }))));
+      const response = await fetch("/api/ai/room-visualization", { method: "POST", body: form }).catch(() => null);
+      const payload = response ? await response.json().catch(() => null) : null;
+      setPending(false);
+      if (!response?.ok || !payload?.image) {
+        setRoomGenerationStatus("idle");
+        setRoomGenerationProgress(0);
+        setAttachmentError(payload?.error ?? "The room visualization could not be generated. Your original photo is unchanged.");
+        return;
+      }
+      setRoomGenerationProgress(100);
+      setRoomGenerationStatus("complete");
+      setGeneratedRoom({ image: payload.image, productIds });
+      setJourneyStep((current) => Math.max(current, 4));
+      setMessages((current) => [...current, { role: "advisor", text: "Your room visualization is ready. It is inspirational and does not confirm physical fit. Review it, then explicitly save it if you want it included in My Musterring and the retailer handover.", roomImage: payload.image }]);
+      storage.track({ name: "room_visualization_generated" });
+    }
+    setAttachmentFile(null);
+  };
+
+  const saveGeneratedRoom = async () => {
+    if (!generatedRoom) return;
+    const compactImage = await compactGeneratedRoom(generatedRoom.image).catch(() => generatedRoom.image);
+    const now = new Date().toISOString();
+    const id = crypto.randomUUID();
+    storage.saveRoomScene({
+      id, rootSceneId: id, projectId: "project-chat-advisor", name: "AI Advisor Room View", version: 1,
+      planningMode: "inspiration", roomSize: { widthMm: 5600, lengthMm: 4200 }, sceneScale: 1,
+      backgroundId: "customer-upload", generatedVisualizationSrc: compactImage, hasLocalRoomPhoto: false,
+      items: generatedRoom.productIds.map((productId, index) => {
+        const product = products.find((candidate) => candidate.id === productId)!;
+        return { id: `${id}-item-${index + 1}`, productId, x: 30 + index * 18, y: 78, rotation: 0, scale: 1, materialId: product.materials[0], color: product.colors[0], dimensions: { widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm } };
+      }), createdAt: now, updatedAt: now, demoData: false
+    });
+    setPendingRoomSave(false);
+    setJourneyStep((current) => Math.max(current, 5));
+    setMessages((current) => [...current, { role: "advisor", text: "The room view was saved to My Musterring. Tell me your city or postcode below and I’ll show the closest available retail partners from the connected retailer list." }]);
+    storage.track({ name: "room_scene_saved" });
+  };
   const propose = (action: AdvisorAction) => {
     if (action.requiresConfirmation) setPendingAction(action);
     else execute(action);
+  };
+  const confirmDealer = () => {
+    const dealer = dealers.find((candidate) => candidate.id === pendingDealerId);
+    if (!dealer) return;
+    storage.setDealer(dealer.id);
+    setPendingDealerId("");
+    setJourneyStep(6);
+    setMessages((current) => [...current, { role: "advisor", text: `${dealer.name} is selected for this project. Choose your preferred consultation date and time; the retailer will confirm final availability.` }]);
+  };
+  const confirmAppointment = () => {
+    const dealerId = storage.selectedDealer() ?? dealers[0].id;
+    storage.saveConsultationDraft({ dealerId, appointmentMode, appointmentDate, preferredTime: appointmentTime, createdAt: new Date().toISOString() });
+    setPendingAppointment(false);
+    setMessages((current) => [...current, { role: "advisor", text: "Your appointment preference is saved. Continue to the final handover to add contact details, review the complete project summary and explicitly confirm submission." }]);
+    storage.track({ name: "appointment_preference_saved", dealerId });
   };
   const handleVoiceCommand = (command: VoiceCommand, transcript: string) => {
     setVoiceState("recognized");
@@ -297,23 +527,42 @@ export function MusterringAdvisor() {
         : voiceState === "recognized"
           ? "Voice command recognized."
           : "Voice input failed. Try again or type your question.";
+  const normalizedLocation = dealerLocation.trim().toLocaleLowerCase();
+  const dealerMatches = [...dealers].sort((left, right) => {
+    const leftExact = normalizedLocation && `${left.city} ${left.postcode}`.toLocaleLowerCase().includes(normalizedLocation) ? 0 : 1;
+    const rightExact = normalizedLocation && `${right.city} ${right.postcode}`.toLocaleLowerCase().includes(normalizedLocation) ? 0 : 1;
+    return leftExact - rightExact || left.distanceKm - right.distanceKm;
+  }).slice(0, 3);
   if (!open) return <button className="assistant-dock" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><span>Ask</span><span className="assistant-mark-crop" aria-hidden="true"><Image className="assistant-launcher-logo" src="/brand/musterring-logo.svg" alt="" width={70} height={90} /></span></button>;
   return <aside className="advisor-panel" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
     <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><div className="advisor-header-actions"><button className="advisor-new-chat" aria-label="Start a new chat" onClick={() => setConfirmNewChat(true)}><MessageSquarePlus /><span>New chat</span></button><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></div></header>
+      <ol className="advisor-journey" aria-label="Project journey">{journeySteps.map((step, index) => <li key={step} className={index + 1 < journeyStep ? "is-complete" : index + 1 === journeyStep ? "is-current" : ""}><span>{index + 1 < journeyStep ? <Check /> : index + 1}</span><small>{step}</small></li>)}</ol>
       <div className="advisor-messages" aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><span className="advisor-welcome-kicker">Your home, considered</span><h3>What are you working on?</h3><p>Products, rooms, materials, planning or service—I can help you find the next useful step.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}<ArrowRight /></button>)}</div></div> : null}
         {messages.length ? <div className="advisor-conversation-prompts" aria-label="Suggested questions">{starters(pathname).slice(0, 3).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><AdvisorReply message={message} /></div></div>
-          {message.answer?.productIds.length ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} /> : null}
-          {message.answer?.proposedAction ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
-          {message.answer?.suggestedQuestions.length ? <div className="advisor-followups">{message.answer.suggestedQuestions.map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
+          {message.answer?.productIds.length ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} visualMatches={message.visualMatches} savedProductIds={savedProductIds} pendingSaveProductId={pendingAction?.type === "SAVE_PRODUCT" ? String(pendingAction.parameters.productId ?? "") : ""} onSave={(productId) => propose({ type: "SAVE_PRODUCT", label: `Save ${products.find((product) => product.id === productId)?.modelCode ?? "this product"} to My Musterring`, parameters: { productId }, requiresConfirmation: true })} onConfirmSave={() => pendingAction?.type === "SAVE_PRODUCT" && execute(pendingAction)} onCancelSave={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }} /> : null}
+          {message.roomImage ? <div className="advisor-room-result"><Image src={message.roomImage} alt="AI-generated visualization of the customer's room" width={900} height={600} unoptimized /><span>Inspirational visualization · fit not confirmed</span><button type="button" onClick={() => setPendingRoomSave(true)}><Save /> Save room view</button></div> : null}
+          {message.answer?.proposedAction && !["SAVE_PRODUCT", "OPEN_FIT_CHECK"].includes(message.answer.proposedAction.type) && message.answer.proposedAction.type !== "OPEN_FIT_CHECK" ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
+          {message.answer?.suggestedQuestions.length && customerQuickReplies(message.answer.suggestedQuestions, message.answer.productIds).length ? <div className="advisor-followups">{customerQuickReplies(message.answer.suggestedQuestions, message.answer.productIds).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         </article>)}
-        {pending ? <p role="status">Consulting available Musterring product data…</p> : null}
+        {pending && roomGenerationStatus === "idle" ? <p role="status">Consulting available Musterring product data…</p> : null}
+        {roomGenerationStatus !== "idle" ? <section className={`advisor-generation-progress is-${roomGenerationStatus}`} role="progressbar" aria-label="Estimated room visualization progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={roomGenerationProgress}><div><span><Sparkles /> {roomGenerationProgress < 18 ? "Preparing your room" : roomGenerationProgress < 42 ? "Locking catalogue products" : roomGenerationProgress < 82 ? "Rendering your room visualization" : roomGenerationProgress < 100 ? "Finalizing lighting and product details" : "Room visualization ready"}</span><strong>{roomGenerationProgress}%</strong></div><div className="advisor-generation-track" aria-hidden="true"><span style={{ width: `${roomGenerationProgress}%` }} /></div><small>Estimated progress · generation usually takes 1–3 minutes. Keep this chat open.</small></section> : null}
         {voiceState !== "idle" ? <p className={`voice-state is-${voiceState}`} role="status">Voice: {voiceStatusText}</p> : null}
+        {attachmentError ? <p className="advisor-attachment-error" role="alert">{attachmentError}</p> : null}
+        {journeyStep === 3 && !attachmentFile ? <button className="advisor-next-step" type="button" onClick={() => chooseAttachment("room")}><ImagePlus /><span><strong>Visualize the saved product</strong><small>Upload your room photo</small></span><ArrowRight /></button> : null}
+        {journeyStep === 5 ? <section className="advisor-retailer-step"><div><MapPin /><span><strong>Find your nearest retailer</strong><small>Enter a city or postcode</small></span></div><input aria-label="City or postcode" value={dealerLocation} onChange={(event) => setDealerLocation(event.target.value)} placeholder="e.g. Hannover or 30159" />{normalizedLocation ? <div className="advisor-dealer-list">{dealerMatches.map((dealer) => <button type="button" key={dealer.id} onClick={() => setPendingDealerId(dealer.id)}><span><strong>{dealer.name}</strong><small>{dealer.city} · {dealer.distanceKm} km listed distance</small></span><ArrowRight /></button>)}</div> : null}</section> : null}
+        {journeyStep >= 6 ? <section className="advisor-appointment-step"><div><CalendarDays /><span><strong>When would you like to visit?</strong><small>The retailer confirms the final appointment.</small></span></div><label>Date<input type="date" value={appointmentDate} onChange={(event) => setAppointmentDate(event.target.value)} /></label><label>Mode<select value={appointmentMode} onChange={(event) => setAppointmentMode(event.target.value)}><option>Showroom consultation</option><option>Video consultation</option><option>Phone consultation</option><option>Home planning visit</option></select></label><label>Time<select value={appointmentTime} onChange={(event) => setAppointmentTime(event.target.value)}><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option></select></label><button type="button" onClick={() => setPendingAppointment(true)}>Review appointment preference</button>{storage.consultationDraft() ? <button type="button" className="is-primary" onClick={() => router.push("/handover")}>Complete contact details &amp; handover <ArrowRight /></button> : null}</section> : null}
       </div>
       {confirmNewChat ? <section className="advisor-confirmation advisor-new-chat-confirmation" aria-label="Confirm new chat"><MessageSquarePlus /><div><h3>Start a new chat?</h3><p>This clears the current conversation and its context.</p></div><button onClick={startNewChat}>Start new chat</button><button onClick={() => setConfirmNewChat(false)}>Cancel</button></section> : null}
-      {!confirmNewChat && pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
-      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder={voiceState === "listening" ? "Listening... your speech appears here" : "How can I help?"} /><button type="button" aria-label="Use microphone" aria-pressed={voiceState === "listening"} disabled={voiceState === "processing"} onClick={() => void startVoice()}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending || voiceState === "processing"}><Send /></button></form>
+      {!confirmNewChat && pendingAction && pendingAction.type !== "SAVE_PRODUCT" ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
+      {!confirmNewChat && !pendingAction && attachmentPending ? <section className="advisor-confirmation advisor-photo-confirmation" aria-label="Confirm photo processing"><ImagePlus /><div><h3>{attachmentPurpose === "reference" ? "Analyze this inspiration image?" : "Generate a room visualization?"}</h3><p>{attachmentFile?.name}</p><small>{attachmentPurpose === "reference" ? "The image will be processed temporarily to find grounded catalogue similarities." : "The room photo and saved catalogue references will be sent to OpenAI. The result is inspirational and does not confirm fit."}</small></div>{attachmentPreview ? <Image src={attachmentPreview} alt="Selected upload preview" width={420} height={180} unoptimized /> : null}<button onClick={() => void analyzeAttachment()}>{attachmentPurpose === "reference" ? "Analyze image" : "Generate room"}</button><button onClick={() => { setAttachmentPending(false); setAttachmentFile(null); }}>Cancel</button></section> : null}
+      {!confirmNewChat && !pendingAction && !attachmentPending && pendingRoomSave ? <section className="advisor-confirmation" aria-label="Confirm saving room view"><Save /><div><h3>Save this room view?</h3><p>It will be added to My Musterring and included in the retailer handover.</p><small>The visualization remains inspirational and is not a fit result.</small></div><button onClick={() => void saveGeneratedRoom()}>Save room view</button><button onClick={() => setPendingRoomSave(false)}>Cancel</button></section> : null}
+      {!confirmNewChat && !pendingAction && !attachmentPending && !pendingRoomSave && pendingDealerId ? <section className="advisor-confirmation" aria-label="Confirm retailer selection"><MapPin /><div><h3>Select this retailer?</h3><p>{dealers.find((dealer) => dealer.id === pendingDealerId)?.name}</p><small>This changes the retailer attached to your project; nothing is submitted yet.</small></div><button onClick={confirmDealer}>Confirm retailer</button><button onClick={() => setPendingDealerId("")}>Cancel</button></section> : null}
+      {!confirmNewChat && !pendingAction && !attachmentPending && !pendingRoomSave && !pendingDealerId && pendingAppointment ? <section className="advisor-confirmation" aria-label="Confirm appointment preference"><CalendarDays /><div><h3>Save appointment preference?</h3><p>{appointmentMode} · {appointmentDate || "Date to confirm"} · {appointmentTime}</p><small>The selected retailer must confirm the final time. No request is submitted here.</small></div><button onClick={confirmAppointment}>Save preference</button><button onClick={() => setPendingAppointment(false)}>Cancel</button></section> : null}
+      {attachmentMenu ? <div className="advisor-attachment-menu"><button type="button" onClick={() => chooseAttachment("reference")}><Paperclip /><span><strong>Find similar products</strong><small>Furniture photo or screenshot</small></span></button><button type="button" onClick={() => chooseAttachment("room")}><ImagePlus /><span><strong>Visualize my room</strong><small>Uses products saved to your project</small></span></button></div> : null}
+      <input ref={fileInputRef} hidden type="file" accept="image/png,image/jpeg,image/webp" onClick={(event) => { event.currentTarget.value = ""; }} onChange={(event) => selectAttachment(event.target.files?.[0])} />
+      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><button type="button" aria-label="Add an image or screenshot" aria-expanded={attachmentMenu} onClick={() => setAttachmentMenu((value) => !value)}><Upload /></button><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder={voiceState === "listening" ? "Listening... your speech appears here" : "Describe your room, product or project…"} /><button type="button" aria-label="Use microphone" aria-pressed={voiceState === "listening"} disabled={voiceState === "processing"} onClick={() => void startVoice()}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending || voiceState === "processing"}><Send /></button></form>
   </aside>;
 }
 
@@ -348,16 +597,16 @@ function AdvisorReply({ message }: { message: Message }) {
   </div>;
 }
 
-function RecommendationSet({ productIds, requestText }: { productIds: string[]; requestText: string }) {
+function RecommendationSet({ productIds, requestText, visualMatches, savedProductIds, pendingSaveProductId, onSave, onConfirmSave, onCancelSave }: { productIds: string[]; requestText: string; visualMatches?: VisualMatch[]; savedProductIds: string[]; pendingSaveProductId: string; onSave: (productId: string) => void; onConfirmSave: () => void; onCancelSave: () => void }) {
   const matches = productIds.map((id) => products.find((product) => product.id === id)).filter((product): product is typeof products[number] => Boolean(product));
   const best = matches[0];
   if (!best) return null;
   const reasons = recommendationReasons(best);
   const imageOverride = /\bred\b/i.test(requestText) && best.slug === "mr-260" ? "/musterring-catalog/mr-260/image-08-hq.jpg?v=4" : undefined;
   return <div className="advisor-recommendation">
-    <div className="advisor-products"><LinkCard product={best} imageOverride={imageOverride} featured /></div>
+    <div className="advisor-products"><LinkCard product={best} imageOverride={imageOverride} featured visualMatch={visualMatches?.find((match) => match.productId === best.id)} saved={savedProductIds.includes(best.id)} pendingSave={pendingSaveProductId === best.id} onSave={onSave} onConfirmSave={onConfirmSave} onCancelSave={onCancelSave} /></div>
     {reasons.length ? <section className="advisor-reasons"><h4>Why it works</h4><ul>{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></section> : null}
-    {matches.length > 1 ? <section className="advisor-other-matches"><h4>Other good matches</h4><p>{matches.slice(1).map((product) => product.modelCode).join(" · ")}</p><div className="advisor-products">{matches.slice(1).map((product) => <LinkCard key={product.id} product={product} />)}</div></section> : null}
+    {matches.length > 1 ? <section className="advisor-other-matches"><h4>Other good matches</h4><p>{matches.slice(1).map((product) => product.modelCode).join(" · ")}</p><div className="advisor-products">{matches.slice(1).map((product) => <LinkCard key={product.id} product={product} visualMatch={visualMatches?.find((match) => match.productId === product.id)} saved={savedProductIds.includes(product.id)} pendingSave={pendingSaveProductId === product.id} onSave={onSave} onConfirmSave={onConfirmSave} onCancelSave={onCancelSave} />)}</div></section> : null}
   </div>;
 }
 
@@ -370,9 +619,9 @@ function recommendationReasons(product: typeof products[number]) {
   return reasons.slice(0, 3);
 }
 
-function LinkCard({ product, imageOverride, featured = false }: { product: typeof products[number]; imageOverride?: string; featured?: boolean }) {
+function LinkCard({ product, imageOverride, featured = false, visualMatch, saved, pendingSave, onSave, onConfirmSave, onCancelSave }: { product: typeof products[number]; imageOverride?: string; featured?: boolean; visualMatch?: VisualMatch; saved: boolean; pendingSave: boolean; onSave: (productId: string) => void; onConfirmSave: () => void; onCancelSave: () => void }) {
   const categories = (product.categories ?? [product.category]).map((category) => category.replaceAll("-", " ")).join(" · ");
-  return <a href={`/furniture/${product.slug}`}>{featured ? <i className="advisor-best-match">Best match</i> : null}<Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={260} height={180} /><span><strong>{product.modelCode}</strong><small>{categories}</small><em>{product.subtitle}</em><b>View details <ArrowRight size={15} /></b></span></a>;
+  return <article className={`advisor-product-card ${saved ? "is-saved" : ""}`} data-product-id={product.id}>{featured ? <i className="advisor-best-match">{visualMatch ? `${visualMatch.score}% visual match` : "Best match"}</i> : null}<a href={`/furniture/${product.slug}`}><Image src={imageOverride ?? productImages(product.id)[0]} alt="" width={260} height={180} /><span><strong>{product.modelCode}</strong><small>{categories}</small><em>{visualMatch ? visualMatch.reasons.slice(0, 2).join(" · ") : product.subtitle}</em><b>View details <ArrowRight size={15} /></b></span></a>{pendingSave ? <section className="advisor-inline-save" aria-label={`Confirm saving ${product.modelCode}`}><div><Check /><span><strong>{saved ? `Save ${product.modelCode} again?` : `Save ${product.modelCode}?`}</strong><small>{saved ? "This product is already in My Musterring. Confirming keeps one catalogue entry and refreshes the project step." : "Add this validated catalogue product to My Musterring."}</small></span></div><div><button type="button" onClick={onCancelSave}>Cancel</button><button type="button" onClick={onConfirmSave}>Confirm save</button></div></section> : <button type="button" onClick={() => onSave(product.id)}>{saved ? <><Check size={14} /> Saved · save again</> : <><Save size={14} /> Save to project</>}</button>}{visualMatch && visualMatch.score < 100 ? <small className="advisor-match-difference">Not exact: {visualMatch.differences[0]}</small> : null}</article>;
 }
 
 function isStoredMessage(value: unknown): value is Message {

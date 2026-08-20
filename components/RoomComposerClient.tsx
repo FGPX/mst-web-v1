@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { Box, Check, ChevronLeft, ChevronRight, Copy, Download, Grid3X3, Layers, Lock, Plus, Printer, Redo2, RotateCw, Save, Send, Share2, Sparkles, Trash2, Unlock, Upload } from "lucide-react";
+import { Box, Check, ChevronLeft, ChevronRight, Copy, Download, Grid3X3, Layers, Lock, Plus, Printer, Redo2, RotateCcw, RotateCw, Save, Send, Share2, Sparkles, Trash2, Unlock, Upload } from "lucide-react";
 import { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
@@ -12,6 +12,14 @@ import type { RoomAnalysis } from "@/lib/ai/schemas";
 import type { Product, Project, SavedRoomScene } from "@/lib/types";
 
 type ComposerCategory = "all" | "seating" | "armchair" | "storage" | "tables" | "bedroom";
+const uploadComposerCategories: { id: ComposerCategory; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "seating", label: "Seating" },
+  { id: "armchair", label: "Armchairs" },
+  { id: "tables", label: "Tables" },
+  { id: "storage", label: "Storage" },
+  { id: "bedroom", label: "Bedroom" }
+];
 const maxGeneratedVisualizationItems = 6;
 
 const roomBackgrounds = [
@@ -58,7 +66,9 @@ const generatedViews = (slug: string) => {
     if (slug === "justb-pm100") {
       return [
         "/generated-product-views/justb-pm100/physical-front.png?v=1",
-        "/generated-product-views/justb-pm100/physical-back-v3.png?v=1"
+        "/generated-product-views/justb-pm100/illustrative-right-v2.png?v=1",
+        "/generated-product-views/justb-pm100/physical-back-v3.png?v=1",
+        "/generated-product-views/justb-pm100/illustrative-left-v2.png?v=1"
       ];
     }
     return [`/generated-product-views/${slug}/physical-front.png?v=1`];
@@ -94,6 +104,7 @@ type SceneItem = {
   y: number;
   rotation: number;
   viewIndex?: number;
+  wallPlacement?: "free" | "west" | "back" | "east";
   scale: number;
   materialId?: string;
   color?: string;
@@ -248,12 +259,18 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     if (category === "bedroom") return ["bed", "bedroom-series", "wardrobe", "home-textile"].includes(productCategory);
     return ["coffee-table", "dining-table", "small-furniture"].includes(productCategory);
   };
+  const catalogCategoryOrder = ["sofa", "sectional", "armchair", "coffee-table", "dining-table", "small-furniture", "storage", "wardrobe", "bed", "bedroom-series", "home-textile"];
   const catalog = activeProducts.filter((product) => categoryMatches(product.category)
     && (upload || generatedCutoutSlugs.has(product.slug))
     && `${product.modelCode} ${product.name} ${product.subtitle}`.toLowerCase().includes(productQuery.toLowerCase()))
-    .sort((left, right) => category === "bedroom"
-      ? Number(left.category !== "bed") - Number(right.category !== "bed")
-      : 0);
+    .sort((left, right) => {
+      const categoryDifference = category === "all"
+        ? catalogCategoryOrder.indexOf(left.category) - catalogCategoryOrder.indexOf(right.category)
+        : category === "bedroom"
+          ? Number(left.category !== "bed") - Number(right.category !== "bed")
+          : 0;
+      return categoryDifference || left.modelCode.localeCompare(right.modelCode, undefined, { numeric: true });
+    });
   const recommendedProductIdSet = useMemo(() => new Set(recommendedProductIds), [recommendedProductIds]);
   const recommendedProducts = recommendedProductIds
     .map((productId) => activeProducts.find((product) => product.id === productId))
@@ -306,7 +323,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const sceneSignature = useMemo(() => JSON.stringify({
     room: roomPhoto ? [roomPhoto.name, roomPhoto.size, roomPhoto.lastModified] : null,
     sceneScale,
-    items: items.map(({ productId, x, y, rotation, scale, materialId, color }) => ({ productId, x, y, rotation, scale, materialId, color }))
+    items: items.map(({ productId, x, y, rotation, viewIndex, wallPlacement, scale, materialId, color }) => ({ productId, x, y, rotation, viewIndex, wallPlacement, scale, materialId, color }))
   }), [items, roomPhoto, sceneScale]);
   const generatedIsCurrent = Boolean(generatedVisualization && generatedForSignature === sceneSignature);
   const displayGenerated = generatedIsCurrent && showGenerated && !showBefore;
@@ -340,6 +357,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     return productImages(productId).length;
   };
   const selected = items.find((item) => item.id === selectedId);
+  const normalizedRotation = selected ? ((selected.rotation % 360) + 360) % 360 : 0;
   const pushHistory = () => {
     setHistory((current) => [...current.slice(-9), items]);
     setFuture([]);
@@ -348,6 +366,39 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     if (!selected) return;
     pushHistory();
     setItems((current) => current.map((item) => item.id === selected.id ? { ...item, ...patch } : item));
+  };
+  const updateSelectedOrientation = (viewIndex: number) => {
+    if (!selected || productViewCount(selected.productId) < 4) return;
+    const normalizedView = ((viewIndex % 4) + 4) % 4;
+    const nextRotation = normalizedView * 90;
+    const product = activeProducts.find((item) => item.id === selected.productId);
+    const displayedWidth = product && verifiedComposerSlugs.has(product.slug)
+      ? (([1, 3].includes(normalizedView) ? product.depthMm : product.widthMm) / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale
+      : (["sofa", "sectional"].includes(product?.category ?? "") ? 42 : 22) * sceneScale;
+    const edgeX = Math.min(45, Math.max(8, displayedWidth / 2 + 1));
+    updateSelected({
+      rotation: nextRotation,
+      viewIndex: normalizedView,
+      ...(selected.wallPlacement === "west" ? { x: edgeX } : {}),
+      ...(selected.wallPlacement === "east" ? { x: 100 - edgeX } : {})
+    });
+  };
+  const rotateSelectedByQuarterTurn = (direction: -1 | 1) => updateSelectedOrientation(normalizedRotation / 90 + direction);
+  const snapSelectedToWall = (wallPlacement: "free" | "west" | "back" | "east") => {
+    if (!selected) return;
+    if (wallPlacement === "free") return updateSelected({ wallPlacement });
+    const product = activeProducts.find((item) => item.id === selected.productId);
+    const sideOrientation = [90, 270].includes(normalizedRotation);
+    const displayedWidth = product && verifiedComposerSlugs.has(product.slug)
+      ? ((sideOrientation ? product.depthMm : product.widthMm) / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale
+      : (["sofa", "sectional"].includes(product?.category ?? "") ? 42 : 22) * sceneScale;
+    const edgeX = Math.min(45, Math.max(8, displayedWidth / 2 + 1));
+    updateSelected({
+      wallPlacement,
+      ...(wallPlacement === "west" ? { x: edgeX, y: Math.max(72, selected.y) } : {}),
+      ...(wallPlacement === "east" ? { x: 100 - edgeX, y: Math.max(72, selected.y) } : {}),
+      ...(wallPlacement === "back" ? { y: 64 } : {})
+    });
   };
   const addProduct = (productId: string) => {
     pushHistory();
@@ -498,11 +549,21 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     if (!dragging || dragging !== item.id || !stageRef.current) return;
     const bounds = stageRef.current.getBoundingClientRect();
     if (item.locked) return;
-    const rawX = Math.max(8, Math.min(92, ((event.clientX - bounds.left) / bounds.width) * 100));
+    const product = activeProducts.find((candidate) => candidate.id === item.productId);
+    const orientation = ((item.rotation % 360) + 360) % 360;
+    const sideOrientation = orientation === 90 || orientation === 270;
+    const displayedWidth = product && verifiedComposerSlugs.has(product.slug)
+      ? ((sideOrientation ? product.depthMm : product.widthMm) / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale
+      : (["sofa", "sectional"].includes(product?.category ?? "") ? 42 : 22) * sceneScale;
+    const halfWidth = Math.min(44, displayedWidth / 2);
+    const rawX = Math.max(halfWidth + 1, Math.min(99 - halfWidth, ((event.clientX - bounds.left) / bounds.width) * 100));
     const rawY = Math.max(20, Math.min(88, ((event.clientY - bounds.top) / bounds.height) * 100));
     const x = grid ? Math.round(rawX / 2) * 2 : rawX;
     const y = grid ? Math.round(rawY / 2) * 2 : rawY;
-    setItems((current) => current.map((candidate) => candidate.id === item.id ? { ...candidate, x, y } : candidate));
+    const westDistance = x - halfWidth;
+    const eastDistance = 100 - (x + halfWidth);
+    const wallPlacement = westDistance <= 4 ? "west" : eastDistance <= 4 ? "east" : y <= 68 ? "back" : "free";
+    setItems((current) => current.map((candidate) => candidate.id === item.id ? { ...candidate, x, y, wallPlacement } : candidate));
   };
 
   const moveSelectedWithKeyboard = (event: ReactKeyboardEvent<HTMLDivElement>) => {
@@ -552,6 +613,8 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
       x: item.x,
       y: item.y,
       rotation: item.rotation,
+      viewIndex: item.viewIndex,
+      wallPlacement: item.wallPlacement ?? "free",
       scale: item.scale * sceneScale,
       materialId: item.materialId,
       color: item.color
@@ -686,13 +749,18 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               {roomPreview ? <button type="button" className="is-active"><span className="stitch-uploaded-swatch"><Upload size={18} /></span><small>Imported photo</small></button> : null}
             </div>
             <p className="eyebrow">{upload ? "Choose products" : "Module categories"}</p>
-            <div className="stitch-composer-tabs">
-              {upload ? <button className={category === "all" ? "is-active" : ""} onClick={() => { setCategory("all"); setVisibleCount(8); }}>All</button> : null}
-              <button className={category === "seating" ? "is-active" : ""} onClick={() => { setCategory("seating"); setVisibleCount(upload ? 8 : 12); }}>Seating</button>
-              {upload ? <button className={category === "bedroom" ? "is-active" : ""} onClick={() => { setCategory("bedroom"); setVisibleCount(8); }}>Bedroom</button> : null}
-              <button className={category === "armchair" ? "is-active" : ""} onClick={() => setCategory("armchair")}>Armchairs</button>
-              <button className={category === "storage" ? "is-active" : ""} onClick={() => setCategory("storage")}>Storage</button>
-              <button className={category === "tables" ? "is-active" : ""} onClick={() => setCategory("tables")}>Tables</button>
+            <div className="stitch-composer-tabs" aria-label="Product categories">
+              {(upload ? uploadComposerCategories : uploadComposerCategories.filter(({ id }) => id !== "all" && id !== "bedroom")).map(({ id, label }) => (
+                <button
+                  type="button"
+                  key={id}
+                  className={category === id ? "is-active" : ""}
+                  aria-pressed={category === id}
+                  onClick={() => { setCategory(id); setVisibleCount(upload ? 8 : 12); }}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
             <div className="stitch-composer-catalog-heading"><p className="eyebrow">Available products</p><span>{catalog.length} models</span></div>
             <input className="stitch-composer-search" type="search" value={productQuery} onChange={(event) => { setProductQuery(event.target.value); setVisibleCount(upload ? 4 : 12); }} placeholder="Search model or product" aria-label="Search products" />
@@ -797,14 +865,16 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 const itemImage = sceneItemImage(product.id, item.viewIndex, item.materialId, item.color);
                 const isCutoutImage = generatedCutoutSlugs.has(product.slug) || itemImage.toLowerCase().split("?")[0].endsWith(".png");
                 const hasVerifiedDimensions = verifiedComposerSlugs.has(product.slug);
+                const orientation = ((item.rotation % 360) + 360) % 360;
+                const isSideOrientation = orientation === 90 || orientation === 270;
                 const relativeWidth = hasVerifiedDimensions
-                  ? (product.widthMm / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale
+                  ? ((isSideOrientation ? product.depthMm : product.widthMm) / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale
                   : (["sofa", "sectional"].includes(product.category) ? 42 : 22) * sceneScale;
                 return (
                   <button
                     key={item.id}
                     className={`stitch-composer-item has-physical-aspect ${["sofa", "sectional"].includes(product.category) ? "is-sofa" : ""} ${selectedId === item.id ? "is-selected" : ""} ${isCutoutImage ? "is-cutout" : "is-scene-crop"}`}
-                    style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio: hasVerifiedDimensions ? `${product.widthMm} / ${product.heightMm}` : (["sofa", "sectional"].includes(product.category) ? "16 / 7" : "1 / 1"), zIndex: item.zIndex, transform: `translate(-50%, -100%) rotate(${item.rotation}deg)` }}
+                    style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio: hasVerifiedDimensions ? `${isSideOrientation ? product.depthMm : product.widthMm} / ${product.heightMm}` : (["sofa", "sectional"].includes(product.category) ? "16 / 7" : "1 / 1"), zIndex: item.zIndex, transform: "translate(-50%, -100%)" }}
                     onPointerDown={(event) => {
                       pushHistory();
                       setSelectedId(item.id);
@@ -814,14 +884,43 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     onPointerMove={(event) => move(event, item)}
                     onPointerUp={() => setDragging(null)}
                   >
-                    {generatedTurntable ? <Image className="stitch-composer-turntable" src={generatedTurntable} alt={`${product.name}, catalogue view`} width={520} height={360} draggable={false} style={{ objectFit: "contain" }} /> : <Image src={itemImage} alt={`${product.name}, catalogue view`} width={420} height={240} draggable={false} style={{ objectFit: isCutoutImage ? "contain" : "cover" }} />}
+                    {generatedTurntable ? <Image className="stitch-composer-turntable" src={generatedTurntable} alt={`${product.name}, ${product.slug === "justb-pm100" && [1, 3].includes(item.viewIndex ?? 0) ? "illustrative side view" : "catalogue view"}`} width={520} height={360} draggable={false} style={{ objectFit: "contain" }} /> : <Image src={itemImage} alt={`${product.name}, catalogue view`} width={420} height={240} draggable={false} style={{ objectFit: isCutoutImage ? "contain" : "cover" }} />}
                   </button>
                 );
               }) : null}
 
               {selected && !showBefore && !displayGenerated ? (
-                <div className="stitch-composer-controls">
-                  <button aria-label="Rotate selected product" onClick={() => updateSelected({ rotation: selected.rotation + 15 })}><RotateCw /></button>
+                <div className="stitch-composer-controls" aria-label="Selected product controls">
+                  <div className="stitch-composer-rotation-controls">
+                    <button type="button" disabled={productViewCount(selected.productId) < 4} title={productViewCount(selected.productId) < 4 ? "Side views are not available for this product" : "Turn product left 90 degrees"} aria-label="Turn selected product left 90 degrees" onClick={() => rotateSelectedByQuarterTurn(-1)}><RotateCcw /></button>
+                    <button type="button" className="stitch-composer-rotation-value" title="Reset to front orientation" aria-label={`Orientation ${normalizedRotation} degrees. Reset to front`} onClick={() => updateSelected({ rotation: 0, viewIndex: 0 })}>
+                      <span>{normalizedRotation === 0 ? "Front" : `${normalizedRotation}°`}</span>
+                      <small>{normalizedRotation === 0 ? "0°" : "Reset"}</small>
+                    </button>
+                    <button type="button" disabled={productViewCount(selected.productId) < 4} title={productViewCount(selected.productId) < 4 ? "Side views are not available for this product" : "Turn product right 90 degrees"} aria-label="Turn selected product right 90 degrees" onClick={() => rotateSelectedByQuarterTurn(1)}><RotateCw /></button>
+                  </div>
+                  {productViewCount(selected.productId) > 1 ? (
+                    <div className="stitch-composer-view-controls" aria-label="Product viewing direction">
+                      <button type="button" aria-label="Previous catalogue view" onClick={() => {
+                        const count = productViewCount(selected.productId);
+                        const viewIndex = ((selected.viewIndex ?? 0) - 1 + count) % count;
+                        count === 4 ? updateSelectedOrientation(viewIndex) : updateSelected({ viewIndex });
+                      }}><ChevronLeft /></button>
+                      <span title={[1, 3].includes((selected.viewIndex ?? 0) % productViewCount(selected.productId)) ? "Illustrative side view derived from the product references" : undefined}>{["Front view", "Right side*", "Back view", "Left side*"][(selected.viewIndex ?? 0) % productViewCount(selected.productId)] ?? `View ${((selected.viewIndex ?? 0) % productViewCount(selected.productId)) + 1}`}</span>
+                      <button type="button" aria-label="Next catalogue view" onClick={() => {
+                        const count = productViewCount(selected.productId);
+                        const viewIndex = ((selected.viewIndex ?? 0) + 1) % count;
+                        count === 4 ? updateSelectedOrientation(viewIndex) : updateSelected({ viewIndex });
+                      }}><ChevronRight /></button>
+                    </div>
+                  ) : null}
+                  <div className="stitch-composer-wall-controls" aria-label="Snap product close to a wall">
+                    <button type="button" className={selected.wallPlacement === "west" ? "is-active" : ""} aria-label="Place selected product close to west wall" title="Close to west wall" onClick={() => snapSelectedToWall("west")}>W</button>
+                    <button type="button" className={selected.wallPlacement === "back" ? "is-active" : ""} aria-label="Place selected product close to back wall" title="Close to back wall" onClick={() => snapSelectedToWall("back")}>Back</button>
+                    <button type="button" className={selected.wallPlacement === "east" ? "is-active" : ""} aria-label="Place selected product close to east wall" title="Close to east wall" onClick={() => snapSelectedToWall("east")}>E</button>
+                    <button type="button" className={!selected.wallPlacement || selected.wallPlacement === "free" ? "is-active" : ""} aria-label="Use free-standing placement" title="Free-standing placement" onClick={() => snapSelectedToWall("free")}>Free</button>
+                  </div>
+                  <div className="stitch-composer-item-actions">
                   <button aria-label="Duplicate selected product" onClick={() => {
                     pushHistory();
                     const topLayer = Math.max(0, ...items.map((item) => item.zIndex ?? 0)) + 1;
@@ -832,6 +931,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   <button aria-label={selected.locked ? "Unlock selected product" : "Lock selected product"} onClick={() => updateSelected({ locked: !selected.locked })}>{selected.locked ? <Unlock /> : <Lock />}</button>
                   <button aria-label="Bring selected product forward" onClick={() => updateSelected({ zIndex: Math.max(...items.map((item) => item.zIndex ?? 1)) + 1 })}><Layers /></button>
                   <button aria-label="Remove selected product" onClick={() => { pushHistory(); setItems((current) => current.filter((item) => item.id !== selected.id)); setSelectedId(""); }}><Trash2 /></button>
+                  </div>
                 </div>
               ) : null}
             </div>
@@ -843,11 +943,13 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     <strong>{productViewCount(selected.productId) > 1 ? ((selected.viewIndex ?? 0) % productViewCount(selected.productId)) + 1 : 1} / {productViewCount(selected.productId)}</strong>
                     <button type="button" aria-label="Previous product view" disabled={productViewCount(selected.productId) < 2} onClick={() => {
                       const count = productViewCount(selected.productId);
-                      updateSelected({ viewIndex: ((selected.viewIndex ?? 0) - 1 + count) % count });
+                      const viewIndex = ((selected.viewIndex ?? 0) - 1 + count) % count;
+                      count === 4 ? updateSelectedOrientation(viewIndex) : updateSelected({ viewIndex });
                     }}><ChevronLeft size={16} /></button>
                     <button type="button" aria-label="Next product view" disabled={productViewCount(selected.productId) < 2} onClick={() => {
                       const count = productViewCount(selected.productId);
-                      updateSelected({ viewIndex: ((selected.viewIndex ?? 0) + 1) % count });
+                      const viewIndex = ((selected.viewIndex ?? 0) + 1) % count;
+                      count === 4 ? updateSelectedOrientation(viewIndex) : updateSelected({ viewIndex });
                     }}><ChevronRight size={16} /></button>
                   </div>
                   <div className="stitch-composer-relative-size"><span>{(() => { const product = activeProducts.find((item) => item.id === selected.productId); return product && verifiedComposerSlugs.has(product.slug) ? composerDimensionLabels[product.slug] ?? "Dimension-proportional size" : "Visual preview only"; })()}</span><strong>{(() => { const product = activeProducts.find((item) => item.id === selected.productId); return product && verifiedComposerSlugs.has(product.slug) ? `W ${Math.round(product.widthMm / 10)} × D ${Math.round(product.depthMm / 10)} × H ${Math.round(product.heightMm / 10)} cm` : "Dimensions require retailer confirmation"; })()}</strong></div>

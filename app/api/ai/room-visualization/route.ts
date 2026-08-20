@@ -107,7 +107,9 @@ export async function POST(request: NextRequest) {
       await toFile(normalizedRoom.buffer, "room.png", { type: "image/png" }),
       ...referenceFiles
     ];
-    const requestedSize = `${normalizedRoom.width}x${normalizedRoom.height}`;
+    // The saved-room presentation is 16:9. Request that composition directly
+    // so the browser never has to crop a correctly generated product.
+    const requestedSize = "1536x864";
     let outputFormat: "jpeg" | "png" = "jpeg";
     let response;
     const editRequest = {

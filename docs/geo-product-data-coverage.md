@@ -1,10 +1,6 @@
 # GEO Product Data Coverage
 
-<<<<<<< HEAD
-Generated: 2026-08-20T09:39:50.534Z
-=======
-Generated: 2026-08-20T09:19:59.040Z
->>>>>>> de0a230cda0d2199a4a92e509cf0b44fd3d0a1a6
+Generated: 2026-08-20T11:15:45.035Z
 
 ## Summary
 
@@ -69,7 +65,7 @@ Exact capability is measured for the target and every hard requirement together,
 | Wardrobe + sliding doors | productSubtypes<br>specifications.wardrobe.doorType | 2 | 2 | no | yes |
 | Bed + 180 × 200 cm | productSubtypes<br>specifications.bed.sleepingSizes | 3 | 9 | yes | yes |
 | Sofa + 4 seats | productSubtypes<br>specifications.seating.seatCapacityMax | 0 | 36 | no | no |
-| Table + extendable rectangular | productSubtypes<br>specifications.table.extendable<br>specifications.table.tabletopShape | 0 | 0 | no | no |
+| Table + extendable rectangular | productSubtypes<br>specifications.table.extendable<br>specifications.table.tabletopShape | 0 | 6 | no | no |
 
 ## Category coverage
 

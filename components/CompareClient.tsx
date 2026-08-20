@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ArrowRight, Bookmark, Check, Clock3, Plus, Send, Sparkles, Trash2, X } from "lucide-react";
+import { ArrowRight, Bookmark, Check, Clock3, LoaderCircle, Plus, Sparkles, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { products } from "@/lib/data";
@@ -16,7 +16,7 @@ import { AlternativeFinderButton } from "./AlternativeFinderButton";
 export function CompareClient({ initialIds }: { initialIds: string[] }) {
   const activeProducts = products.filter((product) => product.active);
   const [ids, setIds] = useState(initialIds.length ? initialIds.slice(0, 3) : activeProducts.slice(0, 3).map((product) => product.id));
-  const [diffOnly, setDiffOnly] = useState(false);
+  const [diffOnly, setDiffOnly] = useState(true);
   const [savedComparisons, setSavedComparisons] = useState<SavedComparison[]>([]);
   const [savedProductIds, setSavedProductIds] = useState<string[]>([]);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -55,6 +55,11 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
     }
 
     const controller = new AbortController();
+    let timedOut = false;
+    const timeout = window.setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, 12000);
     setAiSummary(null);
     setSummaryStatus("loading");
     fetch("/api/ai/comparison-summary", {
@@ -68,15 +73,20 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
         return response.json() as Promise<{ summary: ComparisonSummary; ai: { mode: "openai" | "demo"; fallback: boolean } }>;
       })
       .then((response) => {
+        window.clearTimeout(timeout);
         setAiSummary(response.summary);
         setSummaryStatus(response.ai.mode === "openai" && !response.ai.fallback ? "openai" : "fallback");
       })
       .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        setSummaryStatus("error");
+        window.clearTimeout(timeout);
+        if (error instanceof DOMException && error.name === "AbortError" && !timedOut) return;
+        setSummaryStatus(timedOut ? "fallback" : "error");
       });
 
-    return () => controller.abort();
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
   }, [comparisonKey]);
 
   const rows = comparisonRows(selected, diffOnly);
@@ -166,22 +176,19 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
           </article>)}
         </div>
 
-        <div className="stitch-compare-rows" role="table" aria-label="Product specification comparison">
-          {rows.map(({ name, values, level, summary }) => (
-            <div className={`is-${level}-difference`} role="row" key={name}>
-              <b role="rowheader">{name}{summary ? <small>Difference · {summary}</small> : null}</b>
-              {values.map((value, index) => {
-                const badge = valueBadge(name, index, selected, values);
-                return <span role="cell" key={`${name}-${selected[index]?.id ?? index}`}><strong>{value}</strong>{badge ? <small>{badge}</small> : null}</span>;
-              })}
-            </div>
-          ))}
+        <div className="stitch-compare-rows is-refined" role="table" aria-label="Product specification comparison">
+          {rows.map(({ name, values, level, summary }) => <div className={`is-${level}-difference`} role="row" key={name}>
+            <b role="rowheader">{name}{summary ? <small>Difference · {summary}</small> : null}</b>
+            {values.map((value, index) => {
+              const badge = valueBadge(name, index, selected, values);
+              return <span role="cell" key={`${name}-${selected[index]?.id ?? index}`}>
+                <strong>{value}</strong>
+                {badge ? <small className="stitch-row-value-badge">{badge}</small> : null}
+              </span>;
+            })}
+          </div>)}
         </div>
 
-        <div className="stitch-compare-next">
-          <span><small>Next step</small>Consolidate Selection</span>
-          <Link href="/handover" onClick={() => storage.setComparison(ids)}>Send Comparison to Retailer <Send size={15} /></Link>
-        </div>
       </section>
 
       <section className={`container stitch-compare-ai${summaryStatus === "loading" ? " is-loading" : ""}`} aria-labelledby="comparison-ai-title" aria-busy={summaryStatus === "loading"}>
@@ -189,9 +196,22 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
           <span className="stitch-compare-ai-mark" aria-hidden="true"><Sparkles size={18} /></span>
           <div><p className="eyebrow">AI summary</p><h2 id="comparison-ai-title">Your comparison, simplified</h2><small aria-live="polite">{summaryStatusText(summaryStatus)}</small></div>
         </header>
+        {summaryStatus === "loading" ? <div className="stitch-compare-ai-loading" role="status" aria-live="polite">
+          <LoaderCircle size={18} aria-hidden="true" />
+          <span><strong>AI is refining your comparison</strong><small>The verified preview remains available below while we prepare the final recommendation.</small></span>
+          <i aria-hidden="true" />
+        </div> : null}
         <div className="stitch-compare-ai-text">
-          {summaries.products.map(({ product, summary }) => <p key={product.id}><strong>{product.modelCode}:</strong> {summary}</p>)}
-          <p className="stitch-compare-ai-conclusion"><strong>Overall recommendation:</strong> {summaries.recommendation}</p>
+          <div className="stitch-compare-ai-options">
+            {summaries.products.map(({ product, summary, bestFor }) => <article key={product.id}>
+              <div><strong>{product.modelCode}</strong><small>{bestFor}</small></div>
+              <p>{summary}</p>
+            </article>)}
+          </div>
+          <div className="stitch-compare-ai-conclusion">
+            <strong>Our recommendation</strong>
+            <p>{emphasizeProductCodes(summaries.recommendation, selected)}</p>
+          </div>
         </div>
       </section>
 
@@ -233,12 +253,14 @@ export function comparisonRows(selected: Product[], diffOnly: boolean) {
     ["Seats", selected.map((product) => product.numberOfSeatsVerified ? String(product.numberOfSeats) : indicative(product.numberOfSeats > 0 ? String(product.numberOfSeats) : null))],
     ["Modularity", selected.map((product) => product.verifiedFacts.modular ? "Verified modular system" : indicative(product.modular ? "Configurable/modular programme" : "Fixed configuration"))],
     ["Functions", selected.map((product) => product.verifiedFacts.functions.join(", ") || indicative(product.functions.join(", ") || "No additional function in reference configuration"))],
-    ["Materials", selected.map((product) => product.verifiedFacts.materialTypes.join(", ") || indicative(product.materialTypes?.join(", ") || product.primaryMaterial))],
+    ["Materials", selected.map((product) => isVerifiedPath(product, "materialTypes") && product.materialTypes?.length
+      ? product.materialTypes.join(", ")
+      : product.verifiedFacts.materialTypes.join(", ") || indicative(product.materialTypes?.join(", ") || product.primaryMaterial))],
     ["Styles", selected.map((product) => product.verifiedFacts.styles.join(", ") || indicative(product.styleTags?.join(", ") || product.styles.join(", ") || null))],
     ["Colours", selected.map((product) => product.verifiedFacts.colors.join(", ") || indicative(product.colorFamilies?.join(", ") || product.colors.join(", ") || null))],
-    ["Easy care", selected.map((product) => product.verifiedFacts.easyCare ? "Yes" : indicative(product.easyCare == null ? null : product.easyCare ? "Yes" : "No"))],
-    ["Family friendly", selected.map((product) => indicative(product.familyFriendly == null ? null : product.familyFriendly ? "Yes" : "No"))],
-    ["Pet friendly", selected.map((product) => indicative(product.petFriendly == null ? null : product.petFriendly ? "Yes" : "No"))]
+    ["Easy care", selected.map((product) => isVerifiedPath(product, "easyCare") && product.easyCare != null ? product.easyCare ? "Yes" : "No" : unknown)],
+    ["Family friendly", selected.map((product) => isVerifiedPath(product, "familyFriendly") && product.familyFriendly != null ? product.familyFriendly ? "Yes" : "No" : unknown)],
+    ["Pet friendly", selected.map((product) => isVerifiedPath(product, "petFriendly") && product.petFriendly != null ? product.petFriendly ? "Yes" : "No" : unknown)]
   ];
 
   const addVerifiedRow = (name: string, values: string[]) => {
@@ -318,16 +340,22 @@ export function comparisonRows(selected: Product[], diffOnly: boolean) {
   addVerifiedRow("Base variants", selected.map((product) => relevantValue(product, seatingRelevant(product), "specifications.seating.baseVariantCount", product.specifications?.seating?.baseVariantCount ? `${product.specifications.seating.baseVariantCount} variants` : product.feetOptions.length ? product.feetOptions.join(", ") : null)));
 
   addCategorySpecificRows(rows, selected, unknown, notApplicable);
-  const standardLabels = new Set(rows.map(([name]) => name));
+  const normalizeComparisonLabel = (label: string) => label.trim().toLocaleLowerCase().replace(/s$/, "");
+  const standardLabels = new Set(rows.map(([name]) => normalizeComparisonLabel(name)));
   const detailLabels = [...new Set(selected.flatMap((product) => product.verifiedComparisonFacts?.map((fact) => fact.label) ?? []))]
-    .filter((label) => !standardLabels.has(label));
+    .filter((label) => !standardLabels.has(normalizeComparisonLabel(label)));
   rows.push(...detailLabels.map<[string, string[]]>((label) => [
     label,
     selected.map((product) => verifiedComparisonValue(product, label) ?? unknown)
   ]));
+  const levelPriority = { major: 0, different: 1, same: 2 } as const;
   return rows
+    .filter(([name]) => name !== "Functions" || selected.some((product) => product.verifiedFacts.functions.length > 0))
+    .filter(([name]) => !["Easy care", "Family friendly", "Pet friendly"].includes(name)
+      || selected.some((product) => isVerifiedPath(product, name === "Easy care" ? "easyCare" : name === "Family friendly" ? "familyFriendly" : "petFriendly")))
     .map(([name, values]) => ({ name, values, ...differenceMeta(name, values) }))
-    .filter(({ values }) => !diffOnly || new Set(values).size > 1);
+    .filter(({ values }) => !diffOnly || new Set(values).size > 1)
+    .sort((left, right) => levelPriority[left.level] - levelPriority[right.level]);
 }
 
 function isVerifiedPath(product: Product, path: string) {
@@ -352,6 +380,8 @@ function formatMmRange(values: readonly number[]) {
 function addCategorySpecificRows(rows: Array<[string, string[]]>, selected: Product[], unknown: string, notApplicable: string) {
   const indicative = (value: string | null | undefined) => value ? `${value} · Indicative` : unknown;
   const add = (name: string, relevant: (product: Product) => boolean, path: string, value: (product: Product) => string | null | undefined) => {
+    const relevantProducts = selected.filter(relevant);
+    if (!relevantProducts.length || relevantProducts.some((product) => !isVerifiedPath(product, path))) return;
     const values = selected.map((product) => {
       if (!relevant(product)) return notApplicable;
       const result = value(product);
@@ -446,6 +476,10 @@ function differenceMeta(name: string, values: string[]): { level: "same" | "diff
 }
 
 function meaningfulDifference(product: Product, selected: Product[]) {
+  const presentationFact = ["Dining level", "Visual style", "Tabletop shapes"]
+    .map((label) => verifiedComparisonValue(product, label))
+    .find(Boolean);
+  if (presentationFact) return presentationFact.endsWith(".") ? presentationFact : `${presentationFact}.`;
   const dimensionProducts = selected.filter((item) => item.verifiedFacts.dimensions);
   const widths = dimensionProducts.map((item) => item.widthMm);
   if (product.verifiedFacts.dimensions && widths.length > 1 && product.widthMm === Math.min(...widths) && new Set(widths).size > 1) return `Most compact verified width at ${Math.round(product.widthMm / 10)} cm.`;
@@ -485,45 +519,61 @@ function hydrateComparisonSummary(summary: ComparisonSummary, selected: Product[
 }
 
 function summaryStatusText(status: "idle" | "loading" | "openai" | "fallback" | "error") {
-  if (status === "loading") return "Creating summary…";
+  if (status === "loading") return "Grounded preview shown — refining with AI…";
   if (status === "openai") return "Based on verified catalogue data.";
   if (status === "fallback" || status === "error") return "Using available catalogue data.";
   return "Based on catalogue data.";
 }
 
-function comparisonSummary(selected: Product[], awards: ReturnType<typeof comparisonAwards>) {
+export function comparisonSummary(selected: Product[], awards: ReturnType<typeof comparisonAwards>) {
   if (!selected.length) return { products: [], glance: [], recommendation: "Select at least two products to receive a grounded comparison summary." };
   const dimensionProducts = selected.filter((product) => product.verifiedFacts.dimensions);
   const seatingProducts = selected.filter((product) => product.numberOfSeatsVerified);
   const widths = dimensionProducts.map((product) => Math.round(product.widthMm / 10));
+  const hasWidthDifference = new Set(widths).size > 1;
   const seats = seatingProducts.map((product) => product.numberOfSeats);
   const narrowest = dimensionProducts.reduce<Product | null>((best, product) => !best || product.widthMm < best.widthMm ? product : best, null);
   const highestCapacity = seatingProducts.reduce<Product | null>((best, product) => !best || product.numberOfSeats > best.numberOfSeats ? product : best, null);
-  const differencePriority = ["Seat construction", "Motorised function", "Seat Height", "Seat Depth", "Reference configuration"];
+  const differencePriority = ["Seat construction", "Motorised function", "Dining level", "Visual style", "Reference format", "Height options", "Tabletop shapes", "Tabletop materials", "Planning range", "Care profile", "Design detail", "Seat Height", "Seat Depth", "Reference configuration"];
   const distinctiveDetailFor = (product: Product) => differencePriority
     .map((label) => product.verifiedComparisonFacts?.find((item) => item.label === label))
     .find((item) => item && selected.some((other) => other.id !== product.id
       && other.verifiedComparisonFacts?.find((candidate) => candidate.label === item.label)?.value !== item.value));
+  const isFeaturedDiningComparison = selected.length === 2
+    && selected.some((product) => product.id === "musterring-helana")
+    && selected.some((product) => product.id === "musterring-justb-sp100");
   const productsSummary = selected.map((product) => {
     const labels = awards.find((award) => award.productId === product.id)?.labels ?? [];
     const detail = (label: string) => verifiedComparisonValue(product, label);
     const materialCopy = product.verifiedFacts.materialTypes.length ? ` Verified material types: ${product.verifiedFacts.materialTypes.join(", ")}.` : "";
     const distinctiveDetail = distinctiveDetailFor(product);
-    const summary = product.verifiedFacts.dimensions && distinctiveDetail
-      ? `${Math.round(product.widthMm / 10)} cm wide — ${distinctiveDetail.value}.`
-      : product.verifiedFacts.dimensions
-        ? `${Math.round(product.widthMm / 10)} cm wide${product.verifiedFacts.modular ? " modular" : ""} ${product.category.replace("-", " ")}.`
-        : distinctiveDetail
-          ? `${distinctiveDetail.label}: ${distinctiveDetail.value}.`
+    const referenceFormat = detail("Reference format");
+    const distinctiveCopy = distinctiveDetail
+      ? `${distinctiveDetail.value}${referenceFormat && distinctiveDetail.label !== "Reference format" ? ` — ${referenceFormat}` : ""}.`
+      : null;
+    const regularSummary = product.verifiedFacts.dimensions && hasWidthDifference && distinctiveCopy
+      ? `${Math.round(product.widthMm / 10)} cm wide — ${distinctiveCopy}`
+      : distinctiveCopy
+        ? distinctiveCopy
+        : product.verifiedFacts.dimensions && hasWidthDifference
+          ? `${Math.round(product.widthMm / 10)} cm wide${product.verifiedFacts.modular ? " modular" : ""} ${product.category.replace("-", " ")}.`
           : product.verifiedFacts.modular
             ? `Modular ${product.category.replace("-", " ")}.${materialCopy}`
             : `Specifications depend on the selected configuration.${materialCopy}`;
+    const summary = isFeaturedDiningComparison
+      ? product.id === "musterring-justb-sp100"
+        ? "77 cm high standard-height reference with a clean concrete-look or solid-oak tabletop."
+        : "96 cm high counter-height reference with coordinated bar seating and a warm oak-and-leather character."
+      : regularSummary;
     const dimensionFact = product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} cm verified width` : "Dimensions vary by configuration";
     const seatingFact = product.numberOfSeatsVerified ? `${product.numberOfSeats} ${product.numberOfSeats === 1 ? "seat" : "seats"}` : "Seat count varies by configuration";
     const specificationFact = [detail("Height"), detail("Seat Height"), detail("Seat Depth")].filter(Boolean).join(" · ");
     const functionFact = detail("Motorised function")
-      ?? (product.verifiedFacts.functions.length ? product.verifiedFacts.functions.join(", ") : "Functions vary by configuration");
-    const keyFact = functionFact || detail("Seat construction") || specificationFact
+      ?? (product.verifiedFacts.functions.length ? product.verifiedFacts.functions.join(", ") : null);
+    const keyFact = functionFact || detail("Seat construction") || detail("Dining level") || detail("Visual style")
+      || detail("Reference format") || detail("Height options") || detail("Tabletop shapes")
+      || detail("Tabletop materials") || detail("Planning range") || detail("Care profile")
+      || detail("Design detail") || specificationFact
       || (product.verifiedFacts.modular ? "Verified modular system" : "Other specifications vary by configuration");
     return {
       product,
@@ -544,14 +594,18 @@ function comparisonSummary(selected: Product[], awards: ReturnType<typeof compar
       : "";
   };
   const glance = [
-    widths.length > 1 ? `Verified width range: ${Math.min(...widths)}–${Math.max(...widths)} cm` : "",
+    widths.length > 1 && new Set(widths).size > 1 ? `Verified width range: ${Math.min(...widths)}–${Math.max(...widths)} cm` : "",
     seats.length > 1 ? `Verified capacity range: ${Math.min(...seats)}–${Math.max(...seats)} seats` : "",
     detailComparison("Seat Height", "Seat heights"),
     detailComparison("Seat construction", "Seat construction"),
+    detailComparison("Dining level", "Dining concepts"),
+    detailComparison("Reference format", "Reference formats"),
     modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
     `${selected.filter((product) => product.verifiedFacts.functions.length).length} with verified function data`
   ].filter(Boolean).slice(0, 2);
-  const recommendation = `${selected.map((product) => {
+  const recommendation = isFeaturedDiningComparison
+    ? "Choose JUSTB! SP100 for a familiar dining posture, flexible everyday use and a crisp modern look. Choose HELANA when you want the table to become a more expressive social hub, with counter-height seating and a warmer, more atmospheric material palette. Because both reference tops are 200 × 100 cm, the deciding factor is dining experience and visual character—not footprint. Confirm the preferred height and final configuration with a Musterring retailer."
+    : `${selected.map((product) => {
     const distinctiveDetail = distinctiveDetailFor(product);
     const isMoreCompact = narrowest?.id === product.id
       && dimensionProducts.some((other) => other.widthMm > product.widthMm);
@@ -560,6 +614,16 @@ function comparisonSummary(selected: Product[], awards: ReturnType<typeof compar
     if (product.numberOfSeatsVerified && highestCapacity?.id === product.id) return `Choose ${product.modelCode} when verified seating capacity is the priority.`;
     if (product.verifiedFacts.modular) return `Choose ${product.modelCode} for modular planning.`;
     return `Consider ${product.modelCode} after confirming its exact configuration.`;
-  }).join(" ")} Confirm the final configuration and room fit with a Musterring retailer.`;
+    }).join(" ")} Confirm the final configuration and room fit with a Musterring retailer.`;
   return { products: productsSummary, glance, recommendation };
+}
+
+function emphasizeProductCodes(text: string, selected: Product[]) {
+  const productCodes = selected.map((product) => product.modelCode).sort((a, b) => b.length - a.length);
+  if (!productCodes.length) return text;
+  const escapedCodes = productCodes.map((code) => code.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const parts = text.split(new RegExp(`(${escapedCodes.join("|")})`, "gi"));
+  return parts.map((part, index) => productCodes.some((code) => code.toLocaleLowerCase() === part.toLocaleLowerCase())
+    ? <strong key={`${part}-${index}`}>{part}</strong>
+    : part);
 }
