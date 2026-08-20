@@ -14,6 +14,7 @@ const validBody = {
   roomType: "living-room",
   answers: {
     target: "complete-living-room",
+    "living-pieces": ["sofa", "wall-unit"],
     "seating-capacity": "3",
     "storage-purpose": "mixed-storage",
     space: "compact",
@@ -86,7 +87,7 @@ describe("POST /api/ai/stylist", () => {
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toMatchObject({
       preferences: expect.objectContaining({ roomType: "living-room", target: "complete-living-room" }),
-      ai: { mode: expect.stringMatching(/Single-stage preference/i) },
+      ai: { mode: expect.stringMatching(/Deterministic catalogue selection/i) },
       selections: expect.any(Array)
     });
     expect(styleRoomFromPreferences).toHaveBeenCalledOnce();
@@ -112,7 +113,7 @@ describe("POST /api/ai/stylist", () => {
           slotId: slot.slotId,
           productId: slot.candidates[0].id,
           reason: "Best preference match.",
-          alternatives: slot.candidates.slice(1, 6).map((candidate) => ({ productId: candidate.id, reason: "Grounded alternative." }))
+          alternatives: slot.candidates.slice(1, 3).map((candidate) => ({ productId: candidate.id, reason: "Grounded alternative." }))
         }]
       };
     });
@@ -122,6 +123,41 @@ describe("POST /api/ai/stylist", () => {
     const payload = await response.json();
     expect(payload.selections).toHaveLength(1);
     expect(payload.selections[0].alternatives.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("supports all four selected slots in a complete bedroom", async () => {
+    const body = {
+      ...validBody,
+      roomType: "bedroom",
+      answers: {
+        target: "complete-bedroom",
+        "series-pieces": ["bed", "wardrobe", "bedside-tables", "dresser"],
+        "bed-size": "180x200",
+        "wardrobe-doors": "sliding",
+        space: "medium",
+        atmosphere: "calm-neutral"
+      }
+    };
+    providerState.provider = {
+      name: "openai",
+      styleRoomFromPreferences: vi.fn(async ({ candidateFacts }: { candidateFacts: string }) => {
+        const facts = JSON.parse(candidateFacts) as { slots: Array<{ slotId: string; candidates: Array<{ id: string }> }> };
+        expect(facts.slots).toHaveLength(4);
+        return {
+          title: "Complete bedroom",
+          rationale: "Four selected pieces grounded in catalogue evidence.",
+          selections: facts.slots.map((slot) => ({
+            slotId: slot.slotId,
+            productId: slot.candidates[0].id,
+            reason: "Grounded selected piece.",
+            alternatives: slot.candidates.slice(1).map((candidate) => ({ productId: candidate.id, reason: "Grounded alternative." }))
+          }))
+        };
+      })
+    };
+    const response = await POST(requestWith(body));
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toMatchObject({ selections: expect.arrayContaining([expect.objectContaining({ slotId: "bedroom-dresser" })]) });
   });
 
   it("returns retryable errors without demo results when the provider fails", async () => {

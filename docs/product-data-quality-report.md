@@ -1,6 +1,6 @@
 # Musterring Product Data Quality Report
 
-Generated: 2026-08-20T08:40:17.940Z
+Generated: 2026-08-20T09:19:59.040Z
 
 This report audits the immutable authorised catalogue import. It does not silently rewrite source values.
 
@@ -31,3 +31,6 @@ This report audits the immutable authorised catalogue import. It does not silent
 | FREILICHT (freilicht) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |
 | HELMOND OUTDOOR (helmond-outdoor) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |
 | Target: side-table | Only 2 verified subtype candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until another official programme is structured and verified. |
+| Requirement: Wardrobe + sliding doors | Only 2 field-verified candidates | Medium | Keep this requirement in closest mode until at least 3 official products verify: productSubtypes, specifications.wardrobe.doorType. |
+| Requirement: Sofa + 4 seats | Only 0 field-verified candidates | Medium | Keep this requirement in closest mode until at least 3 official products verify: productSubtypes, specifications.seating.seatCapacityMax. |
+| Requirement: Table + extendable rectangular | Only 0 field-verified candidates | Medium | Keep this requirement in closest mode until at least 3 official products verify: productSubtypes, specifications.table.extendable, specifications.table.tabletopShape. |

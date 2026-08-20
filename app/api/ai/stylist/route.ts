@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stylistOptionsSchema } from "@/lib/ai/schemas";
 import { configuredProvider } from "@/lib/ai/providers";
-import { buildStylistCandidates, groundStylistResult, stylistCandidateFacts } from "@/lib/ai/stylist";
+import { applyStylistNarrative, buildStylistCandidates, groundStylistResult, selectDeterministicStylistResult, stylistCandidateFacts } from "@/lib/ai/stylist";
 import { normalizeStylistQuiz } from "@/lib/ai/stylist-quiz";
 import { checkRateLimit } from "@/lib/server-validation";
 import { products } from "@/lib/data";
@@ -48,8 +48,9 @@ export async function POST(request: NextRequest) {
   const preferences = normalizeStylistQuiz({ ...options.data, selectedProductIds: options.data.selectedProductIds.filter((id) => activeIds.has(id)) });
   const candidateGroups = buildStylistCandidates(preferences);
   const minimumCandidates = 1;
-  if (candidateGroups.some(({ candidates }) => candidates.length < minimumCandidates)) {
-    return NextResponse.json({ error: "The catalogue does not contain enough verified products for these choices. Try a broader space size or another product type." }, { status: 422 });
+  const emptyGroup = candidateGroups.find(({ candidates }) => candidates.length < minimumCandidates);
+  if (emptyGroup) {
+    return NextResponse.json({ error: "The catalogue does not contain a product for this requested slot.", code: "NO_CATALOGUE_MATCH", slotId: emptyGroup.slot.id }, { status: 422 });
   }
 
   const provider = configuredProvider();
@@ -58,16 +59,17 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const raw = await withTimeout(provider.styleRoomFromPreferences({
+    const deterministic = selectDeterministicStylistResult(preferences);
+    const narrative = await withTimeout(provider.styleRoomFromPreferences({
       preferences,
-      candidateFacts: stylistCandidateFacts(preferences)
+      candidateFacts: stylistCandidateFacts(preferences, deterministic)
     }), 50_000);
-    const grounded = groundStylistResult(preferences, raw);
+    const grounded = groundStylistResult(preferences, applyStylistNarrative(deterministic, narrative));
     return NextResponse.json({
       ...grounded,
       roomType: preferences.roomType,
       style: preferences.style,
-      ai: { provider: "openai", mode: "Single-stage preference-based catalogue grounding" }
+      ai: { provider: "openai", mode: "Deterministic catalogue selection with AI-authored rationale" }
     });
   } catch (error) {
     console.warn("Style Finder request failed.", providerErrorDetails(error));
