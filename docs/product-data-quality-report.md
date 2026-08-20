@@ -1,6 +1,10 @@
 # Musterring Product Data Quality Report
 
+<<<<<<< HEAD
 Generated: 2026-08-20T09:39:50.534Z
+=======
+Generated: 2026-08-20T09:19:59.040Z
+>>>>>>> de0a230cda0d2199a4a92e509cf0b44fd3d0a1a6
 
 This report audits the immutable authorised catalogue import. It does not silently rewrite source values.
 
@@ -30,6 +34,7 @@ This report audits the immutable authorised catalogue import. It does not silent
 | NICA (nica) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
 | FREILICHT (freilicht) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |
 | HELMOND OUTDOOR (helmond-outdoor) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |
+<<<<<<< HEAD
 | Target: sofa | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
 | Target: armchair | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
 | Target: coffee-table | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
@@ -43,3 +48,9 @@ This report audits the immutable authorised catalogue import. It does not silent
 | Target: dining-table | Only 2 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
 | Target: dining-chair | Only 1 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
 | Target: dining-bench | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+=======
+| Target: side-table | Only 2 verified subtype candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until another official programme is structured and verified. |
+| Requirement: Wardrobe + sliding doors | Only 2 field-verified candidates | Medium | Keep this requirement in closest mode until at least 3 official products verify: productSubtypes, specifications.wardrobe.doorType. |
+| Requirement: Sofa + 4 seats | Only 0 field-verified candidates | Medium | Keep this requirement in closest mode until at least 3 official products verify: productSubtypes, specifications.seating.seatCapacityMax. |
+| Requirement: Table + extendable rectangular | Only 0 field-verified candidates | Medium | Keep this requirement in closest mode until at least 3 official products verify: productSubtypes, specifications.table.extendable, specifications.table.tabletopShape. |
+>>>>>>> de0a230cda0d2199a4a92e509cf0b44fd3d0a1a6

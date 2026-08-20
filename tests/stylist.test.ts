@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
 import { stylistOptionsSchema, stylistProviderResultSchema, stylistProviderResultSchemaForCandidates, type StylistProviderResult } from "@/lib/ai/schemas";
-import { buildStylistCandidates, groundStylistResult, resolveStylistSlots, stylistCandidateFacts, stylistPaletteColors, stylistPriorityLabels } from "@/lib/ai/stylist";
+import { buildStylistCandidates, groundStylistResult, resolveStylistSlots, selectDeterministicStylistResult, stylistCandidateFacts, stylistPaletteColors, stylistPriorityLabels } from "@/lib/ai/stylist";
 import { normalizeStylistQuiz, stylistQuestionsForAnswers, stylistQuizByRoom, validateStylistQuizInput } from "@/lib/ai/stylist-quiz";
 import type { StylistPreferences, StylistQuizInput, StylistRoomType, StylistStyle, StylistTarget } from "@/lib/types";
 
@@ -22,8 +22,19 @@ const completeTargets: Record<StylistRoomType, StylistTarget> = {
 };
 
 function quizInput(roomType: StylistRoomType = "living-room", target: StylistTarget = completeTargets[roomType]): StylistQuizInput {
-  const answers = Object.fromEntries(stylistQuestionsForAnswers(roomType, { target }).map((question) => [question.id, question.options[0].id]));
-  answers.target = target;
+  const answers: Record<string, string | string[]> = { target };
+  const completePieces: Record<string, string[]> = {
+    "living-pieces": ["sofa", "wall-unit"],
+    "series-pieces": ["bed", "wardrobe", "bedside-tables", "dresser"],
+    "dining-pieces": ["dining-table", "dining-chairs", "dining-bench", "dining-sideboard"]
+  };
+  for (let pass = 0; pass < 4; pass += 1) {
+    for (const question of stylistQuestionsForAnswers(roomType, answers)) {
+      if (answers[question.id] !== undefined) continue;
+      answers[question.id] = completePieces[question.id]
+        ?? (question.minSelections ? question.options.slice(0, question.minSelections).map((choice) => choice.id) : question.options[0].id);
+    }
+  }
   return { roomType, answers, notes: {}, selectedProductIds: [], maxWidthMm: null, maxDepthMm: null };
 }
 
@@ -41,7 +52,7 @@ function providerResult(input: StylistPreferences): StylistProviderResult {
     slotId: slot.id,
     productId: candidates[0].id,
     reason: `Selected from the supplied ${slot.label} candidates.`,
-    alternatives: candidates.slice(1, buildStylistCandidates(input).length > 1 ? 3 : 6).map((candidate) => ({ productId: candidate.id, reason: "Grounded catalogue alternative." }))
+    alternatives: candidates.slice(1, 3).map((candidate) => ({ productId: candidate.id, reason: "Grounded catalogue alternative." }))
   }));
   return stylistProviderResultSchema.parse({
     title: "Grounded catalogue composition",
@@ -128,6 +139,23 @@ describe("Style Finder grounding", () => {
     expect(resolveStylistSlots(input).map((slot) => slot.id)).toEqual(["bedroom-bed", "bedroom-dresser"]);
   });
 
+  it("creates all four complete-bedroom slots in the chosen order", () => {
+    const input = withPreferences({ roomType: "bedroom", target: "complete-bedroom", answers: { "series-pieces": ["bed", "wardrobe", "bedside-tables", "dresser"] } });
+    expect(resolveStylistSlots(input).map((slot) => slot.id)).toEqual(["bedroom-bed", "bedroom-wardrobe", "bedroom-bedside", "bedroom-dresser"]);
+  });
+
+  it("selects the same product IDs deterministically for the same catalogue and input", () => {
+    const input = withPreferences({ roomType: "dining-room" });
+    expect(selectDeterministicStylistResult(input)).toEqual(selectDeterministicStylistResult(input));
+  });
+
+  it("uses requested dining capacity as chair quantity instead of chair capacity", () => {
+    const input = withPreferences({ roomType: "dining-room", target: "dining-chairs", answers: { "table-capacity": "6-8" } });
+    const [group] = buildStylistCandidates(input);
+    expect(group.candidates.every((candidate) => candidate.recommendedQuantity === 8)).toBe(true);
+    expect(group.candidates.every((candidate) => !candidate.unmetPreferences.some((message) => /capacity is below/i.test(message)))).toBe(true);
+  });
+
   it("exposes the exact-capability gate and closest-match contract", () => {
     const input = withPreferences({ roomType: "bedroom", target: "wardrobe" });
     const [group] = buildStylistCandidates(input);
@@ -195,8 +223,8 @@ describe("Style Finder grounding", () => {
     expect(stylistOptionsSchema.safeParse(hallway).success).toBe(true);
 
     const bedroom = quizInput("bedroom", "bed");
-    bedroom.answers["additional-storage"] = ["under-bed", "wardrobe", "dresser"];
-    expect(stylistOptionsSchema.safeParse(bedroom).success).toBe(true);
+    bedroom.answers["additional-storage"] = ["under-bed", "no"];
+    expect(stylistOptionsSchema.safeParse(bedroom).success).toBe(false);
 
     const outdoor = quizInput("outdoor");
     outdoor.answers["main-use"] = ["relaxing", "dining", "entertaining"];
@@ -219,6 +247,13 @@ describe("Style Finder grounding", () => {
     expect(validateStylistQuizInput(wardrobe)).toBe(true);
     wardrobe.answers["bed-size"] = "180x200";
     expect(validateStylistQuizInput(wardrobe)).toBe(false);
+  });
+
+  it("shows conditional complete-room questions only for selected pieces", () => {
+    expect(stylistQuestionsForAnswers("living-room", { target: "complete-living-room", "living-pieces": ["coffee-table", "side-table"] }).map((question) => question.id)).not.toContain("seating-capacity");
+    expect(stylistQuestionsForAnswers("living-room", { target: "complete-living-room", "living-pieces": ["sofa", "wall-unit"] }).map((question) => question.id)).toEqual(["target", "living-pieces", "seating-capacity", "storage-purpose", "space", "style-colours"]);
+    expect(stylistQuestionsForAnswers("bedroom", { target: "complete-bedroom", "series-pieces": ["wardrobe", "dresser"] }).map((question) => question.id)).toEqual(["target", "series-pieces", "wardrobe-doors", "space", "atmosphere"]);
+    expect(stylistQuestionsForAnswers("dining-room", { target: "complete-dining-room", "dining-pieces": ["dining-chairs", "dining-sideboard"] }).map((question) => question.id)).toEqual(["target", "dining-pieces", "table-capacity", "space", "style-colours"]);
   });
 
   it("keeps every product-specific flow concise", () => {
@@ -260,10 +295,38 @@ describe("Style Finder grounding", () => {
     const input = withPreferences({ style: "minimalist-scandinavian" });
     const result = groundStylistResult(input, providerResult(input));
     const ids = new Set(buildStylistCandidates(input).flatMap(({ candidates }) => candidates.map((candidate) => candidate.id)));
-    expect(result.selections).toHaveLength(3);
+    expect(result.selections).toHaveLength(resolveStylistSlots(input).length);
     expect(result.preferences).toEqual(input);
     expect(result.selections.every((selection) => ids.has(selection.product.id))).toBe(true);
     expect(result.selections.flatMap((selection) => selection.alternatives).every((alternative) => ids.has(alternative.product.id))).toBe(true);
+  });
+
+  it("never replaces an exact-capable primary with a closest candidate", () => {
+    const input = withPreferences({ target: "coffee-table", answers: { "surface-material": "no-preference" } });
+    const [group] = buildStylistCandidates(input);
+    expect(group.exactCapable).toBe(true);
+    const selected = selectDeterministicStylistResult(input).selections[0];
+    expect(group.candidates.find((candidate) => candidate.id === selected.productId)?.matchLevel).toBe("exact");
+    expect(selected.alternatives.every((alternative) => group.candidates.find((candidate) => candidate.id === alternative.productId)?.matchLevel === "exact")).toBe(true);
+  });
+
+  it("marks an unverified multi-product combination as a closest coordinated set", () => {
+    const input = withPreferences({ target: "complete-living-room", answers: { "living-pieces": ["sofa", "coffee-table"], "seating-capacity": "1-2" } });
+    const result = groundStylistResult(input, selectDeterministicStylistResult(input));
+    expect(result.recommendationMode).toBe("set");
+    expect(result.matchLevel).toBe("closest");
+    expect(result.unmetPreferences.some((message) => /compatibility/i.test(message))).toBe(true);
+  });
+
+  it("prioritises a verified compatible combination over a higher isolated slot score", () => {
+    const input = normalizeStylistQuiz({
+      roomType: "dining-room",
+      answers: { target: "complete-dining-room", "dining-pieces": ["dining-table", "dining-chairs"], "table-capacity": "2-4", "table-format": "fixed-rectangular", space: "medium", "style-colours": "not-sure" },
+      notes: {}, selectedProductIds: [], maxWidthMm: null, maxDepthMm: null
+    });
+    const result = groundStylistResult(input, selectDeterministicStylistResult(input));
+    expect(result.selections.map((selection) => selection.product.slug)).toEqual(["justb-sp100", "justb-sp500"]);
+    expect(result.unmetPreferences.some((message) => /compatibility/i.test(message))).toBe(false);
   });
 
   it("rejects an AI-invented product ID", () => {

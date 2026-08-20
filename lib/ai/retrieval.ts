@@ -171,8 +171,14 @@ function structuredScore(product: Product, intent: SearchIntent) {
   return { score, reasons };
 }
 
-export async function hybridCatalogueSearch(intent: SearchIntent, semantic: SemanticRetrievalProvider = new LocalSemanticRetrievalProvider(), exclusions: SearchExclusions = noSearchExclusions): Promise<GroundedSearch> {
+export async function hybridCatalogueSearch(
+  intent: SearchIntent,
+  semantic: SemanticRetrievalProvider = new LocalSemanticRetrievalProvider(),
+  exclusions: SearchExclusions = noSearchExclusions,
+  advisorProductIds: string[] = []
+): Promise<GroundedSearch> {
   const active = products.filter((product) => product.active);
+  const advisorOrder = new Map([...new Set(advisorProductIds)].map((id, index) => [id, index]));
   const categoryProducts = active.filter((product) => !intent.category || productHasCategory(product, intent.category));
   const categoryAvailable = categoryProducts.length > 0;
   const unverifiedRequirements = intent.layoutShapes?.filter((shape) =>
@@ -185,7 +191,12 @@ export async function hybridCatalogueSearch(intent: SearchIntent, semantic: Sema
     const exactCode = code === product.modelCode;
     return {
       product,
-      score: structured.score + (semanticScores.get(product.id) ?? 0) + (exactCode ? 200 : 0),
+      // Ask Musterring sees the complete validated catalogue. Its grounded
+      // product selection is therefore used as a ranking signal here too,
+      // while the deterministic checks below still decide whether a result
+      // is exact, alternative, excluded or unverified.
+      score: structured.score + (semanticScores.get(product.id) ?? 0) + (exactCode ? 200 : 0) +
+        (advisorOrder.has(product.id) ? 150 - Math.min(advisorOrder.get(product.id) ?? 0, 12) * 5 : 0),
       reasons: exactCode ? [`exact product code ${product.modelCode}`, ...verifiedMatchReasons(product, intent)] : verifiedMatchReasons(product, intent)
     };
   }).sort((left, right) => right.score - left.score || left.product.modelCode.localeCompare(right.product.modelCode));

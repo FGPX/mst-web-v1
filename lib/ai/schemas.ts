@@ -163,7 +163,7 @@ export const stylistOptionsSchema = z.object({
 });
 
 export const stylistSlotIds = [
-  "living-seating", "living-table", "living-storage",
+  "living-seating", "living-armchair", "living-table", "living-side-table", "living-storage", "living-sideboard",
   "bedroom-bed", "bedroom-wardrobe", "bedroom-series", "bedroom-bedside", "bedroom-dresser",
   "dining-table", "dining-chair", "dining-bench", "dining-storage",
   "single-product", "hallway-wardrobe", "hallway-storage",
@@ -182,7 +182,7 @@ export const stylistProviderResultSchema = z.object({
     alternatives: z.array(z.object({
       productId: z.string().trim().min(1).max(180),
       reason: z.string().trim().min(1).max(260)
-    })).max(5)
+    })).max(2)
   })).min(1).max(4)
 });
 
@@ -198,9 +198,7 @@ export function stylistProviderResultSchemaForCandidates(constraints: Array<{
   const variants = constraints.map((constraint) => {
     const candidateIdSchema = z.enum(constraint.candidateIds as [string, ...string[]]);
     const availableAlternatives = Math.max(0, constraint.candidateIds.length - 1);
-    const alternativeLimits = constraints.length === 1
-      ? { min: Math.min(2, availableAlternatives), max: Math.min(5, availableAlternatives) }
-      : { min: Math.min(1, availableAlternatives), max: Math.min(2, availableAlternatives) };
+    const alternativeLimits = { min: Math.min(constraints.length === 1 ? 2 : 1, availableAlternatives), max: Math.min(2, availableAlternatives) };
     return z.object({
       slotId: z.literal(constraint.slotId),
       productId: candidateIdSchema,

@@ -146,7 +146,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
           </div>
         </div>
       </section>
-      <section className="product-related-section"><div className="product-detail-container"><p className="eyebrow">Products to consider</p><h2>Complete the room</h2><div className="grid grid-3">{related.map(({ product: item, reasons }) => <ProductCard key={item.id} product={item} explanation={`Recommended because: ${reasons.join("; ")}.`} />)}</div></div></section>
+      <section className="product-related-section"><div className="product-detail-container"><p className="eyebrow">Products to consider</p><h2>Complete the room</h2><div className="grid grid-3">{related.map(({ product: item, reasons }) => <ProductCard key={item.id} product={item} explanation={`Recommended because: ${reasons.join("; ")}.`} showCompare={false} />)}</div></div></section>
     </div>
   );
 }

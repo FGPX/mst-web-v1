@@ -128,6 +128,8 @@ export type DiningChairSpecifications = {
 export type StorageSpecifications = {
   storageSubtype?: "wall-unit" | "sideboard" | "media-unit" | "display-cabinet" | "bedside-table" | "dresser" | null;
   purposes?: Array<"media" | "display" | "closed-storage">;
+  availableUnitQuantities?: number[];
+  sizeBand?: "compact" | "medium" | "wide" | "tall" | null;
   storageType: string[]; doors?: number | null; drawers?: number | null; shelves?: number | null; compartments?: number | null;
   wallMounted: boolean; floorStanding: boolean; mountingType: string[]; mediaCompatible: boolean; cableManagement: boolean;
   lightingAvailable: boolean; qiChargingAvailable: boolean; internalLayout: string[]; maximumShelfLoadKg?: number | null;

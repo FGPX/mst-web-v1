@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ChevronDown, Download, Eye, FileText, MapPin, Star } from "lucide-react";
+import { CheckCircle2, ChevronDown, Download, Eye, FileText, MapPin, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Product } from "@/lib/types";
 import { storage } from "@/lib/persistence";
@@ -34,14 +34,18 @@ export function ProductDetailActions({ product }: { product: Product }) {
     storage.track({ name: "product_viewed", productId: product.id });
   }, [product.id]);
   const material = product.materials[0] ?? "";
+  const toggleSaved = () => {
+    const action = saved ? "remove" : "save";
+    setSaved(storage.toggleProduct(product.id).includes(product.id));
+    storage.track({ name: action === "save" ? "product_saved" : "product_removed", productId: product.id });
+  };
   return (
     <div className="product-action-panel" aria-label="Product actions">
       <div className="product-primary-actions">
-        <Link className="button primary" href={["sofa", "armchair", "sectional"].includes(product.category) ? `/configurator/${product.slug}` : "/handover"}>
-          {["sofa", "armchair", "sectional"].includes(product.category) ? "Configure This Product" : "Plan with a Retailer"}
-        </Link>
-        <button className="button ghost" onClick={() => setSaved(storage.toggleProduct(product.id).includes(product.id))}>
-          <Star size={17} /> {saved ? "Saved to Project" : "Save to Project"}
+        <Link className="button primary" href="/handover">Plan with a Retailer</Link>
+        <button className={`button product-save-action${saved ? " is-saved" : ""}`} type="button" aria-pressed={saved} onClick={toggleSaved}>
+          {saved ? <CheckCircle2 aria-hidden="true" size={19} /> : <Star aria-hidden="true" size={18} />}
+          <span aria-live="polite">{saved ? "Saved to My Project" : "Save to My Project"}</span>
         </button>
         <AlternativeFinderButton productId={product.id} />
       </div>

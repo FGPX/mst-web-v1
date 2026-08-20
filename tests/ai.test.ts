@@ -6,8 +6,9 @@ import { comparisonSummaryInput, deterministicComparisonSummary } from "@/lib/ai
 import { groundProjectData } from "@/lib/ai/grounding";
 import { hybridCatalogueSearch, searchCatalogueByVisualTags } from "@/lib/ai/retrieval";
 import { validatedAIAlternativeRequirements } from "@/lib/ai/alternative-intent";
-import { parseSearchExclusions } from "@/lib/search";
+import { parseSearchExclusions, parseSearchQuery } from "@/lib/search";
 import { groundSearchIntent } from "@/lib/ai/search-intent";
+import { answerGroundedQuestion } from "@/lib/assistant";
 import {
   configurationRequirementsSchema,
   retailerProjectDataSchema,
@@ -150,6 +151,37 @@ describe("grounded hybrid retrieval", () => {
     const matches = [...result.exactMatches, ...result.closeAlternatives];
     expect(matches.length).toBeGreaterThan(0);
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
+  });
+
+  it("uses the chatbot's grounded product selection as a search ranking signal", async () => {
+    const intent = searchIntentSchema.parse({ ...baseIntent, queryText: "beige sofa", maxWidthMm: null, modular: null, smallSpaceSuitable: null });
+    const baseline = await hybridCatalogueSearch(intent);
+    const preferred = baseline.exactMatches.at(-1)?.product.id;
+    expect(preferred).toBeTruthy();
+
+    const aligned = await hybridCatalogueSearch(intent, undefined, undefined, [preferred!]);
+    expect(aligned.exactMatches[0]?.product.id).toBe(preferred);
+  });
+
+  it("returns visible recommendations for a family with children and a dog", async () => {
+    const query = "I'm looking for a sofa for a family with two children and a dog.";
+    const parsed = parseSearchQuery(query);
+    const parsedIntent = searchIntentSchema.parse({
+      ...baseIntent,
+      queryText: query,
+      category: parsed.category ?? null,
+      colorFamilies: null,
+      maxWidthMm: null,
+      modular: null,
+      functions: ["easy-care"],
+      smallSpaceSuitable: null
+    });
+    const advisor = answerGroundedQuestion(query, {
+      route: "/search", referencedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {}
+    });
+    const result = await hybridCatalogueSearch(groundSearchIntent(query, parsedIntent), undefined, parseSearchExclusions(query), advisor.productIds);
+
+    expect([...result.exactMatches, ...result.closeAlternatives].length).toBeGreaterThan(0);
   });
 
   it("never silently substitutes a wrong colour", async () => {

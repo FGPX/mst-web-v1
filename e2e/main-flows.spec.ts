@@ -10,7 +10,7 @@ function stylistResponse() {
   return {
     preferences: {
       roomType: "living-room",
-      answers: { target: "complete-living-room", "seating-capacity": "3", "storage-purpose": "mixed-storage", space: "compact", "style-colours": "light-neutral" },
+      answers: { target: "complete-living-room", "living-pieces": ["sofa", "coffee-table", "wall-unit"], "seating-capacity": "3", "storage-purpose": "mixed-storage", space: "compact", "style-colours": "light-neutral" },
       notes: {}, selectedProductIds: [], target: "complete-living-room", style: "minimalist-scandinavian", palette: "light-neutral", material: "fabric", spaceSize: "compact", maxWidthMm: null, maxDepthMm: null, priorities: ["flexible-modular", "compact-footprint"]
     },
     title: "Warm modern living set",
@@ -19,6 +19,10 @@ function stylistResponse() {
     roomType: "living-room",
     style: "modern-contemporary",
     ai: { provider: "openai", mode: "Test fixture" },
+    recommendationMode: "set",
+    matchLevel: "closest",
+    matchedPreferences: [],
+    unmetPreferences: [],
     selections: slots.map((slot) => {
       const matches = products.filter((product) => product.active && slot.categories.includes(product.category)).slice(0, 3);
       return {
@@ -29,7 +33,10 @@ function stylistResponse() {
         styleMatch: "partial",
         preferenceMatch: "partial",
         matchEvidence: ["Authorized catalogue copy supports the selected direction."],
-        alternatives: matches.slice(1).map((product) => ({ product, reason: "A grounded catalogue alternative.", styleMatch: "partial", preferenceMatch: "partial", matchEvidence: [] }))
+        matchLevel: "closest",
+        matchedPreferences: [],
+        unmetPreferences: [],
+        alternatives: matches.slice(1).map((product) => ({ product, reason: "A grounded catalogue alternative.", styleMatch: "partial", preferenceMatch: "partial", matchEvidence: [], matchLevel: "closest", matchedPreferences: [], unmetPreferences: [] }))
       };
     })
   };
@@ -39,6 +46,10 @@ async function prepareStylistQuiz(page: Page) {
   await page.getByRole("button", { name: /^Living room/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
   await page.getByRole("button", { name: /^Complete living room/ }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  await page.getByRole("button", { name: /^Sofa/ }).click();
+  await page.getByRole("button", { name: /^Coffee table/ }).click();
+  await page.getByRole("button", { name: /^Wall unit/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
   await page.getByRole("button", { name: /^3/ }).click();
   await page.getByRole("button", { name: /Continue/ }).click();
@@ -62,15 +73,11 @@ test("Search to product to save", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Saved" }).first()).toBeVisible();
 });
 
-test("Product to configure to save configuration", async ({ page }) => {
+test("Product planning continues to retailer handover", async ({ page }) => {
   await page.goto("/furniture/mr-2875");
-  await page.getByText("Configure This Product").first().click();
-  await expect(page.getByText("Configuration ID")).toBeVisible();
-  await page.getByRole("button", { name: "Save", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Saved", exact: true })).toBeVisible();
-  const configurationId = await page.locator(".stitch-config-id strong").textContent();
-  await page.goto(`/configurator/mr-2875?configuration=${encodeURIComponent(configurationId ?? "")}`);
-  await expect(page.locator(".stitch-config-id strong")).toHaveText(configurationId ?? "");
+  await page.getByRole("link", { name: "Plan with a Retailer" }).first().click();
+  await expect(page).toHaveURL(/\/handover$/);
+  await expect(page.getByRole("heading", { name: /Living Room Project/ })).toBeVisible();
 });
 
 test("Compare three products", async ({ page }) => {
@@ -320,12 +327,10 @@ test("No exact colour match is explicitly separated from alternatives", async ({
   await expect(page.getByRole("heading", { name: "Other products to consider" })).toBeVisible();
 });
 
-test("AI configuration request produces a rule-valid deterministic proposal", async ({ page }) => {
+test("Public configurator routes redirect to retailer handover", async ({ page }) => {
   await page.goto("/configurator/mr-2875");
-  await page.getByLabel("Describe your ideal configuration").fill("Build a compact four-seat sofa in beige, maximum 290 cm, with easy-care fabric and relax function.");
-  await page.getByRole("button", { name: "Build valid proposal" }).click();
-  await expect(page.locator(".ai-config-result")).toContainText("All product rules passed");
-  await expect(page.getByText(/Configuration ID CFG-/)).toBeVisible();
+  await expect(page).toHaveURL(/\/handover$/);
+  await expect(page.getByRole("heading", { name: /Living Room Project/ })).toBeVisible();
 });
 
 test("Retailer handover creates summary and retains structured data", async ({ page }) => {

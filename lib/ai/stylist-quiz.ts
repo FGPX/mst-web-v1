@@ -21,9 +21,11 @@ export type StylistQuizQuestion = {
   dimensionOption?: string;
   noteOption?: string;
   noteLabel?: string;
+  minSelections?: number;
   maxSelections?: number;
   exclusiveOptions?: string[];
   appliesToTargets?: StylistTarget[];
+  appliesWhen?: { questionId: string; includesAny: string[] };
 };
 
 const option = (id: string, label: string): StylistQuizOption => ({ id, label });
@@ -42,10 +44,11 @@ export const stylistRoomOptions: Array<{ id: StylistRoomType; label: string; tex
 export const stylistQuizByRoom: Record<StylistRoomType, StylistQuizQuestion[]> = {
   "living-room": [
     { id: "target", prompt: "What are you looking for?", options: [option("sofa", "Sofa"), option("armchair", "Armchair"), option("coffee-table", "Coffee table"), option("side-table", "Side table"), option("wall-unit", "Wall unit"), option("sideboard", "Sideboard"), option("complete-living-room", "Complete living room")] },
-    { id: "seating-capacity", prompt: "How many people should the seating accommodate?", appliesToTargets: ["sofa", "complete-living-room"], options: [option("1-2", "1–2"), option("3", "3"), option("4", "4"), option("5-plus", "5+")] },
+    { id: "living-pieces", prompt: "Which pieces should the living room include?", appliesToTargets: ["complete-living-room"], minSelections: 2, maxSelections: 4, options: [option("sofa", "Sofa"), option("armchair", "Armchair"), option("coffee-table", "Coffee table"), option("side-table", "Side table"), option("wall-unit", "Wall unit"), option("sideboard", "Sideboard")] },
+    { id: "seating-capacity", prompt: "How many people should the seating accommodate?", appliesToTargets: ["sofa", "complete-living-room"], appliesWhen: { questionId: "living-pieces", includesAny: ["sofa", "armchair"] }, options: [option("1-2", "1–2"), option("3", "3"), option("4", "4"), option("5-plus", "5+")] },
     { id: "sofa-format", prompt: "What sofa format do you prefer?", appliesToTargets: ["sofa"], options: [option("standard-sofa", "Standard sofa"), option("corner-sofa", "Corner sofa"), option("modular-sofa", "Modular sofa"), option("sofa-bed", "Sofa bed"), option("not-sure", "Not sure")] },
     { id: "armchair-function", prompt: "What kind of armchair do you want?", appliesToTargets: ["armchair"], options: [option("standard", "Standard"), option("recliner", "Recliner"), option("swivel", "Swivel"), option("electric-relax", "Electric relax"), option("no-preference", "No preference")] },
-    { id: "storage-purpose", prompt: "What should the storage furniture prioritise?", appliesToTargets: ["wall-unit", "sideboard", "complete-living-room"], options: [option("media", "Media equipment"), option("display", "Display space"), option("closed-storage", "Closed storage"), option("mixed-storage", "A balanced mix")] },
+    { id: "storage-purpose", prompt: "What should the storage furniture prioritise?", appliesToTargets: ["wall-unit", "sideboard", "complete-living-room"], appliesWhen: { questionId: "living-pieces", includesAny: ["wall-unit", "sideboard"] }, options: [option("media", "Media equipment"), option("display", "Display space"), option("closed-storage", "Closed storage"), option("mixed-storage", "A balanced mix")] },
     { id: "space", prompt: "What is the approximate available space?", help: "Dimensions are treated as maximum furniture limits, not a fit guarantee.", dimensionOption: "dimensions", options: [option("compact", "Compact"), option("medium", "Medium"), option("large", "Large"), option("dimensions", "Enter dimensions")] },
     { id: "material", prompt: "What upholstery do you prefer?", appliesToTargets: ["sofa", "armchair"], options: [option("fabric", "Fabric"), option("leather", "Leather"), option("mixed", "Mixed"), option("no-preference", "No preference")] },
     { id: "surface-material", prompt: "What main material do you prefer?", appliesToTargets: ["coffee-table", "side-table", "wall-unit", "sideboard"], options: [option("solid-wood", "Solid wood"), option("wood-look", "Wood look"), option("glass", "Glass"), option("metal", "Metal"), option("mixed", "Mixed materials"), option("no-preference", "No preference")] },
@@ -53,28 +56,31 @@ export const stylistQuizByRoom: Record<StylistRoomType, StylistQuizQuestion[]> =
   ],
   bedroom: [
     { id: "target", prompt: "What are you looking for?", options: [option("bed", "Bed"), option("wardrobe", "Wardrobe"), option("bedside-tables", "Bedside tables"), option("dresser", "Dresser"), option("bedroom-series", "Bedroom series"), option("complete-bedroom", "Complete bedroom")] },
-    { id: "bed-size", prompt: "What bed size do you need?", appliesToTargets: ["bed", "complete-bedroom"], noteOption: "other", noteLabel: "Describe the required bed size", options: [option("140x200", "140 × 200"), option("160x200", "160 × 200"), option("180x200", "180 × 200"), option("200x200", "200 × 200"), option("other", "Other")] },
+    { id: "series-pieces", prompt: "Which pieces should the bedroom include?", appliesToTargets: ["bedroom-series", "complete-bedroom"], minSelections: 2, maxSelections: 4, options: [option("bed", "Bed"), option("wardrobe", "Wardrobe"), option("bedside-tables", "Bedside tables"), option("dresser", "Dresser")] },
+    { id: "bed-size", prompt: "What bed size do you need?", appliesToTargets: ["bed", "complete-bedroom"], appliesWhen: { questionId: "series-pieces", includesAny: ["bed"] }, noteOption: "other", noteLabel: "Describe the required bed size", options: [option("140x200", "140 × 200"), option("160x200", "160 × 200"), option("180x200", "180 × 200"), option("200x200", "200 × 200"), option("other", "Other")] },
     { id: "bed-type", prompt: "What type of bed do you prefer?", appliesToTargets: ["bed"], options: [option("upholstered", "Upholstered"), option("wooden", "Wooden"), option("boxspring", "Boxspring"), option("no-preference", "No preference")] },
-    { id: "additional-storage", prompt: "Do you need additional storage?", appliesToTargets: ["bed"], maxSelections: 3, exclusiveOptions: ["no"], options: [option("under-bed", "Under-bed storage"), option("wardrobe", "Wardrobe storage"), option("dresser", "Dresser storage"), option("no", "No")] },
+    { id: "additional-storage", prompt: "Do you need additional storage?", appliesToTargets: ["bed"], options: [option("under-bed", "Under-bed storage"), option("no", "No")] },
     { id: "wardrobe-capacity", prompt: "How much wardrobe storage do you need?", appliesToTargets: ["wardrobe"], options: [option("compact-one-person", "Compact · one person"), option("standard-two-person", "Standard · two people"), option("generous", "Generous storage"), option("wall-to-wall", "Wall-to-wall storage")] },
-    { id: "wardrobe-doors", prompt: "What type of wardrobe doors do you prefer?", appliesToTargets: ["wardrobe", "complete-bedroom"], options: [option("hinged", "Hinged doors"), option("sliding", "Sliding doors"), option("folding", "Folding doors"), option("no-preference", "No preference")] },
+    { id: "wardrobe-doors", prompt: "What type of wardrobe doors do you prefer?", appliesToTargets: ["wardrobe", "complete-bedroom"], appliesWhen: { questionId: "series-pieces", includesAny: ["wardrobe"] }, options: [option("hinged", "Hinged doors"), option("sliding", "Sliding doors"), option("folding", "Folding doors"), option("no-preference", "No preference")] },
     { id: "wardrobe-interior", prompt: "What should the wardrobe interior prioritise?", appliesToTargets: ["wardrobe"], maxSelections: 3, exclusiveOptions: ["no-preference"], options: [option("hanging-space", "Hanging space"), option("shelving", "Shelving"), option("drawers", "Drawers"), option("shoe-storage", "Shoes & accessories"), option("no-preference", "No preference")] },
     { id: "bedside-quantity", prompt: "How many bedside tables do you need?", appliesToTargets: ["bedside-tables"], options: [option("one", "One"), option("two", "Two"), option("coordinated-set", "A coordinated set"), option("not-sure", "Not sure")] },
     { id: "bedside-storage", prompt: "What kind of bedside storage do you prefer?", appliesToTargets: ["bedside-tables"], options: [option("drawers", "Drawers"), option("open-shelf", "Open shelf"), option("combination", "Drawers + open shelf"), option("minimal", "Minimal surface only")] },
     { id: "dresser-size", prompt: "What dresser size works best?", appliesToTargets: ["dresser"], options: [option("compact", "Compact"), option("medium", "Medium"), option("wide", "Wide"), option("tall", "Tall chest")] },
     { id: "dresser-storage", prompt: "How should the dresser storage be organised?", appliesToTargets: ["dresser"], options: [option("mostly-drawers", "Mostly drawers"), option("drawers-doors", "Drawers + doors"), option("open-closed", "Open + closed storage"), option("no-preference", "No preference")] },
-    { id: "series-pieces", prompt: "Which pieces should the bedroom series include?", appliesToTargets: ["bedroom-series", "complete-bedroom"], maxSelections: 4, options: [option("bed", "Bed"), option("wardrobe", "Wardrobe"), option("bedside-tables", "Bedside tables"), option("dresser", "Dresser")] },
     { id: "series-priority", prompt: "What matters most for the bedroom series?", appliesToTargets: ["bedroom-series"], maxSelections: 2, options: [option("matched-design", "A perfectly matched design"), option("flexible-combination", "Flexible combination"), option("maximum-storage", "Maximum storage"), option("coordinated-finishes", "Coordinated finishes")] },
     { id: "space", prompt: "How much space is available?", dimensionOption: "dimensions", options: [option("compact", "Compact"), option("medium", "Medium"), option("large", "Spacious"), option("dimensions", "Enter dimensions")] },
     { id: "atmosphere", prompt: "What atmosphere do you want?", visual: true, options: [option("calm-neutral", "Calm & neutral"), option("warm-cosy", "Warm & cosy"), option("modern", "Modern"), option("elegant", "Elegant"), option("dark-dramatic", "Dark & dramatic")] }
   ],
   "dining-room": [
     { id: "target", prompt: "What are you looking for?", options: [option("dining-table", "Dining table"), option("dining-chairs", "Chairs"), option("dining-bench", "Bench"), option("dining-sideboard", "Sideboard"), option("complete-dining-room", "Complete dining room")] },
-    { id: "table-capacity", prompt: "How many people should it accommodate?", appliesToTargets: ["dining-table", "dining-chairs", "dining-bench", "complete-dining-room"], options: [option("2-4", "2–4"), option("4-6", "4–6"), option("6-8", "6–8"), option("8-plus", "8+")] },
-    { id: "table-format", prompt: "What table format do you prefer?", appliesToTargets: ["dining-table", "complete-dining-room"], options: [option("fixed-rectangular", "Fixed rectangular"), option("extendable-rectangular", "Extendable rectangular"), option("round", "Round"), option("oval", "Oval"), option("no-preference", "No preference")] },
+    { id: "dining-pieces", prompt: "Which pieces should the dining room include?", appliesToTargets: ["complete-dining-room"], minSelections: 2, maxSelections: 4, options: [option("dining-table", "Dining table"), option("dining-chairs", "Chairs"), option("dining-bench", "Bench"), option("dining-sideboard", "Sideboard")] },
+    { id: "table-capacity", prompt: "How many people should it accommodate?", appliesToTargets: ["dining-table", "dining-chairs", "dining-bench", "complete-dining-room"], appliesWhen: { questionId: "dining-pieces", includesAny: ["dining-table", "dining-chairs", "dining-bench"] }, options: [option("2-4", "2–4"), option("4-6", "4–6"), option("6-8", "6–8"), option("8-plus", "8+")] },
+    { id: "table-format", prompt: "What table format do you prefer?", appliesToTargets: ["dining-table", "complete-dining-room"], appliesWhen: { questionId: "dining-pieces", includesAny: ["dining-table"] }, options: [option("fixed-rectangular", "Fixed rectangular"), option("extendable-rectangular", "Extendable rectangular"), option("round", "Round"), option("oval", "Oval"), option("no-preference", "No preference")] },
     { id: "seating-priority", prompt: "What matters most for the seating?", appliesToTargets: ["dining-chairs", "dining-bench"], options: [option("comfort", "Comfort"), option("easy-care", "Easy care"), option("compact-size", "Compact footprint"), option("mixed-seating", "Flexible mixed seating"), option("no-preference", "No preference")] },
     { id: "sideboard-storage", prompt: "What storage layout do you prefer?", appliesToTargets: ["dining-sideboard"], options: [option("drawers", "Mostly drawers"), option("doors", "Mostly doors"), option("open-display", "Open display"), option("combination", "Combination")] },
-    { id: "material", prompt: "What main material do you prefer?", options: [option("solid-wood", "Solid wood"), option("wood-look", "Wood look"), option("fabric", "Upholstered fabric"), option("leather", "Leather"), option("glass", "Glass"), option("ceramic", "Ceramic"), option("mixed", "Mixed materials"), option("no-preference", "No preference")] },
+    { id: "table-material", prompt: "What table material do you prefer?", appliesToTargets: ["dining-table"], options: [option("solid-wood", "Solid wood"), option("wood-look", "Wood look"), option("glass", "Glass"), option("ceramic", "Ceramic"), option("mixed", "Mixed materials"), option("no-preference", "No preference")] },
+    { id: "seating-material", prompt: "What seating material do you prefer?", appliesToTargets: ["dining-chairs", "dining-bench"], options: [option("fabric", "Fabric"), option("leather", "Leather"), option("wood", "Wood"), option("mixed", "Mixed materials"), option("no-preference", "No preference")] },
+    { id: "sideboard-material", prompt: "What sideboard material do you prefer?", appliesToTargets: ["dining-sideboard"], options: [option("solid-wood", "Solid wood"), option("wood-look", "Wood look"), option("glass", "Glass details"), option("mixed", "Mixed materials"), option("no-preference", "No preference")] },
     { id: "space", prompt: "How much space do you have?", dimensionOption: "dimensions", options: [option("compact", "Compact"), option("medium", "Medium"), option("large", "Large"), option("dimensions", "Enter dimensions")] },
     { id: "style-colours", prompt: "What style and colours do you prefer?", visual: true, options: [option("light-neutral", "Light & neutral"), option("warm-natural", "Warm & natural"), option("dark-elegant", "Dark & elegant"), option("modern", "Modern"), option("not-sure", "Not sure")] }
   ],
@@ -147,7 +153,16 @@ export function stylistAnswerValues(answer: StylistQuizAnswer | undefined) {
 
 export function stylistQuestionsForAnswers(roomType: StylistRoomType, answers: Record<string, StylistQuizAnswer>) {
   const target = stylistAnswerValues(answers.target)[0] as StylistTarget | undefined;
-  return stylistQuizByRoom[roomType].filter((question) => !question.appliesToTargets || Boolean(target && question.appliesToTargets.includes(target)));
+  const questions = stylistQuizByRoom[roomType];
+  return questions.filter((question) => {
+    if (question.appliesToTargets && (!target || !question.appliesToTargets.includes(target))) return false;
+    if (!question.appliesWhen) return true;
+    const controller = questions.find((candidate) => candidate.id === question.appliesWhen!.questionId);
+    const controllerApplies = !controller?.appliesToTargets || Boolean(target && controller.appliesToTargets.includes(target));
+    if (!controllerApplies) return true;
+    const selected = stylistAnswerValues(answers[question.appliesWhen.questionId]);
+    return question.appliesWhen.includesAny.some((value) => selected.includes(value));
+  });
 }
 
 function firstMapped<T>(answers: Record<string, StylistQuizAnswer>, map: Record<string, T>, fallback: T) {
@@ -169,6 +184,7 @@ export function validateStylistQuizInput(input: StylistQuizInput) {
     if (!values.length || values.some((value) => !question.options.some((candidate) => candidate.id === value))) return false;
     if (new Set(values).size !== values.length) return false;
     if (question.maxSelections) {
+      if (question.minSelections && values.length < question.minSelections) return false;
       if (values.length > question.maxSelections) return false;
       if (values.length > 1 && question.exclusiveOptions?.some((value) => values.includes(value))) return false;
     } else if (Array.isArray(answer)) {
@@ -189,7 +205,13 @@ export function normalizeStylistQuiz(input: StylistQuizInput): StylistPreference
   const selectedStyle = firstMapped(aestheticAnswers, styleMap, "not-sure" as StylistStylePreference);
   const style = selectedStyle === "not-sure" && input.styleDirection ? input.styleDirection : selectedStyle;
   const palette = firstMapped(input.answers, paletteMap, "no-preference" as StylistPalette);
-  const materialValue = stylistAnswerValues(input.answers.material ?? input.answers["surface-material"])[0];
+  const materialValue = stylistAnswerValues(
+    input.answers.material
+    ?? input.answers["surface-material"]
+    ?? input.answers["table-material"]
+    ?? input.answers["seating-material"]
+    ?? input.answers["sideboard-material"]
+  )[0];
   const material: StylistMaterialPreference | null = materialValue === "fabric" || materialValue === "leather" || materialValue === "mixed" || materialValue === "no-preference"
     ? materialValue
     : materialValue === "solid-wood" || materialValue === "wood-look" ? "wood" : null;

@@ -7,10 +7,11 @@ Every target-specific flow contains at most six questions, including the target,
 | Question | Applies to | Answer options |
 | --- | --- | --- |
 | What are you looking for? | All | Sofa; Armchair; Coffee table; Side table; Wall unit; Sideboard; Complete living room |
-| How many people should the seating accommodate? | Sofa; Complete living room | 1–2; 3; 4; 5+ |
+| Which pieces should the living room include? | Complete living room | Choose 2–4: Sofa; Armchair; Coffee table; Side table; Wall unit; Sideboard |
+| How many people should the seating accommodate? | Sofa; Complete living room when Sofa/Armchair is selected | 1–2; 3; 4; 5+ |
 | What sofa format do you prefer? | Sofa | Standard sofa; Corner sofa; Modular sofa; Sofa bed; Not sure |
 | What kind of armchair do you want? | Armchair | Standard; Recliner; Swivel; Electric relax; No preference |
-| What should the storage furniture prioritise? | Wall unit; Sideboard; Complete living room | Media equipment; Display space; Closed storage; A balanced mix |
+| What should the storage furniture prioritise? | Wall unit; Sideboard; Complete living room when Wall unit/Sideboard is selected | Media equipment; Display space; Closed storage; A balanced mix |
 | What upholstery do you prefer? | Sofa; Armchair | Fabric; Leather; Mixed; No preference |
 | What main material do you prefer? | Coffee table; Side table; Wall unit; Sideboard | Solid wood; Wood look; Glass; Metal; Mixed materials; No preference |
 | What is the approximate available space? | All | Compact; Medium; Large; Enter dimensions |
@@ -21,17 +22,17 @@ Every target-specific flow contains at most six questions, including the target,
 | Question | Applies to | Answer options |
 | --- | --- | --- |
 | What are you looking for? | All | Bed; Wardrobe; Bedside tables; Dresser; Bedroom series; Complete bedroom |
-| What bed size do you need? | Bed; Complete bedroom | 140 × 200; 160 × 200; 180 × 200; 200 × 200; Other |
+| Which pieces should the bedroom include? | Bedroom series; Complete bedroom | Choose 2–4: Bed; Wardrobe; Bedside tables; Dresser |
+| What bed size do you need? | Bed; Complete bedroom when Bed is selected | 140 × 200; 160 × 200; 180 × 200; 200 × 200; Other |
 | What type of bed do you prefer? | Bed | Upholstered; Wooden; Boxspring; No preference |
-| Do you need additional storage? | Bed | Under-bed storage; Wardrobe storage; Dresser storage; No |
+| Do you need additional storage? | Bed | Under-bed storage; No |
 | How much wardrobe storage do you need? | Wardrobe | Compact · one person; Standard · two people; Generous storage; Wall-to-wall storage |
-| What type of wardrobe doors do you prefer? | Wardrobe; Complete bedroom | Hinged doors; Sliding doors; Folding doors; No preference |
+| What type of wardrobe doors do you prefer? | Wardrobe; Complete bedroom when Wardrobe is selected | Hinged doors; Sliding doors; Folding doors; No preference |
 | What should the wardrobe interior prioritise? | Wardrobe | Hanging space; Shelving; Drawers; Shoes & accessories; No preference |
 | How many bedside tables do you need? | Bedside tables | One; Two; A coordinated set; Not sure |
 | What kind of bedside storage do you prefer? | Bedside tables | Drawers; Open shelf; Drawers + open shelf; Minimal surface only |
 | What dresser size works best? | Dresser | Compact; Medium; Wide; Tall chest |
 | How should the dresser storage be organised? | Dresser | Mostly drawers; Drawers + doors; Open + closed storage; No preference |
-| Which pieces should the bedroom series include? | Bedroom series; Complete bedroom | Bed; Wardrobe; Bedside tables; Dresser |
 | What matters most for the bedroom series? | Bedroom series | A perfectly matched design; Flexible combination; Maximum storage; Coordinated finishes |
 | How much space is available? | All | Compact; Medium; Spacious; Enter dimensions |
 | What atmosphere do you want? | All | Calm & neutral; Warm & cosy; Modern; Elegant; Dark & dramatic |
@@ -41,11 +42,14 @@ Every target-specific flow contains at most six questions, including the target,
 | Question | Applies to | Answer options |
 | --- | --- | --- |
 | What are you looking for? | All | Dining table; Chairs; Bench; Sideboard; Complete dining room |
-| How many people should it accommodate? | Table; Chairs; Bench; Complete dining room | 2–4; 4–6; 6–8; 8+ |
-| What table format do you prefer? | Table; Complete dining room | Fixed rectangular; Extendable rectangular; Round; Oval; No preference |
+| Which pieces should the dining room include? | Complete dining room | Choose 2–4: Dining table; Chairs; Bench; Sideboard |
+| How many people should it accommodate? | Table; Chairs; Bench; Complete dining room when seating/table is selected | 2–4; 4–6; 6–8; 8+ |
+| What table format do you prefer? | Table; Complete dining room when Table is selected | Fixed rectangular; Extendable rectangular; Round; Oval; No preference |
 | What matters most for the seating? | Chairs; Bench | Comfort; Easy care; Compact footprint; Flexible mixed seating; No preference |
 | What storage layout do you prefer? | Sideboard | Mostly drawers; Mostly doors; Open display; Combination |
-| What main material do you prefer? | All | Solid wood; Wood look; Upholstered fabric; Leather; Glass; Ceramic; Mixed materials; No preference |
+| What table material do you prefer? | Dining table | Solid wood; Wood look; Glass; Ceramic; Mixed materials; No preference |
+| What seating material do you prefer? | Chairs; Bench | Fabric; Leather; Wood; Mixed materials; No preference |
+| What sideboard material do you prefer? | Sideboard | Solid wood; Wood look; Glass details; Mixed materials; No preference |
 | How much space do you have? | All | Compact; Medium; Large; Enter dimensions |
 | What style and colours do you prefer? | All | Light & neutral; Warm & natural; Dark & elegant; Modern; Not sure |
 
@@ -151,6 +155,10 @@ Every target-specific flow contains at most six questions, including the target,
 
 The current `Product` model already has verified flags or values for dimensions, seat height, seat depth, colours, fabric/leather material types, styles, functions, modularity, small-space suitability, comfort and easy care. It also has seat count verification, images, authorized copy and source URL.
 
-### Main data gaps in the current code
+### Matching and remaining data gaps
 
-The target-specific attributes above are mostly not structured yet. In particular, wardrobe doors/interior, bed sizes/types, storage layouts, table format/extendability, mounting type, outdoor resistance, carpet size and lamp subtype currently depend mainly on catalogue copy matching. They should become typed, verified fields before these answers are used as strict filters.
+Bedroom, Living and Dining now use typed field paths for hard requirements. A value satisfies `Exact` only when its exact field path is listed in `dataQuality.verifiedFields`; authorised text, demo values and unknown values remain available only for `Closest verified option`. The engine selects stable product IDs; AI writes only the presentation copy.
+
+Dining-chair capacity is represented as `recommendedQuantity` (the requested range's upper bound), while sofa, table and bench capacity are checked on the product. Complete-room results contain only the 2–4 selected pieces and are exact sets only when `seriesId` or verified compatibility IDs coordinate every selected product.
+
+Coverage is still limited for wardrobe interior modules, bedside unit quantities, dresser size bands, detailed storage layouts/purposes and some material combinations. These flows correctly remain closest-only until official sources populate the missing verified fields.

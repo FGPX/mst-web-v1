@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
-const providerState = vi.hoisted(() => ({ options: null as null | { allowOpenAI?: boolean } }));
+const providerState = vi.hoisted(() => ({ options: null as null | { allowOpenAI?: boolean }, advisorCalls: 0 }));
 
 vi.mock("@/lib/ai/providers", () => {
   const intentFor = (queryText: string) => ({
@@ -30,11 +30,20 @@ vi.mock("@/lib/ai/providers", () => {
       }
     },
     withDemoFallback: async (
-      operation: (provider: { parseSearchIntent(query: string): Promise<ReturnType<typeof intentFor>> }) => Promise<ReturnType<typeof intentFor>>,
+      operation: (provider: {
+        parseSearchIntent(query: string): Promise<ReturnType<typeof intentFor>>;
+        answerProductQuestion(input: { question: string }): Promise<{ productIds: string[] }>;
+      }) => Promise<unknown>,
       options: { allowOpenAI?: boolean }
     ) => {
       providerState.options = options;
-      const provider = { parseSearchIntent: (query: string) => Promise.resolve(intentFor(query)) };
+      const provider = {
+        parseSearchIntent: (query: string) => Promise.resolve(intentFor(query)),
+        answerProductQuestion: ({ question }: { question: string }) => {
+          providerState.advisorCalls += 1;
+          return Promise.resolve({ productIds: question.includes("beiges") ? ["musterring-justb-pm100"] : [] });
+        }
+      };
       return { data: await operation(provider), provider: "openai", fallback: false };
     }
   };
@@ -53,6 +62,7 @@ describe("POST /api/ai/search", () => {
 
     expect(response.status).toBe(200);
     expect(providerState.options).toEqual({ allowOpenAI: true });
+    expect(providerState.advisorCalls).toBeGreaterThan(0);
     expect(payload.ai).toMatchObject({ provider: "openai", fallback: false, mode: "Provider-backed AI" });
     expect(payload.intent).toMatchObject({ category: "sofa", colorFamilies: ["beige"] });
     expect([...payload.exactMatches, ...payload.closeAlternatives].every((match) =>

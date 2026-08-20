@@ -85,6 +85,20 @@ describe("GEO product data", () => {
     expect(table.dataQuality?.verifiedFields).toContain("seriesSpecifications.compatibleProductIds");
   });
 
+  it("measures exact coverage at target plus requirement field level", () => {
+    const scenarios = [
+      { paths: ["productSubtypes", "specifications.wardrobe.doorType"], matches: (product: typeof products[number]) => product.productSubtypes?.includes("wardrobe") && product.specifications?.wardrobe?.doorType.includes("sliding") },
+      { paths: ["productSubtypes", "specifications.bed.sleepingSizes"], matches: (product: typeof products[number]) => product.productSubtypes?.includes("bed") && product.specifications?.bed?.sleepingSizes.some((size) => size.widthMm === 1800 && size.lengthMm === 2000) },
+      { paths: ["productSubtypes", "specifications.seating.seatCapacityMax"], matches: (product: typeof products[number]) => product.productSubtypes?.includes("sofa") && (product.specifications?.seating?.seatCapacityMax ?? 0) >= 4 },
+      { paths: ["productSubtypes", "specifications.table.extendable", "specifications.table.tabletopShape"], matches: (product: typeof products[number]) => product.productSubtypes?.includes("dining-table") && product.specifications?.table?.extendable && product.specifications.table.tabletopShape.includes("rectangular") }
+    ];
+    for (const scenario of scenarios) {
+      const exact = products.filter((product) => scenario.matches(product) && scenario.paths.every((path) => product.dataQuality?.verifiedFields.includes(path)));
+      expect(exact.every((product) => scenario.paths.every((path) => product.dataQuality?.verifiedFields.includes(path)))).toBe(true);
+      expect(exact.length).toBeLessThanOrEqual(products.filter(scenario.matches).length);
+    }
+  });
+
   it("supports category-specific search intents", () => {
     const queries = [
       ["round dining table", "nica"],
