@@ -3,6 +3,7 @@ import {
   stylistStyleLabels,
   type Category,
   type Product,
+  type ProductSubtype,
   type StylistPalette,
   type StylistPreferences,
   type StylistPriority,
@@ -17,6 +18,7 @@ export type StylistSlot = {
   id: (typeof stylistSlotIds)[number];
   label: string;
   categories: Category[];
+  productSubtypes?: ProductSubtype[];
 };
 
 export type StylistCandidate = {
@@ -33,6 +35,9 @@ export type StylistCandidate = {
   styleEvidence: string[];
   preferenceEvidence: string[];
   score: number;
+  matchLevel: "exact" | "closest";
+  matchedPreferences: string[];
+  unmetPreferences: string[];
 };
 
 export const stylistBlueprints: Record<StylistRoomType, StylistSlot[]> = {
@@ -70,21 +75,21 @@ export const stylistBlueprints: Record<StylistRoomType, StylistSlot[]> = {
 };
 
 const targetSlots: Partial<Record<StylistTarget, StylistSlot>> = {
-  sofa: { id: "single-product", label: "Sofa", categories: ["sofa", "sectional"] },
-  armchair: { id: "single-product", label: "Armchair", categories: ["armchair"] },
-  "coffee-table": { id: "single-product", label: "Coffee table", categories: ["coffee-table"] },
-  "side-table": { id: "single-product", label: "Side table", categories: ["small-furniture", "coffee-table"] },
-  "wall-unit": { id: "single-product", label: "Wall unit", categories: ["storage"] },
-  sideboard: { id: "single-product", label: "Sideboard", categories: ["storage"] },
-  bed: { id: "single-product", label: "Bed", categories: ["bed"] },
-  wardrobe: { id: "single-product", label: "Wardrobe", categories: ["wardrobe"] },
-  "bedside-tables": { id: "single-product", label: "Bedside tables", categories: ["bedroom-series"] },
-  dresser: { id: "single-product", label: "Dresser", categories: ["bedroom-series"] },
+  sofa: { id: "single-product", label: "Sofa", categories: ["sofa", "sectional"], productSubtypes: ["sofa", "sectional-sofa", "recliner-sofa", "sofa-bed"] },
+  armchair: { id: "single-product", label: "Armchair", categories: ["armchair"], productSubtypes: ["armchair", "recliner-armchair", "swivel-armchair"] },
+  "coffee-table": { id: "single-product", label: "Coffee table", categories: ["coffee-table"], productSubtypes: ["coffee-table"] },
+  "side-table": { id: "single-product", label: "Side table", categories: ["small-furniture", "coffee-table"], productSubtypes: ["side-table"] },
+  "wall-unit": { id: "single-product", label: "Wall unit", categories: ["storage"], productSubtypes: ["wall-unit"] },
+  sideboard: { id: "single-product", label: "Sideboard", categories: ["storage"], productSubtypes: ["sideboard"] },
+  bed: { id: "single-product", label: "Bed", categories: ["bed"], productSubtypes: ["bed", "upholstered-bed", "boxspring-bed"] },
+  wardrobe: { id: "single-product", label: "Wardrobe", categories: ["wardrobe"], productSubtypes: ["wardrobe"] },
+  "bedside-tables": { id: "single-product", label: "Bedside tables", categories: ["bedroom-series", "wardrobe"], productSubtypes: ["bedside-table"] },
+  dresser: { id: "single-product", label: "Dresser", categories: ["bedroom-series", "wardrobe"], productSubtypes: ["dresser"] },
   "bedroom-series": { id: "single-product", label: "Bedroom series", categories: ["bedroom-series"] },
-  "dining-table": { id: "single-product", label: "Dining table", categories: ["dining-table"] },
-  "dining-chairs": { id: "single-product", label: "Dining chairs", categories: ["dining-chair"] },
-  "dining-bench": { id: "single-product", label: "Dining bench", categories: ["dining-chair"] },
-  "dining-sideboard": { id: "single-product", label: "Dining sideboard", categories: ["storage"] },
+  "dining-table": { id: "single-product", label: "Dining table", categories: ["dining-table", "dining-chair"], productSubtypes: ["dining-table"] },
+  "dining-chairs": { id: "single-product", label: "Dining chairs", categories: ["dining-chair", "dining-table"], productSubtypes: ["dining-chair", "dining-armchair"] },
+  "dining-bench": { id: "single-product", label: "Dining bench", categories: ["dining-chair", "dining-table"], productSubtypes: ["dining-bench"] },
+  "dining-sideboard": { id: "single-product", label: "Dining sideboard", categories: ["storage"], productSubtypes: ["sideboard"] },
   "vanity-unit": { id: "single-product", label: "Vanity unit", categories: ["bathroom"] },
   "washbasin-cabinet": { id: "single-product", label: "Washbasin cabinet", categories: ["bathroom"] },
   "tall-cabinet": { id: "single-product", label: "Tall cabinet", categories: ["bathroom"] },
@@ -111,7 +116,37 @@ const targetSlots: Partial<Record<StylistTarget, StylistSlot>> = {
 };
 
 export function resolveStylistSlots(preferences: StylistPreferences) {
-  const multiProductTargets = new Set<StylistTarget>(["complete-living-room", "complete-bedroom", "complete-dining-room", "complete-hallway", "complete-kitchen-concept", "several-accessories"]);
+  const dynamicCompleteTargets = new Set<StylistTarget>(["complete-living-room", "complete-bedroom", "complete-dining-room"]);
+  if (dynamicCompleteTargets.has(preferences.target)) {
+    const slotBySubtype: Partial<Record<ProductSubtype, StylistSlot>> = {
+      sofa: { id: "living-seating", label: "Sofa", categories: ["sofa", "sectional"], productSubtypes: ["sofa", "sectional-sofa", "recliner-sofa", "sofa-bed"] },
+      "coffee-table": { id: "living-table", label: "Coffee table", categories: ["coffee-table"], productSubtypes: ["coffee-table"] },
+      "wall-unit": { id: "living-storage", label: "Living storage", categories: ["storage"], productSubtypes: ["wall-unit", "sideboard", "media-unit"] },
+      bed: { id: "bedroom-bed", label: "Bed", categories: ["bed", "bedroom-series"], productSubtypes: ["bed", "upholstered-bed", "boxspring-bed"] },
+      wardrobe: { id: "bedroom-wardrobe", label: "Wardrobe", categories: ["wardrobe", "bedroom-series"], productSubtypes: ["wardrobe"] },
+      "bedside-table": { id: "bedroom-bedside", label: "Bedside table", categories: ["bedroom-series", "wardrobe"], productSubtypes: ["bedside-table"] },
+      dresser: { id: "bedroom-dresser", label: "Dresser", categories: ["bedroom-series", "wardrobe"], productSubtypes: ["dresser"] },
+      "dining-table": { id: "dining-table", label: "Dining table", categories: ["dining-table", "dining-chair"], productSubtypes: ["dining-table"] },
+      "dining-chair": { id: "dining-chair", label: "Dining chair", categories: ["dining-chair", "dining-table"], productSubtypes: ["dining-chair", "dining-armchair"] },
+      "dining-bench": { id: "dining-bench", label: "Dining bench", categories: ["dining-chair", "dining-table"], productSubtypes: ["dining-bench"] },
+      sideboard: { id: "dining-storage", label: "Dining sideboard", categories: ["storage"], productSubtypes: ["sideboard"] }
+    };
+    const selectedPieceTypes = preferences.selectedProductIds.flatMap((productId) => products.find((product) => product.id === productId)?.seriesSpecifications?.availablePieceTypes ?? []);
+    const requestedBedroomPieces = stylistAnswerValues(preferences.answers["series-pieces"] ?? []).map((value) => value === "bedside-tables" ? "bedside-table" : value) as ProductSubtype[];
+    const defaults: Record<"living-room" | "bedroom" | "dining-room", ProductSubtype[]> = {
+      "living-room": ["sofa", "coffee-table", "wall-unit"],
+      bedroom: ["bed", "wardrobe", "bedside-table", "dresser"],
+      "dining-room": ["dining-table", "dining-chair", "sideboard"]
+    };
+    const requested = preferences.roomType === "bedroom" && requestedBedroomPieces.length
+      ? requestedBedroomPieces
+      : selectedPieceTypes.length
+        ? selectedPieceTypes
+        : defaults[preferences.roomType as keyof typeof defaults] ?? [];
+    const slots = [...new Set(requested)].flatMap((subtype) => slotBySubtype[subtype] ? [slotBySubtype[subtype]!] : []);
+    if (slots.length) return slots.slice(0, 4);
+  }
+  const multiProductTargets = new Set<StylistTarget>(["complete-hallway", "complete-kitchen-concept", "several-accessories"]);
   const seriesTargets = new Set<StylistTarget>(["complete-bathroom-series", "complete-outdoor-set"]);
   if (multiProductTargets.has(preferences.target) || seriesTargets.has(preferences.target)) return stylistBlueprints[preferences.roomType];
   const slot = targetSlots[preferences.target];
@@ -177,6 +212,95 @@ function termMatches(value: string, term: string) {
   const left = normalized(value);
   const right = normalized(term);
   return Boolean(left && right && (left.includes(right) || right.includes(left)));
+}
+
+function hasVerifiedField(product: Product, path: string) {
+  return product.dataQuality?.verifiedFields.includes(path) === true;
+}
+
+function answerValue(preferences: StylistPreferences, id: string) {
+  const value = preferences.answers[id];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function requestedMinimumCapacity(preferences: StylistPreferences) {
+  const value = answerValue(preferences, "seating-capacity") ?? answerValue(preferences, "table-capacity");
+  if (!value) return null;
+  if (value === "3" || value === "4") return Number(value);
+  const match = value.match(/^(\d+)/);
+  return match ? Number(match[1]) : null;
+}
+
+function hardPreferenceAssessment(product: Product, preferences: StylistPreferences, slot: StylistSlot) {
+  const matched: string[] = [];
+  const unmet: string[] = [];
+  const subtypes = product.productSubtypes ?? [];
+  if (slot.productSubtypes?.length) {
+    if (!slot.productSubtypes.some((subtype) => subtypes.includes(subtype))) unmet.push(`required subtype ${slot.productSubtypes.join("/")} is unavailable`);
+    else if (!hasVerifiedField(product, "productSubtypes")) unmet.push("product subtype is not verified");
+    else matched.push(`verified subtype ${subtypes.filter((subtype) => slot.productSubtypes!.includes(subtype)).join(", ")}`);
+  }
+  if (preferences.spaceSize === "known-dimensions" && preferences.maxWidthMm && preferences.maxDepthMm) {
+    const verifiedConfigurations = (product.configurations ?? []).filter((configuration) => configuration.dimensions && configuration.dataQuality.verifiedFields.includes("dimensions"));
+    const fits = verifiedConfigurations.some((configuration) => configuration.dimensions!.widthMm <= preferences.maxWidthMm! && configuration.dimensions!.depthMm <= preferences.maxDepthMm!)
+      || (hasVerifiedField(product, "dimensions") && product.widthMm <= preferences.maxWidthMm && product.depthMm <= preferences.maxDepthMm);
+    if (fits) matched.push("verified configuration dimensions fit the requested maximum");
+    else unmet.push(verifiedConfigurations.length || hasVerifiedField(product, "dimensions") ? "no verified configuration fits the requested dimensions" : "configuration dimensions are not verified");
+  }
+  const bedSize = answerValue(preferences, "bed-size")?.match(/^(\d+)x(\d+)$/);
+  if (bedSize && slot.productSubtypes?.some((subtype) => ["bed", "upholstered-bed", "boxspring-bed"].includes(subtype))) {
+    const widthMm = Number(bedSize[1]) * 10;
+    const lengthMm = Number(bedSize[2]) * 10;
+    const sizes = product.specifications?.bed?.sleepingSizes ?? [];
+    if (!hasVerifiedField(product, "specifications.bed.sleepingSizes")) unmet.push("supported bed sizes are not verified");
+    else if (sizes.some((size) => size.widthMm === widthMm && size.lengthMm === lengthMm)) matched.push(`verified ${bedSize[1]} × ${bedSize[2]} cm sleeping size`);
+    else unmet.push(`requested ${bedSize[1]} × ${bedSize[2]} cm sleeping size is unavailable`);
+  }
+  const minimumCapacity = requestedMinimumCapacity(preferences);
+  if (minimumCapacity) {
+    const table = product.specifications?.table;
+    const chair = product.specifications?.diningChair;
+    const seating = product.specifications?.seating;
+    const capacity = table?.capacityMax ?? chair?.seatCapacityMax ?? seating?.seatCapacityMax ?? null;
+    const capacityPath = table ? "specifications.table.capacityMax" : chair ? "specifications.diningChair.seatCapacityMax" : "specifications.seating.seatCapacityMax";
+    if (!hasVerifiedField(product, capacityPath)) unmet.push("requested minimum capacity is not verified");
+    else if (capacity !== null && capacity >= minimumCapacity) matched.push(`verified capacity for at least ${minimumCapacity}`);
+    else unmet.push(`verified capacity is below ${minimumCapacity}`);
+  }
+  const wardrobeDoor = answerValue(preferences, "wardrobe-doors");
+  if (wardrobeDoor && wardrobeDoor !== "no-preference" && product.specifications?.wardrobe) {
+    if (!hasVerifiedField(product, "specifications.wardrobe.doorType")) unmet.push("wardrobe door types are not verified");
+    else if (product.specifications.wardrobe.doorType.includes(wardrobeDoor as "hinged" | "sliding" | "folding")) matched.push(`verified ${wardrobeDoor} doors`);
+    else unmet.push(`${wardrobeDoor} doors are unavailable`);
+  }
+  const tableFormat = answerValue(preferences, "table-format");
+  if (tableFormat && tableFormat !== "no-preference" && product.specifications?.table) {
+    const wantsExtendable = tableFormat.startsWith("extendable");
+    const wantedShape = tableFormat.includes("rectangular") ? "rectangular" : tableFormat === "oval" ? "oval" : tableFormat === "round" ? "round" : null;
+    if (!hasVerifiedField(product, "specifications.table.extendable")) unmet.push("table extension capability is not verified");
+    else if (product.specifications.table.extendable !== wantsExtendable) unmet.push(wantsExtendable ? "extendable table is required" : "fixed table is required");
+    else matched.push(`verified ${wantsExtendable ? "extendable" : "fixed"} table`);
+    if (wantedShape) {
+      if (!hasVerifiedField(product, "specifications.table.tabletopShape")) unmet.push("table shape is not verified");
+      else if (product.specifications.table.tabletopShape.includes(wantedShape)) matched.push(`verified ${wantedShape} shape`);
+      else unmet.push(`${wantedShape} shape is unavailable`);
+    }
+  }
+  const armchairFunction = answerValue(preferences, "armchair-function");
+  if (armchairFunction && !["standard", "no-preference"].includes(armchairFunction) && product.specifications?.seating) {
+    const path = armchairFunction === "swivel" ? "specifications.seating.swivel" : armchairFunction === "electric-relax" ? "specifications.seating.electricRecliner" : "specifications.seating.recliner";
+    const value = armchairFunction === "swivel" ? product.specifications.seating.swivel : armchairFunction === "electric-relax" ? product.specifications.seating.electricRecliner : product.specifications.seating.recliner;
+    if (!hasVerifiedField(product, path)) unmet.push(`${armchairFunction} function is not verified`);
+    else if (value) matched.push(`verified ${armchairFunction} function`);
+    else unmet.push(`${armchairFunction} function is unavailable`);
+  }
+  const additionalStorage = stylistAnswerValues(preferences.answers["additional-storage"] ?? []);
+  if (additionalStorage.includes("under-bed") && product.specifications?.bed) {
+    if (!hasVerifiedField(product, "specifications.bed.underBedStorage")) unmet.push("under-bed storage is not verified");
+    else if (product.specifications.bed.underBedStorage) matched.push("verified under-bed storage");
+    else unmet.push("under-bed storage is unavailable");
+  }
+  return { matched, unmet, exact: unmet.length === 0 };
 }
 
 function authorizedCopy(product: Product) {
@@ -291,22 +415,40 @@ function assessCandidate(product: Product, preferences: StylistPreferences) {
 }
 
 export function buildStylistCandidates(preferences: StylistPreferences) {
-  return resolveStylistSlots(preferences).map((slot) => ({
-    slot,
-    candidates: products
-      .filter((product) => product.active && slot.categories.includes(product.category) && withinKnownDimensions(product, preferences))
-      .map((product) => ({ product, assessment: assessCandidate(product, preferences) }))
-      .sort((left, right) => right.assessment.score - left.assessment.score || left.product.modelCode.localeCompare(right.product.modelCode))
-      .slice(0, 6)
-      .map(({ product, assessment }): StylistCandidate => ({
-        id: product.id,
-        modelCode: product.modelCode,
-        name: product.name,
-        category: product.category,
-        subtitle: product.subtitle,
-        ...assessment
-      }))
-  }));
+  const slots = resolveStylistSlots(preferences);
+  const exactThreshold = slots.length > 1 ? 2 : 3;
+  return slots.map((slot) => {
+    const assessed = products
+      .filter((product) => product.active
+        && slot.categories.includes(product.category)
+        && (!slot.productSubtypes?.length || slot.productSubtypes.some((subtype) => product.productSubtypes?.includes(subtype))))
+      .map((product) => ({ product, assessment: assessCandidate(product, preferences), hard: hardPreferenceAssessment(product, preferences, slot) }));
+    const exactCandidateCount = assessed.filter((candidate) => candidate.hard.exact).length;
+    return {
+      slot,
+      exactCapable: exactCandidateCount >= exactThreshold,
+      exactCandidateCount,
+      candidates: assessed
+        .map((candidate) => ({
+          ...candidate,
+          matchLevel: candidate.hard.exact && exactCandidateCount >= exactThreshold ? "exact" as const : "closest" as const,
+          gateUnmet: candidate.hard.exact && exactCandidateCount < exactThreshold ? [`Exact-capable catalogue gate requires ${exactThreshold} verified candidates; ${exactCandidateCount} available.`] : []
+        }))
+        .sort((left, right) => Number(right.matchLevel === "exact") - Number(left.matchLevel === "exact") || right.assessment.score - left.assessment.score || left.product.modelCode.localeCompare(right.product.modelCode))
+        .slice(0, 6)
+        .map(({ product, assessment, hard, matchLevel, gateUnmet }): StylistCandidate => ({
+          id: product.id,
+          modelCode: product.modelCode,
+          name: product.name,
+          category: product.category,
+          subtitle: product.subtitle,
+          ...assessment,
+          matchLevel,
+          matchedPreferences: [...hard.matched, ...assessment.preferenceEvidence, ...assessment.styleEvidence].slice(0, 8),
+          unmetPreferences: [...hard.unmet, ...gateUnmet, ...(assessment.styleMatch === "limited" ? ["requested style lacks verified structured evidence"] : []), ...(assessment.preferenceMatch === "limited" ? ["one or more soft preferences lack verified evidence"] : [])]
+        }))
+    };
+  });
 }
 
 export function stylistCandidateFacts(preferences: StylistPreferences) {
@@ -335,10 +477,13 @@ export function stylistCandidateFacts(preferences: StylistPreferences) {
     paletteDefinition: stylistPaletteColors[preferences.palette],
     resultMode: resolveStylistSlots(preferences).length > 1 ? "coordinated multi-product set" : "one primary product or series with available alternatives",
     evidencePolicy: "Only verified metadata and explicit authorized catalogue copy may be stated as product facts.",
-    slots: buildStylistCandidates(preferences).map(({ slot, candidates }) => ({
+    slots: buildStylistCandidates(preferences).map(({ slot, candidates, exactCapable, exactCandidateCount }) => ({
       slotId: slot.id,
       slotLabel: slot.label,
       allowedCategories: slot.categories,
+      requiredProductSubtypes: slot.productSubtypes ?? [],
+      exactCapable,
+      exactCandidateCount,
       candidates: candidates.map((candidate) => ({
         id: candidate.id,
         modelCode: candidate.modelCode,
@@ -348,6 +493,9 @@ export function stylistCandidateFacts(preferences: StylistPreferences) {
         verifiedStyles: candidate.verifiedStyles,
         styleMatch: candidate.styleMatch,
         preferenceMatch: candidate.preferenceMatch,
+        matchLevel: candidate.matchLevel,
+        matchedPreferences: candidate.matchedPreferences,
+        unmetPreferences: candidate.unmetPreferences,
         evidence: [...candidate.styleEvidence, ...candidate.preferenceEvidence].slice(0, 4),
         authorizedCatalogueCopy: candidate.catalogueEvidence.join(" ").slice(0, 520),
         score: candidate.score
@@ -384,6 +532,9 @@ export function groundStylistResult(preferences: StylistPreferences, raw: Stylis
       styleMatch: assessment.styleMatch,
       preferenceMatch: assessment.preferenceMatch,
       matchEvidence: [...assessment.styleEvidence, ...assessment.preferenceEvidence],
+      matchLevel: assessment.matchLevel,
+      matchedPreferences: assessment.matchedPreferences,
+      unmetPreferences: assessment.unmetPreferences,
       alternatives: selection.alternatives.map((alternative) => {
         const alternativeAssessment = group.candidates.find((candidate) => candidate.id === alternative.productId);
         const alternativeProduct = products.find((candidate) => candidate.active && candidate.id === alternative.productId && slot.categories.includes(candidate.category));
@@ -393,7 +544,10 @@ export function groundStylistResult(preferences: StylistPreferences, raw: Stylis
           reason: alternative.reason,
           styleMatch: alternativeAssessment.styleMatch,
           preferenceMatch: alternativeAssessment.preferenceMatch,
-          matchEvidence: [...alternativeAssessment.styleEvidence, ...alternativeAssessment.preferenceEvidence]
+          matchEvidence: [...alternativeAssessment.styleEvidence, ...alternativeAssessment.preferenceEvidence],
+          matchLevel: alternativeAssessment.matchLevel,
+          matchedPreferences: alternativeAssessment.matchedPreferences,
+          unmetPreferences: alternativeAssessment.unmetPreferences
         };
       })
     };
@@ -405,5 +559,19 @@ export function groundStylistResult(preferences: StylistPreferences, raw: Stylis
       ? { level: "partial" as const, message: "These recommendations combine explicit and partial catalogue evidence for your preferences." }
       : { level: "strong" as const, message: "Every recommendation has strong catalogue evidence for your style and preferences." };
 
-  return { preferences, title: parsed.title, rationale: parsed.rationale, catalogueMatch, selections };
+  const recommendationMode = selections.length > 1 ? "set" as const : "alternatives" as const;
+  const compatibilityUnmet = recommendationMode === "set"
+    ? selections.flatMap((selection, index) => selections.slice(index + 1).flatMap((other) => {
+        const compatible = selection.product.seriesId && other.product.seriesId && (
+          selection.product.seriesId === other.product.seriesId
+          || selection.product.seriesSpecifications?.compatibleProductIds.includes(other.product.id)
+          || other.product.seriesSpecifications?.compatibleProductIds.includes(selection.product.id)
+        );
+        return compatible ? [] : [`Compatibility between ${selection.product.modelCode} and ${other.product.modelCode} is not verified.`];
+      }))
+    : [];
+  const matchedPreferences = [...new Set(selections.flatMap((selection) => selection.matchedPreferences))];
+  const unmetPreferences = [...new Set([...selections.flatMap((selection) => selection.unmetPreferences), ...compatibilityUnmet])];
+  const matchLevel = selections.every((selection) => selection.matchLevel === "exact") && !compatibilityUnmet.length ? "exact" as const : "closest" as const;
+  return { preferences, title: parsed.title, rationale: parsed.rationale, catalogueMatch, recommendationMode, matchLevel, matchedPreferences, unmetPreferences, selections };
 }

@@ -28,7 +28,8 @@ import { roomComposerUploadHref } from "@/lib/room-composer-selection";
 import { stylistStyleLabel, type Product, type StylistPreferences, type StylistQuizAnswer, type StylistQuizInput, type StylistRoomType } from "@/lib/types";
 
 type MatchLevel = "strong" | "partial" | "limited";
-type StylistAlternative = { product: Product; reason: string; styleMatch: MatchLevel; preferenceMatch: MatchLevel; matchEvidence: string[] };
+type RecommendationLevel = "exact" | "closest";
+type StylistAlternative = { product: Product; reason: string; styleMatch: MatchLevel; preferenceMatch: MatchLevel; matchEvidence: string[]; matchLevel: RecommendationLevel; matchedPreferences: string[]; unmetPreferences: string[] };
 type StylistSelection = {
   slotId: string;
   slotLabel: string;
@@ -37,6 +38,9 @@ type StylistSelection = {
   styleMatch: MatchLevel;
   preferenceMatch: MatchLevel;
   matchEvidence: string[];
+  matchLevel: RecommendationLevel;
+  matchedPreferences: string[];
+  unmetPreferences: string[];
   alternatives: StylistAlternative[];
 };
 type StylistResult = {
@@ -44,6 +48,10 @@ type StylistResult = {
   title: string;
   rationale: string;
   catalogueMatch: { level: MatchLevel; message: string };
+  recommendationMode: "alternatives" | "set";
+  matchLevel: RecommendationLevel;
+  matchedPreferences: string[];
+  unmetPreferences: string[];
   roomType: StylistRoomType;
   style: StylistPreferences["style"];
   selections: StylistSelection[];
@@ -239,8 +247,11 @@ export default function InteriorStylistClient() {
         styleMatch: alternative.styleMatch,
         preferenceMatch: alternative.preferenceMatch,
         matchEvidence: alternative.matchEvidence,
+        matchLevel: alternative.matchLevel,
+        matchedPreferences: alternative.matchedPreferences,
+        unmetPreferences: alternative.unmetPreferences,
         alternatives: [
-          { product: selection.product, reason: "Return to the previous catalogue recommendation.", styleMatch: selection.styleMatch, preferenceMatch: selection.preferenceMatch, matchEvidence: selection.matchEvidence },
+          { product: selection.product, reason: "Return to the previous catalogue recommendation.", styleMatch: selection.styleMatch, preferenceMatch: selection.preferenceMatch, matchEvidence: selection.matchEvidence, matchLevel: selection.matchLevel, matchedPreferences: selection.matchedPreferences, unmetPreferences: selection.unmetPreferences },
           ...selection.alternatives.filter((item) => item.product.id !== alternative.product.id)
         ].slice(0, limit)
       });
@@ -343,8 +354,13 @@ export default function InteriorStylistClient() {
 
     {result ? <section className="stylist-results" id="stylist-results"><div className="container">
       <header className="stylist-result-head"><div><span className="stylist-kicker"><Sparkles size={15} /> Your grounded recommendations</span><h2>{result.title}</h2><p>{result.rationale}</p><div className={`stylist-match-note is-${result.catalogueMatch.level}`}><strong>{result.catalogueMatch.level === "strong" ? "Strong catalogue evidence" : result.catalogueMatch.level === "partial" ? "Partial catalogue evidence" : "Closest catalogue match"}</strong><span>{result.catalogueMatch.message}</span></div></div><div className="stylist-result-actions"><Link className="is-primary" href={roomComposerUploadHref(result.selections.map((selection) => selection.product.id))}><Armchair size={17} /> See this set in your room</Link><button type="button" onClick={saveSet} disabled={saved}><Save size={17} /> {saved ? "Saved to My Musterring" : result.selections.length === 1 ? "Save recommendation" : "Save complete set"}</button>{saved ? <Link href="/my-musterring">View saved set <ArrowRight size={16} /></Link> : null}</div></header>
+<<<<<<< HEAD
+      <div className="stylist-analysis stylist-adaptive-results"><div><span>Area</span><p>{roomLabel(result.preferences.roomType)}</p></div><div><span>Catalogue direction</span><p>{stylistStyleLabel(result.preferences.style)}</p></div>{Object.entries(result.preferences.answers).map(([questionId, answerId]) => <div key={questionId}><span>{stylistQuizByRoom[result.preferences.roomType].find((question) => question.id === questionId)?.prompt}</span><p>{stylistAnswerLabel(result.preferences.roomType, questionId, answerId)}{result.preferences.notes[questionId] ? ` · ${result.preferences.notes[questionId]}` : ""}</p></div>)}</div>
+      <div className={`stylist-set-grid${result.selections.length === 1 ? " is-single" : ""}`}>{result.selections.map((selection, index) => <article className="stylist-product" key={selection.slotId}><div className="stylist-product-number">0{index + 1} · {selection.slotLabel}</div><Link className="stylist-product-image" href={`/furniture/${selection.product.slug}`}><Image src={productImages(selection.product.id)[0]} alt={selection.product.name} width={760} height={560} /><span>View product <ArrowRight size={15} /></span></Link><div className="stylist-product-copy"><small>{selection.product.modelCode}</small><h3>{selection.product.name}</h3><div className="stylist-product-match"><span className={`is-${selection.matchLevel === "exact" ? "strong" : "limited"}`}>{selection.matchLevel === "exact" ? "Exact-capable" : "Closest match"}</span><span className={`is-${selection.styleMatch}`}>Style: {selection.styleMatch === "limited" ? "closest" : selection.styleMatch}</span><span className={`is-${selection.preferenceMatch}`}>Preference: {selection.preferenceMatch === "limited" ? "closest" : selection.preferenceMatch}</span></div><p>{selection.reason}</p>{selection.matchedPreferences.length ? <p><strong>Matched:</strong> {selection.matchedPreferences.join(" · ")}</p> : null}{selection.unmetPreferences.length ? <p><strong>Not fully matched:</strong> {selection.unmetPreferences.join(" · ")}</p> : null}</div>{selection.alternatives.length ? <div className="stylist-alternatives"><strong>Try an alternative</strong>{selection.alternatives.map((alternative) => <button type="button" key={alternative.product.id} onClick={() => swapAlternative(selection.slotId, alternative)}><Image src={productImages(alternative.product.id)[0]} alt="" width={120} height={90} /><span><small>{alternative.product.modelCode}</small><b>{alternative.product.name}</b><em>{alternative.matchLevel === "closest" ? `Closest: ${alternative.reason}` : alternative.reason}</em></span><RefreshCw size={15} /></button>)}</div> : <div className="stylist-no-alternatives">No other active catalogue product is available in this category.</div>}</article>)}</div>
+=======
       <header className="stylist-section-heading stylist-recommendations-heading"><div><span>Selected for you</span><h3>{result.selections.length === 1 ? "Your best match" : "Your best matches"}</h3><p>Chosen first from the active catalogue against your room, style and product preferences.</p></div><strong>{result.selections.length} {result.selections.length === 1 ? "recommendation" : "recommendations"}</strong></header>
       <div className={`stylist-set-grid${result.selections.length === 1 ? " is-single" : ""}`}>{result.selections.map((selection, index) => <article className="stylist-product" key={selection.slotId}><div className="stylist-product-number">0{index + 1} · {selection.slotLabel}</div><Link className="stylist-product-image" href={`/furniture/${selection.product.slug}`}><Image src={productImages(selection.product.id)[0]} alt={selection.product.name} width={760} height={560} /><span>View product <ArrowRight size={15} /></span></Link><div className="stylist-product-copy"><small>{selection.product.modelCode}</small><h3>{selection.product.name}</h3><div className="stylist-product-match"><span className={`is-${selection.styleMatch}`}>Style: {selection.styleMatch === "limited" ? "closest" : selection.styleMatch}</span><span className={`is-${selection.preferenceMatch}`}>Preference: {selection.preferenceMatch === "limited" ? "closest" : selection.preferenceMatch}</span></div><p>{selection.reason}</p></div>{selection.alternatives.length ? <div className="stylist-alternatives"><strong>Try an alternative</strong>{selection.alternatives.map((alternative) => <button type="button" key={alternative.product.id} onClick={() => swapAlternative(selection.slotId, alternative)}><Image src={productImages(alternative.product.id)[0]} alt="" width={120} height={90} /><span><small>{alternative.product.modelCode}</small><b>{alternative.product.name}</b><em>{alternative.reason}</em></span><RefreshCw size={15} /></button>)}</div> : <div className="stylist-no-alternatives">No other active catalogue product is available in this category.</div>}</article>)}</div>
+>>>>>>> 2269db89499a95c4bb14b56eafc14bc729a8cc31
       <p className="stylist-boundary">These recommendations are for inspiration. Dimensions, exact configuration, physical fit and availability must be confirmed through the product details, Will It Fit, or a Musterring retailer.</p>
       <section className="stylist-selection-summary" aria-labelledby="stylist-selection-summary-heading">
         <header className="stylist-section-heading"><div><span>Your brief</span><h3 id="stylist-selection-summary-heading">Based on your selections</h3><p>These are the preferences used to rank your catalogue matches.</p></div><button type="button" onClick={editAnswers}><Pencil size={14} /> Edit answers</button></header>

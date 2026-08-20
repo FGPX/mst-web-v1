@@ -188,6 +188,21 @@ test("Musterring Assistant keeps the conversation after closing and reopening", 
   await expect(page.locator(".advisor-messages article.customer")).toContainText("hello");
 });
 
+test("Musterring Assistant keeps recommended product cards after navigation", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
+  await page.getByLabel("Ask Musterring about products and your project").fill("Show me a red sofa");
+  await page.getByRole("button", { name: "Send question" }).click();
+
+  const recommendedProducts = page.locator(".advisor-products a");
+  await expect(recommendedProducts.first()).toBeVisible();
+  await recommendedProducts.first().click();
+  await expect(page.getByRole("button", { name: "Open Musterring Assistant" })).toBeVisible();
+  await page.getByRole("button", { name: "Open Musterring Assistant" }).click();
+
+  await expect(page.locator(".advisor-products a").first()).toBeVisible();
+});
+
 test("Musterring Assistant starts a new chat after confirmation", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Open Musterring Assistant" }).click();

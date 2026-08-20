@@ -7,6 +7,15 @@ export type Category = (typeof catalogueCategories)[number];
 export type FactStatus = "verified" | "authorized-source" | "derived" | "demo" | "unknown";
 export type DataQualityLevel = "verified" | "mixed" | "demo";
 export type EntityLevel = "programme" | "product" | "variant" | "module" | "set";
+export const productSubtypes = [
+  "sofa", "sectional-sofa", "recliner-sofa", "sofa-bed", "armchair", "recliner-armchair", "swivel-armchair",
+  "coffee-table", "side-table", "wall-unit", "sideboard", "media-unit", "display-cabinet",
+  "bed", "upholstered-bed", "boxspring-bed", "wardrobe", "bedside-table", "dresser", "bedroom-series",
+  "dining-table", "dining-chair", "dining-armchair", "dining-bench", "bar-stool",
+  "hallway-bench", "shoe-storage", "bathroom-storage", "outdoor-seating", "outdoor-table",
+  "carpet", "lamp", "home-textile", "small-furniture"
+] as const;
+export type ProductSubtype = (typeof productSubtypes)[number];
 
 export type ProductFact<T> = {
   value: T | null;
@@ -28,6 +37,26 @@ export type DataQuality = {
 };
 
 export type Dimensions = { widthMm: number; depthMm: number; heightMm: number };
+export type ProductConfiguration = {
+  id: string;
+  name: string;
+  subtype?: ProductSubtype;
+  dimensions: Dimensions | null;
+  seatCapacityMin?: number | null;
+  seatCapacityMax?: number | null;
+  sleepingSize?: { widthMm: number; lengthMm: number } | null;
+  layoutShape?: string | null;
+  dataQuality: DataQuality;
+};
+export type SeriesSpecifications = {
+  seriesId: string;
+  availablePieceTypes: ProductSubtype[];
+  memberProductIds: string[];
+  compatibleProductIds: string[];
+  coordinatedFinishIds: string[];
+  includedProductIds: string[];
+  optionalProductIds: string[];
+};
 export type DimensionRange = {
   minWidthMm?: number | null; maxWidthMm?: number | null;
   minDepthMm?: number | null; maxDepthMm?: number | null;
@@ -46,6 +75,9 @@ export type ProductDocuments = {
 };
 
 export type SeatingSpecifications = {
+  seatingSubtype?: "standard" | "recliner" | "swivel" | "electric-relax" | "sofa-bed" | null;
+  seatCapacityMin?: number | null; seatCapacityMax?: number | null;
+  configurationIds?: string[]; upholsteryOptions?: string[];
   seatWidthMm?: number | null; seatDepthMm?: number | null; seatHeightMm?: number | null;
   backrestHeightMm?: number | null; armrestHeightMm?: number | null; armrestWidthMm?: number | null;
   comfortLevel?: string; seatFirmnessOptions: string[]; seatQualityOptions: string[];
@@ -63,6 +95,8 @@ export type BedSpecifications = {
   mattressIncluded: boolean; mattressTypes: string[]; mattressFirmnessOptions: string[];
   slattedBaseIncluded: boolean; slattedBaseCompatible: boolean; bedStorage: boolean;
   storageVolumeLitres?: number | null; motorised: boolean;
+  outerDimensionsBySleepingSize?: Array<{ sleepingSize: { widthMm: number; lengthMm: number }; dimensions: Dimensions }>;
+  underBedStorage?: boolean | null;
 };
 export type WardrobeSpecifications = {
   wardrobeType: string[]; doorType: Array<"hinged" | "sliding" | "folding" | "corner">; doorCountOptions: number[];
@@ -70,8 +104,11 @@ export type WardrobeSpecifications = {
   shelves?: number | null; drawers?: number | null; clothesRails?: number | null;
   adjustableShelves: boolean; shoeStorage: boolean; trouserRack: boolean; tieRack: boolean; clothesLift: boolean;
   mirrorOption: boolean; lightingOption: boolean; cornerConfiguration: boolean;
+  capacityBand?: "compact" | "medium" | "large" | "extra-large" | "configuration-dependent" | null;
+  recommendedUserMin?: number | null; recommendedUserMax?: number | null;
 };
 export type TableSpecifications = {
+  tableSubtype?: "coffee-table" | "side-table" | "dining-table" | null;
   tabletopShape: string[]; tabletopMaterials: string[]; tabletopThicknessMm?: number | null;
   widthOptionsMm: number[]; depthOptionsMm: number[]; diameterOptionsMm: number[]; heightMm?: number | null;
   extendable: boolean; extensionMechanism?: string | null; minLengthMm?: number | null; maxLengthMm?: number | null;
@@ -79,11 +116,16 @@ export type TableSpecifications = {
   demoEstimatedCapacity?: number | null; edgeProfiles: string[]; baseVariants: string[];
 };
 export type DiningChairSpecifications = {
+  chairSubtype?: "dining-chair" | "dining-armchair" | "dining-bench" | "bar-stool" | null;
+  seatCapacityMin?: number | null; seatCapacityMax?: number | null;
   chairType: string; seatHeightMm?: number | null; seatWidthMm?: number | null; seatDepthMm?: number | null;
   armrests: boolean; swivel: boolean; swivelDegrees?: number | null; baseType: string[]; frameMaterial: string[];
   upholsteryAvailable: boolean; maxLoadKg?: number | null; stackable: boolean;
+  comfortProfile?: string | null; easyCare?: boolean | null;
 };
 export type StorageSpecifications = {
+  storageSubtype?: "wall-unit" | "sideboard" | "media-unit" | "display-cabinet" | "bedside-table" | "dresser" | null;
+  purposes?: Array<"media" | "display" | "closed-storage">;
   storageType: string[]; doors?: number | null; drawers?: number | null; shelves?: number | null; compartments?: number | null;
   wallMounted: boolean; floorStanding: boolean; mountingType: string[]; mediaCompatible: boolean; cableManagement: boolean;
   lightingAvailable: boolean; qiChargingAvailable: boolean; internalLayout: string[]; maximumShelfLoadKg?: number | null;
@@ -227,6 +269,14 @@ export type ProjectStatus =
     dataQuality?: DataQuality;
     demoData: boolean;
 };
+export type RecommendationMode = "alternatives" | "set";
+export type RecommendationMatchLevel = "exact" | "closest";
+export type RecommendationMatchContract = {
+  recommendationMode: RecommendationMode;
+  matchLevel: RecommendationMatchLevel;
+  matchedPreferences: string[];
+  unmetPreferences: string[];
+};
 
 export type Product = {
   id: string;
@@ -248,6 +298,10 @@ export type Product = {
   gtin?: string | null;
   ean?: string | null;
   canonicalUrl?: string;
+  productSubtypes?: ProductSubtype[];
+  seriesId?: string | null;
+  seriesSpecifications?: SeriesSpecifications;
+  configurations?: ProductConfiguration[];
   tagline?: string;
   shortDescription?: string;
   productHighlights?: string[];
@@ -293,6 +347,7 @@ export type Product = {
   spaceProfile?: "compact" | "medium" | "large" | "configuration-dependent";
   smallSpaceReason?: string[];
   comfortProfile?: string;
+  easyCare?: boolean | null;
   specifications?: ProductSpecifications;
   media?: ProductMedia;
   documents?: ProductDocuments;
@@ -452,6 +507,7 @@ export type Project = {
 export type SearchFilters = {
   q?: string;
   category?: Category;
+  productSubtypes?: ProductSubtype[];
   modelCode?: string;
   colors?: string[];
   materials?: string[];

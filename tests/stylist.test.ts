@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
 import { stylistOptionsSchema, stylistProviderResultSchema, stylistProviderResultSchemaForCandidates, type StylistProviderResult } from "@/lib/ai/schemas";
-import { buildStylistCandidates, groundStylistResult, stylistBlueprints, stylistCandidateFacts, stylistPaletteColors, stylistPriorityLabels } from "@/lib/ai/stylist";
+import { buildStylistCandidates, groundStylistResult, resolveStylistSlots, stylistCandidateFacts, stylistPaletteColors, stylistPriorityLabels } from "@/lib/ai/stylist";
 import { normalizeStylistQuiz, stylistQuestionsForAnswers, stylistQuizByRoom, validateStylistQuizInput } from "@/lib/ai/stylist-quiz";
 import type { StylistPreferences, StylistQuizInput, StylistRoomType, StylistStyle, StylistTarget } from "@/lib/types";
 
@@ -51,11 +51,11 @@ function providerResult(input: StylistPreferences): StylistProviderResult {
 }
 
 describe("Style Finder grounding", () => {
-  it.each(roomTypes)("builds the configured active catalogue slots for %s", (roomType) => {
+  it.each(roomTypes)("builds active catalogue slots from the selected pieces for %s", (roomType) => {
     const input = withPreferences({ roomType });
     const groups = buildStylistCandidates(input);
-    expect(groups).toHaveLength(stylistBlueprints[roomType].length);
-    expect(groups.map(({ slot }) => slot.id)).toEqual(stylistBlueprints[roomType].map((slot) => slot.id));
+    expect(groups).toHaveLength(resolveStylistSlots(input).length);
+    expect(groups.map(({ slot }) => slot.id)).toEqual(resolveStylistSlots(input).map((slot) => slot.id));
     expect(groups.every(({ candidates }) => candidates.length >= 1)).toBe(true);
     expect(groups.every(({ slot, candidates }) => candidates.every((candidate) => slot.categories.includes(candidate.category)))).toBe(true);
   });
@@ -116,8 +116,27 @@ describe("Style Finder grounding", () => {
     })));
     const valid = providerResult(input);
     expect(schema.safeParse(valid).success).toBe(true);
-    valid.selections[0].alternatives[0].productId = groups[1].candidates[0].id;
+    const firstIds = new Set(groups[0].candidates.map((candidate) => candidate.id));
+    const foreign = groups.slice(1).flatMap(({ candidates }) => candidates).find((candidate) => !firstIds.has(candidate.id));
+    expect(foreign).toBeDefined();
+    valid.selections[0].alternatives[0].productId = foreign!.id;
     expect(schema.safeParse(valid).success).toBe(false);
+  });
+
+  it("creates complete-bedroom slots from explicitly selected piece types", () => {
+    const input = withPreferences({ roomType: "bedroom", target: "complete-bedroom", answers: { "series-pieces": ["bed", "dresser"] } });
+    expect(resolveStylistSlots(input).map((slot) => slot.id)).toEqual(["bedroom-bed", "bedroom-dresser"]);
+  });
+
+  it("exposes the exact-capability gate and closest-match contract", () => {
+    const input = withPreferences({ roomType: "bedroom", target: "wardrobe" });
+    const [group] = buildStylistCandidates(input);
+    expect(group.exactCandidateCount).toBeLessThan(3);
+    expect(group.exactCapable).toBe(false);
+    expect(group.candidates.every((candidate) => candidate.matchLevel === "closest" && candidate.unmetPreferences.length > 0)).toBe(true);
+    const grounded = groundStylistResult(input, providerResult(input));
+    expect(grounded).toMatchObject({ recommendationMode: "alternatives", matchLevel: "closest" });
+    expect(grounded.unmetPreferences.length).toBeGreaterThan(0);
   });
 
   it.each(roomTypes)("accepts a grounded structured result for every %s blueprint", (roomType) => {

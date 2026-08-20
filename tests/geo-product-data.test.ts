@@ -40,6 +40,44 @@ describe("GEO product data", () => {
     expect(lia.numberOfSeatsVerified).toBe(false);
   });
 
+  it("adds source-backed pilot bedroom facts with exact provenance paths", () => {
+    const isabelle = products.find((product) => product.slug === "mr-isabelle")!;
+    expect(isabelle.productSubtypes).toEqual(expect.arrayContaining(["wardrobe", "bedside-table", "dresser"]));
+    expect(isabelle.specifications?.wardrobe?.doorType).toEqual(["hinged", "sliding"]);
+    expect(isabelle.specifications?.wardrobe?.widthOptionsMm).toContain(4000);
+    expect(isabelle.sourceDocumentUrl).toMatch(/img\.musterring\.com/);
+    expect(isabelle.lastVerifiedAt).toBe("2026-08-20");
+    expect(isabelle.dataQuality?.verifiedFields).toEqual(expect.arrayContaining([
+      "productSubtypes",
+      "specifications.wardrobe.doorType",
+      "specifications.wardrobe.widthOptionsMm"
+    ]));
+  });
+
+  it("keeps unknown configuration dimensions null instead of treating them as false or verified", () => {
+    const delphi = products.find((product) => product.slug === "delphi")!;
+    expect(delphi.specifications?.bed?.sleepingWidthsMm).toEqual([1600, 1800]);
+    expect(delphi.configurations?.every((configuration) => configuration.dimensions === null)).toBe(true);
+    expect(delphi.configurations?.every((configuration) => configuration.dataQuality.unknownFields?.includes("dimensions"))).toBe(true);
+    expect(delphi.dataQuality?.verifiedFields).not.toContain("specifications.bed.outerDimensionsBySleepingSize");
+  });
+
+  it("identifies verified dining programmes and bench candidates", () => {
+    const chairs = ["justb-sp150", "justb-sp500", "nerina"].map((slug) => products.find((product) => product.slug === slug)!);
+    expect(chairs.every((product) => product.dataQuality?.verifiedFields.includes("specifications.diningChair.seatCapacityMax"))).toBe(true);
+    expect(chairs.find((product) => product.slug === "nerina")?.specifications?.diningChair?.swivelDegrees).toBe(360);
+    const benches = products.filter((product) => product.productSubtypes?.includes("dining-bench") && product.dataQuality?.verifiedFields.includes("productSubtypes"));
+    expect(benches.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("links only explicit compatible programmes in series specifications", () => {
+    const table = products.find((product) => product.slug === "justb-sp100")!;
+    const seating = products.find((product) => product.slug === "justb-sp500")!;
+    expect(table.seriesId).toBe(seating.seriesId);
+    expect(table.seriesSpecifications?.compatibleProductIds).toContain(seating.id);
+    expect(table.dataQuality?.verifiedFields).toContain("seriesSpecifications.compatibleProductIds");
+  });
+
   it("supports category-specific search intents", () => {
     const queries = [
       ["round dining table", "nica"],

@@ -1,0 +1,121 @@
+{
+  "verifiedAt": "2026-08-20",
+  "products": [
+    {
+      "slug": "mr-isabelle",
+      "sourceDocumentUrl": "https://img.musterring.com/f9/ed/8a/09037657ac1eb2b148b5.pdf",
+      "facts": {
+        "productSubtypes": ["wardrobe", "bedside-table", "dresser"],
+        "styleTags": ["modern"],
+        "materialTypes": ["decor surface"],
+        "doorTypes": ["hinged", "sliding"],
+        "widthOptionsMm": [500, 1000, 1500, 2000, 2500, 2800, 3000, 3300, 3500, 4000],
+        "heightOptionsMm": [2160, 2170, 2360],
+        "depthOptionsMm": [580, 670],
+        "interiorModules": ["two shelves per compartment", "one clothes rail per compartment"],
+        "capacityBand": "configuration-dependent"
+      }
+    },
+    {
+      "slug": "justb-sc200",
+      "sourceDocumentUrl": "https://www.musterring.com/en/furniture/bedroom/beds/justb-sc200",
+      "facts": {
+        "productSubtypes": ["bed", "upholstered-bed"],
+        "styleTags": ["elegant"],
+        "materialTypes": ["fabric", "upholstery"],
+        "sleepingSizes": [{ "widthMm": 1800, "lengthMm": 2000 }],
+        "outerDimensionsBySleepingSize": [{ "sleepingSize": { "widthMm": 1800, "lengthMm": 2000 }, "dimensions": { "widthMm": 1960, "depthMm": 2160, "heightMm": 900 } }],
+        "underBedStorage": true,
+        "upholsteryOptions": ["fabric"]
+      }
+    },
+    {
+      "slug": "delphi",
+      "sourceDocumentUrl": "https://img.musterring.com/34/2e/09/284d9248f4c357ff39e8/delphi_pl_mr_de_de_uvp_260601.pdf",
+      "facts": {
+        "productSubtypes": ["bed", "upholstered-bed"],
+        "colorFamilies": ["light grey", "beige", "sage", "rose", "blue", "anthracite", "taupe", "green"],
+        "materialTypes": ["fabric", "solid wood", "metal"],
+        "sleepingSizes": [{ "widthMm": 1600, "lengthMm": 2000 }, { "widthMm": 1800, "lengthMm": 2000 }],
+        "underBedStorage": true,
+        "upholsteryOptions": ["fabric"]
+      }
+    },
+    {
+      "slug": "justb-sp100",
+      "sourceDocumentUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp100",
+      "facts": {
+        "productSubtypes": ["dining-table"],
+        "styleTags": ["modern"],
+        "colorFamilies": ["natural oak", "concrete look", "black"],
+        "materialTypes": ["HPL", "solid oak", "metal"],
+        "tableShapes": ["rectangular"],
+        "tabletopMaterials": ["HPL", "solid oak"],
+        "configurationDimensions": [{ "id": "reference-200x100", "name": "Official 200 × 100 cm reference", "dimensions": { "widthMm": 2000, "depthMm": 1000, "heightMm": 770 } }],
+        "easyCare": true
+      }
+    },
+    {
+      "slug": "justb-sp150",
+      "sourceDocumentUrl": "https://img.musterring.com/a8/33/2c/fcf7de9df0f1c16f1cbb.pdf",
+      "facts": {
+        "productSubtypes": ["dining-chair", "dining-armchair", "dining-table"],
+        "colorFamilies": ["blush", "silk grey", "black", "champagne", "onyx", "aqua"],
+        "materialTypes": ["boucle", "jacquard", "solid oak", "solid walnut", "metal"],
+        "seatCapacityMin": 1,
+        "seatCapacityMax": 1,
+        "overallWidthMm": 650,
+        "seatHeightMm": 490,
+        "overallDepthMm": 660,
+        "overallHeightMm": 910,
+        "armrestHeightMm": 650,
+        "swivelDegrees": 360,
+        "upholsteryOptions": ["boucle", "jacquard"],
+        "tableShapes": ["rectangular", "elliptical", "round"],
+        "tabletopMaterials": ["lacquered MDF", "solid oak", "solid walnut"],
+        "tableWidthOptionsMm": [1800, 2000, 2200, 2400],
+        "tableDepthOptionsMm": [1000, 1100, 1150, 1200],
+        "tableDiameterOptionsMm": [1150, 1300],
+        "tableHeightMm": 760,
+        "extendable": false,
+        "configurationDimensions": [
+          { "id": "table-rect-180x100", "name": "Rectangular 180 × 100 cm", "dimensions": { "widthMm": 1800, "depthMm": 1000, "heightMm": 760 } },
+          { "id": "table-rect-200x100", "name": "Rectangular 200 × 100 cm", "dimensions": { "widthMm": 2000, "depthMm": 1000, "heightMm": 760 } },
+          { "id": "table-rect-220x100", "name": "Rectangular 220 × 100 cm", "dimensions": { "widthMm": 2200, "depthMm": 1000, "heightMm": 760 } },
+          { "id": "table-ellipse-200x110", "name": "Elliptical 200 × 110 cm", "dimensions": { "widthMm": 2000, "depthMm": 1100, "heightMm": 760 } },
+          { "id": "table-ellipse-220x115", "name": "Elliptical 220 × 115 cm", "dimensions": { "widthMm": 2200, "depthMm": 1150, "heightMm": 760 } },
+          { "id": "table-ellipse-240x120", "name": "Elliptical 240 × 120 cm", "dimensions": { "widthMm": 2400, "depthMm": 1200, "heightMm": 760 } },
+          { "id": "table-round-115", "name": "Round Ø 115 cm", "dimensions": { "widthMm": 1150, "depthMm": 1150, "heightMm": 760 } },
+          { "id": "table-round-130", "name": "Round Ø 130 cm", "dimensions": { "widthMm": 1300, "depthMm": 1300, "heightMm": 760 } }
+        ]
+      }
+    },
+    {
+      "slug": "justb-sp500",
+      "sourceDocumentUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/justb-sp500",
+      "facts": {
+        "productSubtypes": ["dining-chair", "dining-armchair", "dining-bench"],
+        "styleTags": ["modern"],
+        "materialTypes": ["fabric", "upholstery"],
+        "seatCapacityMin": 1,
+        "seatCapacityMax": 3,
+        "upholsteryOptions": ["fabric"],
+        "comfortProfile": "upholstered dining comfort"
+      }
+    },
+    {
+      "slug": "nerina",
+      "sourceDocumentUrl": "https://www.musterring.com/en/furniture/dining-room/chairs-tables/nerina",
+      "facts": {
+        "productSubtypes": ["dining-chair", "dining-armchair"],
+        "styleTags": ["timeless", "elegant"],
+        "materialTypes": ["fabric", "leather", "metal"],
+        "seatCapacityMin": 1,
+        "seatCapacityMax": 1,
+        "swivelDegrees": 360,
+        "upholsteryOptions": ["fabric", "leather"],
+        "comfortProfile": "ergonomic upholstered dining comfort"
+      }
+    }
+  ]
+}
