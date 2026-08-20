@@ -18,6 +18,7 @@ export type PreviewSceneItem = {
 export type PreviewScene = {
   backgroundId?: string;
   backgroundSrc?: string;
+  generatedVisualizationSrc?: string;
   hasLocalRoomPhoto?: boolean;
   sceneScale?: number;
   roomSize?: { widthMm?: number; lengthMm?: number };
@@ -26,9 +27,9 @@ export type PreviewScene = {
 
 export function SavedRoomScenePreview({ scene, compact = false }: { scene: PreviewScene; compact?: boolean }) {
   return <div className={`saved-room-scene-preview${compact ? " is-compact" : ""}`}>
-    {scene.backgroundSrc ? <Image className="saved-room-scene-background" src={scene.backgroundSrc} alt="Saved room background" fill sizes={compact ? "33vw" : "80vw"} /> : <div className="saved-room-scene-neutral"><span /><i /></div>}
+    {scene.generatedVisualizationSrc ? <Image className="saved-room-scene-background" src={scene.generatedVisualizationSrc} alt="Saved AI-generated room view" fill sizes={compact ? "33vw" : "80vw"} style={{ objectFit: "cover" }} unoptimized /> : scene.backgroundSrc ? <Image className="saved-room-scene-background" src={scene.backgroundSrc} alt="Saved room background" fill sizes={compact ? "33vw" : "80vw"} style={{ objectFit: "cover" }} unoptimized={scene.backgroundSrc.startsWith("data:")} /> : <div className="saved-room-scene-neutral"><span /><i /></div>}
     <div className="saved-room-scene-shade" />
-    {scene.items?.map((item) => {
+    {!scene.generatedVisualizationSrc ? scene.items?.map((item) => {
       const product = products.find((candidate) => candidate.id === item.productId);
       if (!product) return null;
       const sceneScale = scene.sceneScale ?? 1;
@@ -43,7 +44,7 @@ export function SavedRoomScenePreview({ scene, compact = false }: { scene: Previ
       return <div className="saved-room-scene-item" key={item.id} style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio, zIndex: item.zIndex ?? 2, transform: `translate(-50%, -100%) rotate(${item.rotation}deg)` }}>
         <Image src={productImage} alt={product.name} fill sizes={compact ? "20vw" : "45vw"} style={{ objectFit: isCutoutImage ? "contain" : "cover" }} />
       </div>;
-    })}
+    }) : null}
     {scene.hasLocalRoomPhoto && !scene.backgroundSrc ? <small>Local room photo is not stored; products are shown on the neutral studio.</small> : null}
   </div>;
 }

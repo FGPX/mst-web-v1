@@ -196,7 +196,7 @@ export async function hybridCatalogueSearch(
       // while the deterministic checks below still decide whether a result
       // is exact, alternative, excluded or unverified.
       score: structured.score + (semanticScores.get(product.id) ?? 0) + (exactCode ? 200 : 0) +
-        (advisorOrder.has(product.id) ? 150 - Math.min(advisorOrder.get(product.id) ?? 0, 12) * 5 : 0),
+        (advisorOrder.has(product.id) ? 1200 - Math.min(advisorOrder.get(product.id) ?? 0, 12) * 5 : 0),
       reasons: exactCode ? [`exact product code ${product.modelCode}`, ...verifiedMatchReasons(product, intent)] : verifiedMatchReasons(product, intent)
     };
   }).sort((left, right) => right.score - left.score || left.product.modelCode.localeCompare(right.product.modelCode));
@@ -237,16 +237,20 @@ export async function hybridCatalogueSearch(
   const closeAlternatives = ranked.filter(({ product }) =>
     !exactIds.has(product.id) &&
     !violatesExclusions(product, exclusions) &&
-    (!intent.category || productHasCategory(product, intent.category)) &&
-    // Preserve an explicitly requested colour whenever the catalogue has that
-    // colour in the requested category. A request such as "red sofa" must not
-    // be followed by a wall of beige and grey sofas. Wrong-colour alternatives
-    // are useful only when the requested colour is unavailable altogether.
-    (!requestedColors.length || !exactColorAvailable || requestedColors.some((color) => product.verifiedFacts.colors.includes(color))) &&
-    isRelevantAlternative(product)
+    (advisorOrder.has(product.id) || (
+      (!intent.category || productHasCategory(product, intent.category)) &&
+      // Preserve an explicitly requested colour whenever the catalogue has that
+      // colour in the requested category. A request such as "red sofa" must not
+      // be followed by a wall of beige and grey sofas. Wrong-colour alternatives
+      // are useful only when the requested colour is unavailable altogether.
+      (!requestedColors.length || !exactColorAvailable || requestedColors.some((color) => product.verifiedFacts.colors.includes(color))) &&
+      isRelevantAlternative(product)
+    ))
   ).slice(0, 6).map((match) => ({
     ...match,
-    reasons: requestedColors.length && !requestedColors.some((color) => match.product.verifiedFacts.colors.includes(color))
+    reasons: advisorOrder.has(match.product.id) && intent.category && !productHasCategory(match.product, intent.category)
+      ? [`catalogue ${match.product.category.replaceAll("-", " ")} selected for another part of the request`, ...match.reasons]
+      : requestedColors.length && !requestedColors.some((color) => match.product.verifiedFacts.colors.includes(color))
       ? [`not available in requested ${requestedColors.join(", ")}`, ...match.reasons]
       : match.reasons.length ? match.reasons : ["same requested category; other requested facts are not verified"]
   }));

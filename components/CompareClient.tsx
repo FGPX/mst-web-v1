@@ -6,7 +6,6 @@ import { ArrowRight, Bookmark, Check, Clock3, Plus, Send, Sparkles, Trash2, X } 
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { products } from "@/lib/data";
-import { dimensions } from "@/lib/format";
 import { productImages } from "@/lib/musterring-assets";
 import { storage, type SavedComparison } from "@/lib/persistence";
 import { comparisonAwards } from "@/lib/comparison";
@@ -136,7 +135,7 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
                   <p>{product.subtitle}</p>
                 </div>
                 <div className="stitch-compare-awards" aria-label={`${product.modelCode} comparison highlights`}>
-                  {(productAwards.length ? productAwards.slice(0, 2) : [product.modular ? "Modular" : "Fixed composition"]).map((award) => <span key={award}>{award}</span>)}
+                  {(productAwards.length ? productAwards.slice(0, 2) : [product.verifiedFacts.modular ? "Modular" : "Modularity not verified"]).map((award) => <span key={award}>{award}</span>)}
                 </div>
                 <div className="stitch-compare-actions">
                   <Link href="/handover">Plan with Retailer</Link>
@@ -220,39 +219,210 @@ function comparisonDate(comparison: SavedComparison) {
   return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(comparison.updatedAt));
 }
 
-function comparisonRows(selected: Product[], diffOnly: boolean) {
+export function comparisonRows(selected: Product[], diffOnly: boolean) {
+  const unknown = "Not recorded";
+  const notApplicable = "Not applicable";
+  const indicative = (value: string | null | undefined) => value ? `${value} · Indicative` : unknown;
   const dimensionValue = (product: Product, axis: "widthMm" | "depthMm" | "heightMm") => product.verifiedFacts.dimensions
     ? `${Math.round(product[axis] / 10)} cm`
-    : product.referenceConfiguration
-      ? `${Math.round(product.referenceConfiguration.dimensions[axis] / 10)} cm reference`
-      : "Configuration dependent";
+    : indicative(product[axis] ? `${Math.round(product[axis] / 10)} cm` : null);
   const rows: Array<[string, string[]]> = [
     ["Width", selected.map((product) => dimensionValue(product, "widthMm"))],
     ["Depth", selected.map((product) => dimensionValue(product, "depthMm"))],
     ["Height", selected.map((product) => verifiedComparisonValue(product, "Height") ?? dimensionValue(product, "heightMm"))],
-    ["Seat Height", selected.map((product) => verifiedComparisonValue(product, "Seat Height") ?? (product.verifiedFacts.seatHeight ? `${Math.round(product.seatHeightMm / 10)} cm` : "Configuration dependent"))],
-    ["Seat Depth", selected.map((product) => verifiedComparisonValue(product, "Seat Depth") ?? (product.verifiedFacts.seatDepth ? `${Math.round(product.seatDepthMm / 10)} cm` : "Configuration dependent"))],
-    ["Seats", selected.map((product) => product.numberOfSeatsVerified ? String(product.numberOfSeats) : "Configuration dependent")],
-    ["Modularity", selected.map((product) => product.verifiedFacts.modular ? "Modular system" : "Configuration dependent")],
-    ["Functions", selected.map((product) => product.verifiedFacts.functions.join(", ") || "Configuration dependent")],
-    ["Materials", selected.map((product) => product.verifiedFacts.materialTypes.join(", ") || product.materialTypes?.join(", ") || "Configuration dependent")],
-    ["Comfort", selected.map((product) => product.verifiedFacts.comfort ? product.comfortOptions.join(", ") : "Configuration dependent")],
-    ["Armrests", selected.map((product) => product.armrestOptions.join(", ") || "Configuration dependent")],
-    ["Feet", selected.map((product) => product.feetOptions.join(", ") || "Configuration dependent")],
-    ["Configurator", selected.map((product) => product.category === "storage" ? "Retailer planning" : "Available")],
-    ["Entity level", selected.map((product) => product.entityLevel ?? "product")],
-    ["Overall dimensions", selected.map((product) => product.verifiedFacts.dimensions ? dimensions(product.widthMm, product.depthMm, product.heightMm) : product.referenceConfiguration ? `${dimensions(product.widthMm, product.depthMm, product.heightMm)} reference` : "Configuration dependent")]
+    ["Seats", selected.map((product) => product.numberOfSeatsVerified ? String(product.numberOfSeats) : indicative(product.numberOfSeats > 0 ? String(product.numberOfSeats) : null))],
+    ["Modularity", selected.map((product) => product.verifiedFacts.modular ? "Verified modular system" : indicative(product.modular ? "Configurable/modular programme" : "Fixed configuration"))],
+    ["Functions", selected.map((product) => product.verifiedFacts.functions.join(", ") || indicative(product.functions.join(", ") || "No additional function in reference configuration"))],
+    ["Materials", selected.map((product) => product.verifiedFacts.materialTypes.join(", ") || indicative(product.materialTypes?.join(", ") || product.primaryMaterial))],
+    ["Styles", selected.map((product) => product.verifiedFacts.styles.join(", ") || indicative(product.styleTags?.join(", ") || product.styles.join(", ") || null))],
+    ["Colours", selected.map((product) => product.verifiedFacts.colors.join(", ") || indicative(product.colorFamilies?.join(", ") || product.colors.join(", ") || null))],
+    ["Easy care", selected.map((product) => product.verifiedFacts.easyCare ? "Yes" : indicative(product.easyCare == null ? null : product.easyCare ? "Yes" : "No"))],
+    ["Family friendly", selected.map((product) => indicative(product.familyFriendly == null ? null : product.familyFriendly ? "Yes" : "No"))],
+    ["Pet friendly", selected.map((product) => indicative(product.petFriendly == null ? null : product.petFriendly ? "Yes" : "No"))]
   ];
+
+  const addVerifiedRow = (name: string, values: string[]) => {
+    if (values.some((value) => value !== unknown && value !== notApplicable)) rows.push([name, values]);
+  };
+  const relevantValue = (product: Product, relevant: boolean, path: string, value: string | null | undefined) => {
+    if (!relevant) return notApplicable;
+    return isVerifiedPath(product, path) && value ? value : indicative(value);
+  };
+  const seatingRelevant = (product: Product) => Boolean(product.specifications?.seating);
+  addVerifiedRow("Seat Height", selected.map((product) => {
+    const explicit = verifiedComparisonValue(product, "Seat Height");
+    if (explicit) return explicit;
+    const verifiedValues = verifiedVariantNumbers(product, "seatHeightMm");
+    const values = verifiedValues.length
+      ? verifiedValues
+      : product.specifications?.seating?.seatHeightOptionsMm?.length
+        ? product.specifications.seating.seatHeightOptionsMm
+        : product.specifications?.seating?.seatHeightMm ? [product.specifications.seating.seatHeightMm] : [];
+    return relevantValue(product, seatingRelevant(product), "specifications.seating.seatHeightOptionsMm", formatMmRange(values));
+  }));
+  addVerifiedRow("Seat Depth", selected.map((product) => {
+    const explicit = verifiedComparisonValue(product, "Seat Depth");
+    if (explicit) return explicit;
+    const verifiedValues = verifiedVariantNumbers(product, "seatDepthMm");
+    const values = verifiedValues.length
+      ? verifiedValues
+      : product.specifications?.seating?.seatDepthOptionsMm?.length
+        ? product.specifications.seating.seatDepthOptionsMm
+        : product.specifications?.seating?.seatDepthMm ? [product.specifications.seating.seatDepthMm] : [];
+    return relevantValue(product, seatingRelevant(product), "specifications.seating.seatDepthOptionsMm", formatMmRange(values));
+  }));
+  addVerifiedRow("Ergonomic sizes", selected.map((product) => relevantValue(product, seatingRelevant(product), "specifications.seating.ergonomicSizes", product.specifications?.seating?.ergonomicSizes.join(", "))));
+  addVerifiedRow("Seat firmness", selected.map((product) => relevantValue(product, seatingRelevant(product), "specifications.seating.seatFirmnessOptions", product.specifications?.seating?.seatFirmnessOptions.join(", "))));
+  addVerifiedRow("Reclined depth", selected.map((product) => {
+    const seating = product.specifications?.seating;
+    if (!seating) return notApplicable;
+    const value = formatMmRange(verifiedVariantNumbers(product, "reclinedDepthMm"));
+    if (value) return relevantValue(product, true, "variants", value);
+    return seating.recliner ? indicative("Configuration-dependent") : notApplicable;
+  }));
+  addVerifiedRow("Recline modes", selected.map((product) => {
+    const seating = product.specifications?.seating;
+    if (!seating) return notApplicable;
+    const modes = [
+      isVerifiedPath(product, "specifications.seating.manualRecliner") && seating.manualRecliner ? "Manual" : "",
+      isVerifiedPath(product, "specifications.seating.electricRecliner") && seating.electricRecliner ? "Electric" : ""
+    ].filter(Boolean);
+    if (modes.length) return modes.join(", ");
+    return indicative(seating.recliner ? "Relax function" : "No recline function");
+  }));
+  addVerifiedRow("Adjustments", selected.map((product) => {
+    const seating = product.specifications?.seating;
+    if (!seating) return notApplicable;
+    const adjustments = [
+      isVerifiedPath(product, "specifications.seating.headrestAdjustable") && seating.headrestAdjustable ? "Headrest" : "",
+      isVerifiedPath(product, "specifications.seating.backrestAdjustable") && seating.backrestAdjustable ? "Backrest" : "",
+      isVerifiedPath(product, "specifications.seating.seatDepthAdjustable") && seating.seatDepthAdjustable ? "Seat depth" : ""
+    ].filter(Boolean);
+    return adjustments.join(", ") || indicative("Fixed comfort geometry");
+  }));
+  addVerifiedRow("Seat-height adjustment", selected.map((product) => {
+    if (!seatingRelevant(product)) return notApplicable;
+    const range = formatMmRange(product.specifications?.seating?.seatHeightAdjustmentRangeMm ?? []);
+    return range
+      ? relevantValue(product, true, "specifications.seating.seatHeightAdjustmentRangeMm", range)
+      : indicative("Fixed seat height");
+  }));
+  addVerifiedRow("Lift aid", selected.map((product) => {
+    const seating = product.specifications?.seating;
+    if (!seating) return notApplicable;
+    if (isVerifiedPath(product, "specifications.seating.liftAidMaxLoadKg") && seating.liftAidMaxLoadKg) return `Optional · max ${seating.liftAidMaxLoadKg} kg`;
+    if (isVerifiedPath(product, "specifications.seating.liftAssist")) return seating.liftAssist ? "Optional" : "Not available";
+    return indicative(seating.liftAssist ? "Optional" : "Not available");
+  }));
+  addVerifiedRow("Armrest variants", selected.map((product) => relevantValue(product, seatingRelevant(product), "specifications.seating.armrestVariantCount", product.specifications?.seating?.armrestVariantCount ? `${product.specifications.seating.armrestVariantCount} variants` : product.armrestOptions.length ? product.armrestOptions.join(", ") : null)));
+  addVerifiedRow("Base variants", selected.map((product) => relevantValue(product, seatingRelevant(product), "specifications.seating.baseVariantCount", product.specifications?.seating?.baseVariantCount ? `${product.specifications.seating.baseVariantCount} variants` : product.feetOptions.length ? product.feetOptions.join(", ") : null)));
+
+  addCategorySpecificRows(rows, selected, unknown, notApplicable);
   const standardLabels = new Set(rows.map(([name]) => name));
   const detailLabels = [...new Set(selected.flatMap((product) => product.verifiedComparisonFacts?.map((fact) => fact.label) ?? []))]
     .filter((label) => !standardLabels.has(label));
   rows.push(...detailLabels.map<[string, string[]]>((label) => [
     label,
-    selected.map((product) => verifiedComparisonValue(product, label) ?? "Configuration dependent")
+    selected.map((product) => verifiedComparisonValue(product, label) ?? unknown)
   ]));
   return rows
     .map(([name, values]) => ({ name, values, ...differenceMeta(name, values) }))
     .filter(({ values }) => !diffOnly || new Set(values).size > 1);
+}
+
+function isVerifiedPath(product: Product, path: string) {
+  return product.dataQuality?.verifiedFields.includes(path) ?? false;
+}
+
+function verifiedVariantNumbers(product: Product, field: "seatHeightMm" | "seatDepthMm" | "reclinedDepthMm") {
+  if (!isVerifiedPath(product, "variants")) return [];
+  return (product.variants ?? [])
+    .filter((variant) => variant.dataQuality?.verifiedFields.includes(field))
+    .map((variant) => variant[field])
+    .filter((value): value is number => typeof value === "number");
+}
+
+function formatMmRange(values: readonly number[]) {
+  if (!values.length) return null;
+  const min = Math.min(...values) / 10;
+  const max = Math.max(...values) / 10;
+  return min === max ? `${min} cm` : `${min}–${max} cm`;
+}
+
+function addCategorySpecificRows(rows: Array<[string, string[]]>, selected: Product[], unknown: string, notApplicable: string) {
+  const indicative = (value: string | null | undefined) => value ? `${value} · Indicative` : unknown;
+  const add = (name: string, relevant: (product: Product) => boolean, path: string, value: (product: Product) => string | null | undefined) => {
+    const values = selected.map((product) => {
+      if (!relevant(product)) return notApplicable;
+      const result = value(product);
+      return isVerifiedPath(product, path) && result ? result : indicative(result);
+    });
+    if (values.some((item) => item !== unknown && item !== notApplicable)) rows.push([name, values]);
+  };
+  const list = (values?: Array<string | number>) => values?.length ? values.join(", ") : null;
+  const yesNo = (value?: boolean | null) => value === undefined || value === null ? null : value ? "Yes" : "No";
+
+  const bed = (product: Product) => Boolean(product.specifications?.bed);
+  add("Sleeping sizes", bed, "specifications.bed.sleepingSizes", (product) => product.specifications?.bed?.sleepingSizes.map((size) => `${size.widthMm / 10} × ${size.lengthMm / 10} cm`).join(", "));
+  add("Bed storage", bed, "specifications.bed.bedStorage", (product) => yesNo(product.specifications?.bed?.bedStorage));
+  add("Mattress firmness", bed, "specifications.bed.mattressFirmnessOptions", (product) => list(product.specifications?.bed?.mattressFirmnessOptions));
+  add("Motorised adjustment", bed, "specifications.bed.motorised", (product) => yesNo(product.specifications?.bed?.motorised));
+
+  const wardrobe = (product: Product) => Boolean(product.specifications?.wardrobe);
+  add("Door types", wardrobe, "specifications.wardrobe.doorType", (product) => list(product.specifications?.wardrobe?.doorType));
+  add("Width options", wardrobe, "specifications.wardrobe.widthOptionsMm", (product) => formatMmRange(product.specifications?.wardrobe?.widthOptionsMm ?? []));
+  add("Mirror option", wardrobe, "specifications.wardrobe.mirrorOption", (product) => yesNo(product.specifications?.wardrobe?.mirrorOption));
+  add("Lighting option", wardrobe, "specifications.wardrobe.lightingOption", (product) => yesNo(product.specifications?.wardrobe?.lightingOption));
+  add("Capacity", wardrobe, "specifications.wardrobe.capacityBand", (product) => product.specifications?.wardrobe?.capacityBand?.replaceAll("-", " "));
+
+  const table = (product: Product) => Boolean(product.specifications?.table);
+  add("Tabletop shape", table, "specifications.table.tabletopShape", (product) => list(product.specifications?.table?.tabletopShape));
+  add("Tabletop materials", table, "specifications.table.tabletopMaterials", (product) => list(product.specifications?.table?.tabletopMaterials));
+  add("Extendable", table, "specifications.table.extendable", (product) => yesNo(product.specifications?.table?.extendable));
+  add("Length range", table, "specifications.table.minLengthMm", (product) => {
+    const specification = product.specifications?.table;
+    return specification?.minLengthMm && specification.maxLengthMm ? formatMmRange([specification.minLengthMm, specification.maxLengthMm]) : null;
+  });
+  add("Seating capacity", table, "specifications.table.capacityMax", (product) => {
+    const specification = product.specifications?.table;
+    if (specification?.capacityMin != null && specification.capacityMax != null) return `${specification.capacityMin}–${specification.capacityMax}`;
+    return specification?.demoEstimatedCapacity ? `Approx. ${specification.demoEstimatedCapacity}` : null;
+  });
+
+  const diningChair = (product: Product) => Boolean(product.specifications?.diningChair);
+  add("Chair type", diningChair, "specifications.diningChair.chairSubtype", (product) => product.specifications?.diningChair?.chairSubtype?.replaceAll("-", " "));
+  add("Swivel", diningChair, "specifications.diningChair.swivel", (product) => product.specifications?.diningChair?.swivelDegrees ? `${product.specifications.diningChair.swivelDegrees}°` : yesNo(product.specifications?.diningChair?.swivel));
+  add("Armrests", diningChair, "specifications.diningChair.armrests", (product) => yesNo(product.specifications?.diningChair?.armrests));
+  add("Seat capacity", diningChair, "specifications.diningChair.seatCapacityMax", (product) => {
+    const specification = product.specifications?.diningChair;
+    return specification?.seatCapacityMin != null && specification.seatCapacityMax != null ? `${specification.seatCapacityMin}–${specification.seatCapacityMax}` : null;
+  });
+  add("Easy care", diningChair, "specifications.diningChair.easyCare", (product) => yesNo(product.specifications?.diningChair?.easyCare));
+
+  const storage = (product: Product) => Boolean(product.specifications?.storage);
+  add("Storage type", storage, "specifications.storage.storageType", (product) => list(product.specifications?.storage?.storageType));
+  add("Doors", storage, "specifications.storage.doors", (product) => product.specifications?.storage?.doors?.toString());
+  add("Drawers", storage, "specifications.storage.drawers", (product) => product.specifications?.storage?.drawers?.toString());
+  add("Shelves", storage, "specifications.storage.shelves", (product) => product.specifications?.storage?.shelves?.toString());
+  add("Cable management", storage, "specifications.storage.cableManagement", (product) => yesNo(product.specifications?.storage?.cableManagement));
+  add("Integrated lighting", storage, "specifications.storage.lightingAvailable", (product) => yesNo(product.specifications?.storage?.lightingAvailable));
+
+  const carpet = (product: Product) => Boolean(product.specifications?.carpet);
+  add("Carpet sizes", carpet, "specifications.carpet.dimensionsAvailable", (product) => product.specifications?.carpet?.dimensionsAvailable.map((size) => `${size.widthMm / 10} × ${size.lengthMm / 10} cm`).join(", "));
+  add("Composition", carpet, "specifications.carpet.composition", (product) => product.specifications?.carpet?.composition);
+  add("Underfloor heating", carpet, "specifications.carpet.underfloorHeatingSuitable", (product) => yesNo(product.specifications?.carpet?.underfloorHeatingSuitable));
+  add("Outdoor suitable", carpet, "specifications.carpet.outdoorSuitable", (product) => yesNo(product.specifications?.carpet?.outdoorSuitable));
+
+  const lamp = (product: Product) => Boolean(product.specifications?.lamp);
+  add("Light output", lamp, "specifications.lamp.lumens", (product) => product.specifications?.lamp?.lumens ? `${product.specifications.lamp.lumens} lm` : null);
+  add("Colour temperature", lamp, "specifications.lamp.colourTemperatureKelvin", (product) => {
+    const specification = product.specifications?.lamp;
+    if (specification?.colourTemperatureKelvin) return `${specification.colourTemperatureKelvin} K`;
+    return specification?.colourTemperatureMinKelvin && specification.colourTemperatureMaxKelvin ? `${specification.colourTemperatureMinKelvin}–${specification.colourTemperatureMaxKelvin} K` : null;
+  });
+  add("Dimmable", lamp, "specifications.lamp.dimmable", (product) => yesNo(product.specifications?.lamp?.dimmable));
+  add("Protection rating", lamp, "specifications.lamp.protectionRating", (product) => product.specifications?.lamp?.protectionRating);
+  add("Energy class", lamp, "specifications.lamp.energyEfficiencyClass", (product) => product.specifications?.lamp?.energyEfficiencyClass);
 }
 
 function differenceMeta(name: string, values: string[]): { level: "same" | "different" | "major"; summary?: string } {

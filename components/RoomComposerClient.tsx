@@ -9,7 +9,7 @@ import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
 import { analyzePlacement, type Door, type RoomItem } from "@/lib/fit-simulator";
 import type { RoomAnalysis } from "@/lib/ai/schemas";
-import type { Product, Project } from "@/lib/types";
+import type { Product, Project, SavedRoomScene } from "@/lib/types";
 
 type ComposerCategory = "all" | "seating" | "armchair" | "storage" | "tables" | "bedroom";
 const maxGeneratedVisualizationItems = 6;
@@ -101,18 +101,32 @@ type SceneItem = {
   zIndex?: number;
 };
 
-type SavedScene = {
-  id?: string;
-  version?: number;
-  sceneScale?: number;
-  items?: SceneItem[];
-};
-
 type Wall = Door["wall"];
 type MeasuredOpening = { id: string; wall: Wall; positionCm: number; widthCm: number; heightCm: number; sillHeightCm?: number; hinge?: Door["hinge"]; opens?: Door["opens"] };
 type FixedFeature = { id: string; kind: "radiator" | "built-in" | "column" | "other"; name: string; xCm: number; yCm: number; widthCm: number; depthCm: number; heightCm: number };
 
-export function RoomComposerClient({ upload = false, openPresentationScene = false, recommendedProductIds = [] }: { upload?: boolean; openPresentationScene?: boolean; recommendedProductIds?: string[] }) {
+async function compressImageSource(source: string, maxSide = 1600, quality = .78) {
+  const image = new window.Image();
+  image.src = source;
+  await image.decode();
+  const ratio = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(image.naturalWidth * ratio));
+  canvas.height = Math.max(1, Math.round(image.naturalHeight * ratio));
+  canvas.getContext("2d")?.drawImage(image, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL("image/jpeg", quality);
+}
+
+async function compressRoomPhoto(file: File) {
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    return await compressImageSource(objectUrl);
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
+export function RoomComposerClient({ upload = false, openPresentationScene = false, recommendedProductIds = [], projectId = "project-room-composer", sceneId }: { upload?: boolean; openPresentationScene?: boolean; recommendedProductIds?: string[]; projectId?: string; sceneId?: string }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const roomInputRef = useRef<HTMLInputElement>(null);
   const activeProducts = useMemo(
@@ -125,9 +139,23 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [productQuery, setProductQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(upload ? 8 : 12);
   const [roomBackgroundId, setRoomBackgroundId] = useState<(typeof roomBackgrounds)[number]["id"]>("neutral");
-  const [items, setItems] = useState<SceneItem[]>(() => upload
-    ? []
-    : [{ id: "scene-product-1", productId: activeProducts[0].id, x: 50, y: 86, rotation: 0, scale: 1, materialId: activeProducts[0].materials[0], color: activeProducts[0].colors[0], zIndex: 1 }]);
+  const [items, setItems] = useState<SceneItem[]>(() => {
+    const selectedProducts = recommendedProductIds
+      .map((id) => activeProducts.find((product) => product.id === id))
+      .filter((product): product is Product => Boolean(product));
+    const initialProducts = selectedProducts.length ? selectedProducts : upload ? [] : [activeProducts[0]];
+    return initialProducts.map((product, index) => ({
+      id: `scene-product-${index + 1}`,
+      productId: product.id,
+      x: 42 + ((index * 12) % 36),
+      y: 86 - ((index % 2) * 8),
+      rotation: 0,
+      scale: 1,
+      materialId: composerFinishes[product.slug]?.[0]?.materialId ?? product.materials[0],
+      color: composerFinishes[product.slug]?.[0]?.color ?? product.colors[0],
+      zIndex: index + 1
+    }));
+  });
   const [history, setHistory] = useState<SceneItem[][]>([]);
   const [future, setFuture] = useState<SceneItem[][]>([]);
   const [selectedId, setSelectedId] = useState(items[0]?.id ?? "");
@@ -135,18 +163,20 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [saved, setSaved] = useState(false);
   const [dragging, setDragging] = useState<string | null>(null);
   const [roomPreview, setRoomPreview] = useState("");
+  const [persistedRoomBackground, setPersistedRoomBackground] = useState("");
   const [roomPhoto, setRoomPhoto] = useState<File | null>(null);
   const [uploadConsent, setUploadConsent] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [planningMode, setPlanningMode] = useState<"inspiration" | "accurate">("inspiration");
   const [showBefore, setShowBefore] = useState(false);
   const [versions, setVersions] = useState(0);
-  const [savedVersions, setSavedVersions] = useState<SavedScene[]>([]);
+  const [savedVersions, setSavedVersions] = useState<SavedRoomScene[]>([]);
+  const [editingScene, setEditingScene] = useState<SavedRoomScene | null>(null);
   const [sceneScale, setSceneScale] = useState(1);
   const [roomSize, setRoomSize] = useState({ widthMm: 5600, lengthMm: 4200 });
   const [roomAnalysis, setRoomAnalysis] = useState<RoomAnalysis | null>(null);
   const [composerNotice, setComposerNotice] = useState(() => recommendedProductIds.length
-    ? `${recommendedProductIds.length} Style Finder recommendation${recommendedProductIds.length === 1 ? " is" : "s are"} ready. Choose the products you want to add.`
+    ? `${recommendedProductIds.length === 1 ? "Your selected product is" : "Your selected products are"} ready. Choose the products you want to add.`
     : "");
   const [generatedVisualization, setGeneratedVisualization] = useState("");
   const [generatedForSignature, setGeneratedForSignature] = useState("");
@@ -164,8 +194,8 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [configurationsConfirmed, setConfigurationsConfirmed] = useState(false);
   useEffect(() => {
     storage.track({ name: "room_composer_started" });
-    const scenes = storage.roomScenes() as SavedScene[];
-    setVersions(scenes.length);
+    const scenes = storage.roomScenes();
+    setVersions(0);
     setSavedVersions(scenes);
     if (openPresentationScene) {
       const presentation = scenes.find((scene) => scene.id === "scene-presentation-living");
@@ -175,7 +205,25 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
         setSaved(true);
       }
     }
-  }, [openPresentationScene]);
+    const requestedScene = sceneId ? scenes.find((scene) => scene.id === sceneId) : undefined;
+    if (requestedScene?.items?.length) {
+      setEditingScene(requestedScene);
+      setItems(requestedScene.items);
+      setSelectedId(requestedScene.items[0]?.id ?? "");
+      setSceneScale(requestedScene.sceneScale ?? 1);
+      setRoomSize(requestedScene.roomSize ?? { widthMm: 5600, lengthMm: 4200 });
+      setPlanningMode(requestedScene.planningMode ?? "inspiration");
+      setRoomBackgroundId((roomBackgrounds.some((background) => background.id === requestedScene.backgroundId) ? requestedScene.backgroundId : "neutral") as (typeof roomBackgrounds)[number]["id"]);
+      if (requestedScene.hasLocalRoomPhoto && requestedScene.backgroundSrc) {
+        setRoomPreview(requestedScene.backgroundSrc);
+        setPersistedRoomBackground(requestedScene.backgroundSrc);
+      }
+      setSavedVersions(storage.roomSceneVersions(requestedScene.rootSceneId || requestedScene.id));
+      setVersions(storage.roomSceneVersions(requestedScene.rootSceneId || requestedScene.id).length);
+      setComposerNotice(`Version ${requestedScene.version} opened. Saving changes will create a new version.`);
+      setSaved(true);
+    }
+  }, [openPresentationScene, sceneId]);
 
   useEffect(() => {
     if (generationStatus !== "loading") return;
@@ -338,7 +386,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     const alreadyInRoom = items.some((item) => item.productId === product.id);
     return (
       <article key={product.id} className={recommended ? "is-recommended" : undefined}>
-        <div className={`stitch-composer-product-media ${composerImage(product.id).toLowerCase().endsWith(".png") ? "is-cutout" : "is-scene"}`}><Image src={composerImage(product.id)} alt={`${product.modelCode} product crop`} width={280} height={200} /><span>{recommended ? "Style Finder" : "Product focus"}</span></div>
+        <div className={`stitch-composer-product-media ${composerImage(product.id).toLowerCase().endsWith(".png") ? "is-cutout" : "is-scene"}`}><Image src={composerImage(product.id)} alt={`${product.modelCode} product crop`} width={280} height={200} /><span>{recommended ? "Selected product" : "Product focus"}</span></div>
         <div className="stitch-composer-product-copy">
           <span>{product.modelCode}</span>
           {product.name.trim().toLowerCase() !== product.modelCode.trim().toLowerCase() ? <strong>{product.name}</strong> : null}
@@ -356,6 +404,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const chooseBackground = (backgroundId: (typeof roomBackgrounds)[number]["id"]) => {
     if (roomPreview) URL.revokeObjectURL(roomPreview);
     setRoomPreview("");
+    setPersistedRoomBackground("");
     setRoomPhoto(null);
     setRoomAnalysis(null);
     setGeneratedVisualization("");
@@ -364,6 +413,71 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     setRoomBackgroundId(backgroundId);
     if (roomInputRef.current) roomInputRef.current.value = "";
     setSaved(false);
+  };
+
+  const saveRoomView = async () => {
+    if (!items.length) {
+      setComposerNotice("Add at least one catalogue product before saving.");
+      return;
+    }
+    if (!window.confirm(editingScene ? "Save these changes as a new room view version? The previous version will be kept." : "Save this room view to My Musterring?")) return;
+
+    const timestamp = new Date().toISOString();
+    const rootSceneId = editingScene?.rootSceneId || editingScene?.id || `room-view-${Date.now()}`;
+    const previousVersions = storage.roomSceneVersions(rootSceneId);
+    const version = previousVersions.length ? Math.max(...previousVersions.map((scene) => scene.version || 0)) + 1 : 1;
+    const newSceneId = `${rootSceneId}-v${version}-${Date.now()}`;
+    const savedItems = items.map((item) => {
+      const product = activeProducts.find((candidate) => candidate.id === item.productId)!;
+      return { ...item, dimensions: { widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm } };
+    });
+    const savedGeneratedVisualization = generatedIsCurrent
+      ? await compressImageSource(generatedVisualization, 1600, .8)
+      : undefined;
+    const scene: SavedRoomScene = {
+      id: newSceneId,
+      rootSceneId,
+      parentVersionId: editingScene?.id,
+      projectId,
+      name: editingScene?.name ?? "Living Room Concept",
+      version,
+      planningMode,
+      roomSize: measuredRoom.widthCm && measuredRoom.lengthCm ? { widthMm: measuredRoom.widthCm * 10, lengthMm: measuredRoom.lengthCm * 10 } : roomSize,
+      sceneScale,
+      backgroundId: roomBackgroundId,
+      backgroundSrc: persistedRoomBackground || selectedBackground.src || undefined,
+      generatedVisualizationSrc: savedGeneratedVisualization,
+      items: savedItems,
+      hasLocalRoomPhoto: Boolean(persistedRoomBackground),
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      demoData: false
+    };
+    storage.saveRoomScene(scene);
+
+    const existingProject = storage.projects().find((project) => project.id === projectId);
+    const sceneProductIds = [...new Set(items.map((item) => item.productId))];
+    const project: Project = {
+      id: projectId,
+      name: existingProject?.name ?? "Room Composer Project",
+      status: existingProject?.status ?? "Ideas Saved",
+      coverImage: existingProject?.coverImage || selectedBackground.src || "/stitch-assets/original/room-living-clean.jpg",
+      savedProductIds: [...new Set([...(existingProject?.savedProductIds ?? storage.savedProducts()), ...sceneProductIds])],
+      savedConfigurationIds: existingProject?.savedConfigurationIds ?? [],
+      savedComparisonIds: existingProject?.savedComparisonIds ?? [],
+      savedMaterialIds: existingProject?.savedMaterialIds,
+      preferredDealerId: existingProject?.preferredDealerId,
+      notes: `${sceneProductIds.length} products in saved room view · Version ${version}`,
+      updatedAt: timestamp,
+      demoData: existingProject?.demoData ?? false
+    };
+    storage.saveProject(project);
+    storage.track({ name: "room_scene_saved" });
+    setEditingScene(scene);
+    setVersions(storage.roomSceneVersions(rootSceneId).length);
+    setSavedVersions(storage.roomSceneVersions(rootSceneId));
+    setSaved(true);
+    setComposerNotice(`Room view version ${version} was saved to My Musterring.`);
   };
   const undo = () => {
     const previous = history.at(-1);
@@ -492,7 +606,9 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     return;
                   }
                   if (roomPreview) URL.revokeObjectURL(roomPreview);
-                  setRoomPreview(URL.createObjectURL(file));
+                  const localBackground = await compressRoomPhoto(file);
+                  setRoomPreview(localBackground);
+                  setPersistedRoomBackground(localBackground);
                   setRoomPhoto(file);
                   setRoomAnalysis(null);
                   setGeneratedVisualization("");
@@ -527,7 +643,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
         <div className="container stitch-composer-layout">
           {!upload ? <div className="card card-body stitch-composer-privacy" style={{ gridColumn: "1 / -1" }}>
             <p className="eyebrow">Private room upload</p>
-            <p>{upload ? "Your photo is sent only when you confirm generation. This app does not save it." : "Your photo is sent for room analysis only after you consent. Generating a realistic staged view requires a second confirmation before the room photo and selected catalogue references are sent to OpenAI. This application does not save the uploaded photo."}</p>
+            <p>{upload ? "Your photo is sent to AI only when you confirm generation. If you save the room view, a compressed copy stays locally in this browser." : "Your photo is sent for room analysis only after you consent. Generating a realistic staged view requires a second confirmation. If you save the room view, a compressed copy stays locally in this browser."}</p>
             <label className="chip"><input type="checkbox" checked={uploadConsent} onChange={(event) => {
               setUploadConsent(event.target.checked);
               storage.recordConsent("photo-ai-processing", event.target.checked);
@@ -556,9 +672,9 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
             </div>
           ) : null}
           <aside className="stitch-composer-library">
-            {!upload ? <><div className="stitch-composer-library-heading">
+            <div className="stitch-composer-library-heading">
               <div><p className="eyebrow">Room background</p><strong>Choose your space</strong></div>
-              <button type="button" className="stitch-composer-upload" disabled={!uploadConsent} onClick={() => roomInputRef.current?.click()}><Upload size={15} /> Import</button>
+              <button type="button" className="stitch-composer-upload" disabled={!upload && !uploadConsent} onClick={() => roomInputRef.current?.click()}><Upload size={15} /> Import</button>
             </div>
             <div className="stitch-composer-backgrounds">
               {roomBackgrounds.map((background) => (
@@ -568,7 +684,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 </button>
               ))}
               {roomPreview ? <button type="button" className="is-active"><span className="stitch-uploaded-swatch"><Upload size={18} /></span><small>Imported photo</small></button> : null}
-            </div></> : null}
+            </div>
             <p className="eyebrow">{upload ? "Choose products" : "Module categories"}</p>
             <div className="stitch-composer-tabs">
               {upload ? <button className={category === "all" ? "is-active" : ""} onClick={() => { setCategory("all"); setVisibleCount(8); }}>All</button> : null}
@@ -580,8 +696,8 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
             </div>
             <div className="stitch-composer-catalog-heading"><p className="eyebrow">Available products</p><span>{catalog.length} models</span></div>
             <input className="stitch-composer-search" type="search" value={productQuery} onChange={(event) => { setProductQuery(event.target.value); setVisibleCount(upload ? 4 : 12); }} placeholder="Search model or product" aria-label="Search products" />
-            {upload && recommendedProducts.length ? <section className="stitch-composer-product-group is-yours" aria-labelledby="style-finder-recommendations-heading">
-              <div className="stitch-composer-product-group-heading"><strong id="style-finder-recommendations-heading">Style Finder recommendations</strong><span>{recommendedProducts.length}</span></div>
+            {upload && recommendedProducts.length ? <section className="stitch-composer-product-group is-yours" aria-labelledby="selected-products-heading">
+              <div className="stitch-composer-product-group-heading"><strong id="selected-products-heading">Selected products</strong><span>{recommendedProducts.length}</span></div>
               <div className="stitch-composer-products">{recommendedProducts.map((product) => productCard(product, true))}</div>
             </section> : null}
             <section className="stitch-composer-product-group" aria-labelledby={upload && recommendedProducts.length ? "other-products-heading" : undefined} aria-label={upload && recommendedProducts.length ? undefined : "Available products"}>
@@ -593,7 +709,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
 
           <div className="stitch-composer-main">
             {composerNotice ? <p className="stitch-composer-feedback" role="status"><Check size={16} /> {composerNotice}</p> : null}
-            {!upload ? <div className="stitch-composer-toolbar">
+            <div className="stitch-composer-toolbar">
               <button className={planningMode === "accurate" ? "is-active" : ""} onClick={() => setPlanningMode((mode) => mode === "accurate" ? "inspiration" : "accurate")}>{planningMode === "accurate" ? "Accurate Planning Mode" : "Inspiration Mode"}</button>
               <button onClick={undo} disabled={!history.length}>Undo</button>
               <button onClick={redo} disabled={!future.length}><Redo2 size={15} /> Redo</button>
@@ -614,6 +730,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   {roomPreview ? <button onClick={() => {
                     URL.revokeObjectURL(roomPreview);
                     setRoomPreview("");
+                    setPersistedRoomBackground("");
                     setRoomPhoto(null);
                     setRoomAnalysis(null);
                     setGeneratedVisualization("");
@@ -624,7 +741,8 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   }}>Remove room photo</button> : null}
                 </div>
               </details>
-            </div> : roomPreview ? <div className="stitch-composer-view-toggle" aria-label="Room view">
+            </div>
+            {upload && roomPreview ? <div className="stitch-composer-view-toggle" aria-label="Room view">
               <button className={showBefore ? "is-active" : ""} onClick={() => setShowBefore(true)}>Original</button>
               <button className={!showBefore && !displayGenerated ? "is-active" : ""} onClick={() => { setShowBefore(false); setShowGenerated(false); }}>Layout</button>
               {generatedIsCurrent ? <button className={displayGenerated ? "is-active" : ""} onClick={() => { setShowBefore(false); setShowGenerated(true); }}>Visualized</button> : null}
@@ -704,21 +822,21 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               {selected && !showBefore && !displayGenerated ? (
                 <div className="stitch-composer-controls">
                   <button aria-label="Rotate selected product" onClick={() => updateSelected({ rotation: selected.rotation + 15 })}><RotateCw /></button>
-                  {!upload ? <button aria-label="Duplicate selected product" onClick={() => {
+                  <button aria-label="Duplicate selected product" onClick={() => {
                     pushHistory();
                     const topLayer = Math.max(0, ...items.map((item) => item.zIndex ?? 0)) + 1;
                     const copy = { ...selected, id: `scene-${Date.now()}`, x: Math.min(92, selected.x + 4), y: Math.min(88, selected.y + 4), zIndex: topLayer };
                     setItems((current) => [...current, copy]);
                     setSelectedId(copy.id);
-                  }}><Copy /></button> : null}
-                  {!upload ? <button aria-label={selected.locked ? "Unlock selected product" : "Lock selected product"} onClick={() => updateSelected({ locked: !selected.locked })}>{selected.locked ? <Unlock /> : <Lock />}</button> : null}
-                  {!upload ? <button aria-label="Bring selected product forward" onClick={() => updateSelected({ zIndex: Math.max(...items.map((item) => item.zIndex ?? 1)) + 1 })}><Layers /></button> : null}
+                  }}><Copy /></button>
+                  <button aria-label={selected.locked ? "Unlock selected product" : "Lock selected product"} onClick={() => updateSelected({ locked: !selected.locked })}>{selected.locked ? <Unlock /> : <Lock />}</button>
+                  <button aria-label="Bring selected product forward" onClick={() => updateSelected({ zIndex: Math.max(...items.map((item) => item.zIndex ?? 1)) + 1 })}><Layers /></button>
                   <button aria-label="Remove selected product" onClick={() => { pushHistory(); setItems((current) => current.filter((item) => item.id !== selected.id)); setSelectedId(""); }}><Trash2 /></button>
                 </div>
               ) : null}
             </div>
 
-              {!upload && selected ? (
+              {selected ? (
                 <div className="stitch-composer-properties">
                   <div className="stitch-composer-angle-control">
                     <span>Product views</span>
@@ -751,7 +869,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     </>;
                   })()}
                 </div>
-              ) : !upload ? <div className="stitch-composer-properties is-empty"><strong>Select a product</strong><span>Choose an item in the room to view its dimensions, material, color, and available views.</span></div> : null}
+              ) : <div className="stitch-composer-properties is-empty"><strong>Select a product</strong><span>Choose an item in the room to view its dimensions, material, color, and available views.</span></div>}
             </div>
 
             {upload ? <section className="stitch-fit-panel" aria-labelledby="room-fit-heading">
@@ -841,47 +959,24 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               </div>
             </div>
 
-            {!upload ? <><div className="stitch-composer-summary">
+            <div className="stitch-composer-summary">
                 <div><small>Total items</small><strong>{String(items.length).padStart(2, "0")} Modules</strong></div>
-                <button onClick={() => {
-                  if (!window.confirm("Save this room concept to My Musterring?")) return;
-                  const version = storage.roomScenes().length + 1;
-                  const sceneId = `scene-${Date.now()}`;
-                  const savedItems = items.map((item) => {
-                    const product = activeProducts.find((candidate) => candidate.id === item.productId);
-                    return { ...item, dimensions: product && verifiedComposerSlugs.has(product.slug) ? { widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm } : undefined };
-                  });
-                  storage.saveRoomScene({ id: sceneId, name: "Living Room Concept", version, planningMode, roomSize, sceneScale, backgroundId: roomBackgroundId, backgroundSrc: roomPreview ? undefined : selectedBackground.src, items: savedItems, hasLocalRoomPhoto: Boolean(roomPreview), createdAt: new Date().toISOString() });
-                  const existingProject = storage.projects().find((project) => project.id === "project-room-composer");
-                  const savedProductIds = [...new Set(items.map((item) => item.productId))];
-                  const project: Project = {
-                    id: "project-room-composer",
-                    name: "Room Composer Project",
-                    status: "Ideas Saved",
-                    coverImage: roomPreview ? "/stitch-assets/original/room-living-clean.jpg" : selectedBackground.src || "/stitch-assets/original/room-living-clean.jpg",
-                    savedProductIds,
-                    savedConfigurationIds: existingProject?.savedConfigurationIds ?? [],
-                    savedComparisonIds: existingProject?.savedComparisonIds ?? [],
-                    notes: `${savedProductIds.length} products saved from Room Composer · Version ${version}`,
-                    updatedAt: new Date().toISOString(),
-                    demoData: false
-                  };
-                  storage.saveProject(project);
-                  storage.track({ name: "room_scene_saved" });
-                  setVersions(version);
-                  setSavedVersions(storage.roomScenes() as SavedScene[]);
-                  setSaved(true);
-                }}><Save size={18} /> {saved ? "Saved to project" : "Save concept"}</button>
+                <button onClick={saveRoomView}><Save size={18} /> {saved ? "Save new version" : "Save room view"}</button>
                 <Link href="/handover"><Send size={18} /> Send concept to retailer</Link>
             </div>
             <p className="stitch-composer-note">{planningMode === "accurate" ? "Accurate Planning Mode preserves entered room and product dimensions, but delivery feasibility must still be confirmed with a Musterring retailer." : "Inspirational visualization — product proportions and colors may vary. Never use this visualization for fit confirmation."} Saved versions: {versions}.</p>
             {savedVersions.length ? <div className="chips" aria-label="Saved room versions">{savedVersions.slice(-4).map((version, index) => <button className="chip" key={version.id ?? index} onClick={() => {
-              if (!version.items) return;
               pushHistory();
               setItems(version.items);
               setSceneScale(version.sceneScale ?? 1);
+              setRoomSize(version.roomSize);
+              setPlanningMode(version.planningMode);
+              setEditingScene(version);
+              setRoomBackgroundId((roomBackgrounds.some((background) => background.id === version.backgroundId) ? version.backgroundId : "neutral") as (typeof roomBackgrounds)[number]["id"]);
+              setRoomPreview(version.hasLocalRoomPhoto ? version.backgroundSrc ?? "" : "");
+              setPersistedRoomBackground(version.hasLocalRoomPhoto ? version.backgroundSrc ?? "" : "");
               setSelectedId(version.items[0]?.id ?? "");
-            }}>Open version {version.version ?? index + 1}</button>)}</div> : null}</> : null}
+            }}>Open version {version.version ?? index + 1}</button>)}</div> : null}
           </div>
         </div>
       </section>
@@ -892,7 +987,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
           <dl>
             <div><dt>Planning mode</dt><dd>Interactive composition + confirmed AI staging</dd></div>
             <div><dt>Products</dt><dd>{activeProducts.length} available models</dd></div>
-            <div><dt>Privacy</dt><dd>Uploads are processed with consent and are not saved by this app</dd></div>
+            <div><dt>Privacy</dt><dd>Room photos are saved only in this browser after confirmation; AI processing requires separate consent</dd></div>
             <div><dt>Handover</dt><dd>Retailer-ready project summary</dd></div>
           </dl>
         </div>

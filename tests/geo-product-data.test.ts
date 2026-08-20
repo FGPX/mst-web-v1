@@ -17,6 +17,13 @@ describe("GEO product data", () => {
     expect(nils.variants?.every((variant) => variant.demoData === false && variant.dataQuality?.level === "verified")).toBe(true);
     expect(nils.dimensionRange?.minHeightMm).toBe(1060);
     expect(nils.dataQuality?.verifiedFields).toContain("variants");
+    expect(nils.variants?.map((variant) => variant.seatHeightMm)).toEqual([430, 450, 470, 490, 510]);
+    expect(nils.variants?.map((variant) => variant.seatDepthMm)).toEqual([480, 500, 520, 540, 540]);
+    expect(nils.variants?.map((variant) => variant.reclinedDepthMm)).toEqual([1710, 1730, 1750, 1770, 1770]);
+    expect(nils.specifications?.seating?.armrestVariantCount).toBe(5);
+    expect(nils.specifications?.seating?.baseVariantCount).toBe(6);
+    expect(nils.specifications?.seating?.liftAidMaxLoadKg).toBe(120);
+    expect(nils.dataQuality?.verifiedFields).toContain("specifications.seating.seatHeightOptionsMm");
   });
 
   it("keeps validated catalogue overrides ahead of presentation enrichment", () => {

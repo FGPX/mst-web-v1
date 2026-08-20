@@ -2,26 +2,18 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { Heart, MessageSquare, Send, Share2, Sparkles, Trash2 } from "lucide-react";
+import { Heart, Send, Share2, Sparkles, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { dealers, materials, products } from "@/lib/data";
 import { materialImages } from "@/lib/material-assets";
-import { stylistStyleLabel, type Project, type SavedStylistSet } from "@/lib/types";
+import { stylistStyleLabel, type Project, type SavedRoomScene, type SavedStylistSet } from "@/lib/types";
 import { storage } from "@/lib/persistence";
 import { roomSceneProductImage } from "@/lib/room-scene-assets";
 import { AlternativeFinderButton } from "./AlternativeFinderButton";
-import { SavedRoomScenePreview, type PreviewScene } from "./SavedRoomScenePreview";
-
-type SavedRoomScene = PreviewScene & {
-  id?: string;
-  name?: string;
-  version?: number;
-  planningMode?: string;
-  createdAt?: string;
-};
+import { SavedRoomScenePreview } from "./SavedRoomScenePreview";
 
 function readSavedContent() {
-  const scenes = storage.roomScenes() as SavedRoomScene[];
+  const scenes = storage.roomScenes();
   const stylistSets = storage.stylistSets();
   const productIds = storage.savedProducts();
   return { scenes, stylistSets, productIds };
@@ -36,6 +28,7 @@ export function ProjectsClient() {
   const [savedScenes, setSavedScenes] = useState<SavedRoomScene[]>([]);
   const [savedStylistSets, setSavedStylistSets] = useState<SavedStylistSet[]>([]);
   const [savedMaterialIds, setSavedMaterialIds] = useState<string[]>([]);
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
 
   const syncSavedContent = () => {
     const { scenes, stylistSets, productIds } = readSavedContent();
@@ -60,11 +53,28 @@ export function ProjectsClient() {
     syncSavedContent();
   };
 
+  const duplicateScene = (scene: SavedRoomScene) => {
+    if (!window.confirm(`Create a copy of "${scene.name}"?`)) return;
+    const timestamp = new Date().toISOString();
+    const id = `room-view-${Date.now()}`;
+    storage.saveRoomScene({ ...scene, id: `${id}-v1`, rootSceneId: id, parentVersionId: undefined, name: `${scene.name} Copy`, version: 1, createdAt: timestamp, updatedAt: timestamp });
+    syncSavedContent();
+  };
+
   const project = projects.find((item) => item.id === "project-room-composer") ?? projects.at(-1);
   const displayed = products.filter((product) => savedIds.includes(product.id));
   const preferredDealer = dealers.find((dealer) => dealer.id === dealerId);
   const fitHref = displayed[0] ? `/will-it-fit/${displayed[0].slug}` : "/room-composer";
   const savedMaterials = materials.filter((material) => savedMaterialIds.includes(material.id));
+  const latestScenes = [...savedScenes.reduce((groups, scene) => {
+    const key = scene.rootSceneId || scene.id;
+    const current = groups.get(key);
+    if (!current || scene.version > current.version) groups.set(key, scene);
+    return groups;
+  }, new Map<string, SavedRoomScene>()).values()];
+  const createRoomHref = selectedProductIds.length
+    ? `/room-composer?project=${encodeURIComponent(project?.id ?? "project-room-composer")}&${selectedProductIds.map((id) => `product=${encodeURIComponent(id)}`).join("&")}`
+    : "";
 
   const removeMaterial = (materialId: string, materialName: string) => {
     if (!window.confirm(`Remove ${materialName} from your saved materials?`)) return;
@@ -85,12 +95,12 @@ export function ProjectsClient() {
         <div><button><Share2 size={16} /> Share with designer</button><Link href="/handover"><Send size={16} /> Send to retailer</Link></div>
       </header>
       <div className="container">
-        <div className="stitch-project-title"><h2>Saved Room Views</h2><Link href="/room-composer">Create another view</Link></div>
+        <div className="stitch-project-title"><h2>Saved Room Views</h2><Link href={`/room-composer?project=${encodeURIComponent(project?.id ?? "project-room-composer")}`}>Create another view</Link></div>
         <section className="stitch-room-view-grid">
-          {savedScenes.length ? savedScenes.map((scene, index) => {
-            const sceneKey = scene.id ?? `index-${index}`;
-            const sceneProducts = [...new Set(scene.items?.map((item) => item.productId) ?? [])];
-            const sceneName = scene.name ?? `Room view ${scene.version ?? index + 1}`;
+          {latestScenes.length ? latestScenes.map((scene, index) => {
+            const sceneKey = scene.id;
+            const sceneProducts = [...new Set(scene.items.map((item) => item.productId))];
+            const sceneName = scene.name || `Room view ${scene.version || index + 1}`;
             const href = `/my-musterring/room-scenes/${encodeURIComponent(sceneKey)}`;
             return <article className="stitch-room-view-card" key={sceneKey}>
               <Link href={href} aria-label={`Open ${sceneName}`}>
@@ -101,7 +111,7 @@ export function ProjectsClient() {
                   <span>{sceneProducts.length} product{sceneProducts.length === 1 ? "" : "s"} · {scene.planningMode === "accurate" ? "Accurate planning" : "Inspiration"}</span>
                 </div>
               </Link>
-              <div className="stitch-room-view-actions"><Link href={href}>Open plan</Link><button type="button" onClick={() => deleteScene(sceneKey, sceneName)}>Delete plan</button></div>
+              <div className="stitch-room-view-actions"><Link href={`/room-composer?scene=${encodeURIComponent(sceneKey)}&project=${encodeURIComponent(scene.projectId)}`}>Edit</Link><button type="button" onClick={() => duplicateScene(scene)}>Copy</button><Link href={`/handover?scene=${encodeURIComponent(sceneKey)}`}>Send</Link><button type="button" onClick={() => deleteScene(sceneKey, sceneName)}>Delete</button></div>
             </article>;
           }) : <div className="stitch-project-empty"><h3>No room views saved yet</h3><p>Save a view from Plan a Room and it will appear here.</p><Link href="/room-composer">Open Plan a Room</Link></div>}
         </section>
@@ -115,9 +125,10 @@ export function ProjectsClient() {
             })}</div>
           </article>) : <div className="stitch-project-empty"><h3>No Style Finder sets saved yet</h3><p>Answer the style quiz and save a coordinated set of catalogue products.</p><Link href="/ai-stylist">Open Style Finder</Link></div>}
         </section>
-        <div className="stitch-project-title"><h2>Saved Products</h2><Link href="/handover"><MessageSquare size={16} /> Expert consultation</Link></div>
+        <div className="stitch-project-title"><div><h2>Saved Products</h2><p>Select products, then create a room view with them already placed.</p></div>{createRoomHref ? <Link href={createRoomHref}>Create Room View ({selectedProductIds.length})</Link> : <span className="stitch-project-selection-hint">Select at least one product</span>}</div>
         <section className="stitch-project-products">
-          {displayed.length ? displayed.map((product) => <article key={product.id}>
+          {displayed.length ? displayed.map((product) => <article className={selectedProductIds.includes(product.id) ? "is-selected" : ""} key={product.id}>
+            <label className="stitch-project-product-select"><input type="checkbox" checked={selectedProductIds.includes(product.id)} onChange={(event) => setSelectedProductIds((current) => event.target.checked ? [...new Set([...current, product.id])] : current.filter((id) => id !== product.id))} /><span>{selectedProductIds.includes(product.id) ? "Selected" : "Select for room"}</span></label>
             <Link href={`/furniture/${product.slug}`}><Image src={roomSceneProductImage(product.id)} alt={product.name} width={520} height={360} /><small>{product.modelCode}</small><strong>{product.name}</strong><span>Saved by you</span></Link>
             <button className="stitch-project-product-delete" type="button" aria-label={`Remove ${product.name} from saved products`} onClick={() => removeProduct(product.id, product.name)}><Trash2 aria-hidden="true" size={19} /></button>
             <AlternativeFinderButton productId={product.id} label="Discover More Like This" className="" />

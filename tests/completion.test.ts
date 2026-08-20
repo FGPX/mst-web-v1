@@ -37,6 +37,32 @@ describe("project persistence", () => {
     expect(storage.roomScenes()).toHaveLength(1);
   });
 
+  it("keeps immutable room-view versions linked to one project", () => {
+    const product = products.find((item) => item.active)!;
+    const baseScene = {
+      rootSceneId: "room-view-test",
+      projectId: "project-test",
+      name: "Test room",
+      planningMode: "inspiration" as const,
+      roomSize: { widthMm: 5000, lengthMm: 4000 },
+      sceneScale: 1,
+      backgroundId: "neutral",
+      hasLocalRoomPhoto: false,
+      items: [{ id: "item-1", productId: product.id, x: 50, y: 80, rotation: 0, scale: 1, materialId: product.materials[0], color: product.colors[0], dimensions: { widthMm: product.widthMm, depthMm: product.depthMm, heightMm: product.heightMm } }],
+      createdAt: "2026-08-20T10:00:00.000Z",
+      updatedAt: "2026-08-20T10:00:00.000Z",
+      demoData: false
+    };
+    storage.saveRoomScene({ ...baseScene, id: "room-view-test-v1", version: 1 });
+    storage.saveRoomScene({ ...baseScene, id: "room-view-test-v2", parentVersionId: "room-view-test-v1", version: 2, items: [{ ...baseScene.items[0], x: 62, rotation: 15 }] });
+
+    const versions = storage.roomSceneVersions("room-view-test");
+    expect(versions.map((scene) => scene.version)).toEqual([1, 2]);
+    expect(versions[0].items[0].x).toBe(50);
+    expect(versions[1].items[0]).toMatchObject({ x: 62, rotation: 15 });
+    expect(versions.every((scene) => scene.projectId === "project-test")).toBe(true);
+  });
+
   it("keeps a history of saved comparisons that can be reopened or deleted", () => {
     const active = products.filter((product) => product.active).slice(0, 3);
     const first = storage.saveComparison([active[0].id, active[1].id], "Living room shortlist");

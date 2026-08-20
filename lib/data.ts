@@ -272,7 +272,9 @@ export const products: Product[] = [
     const geoDimensionsVerified = verifiedGeoFields.has("dimensions") || verifiedGeoFields.has("referenceConfiguration");
     const geoSeatHeightVerified = [...verifiedGeoFields].some((field) => field.includes("seatHeight"));
     const geoSeatDepthVerified = [...verifiedGeoFields].some((field) => field.includes("seatDepth"));
-    const geoFunctions = [...(geo?.manualFunctions ?? []), ...(geo?.electricFunctions ?? []), ...(geo?.comfortFunctions ?? [])];
+    const geoFunctions = geo?.functions?.length
+      ? geo.functions
+      : [...(geo?.manualFunctions ?? []), ...(geo?.electricFunctions ?? [])];
     const effectiveDimensionCandidate = geoDimensionsVerified && geo?.dimensions
       ? geo.dimensions
       : dimensionOverride ?? geo?.dimensions ?? legacyDimensions;
@@ -365,7 +367,7 @@ export const products: Product[] = [
       heightMm: effectiveDimensions.heightMm,
       seatHeightMm: finalSeatHeightMm,
       seatDepthMm: finalSeatDepthMm,
-      numberOfSeats: isSeating ? template.numberOfSeats : 0,
+      numberOfSeats: isSeating ? (geo?.numberOfSeats ?? template.numberOfSeats) : 0,
       // Template values support internal layout rendering but are not catalogue facts.
       numberOfSeatsVerified: false,
       verifiedFacts: finalVerifiedFacts,
