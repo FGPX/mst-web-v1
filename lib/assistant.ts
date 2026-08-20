@@ -8,7 +8,7 @@ import {
   type ConversationContext, type MaterialAdvice, type VoiceCommand
 } from "./ai/assistant-schemas";
 import { extractExcludedLayoutShapes } from "./ai/alternative-intent";
-import { extractTabletopShapes } from "./ai/alternative-grounding";
+import { extractBedAlternativeRequirements, extractTabletopShapes } from "./ai/alternative-grounding";
 import { hasDemoColourPresentation, hasVerifiedColourPresentation } from "./musterring-assets";
 import { demoFactsFor } from "./demo-search-metadata";
 
@@ -34,6 +34,9 @@ const alternativeCategorySubtypes: Partial<Record<Category, ProductSubtype[]>> =
 };
 
 function productSupportsAlternativeCategory(product: Product, category: Category) {
+  // A bedroom programme may list a bed among its available pieces, but it is
+  // not itself a bed alternative. Keep bed discovery on actual bed records.
+  if (category === "bed") return product.category === "bed";
   if (productHasCategory(product, category)) return true;
   const subtypes = alternativeCategorySubtypes[category] ?? [];
   const subtypesAreVerified = product.dataQuality?.verifiedFields.includes("productSubtypes") === true;
@@ -48,10 +51,26 @@ function verifiedTabletopShapes(product: Product) {
   return [...new Set([...legacyShapes, ...structuredShapes])];
 }
 
+function verifiedBedTypes(product: Product) {
+  const types = new Set<NonNullable<AlternativeRequest["bedTypes"]>[number]>();
+  if (product.dataQuality?.verifiedFields.includes("specifications.bed.bedType")) {
+    for (const type of product.specifications?.bed?.bedType ?? []) types.add(type);
+  }
+  if (product.dataQuality?.verifiedFields.includes("productSubtypes")) {
+    for (const type of product.productSubtypes ?? []) {
+      if (["bed-frame", "upholstered-bed", "boxspring-bed", "sofa-bed", "mattress", "slatted-base"].includes(type)) {
+        types.add(type as NonNullable<AlternativeRequest["bedTypes"]>[number]);
+      }
+    }
+  }
+  return [...types];
+}
+
 export function materialMatchesNeeds(material: Material, needs: MaterialAdvice["needs"]) {
-  if (needs.easyCareRequired && !material.easyCare) return false;
-  if (needs.children && !material.familyFriendly) return false;
-  if (needs.pets && !material.petFriendly) return false;
+  if (needs.easyCareRequired && material.easyCare !== true) return false;
+  if (needs.children && material.familyFriendly !== true) return false;
+  if (needs.pets && material.petFriendly !== true) return false;
+  if (needs.highUse && material.durability == null) return false;
   if (needs.strongSunlight && material.lightSensitivity !== "low") return false;
   if (needs.preferredColors?.length && !needs.preferredColors.includes(material.colorFamily)) return false;
   if (needs.preferredMaterialGroups?.length && !needs.preferredMaterialGroups.includes(material.type)) return false;
@@ -66,14 +85,18 @@ export function materialMetadataMatches(requestText: string) {
   if (!tokens.length) return [];
   return materials.filter((material) => {
     const attributeLabels = [
-      material.easyCare ? "easy care easy to clean easy to wash washable" : "specialist care",
-      material.petFriendly ? "pet friendly pets dog cat" : "not pet friendly",
-      material.familyFriendly ? "family friendly children kids" : "not family friendly",
-      `${material.lightSensitivity} light sensitivity`
+      material.easyCare === true ? "easy care easy to clean easy to wash washable" : material.easyCare === false ? "specialist care" : "care performance unverified",
+      material.petFriendly === true ? "pet friendly pets dog cat" : material.petFriendly === false ? "not pet friendly" : "pet suitability unverified",
+      material.familyFriendly === true ? "family friendly children kids" : material.familyFriendly === false ? "not family friendly" : "family suitability unverified",
+      material.lightSensitivity === "unknown" ? "light sensitivity unverified" : `${material.lightSensitivity} light sensitivity`
     ];
     const corpus = [material.name, material.type, material.colorFamily, material.texture, material.composition, material.care, material.maintenance, ...material.cleaningMethods, ...material.recommendedUses, ...material.cautions, ...attributeLabels].join(" ").toLowerCase();
     return tokens.every((token) => corpus.includes(token));
   }).map((material) => material.id);
+}
+
+export function isUnsupportedMaterialComfortQuestion(requestText: string) {
+  return /\b(?:seat(?:ing)?\s+)?comfort\b/i.test(requestText);
 }
 
 function requestedTargetWidthMm(text: string) {
@@ -90,6 +113,7 @@ function requestedAlternative(input: AlternativeRequest, source: Product) {
   const excludedLayoutShapes = extractExcludedLayoutShapes(input.requestText ?? "");
   const requestedLayoutShapes = (search.layoutShapes ?? input.layoutShapes ?? []).filter((shape) => !excludedLayoutShapes.includes(shape));
   const parsedTabletopShapes = extractTabletopShapes(input.requestText ?? "");
+  const bedRequirements = extractBedAlternativeRequirements(input.requestText ?? "");
   const easyCareRequested = /\b(?:easy|easier|easiest)[- ](?:care|clean)|easy to (?:care for|clean)|low[- ]maintenance\b/.test(text);
   const narrower = text.match(/(\d{1,3})\s*cm\s*narrower/);
   const parsedWidth = search.minWidthMm !== undefined || search.maxWidthMm !== undefined || search.targetWidthMm !== undefined;
@@ -113,11 +137,18 @@ function requestedAlternative(input: AlternativeRequest, source: Product) {
     maxWidthMm: narrower ? source.widthMm - Number(narrower[1]) * 10 : parsedWidth ? search.maxWidthMm : input.maxWidthMm ?? (/\b(?:smaller|more compact|narrower)\b/.test(text) ? source.widthMm - 10 : undefined),
     minWidthMm: parsedWidth ? search.minWidthMm : input.minWidthMm,
     targetWidthMm: parsedWidth ? targetWidthMm : input.targetWidthMm ?? targetWidthMm,
+    bedTypes: input.bedTypes ?? bedRequirements.bedTypes,
+    bedSleepingWidthMm: input.bedSleepingWidthMm ?? bedRequirements.bedSleepingWidthMm,
+    bedSleepingLengthMm: input.bedSleepingLengthMm ?? bedRequirements.bedSleepingLengthMm,
+    bedStorage: input.bedStorage ?? bedRequirements.bedStorage,
+    bedMotorised: input.bedMotorised ?? bedRequirements.bedMotorised,
     minSeatHeightMm: input.minSeatHeightMm ?? (/higher seat|high[- ]seat|tall/.test(text) ? source.seatHeightMm + 10 : undefined),
     requiredFunctions: [...new Set([
-      ...(input.requiredFunctions ?? []),
+      ...(category === "bed" && bedRequirements.bedMotorised
+        ? (input.requiredFunctions ?? []).filter((value) => value !== "electric")
+        : input.requiredFunctions ?? []),
       ...(/\b(?:relax|recline|lounge)\b/.test(text) ? ["relax"] : []),
-      ...(/\b(?:electric|motor(?:ized|ised)?|power)\b/.test(text) ? ["electric"] : []),
+      ...(category !== "bed" && /\b(?:electric|motor(?:ized|ised)?|power)\b/.test(text) ? ["electric"] : []),
       ...(/\b(?:modular|module|flexible)\b/.test(text) ? ["modular"] : [])
     ])],
     excludedFunctions: [...new Set([...(input.excludedFunctions ?? []), ...(/without electric|non-electric|no electric/.test(text) ? ["electric"] : [])])],
@@ -280,6 +311,48 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
         closeness: matchesShape ? 1 : 0
       });
     }
+    for (const value of request.bedTypes ?? []) {
+      const types = verifiedBedTypes(product);
+      const matchesType = types.includes(value);
+      checks.push({
+        ok: matchesType,
+        label: matchesType ? `verified ${value.replace(/-/g, " ")}` : `${value.replace(/-/g, " ")} type is not verified for this product`,
+        closeness: matchesType ? 1 : 0
+      });
+    }
+    if (request.bedSleepingWidthMm && request.bedSleepingLengthMm) {
+      const sizesVerified = product.dataQuality?.verifiedFields.includes("specifications.bed.sleepingSizes") === true;
+      const matchesSize = sizesVerified && (product.specifications?.bed?.sleepingSizes ?? []).some((size) =>
+        size.widthMm === request.bedSleepingWidthMm && size.lengthMm === request.bedSleepingLengthMm
+      );
+      checks.push({
+        ok: matchesSize,
+        label: matchesSize
+          ? `verified ${request.bedSleepingWidthMm / 10} × ${request.bedSleepingLengthMm / 10} cm sleeping size`
+          : `${request.bedSleepingWidthMm / 10} × ${request.bedSleepingLengthMm / 10} cm sleeping size is not verified for this product`,
+        closeness: matchesSize ? 1 : 0
+      });
+    }
+    if (request.bedStorage) {
+      const bedStorageVerified = product.dataQuality?.verifiedFields.includes("specifications.bed.bedStorage") === true;
+      const underBedStorageVerified = product.dataQuality?.verifiedFields.includes("specifications.bed.underBedStorage") === true;
+      const matchesStorage = (bedStorageVerified && product.specifications?.bed?.bedStorage === true)
+        || (underBedStorageVerified && product.specifications?.bed?.underBedStorage === true);
+      checks.push({
+        ok: matchesStorage,
+        label: matchesStorage ? "verified bed storage" : "bed storage is not verified for this product",
+        closeness: matchesStorage ? 1 : 0
+      });
+    }
+    if (request.bedMotorised) {
+      const motorisedVerified = product.dataQuality?.verifiedFields.includes("specifications.bed.motorised") === true;
+      const matchesMotorised = motorisedVerified && product.specifications?.bed?.motorised === true;
+      checks.push({
+        ok: matchesMotorised,
+        label: matchesMotorised ? "verified motorised bed adjustment" : "motorised bed adjustment is not verified for this product",
+        closeness: matchesMotorised ? 1 : 0
+      });
+    }
     for (const value of request.requiredFunctions ?? []) {
       const match = functionMatch(product, value);
       checks.push({ ok: match.ok, label: `requires ${value}`, closeness: match.ok ? 1 : 0, demoFact: match.demo ? `${value} function` : undefined });
@@ -379,6 +452,10 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     ...(request.maxWidthMm ? [`maximum ${Math.round(request.maxWidthMm / 10)} cm wide`] : []),
     ...(request.minWidthMm ? [`minimum ${Math.round(request.minWidthMm / 10)} cm wide`] : []),
     ...(request.targetWidthMm ? [`around ${Math.round(request.targetWidthMm / 10)} cm wide`] : []),
+    ...(request.bedTypes ?? []).map((value) => value.replace(/-/g, " ")),
+    ...(request.bedSleepingWidthMm && request.bedSleepingLengthMm ? [`${request.bedSleepingWidthMm / 10} × ${request.bedSleepingLengthMm / 10} cm sleeping size`] : []),
+    ...(request.bedStorage ? ["bed storage"] : []),
+    ...(request.bedMotorised ? ["motorised bed adjustment"] : []),
     ...(request.layoutShapes ?? []).map((value) => `${value} layout`),
     ...(request.excludedLayoutShapes ?? []).map((value) => `not ${value} layout`),
     ...(request.tabletopShapes ?? []).map((value) => `${value} tabletop`),
@@ -407,22 +484,24 @@ export function parseMaterialNeeds(textValue: string): MaterialAdvice {
   const preferredColors = colors.filter((color) => text.includes(color));
   const preferredMaterialGroups = ["leather", "fabric"].filter((group) => text.includes(group));
   const avoidMaterialGroups = (text.match(/(?:avoid|without|no)\s+(leather|fabric)/)?.[1] ? [text.match(/(?:avoid|without|no)\s+(leather|fabric)/)![1]] : []);
+  const highestDurabilityRequired = /\b(?:most durable|highest durability|maximum durability|best durability)\b/.test(text);
+  const highestVerifiedDurability = Math.max(...materials.map((material) => material.durability ?? 0));
   const needs = {
     children: /children|child|kids?|kinder|family/.test(text),
     pets: /pets?|dog|cat|hund|katze/.test(text),
     highUse: /high use|everyday|daily|busy|frequent/.test(text),
     strongSunlight: /strong (?:afternoon )?sunlight|direct sun|sunny/.test(text),
-    easyCareRequired: /easy(?: to)? (?:care|clean|wash)|easy[- ]care|washable|children|pets?|dog|stain/.test(text),
+    easyCareRequired: /\b(?:easy|easier|easiest)(?:\s+to)?\s+(?:care(?:\s+for)?|clean|wash|maintain)|\beasy[- ]care\b|\bwashable\b|\bstain(?:s|ed|ing)?\b/.test(text),
     preferredColors: preferredColors.length ? preferredColors : undefined,
     preferredMaterialGroups: preferredMaterialGroups.length ? preferredMaterialGroups : undefined,
     avoidMaterialGroups: avoidMaterialGroups.length ? avoidMaterialGroups : undefined
   };
   const scored = materials.map((material) => {
     let score = 0;
-    if (needs.children) score += material.familyFriendly ? 4 : -4;
-    if (needs.pets) score += material.petFriendly ? 4 : -4;
-    if (needs.highUse) score += material.durability;
-    if (needs.easyCareRequired) score += material.easyCare ? 4 : -3;
+    if (needs.children) score += material.familyFriendly === true ? 4 : -4;
+    if (needs.pets) score += material.petFriendly === true ? 4 : -4;
+    if (needs.highUse) score += material.durability ?? 0;
+    if (needs.easyCareRequired) score += material.easyCare === true ? 4 : -3;
     if (needs.strongSunlight) score += material.lightSensitivity === "low" ? 4 : material.lightSensitivity === "medium" ? 0 : -5;
     if (preferredColors.includes(material.colorFamily)) score += 3;
     if (preferredMaterialGroups.includes(material.type)) score += 3;
@@ -430,7 +509,7 @@ export function parseMaterialNeeds(textValue: string): MaterialAdvice {
     return { material, score };
   }).sort((left, right) => right.score - left.score);
   const scoredMaterialIds = scored
-    .filter(({ material, score }) => score >= 3 && materialMatchesNeeds(material, needs))
+    .filter(({ material, score }) => score >= 3 && materialMatchesNeeds(material, needs) && (!highestDurabilityRequired || (highestVerifiedDurability > 0 && material.durability === highestVerifiedDurability)))
     .map(({ material }) => material.id);
   const hasStructuredNeed = Boolean(needs.children || needs.pets || needs.highUse || needs.strongSunlight || needs.easyCareRequired || preferredColors.length || preferredMaterialGroups.length || avoidMaterialGroups.length);
   const recommendedMaterialIds = hasStructuredNeed ? scoredMaterialIds : materialMetadataMatches(textValue);
@@ -447,17 +526,18 @@ export function parseMaterialNeeds(textValue: string): MaterialAdvice {
 
 export function materialReasons(material: Material, advice: MaterialAdvice) {
   const suitable = [
-    ...(advice.needs.children && material.familyFriendly ? ["family-suitable metadata"] : []),
-    ...(advice.needs.pets && material.petFriendly ? ["pet-suitable metadata"] : []),
-    ...(advice.needs.easyCareRequired && material.easyCare ? ["easy-care metadata"] : []),
+    ...(advice.needs.children && material.familyFriendly === true ? ["family-suitable metadata"] : []),
+    ...(advice.needs.pets && material.petFriendly === true ? ["pet-suitable metadata"] : []),
+    ...(advice.needs.easyCareRequired && material.easyCare === true ? ["easy-care metadata"] : []),
     ...(advice.needs.strongSunlight && material.lightSensitivity === "low" ? ["low light sensitivity"] : []),
-    `durability ${material.durability}/5`
+    ...(material.durability != null ? [`durability ${material.durability}/5`] : []),
+    ...(!advice.needs.children && !advice.needs.pets && !advice.needs.easyCareRequired && !advice.needs.strongSunlight ? [`recorded ${material.type} category`] : [])
   ];
   const cautions = [
     ...(advice.needs.strongSunlight && material.lightSensitivity !== "low" ? [`${material.lightSensitivity} light sensitivity`] : []),
-    ...(advice.needs.pets && !material.petFriendly ? ["not marked pet-suitable"] : []),
-    ...(advice.needs.children && !material.familyFriendly ? ["not marked family-suitable"] : []),
-    ...(!material.easyCare ? ["more involved care"] : [])
+    ...(advice.needs.pets && material.petFriendly !== true ? ["pet suitability is unverified"] : []),
+    ...(advice.needs.children && material.familyFriendly !== true ? ["family suitability is unverified"] : []),
+    ...(material.easyCare === false ? ["more involved care"] : material.easyCare == null ? ["care performance is unverified"] : [])
   ];
   return { suitable, cautions };
 }

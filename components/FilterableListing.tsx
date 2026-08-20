@@ -315,7 +315,7 @@ function CatalogProductCard({ product, compareSelected, onCompare }: { product: 
             src={image}
             alt={`${product.name} ${(product.categories ?? [product.category]).map((category) => categoryDetails[category].label.toLowerCase()).join(" and ")}`}
             fill
-            unoptimized
+            quality={90}
             sizes="(max-width: 760px) 100vw, 50vw"
             style={{ objectFit: "cover" }}
           />

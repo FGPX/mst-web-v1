@@ -12,6 +12,14 @@ import type { RoomAnalysis } from "@/lib/ai/schemas";
 import type { Product, Project, SavedRoomScene } from "@/lib/types";
 
 type ComposerCategory = "all" | "seating" | "armchair" | "storage" | "tables" | "bedroom";
+const uploadComposerCategories: { id: ComposerCategory; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: "seating", label: "Seating" },
+  { id: "armchair", label: "Armchairs" },
+  { id: "tables", label: "Tables" },
+  { id: "storage", label: "Storage" },
+  { id: "bedroom", label: "Bedroom" }
+];
 const maxGeneratedVisualizationItems = 6;
 
 const roomBackgrounds = [
@@ -251,12 +259,18 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     if (category === "bedroom") return ["bed", "bedroom-series", "wardrobe", "home-textile"].includes(productCategory);
     return ["coffee-table", "dining-table", "small-furniture"].includes(productCategory);
   };
+  const catalogCategoryOrder = ["sofa", "sectional", "armchair", "coffee-table", "dining-table", "small-furniture", "storage", "wardrobe", "bed", "bedroom-series", "home-textile"];
   const catalog = activeProducts.filter((product) => categoryMatches(product.category)
     && (upload || generatedCutoutSlugs.has(product.slug))
     && `${product.modelCode} ${product.name} ${product.subtitle}`.toLowerCase().includes(productQuery.toLowerCase()))
-    .sort((left, right) => category === "bedroom"
-      ? Number(left.category !== "bed") - Number(right.category !== "bed")
-      : 0);
+    .sort((left, right) => {
+      const categoryDifference = category === "all"
+        ? catalogCategoryOrder.indexOf(left.category) - catalogCategoryOrder.indexOf(right.category)
+        : category === "bedroom"
+          ? Number(left.category !== "bed") - Number(right.category !== "bed")
+          : 0;
+      return categoryDifference || left.modelCode.localeCompare(right.modelCode, undefined, { numeric: true });
+    });
   const recommendedProductIdSet = useMemo(() => new Set(recommendedProductIds), [recommendedProductIds]);
   const recommendedProducts = recommendedProductIds
     .map((productId) => activeProducts.find((product) => product.id === productId))
@@ -735,13 +749,18 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               {roomPreview ? <button type="button" className="is-active"><span className="stitch-uploaded-swatch"><Upload size={18} /></span><small>Imported photo</small></button> : null}
             </div>
             <p className="eyebrow">{upload ? "Choose products" : "Module categories"}</p>
-            <div className="stitch-composer-tabs">
-              {upload ? <button className={category === "all" ? "is-active" : ""} onClick={() => { setCategory("all"); setVisibleCount(8); }}>All</button> : null}
-              <button className={category === "seating" ? "is-active" : ""} onClick={() => { setCategory("seating"); setVisibleCount(upload ? 8 : 12); }}>Seating</button>
-              {upload ? <button className={category === "bedroom" ? "is-active" : ""} onClick={() => { setCategory("bedroom"); setVisibleCount(8); }}>Bedroom</button> : null}
-              <button className={category === "armchair" ? "is-active" : ""} onClick={() => setCategory("armchair")}>Armchairs</button>
-              <button className={category === "storage" ? "is-active" : ""} onClick={() => setCategory("storage")}>Storage</button>
-              <button className={category === "tables" ? "is-active" : ""} onClick={() => setCategory("tables")}>Tables</button>
+            <div className="stitch-composer-tabs" aria-label="Product categories">
+              {(upload ? uploadComposerCategories : uploadComposerCategories.filter(({ id }) => id !== "all" && id !== "bedroom")).map(({ id, label }) => (
+                <button
+                  type="button"
+                  key={id}
+                  className={category === id ? "is-active" : ""}
+                  aria-pressed={category === id}
+                  onClick={() => { setCategory(id); setVisibleCount(upload ? 8 : 12); }}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
             <div className="stitch-composer-catalog-heading"><p className="eyebrow">Available products</p><span>{catalog.length} models</span></div>
             <input className="stitch-composer-search" type="search" value={productQuery} onChange={(event) => { setProductQuery(event.target.value); setVisibleCount(upload ? 4 : 12); }} placeholder="Search model or product" aria-label="Search products" />

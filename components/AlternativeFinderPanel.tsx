@@ -75,6 +75,9 @@ export function AlternativeFinderPanel() {
     setStatus("idle");
   };
   if (!open || !source) return null;
+  const suggestions = source.category === "bed"
+    ? ["Red upholstery", "Grey upholstery", "Fabric bed", "Upholstered bed", "Box-spring bed", "180 × 200 cm", "With bed storage", "Motorised adjustment"]
+    : ["Smaller size", "Higher seat", "Easy-care", "Relax function", "Three-seat sofa", "Modular design", "Electric recline", "Upright seating"];
   const renderMatches = (matches: AlternativeResponse["exactMatches"], exact: boolean) => (
     <div className="alternative-results">
       {matches.map((match) => {
@@ -129,7 +132,7 @@ export function AlternativeFinderPanel() {
         <div className="alternative-suggestions">
           <span>Suggestions</span>
           <div className="assistant-quick-row">
-            {["Smaller size", "Higher seat", "Easy-care", "Relax function", "Three-seat sofa", "Modular design", "Electric recline", "Upright seating"].map((text) => <button type="button" key={text} aria-pressed={requestText === text} onClick={() => setRequestText(text)}>{text}</button>)}
+            {suggestions.map((text) => <button type="button" key={text} aria-pressed={requestText === text} onClick={() => setRequestText(text)}>{text}</button>)}
           </div>
         </div>
         <label className="assistant-check">

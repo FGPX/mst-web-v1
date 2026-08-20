@@ -1,11 +1,43 @@
 import authorizedCatalog from "./generated/musterring-catalog.json";
 import { demoFactsFor } from "./demo-search-metadata";
 
+const authorizedVariantImages: Record<string, string[]> = {
+  "musterring-justb-sc100-grey": [
+    "/musterring-catalog/justb-sc100/image-05.jpg",
+    "/musterring-catalog/justb-sc100/image-06.jpg",
+    "/musterring-catalog/justb-sc100/image-07.jpg",
+    "/musterring-catalog/justb-sc100/image-08.jpg"
+  ],
+  "musterring-delphi-light-grey": [
+    "/musterring-catalog/delphi/image-05.jpg",
+    "/musterring-catalog/delphi/image-06.jpg",
+    "/musterring-catalog/delphi/image-07.jpg",
+    "/musterring-catalog/delphi/image-08.jpg"
+  ],
+  "musterring-mr-dubai-red": [
+    "/musterring-catalog/mr-dubai/image-05.jpg",
+    "/musterring-catalog/mr-dubai/image-06.jpg",
+    "/musterring-catalog/mr-dubai/image-07.jpg",
+    "/musterring-catalog/mr-dubai/image-08.jpg"
+  ]
+};
+
 const authorizedProductImages = Object.fromEntries(
   authorizedCatalog.products.map((product) => [product.appProductId, product.images])
 ) as Record<string, string[]>;
 
 const verifiedColourImages: Record<string, Record<string, string>> = {
+  "musterring-justb-sc100-grey": {
+    grey: "/musterring-catalog/justb-sc100/image-05.jpg"
+  },
+  "musterring-delphi-light-grey": {
+    grey: "/musterring-catalog/delphi/image-05.jpg",
+    "light grey": "/musterring-catalog/delphi/image-05.jpg",
+    graphite: "/musterring-catalog/delphi/image-05.jpg"
+  },
+  "musterring-mr-dubai-red": {
+    red: "/musterring-catalog/mr-dubai/image-05.jpg"
+  },
   "musterring-justb-pm100": {
     beige: "/musterring-catalog/justb-pm100/image-01.jpg",
     cream: "/musterring-catalog/justb-pm100/image-01.jpg",
@@ -82,7 +114,7 @@ const legacyProductImages: Record<string, string[]> = {
 };
 
 export function productImages(productId: string) {
-  return authorizedProductImages[productId] ?? legacyProductImages[productId] ?? authorizedProductImages.p1;
+  return authorizedVariantImages[productId] ?? authorizedProductImages[productId] ?? legacyProductImages[productId] ?? authorizedProductImages.p1;
 }
 
 export function hasVerifiedColourPresentation(productId: string, color: string) {
