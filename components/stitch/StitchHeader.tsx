@@ -39,6 +39,12 @@ export function StitchHeader() {
   const [furnitureOpen, setFurnitureOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
+  // The Asset Studio is intentionally a separate application: it keeps the
+  // existing image-generation workflow isolated from the customer website.
+  // Set this to the deployed Studio URL for production. The fallback matches
+  // the current local Ikon image-generation app and is intentionally local-only.
+  const assetStudioUrl = process.env.NEXT_PUBLIC_AI_ASSET_STUDIO_URL?.trim()
+    || (process.env.NODE_ENV === "development" ? "https://localhost:9443" : "");
   const close = () => {
     setOpen(false);
     setFurnitureOpen(false);
@@ -91,6 +97,7 @@ export function StitchHeader() {
           <Link className={active("/about") ? "is-active" : ""} href="/about">About</Link>
           <Link className={active("/contact") ? "is-active" : ""} href="/contact">Contact</Link>
           <Link className="stitch-partner-entry" href="/partner/login">Partner Portal</Link>
+          {assetStudioUrl ? <a className="stitch-partner-entry" href={assetStudioUrl} target="_blank" rel="noopener noreferrer">AI Asset Studio</a> : null}
           <Link className="stitch-project-entry" href="/my-musterring">My Project</Link>
         </div>
         <div className="stitch-nav-actions">
@@ -145,6 +152,7 @@ export function StitchHeader() {
         </details>
         <Link href="/room-composer/upload" onClick={close}>Room Visualizer</Link>
         <Link href="/ai-stylist" onClick={close}>Style Finder</Link>
+        {assetStudioUrl ? <a href={assetStudioUrl} target="_blank" rel="noopener noreferrer" onClick={close}>AI Asset Studio</a> : null}
         <Link href="/my-musterring" onClick={close}>My Project</Link>
         <Link href="/search#visual-search" onClick={close}>Visual Search</Link>
         <Link href="/comfort-match" onClick={close}>Advice</Link>

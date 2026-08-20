@@ -27,7 +27,7 @@ export type PreviewScene = {
 
 export function SavedRoomScenePreview({ scene, compact = false }: { scene: PreviewScene; compact?: boolean }) {
   return <div className={`saved-room-scene-preview${compact ? " is-compact" : ""}`}>
-    {scene.generatedVisualizationSrc ? <Image className="saved-room-scene-background" src={scene.generatedVisualizationSrc} alt="Saved AI-generated room view" fill sizes={compact ? "33vw" : "80vw"} style={{ objectFit: "cover" }} unoptimized /> : scene.backgroundSrc ? <Image className="saved-room-scene-background" src={scene.backgroundSrc} alt="Saved room background" fill sizes={compact ? "33vw" : "80vw"} style={{ objectFit: "cover" }} unoptimized={scene.backgroundSrc.startsWith("data:")} /> : <div className="saved-room-scene-neutral"><span /><i /></div>}
+    {scene.generatedVisualizationSrc ? <Image className="saved-room-scene-background" src={scene.generatedVisualizationSrc} alt="Saved AI-generated room view" fill sizes={compact ? "33vw" : "80vw"} style={{ objectFit: "contain" }} unoptimized /> : scene.backgroundSrc ? <Image className="saved-room-scene-background" src={scene.backgroundSrc} alt="Saved room background" fill sizes={compact ? "33vw" : "80vw"} style={{ objectFit: "cover" }} unoptimized={scene.backgroundSrc.startsWith("data:")} /> : <div className="saved-room-scene-neutral"><span /><i /></div>}
     <div className="saved-room-scene-shade" />
     {!scene.generatedVisualizationSrc ? scene.items?.map((item) => {
       const product = products.find((candidate) => candidate.id === item.productId);

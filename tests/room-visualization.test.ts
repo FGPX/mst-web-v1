@@ -4,6 +4,7 @@ import { products } from "@/lib/data";
 import {
   buildRoomVisualizationPrompt,
   groundVisualizationItems,
+  normalizedOrientation,
   normalizeRoomImage,
   roomVisualizationRequestSchema
 } from "@/lib/ai/room-visualization";
@@ -39,11 +40,39 @@ describe("catalogue-grounded room visualization", () => {
     const prompt = buildRoomVisualizationPrompt(groundVisualizationItems([item]));
     expect(prompt).toContain(product.modelCode);
     expect(prompt).toContain("one complete, cohesive, photorealistic premium interior photograph");
+    expect(prompt).toContain("16:9 landscape composition");
     expect(prompt).toContain("Keep it unmistakably the same room");
     expect(prompt).toContain("Do not add people, text, logos, decorations, plants, or unselected furniture");
     expect(prompt).toContain("PRODUCT LOCK");
     expect(prompt).toContain("Do not recolour, desaturate, brighten, darken");
     expect(prompt).toContain("exact selected-product appearance");
+    expect(prompt).toContain("single chair must never appear larger than a sofa or sectional");
+    expect(prompt).toContain("Product size is adaptive rather than a hard percentage");
+  });
+
+  it("keeps quarter-turn orientation and wall placement as hard generation constraints", () => {
+    const pm100 = products.find((candidate) => candidate.slug === "justb-pm100")!;
+    const grounded = groundVisualizationItems([{
+      productId: pm100.id,
+      x: 22,
+      y: 82,
+      rotation: 90,
+      viewIndex: 1,
+      wallPlacement: "west",
+      scale: 1
+    }]);
+    const prompt = buildRoomVisualizationPrompt(grounded);
+    expect(grounded[0].assetUrl).toContain("illustrative-right-v2.png");
+    expect(prompt).toContain("90 degrees clockwise");
+    expect(prompt).toContain("west wall");
+    expect(prompt).toContain("5-15 cm");
+    expect(prompt).toContain("do not pull it toward the middle of the room");
+    expect(prompt).toContain("Never rotate or tilt the flat image");
+  });
+
+  it("normalizes rotations to the four horizontal product orientations", () => {
+    expect(normalizedOrientation(450)).toMatchObject({ degrees: 90 });
+    expect(normalizedOrientation(-90)).toMatchObject({ degrees: 270 });
   });
 
   it("never lets an approximate layout colour override a fixed catalogue reference", () => {
