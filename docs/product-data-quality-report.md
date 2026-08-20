@@ -1,6 +1,6 @@
 # Musterring Product Data Quality Report
 
-Generated: 2026-08-20T08:40:17.940Z
+Generated: 2026-08-20T09:39:50.534Z
 
 This report audits the immutable authorised catalogue import. It does not silently rewrite source values.
 
@@ -30,4 +30,16 @@ This report audits the immutable authorised catalogue import. It does not silent
 | NICA (nica) | Incomplete image set (2 images) | Medium | Add authorised front, detail and room-set assets in DAM. |
 | FREILICHT (freilicht) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |
 | HELMOND OUTDOOR (helmond-outdoor) | Empty official description | High | Correct the source page/import; retain the product but do not invent an authorised description. |
-| Target: side-table | Only 2 verified subtype candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until another official programme is structured and verified. |
+| Target: sofa | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: armchair | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: coffee-table | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: side-table | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: wall-unit | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: sideboard | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: bed | Only 1 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: wardrobe | Only 1 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: bedside-table | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: dresser | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: dining-table | Only 2 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: dining-chair | Only 1 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |
+| Target: dining-bench | Only 0 fact-complete verified candidates; single-product exact mode requires 3 | Medium | Keep the target in closest-match mode until dimensions and the subtype-specific hard facts are officially verified. |

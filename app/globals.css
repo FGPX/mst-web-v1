@@ -3769,10 +3769,17 @@ body:has(.stitch-project) .stitch-project-entry { border-bottom-color: var(--sti
 .stitch-room-view-card small { color: var(--stitch-accent); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .stitch-room-view-card strong { font-family: var(--stitch-font-display); font-size: 25px; font-weight: 400; }
 .stitch-room-view-card span { color: var(--stitch-text-secondary); font-size: 12px; }
-.stitch-room-view-actions { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--stitch-border-soft); }
+.stitch-room-view-actions { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--stitch-border-soft); }
 .stitch-room-view-actions a,
 .stitch-room-view-actions button { min-height: 44px; display: grid; place-items: center; border: 0; background: transparent; color: var(--stitch-text-primary); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
-.stitch-room-view-actions button { border-left: 1px solid var(--stitch-border-soft); color: #8e351f; cursor: pointer; }
+.stitch-room-view-actions > * + * { border-left: 1px solid var(--stitch-border-soft); }
+.stitch-room-view-actions button { color: var(--stitch-text-primary); cursor: pointer; }
+.stitch-room-view-actions button:last-child { color: #8e351f; }
+.stitch-project-selection-hint { color: var(--stitch-text-secondary); font-size: 12px; }
+.stitch-project-title > div > p { margin: 5px 0 0; color: var(--stitch-text-secondary); }
+.stitch-project-products > article { position: relative; border: 2px solid transparent; }
+.stitch-project-products > article.is-selected { border-color: var(--stitch-accent); }
+.stitch-project-product-select { position: absolute; z-index: 3; top: 12px; left: 12px; display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: rgba(255,255,255,.94); box-shadow: 0 4px 16px rgba(25,24,21,.12); cursor: pointer; font-size: 11px; font-weight: 800; text-transform: uppercase; }
 .saved-room-scene-preview { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; isolation: isolate; background: #d7d4ce; }
 .saved-room-scene-preview.is-compact { aspect-ratio: 16 / 10; }
 .saved-room-scene-background { z-index: 0; object-fit: cover; }

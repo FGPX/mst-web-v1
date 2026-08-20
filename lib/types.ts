@@ -82,6 +82,8 @@ export type SeatingSpecifications = {
   backrestHeightMm?: number | null; armrestHeightMm?: number | null; armrestWidthMm?: number | null;
   comfortLevel?: string; seatFirmnessOptions: string[]; seatQualityOptions: string[];
   seatHeightOptionsMm: number[]; seatDepthOptionsMm: number[]; ergonomicSizes: string[];
+  baseVariantCount?: number | null; armrestVariantCount?: number | null;
+  seatHeightAdjustmentRangeMm?: [number, number] | null; liftAidMaxLoadKg?: number | null;
   headrestAdjustable: boolean; seatDepthAdjustable: boolean; backrestAdjustable: boolean; armrestAdjustable: boolean;
   recliner: boolean; manualRecliner: boolean; electricRecliner: boolean; liftAssist: boolean;
   swivel: boolean; swivelDegrees?: number | null; sofaBed: boolean; sleepingArea?: { widthMm: number; lengthMm: number } | null;
@@ -348,6 +350,9 @@ export type Product = {
   smallSpaceReason?: string[];
   comfortProfile?: string;
   easyCare?: boolean | null;
+  easyCareReason?: string[];
+  familyFriendly?: boolean | null;
+  petFriendly?: boolean | null;
   specifications?: ProductSpecifications;
   media?: ProductMedia;
   documents?: ProductDocuments;
@@ -426,6 +431,9 @@ export type ProductVariant = {
   materialId?: string;
   color: string | { name: string; family: string; code?: string };
   dimensions?: Dimensions;
+  seatHeightMm?: number | null;
+  seatDepthMm?: number | null;
+  reclinedDepthMm?: number | null;
   layoutShape?: string;
   price?: number | null;
   currency?: string | null;
@@ -500,6 +508,44 @@ export type Project = {
   preferredDealerId?: string;
   savedMaterialIds?: string[];
   archived?: boolean;
+  updatedAt: string;
+  demoData: boolean;
+};
+
+export type SavedRoomSceneItem = {
+  id: string;
+  productId: string;
+  x: number;
+  y: number;
+  rotation: number;
+  viewIndex?: number;
+  scale: number;
+  materialId?: string;
+  color?: string;
+  locked?: boolean;
+  zIndex?: number;
+  dimensions: Dimensions;
+};
+
+export type SavedRoomScene = {
+  id: string;
+  /** Stable id shared by every immutable version of the same room view. */
+  rootSceneId: string;
+  parentVersionId?: string;
+  projectId: string;
+  name: string;
+  version: number;
+  planningMode: "inspiration" | "accurate";
+  roomSize: { widthMm: number; lengthMm: number };
+  sceneScale: number;
+  backgroundId: string;
+  /** Catalogue background or a compressed, browser-local room photo. */
+  backgroundSrc?: string;
+  /** Final AI composite, kept separately so editable catalogue items are not flattened. */
+  generatedVisualizationSrc?: string;
+  hasLocalRoomPhoto: boolean;
+  items: SavedRoomSceneItem[];
+  createdAt: string;
   updatedAt: string;
   demoData: boolean;
 };

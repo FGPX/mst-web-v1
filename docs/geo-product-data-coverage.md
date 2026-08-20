@@ -1,6 +1,6 @@
 # GEO Product Data Coverage
 
-Generated: 2026-08-20T08:40:17.940Z
+Generated: 2026-08-20T09:39:50.534Z
 
 ## Summary
 
@@ -16,18 +16,20 @@ Generated: 2026-08-20T08:40:17.940Z
 
 ## Field coverage
 
+Presence coverage includes clearly labelled demo enrichment; verified coverage is reported separately where applicable.
+
 | Field | Products | Coverage |
 |---|---:|---:|
 | dimensions | 142 | 100% |
 | materials | 142 | 100% |
-| functions | 19 | 13% |
+| functions | 138 | 97% |
 | categorySpecificSpecs | 139 | 98% |
 | images | 142 | 100% |
 | officialSourceUrl | 142 | 100% |
 | structuredMedia | 142 | 100% |
 | productGroupIdentity | 142 | 100% |
 | provenance | 142 | 100% |
-| verifiedDimensions | 8 | 6% |
+| verifiedDimensions | 7 | 5% |
 | verifiedOrAuthorisedFacts | 142 | 100% |
 | productSubtypes | 142 | 100% |
 | verifiedProductSubtypes | 142 | 100% |
@@ -36,23 +38,23 @@ Generated: 2026-08-20T08:40:17.940Z
 
 ## Exact-capable target gate
 
-A single-product target needs at least 3 candidates with the relevant exact field paths verified. Set slots need at least 2. Unknown and demo values remain searchable for closest-match ranking but cannot satisfy hard filters.
+A single-product target needs at least 3 fact-complete candidates with subtype, dimensions and the relevant capacity/shape/size fields verified. Set slots need at least 2. Demo values may be displayed as indicative and used for closest-match ranking, but cannot satisfy verified hard filters.
 
-| Product subtype | Verified candidates | Single-product exact capable | Set-slot capable |
+| Product subtype | Fact-complete verified candidates | Single-product exact capable | Set-slot capable |
 |---|---:|---|---|
-| sofa | 37 | yes | yes |
-| armchair | 37 | yes | yes |
-| coffee-table | 16 | yes | yes |
-| side-table | 2 | no | yes |
-| wall-unit | 9 | yes | yes |
-| sideboard | 20 | yes | yes |
-| bed | 24 | yes | yes |
-| wardrobe | 23 | yes | yes |
-| bedside-table | 12 | yes | yes |
-| dresser | 10 | yes | yes |
-| dining-table | 30 | yes | yes |
-| dining-chair | 26 | yes | yes |
-| dining-bench | 18 | yes | yes |
+| sofa | 0 | no | no |
+| armchair | 0 | no | no |
+| coffee-table | 0 | no | no |
+| side-table | 0 | no | no |
+| wall-unit | 0 | no | no |
+| sideboard | 0 | no | no |
+| bed | 1 | no | no |
+| wardrobe | 1 | no | no |
+| bedside-table | 0 | no | no |
+| dresser | 0 | no | no |
+| dining-table | 2 | no | yes |
+| dining-chair | 1 | no | no |
+| dining-bench | 0 | no | no |
 
 ## Category coverage
 
@@ -77,7 +79,7 @@ A single-product target needs at least 3 candidates with the relevant exact fiel
 
 ## Implemented attributes
 
-Identity and ProductGroup fields; productSubtypes; room/use/style/colour/material metadata; field-level quality buckets; configuration dimensions; SeriesSpecifications and explicit compatibility; category-specific seating, bedroom, dining, storage, outdoor, carpet and lamp specifications; source documents; safe commerce placeholders; structured search and exact/closest recommendation contracts. Text evidence may improve scoring but does not satisfy a structured hard filter. GTIN, EAN, SKU, MPN, certifications, official prices, legal ratings and real dealer inventory remain null unless supplied by an authorised source.
+Identity and ProductGroup fields; productSubtypes; room/use/style/colour/material metadata; field-level quality buckets; coherent demo variants and configuration dimensions; SeriesSpecifications and explicit compatibility; category-specific seating, bedroom, dining, storage, outdoor, carpet and lamp specifications; source documents; safe commerce placeholders; structured search and exact/closest recommendation contracts. Text evidence may improve scoring but does not satisfy a structured hard filter. GTIN, EAN, SKU, MPN, certifications, official prices, legal ratings and real dealer inventory remain null unless supplied by an authorised source.
 
 ## Recommended future PIM fields
 

@@ -7,27 +7,20 @@ import { useEffect, useState } from "react";
 import { materials, products } from "@/lib/data";
 import { storage } from "@/lib/persistence";
 import { roomSceneProductImage } from "@/lib/room-scene-assets";
-import { SavedRoomScenePreview, type PreviewScene, type PreviewSceneItem } from "./SavedRoomScenePreview";
-
-type SceneItem = PreviewSceneItem & { scale?: number };
-
-type SavedRoomScene = PreviewScene & {
-  id?: string;
-  name?: string;
-  version?: number;
-  planningMode?: string;
-  createdAt?: string;
-  items?: SceneItem[];
-};
+import type { SavedRoomScene } from "@/lib/types";
+import { SavedRoomScenePreview } from "./SavedRoomScenePreview";
 
 export function RoomSceneDetailClient({ sceneKey }: { sceneKey: string }) {
   const router = useRouter();
   const [scene, setScene] = useState<SavedRoomScene | null | undefined>(undefined);
+  const [versions, setVersions] = useState<SavedRoomScene[]>([]);
 
   useEffect(() => {
-    const scenes = storage.roomScenes() as SavedRoomScene[];
+    const scenes = storage.roomScenes();
     const indexMatch = /^index-(\d+)$/.exec(sceneKey);
-    setScene(indexMatch ? scenes[Number(indexMatch[1])] ?? null : scenes.find((item) => item.id === sceneKey) ?? null);
+    const found = indexMatch ? scenes[Number(indexMatch[1])] ?? null : scenes.find((item) => item.id === sceneKey) ?? null;
+    setScene(found);
+    setVersions(found ? storage.roomSceneVersions(found.rootSceneId || found.id) : []);
   }, [sceneKey]);
 
   const deleteScene = () => {
@@ -38,6 +31,15 @@ export function RoomSceneDetailClient({ sceneKey }: { sceneKey: string }) {
     router.push("/my-musterring");
   };
 
+  const duplicateScene = () => {
+    if (!scene || !window.confirm(`Create a copy of "${scene.name}"?`)) return;
+    const timestamp = new Date().toISOString();
+    const rootSceneId = `room-view-${Date.now()}`;
+    const copy = { ...scene, id: `${rootSceneId}-v1`, rootSceneId, parentVersionId: undefined, name: `${scene.name} Copy`, version: 1, createdAt: timestamp, updatedAt: timestamp };
+    storage.saveRoomScene(copy);
+    router.push(`/my-musterring/room-scenes/${encodeURIComponent(copy.id)}`);
+  };
+
   if (scene === undefined) return <main className="container stitch-room-view-detail"><p>Loading saved room view…</p></main>;
   if (!scene) return <main className="container stitch-room-view-detail"><p className="eyebrow">Saved room view</p><h1>View not found</h1><Link href="/my-musterring">Back to My Project</Link></main>;
 
@@ -45,8 +47,9 @@ export function RoomSceneDetailClient({ sceneKey }: { sceneKey: string }) {
     <main className="container stitch-room-view-detail">
       <div className="stitch-room-view-detail-head">
         <div><p className="eyebrow">Saved Room View · Version {scene.version ?? "—"}</p><h1>{scene.name ?? "Living Room Concept"}</h1><p>{scene.items?.length ?? 0} saved items · {scene.planningMode === "accurate" ? "Accurate planning" : "Inspiration mode"} · Visual scale {Math.round((scene.sceneScale ?? 1) * 100)}%</p></div>
-        <div><Link href="/my-musterring">Back to My Project</Link><Link href="/room-composer">Open Plan a Room</Link><button className="stitch-room-view-delete" type="button" onClick={deleteScene}>Delete plan</button></div>
+        <div><Link href="/my-musterring">Back to My Project</Link><Link href={`/room-composer?scene=${encodeURIComponent(scene.id)}&project=${encodeURIComponent(scene.projectId)}`}>Edit room view</Link><button type="button" onClick={duplicateScene}>Copy view</button><Link href={`/handover?scene=${encodeURIComponent(scene.id)}`}>Send to retailer</Link><button className="stitch-room-view-delete" type="button" onClick={deleteScene}>Delete plan</button></div>
       </div>
+      {versions.length > 1 ? <nav className="chips" aria-label="Room view version history">{versions.map((version) => <Link className="chip" href={`/my-musterring/room-scenes/${encodeURIComponent(version.id)}`} key={version.id}>Version {version.version}</Link>)}</nav> : null}
       <SavedRoomScenePreview scene={scene} />
       {scene.roomSize?.widthMm && scene.roomSize.lengthMm ? <p className="stitch-room-view-room-size">Saved room: {Math.round(scene.roomSize.widthMm / 10)} × {Math.round(scene.roomSize.lengthMm / 10)} cm</p> : null}
       <section className="stitch-room-view-products" aria-label="Products in this saved room view">

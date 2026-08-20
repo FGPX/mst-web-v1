@@ -1,6 +1,6 @@
 "use client";
 
-import type { AnalyticsEvent, Configuration, Project, SavedStylistSet } from "./types";
+import type { AnalyticsEvent, Configuration, Project, SavedRoomScene, SavedStylistSet } from "./types";
 import { dealers, materials, products, projects as seedProjects } from "./data";
 import { createConfiguration, priceConfiguration } from "./configurator";
 
@@ -53,6 +53,64 @@ function write<T>(key: string, value: T) {
 function comparisonName(ids: string[]) {
   const names = ids.map((id) => products.find((product) => product.id === id)?.modelCode).filter(Boolean);
   return names.length ? names.join(" vs ") : "Saved product comparison";
+}
+
+function normalizeRoomScene(value: unknown, index: number): SavedRoomScene {
+  const raw = typeof value === "object" && value ? value as Record<string, unknown> : {};
+  const id = typeof raw.id === "string" ? raw.id : `legacy-room-view-${index}`;
+  const rawRoom = typeof raw.room === "object" && raw.room ? raw.room as Record<string, unknown> : {};
+  const rawSize = typeof raw.roomSize === "object" && raw.roomSize ? raw.roomSize as Record<string, unknown> : {};
+  const sourceItems = Array.isArray(raw.items) ? raw.items : Array.isArray(raw.productIds)
+    ? raw.productIds.map((productId, itemIndex) => ({ productId, x: 38 + itemIndex * 14, y: 84, rotation: 0 }))
+    : [];
+  const items = sourceItems.flatMap((value, itemIndex) => {
+    if (typeof value !== "object" || !value) return [];
+    const item = value as Record<string, unknown>;
+    const product = products.find((candidate) => candidate.id === item.productId);
+    if (!product) return [];
+    const rawDimensions = typeof item.dimensions === "object" && item.dimensions ? item.dimensions as Record<string, unknown> : {};
+    return [{
+      id: typeof item.id === "string" ? item.id : `${id}-item-${itemIndex + 1}`,
+      productId: product.id,
+      x: typeof item.x === "number" ? ("z" in item ? 50 + item.x * 10 : item.x) : 50,
+      y: typeof item.y === "number" ? item.y : typeof item.z === "number" ? 72 + item.z * 10 : 84,
+      rotation: typeof item.rotation === "number" ? item.rotation : 0,
+      viewIndex: typeof item.viewIndex === "number" ? item.viewIndex : undefined,
+      scale: typeof item.scale === "number" ? item.scale : 1,
+      materialId: typeof item.materialId === "string" ? item.materialId : product.materials[0],
+      color: typeof item.color === "string" ? item.color : product.colors[0],
+      locked: typeof item.locked === "boolean" ? item.locked : undefined,
+      zIndex: typeof item.zIndex === "number" ? item.zIndex : itemIndex + 1,
+      dimensions: {
+        widthMm: typeof rawDimensions.widthMm === "number" ? rawDimensions.widthMm : product.widthMm,
+        depthMm: typeof rawDimensions.depthMm === "number" ? rawDimensions.depthMm : product.depthMm,
+        heightMm: typeof rawDimensions.heightMm === "number" ? rawDimensions.heightMm : product.heightMm
+      }
+    }];
+  });
+  const createdAt = typeof raw.createdAt === "string" ? raw.createdAt : new Date(0).toISOString();
+  return {
+    id,
+    rootSceneId: typeof raw.rootSceneId === "string" ? raw.rootSceneId : id,
+    parentVersionId: typeof raw.parentVersionId === "string" ? raw.parentVersionId : undefined,
+    projectId: typeof raw.projectId === "string" ? raw.projectId : "project-room-composer",
+    name: typeof raw.name === "string" ? raw.name : "Saved Room View",
+    version: typeof raw.version === "number" ? raw.version : 1,
+    planningMode: raw.planningMode === "accurate" ? "accurate" : "inspiration",
+    roomSize: {
+      widthMm: typeof rawSize.widthMm === "number" ? rawSize.widthMm : typeof rawRoom.width === "number" ? rawRoom.width * 1000 : 5600,
+      lengthMm: typeof rawSize.lengthMm === "number" ? rawSize.lengthMm : typeof rawRoom.depth === "number" ? rawRoom.depth * 1000 : 4200
+    },
+    sceneScale: typeof raw.sceneScale === "number" ? raw.sceneScale : 1,
+    backgroundId: typeof raw.backgroundId === "string" ? raw.backgroundId : "neutral",
+    backgroundSrc: typeof raw.backgroundSrc === "string" ? raw.backgroundSrc : undefined,
+    generatedVisualizationSrc: typeof raw.generatedVisualizationSrc === "string" ? raw.generatedVisualizationSrc : undefined,
+    hasLocalRoomPhoto: raw.hasLocalRoomPhoto === true,
+    items,
+    createdAt,
+    updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : createdAt,
+    demoData: raw.demoData === true
+  };
 }
 
 export const storage = {
@@ -134,9 +192,10 @@ export const storage = {
   saveFitDraft: (productId: string, draft: unknown) => {
     write(keys.fitDrafts, { ...read<Record<string, unknown>>(keys.fitDrafts, {}), [productId]: draft });
   },
-  roomScenes: () => read<unknown[]>(keys.roomScenes, []),
+  roomScenes: () => read<unknown[]>(keys.roomScenes, []).map(normalizeRoomScene),
   saveRoomScene: (scene: unknown) => {
     write(keys.roomScenes, [...storage.roomScenes(), scene]);
+    return scene;
   },
   deleteRoomScene: (sceneKey: string) => {
     write(keys.roomScenes, storage.roomScenes().filter((scene, index) => {
@@ -144,6 +203,10 @@ export const storage = {
       return id !== sceneKey && `index-${index}` !== sceneKey;
     }));
   },
+  roomScene: (sceneId: string) => storage.roomScenes().find((scene) => scene.id === sceneId) ?? null,
+  roomSceneVersions: (rootSceneId: string) => storage.roomScenes()
+    .filter((scene) => (scene.rootSceneId || scene.id) === rootSceneId)
+    .sort((left, right) => left.version - right.version),
   stylistSets: () => read<SavedStylistSet[]>(keys.stylistSets, []),
   saveStylistSet: (set: SavedStylistSet) => {
     const activeIds = new Set(products.filter((product) => product.active).map((product) => product.id));
