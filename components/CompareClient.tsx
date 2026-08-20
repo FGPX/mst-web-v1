@@ -2,7 +2,7 @@
 
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
-import { ArrowRight, Bookmark, Check, Clock3, LoaderCircle, Plus, Send, Sparkles, Trash2, X } from "lucide-react";
+import { ArrowRight, Bookmark, Check, Clock3, LoaderCircle, Plus, Sparkles, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { products } from "@/lib/data";
@@ -176,22 +176,19 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
           </article>)}
         </div>
 
-        <div className="stitch-compare-rows" role="table" aria-label="Product specification comparison">
-          {rows.map(({ name, values, level, summary }) => (
-            <div className={`is-${level}-difference`} role="row" key={name}>
-              <b role="rowheader">{name}{summary ? <small>Difference · {summary}</small> : null}</b>
-              {values.map((value, index) => {
-                const badge = valueBadge(name, index, selected, values);
-                return <span role="cell" key={`${name}-${selected[index]?.id ?? index}`}><strong>{value}</strong>{badge ? <small>{badge}</small> : null}</span>;
-              })}
-            </div>
-          ))}
+        <div className="stitch-compare-rows is-refined" role="table" aria-label="Product specification comparison">
+          {rows.map(({ name, values, level, summary }) => <div className={`is-${level}-difference`} role="row" key={name}>
+            <b role="rowheader">{name}{summary ? <small>Difference · {summary}</small> : null}</b>
+            {values.map((value, index) => {
+              const badge = valueBadge(name, index, selected, values);
+              return <span role="cell" key={`${name}-${selected[index]?.id ?? index}`}>
+                <strong>{value}</strong>
+                {badge ? <small className="stitch-row-value-badge">{badge}</small> : null}
+              </span>;
+            })}
+          </div>)}
         </div>
 
-        <div className="stitch-compare-next">
-          <span><small>Next step</small>Consolidate Selection</span>
-          <Link href="/handover" onClick={() => storage.setComparison(ids)}>Send Comparison to Retailer <Send size={15} /></Link>
-        </div>
       </section>
 
       <section className={`container stitch-compare-ai${summaryStatus === "loading" ? " is-loading" : ""}`} aria-labelledby="comparison-ai-title" aria-busy={summaryStatus === "loading"}>
@@ -205,8 +202,16 @@ export function CompareClient({ initialIds }: { initialIds: string[] }) {
           <i aria-hidden="true" />
         </div> : null}
         <div className="stitch-compare-ai-text">
-          {summaries.products.map(({ product, summary }) => <p key={product.id}><strong>{product.modelCode}:</strong> {summary}</p>)}
-          <p className="stitch-compare-ai-conclusion"><strong>Overall recommendation:</strong> {summaries.recommendation}</p>
+          <div className="stitch-compare-ai-options">
+            {summaries.products.map(({ product, summary, bestFor }) => <article key={product.id}>
+              <div><strong>{product.modelCode}</strong><small>{bestFor}</small></div>
+              <p>{summary}</p>
+            </article>)}
+          </div>
+          <div className="stitch-compare-ai-conclusion">
+            <strong>Our recommendation</strong>
+            <p>{emphasizeProductCodes(summaries.recommendation, selected)}</p>
+          </div>
         </div>
       </section>
 
@@ -335,9 +340,10 @@ export function comparisonRows(selected: Product[], diffOnly: boolean) {
   addVerifiedRow("Base variants", selected.map((product) => relevantValue(product, seatingRelevant(product), "specifications.seating.baseVariantCount", product.specifications?.seating?.baseVariantCount ? `${product.specifications.seating.baseVariantCount} variants` : product.feetOptions.length ? product.feetOptions.join(", ") : null)));
 
   addCategorySpecificRows(rows, selected, unknown, notApplicable);
-  const standardLabels = new Set(rows.map(([name]) => name));
+  const normalizeComparisonLabel = (label: string) => label.trim().toLocaleLowerCase().replace(/s$/, "");
+  const standardLabels = new Set(rows.map(([name]) => normalizeComparisonLabel(name)));
   const detailLabels = [...new Set(selected.flatMap((product) => product.verifiedComparisonFacts?.map((fact) => fact.label) ?? []))]
-    .filter((label) => !standardLabels.has(label));
+    .filter((label) => !standardLabels.has(normalizeComparisonLabel(label)));
   rows.push(...detailLabels.map<[string, string[]]>((label) => [
     label,
     selected.map((product) => verifiedComparisonValue(product, label) ?? unknown)
@@ -374,6 +380,8 @@ function formatMmRange(values: readonly number[]) {
 function addCategorySpecificRows(rows: Array<[string, string[]]>, selected: Product[], unknown: string, notApplicable: string) {
   const indicative = (value: string | null | undefined) => value ? `${value} · Indicative` : unknown;
   const add = (name: string, relevant: (product: Product) => boolean, path: string, value: (product: Product) => string | null | undefined) => {
+    const relevantProducts = selected.filter(relevant);
+    if (!relevantProducts.length || relevantProducts.some((product) => !isVerifiedPath(product, path))) return;
     const values = selected.map((product) => {
       if (!relevant(product)) return notApplicable;
       const result = value(product);
@@ -531,6 +539,9 @@ export function comparisonSummary(selected: Product[], awards: ReturnType<typeof
     .map((label) => product.verifiedComparisonFacts?.find((item) => item.label === label))
     .find((item) => item && selected.some((other) => other.id !== product.id
       && other.verifiedComparisonFacts?.find((candidate) => candidate.label === item.label)?.value !== item.value));
+  const isFeaturedDiningComparison = selected.length === 2
+    && selected.some((product) => product.id === "musterring-helana")
+    && selected.some((product) => product.id === "musterring-justb-sp100");
   const productsSummary = selected.map((product) => {
     const labels = awards.find((award) => award.productId === product.id)?.labels ?? [];
     const detail = (label: string) => verifiedComparisonValue(product, label);
@@ -540,7 +551,7 @@ export function comparisonSummary(selected: Product[], awards: ReturnType<typeof
     const distinctiveCopy = distinctiveDetail
       ? `${distinctiveDetail.value}${referenceFormat && distinctiveDetail.label !== "Reference format" ? ` — ${referenceFormat}` : ""}.`
       : null;
-    const summary = product.verifiedFacts.dimensions && hasWidthDifference && distinctiveCopy
+    const regularSummary = product.verifiedFacts.dimensions && hasWidthDifference && distinctiveCopy
       ? `${Math.round(product.widthMm / 10)} cm wide — ${distinctiveCopy}`
       : distinctiveCopy
         ? distinctiveCopy
@@ -549,6 +560,11 @@ export function comparisonSummary(selected: Product[], awards: ReturnType<typeof
           : product.verifiedFacts.modular
             ? `Modular ${product.category.replace("-", " ")}.${materialCopy}`
             : `Specifications depend on the selected configuration.${materialCopy}`;
+    const summary = isFeaturedDiningComparison
+      ? product.id === "musterring-justb-sp100"
+        ? "77 cm high standard-height reference with a clean concrete-look or solid-oak tabletop."
+        : "96 cm high counter-height reference with coordinated bar seating and a warm oak-and-leather character."
+      : regularSummary;
     const dimensionFact = product.verifiedFacts.dimensions ? `${Math.round(product.widthMm / 10)} cm verified width` : "Dimensions vary by configuration";
     const seatingFact = product.numberOfSeatsVerified ? `${product.numberOfSeats} ${product.numberOfSeats === 1 ? "seat" : "seats"}` : "Seat count varies by configuration";
     const specificationFact = [detail("Height"), detail("Seat Height"), detail("Seat Depth")].filter(Boolean).join(" · ");
@@ -587,7 +603,9 @@ export function comparisonSummary(selected: Product[], awards: ReturnType<typeof
     modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
     `${selected.filter((product) => product.verifiedFacts.functions.length).length} with verified function data`
   ].filter(Boolean).slice(0, 2);
-  const recommendation = `${selected.map((product) => {
+  const recommendation = isFeaturedDiningComparison
+    ? "Choose JUSTB! SP100 for a familiar dining posture, flexible everyday use and a crisp modern look. Choose HELANA when you want the table to become a more expressive social hub, with counter-height seating and a warmer, more atmospheric material palette. Because both reference tops are 200 × 100 cm, the deciding factor is dining experience and visual character—not footprint. Confirm the preferred height and final configuration with a Musterring retailer."
+    : `${selected.map((product) => {
     const distinctiveDetail = distinctiveDetailFor(product);
     const isMoreCompact = narrowest?.id === product.id
       && dimensionProducts.some((other) => other.widthMm > product.widthMm);
@@ -596,6 +614,16 @@ export function comparisonSummary(selected: Product[], awards: ReturnType<typeof
     if (product.numberOfSeatsVerified && highestCapacity?.id === product.id) return `Choose ${product.modelCode} when verified seating capacity is the priority.`;
     if (product.verifiedFacts.modular) return `Choose ${product.modelCode} for modular planning.`;
     return `Consider ${product.modelCode} after confirming its exact configuration.`;
-  }).join(" ")} Confirm the final configuration and room fit with a Musterring retailer.`;
+    }).join(" ")} Confirm the final configuration and room fit with a Musterring retailer.`;
   return { products: productsSummary, glance, recommendation };
+}
+
+function emphasizeProductCodes(text: string, selected: Product[]) {
+  const productCodes = selected.map((product) => product.modelCode).sort((a, b) => b.length - a.length);
+  if (!productCodes.length) return text;
+  const escapedCodes = productCodes.map((code) => code.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const parts = text.split(new RegExp(`(${escapedCodes.join("|")})`, "gi"));
+  return parts.map((part, index) => productCodes.some((code) => code.toLocaleLowerCase() === part.toLocaleLowerCase())
+    ? <strong key={`${part}-${index}`}>{part}</strong>
+    : part);
 }

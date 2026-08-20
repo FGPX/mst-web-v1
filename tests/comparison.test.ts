@@ -35,13 +35,13 @@ describe("product comparison", () => {
   it("surfaces verified dining-table differences before shared specifications", () => {
     const tables = ["nica", "justb-sp100"].map((slug) => products.find((product) => product.slug === slug)!);
     const rows = comparisonRows(tables, false);
-    const shapes = rows.find((row) => row.name === "Tabletop shapes");
+    const shapes = rows.find((row) => row.name === "Tabletop shape");
 
     expect(shapes?.values).toEqual([
-      "6 verified shapes, including rectangular, oval and round",
-      "Focused rectangular format"
+      "rectangular, boat-shaped, oval, flat oval, round, rectangular with rounded corners",
+      "rectangular"
     ]);
-    expect(rows.findIndex((row) => row.name === "Tabletop shapes"))
+    expect(rows.findIndex((row) => row.name === "Tabletop shape"))
       .toBeLessThan(rows.findIndex((row) => row.level === "same"));
   });
 
@@ -56,10 +56,17 @@ describe("product comparison", () => {
       "Standard-height dining table for family meals and social gatherings"
     ]);
     expect(value("Visual style")?.[0]).toContain("brown genuine leather");
-    expect(value("Length range")).toEqual(["140–240 cm", "160–240 cm · Indicative"]);
+    expect(value("Planning range")).toEqual([
+      "High tables from 140 × 80 to 240 × 100 cm",
+      "Featured 200 × 100 cm dining configuration"
+    ]);
     expect(value("Materials")?.[0]).toContain("solid oak");
     expect(rows.some((row) => row.name === "Functions")).toBe(false);
     expect(rows.some((row) => row.name === "Family friendly")).toBe(false);
+    expect(rows.some((row) => row.name === "Extendable")).toBe(false);
+    expect(rows.some((row) => row.name === "Seating capacity")).toBe(false);
+    expect(rows.some((row) => ["Swivel", "Armrests", "Seat capacity"].includes(row.name))).toBe(false);
+    expect(rows.some((row) => row.name === "Tabletop shapes")).toBe(false);
 
     const summary = comparisonSummary(tables, comparisonAwards(tables));
     expect(summary.products.map((item) => item.summary).join(" ")).not.toContain("200 cm wide");

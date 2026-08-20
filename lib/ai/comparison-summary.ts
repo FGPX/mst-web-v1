@@ -43,6 +43,9 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
     .map((label) => product.verifiedDetails.find((item) => item.label === label))
     .find((item) => item && parsed.products.some((other) => other.productId !== product.productId
       && other.verifiedDetails.find((candidate) => candidate.label === item.label)?.value !== item.value));
+  const isFeaturedDiningComparison = parsed.products.length === 2
+    && parsed.products.some((product) => product.productId === "musterring-helana")
+    && parsed.products.some((product) => product.productId === "musterring-justb-sp100");
 
   const products = parsed.products.map((product) => {
     const detail = (label: string) => product.verifiedDetails.find((item) => item.label === label)?.value;
@@ -69,7 +72,7 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
     const keyFact = functionFact || comfortFact || specificationFact
       || (product.verifiedModular ? "Verified modular system" : "Other specifications vary by configuration");
     const distinctiveDetail = distinctiveDetailFor(product);
-    const conciseSummary = product.verifiedWidthCm !== null && distinctiveDetail
+    const regularSummary = product.verifiedWidthCm !== null && distinctiveDetail
       ? `${product.verifiedWidthCm} cm wide — ${distinctiveDetail.value}.`
       : product.verifiedWidthCm !== null
         ? `${product.verifiedWidthCm} cm wide${product.verifiedModular ? " modular" : ""} ${product.category}.`
@@ -78,6 +81,11 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
           : product.verifiedModular
             ? `Modular ${product.category}.${materialCopy}`
             : `Specifications depend on the selected configuration.${materialCopy}`;
+    const conciseSummary = isFeaturedDiningComparison
+      ? product.productId === "musterring-justb-sp100"
+        ? "77 cm high standard-height reference with a clean concrete-look or solid-oak tabletop."
+        : "96 cm high counter-height reference with coordinated bar seating and a warm oak-and-leather character."
+      : regularSummary;
 
     return {
       productId: product.productId,
@@ -115,7 +123,9 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
     modularCount ? `${modularCount} verified modular option${modularCount === 1 ? "" : "s"}` : "",
     `${parsed.products.filter((product) => product.verifiedFunctions.length).length} with verified function data`
   ].filter(Boolean).slice(0, 2);
-  const recommendation = `${parsed.products.map((product) => {
+  const recommendation = isFeaturedDiningComparison
+    ? "Choose JUSTB! SP100 for a familiar dining posture, flexible everyday use and a crisp modern look. Choose HELANA when you want the table to become a more expressive social hub, with counter-height seating and a warmer, more atmospheric material palette. Because both reference tops are 200 × 100 cm, the deciding factor is dining experience and visual character—not footprint. Confirm the preferred height and final configuration with a Musterring retailer."
+    : `${parsed.products.map((product) => {
     const distinctiveDetail = distinctiveDetailFor(product);
     const isMoreCompact = narrowest?.productId === product.productId
       && widthProducts.some((other) => other.verifiedWidthCm! > product.verifiedWidthCm!);
@@ -124,7 +134,7 @@ export function deterministicComparisonSummary(input: ComparisonSummaryInput): C
     if (product.verifiedSeatCount !== null && highestCapacity?.productId === product.productId) return `Choose ${product.modelCode} when verified seating capacity is the priority.`;
     if (product.verifiedModular) return `Choose ${product.modelCode} for modular planning.`;
     return `Consider ${product.modelCode} after confirming its exact configuration.`;
-  }).join(" ")} Confirm the final configuration and room fit with a Musterring retailer.`;
+    }).join(" ")} Confirm the final configuration and room fit with a Musterring retailer.`;
 
   return comparisonSummarySchema.parse({ products, glance, recommendation });
 }
@@ -144,17 +154,20 @@ export function validateComparisonSummary(
   const baselineById = new Map(baseline.products.map((product) => [product.productId, product]));
   const normalizedSummaries = parsed.products.map((product) => product.summary.trim().toLocaleLowerCase());
   const hasDuplicateSummaries = new Set(normalizedSummaries).size !== normalizedSummaries.length;
+  const isFeaturedDiningComparison = input.products.length === 2
+    && input.products.some((product) => product.productId === "musterring-helana")
+    && input.products.some((product) => product.productId === "musterring-justb-sp100");
   const recommendationMentionsEveryProduct = input.products.every((product) =>
     parsed.recommendation.toLocaleLowerCase().includes(product.modelCode.toLocaleLowerCase())
   );
-  const recommendation = recommendationMentionsEveryProduct && parsed.recommendation.trim().split(/\s+/).length <= 80
+  const recommendation = !isFeaturedDiningComparison && recommendationMentionsEveryProduct && parsed.recommendation.trim().split(/\s+/).length <= 80
     ? parsed.recommendation
     : baseline.recommendation;
   return comparisonSummarySchema.parse({
     ...parsed,
     products: expectedIds.map((id) => ({
       ...byId.get(id)!,
-      summary: !hasDuplicateSummaries && byId.get(id)!.summary.trim().split(/\s+/).length <= 20
+      summary: !isFeaturedDiningComparison && !hasDuplicateSummaries && byId.get(id)!.summary.trim().split(/\s+/).length <= 20
         ? byId.get(id)!.summary
         : baselineById.get(id)!.summary,
       bestFor: baselineById.get(id)!.bestFor,

@@ -33,6 +33,8 @@ Open `http://localhost:3000`.
 
 Copy `.env.example` to `.env.local` and add `OPENAI_API_KEY` to run Ask Musterring with the OpenAI Responses API. The app uses deterministic demo mode only when a key is unavailable or an AI request fails.
 
+Retailer handover email supports SMTP or Resend. For SMTP, configure `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASSWORD` and preferably `RETAILER_HANDOVER_TO` in `.env.local`. Gmail requires an App Password. For Resend, configure `RESEND_API_KEY`, `RETAILER_FROM_EMAIL` and `RETAILER_HANDOVER_TO`. All credentials remain server-side and must never use a `NEXT_PUBLIC_` prefix.
+
 Optional variables include `OPENAI_API_KEY`, `DATABASE_URL`, `RESEND_API_KEY`, map tokens, analytics ID and S3 credentials.
 
 ## Commands
