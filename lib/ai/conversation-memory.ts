@@ -1,6 +1,6 @@
 import { products } from "../data";
-import { asksForDetail, buildProductDetail, detailAspect, resolveProduct } from "./product-detail";
-import { productHasCategory, type Category } from "../types";
+import { asksForDetail, buildProductDetail, detailAspect, productIntent, resolveProduct, type ProductIntent } from "./product-detail";
+import { productHasCategory, type Category, type Product } from "../types";
 import { advisorAnswerSchema, type AdvisorAnswer, type ConversationContext } from "./assistant-schemas";
 import {
   emptyBrief, matchBrief, nextQuestion, requestedCategories, summariseBrief, updateBrief,
@@ -65,6 +65,61 @@ const pluralise = (label: string) => label.endsWith("s") ? label : `${label}s`;
 const toNearestPayload = (entry: ScoredProduct) => ({ productId: entry.product.id, gaps: entry.gaps.slice(0, 3) });
 
 /**
+ * Turns a next-step request about a known product into a proposed action the
+ * application can actually execute, rather than more prose about the product.
+ */
+function productActionAnswer(product: Product, intent: Exclude<ProductIntent, "detail" | "similar">, briefSummary: string[]): AdvisorAnswer {
+  const config = {
+    visualise: {
+      type: "OPEN_ROOM_COMPOSER" as const,
+      label: `Place ${product.modelCode} in a photo of your room`,
+      answer: `Let's put ${product.modelCode} in your actual room. Upload a photo of the space and I'll generate the visualisation here in the chat — it stays inspirational, so it isn't a fit confirmation.`,
+      questions: ["Upload a room photo", `Check whether ${product.modelCode} fits my room`]
+    },
+    choose: {
+      type: "SAVE_PRODUCT" as const,
+      label: `Add ${product.modelCode} to your project`,
+      answer: `Good choice. I'll put ${product.modelCode} in your project — then we can place it in a photo of your room and, when you're ready, hand the whole thing to a retailer.`,
+      questions: [`See ${product.modelCode} in my room`, "Show me something similar", "Find my nearest retailer"]
+    },
+    save: {
+      type: "SAVE_PRODUCT" as const,
+      label: `Save ${product.modelCode} to My Musterring`,
+      answer: `I'll add ${product.modelCode} to your project so it travels with you to the retailer handover.`,
+      questions: [`See ${product.modelCode} in my room`, "Find my nearest retailer"]
+    },
+    compare: {
+      type: "COMPARE_PRODUCTS" as const,
+      label: `Compare ${product.modelCode} with your other options`,
+      answer: `I'll put ${product.modelCode} side by side with the other options you've seen.`,
+      questions: [`See ${product.modelCode} in my room`]
+    },
+    retailer: {
+      type: "FIND_RETAILER" as const,
+      label: "Find your nearest Musterring retailer",
+      answer: `Good moment to bring in a retailer — they confirm price, availability and delivery for ${product.modelCode}. Tell me your city or postcode.`,
+      questions: ["Prepare my project for the retailer"]
+    }
+  }[intent];
+
+  return advisorAnswerSchema.parse({
+    answer: config.answer,
+    answerType: intent === "visualise" ? "room" : intent === "retailer" ? "dealer" : "project",
+    productIds: [product.id],
+    materialIds: [],
+    sources: ["Musterring product catalogue"],
+    proposedAction: {
+      type: config.type,
+      label: config.label,
+      parameters: { productId: product.id, slug: product.slug },
+      requiresConfirmation: config.type === "SAVE_PRODUCT"
+    },
+    suggestedQuestions: config.questions,
+    clarify: null, unmet: [], nearest: [], briefSummary
+  });
+}
+
+/**
  * Renders a product's catalogue facts as a chat answer. Used when the customer
  * is asking about a product they already have in front of them.
  */
@@ -113,13 +168,27 @@ export function groundAdvisorConversationTurn(question: string, context: Convers
   // answered with a fresh wall of recommendations. "Continue with BARI" and
   // "explain this bed's functions" are the same intent: tell me about THIS one.
   const named = resolveProduct(question);
-  const focusId = named?.id
-    ?? (asksForDetail(question) && !WANTS_OTHERS.test(question)
-      ? brief.focusProductId ?? (context.currentProductId ?? undefined) ?? brief.shownProductIds.at(-1)
-      : undefined);
-  if (focusId && products.some((product) => product.id === focusId && product.active)
-    && (named || asksForDetail(question)) && !WANTS_OTHERS.test(question)) {
-    return productDetailAnswer(focusId, question, briefSummary);
+  const intent = productIntent(question);
+  // "this one" means the option that was presented first — the best match —
+  // not the last row of the list, which is the weakest suggestion.
+  const impliedId = brief.focusProductId
+    ?? context.referencedProductIds[0]
+    ?? (context.currentProductId ?? undefined)
+    ?? brief.shownProductIds[0];
+  const addressesProduct = intent !== "detail" || asksForDetail(question);
+  const focusId = named?.id ?? (addressesProduct && !WANTS_OTHERS.test(question) ? impliedId : undefined);
+  const focus = focusId ? products.find((product) => product.id === focusId && product.active) : undefined;
+
+  if (focus && (named || addressesProduct)) {
+    // "See it in my room", "save it", "I'll take this one" are steps in the
+    // journey, not requests for another description. They must advance the
+    // process, not repeat what the customer just read.
+    if (intent !== "detail" && intent !== "similar") {
+      return productActionAnswer(focus, intent, briefSummary);
+    }
+    if (intent === "detail" && !WANTS_OTHERS.test(question)) {
+      return productDetailAnswer(focus.id, question, briefSummary);
+    }
   }
 
   let categories = requestedCategories(question);
@@ -133,7 +202,12 @@ export function groundAdvisorConversationTurn(question: string, context: Convers
     return advisorAnswerSchema.parse({ ...generated, briefSummary });
   }
 
-  const excludeIds = WANTS_OTHERS.test(question) ? brief.shownProductIds : [];
+  // "Show me something similar" must not return the very product the customer
+  // is looking at, so the focus is excluded alongside anything already seen.
+  const wantsAlternatives = WANTS_OTHERS.test(question) || intent === "similar";
+  const excludeIds = wantsAlternatives
+    ? [...new Set([...brief.shownProductIds, ...(focus ? [focus.id] : []), ...(impliedId ? [impliedId] : [])])]
+    : [];
   const primary = categories[0];
 
   // Ask before guessing when the brief is still too thin to mean anything.
@@ -218,7 +292,7 @@ export function groundAdvisorConversationTurn(question: string, context: Convers
   // get different sentences, not the same sentence with a footnote.
   const opener = /\b(?:smaller|too big|more compact|narrower)\b/i.test(question)
     ? `Understood — smaller ${plural}`
-    : WANTS_OTHERS.test(question)
+    : wantsAlternatives
       ? `Of course — different ${plural}`
       : `Here are ${plural}`;
   const body = unverified.length

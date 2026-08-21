@@ -70,6 +70,31 @@ export function detailAspect(text: string): DetailAspect {
   return ASPECT_PATTERNS.find(([, pattern]) => pattern.test(text))?.[0] ?? "overview";
 }
 
+/**
+ * What the customer wants done with a product they already have in view. The
+ * quick-reply chips ("See HELANA in my room", "Save HELANA to my project")
+ * previously came straight back through the text path, so naming the product
+ * was read as "tell me about it" and the assistant repeated the same
+ * description instead of advancing the journey.
+ */
+export type ProductIntent = "choose" | "visualise" | "save" | "similar" | "compare" | "retailer" | "detail";
+
+const INTENT_PATTERNS: Array<[ProductIntent, RegExp]> = [
+  ["visualise", /\b(?:in my room|in my space|see it in|show it in|place it in|visuali[sz]e|visuali[sz]er|room planner|how (?:it|this) (?:would |will )?look)\b/i],
+  ["save", /\b(?:save|add|keep|put)\b[^.?!]{0,30}\b(?:project|my musterring|shortlist|list)\b/i],
+  // "I like this one" is a decision, not a request for lookalikes. Reading it
+  // as "similar" sent the customer back to browsing at the exact moment they
+  // had chosen something.
+  ["choose", /\b(?:i(?:'| a)?ll take (?:this|it)|i like (?:this|it)|i want this|take this one|go with this|choose this|pick this|that one|this one, please|yes, this)\b/i],
+  ["similar", /\b(?:similar|something like (?:this|that|it)|alternatives?|other options|comparable|anything else like)\b/i],
+  ["compare", /\b(?:compare|side by side|versus|vs\b|difference between)\b/i],
+  ["retailer", /\b(?:retailer|dealer|showroom|consultation|appointment|book)\b/i]
+];
+
+export function productIntent(text: string): ProductIntent {
+  return INTENT_PATTERNS.find(([, pattern]) => pattern.test(text))?.[0] ?? "detail";
+}
+
 /** True when the message asks about a product rather than for new options. */
 const DETAIL_INTENT = /\b(?:tell me more|more about|explain|describe|details?|what about|specs?|specification|how (?:big|wide|long|tall|much)|continue with|go with|proceed with|stick with|take this|choose this|pick this|this one|it)\b/i;
 
