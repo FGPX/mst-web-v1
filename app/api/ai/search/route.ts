@@ -4,7 +4,7 @@ import { checkRateLimit } from "@/lib/server-validation";
 import { withDemoFallback } from "@/lib/ai/providers";
 import { hybridCatalogueSearch } from "@/lib/ai/retrieval";
 import { groundSearchIntent } from "@/lib/ai/search-intent";
-import { parseSearchExclusions } from "@/lib/search";
+import { parseSearchExclusions, parseSearchQuery } from "@/lib/search";
 
 const requestSchema = z.object({ query: z.string().trim().min(1).max(1000) });
 
@@ -40,9 +40,12 @@ export async function POST(request: NextRequest) {
   );
   const intent = groundSearchIntent(parsed.data.query, interpreted.data.intent);
   const exclusions = parseSearchExclusions(parsed.data.query);
+  const deterministicFilters = parseSearchQuery(parsed.data.query);
   const results = await hybridCatalogueSearch(intent, undefined, exclusions, interpreted.data.advisorProductIds);
   const responseIntent = {
     ...intent,
+    ...(deterministicFilters.extendable ? { extendable: true } : {}),
+    ...(deterministicFilters.tabletopShapes?.length ? { tabletopShapes: deterministicFilters.tabletopShapes } : {}),
     ...(exclusions.colors.length ? { excludedColorFamilies: exclusions.colors } : {}),
     ...(exclusions.functions.length ? { excludedFunctions: exclusions.functions } : {})
   };

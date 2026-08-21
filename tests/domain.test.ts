@@ -44,6 +44,16 @@ describe("search query parsing", () => {
   it("keeps maximum and approximate widths distinct", () => {
     expect(parseSearchQuery("sofa under 240 cm")).toMatchObject({ maxWidthMm: 2400 });
     expect(parseSearchQuery("sofa around 240 cm")).toMatchObject({ targetWidthMm: 2400 });
+    expect(parseSearchQuery("sofa with a maximum width of 240 cm")).toMatchObject({ maxWidthMm: 2400 });
+    expect(parseSearchQuery("sofa no wider than 240 cm")).toMatchObject({ maxWidthMm: 2400 });
+  });
+
+  it("expands an explicitly accepted neutral-colour fallback without admitting bright colours", () => {
+    const filters = parseSearchQuery("Show me compact sofas, ideally beige. Other neutral colours are acceptable.");
+
+    expect(filters.colors?.[0]).toBe("beige");
+    expect(filters.colors).toEqual(expect.arrayContaining(["cream", "grey", "black", "white", "brown"]));
+    expect(filters.colors).not.toEqual(expect.arrayContaining(["yellow", "mustard", "red", "blue"]));
   });
 
   it("treats 'smaller sofa than' as a width limit, not a small-space flag", () => {
@@ -84,6 +94,21 @@ describe("search query parsing", () => {
 
   it("puts an explicitly requested model first", () => {
     expect(searchProductsRanked("show me MR 2875")[0].product.modelCode).toBe("MR 2875");
+  });
+
+  it("interprets a four-person dining request with weekend visitors as an extendable four-chair setup", () => {
+    const filters = parseSearchQuery("We need a dining table for four people, but our children and grandchildren visit on weekends. What should we choose?");
+
+    expect(filters).toMatchObject({
+      category: "dining-table",
+      seatCount: 4,
+      extendable: true
+    });
+
+    const results = searchProductsRanked(filters.q!);
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0].product.specifications?.table?.extendable).toBe(true);
+    expect(results[0].reasons.join(" ")).toMatch(/extendable|dining-chair|dining capacity/i);
   });
 
   it("keeps living-wall searches inside the storage catalog", () => {

@@ -2,7 +2,7 @@ import { materials, products } from "../data";
 import { productHasCategory, type Product } from "../types";
 import type { SearchIntent, VisualTags } from "./schemas";
 import type { SearchExclusions } from "../search";
-import { normalizeSearchText } from "../search";
+import { normalizeSearchText, parseSearchQuery } from "../search";
 import { hasVerifiedColourPresentation } from "../musterring-assets";
 
 export type GroundedMatch = { product: Product; score: number; reasons: string[] };
@@ -51,23 +51,89 @@ function hasVerifiedMaterial(product: Product, requested: string) {
 
 const noSearchExclusions: SearchExclusions = { colors: [], functions: [], modular: false };
 
+function isDiningTableIntent(intent: SearchIntent) {
+  return intent.category === "dining-table";
+}
+
+function hasVerifiedTableCapacity(product: Product, requested: number) {
+  const table = product.specifications?.table;
+  return table?.capacityVerified === true &&
+    product.dataQuality?.verifiedFields.includes("specifications.table.capacityMax") === true &&
+    table.capacityMax != null && table.capacityMax >= requested;
+}
+
+function satisfiesSeatRequirement(product: Product, intent: SearchIntent) {
+  if (!intent.numberOfSeats) return true;
+  if (isDiningTableIntent(intent)) return hasVerifiedTableCapacity(product, intent.numberOfSeats);
+  return product.numberOfSeatsVerified && product.numberOfSeats === intent.numberOfSeats;
+}
+
+function hasVerifiedExtendableTable(product: Product) {
+  return product.dataQuality?.verifiedFields.includes("specifications.table.extendable") === true &&
+    product.specifications?.table?.extendable === true;
+}
+
+function requestedTabletopShapes(intent: SearchIntent) {
+  return isDiningTableIntent(intent) ? parseSearchQuery(intent.queryText).tabletopShapes ?? [] : [];
+}
+
+function hasVerifiedTabletopShape(product: Product, requested: string[]) {
+  return product.dataQuality?.verifiedFields.includes("specifications.table.tabletopShape") === true &&
+    requested.some((shape) => product.specifications?.table?.tabletopShape.includes(shape));
+}
+
 function violatesExclusions(product: Product, exclusions: SearchExclusions) {
   return exclusions.colors.some((color) => product.colors.includes(color)) ||
     exclusions.functions.some((fn) => product.functions.includes(fn)) ||
     (exclusions.modular && product.modular);
 }
 
+function verifiedWidths(product: Product) {
+  const widths: number[] = [];
+  if (product.verifiedFacts.dimensions) widths.push(product.widthMm);
+  for (const configuration of product.configurations ?? []) {
+    if (configuration.dimensions && configuration.dataQuality.verifiedFields.includes("dimensions")) {
+      widths.push(configuration.dimensions.widthMm);
+    }
+  }
+  return widths;
+}
+
+function hasVerifiedWidthAtMost(product: Product, maximumWidthMm: number) {
+  return verifiedWidths(product).some((width) => width <= maximumWidthMm);
+}
+
+function colorValueMatches(available: string, requested: string) {
+  const normalize = (value: string) => value.toLowerCase().replace(/gray/g, "grey").replace(/[^a-z0-9]+/g, " ").trim();
+  const availableValue = normalize(available);
+  const requestedValue = normalize(requested);
+  return availableValue === requestedValue || availableValue.split(" ").includes(requestedValue);
+}
+
+function requestedColorMatchIndex(product: Product, requested: string[], verifiedOnly: boolean) {
+  const available = verifiedOnly ? product.verifiedFacts.colors : product.colors;
+  return requested.findIndex((color) => available.some((candidate) => colorValueMatches(candidate, color)));
+}
+
+function hasRequestedColor(product: Product, requested: string[], verifiedOnly: boolean) {
+  return requestedColorMatchIndex(product, requested, verifiedOnly) >= 0;
+}
+
 function satisfiesVerifiedIntent(product: Product, intent: SearchIntent) {
   const colors = intent.colorFamilies?.map((color) => color.toLowerCase()) ?? [];
+  const requiresExtendableTable = isDiningTableIntent(intent) && parseSearchQuery(intent.queryText).extendable === true;
+  const tabletopShapes = requestedTabletopShapes(intent);
   return (
     (!intent.category || productHasCategory(product, intent.category)) &&
-    (!colors.length || colors.some((color) => product.verifiedFacts.colors.includes(color))) &&
-    (!intent.maxWidthMm || (product.verifiedFacts.dimensions && product.widthMm <= intent.maxWidthMm)) &&
+    (!colors.length || hasRequestedColor(product, colors, true)) &&
+    (!intent.maxWidthMm || hasVerifiedWidthAtMost(product, intent.maxWidthMm)) &&
     (!intent.minWidthMm || (product.verifiedFacts.dimensions && product.widthMm >= intent.minWidthMm)) &&
     (!intent.targetWidthMm || (product.verifiedFacts.dimensions && Math.abs(product.widthMm - intent.targetWidthMm) <= Math.max(100, Math.round(intent.targetWidthMm * 0.03)))) &&
     (!intent.minSeatHeightMm || (product.verifiedFacts.seatHeight && product.seatHeightMm >= intent.minSeatHeightMm)) &&
     (!intent.maxSeatDepthMm || (product.verifiedFacts.seatDepth && product.seatDepthMm <= intent.maxSeatDepthMm)) &&
-    (!intent.numberOfSeats || (product.numberOfSeatsVerified && product.numberOfSeats === intent.numberOfSeats)) &&
+    satisfiesSeatRequirement(product, intent) &&
+    (!requiresExtendableTable || hasVerifiedExtendableTable(product)) &&
+    (!tabletopShapes.length || hasVerifiedTabletopShape(product, tabletopShapes)) &&
     (!intent.modular || (product.verifiedFacts.modular && product.modular)) &&
     (!intent.smallSpaceSuitable || (product.verifiedFacts.smallSpaceSuitable && product.smallSpaceSuitable)) &&
     (!intent.functions?.includes("relax") || product.verifiedFacts.functions.includes("relax")) &&
@@ -82,10 +148,17 @@ function satisfiesVerifiedIntent(product: Product, intent: SearchIntent) {
 function verifiedMatchReasons(product: Product, intent: SearchIntent) {
   const reasons: string[] = [];
   if (intent.category && productHasCategory(product, intent.category)) reasons.push(`requested ${intent.category}`);
-  if (intent.colorFamilies?.some((color) => product.verifiedFacts.colors.includes(color.toLowerCase()))) reasons.push(`verified colour: ${intent.colorFamilies.join(", ")}`);
-  if (intent.maxWidthMm && product.verifiedFacts.dimensions && product.widthMm <= intent.maxWidthMm) reasons.push("verified width is within the requested limit");
+  if (intent.colorFamilies?.length && hasRequestedColor(product, intent.colorFamilies, true)) {
+    const matchedColor = intent.colorFamilies[requestedColorMatchIndex(product, intent.colorFamilies, true)];
+    reasons.push(`verified colour: ${matchedColor}`);
+  }
+  if (intent.maxWidthMm && hasVerifiedWidthAtMost(product, intent.maxWidthMm)) reasons.push("verified width is within the requested limit");
   if (intent.minWidthMm && product.verifiedFacts.dimensions && product.widthMm >= intent.minWidthMm) reasons.push("verified width meets the requested minimum");
-  if (intent.numberOfSeats && product.numberOfSeatsVerified && product.numberOfSeats === intent.numberOfSeats) reasons.push(`${product.numberOfSeats} verified seats`);
+  if (intent.numberOfSeats && isDiningTableIntent(intent) && hasVerifiedTableCapacity(product, intent.numberOfSeats)) reasons.push(`verified dining capacity for at least ${intent.numberOfSeats}`);
+  else if (intent.numberOfSeats && product.numberOfSeatsVerified && product.numberOfSeats === intent.numberOfSeats) reasons.push(`${product.numberOfSeats} verified seats`);
+  if (isDiningTableIntent(intent) && parseSearchQuery(intent.queryText).extendable && hasVerifiedExtendableTable(product)) reasons.push("verified extendable table option");
+  const tabletopShapes = requestedTabletopShapes(intent);
+  if (tabletopShapes.length && hasVerifiedTabletopShape(product, tabletopShapes)) reasons.push(`verified ${tabletopShapes.join(" or ")} tabletop`);
   if (intent.modular && product.verifiedFacts.modular && product.modular) reasons.push("verified modular programme");
   if (intent.functions?.includes("relax") && product.verifiedFacts.functions.includes("relax")) reasons.push("verified relax function");
   if (intent.functions?.includes("electric") && product.verifiedFacts.functions.includes("electric")) reasons.push("verified electric function");
@@ -96,18 +169,25 @@ function verifiedMatchReasons(product: Product, intent: SearchIntent) {
 function structuredScore(product: Product, intent: SearchIntent) {
   let score = 0;
   const reasons: string[] = [];
+  const requiresExtendableTable = isDiningTableIntent(intent) && parseSearchQuery(intent.queryText).extendable === true;
+  const tabletopShapes = requestedTabletopShapes(intent);
   if (intent.category) {
     if (!productHasCategory(product, intent.category)) return { score: -1000, reasons };
     score += 25; reasons.push(`requested ${intent.category}`);
   }
   if (intent.colorFamilies?.length) {
-    if (intent.colorFamilies.some((color) => product.colors.includes(color.toLowerCase()))) {
-      score += 25; reasons.push(`requested colour family: ${intent.colorFamilies.join(", ")}`);
+    const colorIndex = requestedColorMatchIndex(product, intent.colorFamilies, false);
+    if (colorIndex >= 0) {
+      score += colorIndex === 0 ? 25 : 15;
+      reasons.push(`${colorIndex === 0 ? "preferred" : "acceptable"} colour family: ${intent.colorFamilies[colorIndex]}`);
     } else score -= 35;
   }
   if (intent.maxWidthMm) {
-    if (product.widthMm <= intent.maxWidthMm) { score += 18; reasons.push(`width ${product.widthMm} mm is within the limit`); }
-    else score -= 60;
+    const knownWidths = verifiedWidths(product);
+    const fittingWidth = knownWidths.filter((width) => width <= intent.maxWidthMm!).sort((left, right) => right - left)[0];
+    if (fittingWidth != null) { score += 18; reasons.push(`verified width ${fittingWidth} mm is within the limit`); }
+    else if (knownWidths.length) score -= 60;
+    else score -= 10;
   }
   if (intent.minWidthMm) {
     if (product.widthMm >= intent.minWidthMm) { score += 18; reasons.push(`width ${product.widthMm} mm meets the minimum`); }
@@ -128,8 +208,31 @@ function structuredScore(product: Product, intent: SearchIntent) {
     else score -= 15;
   }
   if (intent.numberOfSeats) {
-    if (product.numberOfSeatsVerified && product.numberOfSeats === intent.numberOfSeats) { score += 12; reasons.push(`${product.numberOfSeats} verified seats`); }
-    else score -= 8;
+    if (isDiningTableIntent(intent)) {
+      const table = product.specifications?.table;
+      if (hasVerifiedTableCapacity(product, intent.numberOfSeats)) {
+        score += 18; reasons.push(`verified dining capacity for at least ${intent.numberOfSeats}`);
+      } else if (table?.demoEstimatedCapacity != null && table.demoEstimatedCapacity >= intent.numberOfSeats) {
+        score += 8; reasons.push(`indicative dining capacity for at least ${intent.numberOfSeats}`);
+      } else score -= 8;
+      if (product.productSubtypes?.includes("dining-chair")) {
+        score += 10; reasons.push("coordinating dining-chair options in the programme");
+      }
+    } else if (product.numberOfSeatsVerified && product.numberOfSeats === intent.numberOfSeats) {
+      score += 12; reasons.push(`${product.numberOfSeats} verified seats`);
+    } else score -= 8;
+  }
+  if (requiresExtendableTable) {
+    if (product.specifications?.table?.extendable) {
+      score += 24; reasons.push(hasVerifiedExtendableTable(product) ? "verified extendable table option" : "extendable table option for occasional guests");
+    } else score -= 24;
+  }
+  if (tabletopShapes.length) {
+    if (hasVerifiedTabletopShape(product, tabletopShapes)) {
+      score += 35; reasons.push(`verified ${tabletopShapes.join(" or ")} tabletop`);
+    } else if (tabletopShapes.some((shape) => product.specifications?.table?.tabletopShape.includes(shape))) {
+      score += 6; reasons.push(`indicative ${tabletopShapes.join(" or ")} tabletop option`);
+    } else score -= 45;
   }
   if (intent.modular) {
     if (product.modular) { score += 15; reasons.push("modular catalogue flag"); }
@@ -182,9 +285,21 @@ export async function hybridCatalogueSearch(
   const advisorOrder = new Map([...new Set(advisorProductIds)].map((id, index) => [id, index]));
   const categoryProducts = active.filter((product) => !intent.category || productHasCategory(product, intent.category));
   const categoryAvailable = categoryProducts.length > 0;
+  const parsedQuery = parseSearchQuery(intent.queryText);
   const unverifiedRequirements = intent.layoutShapes?.filter((shape) =>
     !categoryProducts.some((product) => product.layoutShapes?.includes(shape))
   ).map((shape) => `${shape} layout`) ?? [];
+  if (isDiningTableIntent(intent) && intent.numberOfSeats && !categoryProducts.some((product) => hasVerifiedTableCapacity(product, intent.numberOfSeats!))) {
+    unverifiedRequirements.push(`table capacity for ${intent.numberOfSeats} people`);
+  }
+  if (isDiningTableIntent(intent) && parsedQuery.extendable && !categoryProducts.some(hasVerifiedExtendableTable)) {
+    unverifiedRequirements.push("an extendable table configuration");
+  }
+  const tabletopShapes = parsedQuery.tabletopShapes ?? [];
+  const exactTabletopShapeAvailable = !tabletopShapes.length || categoryProducts.some((product) => hasVerifiedTabletopShape(product, tabletopShapes));
+  if (tabletopShapes.length && !exactTabletopShapeAvailable) {
+    unverifiedRequirements.push(`${tabletopShapes.join(" or ")} tabletop shape`);
+  }
   const code = intent.queryText.match(/\bMR\s*-?\s*\d{3,4}\b/i)?.[0].replace(/[\s-]+/g, " ").toUpperCase();
   const semanticScores = new Map((await semantic.rank(intent.queryText, active)).map((item) => [item.id, item.score]));
   const ranked = active.map((product) => {
@@ -203,25 +318,27 @@ export async function hybridCatalogueSearch(
   }).sort((left, right) => right.score - left.score || left.product.modelCode.localeCompare(right.product.modelCode));
   const requestedColors = intent.colorFamilies?.map((color) => color.toLowerCase()) ?? [];
   const exactColorAvailable = !requestedColors.length || active.some((product) =>
-    (!intent.category || productHasCategory(product, intent.category)) && requestedColors.some((color) => product.verifiedFacts.colors.includes(color))
+    (!intent.category || productHasCategory(product, intent.category)) &&
+    (!intent.maxWidthMm || hasVerifiedWidthAtMost(product, intent.maxWidthMm)) &&
+    (!intent.minWidthMm || (product.verifiedFacts.dimensions && product.widthMm >= intent.minWidthMm)) &&
+    hasRequestedColor(product, requestedColors, true)
   );
   const exactMatches = ranked.filter(({ product, score }) =>
     score > -100 && !violatesExclusions(product, exclusions) && satisfiesVerifiedIntent(product, intent)
   ).slice(0, 12);
   const exactIds = new Set(exactMatches.map(({ product }) => product.id));
   const isRelevantAlternative = (product: Product) => {
-    // A clearly verified, materially oversized product is not a useful close
-    // alternative for a hard maximum-width request. Unverified/demo reference
-    // dimensions remain eligible but can never become an exact match.
-    if (intent.maxWidthMm && !exactColorAvailable && product.verifiedFacts.dimensions && product.widthMm > intent.maxWidthMm + 400) return false;
+    // A hard maximum-width request requires catalogue-verified dimensions.
+    // Demo/reference widths cannot justify a compact-space recommendation.
+    if (intent.maxWidthMm && !exactColorAvailable && verifiedWidths(product).length && !hasVerifiedWidthAtMost(product, intent.maxWidthMm)) return false;
     const checks: boolean[] = [];
-    if (requestedColors.length) checks.push(requestedColors.some((color) => product.verifiedFacts.colors.includes(color)));
-    if (intent.maxWidthMm) checks.push(product.verifiedFacts.dimensions && product.widthMm <= intent.maxWidthMm);
+    if (requestedColors.length) checks.push(hasRequestedColor(product, requestedColors, true));
+    if (intent.maxWidthMm) checks.push(hasVerifiedWidthAtMost(product, intent.maxWidthMm));
     if (intent.minWidthMm) checks.push(product.verifiedFacts.dimensions && product.widthMm >= intent.minWidthMm);
     if (intent.targetWidthMm) checks.push(product.verifiedFacts.dimensions && Math.abs(product.widthMm - intent.targetWidthMm) <= Math.max(100, Math.round(intent.targetWidthMm * 0.03)));
     if (intent.minSeatHeightMm) checks.push(product.verifiedFacts.seatHeight && product.seatHeightMm >= intent.minSeatHeightMm);
     if (intent.maxSeatDepthMm) checks.push(product.verifiedFacts.seatDepth && product.seatDepthMm <= intent.maxSeatDepthMm);
-    if (intent.numberOfSeats) checks.push(product.numberOfSeatsVerified && product.numberOfSeats === intent.numberOfSeats);
+    if (intent.numberOfSeats) checks.push(satisfiesSeatRequirement(product, intent));
     if (intent.modular) checks.push(product.verifiedFacts.modular && product.modular);
     if (intent.smallSpaceSuitable) checks.push(product.verifiedFacts.smallSpaceSuitable && product.smallSpaceSuitable);
     if (intent.functions?.includes("relax")) checks.push(product.verifiedFacts.functions.includes("relax"));
@@ -238,21 +355,26 @@ export async function hybridCatalogueSearch(
   const closeAlternatives = ranked.filter(({ product }) =>
     !exactIds.has(product.id) &&
     !violatesExclusions(product, exclusions) &&
+    (!intent.maxWidthMm || !intent.smallSpaceSuitable || hasVerifiedWidthAtMost(product, intent.maxWidthMm)) &&
+    (!requestedColors.length || !exactColorAvailable || hasRequestedColor(product, requestedColors, false)) &&
+    (!isDiningTableIntent(intent) || !parsedQuery.extendable || !productHasCategory(product, "dining-table") || product.specifications?.table?.extendable === true) &&
+    (!tabletopShapes.length || !exactTabletopShapeAvailable || hasVerifiedTabletopShape(product, tabletopShapes)) &&
     (advisorOrder.has(product.id) || (
       (!intent.category || productHasCategory(product, intent.category)) &&
       // Preserve an explicitly requested colour whenever the catalogue has that
       // colour in the requested category. A request such as "red sofa" must not
       // be followed by a wall of beige and grey sofas. Wrong-colour alternatives
       // are useful only when the requested colour is unavailable altogether.
-      (!requestedColors.length || !exactColorAvailable || requestedColors.some((color) => product.verifiedFacts.colors.includes(color))) &&
       isRelevantAlternative(product)
     ))
   ).slice(0, 6).map((match) => ({
     ...match,
     reasons: advisorOrder.has(match.product.id) && intent.category && !productHasCategory(match.product, intent.category)
       ? [`catalogue ${match.product.category.replaceAll("-", " ")} selected for another part of the request`, ...match.reasons]
-      : requestedColors.length && !requestedColors.some((color) => match.product.verifiedFacts.colors.includes(color))
-      ? [`not available in requested ${requestedColors.join(", ")}`, ...match.reasons]
+      : requestedColors.length && !hasRequestedColor(match.product, requestedColors, true)
+      ? hasRequestedColor(match.product, requestedColors, false)
+        ? [`catalogue colour option: ${requestedColors[requestedColorMatchIndex(match.product, requestedColors, false)]}; photo may show another finish`, ...match.reasons]
+        : [`not available in requested ${requestedColors.join(", ")}`, ...match.reasons]
       : match.reasons.length ? match.reasons : ["same requested category; other requested facts are not verified"]
   }));
   return { exactMatches, closeAlternatives, exactColorAvailable, categoryAvailable, unverifiedRequirements };

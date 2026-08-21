@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
-import { catalogueCategories } from "@/lib/types";
+import { catalogueCategories, productHasCategory } from "@/lib/types";
 import { buildGroundedConfiguration } from "@/lib/ai/configuration";
 import { comparisonSummaryInput, deterministicComparisonSummary } from "@/lib/ai/comparison-summary";
 import { groundProjectData } from "@/lib/ai/grounding";
@@ -191,6 +191,54 @@ describe("grounded hybrid retrieval", () => {
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
   });
 
+  it("recommends extendable dining programmes with four everyday chairs for weekend family visits", async () => {
+    const query = "We need a dining table for four people, but our children and grandchildren visit on weekends. What should we choose?";
+    const providerIntent = searchIntentSchema.parse({
+      ...baseIntent,
+      queryText: query,
+      category: "dining-table",
+      colorFamilies: null,
+      maxWidthMm: null,
+      modular: null,
+      smallSpaceSuitable: null
+    });
+    const intent = groundSearchIntent(query, providerIntent);
+    const result = await hybridCatalogueSearch(intent);
+
+    expect(intent.numberOfSeats).toBe(4);
+    expect(result.exactMatches).toHaveLength(0);
+    expect(result.unverifiedRequirements).toEqual(expect.arrayContaining([
+      "table capacity for 4 people",
+      "an extendable table configuration"
+    ]));
+    expect(result.closeAlternatives.length).toBeGreaterThan(0);
+    expect(result.closeAlternatives.every(({ product }) =>
+      productHasCategory(product, "dining-table") && product.specifications?.table?.extendable === true
+    )).toBe(true);
+  });
+
+  it("keeps round dining-table searches out of square and rectangular exact matches", async () => {
+    const query = "Show me a round dining table.";
+    const intent = groundSearchIntent(query, searchIntentSchema.parse({
+      ...baseIntent,
+      queryText: query,
+      category: "dining-table",
+      colorFamilies: null,
+      maxWidthMm: null,
+      modular: null,
+      smallSpaceSuitable: null
+    }));
+    const result = await hybridCatalogueSearch(intent);
+
+    expect(result.exactMatches.length).toBeGreaterThan(0);
+    expect(result.exactMatches.map(({ product }) => product.slug)).toContain("nica");
+    expect(result.exactMatches.every(({ product }) =>
+      product.dataQuality?.verifiedFields.includes("specifications.table.tabletopShape") &&
+      product.specifications?.table?.tabletopShape.includes("round")
+    )).toBe(true);
+    expect(result.closeAlternatives).toHaveLength(0);
+  });
+
   it("uses the chatbot's grounded product selection as a search ranking signal", async () => {
     const intent = searchIntentSchema.parse({ ...baseIntent, queryText: "beige sofa", maxWidthMm: null, modular: null, smallSpaceSuitable: null });
     const baseline = await hybridCatalogueSearch(intent);
@@ -199,6 +247,32 @@ describe("grounded hybrid retrieval", () => {
 
     const aligned = await hybridCatalogueSearch(intent, undefined, undefined, [preferred!]);
     expect(aligned.exactMatches[0]?.product.id).toBe(preferred);
+  });
+
+  it("does not let the AI advisor promote oversized or unverified-width sofas above a 240 cm maximum", async () => {
+    const query = "We are furnishing a small apartment and do not have much space in the living room. We would like a compact beige modular sofa with a maximum width of 240 cm. Which model would you recommend?";
+    const intent = groundSearchIntent(query, searchIntentSchema.parse({ ...baseIntent, queryText: query }));
+    const result = await hybridCatalogueSearch(intent, undefined, undefined, ["musterring-justb-pm200", "p3"]);
+    const matches = [...result.exactMatches, ...result.closeAlternatives];
+
+    expect(intent.maxWidthMm).toBe(2400);
+    expect(matches.map(({ product }) => product.id)).not.toContain("musterring-justb-pm200");
+    expect(matches.map(({ product }) => product.id)).not.toContain("p3");
+    expect(matches.every(({ product }) => product.verifiedFacts.dimensions && product.widthMm <= 2400)).toBe(true);
+  });
+
+  it("keeps neutral-colour fallbacks neutral and ranks beige first", async () => {
+    const query = "Show me compact sofas for a small living room, ideally beige, up to 270 cm wide. Other neutral colours are acceptable.";
+    const intent = groundSearchIntent(query, searchIntentSchema.parse({ ...baseIntent, queryText: query }));
+    const result = await hybridCatalogueSearch(intent);
+    const matches = [...result.exactMatches, ...result.closeAlternatives];
+    const neutral = new Set(["beige", "cream", "ivory", "taupe", "stone", "sand", "grey", "charcoal", "graphite", "black", "white", "brown"]);
+
+    expect(intent.colorFamilies?.[0]).toBe("beige");
+    expect(matches.length).toBeGreaterThan(1);
+    expect(matches.map(({ product }) => product.id)).not.toContain("musterring-mr-270");
+    expect(matches.every(({ product }) => product.colors.some((color) => neutral.has(color)))).toBe(true);
+    expect(matches[0]?.product.colors).toContain("beige");
   });
 
   it("returns visible recommendations for a family with children and a dog", async () => {

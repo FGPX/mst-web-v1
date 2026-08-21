@@ -19,7 +19,7 @@ const suggestions = [
   "Black minimal coffee table"
 ];
 
-const searchStateKey = "musterring.aiSearchState";
+const searchStateKey = "musterring.aiSearchState.v5";
 
 const cutoutSlugs = new Set(["justb-pm100", "justb-pm200", "mr-lucia", "mr-230", "mr-260", "mr-270", "mr-280", "mr-285", "mr-nils", "mr-pamela", "mr-231", "jana", "kanto", "justb-ct100", "nara", "mr-kleo", "mr-281", "mr-5111", "mr-9445"]);
 
@@ -69,7 +69,9 @@ const intentLabels: Record<string, string> = {
   smallSpaceSuitable: "Small-space suitable",
   excludedColorFamilies: "Exclude colour",
   excludedFunctions: "Without functions",
-  layoutShapes: "Layout"
+  layoutShapes: "Layout",
+  tabletopShapes: "Tabletop shape",
+  extendable: "Extendable"
 };
 
 const formatIntentValue = (key: string, value: unknown) => {
@@ -144,10 +146,20 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
 
   const requestedRed = Array.isArray(response?.intent.colorFamilies) &&
     response.intent.colorFamilies.some((color) => ["red", "burgundy", "barolo"].includes(String(color)));
+  const requestedRoundTable = Array.isArray(response?.intent.tabletopShapes) &&
+    response.intent.tabletopShapes.includes("round");
   const resultImage = (slug: string, productId: string) => {
     if (requestedRed && slug === "mr-260") return "/musterring-catalog/mr-260/image-08-hq.jpg?v=4";
+    if (requestedRoundTable && slug === "justb-sp150") return "/musterring-catalog/justb-sp150/image-02.jpg";
     if (cutoutSlugs.has(slug)) return `/generated-product-views/${slug}/official-front.png?v=3`;
     return productImages(productId)[0];
+  };
+  const resultImageNote = (product: Product) => {
+    if (requestedRed) return product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish";
+    if (requestedRoundTable && product.specifications?.table?.tabletopShape.includes("round")) {
+      return product.slug === "justb-sp150" ? "Catalogue photo: round tabletop" : "Round tabletop option · photo may show another shape";
+    }
+    return undefined;
   };
 
   const submit = async (value = query) => {
@@ -228,7 +240,10 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
       maxWidthMm: /\b(?:maximum width|max|under|below|less than|at most|no wider than|up to)\s*\d+(?:[.,]\d+)?\s*(?:mm|cm|m|millimeters?|centimeters?|meters?)\b/gi,
       minWidthMm: /\b(?:minimum width|min|above|over|more than|at least|greater than)\s*\d+(?:[.,]\d+)?\s*(?:mm|cm|m|millimeters?|centimeters?|meters?)\b/gi,
       targetWidthMm: /\b(?:around|about|approximately|approx\.?|roughly)?\s*\d+(?:[.,]\d+)?\s*(?:mm|cm|m|millimeters?|centimeters?|meters?)(?:\s+(?:wide|width|sofa|couch|kitchen))?\b/gi,
-      layoutShapes: /\b(?:l[- ]shaped|l shape|u[- ]shaped|u shape|straight(?: line)?|single[- ]wall|island|corner kitchen)\b/gi
+      layoutShapes: /\b(?:l[- ]shaped|l shape|u[- ]shaped|u shape|straight(?: line)?|single[- ]wall|island|corner kitchen)\b/gi,
+      tabletopShapes: /\b(?:round|oval|square|rectangular)\b/gi,
+      numberOfSeats: /\b(?:for|seat(?:s|ing)?|accommodat(?:e|es|ing)|family of|household of)\s+(?:a\s+)?(?:\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)(?:\s+(?:people|persons?|adults?|diners?))?\b/gi,
+      extendable: /\b(?:extendable|extension table|weekends?|occasionally|sometimes|grandchildren|guests?|visitors?|come over)\b/gi
     };
     const next = (replacements[key] ? submitted.replace(replacements[key], " ") : submitted).replace(/\s+/g, " ").trim();
     void submit(next || "furniture");
@@ -241,6 +256,10 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const exact = response?.exactMatches ?? [];
   const recommendations = response?.closeAlternatives ?? [];
   const primaryResults = exact.length ? exact : recommendations;
+  const diningChairCount = response?.intent.category === "dining-table" && typeof response.intent.numberOfSeats === "number"
+    ? response.intent.numberOfSeats
+    : null;
+  const diningIntentLabel = (key: string) => key === "numberOfSeats" && diningChairCount ? "Everyday chairs" : intentLabels[key] ?? key;
 
   const selectVisualFile = (file?: File) => {
     if (!file) return;
@@ -440,14 +459,24 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
               </div>
               <div className="chips" aria-label="Editable interpreted request">
                 {Object.entries(response?.intent ?? {}).filter(([key, value]) => key !== "queryText" && value !== null && value !== "" && (!Array.isArray(value) || value.length)).map(([key, value]) =>
-                  <button type="button" className="chip" key={key} onClick={() => removeFilter(key)} aria-label={`Remove ${intentLabels[key] ?? key} filter`}>{intentLabels[key] ?? key}: {formatIntentValue(key, value)} ×</button>)}
+                  <button type="button" className="chip" key={key} onClick={() => removeFilter(key)} aria-label={`Remove ${diningIntentLabel(key)} filter`}>{diningIntentLabel(key)}: {formatIntentValue(key, value)} ×</button>)}
               </div>
             </div>
+            {diningChairCount ? (
+              <aside className="stitch-dining-plan" aria-label="Recommended dining setup">
+                <p className="eyebrow">Recommended setup</p>
+                <h2>{response?.intent.extendable ? "An extendable dining table" : "A dining table"} with {diningChairCount} everyday chairs</h2>
+                <p>{response?.intent.extendable
+                  ? `Use ${diningChairCount} chairs for everyday dining and choose an extendable programme with matching guest chairs or a bench for weekend visits.`
+                  : `Choose a table planned for ${diningChairCount} people with ${diningChairCount} coordinating dining chairs.`}</p>
+                <small>Chair quantity is a planning recommendation, not a claim that chairs are included. Confirm the table configuration, capacity and chair quantity with a Musterring retailer.</small>
+              </aside>
+            ) : null}
             {response && [...exact, ...response.closeAlternatives].some(({ product }) => product.authorizedContent) ? (
               <p className="stitch-search-catalogue-notice">Dimensions and prices vary by configuration and are confirmed by a Musterring retailer.</p>
             ) : null}
             {pending ? <div className="card card-body" role="status">Interpreting request and searching validated catalogue data…</div> : primaryResults.length ? (
-              <div className="grid grid-3">{primaryResults.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={requestedRed ? (product.slug === "mr-260" ? "Catalogue photo: red leather" : "Red upholstery option · photo shows another finish") : undefined} explanation={`${exact.length ? "Matches" : "Recommended"}: ${reasons.map(compactMatchReason).join(" · ") || "Catalogue relevance"}`} showMeta={false} compareSelected={compareIds.includes(product.id)} onCompare={() => toggleCompare(product.id)} />)}</div>
+              <div className="grid grid-3">{primaryResults.map(({ product, reasons }) => <ProductCard key={product.id} product={product} imageOverride={resultImage(product.slug, product.id)} imageNote={resultImageNote(product)} explanation={`${exact.length ? "Matches" : "Recommended"}: ${reasons.map(compactMatchReason).join(" · ") || "Catalogue relevance"}`} showMeta={false} compareSelected={compareIds.includes(product.id)} onCompare={() => toggleCompare(product.id)} />)}</div>
             ) : response ? (
               <div className="card card-body">
                 <h2>No exact catalogue match</h2>

@@ -24,7 +24,7 @@
     "expectedIntent": { "category": "sofa", "colors": ["beige"], "maxWidthMm": 2400, "modular": true, "relaxFunction": true, "smallSpaceSuitable": true },
     "expectedProductIds": [],
     "allowedAlternatives": ["p1", "p2", "p6"],
-    "mustNotAppear": ["musterring-mr-kleo"]
+    "mustNotAppear": ["musterring-mr-kleo", "musterring-justb-pm200", "p3"]
   },
   {
     "id": "negative-red",

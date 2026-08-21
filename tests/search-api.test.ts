@@ -86,4 +86,59 @@ describe("POST /api/ai/search", () => {
     expect(matches.length).toBeGreaterThan(0);
     expect(matches.every((match) => !match.product.colors.includes("red") && !match.product.functions.includes("relax"))).toBe(true);
   });
+
+  it("returns the four-chair extendable dining plan for weekend family visits", async () => {
+    const response = await POST(new NextRequest("http://localhost/api/ai/search", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": crypto.randomUUID() },
+      body: JSON.stringify({
+        query: "We need a dining table for four people, but our children and grandchildren visit on weekends. What should we choose?"
+      })
+    }));
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.intent).toMatchObject({
+      category: "dining-table",
+      numberOfSeats: 4,
+      extendable: true
+    });
+    expect(payload.exactMatches).toHaveLength(0);
+    expect(payload.closeAlternatives.length).toBeGreaterThan(0);
+    expect(payload.closeAlternatives.every((match: { product: { specifications?: { table?: { extendable?: boolean } } } }) =>
+      match.product.specifications?.table?.extendable === true
+    )).toBe(true);
+  });
+
+  it("returns only verified round tabletops as exact round-table matches", async () => {
+    const response = await POST(new NextRequest("http://localhost/api/ai/search", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": crypto.randomUUID() },
+      body: JSON.stringify({ query: "Show me a round dining table." })
+    }));
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.intent).toMatchObject({ category: "dining-table", tabletopShapes: ["round"] });
+    expect(payload.exactMatches.length).toBeGreaterThan(0);
+    expect(payload.exactMatches.every((match: { product: { specifications?: { table?: { tabletopShape?: string[] } } } }) =>
+      match.product.specifications?.table?.tabletopShape?.includes("round")
+    )).toBe(true);
+  });
+
+  it("preserves a naturally phrased maximum width in a longer sofa request", async () => {
+    const response = await POST(new NextRequest("http://localhost/api/ai/search", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": crypto.randomUUID() },
+      body: JSON.stringify({
+        query: "We are furnishing a small apartment and do not have much space in the living room. We would like a compact beige modular sofa with a maximum width of 240 cm. Which model would you recommend?"
+      })
+    }));
+    const payload = await response.json();
+    const matches = [...payload.exactMatches, ...payload.closeAlternatives];
+
+    expect(response.status).toBe(200);
+    expect(payload.intent.maxWidthMm).toBe(2400);
+    expect(matches.map((match: { product: { id: string } }) => match.product.id)).not.toContain("musterring-justb-pm200");
+  });
 });

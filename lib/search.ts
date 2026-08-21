@@ -2,6 +2,7 @@ import { materials, products } from "./data";
 import { productHasCategory, type Product, type SearchFilters } from "./types";
 
 export const searchColorTerms = ["beige", "ivory", "taupe", "stone", "charcoal", "black", "white", "brown", "oak", "natural", "cream", "green", "grey", "graphite", "red", "burgundy", "barolo", "purple", "blue", "orange", "pink", "yellow", "mustard", "cognac", "sand"];
+const neutralSearchColorTerms = ["beige", "cream", "ivory", "taupe", "stone", "sand", "grey", "charcoal", "graphite", "black", "white", "brown"];
 export const searchStyleTerms = ["modern", "minimal", "contemporary", "classic", "industrial", "natural", "elegant", "family"];
 const stopWords = new Set(["want", "something", "like", "this", "that", "with", "from", "have", "need", "looking", "product", "piece", "please", "show", "find", "furniture", "maximum", "about"]);
 const corrections: Record<string, string> = {
@@ -75,16 +76,16 @@ function measurementToMm(value: string, unit: string) {
 function widthConstraints(text: string) {
   const amount = "(\\d+(?:[.,]\\d+)?)\\s*(mm|millimet(?:er|re)s?|cm|centimet(?:er|re)s?|zentimeter|m|met(?:er|re)s?)";
   const widthWord = "(?:wide|width|breit|breite)";
-  const minimum = text.match(new RegExp(`(?:above|over|more than|at least|minimum|min\\.?|greater than)\\s*${amount}(?:\\s+${widthWord})?`, "i"));
-  const comparativeMinimum = text.match(new RegExp(`(?:larger|wider)(?:\\s+(?:sofa|couch|furniture|piece|product))?\\s+than\\s*${amount}`, "i"));
+  const minimum = text.match(new RegExp(`(?:above|over|more than|at least|minimum(?: width)?|min\\.?(?: width)?|greater than)(?:\\s+of)?\\s*${amount}(?:\\s+${widthWord})?`, "i"));
+  const comparativeMinimum = text.match(new RegExp(`(?<!no\\s)(?:larger|wider)(?:\\s+(?:sofa|couch|furniture|piece|product))?\\s+than\\s*${amount}`, "i"));
   const comparativeMaximum = text.match(new RegExp(`(?:smaller|narrower)(?:\\s+(?:sofa|couch|furniture|piece|product))?\\s+than\\s*${amount}`, "i"));
-  const maximum = comparativeMaximum ?? text.match(new RegExp(`(?:under|below|less than|at most|maximum(?: width)?|max\\.?(?: width)?|no wider than|up to)\\s*${amount}(?:\\s+${widthWord})?`, "i"));
+  const maximum = comparativeMaximum ?? text.match(new RegExp(`(?:under|below|less than|at most|maximum(?: width)?|max\\.?(?: width)?|no wider than|up to)(?:\\s+of)?\\s*${amount}(?:\\s+${widthWord})?`, "i"));
   const approximate = text.match(new RegExp(`(?:around|about|approximately|approx\\.?|roughly)\\s*${amount}(?:\\s+${widthWord})?`, "i"));
   const between = text.match(new RegExp(`between\\s*${amount}\\s*(?:and|und|to|-)\\s*${amount}`, "i"));
   if (between) return { minWidthMm: measurementToMm(between[1], between[2]), maxWidthMm: measurementToMm(between[3], between[4]) };
   if (minimum) return { minWidthMm: measurementToMm(minimum[1], minimum[2]) };
-  if (comparativeMinimum) return { minWidthMm: measurementToMm(comparativeMinimum[1], comparativeMinimum[2]) };
   if (maximum) return { maxWidthMm: measurementToMm(maximum[1], maximum[2]) };
+  if (comparativeMinimum) return { minWidthMm: measurementToMm(comparativeMinimum[1], comparativeMinimum[2]) };
   if (approximate) return { targetWidthMm: measurementToMm(approximate[1], approximate[2]) };
   const bare = text.match(new RegExp(`${amount}(?:\\s+(?:wide|width|breit|breite|sofa|couch|kitchen))`, "i"));
   return bare ? { targetWidthMm: measurementToMm(bare[1], bare[2]) } : {};
@@ -187,12 +188,21 @@ export function parseSearchQuery(query: string): SearchFilters {
   if (/\bstraight(?: line)?\b|\bsingle[- ]wall\b|\bkitchen run\b/.test(text)) layoutShapes.push("straight");
   if (/\bisland\b|\bkitchen island\b/.test(text)) layoutShapes.push("island");
   if (layoutShapes.length) filters.layoutShapes = [...new Set(layoutShapes)];
-  const seats = text.match(/(\d)\s*[- ]?\s*(?:seat|seater|sitzer)/);
-  const seatWord = text.match(/\b(two|three|four)[- ](?:seat|seater)\b/)?.[1];
+  const seats = text.match(/(\d{1,2})\s*[- ]?\s*(?:seat|seater|sitzer)/);
+  const seatWord = text.match(/\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)[- ](?:seat|seater)\b/)?.[1];
+  const peopleCount = text.match(/\b(?:for|seat(?:s|ing)?|accommodat(?:e|es|ing)|family of|household of)\s+(?:a\s+)?(\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)(?:\s+(?:people|persons?|adults?|diners?))?\b/)?.[1];
+  const numberWords: Record<string, number> = {
+    one: 1, two: 2, three: 3, four: 4, five: 5, six: 6,
+    seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12
+  };
   if (seats) filters.seatCount = Number(seats[1]);
-  else if (seatWord) filters.seatCount = { two: 2, three: 3, four: 4 }[seatWord];
+  else if (seatWord) filters.seatCount = numberWords[seatWord];
+  else if (peopleCount) filters.seatCount = numberWords[peopleCount] ?? Number(peopleCount);
   const colors = searchColorTerms.filter((color) => !exclusions.colors.includes(color) && new RegExp(`\\b${color.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(text));
-  if (colors.length) filters.colors = colors;
+  if (/\b(?:other\s+)?neutral\s+(?:colou?rs?|tones?|shades?)\b/.test(text)) {
+    colors.push(...neutralSearchColorTerms.filter((color) => !exclusions.colors.includes(color)));
+  }
+  if (colors.length) filters.colors = [...new Set(colors)];
   const styles = searchStyleTerms.filter((style) => new RegExp(`\\b${style}\\b`).test(text));
   if (styles.length) filters.styles = styles;
   if (/\b(?:leather|leder)(?:bezug)?\b/.test(text)) filters.materials = ["leather"];
@@ -203,6 +213,10 @@ export function parseSearchQuery(query: string): SearchFilters {
   if (!exclusions.functions.includes("relax") && /\b(?:relax(?:ation|ing|ed|funktion)?|reclin(?:e|er|ing|ed)|lounge|entspannungsfunktion)\b/.test(text)) filters.relaxFunction = true;
   if (!exclusions.functions.includes("electric") && /\b(?:electric(?:al|ally)?|elektrisch(?:e|er|es|en|em)?|motor(?:ized)?|power(?:ed)?)\b/.test(text)) filters.electricFunctions = true;
   if (/\bextendable\b|extension table|auszieh/.test(text)) filters.extendable = true;
+  else if (
+    filters.category === "dining-table" &&
+    /\b(?:weekends?|occasionally|sometimes|grandchildren|guests?|visitors?|friends? visit|family visit|come over)\b/.test(text)
+  ) filters.extendable = true;
   if (/sliding door|sliding wardrobe|schwebet(?:u|ü)r|schiebet(?:u|ü)r/.test(text)) filters.slidingDoors = true;
   const bedSize = text.match(/\b(90|120|140|160|180|200)\s*[x×]\s*(190|200|210|220)\b/);
   if (bedSize) filters.bedWidthMm = Number(bedSize[1]) * 10;
@@ -210,7 +224,14 @@ export function parseSearchQuery(query: string): SearchFilters {
   if (/weather[- ]resistant|weatherproof|wind and weather|wetterfest/.test(text)) filters.weatherResistant = true;
   if (/sofa[- ]bed|sleeper sofa|bed function|schlafsofa/.test(text)) filters.sofaBed = true;
   if (/with storage|integrated storage|storage compartment|bettkasten/.test(text)) filters.integratedStorage = true;
-  if (/\bround\b|rund/.test(text) && filters.category === "dining-table") filters.tabletopShapes = ["round"];
+  if (filters.category === "dining-table") {
+    const tabletopShapes: NonNullable<SearchFilters["tabletopShapes"]> = [];
+    if (/\bround\b|rund/.test(text)) tabletopShapes.push("round");
+    if (/\boval\b/.test(text)) tabletopShapes.push("oval");
+    if (/\bsquare\b|quadratisch/.test(text)) tabletopShapes.push("square");
+    if (/\brectangular\b|rechteckig/.test(text)) tabletopShapes.push("rectangular");
+    if (tabletopShapes.length) filters.tabletopShapes = tabletopShapes;
+  }
   const lumenTarget = text.match(/(?:around|about|approximately|approx\.?|roughly)?\s*(\d{2,4})\s*(?:lm|lumens?)/);
   if (lumenTarget) { filters.minLumens = Math.max(0, Number(lumenTarget[1]) - 75); filters.maxLumens = Number(lumenTarget[1]) + 75; }
   return filters;
@@ -238,7 +259,13 @@ export function productMatches(product: Product, filters: SearchFilters) {
   if (filters.maxDepthMm && (!product.verifiedFacts.dimensions || product.depthMm > filters.maxDepthMm)) return false;
   if (filters.minSeatHeightMm && (!product.verifiedFacts.seatHeight || product.seatHeightMm < filters.minSeatHeightMm)) return false;
   if (filters.maxSeatDepthMm && (!product.verifiedFacts.seatDepth || product.seatDepthMm > filters.maxSeatDepthMm)) return false;
-  if (filters.seatCount && (!product.numberOfSeatsVerified || product.numberOfSeats !== filters.seatCount)) return false;
+  if (filters.seatCount) {
+    if (filters.category === "dining-table") {
+      const table = product.specifications?.table;
+      const capacityVerified = table?.capacityVerified === true && verified("specifications.table.capacityMax");
+      if (!capacityVerified || table?.capacityMax == null || table.capacityMax < filters.seatCount) return false;
+    } else if (!product.numberOfSeatsVerified || product.numberOfSeats !== filters.seatCount) return false;
+  }
   if (filters.modular && (!product.verifiedFacts.modular || !product.modular)) return false;
   if (filters.smallSpaceSuitable && (!product.verifiedFacts.smallSpaceSuitable || !product.smallSpaceSuitable)) return false;
   if (filters.layoutShapes?.length && !filters.layoutShapes.some((shape) => product.layoutShapes?.includes(shape))) return false;
@@ -357,6 +384,24 @@ export function searchProductsRanked(query: string, limit = 12): RankedProduct[]
       if (parsed.electricFunctions && /electric|motor|power/.test(copy)) {
         score += 18;
         reasons.push("motorised or electric functions");
+      }
+      if (parsed.category === "dining-table" && parsed.seatCount) {
+        const table = product.specifications?.table;
+        if (table?.capacityVerified && table.capacityMax != null && table.capacityMax >= parsed.seatCount) {
+          score += 18;
+          reasons.push(`verified dining capacity for at least ${parsed.seatCount}`);
+        } else if (table?.demoEstimatedCapacity != null && table.demoEstimatedCapacity >= parsed.seatCount) {
+          score += 8;
+          reasons.push(`indicative dining capacity for at least ${parsed.seatCount}`);
+        }
+        if (product.productSubtypes?.includes("dining-chair")) {
+          score += 10;
+          reasons.push("coordinating dining-chair options in the programme");
+        }
+      }
+      if (parsed.category === "dining-table" && parsed.extendable && product.specifications?.table?.extendable) {
+        score += 22;
+        reasons.push("extendable table option for occasional guests");
       }
       if (wantsLeather && /leather/.test(copy)) { score += 10; reasons.push("leather options"); }
       if (wantsFabric && /fabric|textile|cover|boucle|chenille|velvet/.test(copy)) { score += 10; reasons.push("fabric-led upholstery"); }
