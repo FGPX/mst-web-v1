@@ -64,7 +64,7 @@ export function PresentationClient({ realAiActive }: { realAiActive: boolean }) 
             <span>03</span><Store />
             <h3>Visualize and continue</h3>
             <p>Open a curated room concept with retained Product and Configuration IDs, then continue through My Musterring to a retailer.</p>
-            <button onClick={() => launch("/room-composer?presentation=1")}>Launch Room & Retailer Journey <ArrowRight size={16} /></button>
+            <button onClick={() => launch("/room-composer/upload?presentation=1")}>Launch Room & Retailer Journey <ArrowRight size={16} /></button>
           </article>
         </div>
       </section>
@@ -127,7 +127,7 @@ export function PresentationClient({ realAiActive }: { realAiActive: boolean }) 
           <li><span>A</span><div><h3>Foundation</h3><p>PIM data contract · taxonomy · analytics · dealer process</p></div></li>
           <li><span>B</span><div><h3>MVP</h3><p>Intelligent Search · product pages · comparison · My Musterring · handover</p></div></li>
           <li><span>C</span><div><h3>Decision Support</h3><p>Configurator pilot · materials · showroom request · booking</p></div></li>
-          <li><span>D</span><div><h3>Advanced Visualization</h3><p>Shoppable rooms · Room Composer · Upload Your Room · 3D / AR · Visual Search</p></div></li>
+          <li><span>D</span><div><h3>Advanced Visualization</h3><p>Shoppable rooms · Room Visualizer · Upload Your Room · 3D / AR · Visual Search</p></div></li>
         </ol>
         <p className="presentation-disclaimer">Product names, prices, configurations and availability shown in this concept are illustrative and must be connected to validated Musterring PIM and retailer data.</p>
       </section>

@@ -539,7 +539,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     const sceneProductIds = [...new Set(items.map((item) => item.productId))];
     const project: Project = {
       id: projectId,
-      name: existingProject?.name ?? "Room Composer Project",
+      name: existingProject?.name ?? "Room Visualizer Project",
       status: existingProject?.status ?? "Ideas Saved",
       coverImage: existingProject?.coverImage || selectedBackground.src || "/stitch-assets/original/room-living-clean.jpg",
       savedProductIds: [...new Set([...(existingProject?.savedProductIds ?? storage.savedProducts()), ...sceneProductIds])],
@@ -706,7 +706,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
           <p className="eyebrow">{upload ? "Room preview" : "Room planning"}</p>
           <div>
             <div>
-              <h1>{upload ? "See it in your room" : "Room Composer"}</h1>
+              <h1>{upload ? "See it in your room" : "Room Visualizer"}</h1>
               <p>{upload ? "Upload a photo, choose products, and generate a realistic preview." : "Upload your real room, choose catalogue products, arrange their approximate placement, and generate a realistic staged view while keeping the original photo available for comparison."}</p>
             </div>
             <div className="chips">
@@ -855,7 +855,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   <span>Snap: 10 cm</span>
                   {roomPreview ? <button onClick={() => setShowBefore((value) => !value)}>{showBefore ? (generatedIsCurrent && showGenerated ? "Show generated view" : "Show product layout") : "Show original room"}</button> : null}
                   <button onClick={() => window.print()}><Printer size={15} /> Print</button>
-                  <button onClick={async () => { await navigator.clipboard?.writeText(`${location.origin}/room-composer`); }}><Share2 size={15} /> Share</button>
+                  <button onClick={async () => { await navigator.clipboard?.writeText(`${location.origin}/room-composer/upload`); }}><Share2 size={15} /> Share</button>
                   <button onClick={() => { setItems([]); setSelectedId(""); }}>Clear room</button>
                   {roomPreview ? <button onClick={() => {
                     URL.revokeObjectURL(roomPreview);
