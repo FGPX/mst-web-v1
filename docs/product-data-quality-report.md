@@ -1,6 +1,6 @@
 # Musterring Product Data Quality Report
 
-Generated: 2026-08-20T11:15:45.035Z
+Generated: 2026-08-21T07:57:57.926Z
 
 This report audits the immutable authorised catalogue import. It does not silently rewrite source values.
 

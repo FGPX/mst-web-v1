@@ -324,7 +324,7 @@ export class GeminiVisionProvider extends LocalDemoAIProvider {
         contents: [{
           parts: [
             { inline_data: { mime_type: match[1], data: match[2] } },
-            { text: `Analyze the most prominent furniture or home-accessory object for catalogue matching. Supported categories are: ${visualCategoryList}. If none is clearly visible, category must be null. Return only JSON with exactly these fields: category (supported category or null), colorFamilies (string array), likelyMaterial (fabric, leather, wood, metal, glass or null), style (string array), silhouette (string), notableVisualFeatures (string array). Describe only visible traits and never identify or invent a product.` }
+            { text: `Analyze the most prominent furniture or home-accessory object for catalogue matching. Supported categories are: ${visualCategoryList}. If none is clearly visible, category must be null. Return only JSON with exactly these fields: category (supported category or null), colorFamilies (string array), likelyMaterial (fabric, leather, wood, metal, glass or null), style (string array), silhouette (string), notableVisualFeatures (string array). colorFamilies must describe the target object's main body or upholstery only, with the dominant colour first; ignore cushions, throws, decor, walls, floors, and background objects. Describe only visible traits and never identify or invent a product.` }
           ]
         }],
         generationConfig: {
@@ -397,8 +397,8 @@ export class OpenAIProvider implements AIProvider {
 
   analyzeProductImage(imageDataUrl: string) {
     return this.parse(visualTagsSchema, "product_visual_tags",
-      `Analyze only the most prominent target furniture or home-accessory object. Allowed categories are: ${visualCategoryList}. Set category to null when none of those objects is clearly visible. Describe only visible traits; never identify or invent a product.`,
-      [{ role: "user", content: [{ type: "input_text", text: "Analyze the selected image area for visual catalogue matching. Return the catalogue category, visible colour families, likely material, style, silhouette and notable features. If no supported catalogue object is clearly visible, set category to null." }, { type: "input_image", image_url: imageDataUrl, detail: "auto" }] }], true);
+      `Analyze only the most prominent target furniture or home-accessory object. Allowed categories are: ${visualCategoryList}. Set category to null when none of those objects is clearly visible. For colorFamilies, report only the target object's main body or upholstery colours in dominance order. Ignore cushions, throws, decor, walls, floors, and background objects. Describe only visible traits; never identify or invent a product.`,
+      [{ role: "user", content: [{ type: "input_text", text: "Analyze the selected image area for visual catalogue matching. Return the catalogue category, dominant main-body colour family, likely material, style, silhouette and notable features. Do not treat accessory or room colours as product colours. If no supported catalogue object is clearly visible, set category to null." }, { type: "input_image", image_url: imageDataUrl, detail: "auto" }] }], true);
   }
 
   analyzeRoomImage(imageDataUrl: string) {
@@ -566,16 +566,29 @@ Return a practical comfortable target, not a bare minimum and not an oversized l
       preserveStyle: shape.preserveStyle.unwrap().nullable(),
       preserveComfort: shape.preserveComfort.unwrap().nullable()
     });
-    const extracted = await this.parse(extractionSchema, "alternative_requirements",
-      "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, included and excluded layout shapes, tabletop shapes, materials and functions. Put negated layouts such as 'not L-shaped' only in excludedLayoutShapes, never in layoutShapes. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories, layout shapes and tabletop shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
-      [{ role: "user", content: JSON.stringify(input) }]);
+    const [extracted, advisorSelection] = await Promise.all([
+      this.parse(extractionSchema, "alternative_requirements",
+        "Extract only alternative-product constraints from the supplied request, including category, colorFamilies, styles, seat count, dimensions, included and excluded layout shapes, tabletop shapes, materials and functions. Put negated layouts such as 'not L-shaped' only in excludedLayoutShapes, never in layoutShapes. Use minWidthMm for 'above/over/at least', targetWidthMm for a requested approximate size, and maxWidthMm only for an explicit upper bound. Normalize colours, categories, layout shapes and tabletop shapes to the schema vocabulary. Use null or an empty array when a requirement is unknown. Do not invent product facts or IDs.",
+        [{ role: "user", content: JSON.stringify(input) }]),
+      this.answerProductQuestion({
+        question: input.requestText ?? "Find a verified alternative to this product.",
+        context: {
+          route: "/furniture",
+          currentProductId: input.sourceProductId,
+          referencedProductIds: [input.sourceProductId],
+          selectedMaterialIds: [],
+          currentFilters: {},
+          approvedPreferences: {}
+        }
+      })
+    ]);
     const inferred = validatedAIAlternativeRequirements(input, extracted);
     const grounded = groundAlternativeRequest(input, extracted);
     // Explicit structured filters from the UI are authoritative; AI only fills
     // constraints that can be verified in the free text. IDs and request text
     // never come from AI.
     const parsed = alternativeRequestSchema.parse({ ...grounded, ...inferred, ...input });
-    return alternativeResponseSchema.parse(findGroundedAlternatives(parsed));
+    return alternativeResponseSchema.parse(findGroundedAlternatives(parsed, advisorSelection.productIds));
   }
 
   async adviseMaterials(input: { requestText: string }) {
@@ -639,7 +652,15 @@ Return a practical comfortable target, not a bare minimum and not an oversized l
       styles: product.verifiedFacts.styles, functions: product.verifiedFacts.functions,
       modular: product.verifiedFacts.modular ? product.modular : null,
       smallSpaceSuitable: product.verifiedFacts.smallSpaceSuitable ? product.smallSpaceSuitable : null,
-      easyCare: product.verifiedFacts.easyCare ? product.easyCare : null
+      easyCare: product.verifiedFacts.easyCare ? product.easyCare : null,
+      bedTypes: product.dataQuality?.verifiedFields.includes("specifications.bed.bedType") ? product.specifications?.bed?.bedType ?? [] : null,
+      bedSleepingSizes: product.dataQuality?.verifiedFields.includes("specifications.bed.sleepingSizes") ? product.specifications?.bed?.sleepingSizes ?? [] : null,
+      bedStorage: product.dataQuality?.verifiedFields.includes("specifications.bed.bedStorage")
+        ? product.specifications?.bed?.bedStorage ?? null
+        : product.dataQuality?.verifiedFields.includes("specifications.bed.underBedStorage")
+          ? product.specifications?.bed?.underBedStorage ?? null
+          : null,
+      bedMotorised: product.dataQuality?.verifiedFields.includes("specifications.bed.motorised") ? product.specifications?.bed?.motorised ?? null : null
     }));
     const completeMaterialFacts = materials.map((material) => ({
       id: material.id, name: material.name, type: material.type, colorFamily: material.colorFamily,

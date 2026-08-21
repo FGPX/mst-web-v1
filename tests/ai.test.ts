@@ -4,11 +4,12 @@ import { catalogueCategories } from "@/lib/types";
 import { buildGroundedConfiguration } from "@/lib/ai/configuration";
 import { comparisonSummaryInput, deterministicComparisonSummary } from "@/lib/ai/comparison-summary";
 import { groundProjectData } from "@/lib/ai/grounding";
-import { hybridCatalogueSearch, searchCatalogueByVisualTags } from "@/lib/ai/retrieval";
+import { hybridCatalogueSearch, searchCatalogueByVisualTags, visualProductGroupId } from "@/lib/ai/retrieval";
 import { validatedAIAlternativeRequirements } from "@/lib/ai/alternative-intent";
 import { parseSearchExclusions, parseSearchQuery } from "@/lib/search";
 import { groundSearchIntent } from "@/lib/ai/search-intent";
 import { answerGroundedQuestion } from "@/lib/assistant";
+import { productImageForColors } from "@/lib/musterring-assets";
 import {
   configurationRequirementsSchema,
   retailerProjectDataSchema,
@@ -259,6 +260,45 @@ describe("grounded hybrid retrieval", () => {
     expect(matches.every(({ product }) => ids.has(product.id))).toBe(true);
   });
 
+  it("deduplicates visual results by product programme", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "bed",
+      colorFamilies: ["grey"],
+      likelyMaterial: "fabric",
+      style: [],
+      silhouette: "upholstered bed",
+      notableVisualFeatures: []
+    }));
+    const groups = matches.map(({ product }) => visualProductGroupId(product));
+    expect(new Set(groups).size).toBe(groups.length);
+  });
+
+  it("uses verified silhouette metadata to rank visual matches", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "dining-table",
+      colorFamilies: [],
+      likelyMaterial: "wood",
+      style: [],
+      silhouette: "round dining table",
+      notableVisualFeatures: []
+    }));
+    const shapeMatches = matches.filter(({ reasons }) => reasons.includes("verified matching tabletop silhouette"));
+    expect(shapeMatches.length).toBeGreaterThan(0);
+    expect(matches[0].reasons).toContain("verified matching tabletop silhouette");
+  });
+
+  it("uses verified product material facts in visual ranking", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "bed",
+      colorFamilies: ["grey"],
+      likelyMaterial: "fabric",
+      style: [],
+      silhouette: "upholstered bed",
+      notableVisualFeatures: []
+    }));
+    expect(matches.some(({ reasons }) => reasons.includes("offers fabric"))).toBe(true);
+  });
+
   it("does not leak wrong-colour beds into white visual-search results", () => {
     const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
       category: "bed",
@@ -285,6 +325,21 @@ describe("grounded hybrid retrieval", () => {
     const accepted = new Set(["black", "charcoal", "graphite", "anthracite", "onyx", "dark grey"]);
     expect(matches.length).toBeGreaterThan(0);
     expect(matches.every(({ product }) => product.colors.some((color) => accepted.has(color)))).toBe(true);
+  });
+
+  it("does not let secondary scene colours override a black sofa", () => {
+    const matches = searchCatalogueByVisualTags(visualTagsSchema.parse({
+      category: "sofa",
+      colorFamilies: ["black", "beige"],
+      likelyMaterial: "fabric",
+      style: ["modern"],
+      silhouette: "wide low sofa",
+      notableVisualFeatures: ["beige cushions"]
+    }));
+    const accepted = new Set(["black", "charcoal", "graphite", "anthracite", "onyx", "dark grey"]);
+    expect(matches.length).toBeGreaterThan(0);
+    expect(matches.every(({ product }) => product.colors.some((color) => accepted.has(color)))).toBe(true);
+    expect(matches.every(({ product }) => productImageForColors(product.id, ["black"]).matchedColor)).toBe(true);
   });
 
   it("accepts every catalogue category for visual search", () => {

@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Check, GitCompare, Heart, SlidersHorizontal } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { Heart, SlidersHorizontal } from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
 import { materials, products } from "@/lib/data";
 import { materialImages } from "@/lib/material-assets";
 import { storage } from "@/lib/persistence";
@@ -12,10 +12,19 @@ import { MaterialAdvisor } from "./MaterialAdvisor";
 type Filter = "all" | "easyCare" | "familyFriendly" | "petFriendly";
 type AdvisorResult = { materialIds: string[]; requestText: string };
 
+const shortMaterialDetails = (material: (typeof materials)[number]) => ({
+  care: material.type === "leather" ? "Check leather type before treatment" : "Vacuum gently · Check care code",
+  suitableFor: [
+    material.petFriendly === true ? "Pets" : null,
+    material.familyFriendly === true ? "Family homes" : null,
+    material.easyCare === true ? "Easy care" : null,
+    material.durability === 5 ? "Everyday use" : null
+  ].filter(Boolean).join(" · ") || "General indoor use",
+  consider: material.type === "leather" ? "Avoid direct sun · Verify finish" : "Verify exact-cover performance"
+});
+
 export function MaterialsClient() {
-  const [selected, setSelected] = useState<string[]>([]);
   const [saved, setSaved] = useState<string[]>([]);
-  const [notice, setNotice] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [filter, setFilter] = useState<Filter>("all");
   const [advisorResult, setAdvisorResult] = useState<AdvisorResult | null>(null);
@@ -32,25 +41,11 @@ export function MaterialsClient() {
     [advisorResult, filter]
   );
 
-  const toggleCompare = (id: string) => {
-    setNotice("");
-    setSelected((current) => {
-      if (current.includes(id)) return current.filter((item) => item !== id);
-      if (current.length >= 3) {
-        setNotice("Compare up to three materials.");
-        return current;
-      }
-      return [...current, id];
-    });
-  };
-
   const toggleSaved = (id: string, name: string, isSaved: boolean) => {
     const action = isSaved ? "remove" : "save";
     if (!window.confirm(`Confirm you want to ${action} ${name}${isSaved ? " from" : " to"} your project?`)) return;
     setSaved(storage.toggleMaterial(id));
   };
-
-  const compared = materials.filter((material) => selected.includes(material.id));
 
   return (
     <main className="materials-page">
@@ -69,9 +64,9 @@ export function MaterialsClient() {
           <header className="materials-catalogue-head">
             <div className="materials-catalogue-label">
               <p id="materials-catalogue-title">{advisorResult ? "Recommended materials" : "Curated selection"}</p>
-              {advisorResult ? <span className="materials-catalogue-result">
-                <strong>{visibleMaterials.length}</strong>
-                <span><b>{visibleMaterials.length === 1 ? "Match" : "Matches"} found</b><small>for “{advisorResult.requestText}”</small></span>
+              {advisorResult ? <span className={`materials-catalogue-result${visibleMaterials.length ? "" : " is-guidance-only"}`}>
+                <strong>{visibleMaterials.length || "i"}</strong>
+                <span><b>{visibleMaterials.length ? `${visibleMaterials.length === 1 ? "Match" : "Matches"} found` : "Guidance available"}</b><small>{visibleMaterials.length ? `for “${advisorResult.requestText}”` : "No exact-cover match verified"}</small></span>
               </span> : null}
             </div>
             <div className="materials-catalogue-actions">
@@ -94,17 +89,15 @@ export function MaterialsClient() {
             </div>
           ) : null}
 
-          {notice ? <p role="alert" className="materials-notice">{notice}</p> : null}
-
           <div className="materials-grid">
             {visibleMaterials.map((material) => {
               const isSaved = saved.includes(material.id);
-              const isSelected = selected.includes(material.id);
               const compatibleCount = products.filter((product) => product.active && product.materials.includes(material.id)).length;
-              const badges = [material.easyCare === true ? "Easy care" : null, material.familyFriendly === true ? "Family friendly" : null, material.petFriendly === true ? "Pet friendly" : null].filter(Boolean) as string[];
+              const badges = [material.easyCare === true ? "Easy-care profile" : null, material.familyFriendly === true ? "Family profile" : null, material.petFriendly === true ? "Pet profile" : null].filter(Boolean) as string[];
+              const details = shortMaterialDetails(material);
 
               return (
-                <article className={`material-card${isSelected ? " is-selected" : ""}`} key={material.id}>
+                <article className="material-card" key={material.id}>
                   <div className="material-card-media">
                     <Image src={materialImages[material.id]} alt={`${material.name} material texture`} fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 50vw, 33vw" />
                     <div className="material-card-badges">{badges.slice(0, 2).map((badge) => <span key={badge}>{badge}</span>)}</div>
@@ -118,36 +111,25 @@ export function MaterialsClient() {
 
                     <div className="material-summary">
                       <p><strong>Composition</strong>{material.composition} · {material.texture}</p>
-                      <p><strong>Care</strong>{material.maintenance}</p>
-                      <p><strong>Suitable for</strong>{material.recommendedUses.join(" · ") || "Not verified for this illustrative profile"}</p>
-                      <p><strong>Consider</strong>{material.cautions.join(" · ")}</p>
+                      <p><strong>Care</strong>{details.care}</p>
+                      <p><strong>Suitable for</strong>{details.suitableFor}</p>
+                      <p><strong>Consider</strong>{details.consider}</p>
                     </div>
 
                     <div className="material-metrics">
-                      <div><span>Durability <em>{material.durability == null ? "Not verified" : `${material.durability}/5`}</em></span><i><b style={{ width: material.durability == null ? "0" : `${material.durability * 20}%` }} /></i></div>
-                      <div><span>Care <em>{material.easyCare === true ? "Easy care" : material.easyCare === false ? "Specialist care" : "Not verified"}</em></span><i><b className="care-bar" style={{ width: material.easyCare === true ? "82%" : material.easyCare === false ? "48%" : "0" }} /></i></div>
+                      <div><span>Durability profile <em>{material.durability == null ? "Not verified" : `${material.durability}/5`}</em></span><i><b style={{ width: material.durability == null ? "0" : `${material.durability * 20}%` }} /></i></div>
+                      <div><span>Care profile <em>{material.easyCare === true ? "Lower maintenance" : material.easyCare === false ? "More involved" : "Not verified"}</em></span><i><b className="care-bar" style={{ width: material.easyCare === true ? "82%" : material.easyCare === false ? "48%" : "0" }} /></i></div>
                     </div>
 
-                    <div className="material-card-actions">
-                      <Link href={`/handover?request=material&material=${encodeURIComponent(material.id)}`}>Request sample <span aria-hidden="true">◎</span></Link>
-                      <button type="button" onClick={() => toggleCompare(material.id)} aria-pressed={isSelected}><GitCompare size={14} /> {isSelected ? "Selected" : "Compare"}</button>
-                    </div>
                     <small>{compatibleCount ? `${compatibleCount} compatible products recorded` : "No compatible products recorded"}</small>
                   </div>
                 </article>
               );
             })}
-            {!visibleMaterials.length ? <div className="materials-empty-results"><h2>No verified matching materials</h2><p>The connected illustrative swatches do not contain exact-cover evidence for this requirement. Confirm the supplier swatch specification or ask a retailer before choosing.</p><button type="button" onClick={() => { setAdvisorResult(null); setFilter("all"); }}>Show all profiles</button></div> : null}
+            {!visibleMaterials.length ? <div className="materials-empty-results"><h2>No exact-cover match is verified yet</h2><p>See the guidance above for what the connected data can support. You can still browse every swatch, then confirm the supplier specification or request a physical sample before choosing.</p><button type="button" onClick={() => { setAdvisorResult(null); setFilter("all"); }}>Browse all materials</button></div> : null}
           </div>
         </section>
 
-        {compared.length ? (
-          <section className="materials-comparison" aria-label="Material comparison">
-            <p className="materials-kicker">Selected comparison</p><h2>Material characteristics</h2>
-            <div className="stitch-compare-rows">{["type", "colorFamily", "texture", "composition", "durability", "lightSensitivity", "care"].map((field) => <div key={field}><b>{field}</b>{compared.map((material) => { const value = material[field as keyof typeof material]; return <span key={material.id}>{value == null || value === "unknown" ? "Not verified" : String(value)}</span>; })}</div>)}</div>
-            <p role="status"><Check size={16} /> {compared.length} material{compared.length === 1 ? "" : "s"} selected.</p>
-          </section>
-        ) : null}
       </div>
     </main>
   );

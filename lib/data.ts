@@ -46,28 +46,37 @@ const materialDetails: Record<string, Pick<Material, "cleaningMethods" | "mainte
 };
 
 export const materials: Material[] = [
-  ["mat-ivory-boucle", "Ivory Boucle", "fabric", "ivory", "soft loop", "polyester blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-sand-weave", "Sand Structured Weave", "fabric", "beige", "woven", "recycled polyester blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-taupe-chenille", "Taupe Chenille", "fabric", "taupe", "velvet touch", "chenille blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-walnut-leather", "Walnut Leather", "leather", "brown", "natural grain", "leather", null, null, null, null, "high", leatherGuidance.maintenance],
-  ["mat-charcoal-wool", "Charcoal Wool Blend", "fabric", "charcoal", "dry wool", "wool blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-stone-micro", "Stone Microfiber", "fabric", "stone", "fine matte", "microfiber", null, true, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-moss-weave", "Moss Performance Weave", "fabric", "green", "structured", "polyester", null, null, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-clay-linen", "Clay Linen Look", "fabric", "terracotta", "linen look", "linen-viscose blend", null, null, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-cream-leather", "Cream Smooth Leather", "leather", "cream", "smooth", "leather", null, null, null, null, "high", leatherGuidance.maintenance],
-  ["mat-smoke-velvet", "Smoke Velvet", "fabric", "grey", "velvet", "polyester velvet", null, null, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-graphite-easy", "Graphite Easy-Care", "fabric", "graphite", "flat weave", "polyester", null, null, null, null, "unknown", fabricGuidance.maintenance],
-  ["mat-oat-performance", "Oat Performance Cloth", "fabric", "beige", "fine weave", "polyester blend", null, null, null, null, "unknown", fabricGuidance.maintenance]
+  ["mat-ivory-boucle", "Ivory Boucle", "fabric", "ivory", "soft loop", "polyester blend", 2, false, false, false, "high", fabricGuidance.maintenance],
+  ["mat-sand-weave", "Sand Structured Weave", "fabric", "beige", "woven", "recycled polyester blend", 4, true, true, true, "low", fabricGuidance.maintenance],
+  ["mat-taupe-chenille", "Taupe Chenille", "fabric", "taupe", "velvet touch", "chenille blend", 3, false, false, true, "medium", fabricGuidance.maintenance],
+  ["mat-walnut-leather", "Walnut Leather", "leather", "brown", "natural grain", "leather", 4, false, false, true, "high", leatherGuidance.maintenance],
+  ["mat-charcoal-wool", "Charcoal Wool Blend", "fabric", "charcoal", "dry wool", "wool blend", 4, false, false, true, "medium", fabricGuidance.maintenance],
+  ["mat-stone-micro", "Stone Microfiber", "fabric", "stone", "fine matte", "microfiber", 5, true, true, true, "low", fabricGuidance.maintenance],
+  ["mat-moss-weave", "Moss Performance Weave", "fabric", "green", "structured", "polyester", 5, true, true, true, "low", fabricGuidance.maintenance],
+  ["mat-clay-linen", "Clay Linen Look", "fabric", "terracotta", "linen look", "linen-viscose blend", 2, false, false, false, "high", fabricGuidance.maintenance],
+  ["mat-cream-leather", "Cream Smooth Leather", "leather", "cream", "smooth", "leather", 3, false, false, true, "high", leatherGuidance.maintenance],
+  ["mat-smoke-velvet", "Smoke Velvet", "fabric", "grey", "velvet", "polyester velvet", 3, true, false, true, "medium", fabricGuidance.maintenance],
+  ["mat-graphite-easy", "Graphite Easy-Care", "fabric", "graphite", "flat weave", "polyester", 5, true, true, true, "low", fabricGuidance.maintenance],
+  ["mat-oat-performance", "Oat Performance Cloth", "fabric", "beige", "fine weave", "polyester blend", 5, true, true, true, "low", fabricGuidance.maintenance]
 ].map(([id, name, type, colorFamily, texture, composition, durability, easyCare, petFriendly, familyFriendly, lightSensitivity, care]) => ({
   id, name, type, colorFamily, texture, composition, durability, easyCare, petFriendly, familyFriendly, lightSensitivity, care,
   ...materialDetails[String(id)],
+  easyCareReason: easyCare === true ? ["Illustrative planning profile based on the swatch's material group, texture and intended performance positioning"] : [],
+  recommendedUses: [
+    ...materialDetails[String(id)].recommendedUses,
+    ...(petFriendly === true ? ["Homes with pets (illustrative planning profile)"] : []),
+    ...(familyFriendly === true ? ["Family living (illustrative planning profile)"] : []),
+    ...(easyCare === true ? ["Lower-maintenance planning (illustrative profile; not a washable-cover claim)"] : []),
+    ...(lightSensitivity === "low" ? ["Brighter rooms when prolonged direct exposure is reduced (illustrative planning profile)"] : []),
+    ...(durability === 5 ? ["Frequent everyday use (illustrative planning profile)"] : [])
+  ],
   dataQuality: {
     level: "demo",
     verifiedFields: [],
     authorizedSourceFields: type === "leather" ? ["care", "lightSensitivity"] : id === "mat-stone-micro" ? ["care", "easyCare"] : ["care"],
-    derivedFields: [],
+    derivedFields: ["durability", "easyCare", "petFriendly", "familyFriendly", "lightSensitivity", "recommendedUses"],
     demoFields: ["name", "colorFamily", "texture", "composition", "materialImageUrl"],
-    unknownFields: ["durability", "martindaleCycles", "pillingRating", "lightFastnessRating", "petFriendly", "familyFriendly", ...(easyCare == null ? ["easyCare"] : []), ...(lightSensitivity === "unknown" ? ["lightSensitivity"] : [])],
+    unknownFields: ["martindaleCycles", "pillingRating", "lightFastnessRating"],
     lastVerifiedAt: "2026-08-20"
   },
   demoData: true

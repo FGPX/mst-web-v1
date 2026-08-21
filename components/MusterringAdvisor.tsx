@@ -371,7 +371,10 @@ export function MusterringAdvisor() {
       approvedPreferences: {
         ...approvedPreferences,
         shownProductIds: [...new Set([...approvedPreferences.shownProductIds, ...answer.productIds])],
-        askedSlots: [...new Set([...approvedPreferences.askedSlots, ...(answer.clarify ? [answer.clarify.slot] : [])])]
+        askedSlots: [...new Set([...approvedPreferences.askedSlots, ...(answer.clarify ? [answer.clarify.slot] : [])])],
+        // A single-product answer means the conversation is now about that
+        // product; several products means the customer is still choosing.
+        focusProductId: answer.productIds.length === 1 ? answer.productIds[0] : approvedPreferences.focusProductId
       },
       referencedProductIds: answer.productIds.length ? answer.productIds : current.referencedProductIds
     }));
@@ -440,6 +443,23 @@ export function MusterringAdvisor() {
       const product = products.find((candidate) => candidate.id === id);
       setJourneyStep((current) => Math.max(current, 3));
       setMessages((current) => [...current, { role: "advisor", text: `${product?.modelCode ?? "The catalogue product"} was saved to My Musterring. Next, upload a photo of your room and I can create a catalogue-grounded visualization after you confirm the image processing.` }]);
+    } else if (action.type === "OPEN_ROOM_COMPOSER") {
+      // The visualisation already exists inside this panel. Navigating to
+      // /room-composer would throw the customer out of the conversation — and
+      // the panel closes on route change — right at the moment the journey is
+      // meant to move forward.
+      const productId = String(action.parameters.productId ?? "");
+      if (productId && !storage.savedProducts().includes(productId)) {
+        storage.toggleProduct(productId);
+        setSavedProductIds(storage.savedProducts());
+        setSelectedProductIds((current) => [...new Set([...current, productId])]);
+      }
+      // Opening the file picker straight from here would be blocked: the click
+      // that started this went through an async round trip, so the browser no
+      // longer counts it as a user gesture. Surface the upload affordance and
+      // let the customer press it.
+      setJourneyStep((current) => Math.max(current, 3));
+      setAttachmentMenu(true);
     } else if (action.type === "SHOW_ALTERNATIVES") {
       window.dispatchEvent(new CustomEvent("musterring:alternatives", { detail: { productId: String(action.parameters.productId), requestText: String(action.parameters.requestText ?? "") } }));
       setOpen(false);

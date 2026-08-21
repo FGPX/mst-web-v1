@@ -3,14 +3,13 @@
 import Image from "@/components/HighQualityImage";
 import Link from "next/link";
 import { AlertCircle, ArrowRight, CheckCircle2, Compass, Save, Search, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImageForColors } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
 import type { AlternativeResponse } from "@/lib/ai/assistant-schemas";
 
 type AlternativePanelResult = AlternativeResponse & { ai?: { mode: "openai" | "demo"; fallback: boolean } };
-const cm = (value: number) => `${Math.round(value / 10)} cm`;
 const conciseDifference = (requirement: string) => requirement
   .replace(/ colour is not verified for this product$/i, " colour not verified")
   .replace(/^requires (.+) material metadata$/i, "$1 material not verified")
@@ -93,14 +92,9 @@ export function AlternativeFinderPanel() {
         const displayedBenefits = requestSpecificBenefits.length ? requestSpecificBenefits : benefits.slice(0, 2);
         const inlineBenefits = displayedBenefits.slice(0, 2);
         return <article key={product.id} className={exact ? "is-exact" : "is-alternative"}>
-          <div className="alternative-product-image"><Image src={presentation.src} alt={`${product.name}${presentation.matchedColor ? ` shown in ${presentation.matchedColor}` : ""}`} width={960} height={720} quality={90} sizes="(max-width: 768px) calc(100vw - 68px), 420px" style={{ width: "100%", height: "100%", objectFit: "cover", imageRendering: "auto" }} />{presentation.matchedColor ? <span>Shown in {presentation.matchedColor}</span> : null}</div>
+          <div className="alternative-product-image"><Image src={presentation.src} alt={`${product.name}${presentation.matchedColor ? ` shown in ${presentation.matchedColor}` : ""}`} width={960} height={720} quality={90} sizes="(max-width: 768px) calc(100vw - 68px), 420px" style={{ width: "100%", height: "100%", objectFit: "cover", imageRendering: "auto" }} /></div>
           <div className="alternative-product-content">
             <div className="alternative-product-heading"><div><div className="alternative-product-match-line"><span className={`alternative-match-badge ${exact ? "is-exact" : "is-other"}`}>{exact ? "Exact match" : usesConceptData ? "Concept option" : "Alternative option"}</span>{exact && inlineBenefits.length ? <span className="alternative-inline-benefits">{inlineBenefits.join(" · ")}</span> : null}</div><h4>{product.name}</h4></div></div>
-            {product.verifiedFacts.dimensions ? <div className="alternative-product-specs" aria-label={`${product.name} key information`}>
-              <div><small>Width</small><strong>{cm(product.widthMm)}</strong></div>
-              <div><small>Depth</small><strong>{cm(product.depthMm)}</strong></div>
-              <div><small>Height</small><strong>{cm(product.heightMm)}</strong></div>
-            </div> : null}
             {!exact ? <div className="alternative-match-details">
               <div className="is-match"><strong>Why it’s relevant</strong><ul>{displayedBenefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul></div>
               {unmetRequirements.length ? <div className="alternative-unmet"><strong>Differs from request</strong><ul>{unmetRequirements.map((requirement) => <li key={requirement}>{requirement}</li>)}</ul></div> : null}
