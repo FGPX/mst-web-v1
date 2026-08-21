@@ -18,6 +18,8 @@ export type RoomSizeProductFact = {
 };
 
 export type RoomSizeCalculation = {
+  minimumWidthMm: number;
+  minimumLengthMm: number;
   recommendedWidthMm: number;
   recommendedLengthMm: number;
   furnitureSpanWidthMm: number;
@@ -55,12 +57,17 @@ export function calculateRecommendedRoomSize(
   const widest = Math.max(...footprints.map((entry) => entry.width));
   const deepest = Math.max(...footprints.map((entry) => entry.depth));
   const clearance = circulationClearanceMm * 2;
+  const compactClearance = 600 * 2;
+  const spanWidth = Math.max(maxX - minX, widest);
+  const spanLength = Math.max(maxY - minY, deepest);
 
   return {
-    recommendedWidthMm: roundUpTo100(Math.max(maxX - minX, widest) + clearance),
-    recommendedLengthMm: roundUpTo100(Math.max(maxY - minY, deepest) + clearance),
-    furnitureSpanWidthMm: roundUpTo100(Math.max(maxX - minX, widest)),
-    furnitureSpanLengthMm: roundUpTo100(Math.max(maxY - minY, deepest)),
+    minimumWidthMm: roundUpTo100(spanWidth + compactClearance),
+    minimumLengthMm: roundUpTo100(spanLength + compactClearance),
+    recommendedWidthMm: roundUpTo100(spanWidth + clearance),
+    recommendedLengthMm: roundUpTo100(spanLength + clearance),
+    furnitureSpanWidthMm: roundUpTo100(spanWidth),
+    furnitureSpanLengthMm: roundUpTo100(spanLength),
     circulationClearanceMm,
     arrangement: "current-layout",
     products: footprints.map(({ product }) => ({
