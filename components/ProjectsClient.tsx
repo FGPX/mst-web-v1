@@ -72,7 +72,7 @@ export function ProjectsClient() {
     return groups;
   }, new Map<string, SavedRoomScene>()).values()];
   const createRoomHref = selectedProductIds.length
-    ? `/room-composer?project=${encodeURIComponent(project?.id ?? "project-room-composer")}&${selectedProductIds.map((id) => `product=${encodeURIComponent(id)}`).join("&")}`
+    ? `/room-composer/upload?project=${encodeURIComponent(project?.id ?? "project-room-composer")}&${selectedProductIds.map((id) => `product=${encodeURIComponent(id)}`).join("&")}`
     : "";
 
   const removeMaterial = (materialId: string, materialName: string) => {
@@ -94,7 +94,7 @@ export function ProjectsClient() {
         <div><button><Share2 size={16} /> Share with designer</button><Link href="/handover"><Send size={16} /> Send to retailer</Link></div>
       </header>
       <div className="container">
-        <div className="stitch-project-title"><h2>Saved Room Views</h2><Link href={`/room-composer?project=${encodeURIComponent(project?.id ?? "project-room-composer")}`}>Create another view</Link></div>
+        <div className="stitch-project-title"><h2>Saved Room Views</h2><Link href={`/room-composer/upload?project=${encodeURIComponent(project?.id ?? "project-room-composer")}`}>Create another view</Link></div>
         <section className="stitch-room-view-grid">
           {latestScenes.length ? latestScenes.map((scene, index) => {
             const sceneKey = scene.id;
@@ -110,9 +110,9 @@ export function ProjectsClient() {
                   <span>{sceneProducts.length} product{sceneProducts.length === 1 ? "" : "s"} · {scene.planningMode === "accurate" ? "Accurate planning" : "Inspiration"}</span>
                 </div>
               </Link>
-              <div className="stitch-room-view-actions"><Link href={`/room-composer?scene=${encodeURIComponent(sceneKey)}&project=${encodeURIComponent(scene.projectId)}`}>Edit</Link><button type="button" onClick={() => duplicateScene(scene)}>Copy</button><Link href={`/handover?scene=${encodeURIComponent(sceneKey)}`}>Send</Link><button type="button" onClick={() => deleteScene(sceneKey, sceneName)}>Delete</button></div>
+              <div className="stitch-room-view-actions"><Link href={`/room-composer/upload?scene=${encodeURIComponent(sceneKey)}&project=${encodeURIComponent(scene.projectId)}`}>Edit</Link><button type="button" onClick={() => duplicateScene(scene)}>Copy</button><Link href={`/handover?scene=${encodeURIComponent(sceneKey)}`}>Send</Link><button type="button" onClick={() => deleteScene(sceneKey, sceneName)}>Delete</button></div>
             </article>;
-          }) : <div className="stitch-project-empty"><h3>No room views saved yet</h3><p>Save a view from Plan a Room and it will appear here.</p><Link href="/room-composer">Open Plan a Room</Link></div>}
+          }) : <div className="stitch-project-empty"><h3>No room views saved yet</h3><p>Save a view in Room Visualizer and it will appear here.</p><Link href="/room-composer/upload">Open Room Visualizer</Link></div>}
         </section>
         <div className="stitch-project-title"><h2>Style Finder Sets</h2><Link href="/ai-stylist"><Sparkles size={16} /> Create another set</Link></div>
         <section className="stylist-saved-grid">
@@ -152,7 +152,7 @@ export function ProjectsClient() {
           <Link href="/furniture"><strong>{savedIds.length}</strong><span>Saved products</span></Link>
           <Link href={project ? `/my-musterring/projects/${project.id}` : "/my-musterring"}><strong>{resourceCounts.configurations}</strong><span>Configurations</span></Link>
           <Link href="/compare"><strong>{resourceCounts.comparisons}</strong><span>Comparisons</span></Link>
-          <Link href="/room-composer"><strong>{resourceCounts.roomScenes}</strong><span>Room scenes</span></Link>
+          <Link href="/room-composer/upload"><strong>{resourceCounts.roomScenes}</strong><span>Room scenes</span></Link>
           <Link href="/ai-stylist"><strong>{resourceCounts.stylistSets}</strong><span>Style Finder sets</span></Link>
           <Link href="/materials"><strong>{resourceCounts.materials}</strong><span>Materials</span></Link>
           <Link href="/dealers"><strong>{preferredDealer?.name ?? "Select"}</strong><span>Preferred retailer</span></Link>

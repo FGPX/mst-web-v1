@@ -7,6 +7,8 @@ const requestSchema = z.object({
   confirmed: z.literal(true),
   subject: z.string().trim().min(3).max(180),
   text: z.string().trim().min(20).max(12_000),
+  /** Optional rich version. The plain text above always remains the fallback. */
+  html: z.string().trim().max(400_000).optional(),
   replyTo: z.string().email().optional()
 });
 
@@ -39,6 +41,7 @@ export async function POST(request: Request) {
         to: recipient,
         subject: input.data.subject,
         text: input.data.text,
+        ...(input.data.html ? { html: input.data.html } : {}),
         ...(input.data.replyTo ? { replyTo: input.data.replyTo } : {})
       });
       if (!result.messageId) throw new Error("SMTP returned no message id.");
@@ -64,6 +67,7 @@ export async function POST(request: Request) {
       to: [to],
       subject: input.data.subject,
       text: input.data.text,
+      ...(input.data.html ? { html: input.data.html } : {}),
       ...(input.data.replyTo ? { reply_to: input.data.replyTo } : {})
     })
   }).catch(() => null);

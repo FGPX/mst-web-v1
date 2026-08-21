@@ -1,167 +1,204 @@
 import { products } from "../data";
-import { parseSearchQuery, searchColorTerms } from "../search";
-import { productHasCategory, type Category, type Product } from "../types";
-import { hasVerifiedColourPresentation } from "../musterring-assets";
+import { productHasCategory, type Category } from "../types";
 import { advisorAnswerSchema, type AdvisorAnswer, type ConversationContext } from "./assistant-schemas";
+import {
+  emptyBrief, matchBrief, nextQuestion, requestedCategories, summariseBrief, updateBrief,
+  type BriefMatch, type CustomerBrief, type ScoredProduct, type UnmetConstraint
+} from "./customer-brief";
 
-export type AdvisorPreferences = {
-  spaceSize?: "compact" | "large";
-  colors?: string[];
-  materialPreferences?: string[];
-  seatCount?: number;
-  maxWidthMm?: number;
-  requestedCategories?: Category[];
-  lastCategory?: Category;
-  shownProductIds?: string[];
-};
+export type { CustomerBrief } from "./customer-brief";
+export { requestedCategories, summariseBrief } from "./customer-brief";
 
-const categoryPatterns: Array<[Category, RegExp]> = [
-  ["coffee-table", /\b(?:coffee|coffe|coffy|cofee|couch|side)\s+table\b/i],
-  ["dining-table", /\bdining\s+table\b/i],
-  ["dining-chair", /\bdining\s+(?:chair|seat|bench)\b/i],
-  ["armchair", /\b(?:armchair|recliner|accent chair)\b/i],
-  ["sectional", /\b(?:sectional|corner sofa|corner couch|chaise)\b/i],
-  ["sofa", /\b(?:sofa|couch|loveseat)\b/i],
-  ["storage", /\b(?:storage|cabinet|sideboard|wall unit)\b/i],
-  ["wardrobe", /\b(?:wardrobe|closet)\b/i],
-  ["bed", /\b(?:bed|mattress|topper)\b/i],
-  ["carpet", /\b(?:carpet|rug)\b/i],
-  ["lamp", /\b(?:lamp|lighting)\b/i]
-];
-
-export function requestedCategories(text: string) {
-  return categoryPatterns.filter(([, pattern]) => pattern.test(text)).map(([category]) => category);
+/**
+ * Folds the newest customer message into the running brief. Exported under the
+ * previous name so existing callers keep working.
+ */
+export function deriveAdvisorPreferences(text: string, previous: Record<string, unknown> = {}): CustomerBrief {
+  return updateBrief({ ...emptyBrief, ...(previous as Partial<CustomerBrief>) } as CustomerBrief, text);
 }
 
-export function deriveAdvisorPreferences(text: string, previous: Record<string, unknown> = {}): AdvisorPreferences {
-  const current = previous as AdvisorPreferences;
-  const categories = requestedCategories(text);
-  const normalized = text.toLowerCase();
-  const parsed = parseSearchQuery(text);
-  const colors = searchColorTerms.filter((color) => new RegExp(`\\b${color}\\b`, "i").test(normalized));
-  const materialPreferences = ["wood", "fabric", "leather", "glass", "metal"].filter((material) => new RegExp(`\\b${material}\\b`, "i").test(normalized));
-  const numericSeats = normalized.match(/\b([1-9])\s*(?:persons?|people|seats?|seater)\b/)?.[1];
-  const wordSeats = normalized.match(/\b(one|two|three|four)\s*(?:persons?|people|seats?|seater)\b/)?.[1];
-  const seatCount = numericSeats ? Number(numericSeats) : wordSeats ? ({ one: 1, two: 2, three: 3, four: 4 } as const)[wordSeats as "one" | "two" | "three" | "four"] : undefined;
-  const compact = /\b(?:small|compact|tiny|narrow|limited space|not much space|no much space|less space|smaller|too big)\b/i.test(normalized);
-  const large = /\b(?:large|spacious|big room|big space)\b/i.test(normalized) && !/\btoo big\b/i.test(normalized);
-  return {
-    ...current,
-    ...(compact ? { spaceSize: "compact" as const } : large ? { spaceSize: "large" as const } : {}),
-    ...(colors.length ? { colors: [...new Set(colors)] } : {}),
-    ...(materialPreferences.length ? { materialPreferences: [...new Set([...(current.materialPreferences ?? []), ...materialPreferences])] } : {}),
-    ...(seatCount ? { seatCount } : {}),
-    ...(parsed.maxWidthMm ? { maxWidthMm: parsed.maxWidthMm } : {}),
-    ...(categories.length ? {
-      requestedCategories: [...new Set([...(current.requestedCategories ?? []), ...categories])],
-      lastCategory: categories.at(-1)
-    } : {})
-  };
+const FOLLOW_UP = /\b(?:another|different|else|replace|smaller|more compact|narrower|too big|too small|larger|bigger|instead)\b/i;
+const DISCOVERY = /\b(?:want|need|find|show|recommend|suggest|looking|have you got|do you have|another|different|smaller|larger|bigger|too big|too small)\b/i;
+const WANTS_OTHERS = /\b(?:another|different|else|replace|instead)\b/i;
+
+/** How many hard, measurable constraints the brief currently carries. */
+function hardConstraintCount(brief: CustomerBrief) {
+  return [brief.maxWidthMm, brief.maxDepthMm, brief.seatCount, brief.colors.length || undefined,
+    brief.materialTypes.length || undefined, brief.layoutShapes.length || undefined,
+    brief.easyCareRequired || undefined].filter(Boolean).length;
 }
 
-function verifiedWidth(product: Product) {
-  return product.verifiedFacts.dimensions ? product.widthMm : null;
+const categoryLabel = (category: Category) => category.replaceAll("-", " ");
+
+/** "max 200 cm wide — the narrowest verified option is 268 cm" */
+const unmetSentence = (unmet: UnmetConstraint[]) =>
+  unmet.map((entry) => `${entry.requested} — ${entry.closest}`).join("; ");
+
+const relaxLabel = (key: string) =>
+  key === "maxWidth" ? "Allow a wider option"
+    : key === "maxDepth" ? "Allow a deeper option"
+      : key === "colour" ? "Show other colours"
+        : key === "seats" ? "Allow a different seat count"
+          : key === "layout" ? "Show other layouts"
+            : key === "material" ? "Show other materials"
+              : "Relax the easy-care requirement";
+
+/**
+ * Verified matches first, then the unverified-but-not-contradicted tier — and
+ * the unpublished facts of whatever was actually taken, so the copy can never
+ * claim full verification for a padded result set.
+ */
+function pick(match: BriefMatch, limit: number) {
+  const verified = match.exact.slice(0, limit).map((product) => ({ product, unverified: [] as string[] }));
+  const padding = match.possible.slice(0, Math.max(0, limit - verified.length));
+  return [...verified, ...padding.map((entry) => ({ product: entry.product, unverified: entry.unverified }))];
 }
 
-function selectForCategory(category: Category, input: { question: string; context: ConversationContext; preferences: AdvisorPreferences; generatedIds: string[] }) {
-  const { question, context, preferences, generatedIds } = input;
-  const text = question.toLowerCase();
-  const currentColors = searchColorTerms.filter((color) => new RegExp(`\\b${color}\\b`, "i").test(text));
-  const referenced = products.filter((product) => context.referencedProductIds.includes(product.id) && productHasCategory(product, category));
-  const alreadyShown = new Set([...(preferences.shownProductIds ?? []), ...referenced.map((product) => product.id)]);
-  let candidates = products.filter((product) => product.active && productHasCategory(product, category));
-  const wantsAnother = /\b(?:another|different|else|replace)\b/.test(text);
-  const wantsSmaller = /\b(?:smaller|more compact|narrower|too big)\b/.test(text);
+/** Turns a category label into something that reads correctly after "Here are". */
+const pluralise = (label: string) => label.endsWith("s") ? label : `${label}s`;
 
-  if (wantsAnother) {
-    candidates = candidates.filter((product) => !alreadyShown.has(product.id));
-  }
-  if (wantsSmaller && referenced.length) {
-    const sourceWidths = referenced.map(verifiedWidth).filter((width): width is number => width !== null);
-    const limit = sourceWidths.length ? Math.min(...sourceWidths) : null;
-    const smaller = limit ? candidates.filter((product) => verifiedWidth(product) !== null && product.widthMm < limit) : [];
-    if (smaller.length) candidates = smaller;
-  }
-  if (preferences.seatCount && ["sofa", "sectional", "armchair"].includes(category)) {
-    const exactSeats = candidates.filter((product) => product.numberOfSeatsVerified && product.numberOfSeats === preferences.seatCount);
-    if (exactSeats.length) candidates = exactSeats;
-  }
-  if (preferences.maxWidthMm) {
-    const withinWidth = candidates.filter((product) => verifiedWidth(product) !== null && product.widthMm <= preferences.maxWidthMm!);
-    if (withinWidth.length) candidates = withinWidth;
-  }
-  if (preferences.spaceSize === "compact") {
-    const verifiedCompact = candidates.filter((product) => product.verifiedFacts.smallSpaceSuitable && product.smallSpaceSuitable);
-    if (verifiedCompact.length) candidates = verifiedCompact;
-  } else if (preferences.spaceSize === "large") {
-    const largeRoomOptions = candidates.filter((product) => !(product.verifiedFacts.smallSpaceSuitable && product.smallSpaceSuitable));
-    if (largeRoomOptions.length) candidates = largeRoomOptions;
-  }
-  if (currentColors.length && requestedCategories(question).length === 1) {
-    candidates = candidates.filter((product) => currentColors.some((color) => product.verifiedFacts.colors.includes(color) && hasVerifiedColourPresentation(product.id, color)));
-  } else if (preferences.colors?.length && !preferences.spaceSize) {
-    const colorMatches = candidates.filter((product) => preferences.colors!.some((color) => product.verifiedFacts.colors.includes(color)));
-    if (colorMatches.length) candidates = colorMatches;
-  }
+const toNearestPayload = (entry: ScoredProduct) => ({ productId: entry.product.id, gaps: entry.gaps.slice(0, 3) });
 
-  const generatedOrder = new Map(generatedIds.map((id, index) => [id, index]));
-  return candidates.sort((left, right) => {
-    if (preferences.spaceSize === "large") return (verifiedWidth(right) ?? 0) - (verifiedWidth(left) ?? 0);
-    if (preferences.spaceSize === "compact" || wantsSmaller) return (verifiedWidth(left) ?? Number.MAX_SAFE_INTEGER) - (verifiedWidth(right) ?? Number.MAX_SAFE_INTEGER);
-    return (generatedOrder.get(left.id) ?? 999) - (generatedOrder.get(right.id) ?? 999) || left.modelCode.localeCompare(right.modelCode);
-  });
-}
-
+/**
+ * Replaces the provider's free-text product selection with a deterministic,
+ * constraint-checked one.
+ *
+ * The rule that matters: a hard constraint is never silently relaxed. If the
+ * catalogue has no beige sofa within 200 x 200 cm, the assistant says exactly
+ * that and shows the nearest options labelled with how far off they are. It
+ * does not present a 268 cm sofa as an answer to a 200 cm request.
+ */
 export function groundAdvisorConversationTurn(question: string, context: ConversationContext, generated: AdvisorAnswer): AdvisorAnswer {
-  const preferences = deriveAdvisorPreferences(question, context.approvedPreferences);
+  const brief = updateBrief({ ...emptyBrief, ...(context.approvedPreferences as Partial<CustomerBrief>) } as CustomerBrief, question);
+  const briefSummary = summariseBrief(brief);
+
   let categories = requestedCategories(question);
-  const followUp = /\b(?:another|different|else|replace|smaller|more compact|narrower|too big|too small|larger|bigger)\b/i.test(question);
-  if (!categories.length && followUp && preferences.lastCategory) categories = [preferences.lastCategory];
-  const discovery = /\b(?:want|need|find|show|recommend|suggest|looking|another|different|smaller|larger|bigger|too big|too small)\b/i.test(question);
-  if (!categories.length || !discovery) return generated;
+  const isFollowUp = FOLLOW_UP.test(question);
+  if (!categories.length && isFollowUp && brief.lastCategory) categories = [brief.lastCategory];
+  if (!categories.length && brief.categories.length && DISCOVERY.test(question)) categories = brief.categories;
+  if (!categories.length || !DISCOVERY.test(question)) {
+    return advisorAnswerSchema.parse({ ...generated, briefSummary });
+  }
 
-  const perCategory = categories.length > 1 ? 1 : 4;
-  const selected = categories.flatMap((category) => selectForCategory(category, {
-    question, context, preferences, generatedIds: generated.productIds
-  }).slice(0, perCategory));
-  const unique = [...new Map(selected.map((product) => [product.id, product])).values()].slice(0, 6);
-  const explicitColors = searchColorTerms.filter((color) => new RegExp(`\\b${color}\\b`, "i").test(question));
-  if (!unique.length && explicitColors.length && categories.length === 1) {
-    const label = categories[0].replaceAll("-", " ");
+  const excludeIds = WANTS_OTHERS.test(question) ? brief.shownProductIds : [];
+  const primary = categories[0];
+
+  // Ask before guessing when the brief is still too thin to mean anything.
+  // One well-chosen question beats six arbitrary recommendations.
+  if (hardConstraintCount(brief) < 2 && !brief.shownProductIds.length && !isFollowUp) {
+    const opening = nextQuestion(brief, primary);
+    if (opening) {
+      return advisorAnswerSchema.parse({
+        answer: `Happy to help you find ${categories.map((category) => pluralise(categoryLabel(category))).join(" and ")}. One thing first, so I only show you options that actually fit — ${opening.question}`,
+        answerType: "clarify",
+        productIds: [], materialIds: [], sources: ["Musterring product catalogue"],
+        proposedAction: null, suggestedQuestions: [],
+        clarify: opening, unmet: [], nearest: [], briefSummary
+      });
+    }
+  }
+
+  const perCategory = categories.length > 1 ? 2 : 4;
+  const results = categories.map((category) => ({ category, match: matchBrief(brief, category, { excludeIds }) }));
+  const blocked = results.filter(({ match }) => match.unmet.length);
+
+  // At least one requested category verifiably cannot be satisfied. Say so.
+  if (blocked.length) {
+    const detail = blocked.map(({ category, match }) =>
+      `${categoryLabel(category)}: ${unmetSentence(match.unmet)}`).join("\n");
+    const nearest = blocked.flatMap(({ match }) => match.nearest.slice(0, 2).map(toNearestPayload));
+    const satisfiedIds = results
+      .filter(({ match }) => !match.unmet.length)
+      .flatMap(({ match }) => pick(match, perCategory).map((entry) => entry.product.id));
+    const relaxable = [...new Set(blocked.flatMap(({ match }) => match.unmet.map((entry) => entry.key)))];
+
     return advisorAnswerSchema.parse({
-      answer: `I couldn’t find a validated ${explicitColors.join(" or ")} ${label} with a matching catalogue presentation. I won’t show a differently coloured product as if it matched.`,
+      answer: `I don't have a validated match for that, and I won't show you something that misses your requirement as if it fitted. Here is exactly what blocks it:\n\n${detail}\n\nTell me which requirement I may relax, or look at the closest options below — each one is labelled with how far off it is.`,
       answerType: "missing-data",
-      productIds: [], materialIds: [], sources: ["Musterring product catalogue"], proposedAction: null,
-      suggestedQuestions: [`Show ${label} options in another colour`, `Show all validated ${label} options`]
+      productIds: satisfiedIds,
+      materialIds: [],
+      sources: ["Musterring product catalogue"],
+      proposedAction: null,
+      suggestedQuestions: relaxable.slice(0, 3).map(relaxLabel),
+      clarify: null,
+      unmet: blocked.flatMap(({ match }) => match.unmet),
+      nearest,
+      briefSummary
     });
   }
-  if (!unique.length && /\b(?:another|different|else|replace)\b/i.test(question)) {
-    const label = categories.map((category) => category.replaceAll("-", " ")).join(" and ");
+
+  const selected = results.flatMap(({ match }) => pick(match, perCategory));
+  const unique = [...new Map(selected.map((entry) => [entry.product.id, entry])).values()].slice(0, 6);
+
+  // Which requirements the catalogue does not publish for the products we are
+  // about to show — computed from the chosen set, not from the whole category.
+  const unverified = [...new Set(unique.flatMap((entry) => entry.unverified))];
+
+  if (!unique.length) {
+    // Every requirement is individually satisfiable but the exclusion list has
+    // exhausted the category: the customer has seen everything that fits.
+    const label = categories.map(categoryLabel).join(" and ");
     return advisorAnswerSchema.parse({
-      answer: `I don’t have another validated ${label} option that keeps the current preferences. I won’t repeat a product you already rejected; tell me which preference I may relax.`,
+      answer: `I've now shown you every validated ${label} that matches your brief, and I won't repeat an option you already turned down. Tell me which requirement I may relax and I'll widen the search.`,
       answerType: "missing-data",
-      productIds: [], materialIds: [], sources: ["Musterring product catalogue"], proposedAction: null,
-      suggestedQuestions: [`Show all ${label} options`, "Relax the colour preference", "Relax the size preference"]
+      productIds: [], materialIds: [], sources: ["Musterring product catalogue"],
+      proposedAction: null,
+      suggestedQuestions: ["Relax the size limit", "Show other colours", `Show all ${label} options`],
+      clarify: null, unmet: [], nearest: [], briefSummary
     });
   }
-  if (!unique.length) return generated;
 
-  const labels = categories.map((category) => category.replaceAll("-", " ")).join(" and ");
-  const compactCopy = preferences.spaceSize === "compact" ? " for your compact-space brief" : preferences.spaceSize === "large" ? " for your larger room" : "";
-  const answer = /\b(?:smaller|too big|more compact|narrower)\b/i.test(question)
-    ? `You’re right — I’ve replaced the previous option with smaller ${labels} recommendations${compactCopy}. The cards below use only catalogue-grounded product data; physical fit still requires the fit check.`
-    : /\b(?:another|different|else|replace)\b/i.test(question)
-      ? `Of course — here are different ${labels} options${compactCopy}. I excluded every previously shown ${labels} from this result.`
-      : `For your request, I found ${labels} recommendations${compactCopy}. I kept the remembered preferences that remain relevant and used only validated catalogue products.`;
+  // Recommend, and keep narrowing: attach the single most useful open question
+  // so the conversation moves forward instead of stalling on a wall of cards.
+  const clarify = nextQuestion(brief, primary);
+  const labels = categories.map(categoryLabel).join(" and ");
+  const plural = categories.map((category) => pluralise(categoryLabel(category))).join(" and ");
+  const qualifiers = [
+    brief.maxWidthMm ? `within ${Math.round(brief.maxWidthMm / 10)} cm` : "",
+    brief.colors.length ? `in ${brief.colors.join("/")}` : "",
+    brief.easyCareRequired ? "easy to clean" : "",
+    brief.spaceSize === "compact" ? "suited to a compact room" : ""
+  ].filter(Boolean).join(", ");
+
+  // The copy must never imply a requirement is met when the catalogue simply
+  // does not publish the fact. Verified results and unverified ones therefore
+  // get different sentences, not the same sentence with a footnote.
+  const opener = /\b(?:smaller|too big|more compact|narrower)\b/i.test(question)
+    ? `Understood — smaller ${plural}`
+    : WANTS_OTHERS.test(question)
+      ? `Of course — different ${plural}`
+      : `Here are ${plural}`;
+  const answer = unverified.length
+    ? `${opener} that don't contradict anything you've told me${qualifiers ? ` (${qualifiers})` : ""}. Be aware: the catalogue does not publish ${unverified.slice(0, 3).join(", ")} for these, so I can't confirm those points — your retailer can.`
+    : `${opener}${qualifiers ? ` ${qualifiers}` : ""}. Every one of them is verified against each requirement you've given me.`;
 
   return advisorAnswerSchema.parse({
     ...generated,
-    answer,
+    answer: clarify ? `${answer}\n\n${clarify.question}` : answer,
     answerType: "products",
-    productIds: unique.map((product) => product.id),
+    productIds: unique.map((entry) => entry.product.id),
     materialIds: categories.some((category) => ["sofa", "sectional", "armchair"].includes(category)) ? generated.materialIds : [],
     sources: ["Musterring product catalogue"],
     proposedAction: null,
-    suggestedQuestions: unique.length > 1 ? [`Compare these ${labels} side by side`] : [`Show me another ${labels} option`]
+    suggestedQuestions: clarify ? [] : unique.length > 1 ? [`Compare these ${labels} side by side`] : [`Show me another ${labels} option`],
+    clarify,
+    unmet: [],
+    nearest: [],
+    briefSummary
   });
+}
+
+/** Products the customer has actually been shown, for the exclusion list. */
+export function recordShownProducts(brief: CustomerBrief, productIds: string[]): CustomerBrief {
+  return { ...brief, shownProductIds: [...new Set([...brief.shownProductIds, ...productIds])] };
+}
+
+/** Marks a slot answered so the assistant never asks the same question twice. */
+export function recordAskedSlot(brief: CustomerBrief, slot: string): CustomerBrief {
+  return { ...brief, askedSlots: [...new Set([...brief.askedSlots, slot])] };
+}
+
+/** Used by the retailer handover to name what the customer actually asked for. */
+export function briefProductPool(brief: CustomerBrief) {
+  return products.filter((product) => product.active && brief.categories.some((category) => productHasCategory(product, category)));
 }
