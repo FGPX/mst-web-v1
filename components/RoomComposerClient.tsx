@@ -144,6 +144,18 @@ async function compressRoomPhoto(file: File) {
   }
 }
 
+function normalizedQuarterRotation(rotation: number) {
+  return ((Math.round(rotation / 90) * 90) % 360 + 360) % 360;
+}
+
+function rotatedFootprint(widthMm: number, depthMm: number, rotation: number) {
+  const radians = normalizedQuarterRotation(rotation) * Math.PI / 180;
+  return {
+    widthMm: Math.round(Math.abs(widthMm * Math.cos(radians)) + Math.abs(depthMm * Math.sin(radians))),
+    depthMm: Math.round(Math.abs(widthMm * Math.sin(radians)) + Math.abs(depthMm * Math.cos(radians)))
+  };
+}
+
 export function RoomComposerClient({ upload = false, openPresentationScene = false, recommendedProductIds = [], projectId = "project-room-composer", sceneId }: { upload?: boolean; openPresentationScene?: boolean; recommendedProductIds?: string[]; projectId?: string; sceneId?: string }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const roomInputRef = useRef<HTMLInputElement>(null);
@@ -1116,18 +1128,33 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   if (lengthCm >= 100) setRoomSize((current) => ({ ...current, lengthMm: lengthCm * 10 }));
                 }} placeholder="e.g. 420" /></label>
               </div>
-              {uploadedRoomDimensionsValid && preGenerationRoomPlan ? <div className="stitch-room-dimensions-before-generation__result" role="status">
-                <small>Dimensions needed for the selected arrangement</small>
-                <div className="stitch-room-size-recommendation__options">
-                  <div><small>Compact planning minimum</small><div className="stitch-room-size-recommendation__dimensions"><span>{(preGenerationRoomPlan.minimumWidthMm / 1000).toFixed(1)} m</span><small>wide</small><b>×</b><span>{(preGenerationRoomPlan.minimumLengthMm / 1000).toFixed(1)} m</span><small>long</small></div><p>Tighter circulation, using 60 cm around the outer edges of the arranged product group.</p></div>
-                  <div className="is-comfortable"><small>Comfortable planning target</small><div className="stitch-room-size-recommendation__dimensions"><span>{(preGenerationRoomPlan.recommendedWidthMm / 1000).toFixed(1)} m</span><small>wide</small><b>×</b><span>{(preGenerationRoomPlan.recommendedLengthMm / 1000).toFixed(1)} m</span><small>long</small></div><p>Uses 90 cm around the outer edges for easier everyday circulation.</p></div>
+              {uploadedRoomDimensionsValid && preGenerationRoomPlan ? <>
+                <div className="stitch-room-dimensions-before-generation__result" role="status">
+                  <div className="stitch-room-dimensions-before-generation__result-heading"><small>Dimensions needed for the selected arrangement</small><span>Position + rotation included</span></div>
+                  <div className="stitch-room-size-recommendation__options">
+                    <div><small>Compact planning minimum</small><div className="stitch-room-size-recommendation__dimensions"><span>{(preGenerationRoomPlan.minimumWidthMm / 1000).toFixed(1)} m</span><small>wide</small><b>×</b><span>{(preGenerationRoomPlan.minimumLengthMm / 1000).toFixed(1)} m</span><small>long</small></div><p>Tighter circulation, using 60 cm around the outer edges of the arranged product group.</p></div>
+                    <div className="is-comfortable"><small>Comfortable planning target</small><div className="stitch-room-size-recommendation__dimensions"><span>{(preGenerationRoomPlan.recommendedWidthMm / 1000).toFixed(1)} m</span><small>wide</small><b>×</b><span>{(preGenerationRoomPlan.recommendedLengthMm / 1000).toFixed(1)} m</span><small>long</small></div><p>Uses 90 cm around the outer edges for easier everyday circulation.</p></div>
+                  </div>
+                  <div className={`stitch-room-dimensions-before-generation__comparison ${uploadedRoomDimensions.widthCm * 10 >= preGenerationRoomPlan.minimumWidthMm && uploadedRoomDimensions.lengthCm * 10 >= preGenerationRoomPlan.minimumLengthMm ? "is-within-target" : "is-below-target"}`}>
+                    <span>{uploadedRoomDimensions.widthCm * 10 >= preGenerationRoomPlan.minimumWidthMm && uploadedRoomDimensions.lengthCm * 10 >= preGenerationRoomPlan.minimumLengthMm ? <Check size={18} /> : <Box size={18} />}</span>
+                    <div><small>Your entered room</small><strong>{(uploadedRoomDimensions.widthCm / 100).toFixed(2)} × {(uploadedRoomDimensions.lengthCm / 100).toFixed(2)} m</strong><p>{uploadedRoomDimensions.widthCm * 10 >= preGenerationRoomPlan.minimumWidthMm && uploadedRoomDimensions.lengthCm * 10 >= preGenerationRoomPlan.minimumLengthMm ? "The entered dimensions meet this compact arrangement-based target." : "One or both dimensions are below the compact planning target. Adjust the arrangement or review the room measurements before generating."}</p></div>
+                  </div>
                 </div>
-                <p className={uploadedRoomDimensions.widthCm * 10 >= preGenerationRoomPlan.minimumWidthMm && uploadedRoomDimensions.lengthCm * 10 >= preGenerationRoomPlan.minimumLengthMm ? "is-within-target" : "is-below-target"}>
-                  Entered room: <strong>{(uploadedRoomDimensions.widthCm / 100).toFixed(2)} × {(uploadedRoomDimensions.lengthCm / 100).toFixed(2)} m</strong>. {uploadedRoomDimensions.widthCm * 10 >= preGenerationRoomPlan.minimumWidthMm && uploadedRoomDimensions.lengthCm * 10 >= preGenerationRoomPlan.minimumLengthMm ? "The entered dimensions meet this compact arrangement-based target." : "One or both entered dimensions are below this compact arrangement-based target; adjust the arrangement or review the room measurements before generating."}
-                </p>
-                <details><summary>Product dimensions used</summary>{preGenerationRoomPlan.products.map((product, index) => <div key={`${product.productId}-${index}`}><span>{product.modelCode} <em>{product.dimensionStatus === "verified" ? "Verified" : "Local reference"}</em></span><span>{Math.round(product.widthMm / 10)} × {Math.round(product.depthMm / 10)} × {Math.round(product.heightMm / 10)} cm</span></div>)}</details>
-                <small>This is an arrangement-based planning estimate, not physical-fit confirmation. Doors, windows, fixed obstacles, exact configurations, and delivery access still require Will It Fit and retailer confirmation.</small>
-              </div> : <small className="stitch-room-dimensions-before-generation__prompt">Enter both measurements to calculate the space needed before generation.</small>}
+                <section className="stitch-room-dimensions-products" aria-labelledby="pre-generation-product-dimensions">
+                  <div className="stitch-room-dimensions-products__heading"><div><small>Calculation inputs</small><strong id="pre-generation-product-dimensions">Product dimensions used</strong></div><span>{preGenerationRoomPlan.products.length} {preGenerationRoomPlan.products.length === 1 ? "item" : "items"}</span></div>
+                  <div className="stitch-room-dimensions-products__list">{preGenerationRoomPlan.products.map((product, index) => {
+                    const sceneItem = items[index];
+                    const rotation = normalizedQuarterRotation(sceneItem?.rotation ?? 0);
+                    const footprint = rotatedFootprint(product.widthMm, product.depthMm, rotation);
+                    return <article key={`${product.productId}-${index}`}>
+                      <div><strong>{product.modelCode}</strong><span className="stitch-room-dimensions-products__category">{product.category.replaceAll("-", " ")}</span></div>
+                      <dl><div><dt>Product W × D × H</dt><dd>{Math.round(product.widthMm / 10)} × {Math.round(product.depthMm / 10)} × {Math.round(product.heightMm / 10)} cm</dd></div><div><dt>Rotated floor footprint</dt><dd>{Math.round(footprint.widthMm / 10)} × {Math.round(footprint.depthMm / 10)} cm</dd></div><div><dt>Placement</dt><dd>{Math.round(sceneItem?.x ?? 0)}% across · {Math.round(sceneItem?.y ?? 0)}% deep</dd></div><div><dt>Rotation</dt><dd>{rotation}°</dd></div></dl>
+                      {product.dimensionStatus === "local-reference" ? <small>Dimensions are an indicative local reference.</small> : null}
+                    </article>;
+                  })}</div>
+                  <small>This calculation uses the products' current position and rotation. It is an arrangement-based planning estimate, not physical-fit confirmation. Doors, windows, fixed obstacles, exact configurations, and delivery access still require Will It Fit and retailer confirmation.</small>
+                </section>
+              </> : <small className="stitch-room-dimensions-before-generation__prompt">Enter both measurements to calculate the space needed before generation.</small>}
             </section> : null}
 
             <div className="stitch-composer-ai-panel" aria-busy={generationStatus === "loading"}>

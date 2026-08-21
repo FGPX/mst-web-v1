@@ -2156,25 +2156,46 @@
 .stitch-room-size-recommendation details em { margin-left: 5px; color: #8a5b3d; font-size: 9px; font-style: normal; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
 @media (max-width: 700px) { .stitch-room-size-recommendation__options { grid-template-columns: 1fr; } }
 
-.stitch-room-dimensions-before-generation { margin-top: 12px; border: 1px solid #c9c2b9; padding: 20px 22px; display: grid; gap: 16px; background: #f8f6f2; }
+.stitch-room-dimensions-before-generation { margin-top: 12px; border: 1px solid #c9c2b9; padding: 24px; display: grid; gap: 20px; background: linear-gradient(145deg, #fbfaf7 0%, #f4f1ec 100%); }
 .stitch-room-dimensions-before-generation > div:first-child { display: grid; gap: 5px; }
 .stitch-room-dimensions-before-generation .eyebrow { margin: 0; display: inline-flex; align-items: center; gap: 7px; }
 .stitch-room-dimensions-before-generation > div:first-child > strong { font-family: var(--stitch-font-display); font-size: 24px; font-weight: 400; }
 .stitch-room-dimensions-before-generation p { margin: 0; color: var(--stitch-text-secondary); font-size: 12px; line-height: 1.55; }
-.stitch-room-dimensions-before-generation__inputs { display: grid; grid-template-columns: repeat(2, minmax(0, 220px)); gap: 12px; }
+.stitch-room-dimensions-before-generation__inputs { display: grid; grid-template-columns: repeat(2, minmax(0, 260px)); gap: 14px; max-width: 620px; padding: 16px; border: 1px solid #ddd5cc; background: rgba(255,255,255,.72); }
 .stitch-room-dimensions-before-generation__inputs label { display: grid; grid-template-columns: 1fr auto; gap: 5px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
 .stitch-room-dimensions-before-generation__inputs label span { color: var(--stitch-text-secondary); }
-.stitch-room-dimensions-before-generation__inputs input { grid-column: 1 / -1; width: 100%; border: 1px solid #c9c2b9; padding: 11px 12px; background: #fff; font: inherit; font-size: 15px; font-weight: 500; text-transform: none; }
-.stitch-room-dimensions-before-generation__result { display: grid; gap: 10px; border-top: 1px solid #ddd5cc; padding-top: 15px; }
-.stitch-room-dimensions-before-generation__result > small:first-child { font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-.stitch-room-dimensions-before-generation__result .is-within-target { border-left: 3px solid #718064; padding: 8px 10px; background: #f3f6ef; }
-.stitch-room-dimensions-before-generation__result .is-below-target { border-left: 3px solid #a16442; padding: 8px 10px; background: #fff3ea; }
-.stitch-room-dimensions-before-generation__result details { border-top: 1px solid #e5ddd4; padding-top: 10px; font-size: 12px; }
-.stitch-room-dimensions-before-generation__result summary { cursor: pointer; font-weight: 800; }
-.stitch-room-dimensions-before-generation__result details div { margin-top: 7px; display: flex; justify-content: space-between; gap: 20px; color: var(--stitch-text-secondary); }
-.stitch-room-dimensions-before-generation__result details em { margin-left: 5px; color: #8a5b3d; font-size: 9px; font-style: normal; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.stitch-room-dimensions-before-generation__inputs input { grid-column: 1 / -1; width: 100%; border: 1px solid #aaa096; padding: 12px 13px; background: #fff; font: inherit; font-size: 18px; font-weight: 600; text-transform: none; outline: none; }
+.stitch-room-dimensions-before-generation__inputs input:focus { border-color: #20201e; box-shadow: 0 0 0 2px rgba(32,32,30,.08); }
+.stitch-room-dimensions-before-generation__result { display: grid; gap: 14px; border-top: 1px solid #d6cec5; padding-top: 18px; }
+.stitch-room-dimensions-before-generation__result-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.stitch-room-dimensions-before-generation__result-heading small { font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.stitch-room-dimensions-before-generation__result-heading span { border: 1px solid #b9c2b0; padding: 5px 8px; background: #f3f6ef; color: #586450; font-size: 9px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.stitch-room-dimensions-before-generation__comparison { display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: center; gap: 12px; padding: 13px 15px; }
+.stitch-room-dimensions-before-generation__comparison > span { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.72); }
+.stitch-room-dimensions-before-generation__comparison > div { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: 2px 9px; }
+.stitch-room-dimensions-before-generation__comparison small { font-size: 9px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.stitch-room-dimensions-before-generation__comparison strong { font-size: 17px; }
+.stitch-room-dimensions-before-generation__comparison p { grid-column: 1 / -1; }
+.stitch-room-dimensions-before-generation__comparison.is-within-target { border-left: 4px solid #718064; background: #eef3e9; }
+.stitch-room-dimensions-before-generation__comparison.is-below-target { border-left: 4px solid #a16442; background: #fff0e5; }
+.stitch-room-dimensions-products { border: 1px solid #d5cec5; padding: 18px; display: grid; gap: 14px; background: #fff; }
+.stitch-room-dimensions-products__heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.stitch-room-dimensions-products__heading > div { display: grid; gap: 2px; }
+.stitch-room-dimensions-products__heading small { color: var(--stitch-text-secondary); font-size: 9px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.stitch-room-dimensions-products__heading strong { font-family: var(--stitch-font-display); font-size: 21px; font-weight: 500; }
+.stitch-room-dimensions-products__heading > span { min-width: 42px; padding: 5px 8px; border-radius: 999px; background: #20201e; color: #fff; text-align: center; font-size: 10px; font-weight: 800; }
+.stitch-room-dimensions-products__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.stitch-room-dimensions-products article { border: 1px solid #e0dad3; padding: 13px; display: grid; gap: 10px; background: #fbfaf8; }
+.stitch-room-dimensions-products article > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-bottom: 1px solid #e7e1da; padding-bottom: 8px; }
+.stitch-room-dimensions-products__category { border: 1px solid #cfc7bd; padding: 4px 7px; background: #f1eee9; color: #56514b; font-size: 8px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+.stitch-room-dimensions-products dl { margin: 0; display: grid; gap: 6px; }
+.stitch-room-dimensions-products dl > div { display: flex; justify-content: space-between; gap: 14px; font-size: 11px; }
+.stitch-room-dimensions-products dt { color: var(--stitch-text-secondary); }
+.stitch-room-dimensions-products dd { margin: 0; text-align: right; font-weight: 700; }
+.stitch-room-dimensions-products article > small { color: #8a5b3d; font-size: 9px; line-height: 1.4; }
+.stitch-room-dimensions-products > small { color: var(--stitch-text-secondary); font-size: 10px; line-height: 1.5; }
 .stitch-room-dimensions-before-generation__prompt { color: #8a5b3d; }
-@media (max-width: 700px) { .stitch-room-dimensions-before-generation__inputs { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .stitch-room-dimensions-before-generation { padding: 17px; } .stitch-room-dimensions-before-generation__inputs, .stitch-room-dimensions-products__list { grid-template-columns: 1fr; } .stitch-room-dimensions-before-generation__result-heading { align-items: flex-start; flex-direction: column; } }
 
 /* The real-room upload is intentionally a smaller flow than the full planner. */
 .stitch-room-composer.is-upload-flow .stitch-composer-intro {
