@@ -142,6 +142,8 @@ export const conversationContextSchema = z.object({
   route: z.string().max(500),
   currentProductId: z.string().nullable().optional(),
   referencedProductIds: z.array(z.string()).max(20).default([]),
+  /** Products explicitly confirmed by the customer in this chat journey. */
+  selectedProductIds: z.array(z.string()).max(20).optional(),
   selectedProjectId: z.string().nullable().optional(),
   selectedConfigurationId: z.string().nullable().optional(),
   selectedMaterialIds: z.array(z.string()).max(20).default([]),

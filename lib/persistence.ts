@@ -73,6 +73,22 @@ function write<T>(key: string, value: T) {
   if (typeof window !== "undefined") window.localStorage.setItem(key, JSON.stringify(value));
 }
 
+/**
+ * Lead history is a lightweight handover index. Room images already live in
+ * the room-scene store, so copying their data URLs into every lead can exhaust
+ * the browser's localStorage quota and prevent the confirmed email request.
+ */
+export function compactLeadForStorage<T>(value: T): T {
+  if (typeof value === "string" && /^data:image\/(?:jpeg|png|webp);base64,/i.test(value)) return undefined as T;
+  if (Array.isArray(value)) return value.map(compactLeadForStorage).filter((item) => item !== undefined) as T;
+  if (typeof value === "object" && value) {
+    return Object.fromEntries(Object.entries(value as Record<string, unknown>)
+      .map(([key, item]) => [key, compactLeadForStorage(item)] as const)
+      .filter(([, item]) => item !== undefined)) as T;
+  }
+  return value;
+}
+
 function comparisonName(ids: string[]) {
   const names = ids.map((id) => products.find((product) => product.id === id)?.modelCode).filter(Boolean);
   return names.length ? names.join(" vs ") : "Saved product comparison";
@@ -202,12 +218,33 @@ export const storage = {
   consultationDraft: () => read<ConsultationDraft | null>(keys.consultationDraft, null),
   saveConsultationDraft: (draft: ConsultationDraft) => write(keys.consultationDraft, draft),
   retailerEmailDelivery: () => read<RetailerEmailDelivery | null>(keys.retailerEmailDelivery, null),
-  saveRetailerEmailDelivery: (delivery: RetailerEmailDelivery) => write(keys.retailerEmailDelivery, delivery),
+  saveRetailerEmailDelivery: (delivery: RetailerEmailDelivery) => {
+    try {
+      write(keys.retailerEmailDelivery, delivery);
+      return true;
+    } catch {
+      return false;
+    }
+  },
   advisorProjectBrief: () => read<AdvisorProjectBrief | null>(keys.advisorProjectBrief, null),
   saveAdvisorProjectBrief: (brief: AdvisorProjectBrief) => write(keys.advisorProjectBrief, brief),
   saveLead: (lead: unknown) => {
-    write(keys.lead, lead);
-    write(keys.leads, [...read<unknown[]>(keys.leads, []), lead]);
+    const compactLead = compactLeadForStorage(lead);
+    let savedLatest = false;
+    try {
+      write(keys.lead, compactLead);
+      savedLatest = true;
+    } catch {
+      // The confirmed server handover and email delivery must not be blocked
+      // just because this browser cannot retain another local snapshot.
+    }
+    try {
+      const history = read<unknown[]>(keys.leads, []).map(compactLeadForStorage).slice(-19);
+      write(keys.leads, [...history, compactLead]);
+    } catch {
+      // lastLead is the primary local record; history is best-effort.
+    }
+    return savedLatest;
   },
   lastLead: () => read<Record<string, unknown> | null>(keys.lead, null),
   leads: () => read<Record<string, unknown>[]>(keys.leads, []),
@@ -266,7 +303,12 @@ export const storage = {
   consentRecords: () => read<Record<string, unknown>[]>(keys.consentRecords, []),
   recordConsent: (scope: string, granted: boolean) => {
     const record = { id: crypto.randomUUID(), scope, granted, timestamp: new Date().toISOString(), policyVersion: "2027-demo-1" };
-    write(keys.consentRecords, [...storage.consentRecords(), record]);
+    try {
+      write(keys.consentRecords, [...storage.consentRecords(), record]);
+    } catch {
+      // The server request still carries the explicit consent. Local audit
+      // persistence is best-effort when the browser storage quota is full.
+    }
     return record;
   },
   recentSearches: () => read<string[]>(keys.recentSearches, []),
@@ -285,12 +327,16 @@ export const storage = {
   events: () => read<AnalyticsEvent[]>(keys.events, []),
   track: (event: Omit<AnalyticsEvent, "id" | "timestamp" | "sessionId" | "locale" | "consent">) => {
     if (!storage.consent()) return false;
-    const sessionId = read("musterring.session", crypto.randomUUID());
-    write("musterring.session", sessionId);
-    const next = [...storage.events(), { ...event, id: crypto.randomUUID(), timestamp: new Date().toISOString(), sessionId, locale: navigator.language || "en", consent: true }].slice(-5000);
-    write(keys.events, next);
-    notifyAnalyticsUpdated();
-    return true;
+    try {
+      const sessionId = read("musterring.session", crypto.randomUUID());
+      write("musterring.session", sessionId);
+      const next = [...storage.events(), { ...event, id: crypto.randomUUID(), timestamp: new Date().toISOString(), sessionId, locale: navigator.language || "en", consent: true }].slice(-5000);
+      write(keys.events, next);
+      notifyAnalyticsUpdated();
+      return true;
+    } catch {
+      return false;
+    }
   },
   resetPresentationDemo: () => {
     const sofa = products.find((product) => product.id === "p1" && product.active)

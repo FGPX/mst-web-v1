@@ -10,6 +10,7 @@ import { storage } from "@/lib/persistence";
 import { normalizeAppointmentTime } from "@/lib/appointment";
 import { buildRetailerEmail } from "@/lib/retailer-email";
 import { advisorAnswerSchema, type AdvisorAction, type AdvisorAnswer, type ConversationContext, type VoiceCommand } from "@/lib/ai/assistant-schemas";
+import { selectedProductIdsForVisualization } from "@/lib/ai/visualization";
 import { deriveAdvisorPreferences } from "@/lib/ai/conversation-memory";
 
 type VisualMatch = { productId: string; score: number; label: string; reasons: string[]; differences: string[] };
@@ -142,7 +143,7 @@ export function MusterringAdvisor() {
   const [pendingHandover, setPendingHandover] = useState(false);
   const [handoverState, setHandoverState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [handoverError, setHandoverError] = useState("");
-  const [context, setContext] = useState<ConversationContext>({ route: pathname, referencedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {} });
+  const [context, setContext] = useState<ConversationContext>({ route: pathname, referencedProductIds: [], selectedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {} });
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -158,6 +159,22 @@ export function MusterringAdvisor() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const spokenCountRef = useRef(0);
   const currentProduct = productFromPath(pathname);
+  const rememberSelectedProducts = (ids: string[]) => {
+    const validIds = ids.filter((id) => products.some((product) => product.active && product.id === id));
+    setSelectedProductIds((current) => [...new Set([...current, ...validIds])]);
+    setContext((current) => ({
+      ...current,
+      selectedProductIds: [...new Set([...(current.selectedProductIds ?? []), ...validIds])]
+    }));
+  };
+  const toggleSelectedProduct = (id: string) => {
+    const next = selectedProductIds.includes(id)
+      ? selectedProductIds.filter((selectedId) => selectedId !== id)
+      : [...selectedProductIds, id];
+    const validIds = next.filter((selectedId) => products.some((product) => product.active && product.id === selectedId));
+    setSelectedProductIds(validIds);
+    setContext((current) => ({ ...current, selectedProductIds: validIds }));
+  };
   // A single source of truth for which blocking card is on screen. Previously
   // each section carried its own `!a && !b && !c` guard, which let the photo
   // and handover confirmations render at the same time.
@@ -217,7 +234,12 @@ export function MusterringAdvisor() {
   useEffect(() => {
     const stored = window.sessionStorage.getItem(memoryKey);
     if (stored) {
-      try { setContext({ ...JSON.parse(stored), route: pathname, currentProductId: currentProduct?.id ?? null }); } catch { /* discard malformed session data */ }
+      try {
+        const restored = { ...JSON.parse(stored), route: pathname, currentProductId: currentProduct?.id ?? null } as ConversationContext;
+        const restoredSelection = (restored.selectedProductIds ?? []).filter((id) => products.some((product) => product.active && product.id === id));
+        setContext({ ...restored, selectedProductIds: restoredSelection });
+        setSelectedProductIds(restoredSelection);
+      } catch { /* discard malformed session data */ }
     } else setContext((current) => ({ ...current, route: pathname, currentProductId: currentProduct?.id ?? null }));
   }, [pathname, currentProduct?.id]);
   useEffect(() => {
@@ -411,6 +433,7 @@ export function MusterringAdvisor() {
       route: pathname,
       currentProductId: currentProduct?.id ?? null,
       referencedProductIds: [],
+      selectedProductIds: [],
       selectedMaterialIds: [],
       currentFilters: {},
       approvedPreferences: {}
@@ -439,7 +462,7 @@ export function MusterringAdvisor() {
       const id = String(action.parameters.productId ?? "");
       if (products.some((product) => product.id === id) && !storage.savedProducts().includes(id)) storage.toggleProduct(id);
       setSavedProductIds(storage.savedProducts());
-      if (id) setSelectedProductIds((current) => [...new Set([...current, id])]);
+      if (id) rememberSelectedProducts([id]);
       const product = products.find((candidate) => candidate.id === id);
       setJourneyStep((current) => Math.max(current, 3));
       setMessages((current) => [...current, { role: "advisor", text: `${product?.modelCode ?? "The catalogue product"} was saved to My Musterring. Next, upload a photo of your room and I can create a catalogue-grounded visualization after you confirm the image processing.` }]);
@@ -448,12 +471,6 @@ export function MusterringAdvisor() {
       // /room-composer would throw the customer out of the conversation — and
       // the panel closes on route change — right at the moment the journey is
       // meant to move forward.
-      const productId = String(action.parameters.productId ?? "");
-      if (productId && !storage.savedProducts().includes(productId)) {
-        storage.toggleProduct(productId);
-        setSavedProductIds(storage.savedProducts());
-        setSelectedProductIds((current) => [...new Set([...current, productId])]);
-      }
       // Opening the file picker straight from here would be blocked: the click
       // that started this went through an async round trip, so the browser no
       // longer counts it as a user gesture. Surface the upload affordance and
@@ -478,7 +495,7 @@ export function MusterringAdvisor() {
       if (!storage.savedProducts().includes(id)) storage.toggleProduct(id);
     });
     setSavedProductIds(storage.savedProducts());
-    setSelectedProductIds((current) => [...new Set([...current, ...validIds])]);
+    rememberSelectedProducts(validIds);
     setJourneyStep((current) => Math.max(current, 3));
     const labels = validIds.map((id) => products.find((product) => product.id === id)?.modelCode).filter(Boolean).join(", ");
     setMessages((current) => [...current, { role: "advisor", text: `${labels || "The selected products"} ${validIds.length === 1 ? "was" : "were"} saved to your project. Next I can place ${validIds.length === 1 ? "it" : "them"} in a photo of your own room — upload one and I'll generate the visualisation.` }]);
@@ -539,7 +556,8 @@ export function MusterringAdvisor() {
         answer: ids.length ? "I analyzed the visible shape, palette and style, then matched them only against available Musterring catalogue products." : payload?.noMatchReason ?? "No grounded catalogue match is available for this image.",
         answerType: ids.length ? "products" : "missing-data",
         productIds: ids, materialIds: [], sources: ["Uploaded reference image", "Validated Musterring catalogue"], proposedAction: null,
-        suggestedQuestions: ids.length > 1 ? ["Compare the top matches", "Which one is more compact?"] : []
+        suggestedQuestions: ids.length > 1 ? ["Compare the top matches", "Which one is more compact?"] : [],
+        clarify: null, unmet: [], nearest: [], briefSummary: []
       };
       setMessages((current) => [...current, { role: "advisor", text: answer.answer, answer, visualMatches }]);
       setContext((current) => ({ ...current, referencedProductIds: ids }));
@@ -547,12 +565,16 @@ export function MusterringAdvisor() {
       storage.track({ name: "visual_search_analyzed" });
     } else {
       setRoomGenerationStatus("loading");
-      const productIds = [...new Set([...storage.savedProducts(), ...context.referencedProductIds])].filter((id) => products.some((product) => product.id === id)).slice(0, 6);
+      const productIds = selectedProductIdsForVisualization(
+        selectedProductIds,
+        savedProductIds,
+        products.filter((product) => product.active).map((product) => product.id)
+      );
       if (!productIds.length) {
         setPending(false);
         setRoomGenerationStatus("idle");
         setRoomGenerationProgress(0);
-        setAttachmentError("Save at least one catalogue product before visualizing your room.");
+        setAttachmentError("Confirm and save at least one selected catalogue product in this chat before visualizing your room.");
         return;
       }
       form.append("confirmed", "true");
@@ -714,6 +736,15 @@ export function MusterringAdvisor() {
     const deliveryPayload = delivery ? await delivery.json().catch(() => null) : null;
     if (delivery?.ok && deliveryPayload?.delivered) {
       storage.track({ name: "retailer_email_delivered" });
+      const provider = deliveryPayload.provider === "smtp" ? "smtp" as const : "resend" as const;
+      storage.saveRetailerEmailDelivery({
+        id: String(deliveryPayload.id), provider, dealerId, deliveredAt: new Date().toISOString()
+      });
+    } else {
+      setPendingHandover(false);
+      setHandoverState("error");
+      setHandoverError(`Your project was saved with reference ${String(payload.reference)}, but the email was not delivered. ${deliveryPayload?.error ?? "Please try again or contact the retailer directly."}`);
+      return;
     }
 
     setPendingHandover(false);
@@ -1161,7 +1192,7 @@ export function MusterringAdvisor() {
           {message.answer?.unmet?.length ? <section className="advisor-unmet" aria-label="Requirements the catalogue cannot meet"><h4>Why there is no exact match</h4><ul>{message.answer.unmet.map((entry) => <li key={entry.key}><strong>{entry.requested}</strong><span>{entry.closest}</span></li>)}</ul></section> : null}
           {message.answer?.nearest?.length ? <section className="advisor-nearest" aria-label="Closest options, not matches"><h4>Closest in the catalogue — not a match</h4>{message.answer.nearest.map((entry) => { const product = products.find((candidate) => candidate.id === entry.productId); return product ? <article key={entry.productId}><Image src={productImages(product.id)[0]} alt="" width={96} height={72} /><div><strong>{product.modelCode}</strong><ul>{entry.gaps.map((gap) => <li key={gap}>{gap}</li>)}</ul><a href={`/furniture/${product.slug}`}>View details <ArrowRight size={13} /></a></div></article> : null; })}</section> : null}
           {message.answer?.clarify ? <section className="advisor-clarify" aria-label="Question from the assistant"><p>{message.answer.clarify.question}</p><div>{message.answer.clarify.options.map((option) => <button type="button" key={option} onClick={() => void ask(option)}>{option}</button>)}</div></section> : null}
-          {message.answer?.productIds.length ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} visualMatches={message.visualMatches} savedProductIds={savedProductIds} pendingSaveProductId={pendingAction?.type === "SAVE_PRODUCT" ? String(pendingAction.parameters.productId ?? "") : ""} onSave={(productId) => propose({ type: "SAVE_PRODUCT", label: `Save ${products.find((product) => product.id === productId)?.modelCode ?? "this product"} to My Musterring`, parameters: { productId }, requiresConfirmation: true })} onSaveSelected={(productIds) => setPendingProjectProductIds(productIds)} onConfirmSave={() => pendingAction?.type === "SAVE_PRODUCT" && execute(pendingAction)} onCancelSave={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }} /> : null}
+          {message.answer?.productIds.length && showsRecommendationCards(message.answer) ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} visualMatches={message.visualMatches} savedProductIds={savedProductIds} selectedProductIds={selectedProductIds} pendingSaveProductId={pendingAction?.type === "SAVE_PRODUCT" ? String(pendingAction.parameters.productId ?? "") : ""} onSave={(productId) => propose({ type: "SAVE_PRODUCT", label: `Save ${products.find((product) => product.id === productId)?.modelCode ?? "this product"} to My Musterring`, parameters: { productId }, requiresConfirmation: true })} onToggleSelection={toggleSelectedProduct} onSaveSelected={(productIds) => setPendingProjectProductIds(productIds)} onConfirmSave={() => pendingAction?.type === "SAVE_PRODUCT" && execute(pendingAction)} onCancelSave={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }} /> : null}
           {message.roomImage ? <div className="advisor-room-result"><Image src={message.roomImage} alt="AI-generated visualization of the customer's room" width={900} height={600} unoptimized /><span>Inspirational visualization · fit not confirmed</span><button type="button" onClick={() => setPendingRoomSave(true)}><Save /> Save room view</button></div> : null}
           {message.answer?.proposedAction && !["SAVE_PRODUCT", "OPEN_FIT_CHECK"].includes(message.answer.proposedAction.type) && message.answer.proposedAction.type !== "OPEN_FIT_CHECK" ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
           {message.answer?.suggestedQuestions.length && customerQuickReplies(message.answer.suggestedQuestions, message.answer.productIds).length ? <div className="advisor-followups">{customerQuickReplies(message.answer.suggestedQuestions, message.answer.productIds).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
@@ -1176,7 +1207,8 @@ export function MusterringAdvisor() {
               : null}
         </section> : null}
         {attachmentError ? <p className="advisor-attachment-error" role="alert">{attachmentError}</p> : null}
-        {journeyStep === 3 && !attachmentFile ? <button className="advisor-next-step" type="button" onClick={() => chooseAttachment("room")}><ImagePlus /><span><strong>Visualize the saved product</strong><small>Upload your room photo</small></span><ArrowRight /></button> : null}
+        {selectedProductIds.some((id) => !savedProductIds.includes(id)) ? <button className="advisor-next-step" type="button" onClick={() => setPendingProjectProductIds(selectedProductIds.filter((id) => !savedProductIds.includes(id)))}><Save /><span><strong>Save selected products</strong><small>{selectedProductIds.filter((id) => !savedProductIds.includes(id)).map((id) => products.find((product) => product.id === id)?.modelCode).filter(Boolean).join(" · ")}</small></span><ArrowRight /></button> : null}
+        {journeyStep === 3 && !attachmentFile && !selectedProductIds.some((id) => !savedProductIds.includes(id)) ? <button className="advisor-next-step" type="button" onClick={() => chooseAttachment("room")}><ImagePlus /><span><strong>Visualize the saved products</strong><small>Upload your room photo</small></span><ArrowRight /></button> : null}
         {journeyStep === 5 ? <section className="advisor-retailer-step"><div><MapPin /><span><strong>Find your nearest retailer</strong><small>Enter a city or postcode</small></span></div><input aria-label="City or postcode" value={dealerLocation} onChange={(event) => setDealerLocation(event.target.value)} placeholder="e.g. Hannover or 30159" />{normalizedLocation ? <div className="advisor-dealer-list">{dealerMatches.map((dealer) => <button type="button" key={dealer.id} onClick={() => setPendingDealerId(dealer.id)}><span><strong>{dealer.name}</strong><small>{dealer.city} · {dealer.distanceKm} km listed distance</small></span><ArrowRight /></button>)}</div> : null}</section> : null}
         {journeyStep >= 6 ? <section className="advisor-appointment-step"><div><CalendarDays /><span><strong>When would you like to visit?</strong><small>The retailer confirms the final appointment.</small></span></div><label>Date<input type="date" value={appointmentDate} onChange={(event) => setAppointmentDate(event.target.value)} /></label><label>Mode<select value={appointmentMode} onChange={(event) => setAppointmentMode(event.target.value)}><option>Showroom consultation</option><option>Video consultation</option><option>Phone consultation</option><option>Home planning visit</option></select></label><label>Exact time<input type="time" value={appointmentTime} onChange={(event) => setAppointmentTime(event.target.value)} /></label><button type="button" onClick={() => setPendingAppointment(true)}>Review appointment preference</button>{storage.consultationDraft() ? <button type="button" className="is-primary" onClick={() => setShowInlineHandover(true)}>Complete contact details in chat <ArrowRight /></button> : null}</section> : null}
         {journeyStep >= 6 && showInlineHandover && handoverState !== "sent" ? <section className="advisor-inline-handover" aria-label="Complete retailer handover in chat"><div className="advisor-inline-handover-head"><span>Final handover</span><strong>Your contact details</strong><small>Review and explicitly confirm before anything is submitted.</small></div><div className="advisor-inline-handover-grid"><label>First name<input autoComplete="given-name" value={handoverFirstName} onChange={(event) => setHandoverFirstName(event.target.value)} /></label><label>Last name<input autoComplete="family-name" value={handoverLastName} onChange={(event) => setHandoverLastName(event.target.value)} /></label><label>Email<input type="email" autoComplete="email" value={handoverEmail} onChange={(event) => setHandoverEmail(event.target.value)} /></label><label>Phone<input type="tel" autoComplete="tel" value={handoverPhone} onChange={(event) => setHandoverPhone(event.target.value)} /></label></div><label>Message to retailer <small>Optional</small><textarea rows={3} value={handoverNotes} onChange={(event) => setHandoverNotes(event.target.value)} placeholder="Priorities, questions or access details" /></label><div className="advisor-inline-project-review"><span><strong>{storage.savedProducts().length}</strong> products</span><span><strong>{storage.roomScenes().length}</strong> room views</span><span><strong>{storage.fitReports().length}</strong> fit reports</span></div><label className="advisor-inline-consent"><input type="checkbox" checked={handoverConsent} onChange={(event) => setHandoverConsent(event.target.checked)} /><span>I confirm that my project and contact details may be transmitted to <strong>{dealers.find((dealer) => dealer.id === (storage.selectedDealer() ?? dealers[0].id))?.name}</strong>.</span></label>{handoverError ? <p className="advisor-attachment-error" role="alert">{handoverError}</p> : null}<button type="button" disabled={handoverState === "sending"} onClick={reviewInlineHandover}>{handoverState === "sending" ? "Preparing handover…" : "Review complete handover"}</button></section> : null}
@@ -1196,15 +1228,19 @@ export function MusterringAdvisor() {
   </aside>;
 }
 
+function showsRecommendationCards(answer: AdvisorAnswer) {
+  return ["products", "comparison"].includes(answer.answerType) || answer.proposedAction?.type === "SAVE_PRODUCT";
+}
+
 function AdvisorReply({ message }: { message: Message }) {
   if (message.role === "customer" || !message.answer) return <p>{message.text}</p>;
 
   const answer = message.answer;
   const normalizedText = message.text.toLocaleLowerCase();
   const referencedMaterials = materials.filter((material) =>
-    answer.materialIds.includes(material.id) || normalizedText.includes(material.name.toLocaleLowerCase())
+    answer.materialIds.includes(material.id) || (answer.answerType === "materials" && normalizedText.includes(material.name.toLocaleLowerCase()))
   );
-  const hasStructuredRecommendations = answer.productIds.length > 0 || referencedMaterials.length > 0;
+  const hasStructuredRecommendations = showsRecommendationCards(answer) || referencedMaterials.length > 0;
   const firstSentence = message.text.match(/^.*?[.!?](?=\s|$)/s)?.[0]?.trim();
   // When cards or material facts are available, never repeat the provider's
   // prose list. The structured sections below are the single source of detail.
@@ -1223,26 +1259,24 @@ function AdvisorReply({ message }: { message: Message }) {
       })}</ul>
     </section> : null}
     {practicalAdvice ? <p className="advisor-practical-note"><strong>Practical choice</strong><span>{practicalAdvice}</span></p> : null}
-    {answer.productIds.length ? <p className="advisor-match-intro"><strong>Top catalogue matches</strong><span>Selected from the current validated Musterring catalogue.</span></p> : null}
+    {answer.answerType === "products" && answer.productIds.length ? <p className="advisor-match-intro"><strong>Top catalogue matches</strong><span>Selected from the current validated Musterring catalogue.</span></p> : null}
   </div>;
 }
 
-function RecommendationSet({ productIds, requestText, visualMatches, savedProductIds, pendingSaveProductId, onSave, onSaveSelected, onConfirmSave, onCancelSave }: { productIds: string[]; requestText: string; visualMatches?: VisualMatch[]; savedProductIds: string[]; pendingSaveProductId: string; onSave: (productId: string) => void; onSaveSelected: (productIds: string[]) => void; onConfirmSave: () => void; onCancelSave: () => void }) {
+function RecommendationSet({ productIds, requestText, visualMatches, savedProductIds, selectedProductIds, pendingSaveProductId, onSave, onToggleSelection, onSaveSelected, onConfirmSave, onCancelSave }: { productIds: string[]; requestText: string; visualMatches?: VisualMatch[]; savedProductIds: string[]; selectedProductIds: string[]; pendingSaveProductId: string; onSave: (productId: string) => void; onToggleSelection: (productId: string) => void; onSaveSelected: (productIds: string[]) => void; onConfirmSave: () => void; onCancelSave: () => void }) {
   const matches = productIds.map((id) => products.find((product) => product.id === id)).filter((product): product is typeof products[number] => Boolean(product));
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const best = matches[0];
   if (!best) return null;
   const selectionMode = matches.length > 1;
-  const toggleSelection = (productId: string) => setSelectedIds((current) => current.includes(productId) ? current.filter((id) => id !== productId) : [...current, productId]);
   const reasons = recommendationReasons(best);
   const requestColors = ["beige", "cream", "white", "black", "red", "burgundy", "brown", "grey", "gray", "green", "blue"].filter((color) => new RegExp(`\\b${color}\\b`, "i").test(requestText));
   const requestedImage = (productId: string) => productImageForColors(productId, requestColors);
   const imageOverride = requestedImage(best.id).matchedColor ? requestedImage(best.id).src : undefined;
   return <div className="advisor-recommendation">
-    <div className="advisor-products"><LinkCard product={best} imageOverride={imageOverride} featured visualMatch={visualMatches?.find((match) => match.productId === best.id)} saved={savedProductIds.includes(best.id)} selected={selectedIds.includes(best.id)} selectionMode={selectionMode} pendingSave={pendingSaveProductId === best.id} onSave={onSave} onSelect={toggleSelection} onConfirmSave={onConfirmSave} onCancelSave={onCancelSave} /></div>
+    <div className="advisor-products"><LinkCard product={best} imageOverride={imageOverride} featured visualMatch={visualMatches?.find((match) => match.productId === best.id)} saved={savedProductIds.includes(best.id)} selected={selectedProductIds.includes(best.id)} selectionMode={selectionMode} pendingSave={pendingSaveProductId === best.id} onSave={onSave} onSelect={onToggleSelection} onConfirmSave={onConfirmSave} onCancelSave={onCancelSave} /></div>
     {reasons.length ? <section className="advisor-reasons"><h4>Why it works</h4><ul>{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul></section> : null}
-    {matches.length > 1 ? <section className="advisor-other-matches"><h4>Other good matches</h4><p>{matches.slice(1).map((product) => product.modelCode).join(" · ")}</p><div className="advisor-products">{matches.slice(1).map((product) => { const presentation = requestedImage(product.id); return <LinkCard key={product.id} product={product} imageOverride={presentation.matchedColor ? presentation.src : undefined} visualMatch={visualMatches?.find((match) => match.productId === product.id)} saved={savedProductIds.includes(product.id)} selected={selectedIds.includes(product.id)} selectionMode={selectionMode} pendingSave={pendingSaveProductId === product.id} onSave={onSave} onSelect={toggleSelection} onConfirmSave={onConfirmSave} onCancelSave={onCancelSave} />; })}</div></section> : null}
-    {selectionMode ? <section className="advisor-selection-bar"><span><strong>{selectedIds.length}</strong> selected</span><button type="button" disabled={!selectedIds.length} onClick={() => onSaveSelected(selectedIds)}><Save size={14} /> Save selected as project</button></section> : null}
+    {matches.length > 1 ? <section className="advisor-other-matches"><h4>Other good matches</h4><p>{matches.slice(1).map((product) => product.modelCode).join(" · ")}</p><div className="advisor-products">{matches.slice(1).map((product) => { const presentation = requestedImage(product.id); return <LinkCard key={product.id} product={product} imageOverride={presentation.matchedColor ? presentation.src : undefined} visualMatch={visualMatches?.find((match) => match.productId === product.id)} saved={savedProductIds.includes(product.id)} selected={selectedProductIds.includes(product.id)} selectionMode={selectionMode} pendingSave={pendingSaveProductId === product.id} onSave={onSave} onSelect={onToggleSelection} onConfirmSave={onConfirmSave} onCancelSave={onCancelSave} />; })}</div></section> : null}
+    {selectionMode ? <section className="advisor-selection-bar"><span><strong>{selectedProductIds.length}</strong> selected in this chat</span><button type="button" disabled={!selectedProductIds.length} onClick={() => onSaveSelected(selectedProductIds)}><Save size={14} /> Save selected products</button></section> : null}
   </div>;
 }
 

@@ -9,7 +9,13 @@ const requestSchema = z.object({
   text: z.string().trim().min(20).max(12_000),
   /** Optional rich version. The plain text above always remains the fallback. */
   html: z.string().trim().max(400_000).optional(),
-  replyTo: z.string().email().optional()
+  replyTo: z.string().email().optional(),
+  attachments: z.array(z.object({
+    filename: z.string().trim().min(1).max(160),
+    content: z.string().regex(/^[A-Za-z0-9+/=]+$/).max(10_000_000),
+    contentType: z.enum(["image/jpeg", "image/png", "image/webp"]),
+    cid: z.string().trim().min(1).max(127)
+  })).max(1).optional()
 });
 
 export async function POST(request: Request) {
@@ -42,7 +48,13 @@ export async function POST(request: Request) {
         subject: input.data.subject,
         text: input.data.text,
         ...(input.data.html ? { html: input.data.html } : {}),
-        ...(input.data.replyTo ? { replyTo: input.data.replyTo } : {})
+        ...(input.data.replyTo ? { replyTo: input.data.replyTo } : {}),
+        ...(input.data.attachments ? { attachments: input.data.attachments.map((attachment) => ({
+          filename: attachment.filename,
+          content: Buffer.from(attachment.content, "base64"),
+          contentType: attachment.contentType,
+          cid: attachment.cid
+        })) } : {})
       });
       if (!result.messageId) throw new Error("SMTP returned no message id.");
       return NextResponse.json({ delivered: true, id: result.messageId, provider: "smtp" });
@@ -68,7 +80,13 @@ export async function POST(request: Request) {
       subject: input.data.subject,
       text: input.data.text,
       ...(input.data.html ? { html: input.data.html } : {}),
-      ...(input.data.replyTo ? { reply_to: input.data.replyTo } : {})
+      ...(input.data.replyTo ? { reply_to: input.data.replyTo } : {}),
+      ...(input.data.attachments ? { attachments: input.data.attachments.map((attachment) => ({
+        filename: attachment.filename,
+        content: attachment.content,
+        content_type: attachment.contentType,
+        content_id: attachment.cid
+      })) } : {})
     })
   }).catch(() => null);
   const payload = response ? await response.json().catch(() => null) : null;

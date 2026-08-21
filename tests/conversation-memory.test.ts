@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { products } from "@/lib/data";
 import { deriveAdvisorPreferences, groundAdvisorConversationTurn } from "@/lib/ai/conversation-memory";
+import { selectedProductIdsForVisualization } from "@/lib/ai/visualization";
 import type { AdvisorAnswer, ConversationContext } from "@/lib/ai/assistant-schemas";
 
 const emptyAnswer: AdvisorAnswer = {
@@ -10,7 +11,11 @@ const emptyAnswer: AdvisorAnswer = {
   materialIds: [],
   sources: [],
   proposedAction: null,
-  suggestedQuestions: []
+  suggestedQuestions: [],
+  clarify: null,
+  unmet: [],
+  nearest: [],
+  briefSummary: []
 };
 
 const context: ConversationContext = {
@@ -26,8 +31,8 @@ describe("advisor conversational memory and follow-ups", () => {
     const preferences = deriveAdvisorPreferences("I need a sofa and coffee table for 2 persons in a very small room, with beige, white and wood.");
     expect(preferences).toMatchObject({ spaceSize: "compact", seatCount: 2 });
     expect(preferences.colors).toEqual(expect.arrayContaining(["beige", "white"]));
-    expect(preferences.materialPreferences).toContain("wood");
-    expect(preferences.requestedCategories).toEqual(expect.arrayContaining(["sofa", "coffee-table"]));
+    expect(preferences.woodPreference).toBe(true);
+    expect(preferences.categories).toEqual(expect.arrayContaining(["sofa", "coffee-table"]));
   });
 
   it("treats a newly requested colour as a replacement, not an addition", () => {
@@ -96,5 +101,61 @@ describe("advisor conversational memory and follow-ups", () => {
     const answer = groundAdvisorConversationTurn("Show me a black coffe table", context, emptyAnswer);
     expect(answer.productIds).toEqual([]);
     expect(answer.answer).toMatch(/matching catalogue presentation/i);
+  });
+
+  it("answers a care follow-up directly about the focused product", () => {
+    const product = products.find((candidate) => candidate.modelCode === "MR 1370")!;
+    const answer = groundAdvisorConversationTurn("is it easy to clean?", {
+      ...context,
+      referencedProductIds: [product.id],
+      approvedPreferences: { ...deriveAdvisorPreferences("I choose MR 1370"), focusProductId: product.id }
+    }, { ...emptyAnswer, productIds: [product.id], materialIds: product.materials });
+
+    expect(answer.answerType).toBe("fact");
+    expect(answer.productIds).toEqual([product.id]);
+    expect(answer.materialIds).toEqual([]);
+    expect(answer.answer).toMatch(/^The catalogue does not verify MR 1370 as easy-care\./);
+    expect(answer.answer).not.toMatch(/Materials and colours|Catalogue covers|Recommended materials/);
+  });
+
+  it("keeps a sofa choice while moving on to a coffee table and summarizes only confirmed selections", () => {
+    const initialQuestion = "We have two young children and a dog and I need a sofa that is comfortable and easy to clean, beige colour. What would you recommend?";
+    const sofaPreferences = deriveAdvisorPreferences(initialQuestion);
+    const sofaAnswer = groundAdvisorConversationTurn(initialQuestion, context, emptyAnswer);
+    const sofa = products.find((product) => product.id === sofaAnswer.productIds[0])!;
+    expect(sofa.category).toBe("sofa");
+
+    const tableQuestion = "Now I also need a coffee table";
+    const tablePreferences = deriveAdvisorPreferences(tableQuestion, {
+      ...sofaPreferences,
+      shownProductIds: sofaAnswer.productIds,
+      focusProductId: sofa.id
+    });
+    const tableAnswer = groundAdvisorConversationTurn(tableQuestion, {
+      ...context,
+      referencedProductIds: sofaAnswer.productIds,
+      selectedProductIds: [sofa.id],
+      approvedPreferences: tablePreferences
+    }, emptyAnswer);
+    const table = products.find((product) => product.id === tableAnswer.productIds[0])!;
+    expect(table.category).toBe("coffee-table");
+
+    const summary = groundAdvisorConversationTurn("Show me which products we selected", {
+      ...context,
+      selectedProductIds: [sofa.id, table.id],
+      approvedPreferences: tablePreferences
+    }, emptyAnswer);
+    expect(summary.productIds).toEqual([sofa.id, table.id]);
+    expect(summary.answer).toContain(sofa.modelCode);
+    expect(summary.answer).toContain(table.modelCode);
+  });
+
+  it("uses only explicitly selected products for room visualization", () => {
+    const active = products.filter((product) => product.active).slice(0, 4);
+    expect(selectedProductIdsForVisualization(
+      [active[1].id, active[3].id, active[1].id, "not-in-catalogue"],
+      [active[0].id, active[1].id, active[3].id],
+      active.map((product) => product.id)
+    )).toEqual([active[1].id, active[3].id]);
   });
 });
