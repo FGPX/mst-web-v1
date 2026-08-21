@@ -39,7 +39,7 @@ function starters(pathname: string) {
   if (pathname.includes("room-composer")) return ["Add matching products", "Improve walking space", "Create a warmer style", "Prepare this room for a retailer"];
   if (pathname.includes("my-musterring")) return ["What is missing from my project?", "Summarize my decisions", "Suggest my next step", "Prepare this project for a retailer"];
   if (pathname.includes("/furniture/")) return ["Find a smaller alternative", "Explain the configuration options", "Which material is best for a family?", "Add this to my project"];
-  return ["Help me find the right sofa", "Plan a room", "Choose a material", "Find a retailer"];
+  return ["Help me find the right sofa", "Open Room Visualizer", "Choose a material", "Find a retailer"];
 }
 
 function productFromPath(pathname: string) {
@@ -427,7 +427,7 @@ export function MusterringAdvisor() {
     if (action.type === "COMPARE_PRODUCTS") return `/compare?ids=${(values.productIds as string[] ?? []).join(",")}`;
     if (action.type === "OPEN_PRODUCT") return `/furniture/${String(values.slug ?? "")}`;
     if (action.type === "CONFIGURE_PRODUCT") return "/handover";
-    if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer";
+    if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer/upload";
     if (action.type === "OPEN_FIT_CHECK") return "";
     if (action.type === "FIND_RETAILER") return "/dealers";
     if (action.type === "PREPARE_HANDOVER" || action.type === "BOOK_CONSULTATION") return "/handover";

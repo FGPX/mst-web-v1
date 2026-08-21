@@ -30,7 +30,7 @@ export function StitchFooter() {
           <span className="stitch-footer-label">Planning &amp; service</span>
           <ul>
             <li><Link href="/search">Product search</Link></li>
-            <li><Link href="/room-composer">Plan a room</Link></li>
+            <li><Link href="/room-composer/upload">Room Visualizer</Link></li>
             <li><Link href="/my-musterring">My Musterring</Link></li>
             <li><Link href="/handover">Project handover</Link></li>
             <li><Link href="/dealers">Find a retailer</Link></li>

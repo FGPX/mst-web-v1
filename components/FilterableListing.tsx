@@ -267,7 +267,7 @@ export function FilterableListing() {
               <Link className="stitch-consultation-primary" href="/dealers">
                 <CalendarDays size={20} /> Book a Consultation
               </Link>
-              <Link className="stitch-consultation-secondary" href="/room-composer">
+              <Link className="stitch-consultation-secondary" href="/room-composer/upload">
                 Virtual Showroom
               </Link>
             </div>

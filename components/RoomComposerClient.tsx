@@ -8,6 +8,7 @@ import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
 import { analyzePlacement, type Door, type RoomItem } from "@/lib/fit-simulator";
+import { calculateRecommendedRoomSize } from "@/lib/ai/room-size";
 import type { RoomAnalysis } from "@/lib/ai/schemas";
 import type { Product, Project, SavedRoomScene } from "@/lib/types";
 
@@ -143,6 +144,18 @@ async function compressRoomPhoto(file: File) {
   }
 }
 
+function normalizedQuarterRotation(rotation: number) {
+  return ((Math.round(rotation / 90) * 90) % 360 + 360) % 360;
+}
+
+function rotatedFootprint(widthMm: number, depthMm: number, rotation: number) {
+  const radians = normalizedQuarterRotation(rotation) * Math.PI / 180;
+  return {
+    widthMm: Math.round(Math.abs(widthMm * Math.cos(radians)) + Math.abs(depthMm * Math.sin(radians))),
+    depthMm: Math.round(Math.abs(widthMm * Math.sin(radians)) + Math.abs(depthMm * Math.cos(radians)))
+  };
+}
+
 export function RoomComposerClient({ upload = false, openPresentationScene = false, recommendedProductIds = [], projectId = "project-room-composer", sceneId }: { upload?: boolean; openPresentationScene?: boolean; recommendedProductIds?: string[]; projectId?: string; sceneId?: string }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const roomInputRef = useRef<HTMLInputElement>(null);
@@ -191,6 +204,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   const [editingScene, setEditingScene] = useState<SavedRoomScene | null>(null);
   const [sceneScale, setSceneScale] = useState(1);
   const [roomSize, setRoomSize] = useState({ widthMm: 5600, lengthMm: 4200 });
+  const [uploadedRoomDimensions, setUploadedRoomDimensions] = useState({ widthCm: 0, lengthCm: 0 });
   const [roomAnalysis, setRoomAnalysis] = useState<RoomAnalysis | null>(null);
   const [composerNotice, setComposerNotice] = useState(() => recommendedProductIds.length
     ? `${recommendedProductIds.length === 1 ? "Your selected product is" : "Your selected products are"} ready. Choose the products you want to add.`
@@ -291,6 +305,21 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     : catalog;
   const visibleCatalog = otherCatalog.slice(0, visibleCount);
   const selectedBackground = roomBackgrounds.find((background) => background.id === roomBackgroundId) ?? roomBackgrounds[0];
+  const uploadedRoomDimensionsValid = !upload || (uploadedRoomDimensions.widthCm >= 100 && uploadedRoomDimensions.lengthCm >= 100);
+  const preGenerationRoomPlan = useMemo(() => {
+    if (!upload || !roomPhoto || !uploadedRoomDimensionsValid || !items.length) return null;
+    const selectedProducts = items.map((item) => activeProducts.find((product) => product.id === item.productId));
+    if (selectedProducts.some((product) => !product)) return null;
+    try {
+      return calculateRecommendedRoomSize(
+        items.map(({ productId, x, y, rotation }) => ({ productId, x, y, rotation })),
+        selectedProducts as Product[],
+        { widthMm: uploadedRoomDimensions.widthCm * 10, lengthMm: uploadedRoomDimensions.lengthCm * 10 }
+      );
+    } catch {
+      return null;
+    }
+  }, [activeProducts, items, roomPhoto, upload, uploadedRoomDimensions.lengthCm, uploadedRoomDimensions.widthCm, uploadedRoomDimensionsValid]);
   const fitAssessment = useMemo(() => {
     const selected = items.map((item) => ({ item, product: activeProducts.find((product) => product.id === item.productId) })).filter((entry) => entry.product);
     const missing: string[] = [];
@@ -333,9 +362,10 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   }, [activeProducts, configurationsConfirmed, featuresConfirmed, fixedFeatures, items, measuredDoors, measuredRoom, measuredWindows]);
   const sceneSignature = useMemo(() => JSON.stringify({
     room: roomPhoto ? [roomPhoto.name, roomPhoto.size, roomPhoto.lastModified] : null,
+    roomSize,
     sceneScale,
     items: items.map(({ productId, x, y, rotation, viewIndex, wallPlacement, scale, materialId, color }) => ({ productId, x, y, rotation, viewIndex, wallPlacement, scale, materialId, color }))
-  }), [items, roomPhoto, sceneScale]);
+  }), [items, roomPhoto, roomSize, sceneScale]);
   const generatedIsCurrent = Boolean(generatedVisualization && generatedForSignature === sceneSignature);
   const displayGenerated = generatedIsCurrent && showGenerated && !showBefore;
   const composerImage = (productId: string) => {
@@ -521,7 +551,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     const sceneProductIds = [...new Set(items.map((item) => item.productId))];
     const project: Project = {
       id: projectId,
-      name: existingProject?.name ?? "Room Composer Project",
+      name: existingProject?.name ?? "Room Visualizer Project",
       status: existingProject?.status ?? "Ideas Saved",
       coverImage: existingProject?.coverImage || selectedBackground.src || "/stitch-assets/original/room-living-clean.jpg",
       savedProductIds: [...new Set([...(existingProject?.savedProductIds ?? storage.savedProducts()), ...sceneProductIds])],
@@ -608,6 +638,16 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
       setGenerationError(`Choose between one and ${maxGeneratedVisualizationItems} products for one generated view.`);
       return;
     }
+    if (upload && !uploadedRoomDimensionsValid) {
+      setGenerationStatus("error");
+      setGenerationError("Enter the room's clear internal width and length before generating.");
+      return;
+    }
+    if (upload && !preGenerationRoomPlan) {
+      setGenerationStatus("error");
+      setGenerationError("The selected products need usable catalogue or local-reference dimensions before generation.");
+      return;
+    }
     const confirmed = window.confirm(
       "Generate a new full-room image? Your room photo and selected catalogue product references will be sent to OpenAI, and this request uses image-generation quota. Your uploaded file stays unchanged. The selected products are locked to their catalogue references, while the generated image may reinterpret room lighting, room finishes, decor, and loose objects."
     );
@@ -678,7 +718,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
           <p className="eyebrow">{upload ? "Room preview" : "Room planning"}</p>
           <div>
             <div>
-              <h1>{upload ? "See it in your room" : "Room Composer"}</h1>
+              <h1>{upload ? "See it in your room" : "Room Visualizer"}</h1>
               <p>{upload ? "Upload a photo, choose products, and generate a realistic preview." : "Upload your real room, choose catalogue products, arrange their approximate placement, and generate a realistic staged view while keeping the original photo available for comparison."}</p>
             </div>
             <div className="chips">
@@ -706,6 +746,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   setRoomPreview(localBackground);
                   setPersistedRoomBackground(localBackground);
                   setRoomPhoto(file);
+                  setUploadedRoomDimensions({ widthCm: 0, lengthCm: 0 });
                   setRoomAnalysis(null);
                   setGeneratedVisualization("");
                   setGeneratedForSignature("");
@@ -826,13 +867,14 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                   <span>Snap: 10 cm</span>
                   {roomPreview ? <button onClick={() => setShowBefore((value) => !value)}>{showBefore ? (generatedIsCurrent && showGenerated ? "Show generated view" : "Show product layout") : "Show original room"}</button> : null}
                   <button onClick={() => window.print()}><Printer size={15} /> Print</button>
-                  <button onClick={async () => { await navigator.clipboard?.writeText(`${location.origin}/room-composer`); }}><Share2 size={15} /> Share</button>
+                  <button onClick={async () => { await navigator.clipboard?.writeText(`${location.origin}/room-composer/upload`); }}><Share2 size={15} /> Share</button>
                   <button onClick={() => { setItems([]); setSelectedId(""); }}>Clear room</button>
                   {roomPreview ? <button onClick={() => {
                     URL.revokeObjectURL(roomPreview);
                     setRoomPreview("");
                     setPersistedRoomBackground("");
                     setRoomPhoto(null);
+                    setUploadedRoomDimensions({ widthCm: 0, lengthCm: 0 });
                     setRoomAnalysis(null);
                     setGeneratedVisualization("");
                     setGeneratedForSignature("");
@@ -1068,6 +1110,53 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
               <small>Estimated progress — this usually takes 1–3 minutes. Please keep this page open.</small>
             </div> : null}
 
+            {upload && roomPhoto ? <section className="stitch-room-dimensions-before-generation">
+              <div>
+                <p className="eyebrow"><Box size={15} /> Room measurements</p>
+                <strong>Enter the room dimensions before generating</strong>
+                <p>Measure the clear internal wall-to-wall space. The calculation below uses the selected products, their rotation, and their current arrangement.</p>
+              </div>
+              <div className="stitch-room-dimensions-before-generation__inputs">
+                <label>Room width <span>cm</span><input type="number" min="100" max="3000" step="1" value={uploadedRoomDimensions.widthCm || ""} onChange={(event) => {
+                  const widthCm = Number(event.target.value);
+                  setUploadedRoomDimensions((current) => ({ ...current, widthCm }));
+                  if (widthCm >= 100) setRoomSize((current) => ({ ...current, widthMm: widthCm * 10 }));
+                }} placeholder="e.g. 560" /></label>
+                <label>Room length <span>cm</span><input type="number" min="100" max="3000" step="1" value={uploadedRoomDimensions.lengthCm || ""} onChange={(event) => {
+                  const lengthCm = Number(event.target.value);
+                  setUploadedRoomDimensions((current) => ({ ...current, lengthCm }));
+                  if (lengthCm >= 100) setRoomSize((current) => ({ ...current, lengthMm: lengthCm * 10 }));
+                }} placeholder="e.g. 420" /></label>
+              </div>
+              {uploadedRoomDimensionsValid && preGenerationRoomPlan ? <>
+                <div className="stitch-room-dimensions-before-generation__result" role="status">
+                  <div className="stitch-room-dimensions-before-generation__result-heading"><small>Dimensions needed for the selected arrangement</small><span>Position + rotation included</span></div>
+                  <div className="stitch-room-size-recommendation__options">
+                    <div><small>Compact planning minimum</small><div className="stitch-room-size-recommendation__dimensions"><span>{(preGenerationRoomPlan.minimumWidthMm / 1000).toFixed(1)} m</span><small>wide</small><b>×</b><span>{(preGenerationRoomPlan.minimumLengthMm / 1000).toFixed(1)} m</span><small>long</small></div><p>Tighter circulation, using 60 cm around the outer edges of the arranged product group.</p></div>
+                    <div className="is-comfortable"><small>Comfortable planning target</small><div className="stitch-room-size-recommendation__dimensions"><span>{(preGenerationRoomPlan.recommendedWidthMm / 1000).toFixed(1)} m</span><small>wide</small><b>×</b><span>{(preGenerationRoomPlan.recommendedLengthMm / 1000).toFixed(1)} m</span><small>long</small></div><p>Uses 90 cm around the outer edges for easier everyday circulation.</p></div>
+                  </div>
+                  <div className={`stitch-room-dimensions-before-generation__comparison ${uploadedRoomDimensions.widthCm * 10 >= preGenerationRoomPlan.minimumWidthMm && uploadedRoomDimensions.lengthCm * 10 >= preGenerationRoomPlan.minimumLengthMm ? "is-within-target" : "is-below-target"}`}>
+                    <span>{uploadedRoomDimensions.widthCm * 10 >= preGenerationRoomPlan.minimumWidthMm && uploadedRoomDimensions.lengthCm * 10 >= preGenerationRoomPlan.minimumLengthMm ? <Check size={18} /> : <Box size={18} />}</span>
+                    <div><small>Your entered room</small><strong>{(uploadedRoomDimensions.widthCm / 100).toFixed(2)} × {(uploadedRoomDimensions.lengthCm / 100).toFixed(2)} m</strong><p>{uploadedRoomDimensions.widthCm * 10 >= preGenerationRoomPlan.minimumWidthMm && uploadedRoomDimensions.lengthCm * 10 >= preGenerationRoomPlan.minimumLengthMm ? "The entered dimensions meet this compact arrangement-based target." : "One or both dimensions are below the compact planning target. Adjust the arrangement or review the room measurements before generating."}</p></div>
+                  </div>
+                </div>
+                <section className="stitch-room-dimensions-products" aria-labelledby="pre-generation-product-dimensions">
+                  <div className="stitch-room-dimensions-products__heading"><div><small>Calculation inputs</small><strong id="pre-generation-product-dimensions">Product dimensions used</strong></div><span>{preGenerationRoomPlan.products.length} {preGenerationRoomPlan.products.length === 1 ? "item" : "items"}</span></div>
+                  <div className="stitch-room-dimensions-products__list">{preGenerationRoomPlan.products.map((product, index) => {
+                    const sceneItem = items[index];
+                    const rotation = normalizedQuarterRotation(sceneItem?.rotation ?? 0);
+                    const footprint = rotatedFootprint(product.widthMm, product.depthMm, rotation);
+                    return <article key={`${product.productId}-${index}`}>
+                      <div><strong>{product.modelCode}</strong><span className="stitch-room-dimensions-products__category">{product.category.replaceAll("-", " ")}</span></div>
+                      <dl><div><dt>Product W × D × H</dt><dd>{Math.round(product.widthMm / 10)} × {Math.round(product.depthMm / 10)} × {Math.round(product.heightMm / 10)} cm</dd></div><div><dt>Rotated floor footprint</dt><dd>{Math.round(footprint.widthMm / 10)} × {Math.round(footprint.depthMm / 10)} cm</dd></div><div><dt>Placement</dt><dd>{Math.round(sceneItem?.x ?? 0)}% across · {Math.round(sceneItem?.y ?? 0)}% deep</dd></div><div><dt>Rotation</dt><dd>{rotation}°</dd></div></dl>
+                      {product.dimensionStatus === "local-reference" ? <small>Dimensions are an indicative local reference.</small> : null}
+                    </article>;
+                  })}</div>
+                  <small>This calculation uses the products' current position and rotation. It is an arrangement-based planning estimate, not physical-fit confirmation. Doors, windows, fixed obstacles, exact configurations, and delivery access still require Will It Fit and retailer confirmation.</small>
+                </section>
+              </> : <small className="stitch-room-dimensions-before-generation__prompt">Enter both measurements to calculate the space needed before generation.</small>}
+            </section> : null}
+
             <div className="stitch-composer-ai-panel" aria-busy={generationStatus === "loading"}>
               <div>
                 <p className="eyebrow"><Sparkles size={15} /> AI room staging</p>
@@ -1085,7 +1174,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 <button
                   type="button"
                   onClick={generateRoomVisualization}
-                  disabled={!roomPhoto || !uploadConsent || !items.length || items.length > maxGeneratedVisualizationItems || generationStatus === "loading"}
+                  disabled={!roomPhoto || !uploadConsent || !items.length || items.length > maxGeneratedVisualizationItems || (upload && (!uploadedRoomDimensionsValid || !preGenerationRoomPlan)) || generationStatus === "loading"}
                 >{generatedIsCurrent ? <RotateCw size={17} /> : <Sparkles size={17} />} {generationStatus === "loading" ? "Generating realistic view…" : generatedIsCurrent ? "Regenerate again" : "Generate realistic view"}</button>
                 {upload ? <label className="stitch-composer-ai-consent"><input type="checkbox" checked={uploadConsent} onChange={(event) => {
                   setUploadConsent(event.target.checked);

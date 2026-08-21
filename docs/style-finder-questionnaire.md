@@ -57,13 +57,13 @@ Every target-specific flow contains at most six questions, including the target,
 
 | Question | Applies to | Answer options |
 | --- | --- | --- |
-| What are you looking for? | All | Vanity unit; Washbasin cabinet; Tall cabinet; Mirror cabinet; Storage; Complete bathroom series |
-| How much storage do you need? | All | Minimal; Moderate; Lots of storage |
-| What size is your bathroom? | All | Small; Medium; Large; Enter dimensions |
-| Do you prefer wall-mounted or floor-standing furniture? | Vanity; Washbasin cabinet; Tall cabinet | Wall-mounted; Floor-standing; No preference |
-| What kind of storage do you prefer? | Storage; Complete bathroom series | Drawers; Doors; Open shelving; Combination |
-| What finish do you prefer? | All | Light wood; Dark wood; White; Dark colours; Natural tones |
-| What style should the bathroom have? | All | Minimal; Warm & natural; Modern; Elegant; Spa-like |
+| What would make the biggest difference in your bathroom? | All | Vanity with useful storage; Tall storage cabinet; Mirror cabinet; A complete coordinated bathroom |
+| How much needs to stay neatly out of sight? | All | Just the daily essentials; Everyday storage for one or two; Family-size storage |
+| How much clear wall space can the furniture use? | All | Compact, under 80 cm; Standard, 80–120 cm; Generous, over 120 cm; Enter exact limits |
+| How should the bathroom feel at floor level? | Vanity; Tall cabinet; Complete bathroom | Light and open, wall-mounted; Grounded and classic, floor-standing; Show me the best match |
+| Which mood should greet you each morning? | All | Fresh light oak; Warm natural tones; Calm clean white; Rich dark wood; Modern dark contrast |
+
+The bathroom result presents one leading catalogue series. Up to two grounded alternatives may be offered for replacement, but only the currently selected series is sent to “See it in your room”.
 
 ## Hallway
 

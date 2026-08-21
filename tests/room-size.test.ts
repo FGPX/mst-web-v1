@@ -15,6 +15,8 @@ describe("calculateRecommendedRoomSize", () => {
     ], [product("sofa", 2400, 1000), product("chair", 900, 900)], { widthMm: 5000, lengthMm: 4000 });
     expect(result.recommendedWidthMm).toBe(6000);
     expect(result.recommendedLengthMm).toBe(2800);
+    expect(result.minimumWidthMm).toBe(5400);
+    expect(result.minimumLengthMm).toBe(2200);
     expect(result.furnitureSpanWidthMm).toBe(4200);
     expect(result.products).toHaveLength(2);
   });
@@ -23,6 +25,8 @@ describe("calculateRecommendedRoomSize", () => {
     const result = calculateRecommendedRoomSize([{ productId: "sofa", x: 50, y: 50, rotation: 90 }], [product("sofa", 2400, 1000)], { widthMm: 5000, lengthMm: 4000 });
     expect(result.recommendedWidthMm).toBe(2800);
     expect(result.recommendedLengthMm).toBe(4200);
+    expect(result.minimumWidthMm).toBe(2200);
+    expect(result.minimumLengthMm).toBe(3600);
   });
 
   it("uses local reference dimensions and labels them", () => {
