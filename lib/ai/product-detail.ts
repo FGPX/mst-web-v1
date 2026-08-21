@@ -182,14 +182,19 @@ const CARE_FALLBACK = "Vacuum or wipe gently; confirm cover-specific care with t
 export function buildProductDetail(product: Product, aspect: DetailAspect = "overview"): ProductDetail {
   const all = [...bedGroups(product), ...generalGroups(product)];
 
-  const wanted = aspect === "sizes" || aspect === "storage"
+  const wanted = aspect === "care"
+    ? []
+    : aspect === "sizes" || aspect === "storage"
     ? all.filter((group) => group.title === "Bed specification" || group.title === "Planning")
     : aspect === "materials" || aspect === "colours"
       ? all.filter((group) => group.title === "Materials and colours")
       : aspect === "functions"
         ? all.filter((group) => group.title === "Functions and components" || group.title === "Bed specification")
         : all;
-  const groups = wanted.length ? wanted : all;
+  // A care question needs a care answer, not the complete product specification.
+  // Keeping this branch narrow also stops unrelated cover names being rendered
+  // as recommendations in the chat response.
+  const groups = aspect === "care" ? [] : wanted.length ? wanted : all;
 
   if (aspect === "care") {
     groups.push({ title: "Care", rows: [{ label: "Recommended care", value: CARE_FALLBACK }] });

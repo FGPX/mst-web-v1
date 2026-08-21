@@ -34,6 +34,13 @@ export type RetailerEmailInput = {
   origin: string;
 };
 
+export type RetailerEmailAttachment = {
+  filename: string;
+  content: string;
+  contentType: "image/jpeg" | "image/png" | "image/webp";
+  cid: string;
+};
+
 const escape = (value: string) =>
   value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -76,6 +83,14 @@ export function buildRetailerEmail(input: RetailerEmailInput) {
   const fullName = `${input.customer.firstName} ${input.customer.lastName}`.trim();
   const appointment = `${input.appointment.mode} · ${input.appointment.date || "date to confirm"} · ${input.appointment.time}`;
   const points = openPoints(input);
+  const inlineRoomImage = input.roomImage?.match(/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/i);
+  const roomImageSource = inlineRoomImage ? "cid:musterring-room-visualisation" : input.roomImage;
+  const attachments: RetailerEmailAttachment[] = inlineRoomImage ? [{
+    filename: `musterring-room-${input.reference}.${inlineRoomImage[1].toLowerCase() === "image/jpeg" ? "jpg" : inlineRoomImage[1].split("/")[1]}`,
+    content: inlineRoomImage[2],
+    contentType: inlineRoomImage[1].toLowerCase() as RetailerEmailAttachment["contentType"],
+    cid: "musterring-room-visualisation"
+  }] : [];
 
   const subject = `Musterring consultation ${input.reference} — ${fullName || "new customer"}${chosen.length ? `, ${chosen.length} product${chosen.length > 1 ? "s" : ""} selected` : ""}`;
 
@@ -178,8 +193,8 @@ export function buildRetailerEmail(input: RetailerEmailInput) {
   ${chosen.length ? section(`Products the customer selected (${chosen.length})`,
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${productCards}</table>`) : ""}
 
-  ${input.roomImage ? section("Their room, visualised with these products",
-    `<img src="${escape(input.roomImage)}" alt="Room visualisation generated for the customer" width="584" style="display:block;width:100%;max-width:584px;height:auto;border-radius:10px;border:1px solid #e2ddd4" />
+  ${roomImageSource ? section("Their room, visualised with these products",
+    `<img src="${escape(roomImageSource)}" alt="Room visualisation generated for the customer" width="584" style="display:block;width:100%;max-width:584px;height:auto;border-radius:10px;border:1px solid #e2ddd4" />
      <div style="font:400 11px/1.5 Helvetica,Arial,sans-serif;color:#8a847b;padding-top:8px">Inspirational visualisation generated from the customer's own photo. Not a fit confirmation.</div>`) : ""}
 
   ${chosenMaterials.length ? section("Materials of interest",
@@ -205,5 +220,5 @@ export function buildRetailerEmail(input: RetailerEmailInput) {
 </table></td></tr></table>
 </body></html>`;
 
-  return { subject, text, html, replyTo: input.customer.email };
+  return { subject, text, html, replyTo: input.customer.email, ...(attachments.length ? { attachments } : {}) };
 }

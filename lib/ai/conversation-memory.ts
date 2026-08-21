@@ -130,7 +130,11 @@ function productDetailAnswer(productId: string, question: string, briefSummary: 
   const body = detail.groups
     .map((group) => `${group.title}\n${group.rows.map((row) => `- ${row.label}: ${row.value}`).join("\n")}`)
     .join("\n\n");
-  const lead = aspect === "overview"
+  const lead = aspect === "care"
+    ? product.verifiedFacts.easyCare
+      ? `Yes — the catalogue marks ${product.modelCode} as easy-care. Cleaning still depends on the exact upholstery cover, so follow its cover-specific care instructions.`
+      : `The catalogue does not verify ${product.modelCode} as easy-care. Cleaning depends on the exact upholstery cover, so confirm its care instructions before spot cleaning.`
+    : aspect === "overview"
     ? `${product.modelCode} — ${detail.headline}`
     : `Here is what the catalogue publishes for ${product.modelCode}.`;
   return advisorAnswerSchema.parse({
@@ -163,6 +167,27 @@ function productDetailAnswer(productId: string, question: string, briefSummary: 
 export function groundAdvisorConversationTurn(question: string, context: ConversationContext, generated: AdvisorAnswer): AdvisorAnswer {
   const brief = updateBrief({ ...emptyBrief, ...(context.approvedPreferences as Partial<CustomerBrief>) } as CustomerBrief, question);
   const briefSummary = summariseBrief(brief);
+
+  // Recommendations are not selections. Only products the customer explicitly
+  // confirmed belong in this summary and, later, in the room visualisation.
+  const asksForSelectionSummary = /\b(?:what|which|show|list|summari[sz]e|review)\b[^.?!]{0,60}\b(?:selected|chosen|picked|saved)\b|\b(?:my|our)\s+(?:selections?|choices?|chosen products?|saved products?)\b/i.test(question);
+  if (asksForSelectionSummary) {
+    const selected = [...new Set(context.selectedProductIds ?? [])]
+      .map((id) => products.find((product) => product.id === id && product.active))
+      .filter((product): product is Product => Boolean(product));
+    return advisorAnswerSchema.parse({
+      answer: selected.length
+        ? `You selected ${selected.map((product) => product.modelCode).join(" and ")}. Only these confirmed products will be used when you visualise them in your room.`
+        : "You have not confirmed any products yet. Choose the products you want first; saving them and processing a room photo will each require confirmation.",
+      answerType: "project",
+      productIds: selected.map((product) => product.id),
+      materialIds: [],
+      sources: selected.length ? ["My Musterring project data", "Musterring product catalogue"] : [],
+      proposedAction: null,
+      suggestedQuestions: selected.length ? ["Visualise these products in my room"] : ["Help me find a sofa"],
+      clarify: null, unmet: [], nearest: [], briefSummary
+    });
+  }
 
   // A question about a product the customer already has in view must never be
   // answered with a fresh wall of recommendations. "Continue with BARI" and
