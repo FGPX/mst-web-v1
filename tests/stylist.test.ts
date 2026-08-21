@@ -249,6 +249,27 @@ describe("Style Finder grounding", () => {
     expect(validateStylistQuizInput(wardrobe)).toBe(false);
   });
 
+  it("uses the bathroom finish as its style direction without a duplicate visual-style step", () => {
+    const bathroomQuestions = stylistQuestionsForAnswers("bathroom", { target: "complete-bathroom-series" });
+    expect(bathroomQuestions.map((question) => question.id)).toEqual([
+      "target", "storage-amount", "space", "mounting", "finish"
+    ]);
+    expect(bathroomQuestions.every((question) => !question.visual)).toBe(true);
+
+    const bathroom = quizInput("bathroom");
+    bathroom.answers.finish = "light-wood";
+    expect(normalizeStylistQuiz(bathroom).style).toBe("warm-natural-rustic");
+  });
+
+  it("recommends one bathroom series and keeps other series as swap alternatives", () => {
+    const input = withPreferences({ roomType: "bathroom" });
+    const result = groundStylistResult(input, selectDeterministicStylistResult(input));
+
+    expect(result.recommendationMode).toBe("alternatives");
+    expect(result.selections).toHaveLength(1);
+    expect(result.selections[0].alternatives).toHaveLength(2);
+  });
+
   it("shows conditional complete-room questions only for selected pieces", () => {
     expect(stylistQuestionsForAnswers("living-room", { target: "complete-living-room", "living-pieces": ["coffee-table", "side-table"] }).map((question) => question.id)).not.toContain("seating-capacity");
     expect(stylistQuestionsForAnswers("living-room", { target: "complete-living-room", "living-pieces": ["sofa", "wall-unit"] }).map((question) => question.id)).toEqual(["target", "living-pieces", "seating-capacity", "storage-purpose", "space", "style-colours"]);

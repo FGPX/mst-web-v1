@@ -85,13 +85,11 @@ export const stylistQuizByRoom: Record<StylistRoomType, StylistQuizQuestion[]> =
     { id: "style-colours", prompt: "What style and colours do you prefer?", visual: true, options: [option("light-neutral", "Light & neutral"), option("warm-natural", "Warm & natural"), option("dark-elegant", "Dark & elegant"), option("modern", "Modern"), option("not-sure", "Not sure")] }
   ],
   bathroom: [
-    { id: "target", prompt: "What are you looking for?", options: [option("vanity-unit", "Vanity unit"), option("washbasin-cabinet", "Washbasin cabinet"), option("tall-cabinet", "Tall cabinet"), option("mirror-cabinet", "Mirror cabinet"), option("bathroom-storage", "Storage"), option("complete-bathroom-series", "Complete bathroom series")] },
-    { id: "storage-amount", prompt: "How much storage do you need?", options: [option("minimal", "Minimal"), option("moderate", "Moderate"), option("lots", "Lots of storage")] },
-    { id: "space", prompt: "What size is your bathroom?", dimensionOption: "dimensions", options: [option("compact", "Small"), option("medium", "Medium"), option("large", "Large"), option("dimensions", "Enter dimensions")] },
-    { id: "mounting", prompt: "Do you prefer wall-mounted or floor-standing furniture?", appliesToTargets: ["vanity-unit", "washbasin-cabinet", "tall-cabinet"], options: [option("wall-mounted", "Wall-mounted"), option("floor-standing", "Floor-standing"), option("no-preference", "No preference")] },
-    { id: "storage-type", prompt: "What kind of storage do you prefer?", appliesToTargets: ["bathroom-storage", "complete-bathroom-series"], options: [option("drawers", "Drawers"), option("doors", "Doors"), option("open-shelving", "Open shelving"), option("combination", "Combination")] },
-    { id: "finish", prompt: "What finish do you prefer?", options: [option("light-wood", "Light wood"), option("dark-wood", "Dark wood"), option("white", "White"), option("dark-colours", "Dark colours"), option("natural-tones", "Natural tones")] },
-    { id: "bathroom-style", prompt: "What style should the bathroom have?", visual: true, options: [option("minimal", "Minimal"), option("warm-natural", "Warm & natural"), option("modern", "Modern"), option("elegant", "Elegant"), option("spa-like", "Spa-like")] }
+    { id: "target", prompt: "What would make the biggest difference in your bathroom?", help: "Start with one product or choose a coordinated series.", options: [option("vanity-unit", "Vanity with useful storage"), option("tall-cabinet", "Tall storage cabinet"), option("mirror-cabinet", "Mirror cabinet"), option("complete-bathroom-series", "A complete coordinated bathroom")] },
+    { id: "storage-amount", prompt: "How much needs to stay neatly out of sight?", options: [option("minimal", "Just the daily essentials"), option("moderate", "Everyday storage for one or two"), option("lots", "Family-size storage")] },
+    { id: "space", prompt: "How much clear wall space can the furniture use?", help: "A rough answer is enough. Choose dimensions only when you already know them.", dimensionOption: "dimensions", options: [option("compact", "Compact · under 80 cm"), option("medium", "Standard · 80–120 cm"), option("large", "Generous · over 120 cm"), option("dimensions", "Enter exact limits")] },
+    { id: "mounting", prompt: "How should the bathroom feel at floor level?", appliesToTargets: ["vanity-unit", "tall-cabinet", "complete-bathroom-series"], options: [option("wall-mounted", "Light and open · wall-mounted"), option("floor-standing", "Grounded and classic · floor-standing"), option("no-preference", "Show me the best match")] },
+    { id: "finish", prompt: "Which mood should greet you each morning?", options: [option("light-wood", "Fresh light oak"), option("natural-tones", "Warm natural tones"), option("white", "Calm clean white"), option("dark-wood", "Rich dark wood"), option("dark-colours", "Modern dark contrast")] }
   ],
   hallway: [
     { id: "target", prompt: "What are you looking for?", options: [option("hallway-wardrobe", "Wardrobe"), option("shoe-storage", "Shoe storage"), option("coat-storage", "Coat storage"), option("hallway-bench", "Bench"), option("mirror", "Mirror"), option("complete-hallway", "Complete hallway")] },
@@ -134,9 +132,10 @@ export const stylistQuizByRoom: Record<StylistRoomType, StylistQuizQuestion[]> =
 
 const styleMap: Record<string, StylistStylePreference> = {
   modern: "modern-contemporary", minimal: "minimalist-scandinavian", "light-minimal": "minimalist-scandinavian",
-  "light-neutral": "minimalist-scandinavian", "calm-neutral": "minimalist-scandinavian", "warm-natural": "warm-natural-rustic", "warm-cosy": "warm-natural-rustic",
-  "warm-wood": "warm-natural-rustic", natural: "warm-natural-rustic", mediterranean: "warm-natural-rustic",
-  elegant: "classic-elegant-luxury", "dark-elegant": "classic-elegant-luxury", "dark-dramatic": "classic-elegant-luxury",
+  "light-neutral": "minimalist-scandinavian", "calm-neutral": "minimalist-scandinavian", white: "minimalist-scandinavian",
+  "warm-natural": "warm-natural-rustic", "warm-cosy": "warm-natural-rustic", "warm-wood": "warm-natural-rustic",
+  "light-wood": "warm-natural-rustic", "natural-tones": "warm-natural-rustic", natural: "warm-natural-rustic", mediterranean: "warm-natural-rustic",
+  elegant: "classic-elegant-luxury", "dark-elegant": "classic-elegant-luxury", "dark-dramatic": "classic-elegant-luxury", "dark-wood": "classic-elegant-luxury", "dark-colours": "classic-elegant-luxury",
   industrial: "industrial-urban", colourful: "retro-decorative", decorative: "retro-decorative"
 };
 
@@ -200,7 +199,7 @@ export function validateStylistQuizInput(input: StylistQuizInput) {
 export function normalizeStylistQuiz(input: StylistQuizInput): StylistPreferences {
   if (!validateStylistQuizInput(input)) throw new Error("Invalid stylist quiz answers.");
   const target = stylistAnswerValues(input.answers.target)[0] as StylistTarget;
-  const aestheticQuestionIds = new Set(["style-colours", "atmosphere", "bathroom-style", "look", "kitchen-style", "outdoor-look", "accessory-style"]);
+  const aestheticQuestionIds = new Set(["style-colours", "atmosphere", "finish", "look", "kitchen-style", "outdoor-look", "accessory-style"]);
   const aestheticAnswers = Object.fromEntries(Object.entries(input.answers).filter(([questionId]) => aestheticQuestionIds.has(questionId)));
   const selectedStyle = firstMapped(aestheticAnswers, styleMap, "not-sure" as StylistStylePreference);
   const style = selectedStyle === "not-sure" && input.styleDirection ? input.styleDirection : selectedStyle;
