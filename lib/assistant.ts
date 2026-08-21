@@ -99,6 +99,70 @@ export function isUnsupportedMaterialComfortQuestion(requestText: string) {
   return /\b(?:seat(?:ing)?\s+)?comfort\b/i.test(requestText);
 }
 
+export type MaterialGuidanceItem = {
+  key: "pets" | "children" | "cleaning" | "sunlight" | "comfort" | "durability";
+  title: string;
+  answer: string;
+};
+
+/**
+ * Customer-facing guidance for the advisor's supported question set. These
+ * statements deliberately describe only the connected catalogue metadata and
+ * Musterring's recorded category-level care guidance; they never turn general
+ * material advice into an exact-cover performance claim.
+ */
+export function materialGuidance(requestText: string, advice: MaterialAdvice): MaterialGuidanceItem[] {
+  const text = requestText.toLowerCase();
+  const items: MaterialGuidanceItem[] = [];
+  const hasPetMatch = advice.recommendedMaterialIds.some((id) => materials.find((material) => material.id === id)?.petFriendly === true);
+  const hasFamilyMatch = advice.recommendedMaterialIds.some((id) => materials.find((material) => material.id === id)?.familyFriendly === true);
+  const hasSunlightMatch = advice.recommendedMaterialIds.some((id) => materials.find((material) => material.id === id)?.lightSensitivity === "low");
+  const hasDurabilityMatch = advice.recommendedMaterialIds.some((id) => materials.find((material) => material.id === id)?.durability != null);
+
+  if (advice.needs.pets) items.push({
+    key: "pets",
+    title: "For homes with pets",
+    answer: hasPetMatch
+      ? "The matches below are marked pet-suitable in the illustrative planning profiles. Confirm the exact cover specification before ordering and vacuum loose hair with the care method provided for that cover."
+      : "Pet suitability is not recorded for the connected swatches, so no specific cover can be recommended yet. Ask the retailer to confirm the exact cover's cleanability and pet-use guidance; pet damage is not covered by Musterring's guarantee."
+  });
+  if (advice.needs.children) items.push({
+    key: "children",
+    title: "For families with children",
+    answer: hasFamilyMatch
+      ? "The matches below are marked family-suitable in the illustrative planning profiles. Check the exact cover's cleaning instructions before ordering."
+      : "Family suitability is not recorded for the connected swatches. Compare exact-cover cleaning instructions and verified durability data with a retailer before choosing."
+  });
+  if (advice.needs.easyCareRequired) items.push({
+    key: "cleaning",
+    title: "For easier cleaning and maintenance",
+    answer: advice.recommendedMaterialIds.length
+      ? "The planning matches below are profiled for lower-maintenance use. This means easier care, not machine washability: confirm the exact cover care code before spot cleaning or washing any removable cover."
+      : "No connected swatch has enough easy-care evidence for this request. Follow the exact cover's care code; for fabrics, Musterring recommends regular low-power vacuuming with an upholstery nozzle."
+  });
+  if (advice.needs.strongSunlight) items.push({
+    key: "sunlight",
+    title: "For rooms with direct sunlight",
+    answer: hasSunlightMatch
+      ? "The planning matches below have low light sensitivity in the illustrative profile. Even so, reduce prolonged direct exposure and confirm the exact cover's lightfastness specification."
+      : "No connected swatch has verified low light sensitivity. The leather profiles are recorded as highly light-sensitive, and Musterring advises keeping leather furniture out of direct sunlight and UV light."
+  });
+  if (isUnsupportedMaterialComfortQuestion(requestText)) items.push({
+    key: "comfort",
+    title: "How upholstery affects seat comfort",
+    answer: "The cover changes the surface feel, warmth and how the upholstery drapes, but the connected material records do not measure seating comfort. Compare the product's padding construction and comfort option, then use a physical swatch to judge the cover feel."
+  });
+  if (/\b(?:durab(?:le|ility)|everyday use|daily use|high use)\b/.test(text) || advice.needs.highUse) items.push({
+    key: "durability",
+    title: "For durable everyday use",
+    answer: hasDurabilityMatch
+      ? "The matches below have the highest durability score in the illustrative planning profiles. Confirm the exact cover's abrasion, pilling and lightfastness results before ordering."
+      : "The connected swatches do not include verified durability ratings. Ask the retailer for the exact cover's abrasion, pilling and lightfastness test results before ranking materials for everyday use."
+  });
+
+  return items;
+}
+
 function requestedTargetWidthMm(text: string) {
   const match =
     text.match(/\b(?:around|about|approximately|approx\.?|roughly)\s*(\d{2,3})\s*cm(?:\s+(?:wide|width))?\b/) ??
@@ -216,13 +280,14 @@ function softPreferenceTokens(text: string) {
   return [...new Set(text.toLowerCase().split(/[^a-z0-9]+/).filter((token) => token.length > 3 && !ignored.has(token)))];
 }
 
-export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeResponse {
+export function findGroundedAlternatives(raw: AlternativeRequest, preferredProductIds: string[] = []): AlternativeResponse {
   const source = products.find((product) => product.id === raw.sourceProductId && product.active);
   if (!source) throw new Error("Unknown source Product ID.");
   const request = requestedAlternative(raw, source);
   const requestedCategory = request.category ?? source.category;
   const candidates = products.filter((product) => product.active && product.id !== source.id && productSupportsAlternativeCategory(product, requestedCategory));
   const preferenceTokens = softPreferenceTokens(request.requestText ?? "");
+  const preferredOrder = new Map([...new Set(preferredProductIds)].map((id, index) => [id, index]));
   const ranked = candidates.map((product) => {
     const demo = demoFactsFor(product.id);
     const checks: Array<{ ok: boolean; label: string; closeness: number; demoFact?: string }> = [];
@@ -233,15 +298,15 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       const demoColor = demo?.colors?.some((color) => color === value || color.split(/[^a-z]+/).includes(value)) ?? false;
       const hasDemoPresentation = !hasMatchingPresentation && demoColor && hasDemoColourPresentation(product.id, value);
       checks.push({
-        ok: hasMatchingPresentation || hasDemoPresentation,
+        ok: verified || hasDemoPresentation,
         label: hasMatchingPresentation
           ? `verified in ${value}`
+          : verified
+            ? `verified available in ${value}`
           : hasDemoPresentation
             ? `illustrative ${value} presentation`
-          : verified
-            ? `${value} colour is available, but no matching catalogue image is verified`
             : `${value} colour is not verified for this product`,
-        closeness: hasMatchingPresentation || hasDemoPresentation ? 1 : verified ? 0.75 : closeness,
+        closeness: verified || hasDemoPresentation ? 1 : closeness,
         demoFact: hasDemoPresentation ? `${value} colour presentation` : undefined
       });
     }
@@ -338,23 +403,29 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
         closeness: matchesSize ? 1 : 0
       });
     }
-    if (request.bedStorage) {
+    if (request.bedStorage !== undefined) {
       const bedStorageVerified = product.dataQuality?.verifiedFields.includes("specifications.bed.bedStorage") === true;
       const underBedStorageVerified = product.dataQuality?.verifiedFields.includes("specifications.bed.underBedStorage") === true;
-      const matchesStorage = (bedStorageVerified && product.specifications?.bed?.bedStorage === true)
+      const hasVerifiedStorageValue = bedStorageVerified || underBedStorageVerified;
+      const hasStorage = (bedStorageVerified && product.specifications?.bed?.bedStorage === true)
         || (underBedStorageVerified && product.specifications?.bed?.underBedStorage === true);
+      const matchesStorage = hasVerifiedStorageValue && hasStorage === request.bedStorage;
       checks.push({
         ok: matchesStorage,
-        label: matchesStorage ? "verified bed storage" : "bed storage is not verified for this product",
+        label: matchesStorage
+          ? request.bedStorage ? "verified bed storage" : "verified without bed storage"
+          : request.bedStorage ? "bed storage is not verified for this product" : "storage-free configuration is not verified for this product",
         closeness: matchesStorage ? 1 : 0
       });
     }
-    if (request.bedMotorised) {
+    if (request.bedMotorised !== undefined) {
       const motorisedVerified = product.dataQuality?.verifiedFields.includes("specifications.bed.motorised") === true;
-      const matchesMotorised = motorisedVerified && product.specifications?.bed?.motorised === true;
+      const matchesMotorised = motorisedVerified && product.specifications?.bed?.motorised === request.bedMotorised;
       checks.push({
         ok: matchesMotorised,
-        label: matchesMotorised ? "verified motorised bed adjustment" : "motorised bed adjustment is not verified for this product",
+        label: matchesMotorised
+          ? request.bedMotorised ? "verified motorised bed adjustment" : "verified without motorised bed adjustment"
+          : request.bedMotorised ? "motorised bed adjustment is not verified for this product" : "non-motorised adjustment is not verified for this product",
         closeness: matchesMotorised ? 1 : 0
       });
     }
@@ -415,7 +486,13 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
       exact: unmet.length === 0,
       failedRequirementCount: checks.filter((check) => !check.ok).length,
       unmet,
-      score: checks.filter((check) => check.ok).length * 100 + checks.reduce((total, check) => total + check.closeness * 50, 0) - unmet.length * 25 + keywordMatches.length * 12 - Math.abs(product.widthMm - (request.targetWidthMm ?? source.widthMm)) / 1000,
+      score: checks.filter((check) => check.ok).length * 100
+        + checks.reduce((total, check) => total + check.closeness * 50, 0)
+        + (request.colorFamilies ?? []).filter((color) => hasVerifiedColourPresentation(product.id, color)).length * 30
+        - unmet.length * 25
+        + keywordMatches.length * 12
+        + (preferredOrder.has(product.id) ? 60 - Math.min(preferredOrder.get(product.id) ?? 0, 10) * 4 : 0)
+        - Math.abs(product.widthMm - (request.targetWidthMm ?? source.widthMm)) / 1000,
       differences: [],
       benefits: [...new Set([...benefits, ...requestReasons])],
       tradeOffs,
@@ -440,7 +517,18 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
         ? `${item.product.modelCode} is a concept match using illustrative attributes that require retailer confirmation.`
       : `${item.product.modelCode} is a close alternative, but ${item.unmet.join("; ")}.`
   });
-  const exactMatches = ranked.filter((item) => item.exact).slice(0, 6).map(toMatch);
+  const uniqueProductPrograms = (items: typeof ranked) => {
+    const seen = new Set<string>();
+    return items.filter((item) => {
+      const productGroupId = item.product.entityLevel === "variant" ? item.product.productGroupId ?? item.product.id : item.product.id;
+      if (seen.has(productGroupId)) return false;
+      seen.add(productGroupId);
+      return true;
+    });
+  };
+  const exactRanked = uniqueProductPrograms(ranked.filter((item) => item.exact));
+  const exactProductGroups = new Set(exactRanked.map((item) => item.product.entityLevel === "variant" ? item.product.productGroupId ?? item.product.id : item.product.id));
+  const exactMatches = exactRanked.slice(0, 6).map(toMatch);
   // Exact requirements determine the exact-match bucket. The best remaining
   // same-category products are still useful recommendations when they are
   // clearly labelled with every unmet requirement (for example, an unverified
@@ -448,7 +536,9 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
   // When the requested tabletop shape is unavailable, keep the best
   // same-category products visible as clearly labelled alternatives. This is
   // more useful than an empty result and the unmet shape remains explicit.
-  const closestAlternatives = request.strict ? [] : ranked.filter((item) => !item.exact).slice(0, 3).map(toMatch);
+  const closestAlternatives = request.strict
+    ? []
+    : uniqueProductPrograms(ranked.filter((item) => !item.exact && !exactProductGroups.has(item.product.entityLevel === "variant" ? item.product.productGroupId ?? item.product.id : item.product.id))).slice(0, 3).map(toMatch);
   const interpretedRequirements = [
     ...(request.category ? [request.category.replace(/-/g, " ")] : []),
     ...(request.colorFamilies ?? []).map((value) => `${value} colour`),
@@ -459,8 +549,8 @@ export function findGroundedAlternatives(raw: AlternativeRequest): AlternativeRe
     ...(request.targetWidthMm ? [`around ${Math.round(request.targetWidthMm / 10)} cm wide`] : []),
     ...(request.bedTypes ?? []).map((value) => value.replace(/-/g, " ")),
     ...(request.bedSleepingWidthMm && request.bedSleepingLengthMm ? [`${request.bedSleepingWidthMm / 10} × ${request.bedSleepingLengthMm / 10} cm sleeping size`] : []),
-    ...(request.bedStorage ? ["bed storage"] : []),
-    ...(request.bedMotorised ? ["motorised bed adjustment"] : []),
+    ...(request.bedStorage === true ? ["bed storage"] : request.bedStorage === false ? ["without bed storage"] : []),
+    ...(request.bedMotorised === true ? ["motorised bed adjustment"] : request.bedMotorised === false ? ["without motorised bed adjustment"] : []),
     ...(request.layoutShapes ?? []).map((value) => `${value} layout`),
     ...(request.excludedLayoutShapes ?? []).map((value) => `not ${value} layout`),
     ...(request.tabletopShapes ?? []).map((value) => `${value} tabletop`),
@@ -531,11 +621,11 @@ export function parseMaterialNeeds(textValue: string): MaterialAdvice {
 
 export function materialReasons(material: Material, advice: MaterialAdvice) {
   const suitable = [
-    ...(advice.needs.children && material.familyFriendly === true ? ["family-suitable metadata"] : []),
-    ...(advice.needs.pets && material.petFriendly === true ? ["pet-suitable metadata"] : []),
-    ...(advice.needs.easyCareRequired && material.easyCare === true ? ["easy-care metadata"] : []),
-    ...(advice.needs.strongSunlight && material.lightSensitivity === "low" ? ["low light sensitivity"] : []),
-    ...(material.durability != null ? [`durability ${material.durability}/5`] : []),
+    ...(advice.needs.children && material.familyFriendly === true ? ["family-suitable planning profile"] : []),
+    ...(advice.needs.pets && material.petFriendly === true ? ["pet-suitable planning profile"] : []),
+    ...(advice.needs.easyCareRequired && material.easyCare === true ? ["lower-maintenance planning profile"] : []),
+    ...(advice.needs.strongSunlight && material.lightSensitivity === "low" ? ["low light-sensitivity planning profile"] : []),
+    ...(material.durability != null ? [`durability planning score ${material.durability}/5`] : []),
     ...(!advice.needs.children && !advice.needs.pets && !advice.needs.easyCareRequired && !advice.needs.strongSunlight ? [`recorded ${material.type} category`] : [])
   ];
   const cautions = [

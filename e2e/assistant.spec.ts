@@ -39,6 +39,17 @@ test("Better Match treats a red sofa request as a catalogue requirement", async 
   await expect(page.locator(".alternative-group.is-other article").first()).toContainText("red colour is not verified for this product");
 });
 
+test("Better Match shows verified bed outer dimensions without a requested-size marker", async ({ page }) => {
+  await page.goto("/furniture/mr-dubai");
+  await page.getByRole("button", { name: /Discover More Like This/ }).click();
+  await page.getByLabel("What are you looking for?").fill("Do you have a bed with storage around 160 × 200 cm?");
+  await page.getByRole("button", { name: "Show matches" }).click();
+
+  const firstExactMatch = page.locator(".alternative-group.is-exact article").first();
+  await expect(firstExactMatch.locator(".alternative-product-specs")).toContainText(/Width.*Depth.*Height/s);
+  await expect(firstExactMatch).not.toContainText("Requested");
+});
+
 test("Guided search preserves kitchen shape and minimum width constraints", async ({ page }) => {
   await page.goto("/search");
   await page.getByLabel("Describe the furniture you are looking for").fill("L shaped kitchen above 300 cm");

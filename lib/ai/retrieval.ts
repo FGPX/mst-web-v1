@@ -3,6 +3,7 @@ import { productHasCategory, type Product } from "../types";
 import type { SearchIntent, VisualTags } from "./schemas";
 import type { SearchExclusions } from "../search";
 import { normalizeSearchText } from "../search";
+import { hasVerifiedColourPresentation } from "../musterring-assets";
 
 export type GroundedMatch = { product: Product; score: number; reasons: string[] };
 export type GroundedSearch = {
@@ -257,6 +258,113 @@ export async function hybridCatalogueSearch(
   return { exactMatches, closeAlternatives, exactColorAvailable, categoryAvailable, unverifiedRequirements };
 }
 
+const visualColorGroups = [
+  ["white", "warm white", "off white", "ivory", "cream"],
+  ["beige", "sand", "taupe", "stone", "greige", "warm neutral"],
+  ["black", "charcoal", "graphite", "anthracite", "onyx", "dark grey"],
+  ["grey", "silver", "cool neutral"],
+  ["brown", "cognac", "walnut", "oak", "natural oak"],
+  ["red", "burgundy", "barolo", "wine"],
+  ["blue", "navy", "aqua"],
+  ["green", "sage", "olive"],
+  ["yellow", "mustard", "gold"],
+  ["pink", "rose", "blush"]
+];
+
+const normalizeVisualValue = (value: string) => value
+  .toLowerCase()
+  .normalize("NFKC")
+  .replace(/gray/g, "grey")
+  .replace(/[^a-z0-9]+/g, " ")
+  .trim();
+
+export function visualColorsCompatible(detected: string, available: string) {
+  const wanted = normalizeVisualValue(detected);
+  const candidate = normalizeVisualValue(available);
+  if (!wanted || !candidate) return false;
+  if (wanted === candidate || wanted.includes(candidate) || candidate.includes(wanted)) return true;
+  return visualColorGroups.some((group) => {
+    const normalized = group.map(normalizeVisualValue);
+    return normalized.includes(wanted) && normalized.includes(candidate);
+  });
+}
+
+/**
+ * Vision providers return colours in dominance order. Keep aliases of the
+ * dominant furniture colour, but discard unrelated secondary colours that
+ * commonly come from cushions, throws, walls, or the surrounding room.
+ */
+export function dominantVisualColorFamilies(colors: string[]) {
+  const normalized = colors.map((color) => color.trim()).filter(Boolean);
+  const dominant = normalized[0];
+  if (!dominant) return [];
+  return normalized.filter((color) => visualColorsCompatible(dominant, color));
+}
+
+export function visualProductGroupId(product: Product) {
+  return product.entityLevel === "variant" ? product.productGroupId ?? product.id : product.id;
+}
+
+const visualStopWords = new Set([
+  "with", "and", "the", "this", "that", "from", "visible", "object", "furniture", "style", "shape",
+  "sofa", "bed", "chair", "table", "cabinet", "unit", "profile", "silhouette"
+]);
+
+function visualTokens(value: string) {
+  return [...new Set(normalizeVisualValue(value).split(" ").filter((token) => token.length > 2 && !visualStopWords.has(token)))];
+}
+
+function verifiedVisualShapeReason(product: Product, tags: VisualTags) {
+  const silhouette = normalizeVisualValue(tags.silhouette);
+  const requestedLayouts = [
+    ...(/\b(?:corner|l shaped)\b/.test(silhouette) ? ["l-shaped", "corner"] as const : []),
+    ...(/\bu shaped\b/.test(silhouette) ? ["u-shaped"] as const : []),
+    ...(/\bstraight\b/.test(silhouette) ? ["straight"] as const : [])
+  ];
+  if (requestedLayouts.some((shape) => product.layoutShapes?.includes(shape))) return "verified matching layout silhouette";
+
+  const requestedTableShapes = ["round", "oval", "square", "rectangular"].filter((shape) =>
+    new RegExp(`\\b${shape}\\b`).test(silhouette)
+  );
+  const verifiedTableShapes = product.dataQuality?.verifiedFields.includes("specifications.table.tabletopShape")
+    ? product.specifications?.table?.tabletopShape ?? []
+    : product.tabletopShapes ?? [];
+  if (requestedTableShapes.some((shape) => verifiedTableShapes.includes(shape))) return "verified matching tabletop silhouette";
+
+  const verifiedBedTypes = product.dataQuality?.verifiedFields.includes("specifications.bed.bedType")
+    ? product.specifications?.bed?.bedType ?? []
+    : [];
+  if (/\bbox ?spring\b/.test(silhouette) && verifiedBedTypes.includes("boxspring-bed")) return "verified matching box-spring silhouette";
+  if (/\bupholster/.test(silhouette) && verifiedBedTypes.includes("upholstered-bed")) return "verified matching upholstered silhouette";
+  return null;
+}
+
+function visualTextSignals(product: Product, tags: VisualTags) {
+  const requested = visualTokens([tags.silhouette, ...tags.notableVisualFeatures].join(" "));
+  if (!requested.length) return [];
+  const corpus = new Set(visualTokens([
+    product.name, product.subtitle, product.description,
+    ...(product.productSubtypes ?? []), ...(product.styles ?? []), ...(product.functions ?? []),
+    ...(product.layoutShapes ?? []), ...(product.tabletopShapes ?? [])
+  ].join(" ")));
+  return requested.filter((token) => [...corpus].some((candidate) =>
+    candidate === token || (token.length >= 5 && (candidate.startsWith(token) || token.startsWith(candidate)))
+  ));
+}
+
+export function hasVerifiedVisualMaterial(product: Product, requested: string) {
+  const normalized = normalizeVisualValue(requested);
+  const aliases = /\b(?:fabric|textile|velvet|boucle|chenille|upholster)/.test(normalized)
+    ? ["fabric", "upholstery"]
+    : /\bleather\b/.test(normalized)
+      ? ["leather"]
+      : /\b(?:wood|oak|walnut|timber)\b/.test(normalized)
+        ? ["wood", "solid wood", "oak", "walnut"]
+        : [normalized];
+  return product.verifiedFacts.materialTypes.some((type) => aliases.some((alias) => normalizeVisualValue(type).includes(alias)))
+    || materials.some((material) => product.materials.includes(material.id) && aliases.some((alias) => normalizeVisualValue(material.type).includes(alias)));
+}
+
 export function searchCatalogueByVisualTags(tags: VisualTags) {
   // An unrelated or unclear upload must never be turned into an arbitrary
   // Musterring recommendation merely because catalogue products exist.
@@ -265,36 +373,20 @@ export function searchCatalogueByVisualTags(tags: VisualTags) {
     productCategory === tags.category ||
     ((tags.category === "sectional" || tags.category === "sofa") &&
       (productCategory === "sectional" || productCategory === "sofa"));
-  const normalizeVisualColor = (value: string) => value
-    .toLowerCase()
-    .replace(/gray/g, "grey")
-    .replace(/[^a-z]+/g, " ")
-    .trim();
-  const visualColorGroups = [
-    ["white", "warm white", "off white", "ivory", "cream"],
-    ["beige", "sand", "taupe", "stone", "greige", "warm neutral"],
-    ["black", "charcoal", "graphite", "anthracite", "onyx", "dark grey"],
-    ["grey", "silver", "cool neutral"],
-    ["brown", "cognac", "walnut", "oak", "natural oak"],
-    ["red", "burgundy", "barolo", "wine"],
-    ["blue", "navy", "aqua"],
-    ["green", "sage", "olive"],
-    ["yellow", "mustard", "gold"],
-    ["pink", "rose", "blush"]
-  ].map((group) => group.map(normalizeVisualColor));
-  const compatibleVisualColor = (detected: string, available: string) => {
-    const wanted = normalizeVisualColor(detected);
-    const candidate = normalizeVisualColor(available);
-    if (!wanted || !candidate) return false;
-    if (wanted === candidate || wanted.includes(candidate) || candidate.includes(wanted)) return true;
-    return visualColorGroups.some((group) => group.includes(wanted) && group.includes(candidate));
-  };
-  const detectedColors = tags.colorFamilies.map(normalizeVisualColor).filter(Boolean);
+  const dominantColors = dominantVisualColorFamilies(tags.colorFamilies);
+  const detectedColors = dominantColors.map(normalizeVisualValue).filter(Boolean);
+  const requiresDarkPresentation = dominantColors.some((color) => visualColorsCompatible(color, "black"));
   const active = products.filter((product) =>
     product.active &&
     isCompatibleCategory(product.category) &&
     (!detectedColors.length || product.colors.some((available) =>
-      detectedColors.some((detected) => compatibleVisualColor(detected, available))
+      detectedColors.some((detected) => visualColorsCompatible(detected, available))
+    )) &&
+    // A programme being configurable in black is not enough for visual search:
+    // dark uploads must have catalogue photography verified for that dark option.
+    (!requiresDarkPresentation || product.colors.some((available) =>
+      detectedColors.some((detected) => visualColorsCompatible(detected, available)) &&
+      hasVerifiedColourPresentation(product.id, available)
     ))
   );
   return active.map((product) => {
@@ -302,18 +394,31 @@ export function searchCatalogueByVisualTags(tags: VisualTags) {
     const reasons: string[] = [];
     if (product.category === tags.category) { score += 35; reasons.push("same furniture category"); }
     else if (isCompatibleCategory(product.category)) { score += 30; reasons.push("same sofa family"); }
-    const colors = tags.colorFamilies.filter((color) =>
-      product.colors.some((available) => compatibleVisualColor(color, available))
+    const colors = dominantColors.filter((color) =>
+      product.colors.some((available) => visualColorsCompatible(color, available))
     );
     if (colors.length) { score += 30; reasons.push(`similar ${colors.join(", ")} colour family`); }
-    const styles = tags.style.filter((style) => product.styles.some((candidate) => candidate.includes(style) || style.includes(candidate)));
+    const styles = tags.style.filter((style) => product.styles.some((candidate) => {
+      const wanted = normalizeVisualValue(style);
+      const available = normalizeVisualValue(candidate);
+      return wanted.includes(available) || available.includes(wanted);
+    }));
     if (styles.length) { score += 20; reasons.push("related style"); }
     if (tags.likelyMaterial) {
-      const hasMaterial = materials.some((material) => product.materials.includes(material.id) && material.type === tags.likelyMaterial);
+      const hasMaterial = hasVerifiedVisualMaterial(product, tags.likelyMaterial);
       if (hasMaterial) { score += 15; reasons.push(`offers ${tags.likelyMaterial}`); }
     }
+    const shapeReason = verifiedVisualShapeReason(product, tags);
+    if (shapeReason) { score += 20; reasons.push(shapeReason); }
+    const textSignals = visualTextSignals(product, tags);
+    if (textSignals.length) {
+      score += Math.min(15, textSignals.length * 5);
+      reasons.push(`catalogue description shares visible features: ${textSignals.slice(0, 3).join(", ")}`);
+    }
+    if (dominantColors.some((color) => hasVerifiedColourPresentation(product.id, color))) score += 8;
     return { product, score, reasons };
   }).filter((match) => isCompatibleCategory(match.product.category))
     .sort((left, right) => right.score - left.score)
+    .filter((match, index, all) => all.findIndex((candidate) => visualProductGroupId(candidate.product) === visualProductGroupId(match.product)) === index)
     .slice(0, 12);
 }

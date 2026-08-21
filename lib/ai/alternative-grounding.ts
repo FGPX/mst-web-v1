@@ -24,20 +24,22 @@ export function extractBedAlternativeRequirements(value: string): Pick<Alternati
   const text = normalizeSearchText(value);
   const bedTypes: NonNullable<AlternativeRequest["bedTypes"]> = [];
   if (/\bbox[- ]?spring\b/.test(text)) bedTypes.push("boxspring-bed");
-  if (/\bupholstered bed\b/.test(text)) bedTypes.push("upholstered-bed");
+  if (/\bupholster(?:ed|y)\b.{0,40}\bbeds?\b/.test(text)) bedTypes.push("upholstered-bed");
   if (/\bbed frame\b/.test(text)) bedTypes.push("bed-frame");
   if (/\bsofa[- ]bed\b|\bsleeper sofa\b/.test(text)) bedTypes.push("sofa-bed");
   if (/\bmattress(?:es)?\b/.test(text)) bedTypes.push("mattress");
   if (/\bslatted (?:bed )?base(?:s)?\b|\bslatted frame(?:s)?\b/.test(text)) bedTypes.push("slatted-base");
-  const sleepingSize = text.match(/\b(90|120|140|160|180|200)\s*[x×]\s*(190|200|210|220)\b/);
-  const bedStorage = /\b(?:with|including|integrated) (?:under[- ]bed |bed )?storage\b|\bunder[- ]bed storage\b|\bstorage compartment\b|\bbed base\b|\bbettkasten\b/.test(text);
-  const bedMotorised = /\bmotor(?:ised|ized)\b|\belectric(?:ally)? adjustable (?:bed|base)\b|\bpower(?:ed)? adjustable (?:bed|base)\b/.test(text);
+  const sleepingSize = text.match(/\b(90|120|140|160|180|200)\s*[x×]\s*(190|200|210|220)\s*(?:cm)?\b/);
+  const storageRequested = /\b(?:with|including|integrated) (?:under[- ]bed |bed )?storage\b|\bunder[- ]bed storage\b|\bstorage compartment\b|\bbed base\b|\bbettkasten\b/.test(text);
+  const storageExcluded = /\b(?:without|no) (?:under[- ]bed |bed )?storage\b|\bnon[- ]storage bed\b/.test(text);
+  const motorisedRequested = /\bmotor(?:ised|ized)\b|\belectric(?:ally)? adjustable (?:bed|base)\b|\bpower(?:ed)? adjustable (?:bed|base)\b/.test(text);
+  const motorisedExcluded = /\b(?:without|no)\s+(?:motor(?:ised|ized)|electric|power(?:ed)?)(?:\s+(?:adjustment|bed|base|function))?\b|\bnon[- ](?:motor(?:ised|ized)|electric|power(?:ed)?)\b/.test(text);
   return {
     bedTypes: bedTypes.length ? [...new Set(bedTypes)] : undefined,
     bedSleepingWidthMm: sleepingSize ? Number(sleepingSize[1]) * 10 : undefined,
     bedSleepingLengthMm: sleepingSize ? Number(sleepingSize[2]) * 10 : undefined,
-    bedStorage: bedStorage || undefined,
-    bedMotorised: bedMotorised || undefined
+    bedStorage: storageExcluded ? false : storageRequested || undefined,
+    bedMotorised: motorisedExcluded ? false : motorisedRequested || undefined
   };
 }
 

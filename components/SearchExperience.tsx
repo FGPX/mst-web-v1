@@ -3,7 +3,7 @@
 import Image from "@/components/HighQualityImage";
 import { ArrowRight, Camera, History, Search, Sparkles, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/lib/data";
 import { productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
@@ -120,6 +120,7 @@ type VisualMatch = {
   label: string;
   reasons: string[];
   differences: string[];
+  image?: string;
 };
 
 export function SearchExperience({ initialQuery = "" }: { initialQuery?: string }) {
@@ -241,7 +242,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
   const recommendations = response?.closeAlternatives ?? [];
   const primaryResults = exact.length ? exact : recommendations;
 
-  const uploadAndAnalyzeVisual = async (file?: File) => {
+  const selectVisualFile = (file?: File) => {
     if (!file) return;
     setVisualUploadError("");
     if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
@@ -254,12 +255,17 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
     }
     if (visualPreview) URL.revokeObjectURL(visualPreview);
     setVisualPreview(URL.createObjectURL(file));
-    setVisualPending(true);
     setVisualMatches([]);
     setVisualAnalysis("");
     setVisualNoMatchReason("");
     storage.recordConsent("photo-ai-processing", true);
     storage.track({ name: "visual_search_uploaded" });
+    void analyzeVisual(file);
+  };
+
+  const analyzeVisual = async (file: File) => {
+    setVisualPending(true);
+    setVisualUploadError("");
     const form = new FormData();
     form.append("image", file);
     form.append("consent", "true");
@@ -335,7 +341,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                 onDrop={(event) => {
                   event.preventDefault();
                   setVisualDragActive(false);
-                  void uploadAndAnalyzeVisual(event.dataTransfer.files?.[0]);
+                  selectVisualFile(event.dataTransfer.files?.[0]);
                 }}
               >
                 {visualPreview ? (
@@ -354,8 +360,9 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
                 onClick={(event) => { event.currentTarget.value = ""; }}
-                onChange={(event) => void uploadAndAnalyzeVisual(event.target.files?.[0])}
+                onChange={(event) => selectVisualFile(event.target.files?.[0])}
               />
+              <p className="stitch-inline-visual-consent">By uploading an image, you agree to its temporary AI processing for catalogue recommendations.</p>
             </div>
             {visualPreview ? (
               <div className="stitch-inline-visual-results" aria-live="polite">
@@ -405,7 +412,7 @@ export function SearchExperience({ initialQuery = "" }: { initialQuery?: string 
                 <ProductCard
                   key={match.product.id}
                   product={match.product}
-                  imageOverride={productImages(match.product.id)[0]}
+                  imageOverride={match.image ?? productImages(match.product.id)[0]}
                   explanation={`${match.label}: ${match.reasons.map(compactMatchReason).join(" · ") || "Same detected furniture category"}`}
                   showMeta={false}
                   compareSelected={compareIds.includes(match.product.id)}

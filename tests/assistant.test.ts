@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { materials, products } from "@/lib/data";
 import {
-  answerGroundedQuestion, findGroundedAlternatives, isUnsupportedMaterialComfortQuestion, materialReasons, parseMaterialNeeds,
+  answerGroundedQuestion, findGroundedAlternatives, isUnsupportedMaterialComfortQuestion, materialGuidance, materialReasons, parseMaterialNeeds,
   parseVoiceCommandDeterministic, validateProposedConfiguration
 } from "@/lib/assistant";
 import { createConfiguration } from "@/lib/configurator";
@@ -321,6 +321,40 @@ describe("connected Musterring assistant grounding", () => {
     expect(result.exactMatches.map((match) => match.productId)).toContain(expectedProductId);
   });
 
+  it.each([
+    [
+      "Do you have a bed with storage around 160 × 200 cm?",
+      ["musterring-justb-sc100", "musterring-justb-sc100-grey", "musterring-delphi", "musterring-delphi-light-grey"]
+    ],
+    [
+      "I'm looking for a grey bed with storage, roughly 160 × 200 cm.",
+      ["musterring-justb-sc100-grey", "musterring-delphi-light-grey"]
+    ],
+    [
+      "Is there a grey box-spring bed with storage around 180 × 200 cm?",
+      ["musterring-justb-sc100-grey"]
+    ],
+    [
+      "I'd like a motorised grey box-spring bed, about 180 × 200 cm.",
+      ["musterring-justb-sc100-grey"]
+    ],
+    [
+      "Could you find me a graphite upholstered bed with storage, around 160 × 200 cm?",
+      ["musterring-delphi-light-grey"]
+    ],
+    [
+      "I'm after an elegant fabric bed with storage, roughly 180 × 200 cm.",
+      ["musterring-justb-sc200"]
+    ],
+    [
+      "Do you have a red box-spring bed?",
+      ["musterring-mr-dubai-red"]
+    ]
+  ])("returns the intended exact products for a natural bed request: %s", (requestText, expectedProductIds) => {
+    const result = findGroundedAlternatives({ sourceProductId: "musterring-mr-dubai", requestText });
+    expect(result.exactMatches.map((match) => match.productId)).toEqual(expectedProductIds);
+  });
+
   it("shows MR 285 as a black alternative without claiming its unverified width is around 300 cm", () => {
     const result = findGroundedAlternatives({ sourceProductId: "musterring-justb-pm200", requestText: "find me a black sofa around 300 cm" });
     const mr285 = result.closestAlternatives.find((match) => match.productId === "musterring-mr-285");
@@ -398,7 +432,9 @@ describe("connected Musterring assistant grounding", () => {
     expect(advice.needs.children).toBe(true);
     expect(advice.needs.pets).toBe(true);
     expect(advice.needs.strongSunlight).toBe(true);
-    expect(advice.recommendedMaterialIds).toEqual([]);
+    expect(advice.recommendedMaterialIds).toEqual(
+      materials.filter((material) => material.familyFriendly === true && material.petFriendly === true && material.lightSensitivity === "low").map((material) => material.id)
+    );
     const material = materials[0];
     expect(materialReasons(material, advice).suitable.join(" ")).not.toMatch(/stain-proof|scratch-proof|allergy-safe|indestructible/i);
   });
@@ -419,25 +455,49 @@ describe("connected Musterring assistant grounding", () => {
     const lowLightSensitivityIds = materials.filter((material) => material.lightSensitivity === "low").map((material) => material.id);
     const mostDurableIds = materials.filter((material) => material.durability === 5).map((material) => material.id);
 
+    expect(petFriendlyIds.length).toBeGreaterThan(0);
+    expect(familyFriendlyIds.length).toBeGreaterThan(0);
+    expect(easyCareIds.length).toBeGreaterThan(0);
+    expect(lowLightSensitivityIds.length).toBeGreaterThan(0);
+    expect(mostDurableIds.length).toBeGreaterThan(0);
+
     expect(parseMaterialNeeds("Should I choose fabric or leather upholstery?").recommendedMaterialIds).toEqual(allIds);
     expect(parseMaterialNeeds("Which materials are most suitable for a home with pets?").recommendedMaterialIds).toEqual(petFriendlyIds);
     expect(parseMaterialNeeds("Which materials work well for families with children?").recommendedMaterialIds).toEqual(familyFriendlyIds);
     expect(parseMaterialNeeds("Which materials are easiest to clean and maintain?").recommendedMaterialIds).toEqual(easyCareIds);
     expect(parseMaterialNeeds("Which materials are best suited to rooms with direct sunlight?").recommendedMaterialIds).toEqual(lowLightSensitivityIds);
     expect(parseMaterialNeeds("Which materials are most durable for everyday use?").recommendedMaterialIds).toEqual(mostDurableIds);
+    expect(parseMaterialNeeds("pet friendly materials?").recommendedMaterialIds).toEqual(petFriendlyIds);
   });
 
   it("does not invent material recommendations for unsupported seat-comfort questions", () => {
     const question = "How does the upholstery material affect seating comfort?";
     expect(isUnsupportedMaterialComfortQuestion(question)).toBe(true);
     expect(parseMaterialNeeds(question).recommendedMaterialIds).toEqual([]);
+    expect(materialGuidance(question, parseMaterialNeeds(question))).toEqual(expect.arrayContaining([
+      expect.objectContaining({ key: "comfort", answer: expect.stringContaining("padding construction") })
+    ]));
   });
 
-  it("keeps illustrative swatches conservative when exact-cover performance data is unavailable", () => {
-    expect(materials.filter((material) => material.easyCare === true).map((material) => material.id)).toEqual(["mat-stone-micro"]);
-    expect(materials.every((material) => material.petFriendly == null)).toBe(true);
-    expect(materials.every((material) => material.familyFriendly == null)).toBe(true);
-    expect(materials.every((material) => material.durability == null)).toBe(true);
+  it("returns planning guidance with pet and durability recommendations", () => {
+    const petQuestion = "Which materials are most suitable for a home with pets?";
+    const durabilityQuestion = "Which materials are most durable for everyday use?";
+
+    expect(materialGuidance(petQuestion, parseMaterialNeeds(petQuestion))).toEqual(expect.arrayContaining([
+      expect.objectContaining({ key: "pets", answer: expect.stringContaining("illustrative planning profiles") })
+    ]));
+    expect(materialGuidance(durabilityQuestion, parseMaterialNeeds(durabilityQuestion))).toEqual(expect.arrayContaining([
+      expect.objectContaining({ key: "durability", answer: expect.stringContaining("highest durability score") })
+    ]));
+  });
+
+  it("provides complete illustrative planning profiles without presenting them as exact-cover tests", () => {
+    expect(materials.filter((material) => material.easyCare === true).length).toBeGreaterThan(1);
+    expect(materials.filter((material) => material.petFriendly === true).length).toBeGreaterThan(1);
+    expect(materials.filter((material) => material.familyFriendly === true).length).toBeGreaterThan(1);
+    expect(materials.filter((material) => material.durability === 5).length).toBeGreaterThan(1);
+    expect(materials.every((material) => material.dataQuality?.derivedFields.includes("durability"))).toBe(true);
+    expect(materials.every((material) => material.dataQuality?.unknownFields?.includes("martindaleCycles"))).toBe(true);
     expect(materials.filter((material) => material.type === "leather").every((material) => material.lightSensitivity === "high")).toBe(true);
   });
 

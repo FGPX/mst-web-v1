@@ -69,6 +69,15 @@ describe("GEO product data", () => {
     expect(delphi.dataQuality?.verifiedFields).not.toContain("specifications.bed.outerDimensionsBySleepingSize");
   });
 
+  it("maps SC100 sleeping sizes to their source-backed outer product dimensions", () => {
+    const sc100 = products.find((product) => product.slug === "justb-sc100")!;
+    expect(sc100.dataQuality?.verifiedFields).toContain("specifications.bed.outerDimensionsBySleepingSize");
+    expect(sc100.specifications?.bed?.outerDimensionsBySleepingSize).toContainEqual({
+      sleepingSize: { widthMm: 1600, lengthMm: 2000 },
+      dimensions: { widthMm: 1660, depthMm: 2030, heightMm: 515 }
+    });
+  });
+
   it("identifies verified dining programmes and bench candidates", () => {
     const chairs = ["justb-sp150", "justb-sp500", "nerina"].map((slug) => products.find((product) => product.slug === slug)!);
     expect(chairs.every((product) => product.dataQuality?.verifiedFields.includes("specifications.diningChair.seatCapacityMax"))).toBe(true);

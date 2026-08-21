@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-20T11:15:45.035Z",
+  "generatedAt": "2026-08-21T07:57:57.926Z",
   "catalogueImportedAt": "2026-08-19T12:17:02.984Z",
   "sourceBatch": "mst_geo_verified_enrichment_batch1.json",
   "unmatchedVerified": [],
@@ -19501,7 +19501,7 @@
       },
       "documents": {},
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/sofas-armchairs/mr-2875",
-      "lastVerifiedAt": "2026-08-20",
+      "lastVerifiedAt": "2026-08-21",
       "verificationStatus": "verified-from-official-page",
       "stale": false,
       "dataQuality": {
@@ -19587,7 +19587,7 @@
           "availability",
           "seriesSpecifications.memberProductIds"
         ],
-        "lastVerifiedAt": "2026-08-20"
+        "lastVerifiedAt": "2026-08-21"
       }
     },
     {
@@ -37165,7 +37165,7 @@
       },
       "documents": {},
       "sourceUrl": "https://www.musterring.com/en/furniture/living-room/living-walls-sideboards-co/q-media-20",
-      "lastVerifiedAt": "2026-08-20",
+      "lastVerifiedAt": "2026-08-21",
       "verificationStatus": "verified-from-official-page",
       "stale": false,
       "dataQuality": {
@@ -37248,7 +37248,7 @@
           "availability",
           "seriesSpecifications.memberProductIds"
         ],
-        "lastVerifiedAt": "2026-08-20"
+        "lastVerifiedAt": "2026-08-21"
       }
     },
     {
@@ -41954,7 +41954,7 @@
       },
       "documents": {},
       "sourceUrl": "https://www.musterring.com/en/furniture/bedroom/bedroom-series/joern",
-      "lastVerifiedAt": "2026-08-20",
+      "lastVerifiedAt": "2026-08-21",
       "verificationStatus": "verified-from-official-page",
       "stale": false,
       "dataQuality": {
@@ -42036,7 +42036,7 @@
           "availability",
           "seriesSpecifications.memberProductIds"
         ],
-        "lastVerifiedAt": "2026-08-20"
+        "lastVerifiedAt": "2026-08-21"
       }
     },
     {
@@ -45118,9 +45118,9 @@
                 "lengthMm": 2000
               },
               "dimensions": {
-                "widthMm": 1520,
-                "depthMm": 2140,
-                "heightMm": 1100
+                "widthMm": 1460,
+                "depthMm": 2030,
+                "heightMm": 515
               }
             },
             {
@@ -45129,9 +45129,9 @@
                 "lengthMm": 2000
               },
               "dimensions": {
-                "widthMm": 1720,
-                "depthMm": 2140,
-                "heightMm": 1100
+                "widthMm": 1660,
+                "depthMm": 2030,
+                "heightMm": 515
               }
             },
             {
@@ -45140,9 +45140,20 @@
                 "lengthMm": 2000
               },
               "dimensions": {
-                "widthMm": 1920,
-                "depthMm": 2140,
-                "heightMm": 1100
+                "widthMm": 1860,
+                "depthMm": 2030,
+                "heightMm": 515
+              }
+            },
+            {
+              "sleepingSize": {
+                "widthMm": 2000,
+                "lengthMm": 2000
+              },
+              "dimensions": {
+                "widthMm": 2060,
+                "depthMm": 2030,
+                "heightMm": 515
               }
             }
           ],
@@ -45214,13 +45225,14 @@
           "specifications.bed.sleepingWidthsMm",
           "specifications.bed.sleepingLengthsMm",
           "specifications.bed.bedType",
-          "specifications.bed.outerDimensions",
           "specifications.bed.headboardHeightMm",
           "specifications.bed.bedStorage",
           "specifications.bed.storageVolumeLitres",
           "specifications.bed.mattressFirmnessOptions",
           "specifications.bed.motorised",
-          "floorClearanceMm"
+          "floorClearanceMm",
+          "specifications.bed.outerDimensionsBySleepingSize",
+          "specifications.bed.outerDimensions"
         ],
         "authorizedSourceFields": [
           "id",
@@ -65069,7 +65081,7 @@
       },
       "documents": {},
       "sourceUrl": "https://www.musterring.com/en/furniture/outdoor/outdoor-furniture/justb-od100",
-      "lastVerifiedAt": "2026-08-20",
+      "lastVerifiedAt": "2026-08-21",
       "verificationStatus": "verified-from-official-page",
       "stale": false,
       "dataQuality": {
@@ -65154,7 +65166,7 @@
           "availability",
           "seriesSpecifications.memberProductIds"
         ],
-        "lastVerifiedAt": "2026-08-20"
+        "lastVerifiedAt": "2026-08-21"
       }
     },
     {
@@ -66266,7 +66278,7 @@
       },
       "documents": {},
       "sourceUrl": "https://www.musterring.com/en/furniture/home-accessories/carpets/mr-bergen",
-      "lastVerifiedAt": "2026-08-20",
+      "lastVerifiedAt": "2026-08-21",
       "verificationStatus": "verified-from-official-page",
       "stale": false,
       "dataQuality": {
@@ -66351,7 +66363,7 @@
           "price",
           "availability"
         ],
-        "lastVerifiedAt": "2026-08-20"
+        "lastVerifiedAt": "2026-08-21"
       }
     },
     {
@@ -71907,12 +71919,11 @@
       "slug": "montino",
       "modelCode": "MONTINO",
       "name": "MONTINO",
-      "category": "bedroom-series",
+      "category": "wardrobe",
       "categories": [
-        "bedroom-series"
+        "wardrobe"
       ],
       "productSubtypes": [
-        "bedroom-series",
         "wardrobe",
         "dresser",
         "bedside-table"
@@ -71921,7 +71932,6 @@
       "seriesSpecifications": {
         "seriesId": "musterring-series:montino",
         "availablePieceTypes": [
-          "bedroom-series",
           "wardrobe",
           "dresser",
           "bedside-table"
@@ -71958,24 +71968,24 @@
         "bedroom"
       ],
       "useCases": [
-        "coordinated bedroom planning",
-        "bedroom storage"
+        "clothing storage",
+        "bedroom organisation"
       ],
       "bestFor": [
         "customers who want configuration choices",
-        "coordinated bedroom planning",
-        "bedroom storage"
+        "clothing storage",
+        "bedroom organisation"
       ],
       "notIdealFor": [
         "customers who need a final size without selecting a configuration"
       ],
       "styles": [
         "modern",
-        "coordinated"
+        "minimal"
       ],
       "styleTags": [
         "modern",
-        "coordinated"
+        "minimal"
       ],
       "keywords": [
         "montino",
@@ -71985,7 +71995,6 @@
         "just",
         "a",
         "wardrobe",
-        "bedroom-series",
         "wardrobes",
         "chests",
         "of",
@@ -71996,12 +72005,12 @@
         "design"
       ],
       "synonyms": [
-        "bedroom programme",
-        "bedroom set",
-        "bedroom furniture"
+        "wardrobe",
+        "closet",
+        "clothes cabinet"
       ],
       "dimensions": {
-        "widthMm": 2800,
+        "widthMm": 2500,
         "depthMm": 600,
         "heightMm": 2200
       },
@@ -72016,7 +72025,7 @@
       "referenceConfiguration": {
         "name": "Demo reference configuration",
         "dimensions": {
-          "widthMm": 2800,
+          "widthMm": 2500,
           "depthMm": 600,
           "heightMm": 2200
         },
@@ -72027,9 +72036,9 @@
         {
           "id": "musterring-montino:demo-reference",
           "name": "Indicative reference configuration",
-          "subtype": "bedroom-series",
+          "subtype": "wardrobe",
           "dimensions": {
-            "widthMm": 2800,
+            "widthMm": 2500,
             "depthMm": 600,
             "heightMm": 2200
           },
@@ -72050,7 +72059,7 @@
       ],
       "variants": [
         {
-          "id": "musterring-montino:demo-reference:demo-natural-oak",
+          "id": "musterring-montino:demo-reference:demo-white",
           "productId": "musterring-montino",
           "productGroupId": "musterring:montino",
           "sku": null,
@@ -72058,12 +72067,12 @@
           "mpn": null,
           "configurationName": "Indicative reference configuration",
           "color": {
-            "name": "natural oak",
-            "family": "natural oak"
+            "name": "white",
+            "family": "white"
           },
           "materialId": null,
           "dimensions": {
-            "widthMm": 2800,
+            "widthMm": 2500,
             "depthMm": 600,
             "heightMm": 2200
           },
@@ -72105,25 +72114,25 @@
       "primaryMaterial": "wood-based material",
       "materialTypes": [
         "wood-based material",
-        "veneer",
-        "upholstery"
+        "glass",
+        "mirror"
       ],
       "materialComposition": "configuration-dependent",
       "upholsteryMaterial": null,
       "frameMaterial": "wood-based material",
       "tabletopMaterial": null,
       "legMaterial": null,
-      "finish": "coordinated matt and wood-effect finishes",
+      "finish": "matt, glass or mirror front",
       "surfaceTreatment": "configuration-dependent",
       "colors": [
-        "natural oak",
         "white",
-        "graphite"
+        "graphite",
+        "natural oak"
       ],
       "colorFamilies": [
-        "natural oak",
         "white",
-        "graphite"
+        "graphite",
+        "natural oak"
       ],
       "configurable": true,
       "modular": false,
@@ -72142,12 +72151,10 @@
       "seatHeightOptions": [],
       "seatDepthOptions": [],
       "functions": [
-        "configurable programme",
-        "structured storage"
+        "configurable programme"
       ],
       "manualFunctions": [
-        "configurable programme",
-        "structured storage"
+        "configurable programme"
       ],
       "electricFunctions": [],
       "comfortFunctions": [],
@@ -72171,36 +72178,48 @@
       "familyFriendly": null,
       "petFriendly": null,
       "specifications": {
-        "storage": {
-          "storageSubtype": "bedside-table",
-          "purposes": [
-            "closed-storage"
+        "wardrobe": {
+          "wardrobeType": [
+            "modular wardrobe"
           ],
-          "storageType": [
-            "wardrobes",
-            "chests of drawers",
-            "bedside tables",
-            "front design"
+          "doorType": [
+            "hinged"
           ],
-          "doors": 4,
-          "drawers": 2,
-          "shelves": 3,
-          "compartments": 4,
-          "wallMounted": false,
-          "floorStanding": true,
-          "mountingType": [
-            "floor-standing"
+          "doorCountOptions": [
+            2,
+            3,
+            4
           ],
-          "mediaCompatible": false,
-          "cableManagement": false,
-          "lightingAvailable": false,
-          "qiChargingAvailable": false,
-          "internalLayout": [
-            "adjustable shelves",
-            "closed compartment",
-            "open display section"
+          "widthOptionsMm": [
+            2000,
+            2500,
+            3000
           ],
-          "maximumShelfLoadKg": 15
+          "heightOptionsMm": [
+            2160,
+            2360
+          ],
+          "depthOptionsMm": [
+            600
+          ],
+          "interiorModules": [
+            "shelves",
+            "clothes rails"
+          ],
+          "shelves": 6,
+          "drawers": 3,
+          "clothesRails": 2,
+          "adjustableShelves": true,
+          "shoeStorage": true,
+          "trouserRack": false,
+          "tieRack": false,
+          "clothesLift": false,
+          "mirrorOption": false,
+          "lightingOption": false,
+          "cornerConfiguration": false,
+          "capacityBand": "configuration-dependent",
+          "recommendedUserMin": null,
+          "recommendedUserMax": null
         }
       },
       "media": {
@@ -72208,42 +72227,42 @@
         "images": [
           {
             "url": "/musterring-catalog/montino/image-01.jpg",
-            "alt": "MONTINO bedroom series product view",
+            "alt": "MONTINO wardrobe product view",
             "role": "hero"
           },
           {
             "url": "/musterring-catalog/montino/image-02.jpg",
-            "alt": "MONTINO bedroom series gallery view 2",
+            "alt": "MONTINO wardrobe gallery view 2",
             "role": "roomset"
           },
           {
             "url": "/musterring-catalog/montino/image-03.jpg",
-            "alt": "MONTINO bedroom series gallery view 3",
+            "alt": "MONTINO wardrobe gallery view 3",
             "role": "perspective"
           },
           {
             "url": "/musterring-catalog/montino/image-04.jpg",
-            "alt": "MONTINO bedroom series gallery view 4",
+            "alt": "MONTINO wardrobe gallery view 4",
             "role": "detail"
           },
           {
             "url": "/musterring-catalog/montino/image-05.jpg",
-            "alt": "MONTINO bedroom series gallery view 5",
+            "alt": "MONTINO wardrobe gallery view 5",
             "role": "side"
           },
           {
             "url": "/musterring-catalog/montino/image-06.jpg",
-            "alt": "MONTINO bedroom series gallery view 6",
+            "alt": "MONTINO wardrobe gallery view 6",
             "role": "gallery"
           },
           {
             "url": "/musterring-catalog/montino/image-07.jpg",
-            "alt": "MONTINO bedroom series gallery view 7",
+            "alt": "MONTINO wardrobe gallery view 7",
             "role": "gallery"
           },
           {
             "url": "/musterring-catalog/montino/image-08.jpg",
-            "alt": "MONTINO bedroom series gallery view 8",
+            "alt": "MONTINO wardrobe gallery view 8",
             "role": "gallery"
           }
         ],

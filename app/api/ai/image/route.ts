@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "node:crypto";
 import { imageUploadSchema } from "@/lib/ai/schemas";
 import { withDemoFallback } from "@/lib/ai/providers";
-import { searchCatalogueByVisualTags } from "@/lib/ai/retrieval";
+import { dominantVisualColorFamilies, hasVerifiedVisualMaterial, searchCatalogueByVisualTags, visualColorsCompatible, visualProductGroupId } from "@/lib/ai/retrieval";
 import { materials, products } from "@/lib/data";
+import { productImageForColors } from "@/lib/musterring-assets";
 import visualImageHashes from "@/lib/generated/visual-image-hashes.json";
 import { checkRateLimit } from "@/lib/server-validation";
 import { catalogueCategories, type Category } from "@/lib/types";
@@ -60,7 +61,10 @@ export async function POST(request: NextRequest) {
     try {
       analysis = await withDemoFallback(
         (provider) => withTimeout(provider.analyzeProductImage(toDataUrl(file, buffer)), 20_000),
-        { allowOpenAI: true, capability: "vision", fallbackOnError: false }
+        // Visual search must remain usable when the configured provider is
+        // briefly unavailable. The fallback only extracts search tags; every
+        // returned recommendation is still selected from the local catalogue.
+        { allowOpenAI: true, capability: "vision", fallbackOnError: true }
       );
     } catch (error) {
       const message = error instanceof Error ? error.message : "";
@@ -72,13 +76,13 @@ export async function POST(request: NextRequest) {
       }, { status: billingRequired ? 402 : 503 });
     }
   }
-  if (process.env.NODE_ENV === "production" && analysis?.provider === "demo") {
+  if (process.env.NODE_ENV === "production" && analysis?.provider === "demo" && !analysis.fallback) {
     return NextResponse.json({ error: "Visual analysis is not configured." }, { status: 503 });
   }
   const exactMaterial = exactProduct
     ? materials.find((material) => exactProduct.materials.includes(material.id))
     : null;
-  const tags = exactProduct ? {
+  const rawTags = exactProduct ? {
     category: exactProduct.category,
     colorFamilies: exactProduct.colors.slice(0, 3),
     likelyMaterial: exactMaterial?.type ?? null,
@@ -94,16 +98,22 @@ export async function POST(request: NextRequest) {
       ? preferredCategory
       : analysis!.data.category
   };
-  const visualMatches = searchCatalogueByVisualTags(tags).filter(({ product }) => product.id !== exactProduct?.id);
+  const tags = {
+    ...rawTags,
+    colorFamilies: dominantVisualColorFamilies(rawTags.colorFamilies)
+  };
+  const visualMatches = searchCatalogueByVisualTags(tags).filter(({ product }) =>
+    product.id !== exactProduct?.id && (!exactProduct || visualProductGroupId(product) !== visualProductGroupId(exactProduct))
+  );
   const matches = exactProduct
     ? [{ product: exactProduct, score: 100, reasons: ["identical catalogue image"] }, ...visualMatches]
     : visualMatches;
   return NextResponse.json({
     tags,
     matches: matches.map(({ product, score, reasons }) => {
-      const matchingColors = tags.colorFamilies.filter((color) => product.colors.includes(color.toLowerCase()));
+      const matchingColors = tags.colorFamilies.filter((color) => product.colors.some((available) => visualColorsCompatible(color, available)));
       const matchingStyles = tags.style.filter((style) => product.styles.some((candidate) => candidate.includes(style) || style.includes(candidate)));
-      const matchingMaterial = !tags.likelyMaterial || materials.some((material) => product.materials.includes(material.id) && material.type === tags.likelyMaterial);
+      const matchingMaterial = !tags.likelyMaterial || hasVerifiedVisualMaterial(product, tags.likelyMaterial);
       const differences = product.id === exactProduct?.id ? [] : [
         "no identical catalogue image was found",
         "the exact module layout and proportions cannot be confirmed from the uploaded photo",
@@ -112,8 +122,25 @@ export async function POST(request: NextRequest) {
         ...(!matchingStyles.length ? ["the recorded style is not an exact metadata match"] : []),
         ...(!matchingMaterial ? [`the detected ${tags.likelyMaterial} material is not recorded for this product`] : [])
       ];
+      const hasShapeEvidence = reasons.some((reason) => /silhouette|visible features/i.test(reason));
+      const hasMaterialEvidence = reasons.some((reason) => /^offers /i.test(reason));
+      const hasStyleEvidence = reasons.some((reason) => /style/i.test(reason));
+      const hasColourEvidence = reasons.some((reason) => /colour/i.test(reason));
       return { product, score, reasons: reasons.length ? reasons : ["same selected furniture category"], differences,
-      label: product.id === exactProduct?.id ? "Exact Catalogue Image" : score >= 80 ? "Excellent Visual Match" : score >= 65 ? "Strong Match" : score >= 50 ? "Similar Shape" : score >= 30 ? "Similar Material" : "Related Style"
+      image: productImageForColors(product.id, tags.colorFamilies).src,
+      label: product.id === exactProduct?.id
+        ? "Exact Catalogue Image"
+        : hasShapeEvidence && score >= 80
+          ? "Strong Visual Match"
+          : hasShapeEvidence
+            ? "Similar Shape"
+            : hasMaterialEvidence && hasStyleEvidence
+              ? "Similar Material and Style"
+              : hasMaterialEvidence
+                ? "Similar Material"
+                : hasColourEvidence
+                  ? "Similar Colour"
+                  : "Same Furniture Category"
       };
     }),
     noMatchReason: !tags.category

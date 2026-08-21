@@ -382,8 +382,18 @@ function applyVerified(record, enrichment) {
     const bed = record.specifications.bed;
     bed.sleepingSizes = data.sleepingSurfaceOptionsMm.map(([widthMm, lengthMm]) => ({ widthMm, lengthMm })); bed.sleepingWidthsMm = unique(bed.sleepingSizes.map((size) => size.widthMm)); bed.sleepingLengthsMm = unique(bed.sleepingSizes.map((size) => size.lengthMm));
     bed.bedType = (data.bedTypes ?? []).map((type) => type.includes("boxspring") ? "boxspring-bed" : "upholstered-bed"); bed.headboardHeightMm = data.headboardHeightMm; bed.storageVolumeLitres = data.storageVolumeLitresAt180x200; bed.bedStorage = Boolean(data.storageVolumeLitresAt180x200); bed.mattressFirmnessOptions = data.mattressFirmnessOptions ?? []; bed.motorised = Boolean(data.motorisedHeadAndFootAdjustmentAvailable);
-    record.floorClearanceMm = data.floorClearanceMm; bed.outerDimensions = (data.upholsteredFrameExternalDimensionsByWidth ?? []).map((size) => ({ widthMm: size.externalWidthMm, depthMm: size.depthMm, heightMm: size.heightMm }));
-    paths.push("specifications.bed.sleepingSizes", "specifications.bed.sleepingWidthsMm", "specifications.bed.sleepingLengthsMm", "specifications.bed.bedType", "specifications.bed.outerDimensions", "specifications.bed.headboardHeightMm", "specifications.bed.bedStorage", "specifications.bed.storageVolumeLitres", "specifications.bed.mattressFirmnessOptions", "specifications.bed.motorised", "floorClearanceMm");
+    const frameDimensions = data.upholsteredFrameExternalDimensionsByWidth ?? [];
+    bed.outerDimensionsBySleepingSize = frameDimensions.flatMap((size) => {
+      const sleepingSize = bed.sleepingSizes.find((candidate) => candidate.widthMm === size.sleepingWidthMm);
+      return sleepingSize ? [{
+        sleepingSize,
+        dimensions: { widthMm: size.externalWidthMm, depthMm: size.depthMm, heightMm: size.heightMm }
+      }] : [];
+    });
+    bed.outerDimensions = bed.outerDimensionsBySleepingSize.map((entry) => entry.dimensions);
+    record.floorClearanceMm = data.floorClearanceMm;
+    paths.push("specifications.bed.sleepingSizes", "specifications.bed.sleepingWidthsMm", "specifications.bed.sleepingLengthsMm", "specifications.bed.bedType", "specifications.bed.headboardHeightMm", "specifications.bed.bedStorage", "specifications.bed.storageVolumeLitres", "specifications.bed.mattressFirmnessOptions", "specifications.bed.motorised", "floorClearanceMm");
+    if (bed.outerDimensionsBySleepingSize.length) paths.push("specifications.bed.outerDimensionsBySleepingSize", "specifications.bed.outerDimensions");
   }
   if (record.specifications.wardrobe && data.doorTypes) {
     const wardrobe = record.specifications.wardrobe; wardrobe.doorType = data.doorTypes; wardrobe.widthOptionsMm = data.slidingWardrobeWidthOptionsMm ?? []; wardrobe.heightOptionsMm = data.heightOptionsMm ?? []; wardrobe.interiorModules = data.interiorAccessories ?? [];

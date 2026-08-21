@@ -1,6 +1,6 @@
 # GEO Product Data Coverage
 
-Generated: 2026-08-20T11:15:45.035Z
+Generated: 2026-08-21T07:57:57.926Z
 
 ## Summary
 
@@ -74,7 +74,7 @@ Exact capability is measured for the target and every hard requirement together,
 | armchair | 22 | 0 | 22 | 0 |
 | bathroom | 4 | 0 | 4 | 0 |
 | bed | 9 | 0 | 9 | 0 |
-| bedroom-series | 12 | 0 | 12 | 0 |
+| bedroom-series | 11 | 0 | 11 | 0 |
 | carpet | 3 | 0 | 3 | 0 |
 | coffee-table | 4 | 0 | 4 | 0 |
 | dining-chair | 3 | 0 | 3 | 0 |
@@ -86,7 +86,7 @@ Exact capability is measured for the target and every hard requirement together,
 | small-furniture | 1 | 0 | 1 | 0 |
 | sofa | 36 | 0 | 36 | 0 |
 | storage | 19 | 0 | 19 | 0 |
-| wardrobe | 2 | 0 | 2 | 0 |
+| wardrobe | 3 | 0 | 3 | 0 |
 
 ## Implemented attributes
 
