@@ -124,8 +124,8 @@ export default function AboutPage() {
             <span className="simple-kicker">Individuality</span>
             <h2>Designed around your life.</h2>
             <p>Different spaces and routines call for different solutions. Musterring collections offer room for personal decisions—from layout and size to surfaces, fabrics and comfort.</p>
-            <Link className="simple-arrow-link" href="/room-composer">
-              Start planning your room <ArrowRight size={18} />
+            <Link className="simple-arrow-link" href="/room-composer/upload">
+              Open Room Visualizer <ArrowRight size={18} />
             </Link>
           </div>
         </article>

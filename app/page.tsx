@@ -137,7 +137,7 @@ export default function HomePage() {
               <li><span>3</span><div><strong>Consult</strong><p>Hand the prepared project to a retailer.</p></div></li>
             </ol>
             <div className="simple-actions">
-              <StitchLinkButton href="/room-composer">Start a project</StitchLinkButton>
+              <StitchLinkButton href="/room-composer/upload">Start a project</StitchLinkButton>
               <StitchLinkButton variant="ghost" href="/handover">View handover</StitchLinkButton>
             </div>
           </div>

@@ -45,7 +45,7 @@ describe("catalogue-grounded room visualization", () => {
     expect(prompt).toContain("believable, lived-in Musterring editorial result");
     expect(prompt).toContain("ordinary, unbranded, non-catalogue styling accessories");
     expect(prompt).toContain("These accessories are decorative context only, not Musterring products");
-    expect(prompt).toContain("Do not add people, pets, televisions, or additional unselected seating");
+    expect(prompt).toContain("Do not add people, pets, televisions, additional unselected seating");
     expect(prompt).toContain("PRODUCT LOCK");
     expect(prompt).toContain("Do not recolour, desaturate, brighten, darken");
     expect(prompt).toContain("exact selected-product appearance");
@@ -67,8 +67,25 @@ describe("catalogue-grounded room visualization", () => {
     expect(prompt).toContain("this relationship outranks the table's editor anchor");
     expect(prompt).toContain("Never leave a coffee table isolated");
     expect(prompt).toContain("Integrate each selected armchair into the conversation area");
-    expect(prompt).toContain("Add one understated, unbranded, neutral low-pile area rug");
-    expect(prompt).toContain("coffee table must sit fully on it");
+    expect(prompt).toContain("No catalogue carpet was selected");
+    expect(prompt).toContain("do not invent, retain, or add any rug");
+  });
+
+  it("locks a selected catalogue carpet design and permits no substitute", () => {
+    const carpet = products.find((candidate) => candidate.active && candidate.category === "carpet")!;
+    const prompt = buildRoomVisualizationPrompt(groundVisualizationItems([{
+      ...item,
+      productId: carpet.id,
+      x: 50,
+      y: 82
+    }]));
+
+    expect(prompt).toContain(carpet.modelCode);
+    expect(prompt).toContain("selected catalogue carpet is required");
+    expect(prompt).toContain("preserve the same pattern, motif geometry, colours, border");
+    expect(prompt).toContain("This is the only permitted carpet design");
+    expect(prompt).toContain("never generate a generic substitute");
+    expect(prompt).not.toContain("No catalogue carpet was selected");
   });
 
   it("keeps quarter-turn orientation and wall placement as hard generation constraints", () => {

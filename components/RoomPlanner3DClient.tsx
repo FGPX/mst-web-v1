@@ -284,7 +284,7 @@ export function RoomPlanner3DClient() {
   };
 
   return <div className="planner3d-shell">
-    <header className="planner3d-topbar"><Link href="/room-composer"><ChevronLeft size={18} /> Room Composer</Link><div><Box size={20} /><strong>Musterring 3D Room Planner</strong><span>Catalogue-grounded planner</span></div><button onClick={save}><Save size={17} /> {saved ? "Saved" : "Save plan"}</button></header>
+    <header className="planner3d-topbar"><Link href="/room-composer/upload"><ChevronLeft size={18} /> Room Visualizer</Link><div><Box size={20} /><strong>Musterring 3D Room Planner</strong><span>Catalogue-grounded planner</span></div><button onClick={save}><Save size={17} /> {saved ? "Saved" : "Save plan"}</button></header>
     {step < 3 ? <div className="planner3d-setup">
       <aside>
         <p>Step {step} of 2</p>

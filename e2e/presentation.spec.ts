@@ -27,7 +27,7 @@ test("Demo B opens the retailer handover", async ({ page }) => {
 
 test("Demo C restores room, project and retailer context", async ({ page }) => {
   await page.getByRole("button", { name: /Launch Room & Retailer Journey/ }).click();
-  await expect(page).toHaveURL(/\/room-composer\?presentation=1/);
+  await expect(page).toHaveURL(/\/room-composer\/upload\?presentation=1/);
   await expect(page.getByText(/Saved versions: 1/)).toBeVisible();
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("musterring.roomScenes") ?? "[]")[0]?.items?.length)).toBeGreaterThanOrEqual(3);
   await page.goto("/my-musterring");
