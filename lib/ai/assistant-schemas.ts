@@ -98,14 +98,43 @@ export const advisorActionSchema = z.object({
 });
 export type AdvisorAction = z.infer<typeof advisorActionSchema>;
 
+/** One question the assistant asks to narrow an under-specified brief. */
+export const clarifyingQuestionSchema = z.object({
+  slot: z.string().max(40),
+  question: z.string().max(240),
+  options: z.array(z.string().max(60)).max(6)
+});
+export type ClarifyingQuestionPayload = z.infer<typeof clarifyingQuestionSchema>;
+
+/** A hard requirement that no catalogue product could satisfy. */
+export const unmetConstraintSchema = z.object({
+  key: z.string().max(40),
+  requested: z.string().max(160),
+  closest: z.string().max(240)
+});
+
+/** A near miss, always shown with the exact reason it is not a match. */
+export const nearestMatchSchema = z.object({
+  productId: z.string(),
+  gaps: z.array(z.string().max(200)).max(4)
+});
+
 export const advisorAnswerSchema = z.object({
   answer: z.string().max(3000),
-  answerType: z.enum(["fact", "products", "comparison", "materials", "configuration", "project", "room", "fit", "dealer", "missing-data"]),
+  answerType: z.enum(["fact", "products", "comparison", "materials", "configuration", "project", "room", "fit", "dealer", "missing-data", "clarify"]),
   productIds: z.array(z.string()).max(12),
   materialIds: z.array(z.string()).max(12),
   sources: z.array(z.string()).max(12),
   proposedAction: advisorActionSchema.nullable(),
-  suggestedQuestions: z.array(z.string()).max(4)
+  suggestedQuestions: z.array(z.string()).max(4),
+  /** Present when the assistant needs one more detail before recommending. */
+  clarify: clarifyingQuestionSchema.nullable().default(null),
+  /** Non-empty only when the brief cannot be satisfied by the catalogue. */
+  unmet: z.array(unmetConstraintSchema).max(8).default([]),
+  /** Deliberate near misses, each labelled with how far it is off. */
+  nearest: z.array(nearestMatchSchema).max(3).default([]),
+  /** Short chips describing what the assistant currently understands. */
+  briefSummary: z.array(z.string().max(60)).max(12).default([])
 });
 export type AdvisorAnswer = z.infer<typeof advisorAnswerSchema>;
 

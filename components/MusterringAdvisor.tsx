@@ -2,12 +2,13 @@
 
 import Image from "@/components/HighQualityImage";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowRight, CalendarDays, Check, ImagePlus, MapPin, MessageSquarePlus, Mic, Paperclip, Save, Send, Sparkles, Upload, X } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, ImagePlus, MapPin, Maximize2, MessageSquarePlus, Mic, Minimize2, Paperclip, Save, Send, Sparkles, Square, Upload, Volume2, VolumeX, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { dealers, materials, products } from "@/lib/data";
 import { productImageForColors, productImages } from "@/lib/musterring-assets";
 import { storage } from "@/lib/persistence";
 import { normalizeAppointmentTime } from "@/lib/appointment";
+import { buildRetailerEmail } from "@/lib/retailer-email";
 import { advisorAnswerSchema, type AdvisorAction, type AdvisorAnswer, type ConversationContext, type VoiceCommand } from "@/lib/ai/assistant-schemas";
 import { deriveAdvisorPreferences } from "@/lib/ai/conversation-memory";
 
@@ -15,6 +16,8 @@ type VisualMatch = { productId: string; score: number; label: string; reasons: s
 type Message = { role: "customer" | "advisor"; text: string; answer?: AdvisorAnswer; visualMatches?: VisualMatch[]; roomImage?: string; uploadedImage?: string };
 type AttachmentPurpose = "reference" | "room";
 const journeySteps = ["Describe", "Discover", "Save", "Visualize", "Retailer", "Consultation"];
+/** How long a customer may pause mid-sentence before the turn is submitted. */
+const VOICE_SILENCE_MS = 1800;
 const memoryKey = "musterring.assistantContext";
 const conversationKey = "musterring.assistantConversation";
 type SpeechRecognitionResultLike = { 0: { transcript: string }; isFinal?: boolean };
@@ -24,6 +27,7 @@ type SpeechRecognitionLike = {
   interimResults: boolean;
   continuous?: boolean;
   start: () => void;
+  stop: () => void;
   abort: () => void;
   onresult: (event: SpeechRecognitionEventLike) => void;
   onerror: (event: { error: string }) => void;
@@ -94,6 +98,7 @@ export function MusterringAdvisor() {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [wide, setWide] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationReady, setConversationReady] = useState(false);
@@ -103,6 +108,12 @@ export function MusterringAdvisor() {
   const [savedProductIds, setSavedProductIds] = useState<string[]>([]);
   const [confirmNewChat, setConfirmNewChat] = useState(false);
   const [voiceState, setVoiceState] = useState<"idle" | "listening" | "processing" | "recognized" | "error" | "denied">("idle");
+  const [voiceLevel, setVoiceLevel] = useState(0);
+  const [voiceLang, setVoiceLang] = useState("en-US");
+  /** Voice conversation mode: the assistant answers out loud, not just in text. */
+  const [voiceReplies, setVoiceReplies] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [journeyStep, setJourneyStep] = useState(1);
   const [attachmentMenu, setAttachmentMenu] = useState(false);
   const [attachmentPurpose, setAttachmentPurpose] = useState<AttachmentPurpose>("reference");
@@ -133,12 +144,46 @@ export function MusterringAdvisor() {
   const [handoverError, setHandoverError] = useState("");
   const [context, setContext] = useState<ConversationContext>({ route: pathname, referencedProductIds: [], selectedMaterialIds: [], currentFilters: {}, approvedPreferences: {} });
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const conversationVersionRef = useRef(0);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const voiceDraftRef = useRef("");
   const voiceParsedRef = useRef(false);
+  const stickToBottomRef = useRef(true);
+  const silenceTimerRef = useRef<number | null>(null);
+  const manualStopRef = useRef(false);
+  const levelFrameRef = useRef<number | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const spokenCountRef = useRef(0);
   const currentProduct = productFromPath(pathname);
+  // A single source of truth for which blocking card is on screen. Previously
+  // each section carried its own `!a && !b && !c` guard, which let the photo
+  // and handover confirmations render at the same time.
+  const activeModal: "newChat" | "action" | "projectSave" | "handover" | "attachment" | "roomSave" | "dealer" | "appointment" | null =
+    confirmNewChat ? "newChat"
+      : pendingAction && pendingAction.type !== "SAVE_PRODUCT" ? "action"
+        : pendingProjectProductIds.length ? "projectSave"
+          : pendingHandover ? "handover"
+            : attachmentPending ? "attachment"
+              : pendingRoomSave ? "roomSave"
+                : pendingDealerId ? "dealer"
+                  : pendingAppointment ? "appointment"
+                    : null;
+  const dismissModal = () => {
+    switch (activeModal) {
+      case "newChat": setConfirmNewChat(false); break;
+      case "action": setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); break;
+      case "projectSave": setPendingProjectProductIds([]); break;
+      case "handover": setPendingHandover(false); break;
+      case "attachment": setAttachmentPending(false); setAttachmentFile(null); break;
+      case "roomSave": setPendingRoomSave(false); break;
+      case "dealer": setPendingDealerId(""); break;
+      case "appointment": setPendingAppointment(false); break;
+      default: break;
+    }
+  };
   useEffect(() => {
     const stored = window.sessionStorage.getItem(conversationKey);
     let restoredJourneyStep = 1;
@@ -230,7 +275,12 @@ export function MusterringAdvisor() {
     if (!open) return;
     const focusFrame = window.requestAnimationFrame(() => inputRef.current?.focus());
     const key = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      // Escape dismisses the blocking card first; only an unobstructed panel closes.
+      if (event.key === "Escape") {
+        if (activeModal) { event.preventDefault(); dismissModal(); }
+        else if (attachmentMenu) setAttachmentMenu(false);
+        else setOpen(false);
+      }
       if (event.key === "Tab") {
         const focusable = document.querySelectorAll<HTMLElement>(".advisor-panel button:not([disabled]), .advisor-panel a, .advisor-panel textarea");
         if (!focusable.length) return;
@@ -244,7 +294,53 @@ export function MusterringAdvisor() {
       window.cancelAnimationFrame(focusFrame);
       window.removeEventListener("keydown", key);
     };
+  }, [open, activeModal, attachmentMenu]);
+  // Only follow the conversation while the reader is already at the bottom, so
+  // scrolling back through history is never yanked away by an incoming message.
+  useEffect(() => {
+    const node = messagesRef.current;
+    if (!node) return;
+    const track = () => { stickToBottomRef.current = node.scrollHeight - node.scrollTop - node.clientHeight < 160; };
+    node.addEventListener("scroll", track, { passive: true });
+    return () => node.removeEventListener("scroll", track);
   }, [open]);
+  useEffect(() => {
+    const node = messagesRef.current;
+    if (!node || !stickToBottomRef.current) return;
+    const behavior: ScrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    const frame = window.requestAnimationFrame(() => node.scrollTo({ top: node.scrollHeight, behavior }));
+    return () => window.cancelAnimationFrame(frame);
+  }, [open, messages, pending, roomGenerationStatus, roomGenerationProgress, journeyStep, showInlineHandover, handoverState]);
+  // Speak each new advisor reply while voice mode is on, and never speak the
+  // backlog when the customer switches it on mid-conversation.
+  useEffect(() => {
+    if (!voiceReplies) { spokenCountRef.current = messages.length; return; }
+    if (messages.length <= spokenCountRef.current) { spokenCountRef.current = messages.length; return; }
+    const fresh = messages.slice(spokenCountRef.current);
+    spokenCountRef.current = messages.length;
+    const latest = [...fresh].reverse().find((message) => message.role === "advisor");
+    if (latest) speak(spokenSummary(latest));
+  }, [messages, voiceReplies]);
+
+  useEffect(() => {
+    if (!voiceReplies) cancelSpeech();
+  }, [voiceReplies]);
+
+  // Match the recogniser and the speaking voice to the page language once, and
+  // let the customer override it — a German speaker on an English browser was
+  // previously never understood.
+  useEffect(() => {
+    const detected = navigator.language;
+    if (detected) setVoiceLang(detected.startsWith("de") ? "de-DE" : detected.startsWith("en") ? "en-US" : detected);
+  }, []);
+
+  useEffect(() => () => {
+    if (silenceTimerRef.current) window.clearTimeout(silenceTimerRef.current);
+    if (levelFrameRef.current) window.cancelAnimationFrame(levelFrameRef.current);
+    mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
+    if (typeof window !== "undefined") window.speechSynthesis?.cancel();
+  }, []);
+
   const ask = async (question = input) => {
     const clean = question.trim();
     if (!clean) return;
@@ -253,6 +349,7 @@ export function MusterringAdvisor() {
       setMessages((current) => [...current, { role: "advisor", text: "I didn’t catch a question there. Tell me what you would like to find, compare, configure or check." }]);
       return;
     }
+    stickToBottomRef.current = true;
     setMessages((current) => [...current, { role: "customer", text: clean }]);
     setInput(""); setPending(true);
     const conversationVersion = conversationVersionRef.current;
@@ -269,11 +366,15 @@ export function MusterringAdvisor() {
     }
     const answer = payload.answer as AdvisorAnswer;
     setMessages((current) => [...current, { role: "advisor", text: answer.answer, answer }]);
+    // Carry the brief forward: what the customer has now seen must never be
+    // offered again as "something different", and a slot we just asked about
+    // must never be asked twice.
     setContext((current) => ({
       ...current,
       approvedPreferences: {
         ...approvedPreferences,
-        shownProductIds: [...new Set([...(Array.isArray(approvedPreferences.shownProductIds) ? approvedPreferences.shownProductIds as string[] : []), ...answer.productIds])]
+        shownProductIds: [...new Set([...approvedPreferences.shownProductIds, ...answer.productIds])],
+        askedSlots: [...new Set([...approvedPreferences.askedSlots, ...(answer.clarify ? [answer.clarify.slot] : [])])]
       },
       referencedProductIds: answer.productIds.length ? answer.productIds : current.referencedProductIds
     }));
@@ -292,6 +393,8 @@ export function MusterringAdvisor() {
     setConfirmNewChat(false);
     setVoiceState("idle");
     setJourneyStep(1);
+    setSelectedProductIds([]);
+    cancelSpeech();
     setAttachmentFile(null);
     if (attachmentPreview) URL.revokeObjectURL(attachmentPreview);
     setAttachmentPreview("");
@@ -336,6 +439,7 @@ export function MusterringAdvisor() {
       const id = String(action.parameters.productId ?? "");
       if (products.some((product) => product.id === id) && !storage.savedProducts().includes(id)) storage.toggleProduct(id);
       setSavedProductIds(storage.savedProducts());
+      if (id) setSelectedProductIds((current) => [...new Set([...current, id])]);
       const product = products.find((candidate) => candidate.id === id);
       setJourneyStep((current) => Math.max(current, 3));
       setMessages((current) => [...current, { role: "advisor", text: `${product?.modelCode ?? "The catalogue product"} was saved to My Musterring. Next, upload a photo of your room and I can create a catalogue-grounded visualization after you confirm the image processing.` }]);
@@ -357,9 +461,10 @@ export function MusterringAdvisor() {
       if (!storage.savedProducts().includes(id)) storage.toggleProduct(id);
     });
     setSavedProductIds(storage.savedProducts());
+    setSelectedProductIds((current) => [...new Set([...current, ...validIds])]);
     setJourneyStep((current) => Math.max(current, 3));
     const labels = validIds.map((id) => products.find((product) => product.id === id)?.modelCode).filter(Boolean).join(", ");
-    setMessages((current) => [...current, { role: "advisor", text: `${labels || "The selected products"} ${validIds.length === 1 ? "was" : "were"} saved to your My Musterring project. You can continue selecting products or upload a room photo when the project selection is ready.` }]);
+    setMessages((current) => [...current, { role: "advisor", text: `${labels || "The selected products"} ${validIds.length === 1 ? "was" : "were"} saved to your project. Next I can place ${validIds.length === 1 ? "it" : "them"} in a photo of your own room — upload one and I'll generate the visualisation.` }]);
     storage.track({ name: "chatbot_action_confirmed" });
     setPendingProjectProductIds([]);
   };
@@ -563,9 +668,46 @@ export function MusterringAdvisor() {
     });
     storage.track({ name: "lead_submitted", dealerId });
     storage.track({ name: "appointment_booked", dealerId });
+
+    // Send the retailer a ready-to-work email rather than a bare notification:
+    // the brief, the customer's own sentences, the products they picked with
+    // photos, their room visualisation and the slot they want.
+    const chosenIds = selectedProductIds.length ? selectedProductIds : projectData.productIds;
+    const roomImage = [...messages].reverse().find((message) => message.roomImage)?.roomImage;
+    const email = buildRetailerEmail({
+      reference: String(payload.reference),
+      customer: {
+        firstName: handoverFirstName.trim(), lastName: handoverLastName.trim(),
+        email: handoverEmail.trim(), phone: handoverPhone.trim(), notes: handoverNotes.trim()
+      },
+      dealerId,
+      briefSummary: briefChips,
+      quotes: customerRequests(messages),
+      productIds: chosenIds,
+      materialIds: storage.savedMaterials(),
+      roomImage,
+      appointment: { mode: appointmentMode, date: appointmentDate, time: appointmentTime },
+      aiSummary: String(summaryPayload.summary),
+      origin: window.location.origin
+    });
+    const delivery = await fetch("/api/dealer-assistant/send-email", {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ confirmed: true, ...email })
+    }).catch(() => null);
+    const deliveryPayload = delivery ? await delivery.json().catch(() => null) : null;
+    if (delivery?.ok && deliveryPayload?.delivered) {
+      storage.track({ name: "retailer_email_delivered" });
+    }
+
     setPendingHandover(false);
     setHandoverState("sent");
-    setMessages((current) => [...current, { role: "advisor", text: `Your complete retailer handover is confirmed with reference ${String(payload.reference)}. The selected products, room view, appointment preference, contact details and project summary are now prepared for ${dealers.find((dealer) => dealer.id === dealerId)?.name ?? "the selected retailer"}. Final availability and appointment time still require retailer confirmation.` }]);
+    const dealerName = dealers.find((dealer) => dealer.id === dealerId)?.name ?? "the selected retailer";
+    setMessages((current) => [...current, {
+      role: "advisor",
+      text: delivery?.ok && deliveryPayload?.delivered
+        ? `Done — reference ${String(payload.reference)}. I've emailed ${dealerName} your brief, the ${chosenIds.length} product${chosenIds.length === 1 ? "" : "s"} you picked with their photos, your room visualisation and your preferred appointment. They start from your project, not from zero. Final availability and the exact time still come from them.`
+        : `Your handover is confirmed with reference ${String(payload.reference)}. The selected products, room view, appointment preference and contact details are prepared for ${dealerName}. Email delivery is not configured in this environment, so nothing was sent outside. Final availability and appointment time still require retailer confirmation.`
+    }]);
   };
   const handleVoiceCommand = (command: VoiceCommand, transcript: string) => {
     setVoiceState("recognized");
@@ -601,21 +743,149 @@ export function MusterringAdvisor() {
     if (conversationVersion !== conversationVersionRef.current) return;
     if (!response?.ok || !payload?.command) { setVoiceState("error"); storage.track({ name: "voice_command_failed" }); return; }
     handleVoiceCommand(payload.command, cleanTranscript);
+  };  /* ---------------------------------------------------------------------- */
+  /* Speech output                                                            */
+  /* ---------------------------------------------------------------------- */
+
+  /**
+   * The assistant speaks its answers back. Previously voice was one-way: the
+   * customer talked and read the reply, which is not a conversation. In a
+   * showroom, on a tablet, being answered out loud is the whole point.
+   */
+  const cancelSpeech = () => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    setSpeaking(false);
   };
+
+  const speak = (text: string) => {
+    if (typeof window === "undefined" || !window.speechSynthesis || !text.trim()) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = voiceLang;
+    utterance.rate = 1.02;
+    utterance.pitch = 1;
+    const preferred = window.speechSynthesis.getVoices().find((voice) => voice.lang === voiceLang)
+      ?? window.speechSynthesis.getVoices().find((voice) => voice.lang.startsWith(voiceLang.slice(0, 2)));
+    if (preferred) utterance.voice = preferred;
+    utterance.onstart = () => setSpeaking(true);
+    utterance.onend = () => setSpeaking(false);
+    utterance.onerror = () => setSpeaking(false);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  /**
+   * Turns a rendered answer into something worth hearing. Screen copy leans on
+   * cards and lists; spoken copy has to carry the product names itself, so the
+   * assistant actually presents what it found instead of saying "here are four
+   * options" to someone who cannot see them.
+   */
+  const spokenSummary = (message: Message) => {
+    const prose = message.text.replace(/\*\*/g, "").replace(/\s+/g, " ").trim();
+    const named = (message.answer?.productIds ?? [])
+      .map((id) => products.find((product) => product.id === id))
+      .filter((product): product is typeof products[number] => Boolean(product));
+    if (!named.length) return prose;
+    const introduce = named.slice(0, 3).map((product) => {
+      const size = product.verifiedFacts.dimensions
+        ? `, ${Math.round(product.widthMm / 10)} by ${Math.round(product.depthMm / 10)} centimetres`
+        : "";
+      return `${product.modelCode}${size}`;
+    });
+    const rest = named.length > 3 ? ` And ${named.length - 3} more below.` : "";
+    return `${prose} ${introduce.length === 1 ? "That is" : "Those are"} ${introduce.join(", then ")}.${rest}`;
+  };
+
+  /**
+   * Voice capture. Two things were wrong before and both made the assistant
+   * feel broken in the room:
+   *
+   *  1. `continuous` was false, so the browser ended the session at the first
+   *     natural pause and the sentence was cut in half.
+   *  2. The first final result submitted immediately, so a customer drawing
+   *     breath mid-sentence had their half-sentence sent.
+   *
+   * Now the recogniser runs continuously and a silence timer decides when the
+   * customer has actually finished. Any new speech cancels the pending submit.
+   */
+  const clearSilenceTimer = () => {
+    if (silenceTimerRef.current) { window.clearTimeout(silenceTimerRef.current); silenceTimerRef.current = null; }
+  };
+
+  const stopVoice = (submit: boolean) => {
+    clearSilenceTimer();
+    stopLevelMeter();
+    const recognition = recognitionRef.current;
+    recognitionRef.current = null;
+    manualStopRef.current = true;
+    try { recognition?.stop(); } catch { try { recognition?.abort(); } catch { /* already stopped */ } }
+    const draft = voiceDraftRef.current.trim();
+    if (submit && draft && !voiceParsedRef.current) {
+      voiceParsedRef.current = true;
+      void parseVoiceText(draft);
+    } else if (!submit) {
+      voiceDraftRef.current = "";
+      setVoiceState("idle");
+    }
+  };
+
+  /** Live microphone level, so the customer can see they are being heard. */
+  const startLevelMeter = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+      const AudioContextCtor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextCtor) return;
+      const audioContext = new AudioContextCtor();
+      audioContextRef.current = audioContext;
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 512;
+      audioContext.createMediaStreamSource(stream).connect(analyser);
+      const samples = new Uint8Array(analyser.frequencyBinCount);
+      const tick = () => {
+        analyser.getByteTimeDomainData(samples);
+        let sum = 0;
+        for (const sample of samples) { const centred = (sample - 128) / 128; sum += centred * centred; }
+        setVoiceLevel(Math.min(1, Math.sqrt(sum / samples.length) * 4));
+        levelFrameRef.current = window.requestAnimationFrame(tick);
+      };
+      tick();
+    } catch { /* the level meter is a nicety; recognition still works without it */ }
+  };
+
+  const stopLevelMeter = () => {
+    if (levelFrameRef.current) { window.cancelAnimationFrame(levelFrameRef.current); levelFrameRef.current = null; }
+    mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
+    mediaStreamRef.current = null;
+    void audioContextRef.current?.close().catch(() => undefined);
+    audioContextRef.current = null;
+    setVoiceLevel(0);
+  };
+
   const startVoice = async () => {
-    if (voiceState === "listening" || voiceState === "processing") return;
+    if (voiceState === "listening") { stopVoice(true); return; }
+    if (voiceState === "processing") return;
+    cancelSpeech();
     storage.track({ name: "voice_assistant_started" });
     const scope = window as unknown as { SpeechRecognition?: new () => SpeechRecognitionLike; webkitSpeechRecognition?: new () => SpeechRecognitionLike };
     const Recognition = scope.SpeechRecognition ?? scope.webkitSpeechRecognition;
-    if (!Recognition) { setVoiceState("error"); setMessages((current) => [...current, { role: "advisor", text: "Speech recognition is not supported in this browser. Type the command below instead." }]); return; }
+    if (!Recognition) {
+      setVoiceState("error");
+      setMessages((current) => [...current, { role: "advisor", text: "Speech recognition is not supported in this browser. Type the command below instead." }]);
+      return;
+    }
     const recognition = new Recognition();
     recognitionRef.current = recognition;
     voiceDraftRef.current = "";
     voiceParsedRef.current = false;
+    manualStopRef.current = false;
     setInput("");
-    recognition.lang = navigator.language || "en-US";
+    recognition.lang = voiceLang;
     recognition.interimResults = true;
-    recognition.continuous = false;
+    // Keep the microphone open across natural pauses; the silence timer below
+    // is what decides the customer has finished, not the browser.
+    recognition.continuous = true;
+
     recognition.onresult = (event) => {
       let finalTranscript = "";
       let interimTranscript = "";
@@ -630,15 +900,29 @@ export function MusterringAdvisor() {
         voiceDraftRef.current = visibleTranscript;
         setInput(visibleTranscript);
       }
-      const completed = finalTranscript.replace(/\s+/g, " ").trim();
-      if (completed && !voiceParsedRef.current) {
-        voiceParsedRef.current = true;
-        void parseVoiceText(completed);
-      }
+      // Still talking: push the submit back. Only a genuine pause sends.
+      clearSilenceTimer();
+      silenceTimerRef.current = window.setTimeout(() => stopVoice(true), VOICE_SILENCE_MS);
     };
-    recognition.onerror = (event) => { setVoiceState(event.error === "not-allowed" ? "denied" : "error"); storage.track({ name: "voice_command_failed" }); };
+
+    recognition.onerror = (event) => {
+      // A pause long enough to trip "no-speech" is not a failure worth showing;
+      // the silence timer already handles the end of a sentence.
+      if (event.error === "no-speech" || event.error === "aborted") return;
+      clearSilenceTimer();
+      stopLevelMeter();
+      setVoiceState(event.error === "not-allowed" ? "denied" : "error");
+      storage.track({ name: "voice_command_failed" });
+    };
+
     recognition.onend = () => {
-      if (recognitionRef.current === recognition) recognitionRef.current = null;
+      if (recognitionRef.current !== recognition) return;
+      // Chrome ends the session on its own after a long silence. If the
+      // customer said something, treat that as the end of their turn.
+      recognitionRef.current = null;
+      clearSilenceTimer();
+      stopLevelMeter();
+      if (manualStopRef.current) return;
       const draft = voiceDraftRef.current.trim();
       if (draft && !voiceParsedRef.current) {
         voiceParsedRef.current = true;
@@ -647,17 +931,24 @@ export function MusterringAdvisor() {
       }
       setVoiceState((current) => current === "listening" ? "idle" : current);
     };
-    setVoiceState("listening"); recognition.start();
+
+    setVoiceState("listening");
+    recognition.start();
+    void startLevelMeter();
   };
+
   const voiceStatusText = voiceState === "denied"
     ? "Microphone permission denied. Use text input."
     : voiceState === "listening"
-      ? "Listening... the words you say appear in the message box."
+      ? "Listening — take your time, I'll wait for you to finish."
       : voiceState === "processing"
-        ? "Reading your voice command..."
+        ? "Reading your voice command…"
         : voiceState === "recognized"
           ? "Voice command recognized."
           : "Voice input failed. Try again or type your question.";
+  // What the assistant currently understands, shown as chips so the customer
+  // can see their brief being built instead of guessing what was heard.
+  const briefChips = [...messages].reverse().find((message) => message.answer?.briefSummary?.length)?.answer?.briefSummary ?? [];
   const normalizedLocation = dealerLocation.trim().toLocaleLowerCase();
   const dealerMatches = [...dealers].sort((left, right) => {
     const leftExact = normalizedLocation && `${left.city} ${left.postcode}`.toLocaleLowerCase().includes(normalizedLocation) ? 0 : 1;
@@ -665,21 +956,31 @@ export function MusterringAdvisor() {
     return leftExact - rightExact || left.distanceKm - right.distanceKm;
   }).slice(0, 3);
   if (!open) return <button className="assistant-dock" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><span>Ask</span><span className="assistant-mark-crop" aria-hidden="true"><Image className="assistant-launcher-logo" src="/brand/musterring-logo.svg" alt="" width={70} height={90} /></span></button>;
-  return <aside className="advisor-panel" role="dialog" aria-modal="true" aria-labelledby="advisor-title">
-    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><div className="advisor-header-actions"><button className="advisor-new-chat" aria-label="Start a new chat" onClick={() => setConfirmNewChat(true)}><MessageSquarePlus /><span>New chat</span></button><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></div></header>
+  return <aside className={`advisor-panel${wide ? " is-wide" : ""}`} data-modal={activeModal ?? undefined} role="dialog" aria-modal="true" aria-labelledby="advisor-title">
+    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><div className="advisor-header-actions"><button className="advisor-new-chat" aria-label="Start a new chat" onClick={() => setConfirmNewChat(true)}><MessageSquarePlus /><span>New chat</span></button><button className={`advisor-voice-toggle${voiceReplies ? " is-on" : ""}`} aria-label={voiceReplies ? "Turn off spoken replies" : "Turn on spoken replies"} aria-pressed={voiceReplies} onClick={() => setVoiceReplies((value) => !value)}>{voiceReplies ? <Volume2 /> : <VolumeX />}</button><button className="advisor-expand" aria-label={wide ? "Collapse the assistant panel" : "Expand the assistant panel"} aria-pressed={wide} onClick={() => setWide((value) => !value)}>{wide ? <Minimize2 /> : <Maximize2 />}</button><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></div></header>
       <ol className="advisor-journey" aria-label="Project journey">{journeySteps.map((step, index) => <li key={step} className={index + 1 < journeyStep ? "is-complete" : index + 1 === journeyStep ? "is-current" : ""}><span>{index + 1 < journeyStep ? <Check /> : index + 1}</span><small>{step}</small></li>)}</ol>
-      <div className="advisor-messages" aria-live="polite">
+      {briefChips.length ? <div className="advisor-brief-chips" aria-label="What I understand so far"><span>Your brief</span><ul>{briefChips.map((chip) => <li key={chip}>{chip}</li>)}</ul></div> : null}
+      <div className="advisor-messages" ref={messagesRef} aria-live="polite">
         {!messages.length ? <div className="advisor-welcome"><div className="advisor-welcome-copy"><div><span className="advisor-welcome-kicker">Your home, considered</span><h3>What are you working on?</h3><p>Products, rooms, materials, planning or service—I can help you find the next useful step.</p></div></div><div className="advisor-starters">{starters(pathname).map((question) => <button key={question} onClick={() => void ask(question)}>{question}<ArrowRight /></button>)}</div></div> : null}
         {messages.length ? <div className="advisor-conversation-prompts" aria-label="Suggested questions">{starters(pathname).slice(0, 3).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         {messages.map((message, index) => <article className={message.role} key={`${message.role}-${index}`}><div className="advisor-message-bubble">{message.role === "advisor" ? <span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span> : null}<div><small>{message.role === "customer" ? "You" : "Musterring Assistant"}</small><AdvisorReply message={message} />{message.uploadedImage ? <figure className="advisor-uploaded-image"><Image src={message.uploadedImage} alt={message.text.startsWith("My room photo") ? "Room photo uploaded by the customer" : "Product inspiration uploaded by the customer"} width={640} height={420} unoptimized /><figcaption>{message.text.startsWith("My room photo") ? "Your uploaded room" : "Your inspiration image"}</figcaption></figure> : null}</div></div>
+          {message.answer?.unmet?.length ? <section className="advisor-unmet" aria-label="Requirements the catalogue cannot meet"><h4>Why there is no exact match</h4><ul>{message.answer.unmet.map((entry) => <li key={entry.key}><strong>{entry.requested}</strong><span>{entry.closest}</span></li>)}</ul></section> : null}
+          {message.answer?.nearest?.length ? <section className="advisor-nearest" aria-label="Closest options, not matches"><h4>Closest in the catalogue — not a match</h4>{message.answer.nearest.map((entry) => { const product = products.find((candidate) => candidate.id === entry.productId); return product ? <article key={entry.productId}><Image src={productImages(product.id)[0]} alt="" width={96} height={72} /><div><strong>{product.modelCode}</strong><ul>{entry.gaps.map((gap) => <li key={gap}>{gap}</li>)}</ul><a href={`/furniture/${product.slug}`}>View details <ArrowRight size={13} /></a></div></article> : null; })}</section> : null}
+          {message.answer?.clarify ? <section className="advisor-clarify" aria-label="Question from the assistant"><p>{message.answer.clarify.question}</p><div>{message.answer.clarify.options.map((option) => <button type="button" key={option} onClick={() => void ask(option)}>{option}</button>)}</div></section> : null}
           {message.answer?.productIds.length ? <RecommendationSet productIds={message.answer.productIds} requestText={messages[index - 1]?.role === "customer" ? messages[index - 1].text : ""} visualMatches={message.visualMatches} savedProductIds={savedProductIds} pendingSaveProductId={pendingAction?.type === "SAVE_PRODUCT" ? String(pendingAction.parameters.productId ?? "") : ""} onSave={(productId) => propose({ type: "SAVE_PRODUCT", label: `Save ${products.find((product) => product.id === productId)?.modelCode ?? "this product"} to My Musterring`, parameters: { productId }, requiresConfirmation: true })} onSaveSelected={(productIds) => setPendingProjectProductIds(productIds)} onConfirmSave={() => pendingAction?.type === "SAVE_PRODUCT" && execute(pendingAction)} onCancelSave={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }} /> : null}
           {message.roomImage ? <div className="advisor-room-result"><Image src={message.roomImage} alt="AI-generated visualization of the customer's room" width={900} height={600} unoptimized /><span>Inspirational visualization · fit not confirmed</span><button type="button" onClick={() => setPendingRoomSave(true)}><Save /> Save room view</button></div> : null}
           {message.answer?.proposedAction && !["SAVE_PRODUCT", "OPEN_FIT_CHECK"].includes(message.answer.proposedAction.type) && message.answer.proposedAction.type !== "OPEN_FIT_CHECK" ? <button className="advisor-proposal" onClick={() => propose(message.answer!.proposedAction!)}>{message.answer.proposedAction.label}</button> : null}
           {message.answer?.suggestedQuestions.length && customerQuickReplies(message.answer.suggestedQuestions, message.answer.productIds).length ? <div className="advisor-followups">{customerQuickReplies(message.answer.suggestedQuestions, message.answer.productIds).map((question) => <button type="button" key={question} onClick={() => void ask(question)}>{question}</button>)}</div> : null}
         </article>)}
-        {pending && roomGenerationStatus === "idle" ? <p role="status">Consulting available Musterring product data…</p> : null}
+        {pending && roomGenerationStatus === "idle" ? <article className="advisor advisor-thinking" role="status" aria-label="The assistant is preparing an answer"><div className="advisor-message-bubble"><span className="advisor-message-icon" aria-hidden="true"><Sparkles /></span><div><small>Musterring Assistant</small><p><span className="advisor-thinking-dots" aria-hidden="true"><i /><i /><i /></span><span className="advisor-thinking-label">Consulting the validated catalogue…</span></p></div></div></article> : null}
         {roomGenerationStatus !== "idle" ? <section className={`advisor-generation-progress is-${roomGenerationStatus}`} role="progressbar" aria-label="Estimated room visualization progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={roomGenerationProgress}>{uploadedRoomPreview ? <figure className="advisor-generation-source"><Image src={uploadedRoomPreview} alt="Room photo currently being processed" width={240} height={160} unoptimized /><figcaption><strong>Your uploaded room</strong><span>Source photo being processed</span></figcaption></figure> : null}<div><span><Sparkles /> {roomGenerationProgress < 18 ? "Preparing your room" : roomGenerationProgress < 42 ? "Locking catalogue products" : roomGenerationProgress < 82 ? "Rendering your room visualization" : roomGenerationProgress < 100 ? "Finalizing lighting and product details" : "Room visualization ready"}</span><strong>{roomGenerationProgress}%</strong></div><div className="advisor-generation-track" aria-hidden="true"><span style={{ width: `${roomGenerationProgress}%` }} /></div><small>Estimated progress · generation usually takes 1–3 minutes. Keep this chat open.</small></section> : null}
-        {voiceState !== "idle" ? <p className={`voice-state is-${voiceState}`} role="status">Voice: {voiceStatusText}</p> : null}
+        {voiceState !== "idle" || speaking ? <section className={`advisor-voice-bar is-${speaking ? "speaking" : voiceState}`} role="status" aria-label="Voice status">
+          <span className="advisor-voice-orb" aria-hidden="true" style={{ ["--level" as string]: String(speaking ? 0.7 : voiceLevel) }}><i /><i /><i /><i /><i /></span>
+          <div><strong>{speaking ? "Speaking…" : voiceState === "listening" ? "Listening" : voiceState === "processing" ? "Thinking" : voiceState === "recognized" ? "Got it" : "Voice"}</strong><small>{speaking ? "Tap stop to interrupt me." : voiceStatusText}</small></div>
+          {speaking ? <button type="button" onClick={cancelSpeech}>Stop</button>
+            : voiceState === "listening" ? <><button type="button" onClick={() => stopVoice(false)}>Cancel</button><button type="button" className="is-primary" onClick={() => stopVoice(true)}>Send now</button></>
+              : null}
+        </section> : null}
         {attachmentError ? <p className="advisor-attachment-error" role="alert">{attachmentError}</p> : null}
         {journeyStep === 3 && !attachmentFile ? <button className="advisor-next-step" type="button" onClick={() => chooseAttachment("room")}><ImagePlus /><span><strong>Visualize the saved product</strong><small>Upload your room photo</small></span><ArrowRight /></button> : null}
         {journeyStep === 5 ? <section className="advisor-retailer-step"><div><MapPin /><span><strong>Find your nearest retailer</strong><small>Enter a city or postcode</small></span></div><input aria-label="City or postcode" value={dealerLocation} onChange={(event) => setDealerLocation(event.target.value)} placeholder="e.g. Hannover or 30159" />{normalizedLocation ? <div className="advisor-dealer-list">{dealerMatches.map((dealer) => <button type="button" key={dealer.id} onClick={() => setPendingDealerId(dealer.id)}><span><strong>{dealer.name}</strong><small>{dealer.city} · {dealer.distanceKm} km listed distance</small></span><ArrowRight /></button>)}</div> : null}</section> : null}
@@ -687,17 +988,17 @@ export function MusterringAdvisor() {
         {journeyStep >= 6 && showInlineHandover && handoverState !== "sent" ? <section className="advisor-inline-handover" aria-label="Complete retailer handover in chat"><div className="advisor-inline-handover-head"><span>Final handover</span><strong>Your contact details</strong><small>Review and explicitly confirm before anything is submitted.</small></div><div className="advisor-inline-handover-grid"><label>First name<input autoComplete="given-name" value={handoverFirstName} onChange={(event) => setHandoverFirstName(event.target.value)} /></label><label>Last name<input autoComplete="family-name" value={handoverLastName} onChange={(event) => setHandoverLastName(event.target.value)} /></label><label>Email<input type="email" autoComplete="email" value={handoverEmail} onChange={(event) => setHandoverEmail(event.target.value)} /></label><label>Phone<input type="tel" autoComplete="tel" value={handoverPhone} onChange={(event) => setHandoverPhone(event.target.value)} /></label></div><label>Message to retailer <small>Optional</small><textarea rows={3} value={handoverNotes} onChange={(event) => setHandoverNotes(event.target.value)} placeholder="Priorities, questions or access details" /></label><div className="advisor-inline-project-review"><span><strong>{storage.savedProducts().length}</strong> products</span><span><strong>{storage.roomScenes().length}</strong> room views</span><span><strong>{storage.fitReports().length}</strong> fit reports</span></div><label className="advisor-inline-consent"><input type="checkbox" checked={handoverConsent} onChange={(event) => setHandoverConsent(event.target.checked)} /><span>I confirm that my project and contact details may be transmitted to <strong>{dealers.find((dealer) => dealer.id === (storage.selectedDealer() ?? dealers[0].id))?.name}</strong>.</span></label>{handoverError ? <p className="advisor-attachment-error" role="alert">{handoverError}</p> : null}<button type="button" disabled={handoverState === "sending"} onClick={reviewInlineHandover}>{handoverState === "sending" ? "Preparing handover…" : "Review complete handover"}</button></section> : null}
         {handoverState === "sent" ? <section className="advisor-inline-handover-success"><Check /><div><strong>Handover confirmed</strong><small>Your complete project remains available inside My Musterring and the Dealer AI workspace.</small></div></section> : null}
       </div>
-      {confirmNewChat ? <section className="advisor-confirmation advisor-new-chat-confirmation" aria-label="Confirm new chat"><MessageSquarePlus /><div><h3>Start a new chat?</h3><p>This clears the current conversation and its context.</p></div><button onClick={startNewChat}>Start new chat</button><button onClick={() => setConfirmNewChat(false)}>Cancel</button></section> : null}
-      {!confirmNewChat && pendingAction && pendingAction.type !== "SAVE_PRODUCT" ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
-      {!confirmNewChat && !pendingAction && pendingProjectProductIds.length ? <section className="advisor-confirmation" aria-label="Confirm selected project products"><Save /><div><h3>Save selected products as a project?</h3><p>{pendingProjectProductIds.map((id) => products.find((product) => product.id === id)?.modelCode).filter(Boolean).join(", ")}</p><small>Only the products you selected will be added to My Musterring. Existing saved products will not be duplicated.</small></div><button onClick={confirmSelectedProjectProducts}>Confirm project save</button><button onClick={() => setPendingProjectProductIds([])}>Cancel</button></section> : null}
-      {!confirmNewChat && !pendingAction && !pendingProjectProductIds.length && pendingHandover ? <section className="advisor-confirmation" aria-label="Confirm complete retailer handover"><Check /><div><h3>Submit this complete handover?</h3><p>{handoverFirstName} {handoverLastName} · {handoverEmail}</p><small>This sends the confirmed contact details and saved project context to the selected retailer workflow. Price, availability, fit and final appointment time remain retailer decisions.</small></div><button disabled={handoverState === "sending"} onClick={() => void submitInlineHandover()}>{handoverState === "sending" ? "Submitting…" : "Confirm & submit"}</button><button disabled={handoverState === "sending"} onClick={() => setPendingHandover(false)}>Back</button></section> : null}
-      {!confirmNewChat && !pendingAction && attachmentPending ? <section className="advisor-confirmation advisor-photo-confirmation" aria-label="Confirm photo processing"><ImagePlus /><div><h3>{attachmentPurpose === "reference" ? "Analyze this inspiration image?" : "Generate a room visualization?"}</h3><p>{attachmentFile?.name}</p><small>{attachmentPurpose === "reference" ? "The image will be processed temporarily to find grounded catalogue similarities." : "The room photo and saved catalogue references will be sent to OpenAI. The result is inspirational and does not confirm fit."}</small></div>{attachmentPreview ? <Image src={attachmentPreview} alt="Selected upload preview" width={420} height={180} unoptimized /> : null}<button onClick={() => void analyzeAttachment()}>{attachmentPurpose === "reference" ? "Analyze image" : "Generate room"}</button><button onClick={() => { setAttachmentPending(false); setAttachmentFile(null); }}>Cancel</button></section> : null}
-      {!confirmNewChat && !pendingAction && !attachmentPending && pendingRoomSave ? <section className="advisor-confirmation" aria-label="Confirm saving room view"><Save /><div><h3>Save this room view?</h3><p>It will be added to My Musterring and included in the retailer handover.</p><small>The visualization remains inspirational and is not a fit result.</small></div><button onClick={() => void saveGeneratedRoom()}>Save room view</button><button onClick={() => setPendingRoomSave(false)}>Cancel</button></section> : null}
-      {!confirmNewChat && !pendingAction && !attachmentPending && !pendingRoomSave && pendingDealerId ? <section className="advisor-confirmation" aria-label="Confirm retailer selection"><MapPin /><div><h3>Select this retailer?</h3><p>{dealers.find((dealer) => dealer.id === pendingDealerId)?.name}</p><small>This changes the retailer attached to your project; nothing is submitted yet.</small></div><button onClick={confirmDealer}>Confirm retailer</button><button onClick={() => setPendingDealerId("")}>Cancel</button></section> : null}
-      {!confirmNewChat && !pendingAction && !attachmentPending && !pendingRoomSave && !pendingDealerId && pendingAppointment ? <section className="advisor-confirmation" aria-label="Confirm appointment preference"><CalendarDays /><div><h3>Save appointment preference?</h3><p>{appointmentMode} · {appointmentDate || "Date to confirm"} · {appointmentTime}</p><small>The selected retailer must confirm the final time. No request is submitted here.</small></div><button onClick={confirmAppointment}>Save preference</button><button onClick={() => setPendingAppointment(false)}>Cancel</button></section> : null}
+      {activeModal === "newChat" ? <section className="advisor-confirmation advisor-new-chat-confirmation" aria-label="Confirm new chat"><MessageSquarePlus /><div><h3>Start a new chat?</h3><p>This clears the current conversation and its context.</p></div><button onClick={startNewChat}>Start new chat</button><button onClick={() => setConfirmNewChat(false)}>Cancel</button></section> : null}
+      {activeModal === "action" && pendingAction ? <section className="advisor-confirmation" aria-label="Confirmation required"><Check /><div><h3>Confirmation required</h3><p>{pendingAction.label}</p><small>The application will validate and execute this action. No retailer request is submitted here.</small></div><button onClick={() => execute(pendingAction)}>Confirm</button><button onClick={() => { setPendingAction(null); storage.track({ name: "chatbot_action_cancelled" }); }}>Cancel</button></section> : null}
+      {activeModal === "projectSave" ? <section className="advisor-confirmation" aria-label="Confirm selected project products"><Save /><div><h3>Save selected products as a project?</h3><p>{pendingProjectProductIds.map((id) => products.find((product) => product.id === id)?.modelCode).filter(Boolean).join(", ")}</p><small>Only the products you selected will be added to My Musterring. Existing saved products will not be duplicated.</small></div><button onClick={confirmSelectedProjectProducts}>Confirm project save</button><button onClick={() => setPendingProjectProductIds([])}>Cancel</button></section> : null}
+      {activeModal === "handover" ? <section className="advisor-confirmation" aria-label="Confirm complete retailer handover"><Check /><div><h3>Submit this complete handover?</h3><p>{handoverFirstName} {handoverLastName} · {handoverEmail}</p><small>This sends the confirmed contact details and saved project context to the selected retailer workflow. Price, availability, fit and final appointment time remain retailer decisions.</small></div><button disabled={handoverState === "sending"} onClick={() => void submitInlineHandover()}>{handoverState === "sending" ? "Submitting…" : "Confirm & submit"}</button><button disabled={handoverState === "sending"} onClick={() => setPendingHandover(false)}>Back</button></section> : null}
+      {activeModal === "attachment" ? <section className="advisor-confirmation advisor-photo-confirmation" aria-label="Confirm photo processing"><ImagePlus /><div><h3>{attachmentPurpose === "reference" ? "Analyze this inspiration image?" : "Generate a room visualization?"}</h3><p>{attachmentFile?.name}</p><small>{attachmentPurpose === "reference" ? "The image will be processed temporarily to find grounded catalogue similarities." : "The room photo and saved catalogue references will be sent to OpenAI. The result is inspirational and does not confirm fit."}</small></div>{attachmentPreview ? <Image src={attachmentPreview} alt="Selected upload preview" width={420} height={180} unoptimized /> : null}<button onClick={() => void analyzeAttachment()}>{attachmentPurpose === "reference" ? "Analyze image" : "Generate room"}</button><button onClick={() => { setAttachmentPending(false); setAttachmentFile(null); }}>Cancel</button></section> : null}
+      {activeModal === "roomSave" ? <section className="advisor-confirmation" aria-label="Confirm saving room view"><Save /><div><h3>Save this room view?</h3><p>It will be added to My Musterring and included in the retailer handover.</p><small>The visualization remains inspirational and is not a fit result.</small></div><button onClick={() => void saveGeneratedRoom()}>Save room view</button><button onClick={() => setPendingRoomSave(false)}>Cancel</button></section> : null}
+      {activeModal === "dealer" ? <section className="advisor-confirmation" aria-label="Confirm retailer selection"><MapPin /><div><h3>Select this retailer?</h3><p>{dealers.find((dealer) => dealer.id === pendingDealerId)?.name}</p><small>This changes the retailer attached to your project; nothing is submitted yet.</small></div><button onClick={confirmDealer}>Confirm retailer</button><button onClick={() => setPendingDealerId("")}>Cancel</button></section> : null}
+      {activeModal === "appointment" ? <section className="advisor-confirmation" aria-label="Confirm appointment preference"><CalendarDays /><div><h3>Save appointment preference?</h3><p>{appointmentMode} · {appointmentDate || "Date to confirm"} · {appointmentTime}</p><small>The selected retailer must confirm the final time. No request is submitted here.</small></div><button onClick={confirmAppointment}>Save preference</button><button onClick={() => setPendingAppointment(false)}>Cancel</button></section> : null}
       {attachmentMenu ? <div className="advisor-attachment-menu"><button type="button" onClick={() => chooseAttachment("reference")}><Paperclip /><span><strong>Find similar products</strong><small>Furniture photo or screenshot</small></span></button><button type="button" onClick={() => chooseAttachment("room")}><ImagePlus /><span><strong>Visualize my room</strong><small>Uses products saved to your project</small></span></button></div> : null}
       <input ref={fileInputRef} hidden type="file" accept="image/png,image/jpeg,image/webp" onClick={(event) => { event.currentTarget.value = ""; }} onChange={(event) => void selectAttachment(event.target.files?.[0])} />
-      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><button type="button" aria-label="Add an image or screenshot" aria-expanded={attachmentMenu} onClick={() => setAttachmentMenu((value) => !value)}><Upload /></button><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder={voiceState === "listening" ? "Listening... your speech appears here" : "Describe your room, product or project…"} /><button type="button" aria-label="Use microphone" aria-pressed={voiceState === "listening"} disabled={voiceState === "processing"} onClick={() => void startVoice()}><Mic /></button><button type="submit" aria-label="Send question" disabled={pending || voiceState === "processing"}><Send /></button></form>
+      <form className="advisor-input" onSubmit={(event) => { event.preventDefault(); void ask(); }}><button type="button" aria-label="Add an image or screenshot" aria-expanded={attachmentMenu} onClick={() => setAttachmentMenu((value) => !value)}><Upload /></button><textarea ref={inputRef} aria-label="Ask Musterring about products and your project" value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); void ask(); } }} placeholder={voiceState === "listening" ? "Listening... your speech appears here" : "Describe your room, product or project…"} /><button type="button" className={voiceState === "listening" ? "advisor-mic is-listening" : "advisor-mic"} aria-label={voiceState === "listening" ? "Stop listening and send" : "Speak to the assistant"} aria-pressed={voiceState === "listening"} disabled={voiceState === "processing"} onClick={() => void startVoice()}>{voiceState === "listening" ? <Square /> : <Mic />}</button><button type="submit" aria-label="Send question" disabled={pending || voiceState === "processing"}><Send /></button></form>
   </aside>;
 }
 
@@ -776,7 +1077,16 @@ function isStoredMessage(value: unknown): value is Message {
 
 function restoreStoredMessage(value: unknown): Message | null {
   if (!isStoredMessage(value)) return null;
-  if (value.answer || value.role !== "advisor") return value;
+
+  // A conversation stored before a field was added to advisorAnswerSchema has
+  // no value for it. Re-parsing (rather than only validating) applies the
+  // schema defaults, so an older session cannot reach the render with
+  // `briefSummary`, `unmet` or `nearest` missing.
+  if (value.answer) {
+    const parsed = advisorAnswerSchema.safeParse(value.answer);
+    return parsed.success ? { ...value, answer: parsed.data } : { ...value, answer: undefined };
+  }
+  if (value.role !== "advisor") return value;
 
   // Conversations saved before structured answer persistence contain only the
   // visible paragraph. Reconnect model codes from that paragraph to active,
@@ -790,7 +1100,7 @@ function restoreStoredMessage(value: unknown): Message | null {
 
   return {
     ...value,
-    answer: {
+    answer: advisorAnswerSchema.parse({
       answer: value.text,
       answerType: "products",
       productIds,
@@ -798,6 +1108,6 @@ function restoreStoredMessage(value: unknown): Message | null {
       sources: [],
       proposedAction: null,
       suggestedQuestions: []
-    }
+    })
   };
 }
