@@ -12,12 +12,13 @@ import { calculateRecommendedRoomSize } from "@/lib/ai/room-size";
 import type { RoomAnalysis } from "@/lib/ai/schemas";
 import type { Product, Project, SavedRoomScene } from "@/lib/types";
 
-type ComposerCategory = "all" | "seating" | "armchair" | "storage" | "wardrobe" | "tables" | "bedroom";
+type ComposerCategory = "all" | "seating" | "armchair" | "storage" | "wardrobe" | "tables" | "carpets" | "bedroom";
 const uploadComposerCategories: { id: ComposerCategory; label: string }[] = [
   { id: "all", label: "All" },
   { id: "seating", label: "Seating" },
   { id: "armchair", label: "Armchairs" },
   { id: "tables", label: "Tables" },
+  { id: "carpets", label: "Carpets" },
   { id: "storage", label: "Storage" },
   { id: "wardrobe", label: "Wardrobes" },
   { id: "bedroom", label: "Bedroom" }
@@ -282,9 +283,10 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     if (category === "storage") return ["storage", "wardrobe", "bedroom-series"].includes(productCategory);
     if (category === "wardrobe") return productCategory === "wardrobe";
     if (category === "bedroom") return ["bed", "bedroom-series", "wardrobe", "home-textile"].includes(productCategory);
+    if (category === "carpets") return productCategory === "carpet";
     return ["coffee-table", "dining-table", "small-furniture"].includes(productCategory);
   };
-  const catalogCategoryOrder = ["sofa", "sectional", "armchair", "coffee-table", "dining-table", "small-furniture", "storage", "wardrobe", "bed", "bedroom-series", "home-textile"];
+  const catalogCategoryOrder = ["sofa", "sectional", "armchair", "coffee-table", "dining-table", "small-furniture", "carpet", "storage", "wardrobe", "bed", "bedroom-series", "home-textile"];
   const catalog = activeProducts.filter((product) => categoryMatches(product.category)
     && (upload || generatedCutoutSlugs.has(product.slug))
     && `${product.modelCode} ${product.name} ${product.subtitle}`.toLowerCase().includes(productQuery.toLowerCase()))
@@ -448,7 +450,8 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
     const finish = composerFinishes[product.slug]?.[0];
     setItems((current) => {
       const topLayer = Math.max(0, ...current.map((item) => item.zIndex ?? 0)) + 1;
-      return [...current, { id, productId, x: 44 + ((current.length * 8) % 24), y: 86, rotation: 0, scale: 1, materialId: finish?.materialId ?? product.materials[0], color: finish?.color ?? product.colors[0], zIndex: topLayer }];
+      const isCarpet = product.category === "carpet";
+      return [...current, { id, productId, x: isCarpet ? 50 : 44 + ((current.length * 8) % 24), y: isCarpet ? 80 : 86, rotation: 0, scale: isCarpet ? 1.25 : 1, materialId: finish?.materialId ?? product.materials[0], color: finish?.color ?? product.colors[0], zIndex: isCarpet ? 0 : topLayer }];
     });
     setSelectedId(id);
     setShowBefore(false);
@@ -942,14 +945,17 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 const hasVerifiedDimensions = verifiedComposerSlugs.has(product.slug);
                 const orientation = ((item.rotation % 360) + 360) % 360;
                 const isSideOrientation = orientation === 90 || orientation === 270;
-                const relativeWidth = hasVerifiedDimensions
+                const isCarpet = product.category === "carpet";
+                const relativeWidth = isCarpet
+                  ? 58 * item.scale * sceneScale
+                  : hasVerifiedDimensions
                   ? ((isSideOrientation ? product.depthMm : product.widthMm) / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale
                   : (["sofa", "sectional"].includes(product.category) ? 42 : 22) * sceneScale;
                 return (
                   <button
                     key={item.id}
-                    className={`stitch-composer-item has-physical-aspect ${["sofa", "sectional"].includes(product.category) ? "is-sofa" : ""} ${selectedId === item.id ? "is-selected" : ""} ${isCutoutImage ? "is-cutout" : "is-scene-crop"}`}
-                    style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio: hasVerifiedDimensions ? `${isSideOrientation ? product.depthMm : product.widthMm} / ${product.heightMm}` : (["sofa", "sectional"].includes(product.category) ? "16 / 7" : "1 / 1"), zIndex: item.zIndex, transform: "translate(-50%, -100%)" }}
+                    className={`stitch-composer-item has-physical-aspect ${["sofa", "sectional"].includes(product.category) ? "is-sofa" : ""} ${isCarpet ? "is-carpet" : ""} ${selectedId === item.id ? "is-selected" : ""} ${isCutoutImage ? "is-cutout" : "is-scene-crop"}`}
+                    style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio: isCarpet ? "16 / 9" : hasVerifiedDimensions ? `${isSideOrientation ? product.depthMm : product.widthMm} / ${product.heightMm}` : (["sofa", "sectional"].includes(product.category) ? "16 / 7" : "1 / 1"), zIndex: item.zIndex, transform: isCarpet ? "translate(-50%, -50%)" : "translate(-50%, -100%)" }}
                     onPointerDown={(event) => {
                       pushHistory();
                       setSelectedId(item.id);
