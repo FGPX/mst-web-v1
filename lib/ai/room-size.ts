@@ -31,24 +31,51 @@ export type RoomSizeCalculation = {
 
 const roundUpTo100 = (value: number) => Math.ceil(value / 100) * 100;
 
+// Composer positions are percentages, not measurements. Convert them on a
+// stable planning canvas so changing the entered room only changes the fit
+// comparison—it must never inflate the dimensions the arrangement requires.
+const PLANNING_CANVAS_WIDTH_MM = 5000;
+const PLANNING_CANVAS_LENGTH_MM = 4000;
+
+const excludedPlanningCategories = new Set([
+  "armchair",
+  "coffee-table",
+  "dining-table",
+  "small-furniture",
+  "carpet"
+]);
+
 export function calculateRecommendedRoomSize(
   items: RoomSizeSceneItem[],
   selectedProducts: Product[],
-  referenceRoom: { widthMm: number; lengthMm: number },
+  _referenceRoom: { widthMm: number; lengthMm: number },
   circulationClearanceMm = 900
 ): RoomSizeCalculation {
   const byId = new Map(selectedProducts.map((product) => [product.id, product]));
-  const footprints = items.map((item) => {
+  const footprints = items.flatMap((item) => {
     const product = byId.get(item.productId);
     if (!product || !product.widthMm || !product.depthMm || !product.heightMm) throw new Error("Local dimensions are required for every selected product.");
+    if (excludedPlanningCategories.has(product.category)) return [];
     const radians = (((item.rotation % 360) + 360) % 360) * Math.PI / 180;
     const width = Math.abs(product.widthMm * Math.cos(radians)) + Math.abs(product.depthMm * Math.sin(radians));
     const depth = Math.abs(product.widthMm * Math.sin(radians)) + Math.abs(product.depthMm * Math.cos(radians));
-    const centerX = Math.max(0, Math.min(100, item.x)) / 100 * referenceRoom.widthMm;
-    const centerY = Math.max(0, Math.min(100, item.y)) / 100 * referenceRoom.lengthMm;
-    return { item, product, width, depth, centerX, centerY };
+    const centerX = Math.max(0, Math.min(100, item.x)) / 100 * PLANNING_CANVAS_WIDTH_MM;
+    const centerY = Math.max(0, Math.min(100, item.y)) / 100 * PLANNING_CANVAS_LENGTH_MM;
+    return [{ item, product, width, depth, centerX, centerY }];
   });
-  if (!footprints.length) throw new Error("At least one product is required.");
+  if (!footprints.length) {
+    return {
+      minimumWidthMm: 0,
+      minimumLengthMm: 0,
+      recommendedWidthMm: 0,
+      recommendedLengthMm: 0,
+      furnitureSpanWidthMm: 0,
+      furnitureSpanLengthMm: 0,
+      circulationClearanceMm,
+      arrangement: "current-layout",
+      products: []
+    };
+  }
 
   const minX = Math.min(...footprints.map((entry) => entry.centerX - entry.width / 2));
   const maxX = Math.max(...footprints.map((entry) => entry.centerX + entry.width / 2));

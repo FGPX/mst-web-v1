@@ -9,7 +9,10 @@ const generatedSceneSlugs = new Set(["mr-alena", "mr-lia", "mr-2665", "mr-4100",
 // those choices explicit: a multi-product room scene is an ambiguous image
 // generation reference and can cause the model to redesign the selected item.
 const preferredCatalogueReferences: Record<string, string> = {
-  nela: "/musterring-catalog/nela/image-02.jpg"
+  nela: "/musterring-catalog/nela/image-02.jpg",
+  "justb-carpets": "/musterring-catalog/justb-carpets/image-06.jpg",
+  "deluxe-collection": "/musterring-catalog/deluxe-collection/image-06.jpg",
+  "mr-bergen": "/musterring-catalog/mr-bergen/image-06.jpg"
 };
 
 const savedFinishes: Record<string, Array<{ materialId: string; color: string; image: string }>> = {
