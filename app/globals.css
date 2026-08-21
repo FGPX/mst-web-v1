@@ -2268,8 +2268,19 @@
 .stitch-room-dimensions-before-generation__prompt { color: #8a5b3d; }
 @media (max-width: 700px) { .stitch-room-dimensions-before-generation { padding: 17px; } .stitch-room-dimensions-before-generation__inputs, .stitch-room-dimensions-products__list { grid-template-columns: 1fr; } .stitch-room-dimensions-before-generation__result-heading { align-items: flex-start; flex-direction: column; } }
 
-.stitch-composer-item.is-carpet { border-radius: 2px; overflow: hidden; box-shadow: 0 10px 22px rgba(48, 40, 32, .18); }
-.stitch-composer-item.is-carpet img { filter: saturate(.9) contrast(.96); }
+.stitch-composer-item.is-carpet,
+.stitch-composer-item.is-isolated-product {
+  border-radius: 2px;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+.stitch-composer-item.is-carpet img,
+.stitch-composer-item.is-isolated-product img {
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.stitch-composer-item.is-carpet img { filter: saturate(.94) contrast(1.02); }
 
 /* The real-room upload is intentionally a smaller flow than the full planner. */
 .stitch-room-composer.is-upload-flow .stitch-composer-intro {

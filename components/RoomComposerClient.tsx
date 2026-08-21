@@ -370,10 +370,17 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
   }), [items, roomPhoto, roomSize, sceneScale]);
   const generatedIsCurrent = Boolean(generatedVisualization && generatedForSignature === sceneSignature);
   const displayGenerated = generatedIsCurrent && showGenerated && !showBefore;
+  const preferredComposerImages: Record<string, string> = {
+    "nela": "/musterring-catalog/nela/image-02.jpg",
+    "justb-carpets": "/musterring-catalog/justb-carpets/image-06.jpg",
+    "deluxe-collection": "/musterring-catalog/deluxe-collection/image-06.jpg",
+    "mr-bergen": "/musterring-catalog/mr-bergen/image-06.jpg"
+  };
   const composerImage = (productId: string) => {
     const product = activeProducts.find((item) => item.id === productId);
     if (product && physicalFrontSlugs.has(product.slug)) return `/generated-product-views/${product.slug}/physical-front.png?v=1`;
     if (product && generatedCutoutSlugs.has(product.slug)) return `/generated-product-views/${product.slug}/official-front.png?v=4`;
+    if (product && preferredComposerImages[product.slug]) return preferredComposerImages[product.slug];
     const images = productImages(productId);
     return images.find((image) => image.toLowerCase().endsWith(".png")) ?? images[0];
   };
@@ -946,15 +953,16 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 const orientation = ((item.rotation % 360) + 360) % 360;
                 const isSideOrientation = orientation === 90 || orientation === 270;
                 const isCarpet = product.category === "carpet";
+                const isIsolatedCatalogueObject = isCarpet || product.slug === "nela";
                 const relativeWidth = isCarpet
-                  ? 58 * item.scale * sceneScale
+                  ? 24 * item.scale * sceneScale
                   : hasVerifiedDimensions
                   ? ((isSideOrientation ? product.depthMm : product.widthMm) / Math.max(roomSize.widthMm, 1)) * 100 * sceneScale
-                  : (["sofa", "sectional"].includes(product.category) ? 42 : 22) * sceneScale;
+                  : (["sofa", "sectional"].includes(product.category) ? 42 : product.slug === "nela" ? 14 : 22) * sceneScale;
                 return (
                   <button
                     key={item.id}
-                    className={`stitch-composer-item has-physical-aspect ${["sofa", "sectional"].includes(product.category) ? "is-sofa" : ""} ${isCarpet ? "is-carpet" : ""} ${selectedId === item.id ? "is-selected" : ""} ${isCutoutImage ? "is-cutout" : "is-scene-crop"}`}
+                    className={`stitch-composer-item has-physical-aspect ${["sofa", "sectional"].includes(product.category) ? "is-sofa" : ""} ${isCarpet ? "is-carpet" : ""} ${product.slug === "nela" ? "is-isolated-product" : ""} ${selectedId === item.id ? "is-selected" : ""} ${isCutoutImage ? "is-cutout" : isIsolatedCatalogueObject ? "is-isolated-catalogue-object" : "is-scene-crop"}`}
                     style={{ left: `${item.x}%`, top: `${item.y}%`, width: `${relativeWidth}%`, aspectRatio: isCarpet ? "16 / 9" : hasVerifiedDimensions ? `${isSideOrientation ? product.depthMm : product.widthMm} / ${product.heightMm}` : (["sofa", "sectional"].includes(product.category) ? "16 / 7" : "1 / 1"), zIndex: item.zIndex, transform: isCarpet ? "translate(-50%, -50%)" : "translate(-50%, -100%)" }}
                     onPointerDown={(event) => {
                       pushHistory();
@@ -965,7 +973,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                     onPointerMove={(event) => move(event, item)}
                     onPointerUp={() => setDragging(null)}
                   >
-                    {generatedTurntable ? <Image className="stitch-composer-turntable" src={generatedTurntable} alt={`${product.name}, ${product.slug === "justb-pm100" && [1, 3].includes(item.viewIndex ?? 0) ? "illustrative side view" : "catalogue view"}`} width={520} height={360} draggable={false} style={{ objectFit: "contain" }} /> : <Image src={itemImage} alt={`${product.name}, catalogue view`} width={420} height={240} draggable={false} style={{ objectFit: isCutoutImage ? "contain" : "cover" }} />}
+                    {generatedTurntable ? <Image className="stitch-composer-turntable" src={generatedTurntable} alt={`${product.name}, ${product.slug === "justb-pm100" && [1, 3].includes(item.viewIndex ?? 0) ? "illustrative side view" : "catalogue view"}`} width={520} height={360} draggable={false} style={{ objectFit: "contain" }} /> : <Image src={itemImage} alt={`${product.name}, catalogue view`} width={420} height={240} draggable={false} style={{ objectFit: isCarpet || product.slug === "nela" || isCutoutImage ? "contain" : "cover" }} />}
                   </button>
                 );
               }) : null}
@@ -1149,7 +1157,7 @@ export function RoomComposerClient({ upload = false, openPresentationScene = fal
                 <section className="stitch-room-dimensions-products" aria-labelledby="pre-generation-product-dimensions">
                   <div className="stitch-room-dimensions-products__heading"><div><small>Calculation inputs</small><strong id="pre-generation-product-dimensions">Product dimensions used</strong></div><span>{preGenerationRoomPlan.products.length} {preGenerationRoomPlan.products.length === 1 ? "item" : "items"}</span></div>
                   <div className="stitch-room-dimensions-products__list">{preGenerationRoomPlan.products.map((product, index) => {
-                    const sceneItem = items[index];
+                    const sceneItem = items.find((item) => item.productId === product.productId);
                     const rotation = normalizedQuarterRotation(sceneItem?.rotation ?? 0);
                     const footprint = rotatedFootprint(product.widthMm, product.depthMm, rotation);
                     return <article key={`${product.productId}-${index}`}>
