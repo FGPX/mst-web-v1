@@ -39,7 +39,7 @@ function starters(pathname: string) {
   if (pathname.includes("room-composer")) return ["Add matching products", "Improve walking space", "Create a warmer style", "Prepare this room for a retailer"];
   if (pathname.includes("my-musterring")) return ["What is missing from my project?", "Summarize my decisions", "Suggest my next step", "Prepare this project for a retailer"];
   if (pathname.includes("/furniture/")) return ["Find a smaller alternative", "Explain the configuration options", "Which material is best for a family?", "Add this to my project"];
-  return ["Help me find the right sofa", "Open Room Visualizer", "Choose a material", "Find a retailer"];
+  return ["Help me find the right sofa", "Plan a room", "Choose a material", "Find a retailer"];
 }
 
 function productFromPath(pathname: string) {
@@ -319,12 +319,8 @@ export function MusterringAdvisor() {
     const fresh = messages.slice(spokenCountRef.current);
     spokenCountRef.current = messages.length;
     const latest = [...fresh].reverse().find((message) => message.role === "advisor");
-    if (latest) speak(spokenSummary(latest));
+    if (latest) void speak(spokenSummary(latest));
   }, [messages, voiceReplies]);
-
-  useEffect(() => {
-    if (!voiceReplies) cancelSpeech();
-  }, [voiceReplies]);
 
   // Match the recogniser and the speaking voice to the page language once, and
   // let the customer override it — a German speaker on an English browser was
@@ -337,6 +333,7 @@ export function MusterringAdvisor() {
   useEffect(() => () => {
     if (silenceTimerRef.current) window.clearTimeout(silenceTimerRef.current);
     if (levelFrameRef.current) window.cancelAnimationFrame(levelFrameRef.current);
+    if (keepAliveRef.current) window.clearInterval(keepAliveRef.current);
     mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
     if (typeof window !== "undefined") window.speechSynthesis?.cancel();
   }, []);
@@ -427,7 +424,7 @@ export function MusterringAdvisor() {
     if (action.type === "COMPARE_PRODUCTS") return `/compare?ids=${(values.productIds as string[] ?? []).join(",")}`;
     if (action.type === "OPEN_PRODUCT") return `/furniture/${String(values.slug ?? "")}`;
     if (action.type === "CONFIGURE_PRODUCT") return "/handover";
-    if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer/upload";
+    if (action.type === "OPEN_ROOM_COMPOSER") return "/room-composer";
     if (action.type === "OPEN_FIT_CHECK") return "";
     if (action.type === "FIND_RETAILER") return "/dealers";
     if (action.type === "PREPARE_HANDOVER" || action.type === "BOOK_CONSULTATION") return "/handover";
@@ -752,48 +749,225 @@ export function MusterringAdvisor() {
    * customer talked and read the reply, which is not a conversation. In a
    * showroom, on a tablet, being answered out loud is the whole point.
    */
+  /**
+   * Chrome's speechSynthesis has three well-known failure modes, and the first
+   * implementation hit all of them — which is why nothing was audible:
+   *
+   *  1. `cancel()` is asynchronous internally. Calling `speak()` on the same
+   *     tick makes Chrome silently drop the new utterance.
+   *  2. An utterance that nothing references can be garbage-collected while it
+   *     is still queued, so speech never starts or cuts off mid-sentence.
+   *  3. `getVoices()` returns an empty list until the engine has loaded, and a
+   *     `lang` with no matching voice yields silence rather than a fallback.
+   *
+   * Everything below exists to work around one of those.
+   */
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const keepAliveRef = useRef<number | null>(null);
+
+  const stopKeepAlive = () => {
+    if (keepAliveRef.current) { window.clearInterval(keepAliveRef.current); keepAliveRef.current = null; }
+  };
+
   const cancelSpeech = () => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
+    stopKeepAlive();
+    utteranceRef.current = null;
     window.speechSynthesis.cancel();
     setSpeaking(false);
   };
 
-  const speak = (text: string) => {
-    if (typeof window === "undefined" || !window.speechSynthesis || !text.trim()) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = voiceLang;
-    utterance.rate = 1.02;
-    utterance.pitch = 1;
-    const preferred = window.speechSynthesis.getVoices().find((voice) => voice.lang === voiceLang)
-      ?? window.speechSynthesis.getVoices().find((voice) => voice.lang.startsWith(voiceLang.slice(0, 2)));
-    if (preferred) utterance.voice = preferred;
+  /** Resolves once the engine has published its voice list, or gives up. */
+  const loadVoices = () => new Promise<SpeechSynthesisVoice[]>((resolve) => {
+    const synthesis = window.speechSynthesis;
+    const existing = synthesis.getVoices();
+    if (existing.length) { resolve(existing); return; }
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      synthesis.removeEventListener("voiceschanged", finish);
+      resolve(synthesis.getVoices());
+    };
+    synthesis.addEventListener("voiceschanged", finish);
+    window.setTimeout(finish, 1200);
+  });
+
+  /**
+   * Windows and Chrome ship two generations of voice side by side: the old
+   * formant ones (David, Zira, Hazel "Desktop") that sound unmistakably
+   * synthetic, and the newer neural ones (Aria, Jenny, Katja, and Google's
+   * cloud voices) that do not. Both answer to the same language code, and the
+   * browser hands back whichever it likes, so the good ones are chosen by name.
+   */
+  const voiceQuality = (voice: SpeechSynthesisVoice) => {
+    const name = voice.name.toLowerCase();
+    if (/natural|neural/.test(name)) return 5;
+    if (/online/.test(name)) return 4;
+    if (/google/.test(name)) return 3;
+    if (/desktop|espeak|compact/.test(name)) return 0;
+    return 2;
+  };
+
+  const pickVoice = (voices: SpeechSynthesisVoice[]) => {
+    const language = voiceLang.slice(0, 2).toLowerCase();
+    const sameLanguage = voices
+      .filter((voice) => voice.lang.replace("_", "-").toLowerCase().startsWith(language))
+      .sort((left, right) => voiceQuality(right) - voiceQuality(left));
+    const exact = sameLanguage.filter((voice) => voice.lang.replace("_", "-").toLowerCase() === voiceLang.toLowerCase());
+    return exact[0] ?? sameLanguage[0] ?? voices.find((voice) => voice.default) ?? voices[0] ?? null;
+  };
+
+  const speak = async (text: string) => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    const clean = text.replace(/\*\*/g, "").replace(/\s+/g, " ").trim();
+    if (!clean) return;
+    const synthesis = window.speechSynthesis;
+
+    stopKeepAlive();
+    synthesis.cancel();
+    const voices = await loadVoices();
+    // Let the cancel above actually settle before queueing the new utterance.
+    await new Promise((resolve) => window.setTimeout(resolve, 90));
+
+    const utterance = new SpeechSynthesisUtterance(clean);
+    const voice = pickVoice(voices);
+    if (voice) { utterance.voice = voice; utterance.lang = voice.lang; }
+    else utterance.lang = voiceLang;
+    // Slightly under natural pace with a touch of pitch variation reads as
+    // considered rather than hurried; the defaults sound like an announcement.
+    utterance.rate = 0.97;
+    utterance.pitch = 1.03;
+    utterance.volume = 1;
     utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-    window.speechSynthesis.speak(utterance);
+    utterance.onend = () => { stopKeepAlive(); utteranceRef.current = null; setSpeaking(false); };
+    utterance.onerror = () => { stopKeepAlive(); utteranceRef.current = null; setSpeaking(false); };
+
+    // Hold a reference for the lifetime of the utterance so it survives GC.
+    utteranceRef.current = utterance;
+    synthesis.speak(utterance);
+
+    // Chrome suspends the engine after roughly fifteen seconds; nudging it
+    // keeps longer product descriptions from stopping halfway.
+    keepAliveRef.current = window.setInterval(() => {
+      if (!synthesis.speaking) { stopKeepAlive(); return; }
+      synthesis.pause();
+      synthesis.resume();
+    }, 10_000);
   };
 
   /**
-   * Turns a rendered answer into something worth hearing. Screen copy leans on
-   * cards and lists; spoken copy has to carry the product names itself, so the
-   * assistant actually presents what it found instead of saying "here are four
-   * options" to someone who cannot see them.
+   * Turning spoken replies on happens inside a real click, which is the one
+   * moment the browser reliably lets audio start. Speaking a short confirmation
+   * here unlocks the engine for every later reply and tells the customer the
+   * feature is actually working.
    */
+  const toggleVoiceReplies = () => {
+    if (typeof window !== "undefined" && !window.speechSynthesis) {
+      setMessages((current) => [...current, { role: "advisor", text: "This browser cannot speak replies aloud. Everything still works in writing." }]);
+      return;
+    }
+    const next = !voiceReplies;
+    setVoiceReplies(next);
+    if (!next) { cancelSpeech(); return; }
+    // Nothing new should be spoken twice, so mark the backlog as already heard
+    // before the confirmation goes out.
+    spokenCountRef.current = messages.length;
+    const latest = [...messages].reverse().find((message) => message.role === "advisor");
+    void speak(latest ? spokenSummary(latest) : "Spoken replies are on. Ask me anything.");
+  };
+
+  /**
+   * Rewrites an answer for the ear.
+   *
+   * Screen copy and spoken copy are not the same register. On screen a bulleted
+   * spec table is efficient; read aloud, "dash, sleeping sizes colon, one four
+   * zero multiplication sign two zero zero c m" is unbearable and instantly
+   * gives away that a machine is reading a form. So symbols become words, the
+   * list becomes sentences, and only the handful of facts a person would
+   * actually say out loud survive.
+   */
+  const toSpeech = (value: string) => value
+    .replace(/\*\*/g, "")
+    .replace(/(\d)\s*[×x]\s*(\d)/g, "$1 by $2")
+    .replace(/\s*·\s*/g, ", ")
+    .replace(/\bcm\b/g, "centimetres")
+    .replace(/\bmm\b/g, "millimetres")
+    .replace(/\bl\b(?=\s*\))/g, "litres")
+    .replace(/\s*—\s*/g, ", ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  /** Openers rotate so a run of answers never sounds like a loop. */
+  const opener = (seed: number, options: string[]) => options[seed % options.length];
+
   const spokenSummary = (message: Message) => {
-    const prose = message.text.replace(/\*\*/g, "").replace(/\s+/g, " ").trim();
-    const named = (message.answer?.productIds ?? [])
+    const seed = messages.length;
+    const answer = message.answer;
+
+    // A product detail answer: read the lead, then a few facts as sentences.
+    if (answer?.answerType === "fact") {
+      const [lead, ...rest] = message.text.split("\n\n");
+      const facts = rest
+        .join("\n")
+        .split("\n")
+        .filter((line) => line.trimStart().startsWith("-"))
+        .slice(0, 4)
+        .map((line) => {
+          const [rawLabel, ...valueParts] = line.replace(/^\s*-\s*/, "").split(":");
+          const label = rawLabel.trim().toLowerCase();
+          const value = valueParts.join(":").trim();
+          if (!value) return label;
+          // A spec sheet says "Bed storage: no". A person says "it has no bed
+          // storage". Reading the table verbatim is the giveaway.
+          if (/^(?:no|none|not included)$/i.test(value)) return `it has no ${label}`;
+          if (/^yes$/i.test(value)) return `it does have ${label}`;
+          const plural = label.endsWith("s") && !label.endsWith("ss");
+          return `the ${label} ${plural ? "are" : "is"} ${value}`;
+        });
+      const more = rest.join("\n").split("\n").filter((line) => line.trimStart().startsWith("-")).length - facts.length;
+      const sentence = (part: string) => part.charAt(0).toUpperCase() + part.slice(1);
+      return toSpeech([
+        lead.replace(/^(\S+)\s+—\s+/, "$1. "),
+        facts.length ? `${facts.map(sentence).join(". ")}.` : "",
+        more > 0 ? `There ${more === 1 ? "is one more detail" : `are ${more} more details`} on screen.` : ""
+      ].filter(Boolean).join(" "));
+    }
+
+    // A clarifying question: just ask it, warmly.
+    if (answer?.answerType === "clarify" && answer.clarify) {
+      return toSpeech(`${opener(seed, ["Sure.", "Of course.", "Happy to help."])} ${answer.clarify.question}`);
+    }
+
+    // Nothing matched: say what blocks it, plainly, without the written hedging.
+    if (answer?.answerType === "missing-data") {
+      const blockers = (answer.unmet ?? []).map((entry) => `${entry.requested}, where ${entry.closest}`);
+      return toSpeech(blockers.length
+        ? `I don't have a match for that. ${blockers.join(". ")}. Tell me which of those I can relax and I'll look again.`
+        : message.text.split("\n")[0]);
+    }
+
+    // Recommendations: name what was found rather than reading the UI copy.
+    const named = (answer?.productIds ?? [])
       .map((id) => products.find((product) => product.id === id))
       .filter((product): product is typeof products[number] => Boolean(product));
-    if (!named.length) return prose;
-    const introduce = named.slice(0, 3).map((product) => {
+    if (!named.length) return toSpeech(message.text.split("\n\n")[0]);
+
+    const describe = named.slice(0, 3).map((product) => {
       const size = product.verifiedFacts.dimensions
         ? `, ${Math.round(product.widthMm / 10)} by ${Math.round(product.depthMm / 10)} centimetres`
         : "";
       return `${product.modelCode}${size}`;
     });
-    const rest = named.length > 3 ? ` And ${named.length - 3} more below.` : "";
-    return `${prose} ${introduce.length === 1 ? "That is" : "Those are"} ${introduce.join(", then ")}.${rest}`;
+    const lead = named.length === 1
+      ? opener(seed, ["I found one that fits.", "There's one that works here.", "One match for you."])
+      : opener(seed, [`I found ${named.length} that fit.`, `Here are ${named.length} worth a look.`, `${named.length} of these should work.`]);
+    const list = describe.length === 1
+      ? describe[0]
+      : `${describe.slice(0, -1).join(", ")} and ${describe.at(-1)}`;
+    const rest = named.length > describe.length ? ` The rest are on screen.` : "";
+    const question = answer?.clarify ? ` ${answer.clarify.question}` : "";
+    return toSpeech(`${lead} ${list}.${rest}${question}`);
   };
 
   /**
@@ -957,7 +1131,7 @@ export function MusterringAdvisor() {
   }).slice(0, 3);
   if (!open) return <button className="assistant-dock" aria-label="Open Musterring Assistant" onClick={() => { setOpen(true); storage.track({ name: "chatbot_opened" }); }}><span>Ask</span><span className="assistant-mark-crop" aria-hidden="true"><Image className="assistant-launcher-logo" src="/brand/musterring-logo.svg" alt="" width={70} height={90} /></span></button>;
   return <aside className={`advisor-panel${wide ? " is-wide" : ""}`} data-modal={activeModal ?? undefined} role="dialog" aria-modal="true" aria-labelledby="advisor-title">
-    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><div className="advisor-header-actions"><button className="advisor-new-chat" aria-label="Start a new chat" onClick={() => setConfirmNewChat(true)}><MessageSquarePlus /><span>New chat</span></button><button className={`advisor-voice-toggle${voiceReplies ? " is-on" : ""}`} aria-label={voiceReplies ? "Turn off spoken replies" : "Turn on spoken replies"} aria-pressed={voiceReplies} onClick={() => setVoiceReplies((value) => !value)}>{voiceReplies ? <Volume2 /> : <VolumeX />}</button><button className="advisor-expand" aria-label={wide ? "Collapse the assistant panel" : "Expand the assistant panel"} aria-pressed={wide} onClick={() => setWide((value) => !value)}>{wide ? <Minimize2 /> : <Maximize2 />}</button><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></div></header>
+    <header><span className="advisor-brand-icon" aria-hidden="true"><Sparkles /></span><div><p id="advisor-title" className="advisor-header-title">Ask Musterring</p><small>Interior &amp; service concierge</small></div><div className="advisor-header-actions"><button className="advisor-new-chat" aria-label="Start a new chat" onClick={() => setConfirmNewChat(true)}><MessageSquarePlus /><span>New chat</span></button><button className={`advisor-voice-toggle${voiceReplies ? " is-on" : ""}`} aria-label={voiceReplies ? "Turn off spoken replies" : "Turn on spoken replies"} aria-pressed={voiceReplies} onClick={toggleVoiceReplies}>{voiceReplies ? <Volume2 /> : <VolumeX />}</button><button className="advisor-expand" aria-label={wide ? "Collapse the assistant panel" : "Expand the assistant panel"} aria-pressed={wide} onClick={() => setWide((value) => !value)}>{wide ? <Minimize2 /> : <Maximize2 />}</button><button aria-label="Close Musterring Assistant" onClick={() => setOpen(false)}><X /></button></div></header>
       <ol className="advisor-journey" aria-label="Project journey">{journeySteps.map((step, index) => <li key={step} className={index + 1 < journeyStep ? "is-complete" : index + 1 === journeyStep ? "is-current" : ""}><span>{index + 1 < journeyStep ? <Check /> : index + 1}</span><small>{step}</small></li>)}</ol>
       {briefChips.length ? <div className="advisor-brief-chips" aria-label="What I understand so far"><span>Your brief</span><ul>{briefChips.map((chip) => <li key={chip}>{chip}</li>)}</ul></div> : null}
       <div className="advisor-messages" ref={messagesRef} aria-live="polite">

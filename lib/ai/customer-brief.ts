@@ -1,6 +1,7 @@
 import { products } from "../data";
 import { searchColorTerms } from "../search";
 import { productHasCategory, type Category, type Product } from "../types";
+import { bedSleepingSizes } from "./product-detail";
 
 /**
  * The customer brief is the cumulative, structured reading of everything the
@@ -26,6 +27,9 @@ export type CustomerBrief = {
   /* --- hard, measurable --- */
   maxWidthMm?: number;
   maxDepthMm?: number;
+  /** For beds the customer's numbers are a mattress size, not a footprint. */
+  sleepingWidthMm?: number;
+  sleepingLengthMm?: number;
   minWidthMm?: number;
   targetWidthMm?: number;
   seatCount?: number;
@@ -44,6 +48,8 @@ export type CustomerBrief = {
   rejectedProductIds: string[];
   /** Slots the customer was already asked about, so we never ask twice. */
   askedSlots: string[];
+  /** The product the conversation is currently about, if any. */
+  focusProductId?: string;
   /** The customer's own words, kept verbatim for the retailer handover. */
   quotes: string[];
 };
@@ -74,20 +80,72 @@ const setPatterns: Array<[RegExp, Category[]]> = [
   [/\bbedroom\s*(?:set|suite)\b/i, ["bed", "wardrobe"]]
 ];
 
+/** Single-word category cues that speech-to-text and typing commonly mangle. */
+const fuzzyCategoryWords: Array<[Category, string]> = [
+  ["bed", "bed"], ["sofa", "sofa"], ["sofa", "couch"], ["armchair", "chair"],
+  ["wardrobe", "wardrobe"], ["carpet", "carpet"], ["carpet", "rug"], ["lamp", "lamp"]
+];
+
+/**
+ * Misspellings an edit-distance check cannot reach. "bat" is two edits from
+ * "bed", yet it is exactly what a customer types — or what dictation hears —
+ * when they mean a bed.
+ */
+const categoryTypos: Record<string, Category> = {
+  bat: "bed", bet: "bed", bad: "bed", bde: "bed", bedd: "bed",
+  sofe: "sofa", sopha: "sofa", sofá: "sofa", coach: "sofa", couche: "sofa",
+  tabel: "dining-table", tabl: "dining-table",
+  chari: "armchair", chiar: "armchair",
+  wardrop: "wardrobe", wardobe: "wardrobe"
+};
+
+function withinOneEdit(left: string, right: string) {
+  if (left === right) return true;
+  if (Math.abs(left.length - right.length) > 1) return false;
+  let edits = 0;
+  for (let i = 0, j = 0; i < left.length && j < right.length;) {
+    if (left[i] === right[j]) { i += 1; j += 1; continue; }
+    edits += 1;
+    if (edits > 1) return false;
+    if (left.length > right.length) i += 1;
+    else if (right.length > left.length) j += 1;
+    else { i += 1; j += 1; }
+  }
+  return true;
+}
+
 export function requestedCategories(text: string): Category[] {
   const direct = categoryPatterns.filter(([, pattern]) => pattern.test(text)).map(([category]) => category);
   const fromSets = setPatterns.filter(([pattern]) => pattern.test(text)).flatMap(([, categories]) => categories);
-  return [...new Set([...direct, ...fromSets])];
+  // "find me a bat" should reach the bed catalogue rather than a clarification
+  // loop. Only applied when no exact category word was found, so a real match
+  // is never overridden by a near miss.
+  const tokens = direct.length || fromSets.length ? [] : text.toLowerCase().split(/[^a-zá]+/).filter((token) => token.length >= 3);
+  const fuzzy = tokens.flatMap((token) => {
+    const mapped = categoryTypos[token];
+    if (mapped) return [mapped];
+    return fuzzyCategoryWords.filter(([, word]) => withinOneEdit(token, word)).map(([category]) => category);
+  });
+  return [...new Set([...direct, ...fromSets, ...fuzzy])];
 }
 
-const unitToMm = (value: string, unit: string) => {
+/**
+ * Converts a spoken or typed measurement to millimetres.
+ *
+ * A missing unit is the common case in real messages ("140 with 2 meters",
+ * "200 x 90"), so magnitude decides: furniture numbers under 10 are metres,
+ * up to 400 are centimetres, and anything larger is already millimetres.
+ */
+const unitToMm = (value: string, unit?: string | null) => {
   const numeric = Number(value.replace(",", "."));
-  if (!Number.isFinite(numeric)) return null;
-  const normalized = unit.toLowerCase();
+  if (!Number.isFinite(numeric) || numeric <= 0) return null;
+  const normalized = (unit ?? "").toLowerCase();
   if (/^mm|^millimet/.test(normalized)) return Math.round(numeric);
   if (/^cm|^centimet|^zentimet/.test(normalized)) return Math.round(numeric * 10);
-  // A bare "2 m" is metres; a bare number without a unit is handled separately.
-  return Math.round(numeric * 1000);
+  if (/^m$|^met/.test(normalized)) return Math.round(numeric * 1000);
+  if (numeric < 10) return Math.round(numeric * 1000);
+  if (numeric <= 400) return Math.round(numeric * 10);
+  return Math.round(numeric);
 };
 
 const AMOUNT = "(\\d+(?:[.,]\\d+)?)\\s*(mm|millimet(?:er|re)s?|cm|centimet(?:er|re)s?|zentimeter|m|met(?:er|re)s?)";
@@ -100,19 +158,33 @@ const AMOUNT = "(\\d+(?:[.,]\\d+)?)\\s*(mm|millimet(?:er|re)s?|cm|centimet(?:er|
  * sofas came back as if they matched.
  */
 export function parseFootprint(text: string): { maxWidthMm?: number; maxDepthMm?: number } {
-  // Both values carry a unit: "2 m by 2 m", "200 cm x 90 cm".
-  const bothUnits = text.match(new RegExp(`${AMOUNT}\\s*(?:x|×|by|na|auf)\\s*${AMOUNT}`, "i"));
-  if (bothUnits) {
-    const width = unitToMm(bothUnits[1], bothUnits[2]);
-    const depth = unitToMm(bothUnits[3], bothUnits[4]);
-    if (width && depth) return { maxWidthMm: Math.max(width, depth), maxDepthMm: Math.min(width, depth) };
+  // Speech-to-text turns "by" into "with" more often than not, and customers
+  // write "and" just as readily, so all three separate a pair of measurements.
+  const separator = "(?:x|×|by|with|and|na|auf)";
+  const bare = "(\\d+(?:[.,]\\d+)?)";
+  const unit = "(mm|millimet(?:er|re)s?|cm|centimet(?:er|re)s?|zentimeter|m|met(?:er|re)s?)";
+
+  // Both sides carry a unit: "2 m by 2 m", "200 cm x 90 cm".
+  const both = text.match(new RegExp(`${bare}\\s*${unit}\\s*${separator}\\s*${bare}\\s*${unit}`, "i"));
+  if (both) {
+    const first = unitToMm(both[1], both[2]);
+    const second = unitToMm(both[3], both[4]);
+    if (first && second) return { maxWidthMm: Math.max(first, second), maxDepthMm: Math.min(first, second) };
   }
-  // Only the second value carries a unit: "2 x 2 m", "200 x 90 cm".
-  const trailingUnit = text.match(new RegExp(`(\\d+(?:[.,]\\d+)?)\\s*(?:x|×|by)\\s*${AMOUNT}`, "i"));
-  if (trailingUnit) {
-    const depth = unitToMm(trailingUnit[2], trailingUnit[3]);
-    const width = unitToMm(trailingUnit[1], trailingUnit[3]);
-    if (width && depth) return { maxWidthMm: Math.max(width, depth), maxDepthMm: Math.min(width, depth) };
+  // Only the second carries a unit: "140 with 2 meters", "200 x 90 cm".
+  const trailing = text.match(new RegExp(`${bare}\\s*${separator}\\s*${bare}\\s*${unit}`, "i"));
+  if (trailing) {
+    const first = unitToMm(trailing[1], null);
+    const second = unitToMm(trailing[2], trailing[3]);
+    if (first && second) return { maxWidthMm: Math.max(first, second), maxDepthMm: Math.min(first, second) };
+  }
+  // Neither carries a unit: "140 x 200", "140 by 200". "and" is excluded here
+  // because two bare numbers joined by "and" are usually not a measurement.
+  const neither = text.match(new RegExp(`${bare}\\s*(?:x|×|by|with)\\s*${bare}(?!\\s*\\w)`, "i"));
+  if (neither) {
+    const first = unitToMm(neither[1], null);
+    const second = unitToMm(neither[2], null);
+    if (first && second) return { maxWidthMm: Math.max(first, second), maxDepthMm: Math.min(first, second) };
   }
   return {};
 }
@@ -162,20 +234,44 @@ export function updateBrief(previous: CustomerBrief, text: string): CustomerBrie
   }
 
   const footprint = parseFootprint(text);
-  if (footprint.maxWidthMm) brief.maxWidthMm = footprint.maxWidthMm;
-  if (footprint.maxDepthMm) brief.maxDepthMm = footprint.maxDepthMm;
+  const aboutBed = brief.categories.includes("bed") || categories.includes("bed");
+  // The customer often gives the numbers before naming the piece. When the
+  // category arrives later, reinterpret what we already stored.
+  if (aboutBed && !brief.sleepingWidthMm && brief.maxWidthMm && brief.maxDepthMm) {
+    brief.sleepingWidthMm = Math.min(brief.maxWidthMm, brief.maxDepthMm);
+    brief.sleepingLengthMm = Math.max(brief.maxWidthMm, brief.maxDepthMm);
+    brief.maxWidthMm = undefined;
+    brief.maxDepthMm = undefined;
+  }
+  if (aboutBed && footprint.maxWidthMm && footprint.maxDepthMm) {
+    // "140 with 2 meters" for a bed is a mattress size, not a room footprint:
+    // the smaller number is the sleeping width, the larger the length.
+    brief.sleepingWidthMm = footprint.maxDepthMm;
+    brief.sleepingLengthMm = footprint.maxWidthMm;
+  } else {
+    if (footprint.maxWidthMm) brief.maxWidthMm = footprint.maxWidthMm;
+    if (footprint.maxDepthMm) brief.maxDepthMm = footprint.maxDepthMm;
+  }
   const maxWidth = parseMaxWidth(text);
   if (maxWidth) brief.maxWidthMm = maxWidth;
 
+  // These slots hold one decision, not a growing wish list. When the customer
+  // names a colour, material or shape they are REPLACING the previous answer —
+  // accumulating meant that clicking "L-shaped" and later asking for a straight
+  // sofa left both in the brief, so the filter matched either and the customer
+  // got L-shaped results back.
   const colors = searchColorTerms.filter((color) => new RegExp(`\\b${color}\\b`, "i").test(normalized));
-  if (colors.length) brief.colors = [...new Set([...brief.colors, ...colors])];
+  if (colors.length) brief.colors = [...new Set(colors)];
 
-  if (/\bleather\b/i.test(normalized)) brief.materialTypes = [...new Set([...brief.materialTypes, "leather" as const])];
-  if (/\b(?:fabric|textile|cloth|stoff)\b/i.test(normalized)) brief.materialTypes = [...new Set([...brief.materialTypes, "fabric" as const])];
+  const namedMaterials: Array<"fabric" | "leather"> = [];
+  if (/\bleather\b/i.test(normalized)) namedMaterials.push("leather");
+  if (/\b(?:fabric|textile|cloth|stoff)\b/i.test(normalized)) namedMaterials.push("fabric");
+  if (namedMaterials.length) brief.materialTypes = namedMaterials;
+  if (/\bno preference\b/i.test(normalized)) brief.materialTypes = [];
   if (/\b(?:wood|wooden|oak|walnut|holz)\b/i.test(normalized)) brief.woodPreference = true;
 
   const shapes = layoutWords.filter(([, pattern]) => pattern.test(normalized)).map(([shape]) => shape);
-  if (shapes.length) brief.layoutShapes = [...new Set([...brief.layoutShapes, ...shapes])];
+  if (shapes.length) brief.layoutShapes = [...new Set(shapes)];
 
   const numericSeats = normalized.match(/\b([1-9])\s*(?:persons?|people|seats?|seater|pax)\b/)?.[1];
   const wordSeats = normalized.match(/\b(one|two|three|four|five|six)\s*(?:persons?|people|seats?|seater)\b/)?.[1];
@@ -203,7 +299,7 @@ export function updateBrief(previous: CustomerBrief, text: string): CustomerBrie
 /* Matching                                                                   */
 /* ------------------------------------------------------------------------ */
 
-export type ConstraintKey = "category" | "maxWidth" | "maxDepth" | "seats" | "colour" | "material" | "layout" | "easyCare";
+export type ConstraintKey = "category" | "maxWidth" | "maxDepth" | "seats" | "colour" | "material" | "layout" | "easyCare" | "sleepingSize";
 
 /**
  * Every constraint resolves to one of three verdicts against a product, never
@@ -245,6 +341,11 @@ export type BriefMatch = {
   nearest: ScoredProduct[];
   /** Requirements that every product in the category verifiably fails. */
   unmet: UnmetConstraint[];
+  /**
+   * Requirements every product in the category satisfies. These narrow nothing,
+   * so presenting the result as "filtered by your shape" would be misleading.
+   */
+  uninformative: Array<{ key: ConstraintKey; label: string; note: string }>;
 };
 
 const mmToCm = (value: number) => Math.round(value / 10);
@@ -268,6 +369,19 @@ function constraintsFor(brief: CustomerBrief, category: Category): Constraint[] 
   const seatingCategory = ["sofa", "sectional", "armchair"].includes(category);
   const list: Constraint[] = [];
 
+  // A bed's usable size is its mattress size, which the catalogue publishes
+  // separately from the outer frame dimensions. Checking widthMm here would
+  // reject BARI for a 140 x 200 request even though it offers exactly that.
+  if (brief.sleepingWidthMm && brief.sleepingLengthMm) list.push({
+    key: "sleepingSize",
+    label: `${mmToCm(brief.sleepingWidthMm)} × ${mmToCm(brief.sleepingLengthMm)} cm sleeping size`,
+    unknownLabel: "sleeping sizes",
+    evaluate: (product) => {
+      const sizes = bedSleepingSizes(product);
+      if (!sizes.length) return "unknown";
+      return sizes.some((size) => size.widthMm === brief.sleepingWidthMm && size.lengthMm === brief.sleepingLengthMm) ? "pass" : "fail";
+    }
+  });
   if (brief.maxWidthMm) list.push({
     key: "maxWidth", label: `max ${mmToCm(brief.maxWidthMm)} cm wide`, unknownLabel: "width",
     evaluate: (product) => {
@@ -325,6 +439,10 @@ function constraintsFor(brief: CustomerBrief, category: Category): Constraint[] 
 
 /** Describes what the catalogue can actually offer for a requirement nothing satisfies. */
 function closestOffer(key: ConstraintKey, pool: Product[]): string {
+  if (key === "sleepingSize") {
+    const sizes = [...new Set(pool.flatMap((product) => bedSleepingSizes(product).map((size) => `${mmToCm(size.widthMm)} × ${mmToCm(size.lengthMm)} cm`)))];
+    return sizes.length ? `sleeping sizes available: ${sizes.join(", ")}` : "no sleeping size is published in this category";
+  }
   if (key === "maxWidth") {
     const widths = pool.map(verifiedWidth).filter((value): value is number => value !== null);
     return widths.length ? `the narrowest verified option is ${mmToCm(Math.min(...widths))} cm` : "no verified width is published in this category";
@@ -355,6 +473,10 @@ function closestOffer(key: ConstraintKey, pool: Product[]): string {
 
 /** How far one product misses a requirement, in the customer's own units. */
 function gapFor(constraint: Constraint, product: Product, brief: CustomerBrief): string {
+  if (constraint.key === "sleepingSize") {
+    const sizes = bedSleepingSizes(product).map((size) => `${mmToCm(size.widthMm)} × ${mmToCm(size.lengthMm)} cm`);
+    return `offers ${sizes.join(", ")} — not ${mmToCm(brief.sleepingWidthMm ?? 0)} × ${mmToCm(brief.sleepingLengthMm ?? 0)} cm`;
+  }
   if (constraint.key === "maxWidth" && brief.maxWidthMm) {
     return `${mmToCm(product.widthMm)} cm wide — ${mmToCm(product.widthMm - brief.maxWidthMm)} cm over your ${mmToCm(brief.maxWidthMm)} cm limit`;
   }
@@ -427,7 +549,21 @@ export function matchBrief(brief: CustomerBrief, category: Category, options: { 
     .sort((left, right) => left.gaps.length - right.gaps.length || byFit(left.product, right.product))
     .slice(0, 3);
 
-  return { exact, possible, nearest, unmet };
+  // A requirement that nothing fails and nothing leaves unknown has not
+  // narrowed the catalogue at all. Every Musterring sofa programme lists
+  // straight, L-shaped and corner, so "find me a straight sofa" matches all of
+  // them — and the customer then sees corner photos and thinks it was ignored.
+  const uninformative = constraints
+    .filter((constraint) => pool.length > 1 && pool.every((product) => constraint.evaluate(product) === "pass"))
+    .map((constraint) => ({
+      key: constraint.key,
+      label: constraint.label,
+      note: constraint.key === "layout"
+        ? `every ${category.replaceAll("-", " ")} programme in the catalogue can be configured this way, so it does not narrow the choice — the photos show one possible configuration`
+        : `all ${pool.length} products in this category satisfy it, so it does not narrow the choice`
+    }));
+
+  return { exact, possible, nearest, unmet, uninformative };
 }
 
 /** Backwards-compatible helper: the gaps already computed for a scored product. */
@@ -450,16 +586,6 @@ export function nextQuestion(brief: CustomerBrief, category: Category): Clarifyi
   const asked = new Set(brief.askedSlots);
   const candidates: ClarifyingQuestion[] = [];
 
-  if ((category === "sofa" || category === "sectional") && !brief.layoutShapes.length) {
-    const available = [...new Set(products
-      .filter((product) => product.active && productHasCategory(product, category))
-      .flatMap((product) => product.layoutShapes ?? []))];
-    if (available.length > 1) candidates.push({
-      slot: "layout",
-      question: "What shape should it be? That changes which programmes I can offer.",
-      options: available.map((shape) => shape === "l-shaped" ? "L-shaped" : shape === "u-shaped" ? "U-shaped" : shape.charAt(0).toUpperCase() + shape.slice(1))
-    });
-  }
   if (["sofa", "sectional", "armchair"].includes(category) && !brief.seatCount) candidates.push({
     slot: "seats",
     question: "How many people should sit on it comfortably?",
@@ -486,6 +612,24 @@ export function nextQuestion(brief: CustomerBrief, category: Category): Clarifyi
     });
   }
 
+  if ((category === "sofa" || category === "sectional") && !brief.layoutShapes.length) {
+    const pool = products.filter((product) => product.active && productHasCategory(product, category));
+    const available = [...new Set(pool.flatMap((product) => product.layoutShapes ?? []))];
+    // Offer only the shapes that actually split the catalogue. Every sofa
+    // programme currently lists straight and corner, so putting those on a chip
+    // promises a narrowing the data cannot deliver. With fewer than two real
+    // choices left the question is not worth a turn at all.
+    const options = available.filter((shape) => {
+      const count = pool.filter((product) => (product.layoutShapes ?? []).includes(shape)).length;
+      return count > 0 && count < pool.length;
+    });
+    if (options.length > 1) candidates.push({
+      slot: "layout",
+      question: "What shape should it be? That changes which programmes I can offer.",
+      options: options.map((shape) => shape === "l-shaped" ? "L-shaped" : shape === "u-shaped" ? "U-shaped" : shape.charAt(0).toUpperCase() + shape.slice(1))
+    });
+  }
+
   return candidates.find((candidate) => !asked.has(candidate.slot)) ?? null;
 }
 
@@ -494,6 +638,7 @@ export function summariseBrief(brief: CustomerBrief): string[] {
   const parts: string[] = [];
   if (brief.categories.length) parts.push(brief.categories.map((category) => category.replaceAll("-", " ")).join(" + "));
   if (brief.seatCount) parts.push(`${brief.seatCount} seats`);
+  if (brief.sleepingWidthMm && brief.sleepingLengthMm) parts.push(`${mmToCm(brief.sleepingWidthMm)} × ${mmToCm(brief.sleepingLengthMm)} cm sleeping size`);
   if (brief.maxWidthMm && brief.maxDepthMm) parts.push(`max ${mmToCm(brief.maxWidthMm)} × ${mmToCm(brief.maxDepthMm)} cm`);
   else if (brief.maxWidthMm) parts.push(`max ${mmToCm(brief.maxWidthMm)} cm wide`);
   if (brief.layoutShapes.length) parts.push(brief.layoutShapes.join("/"));

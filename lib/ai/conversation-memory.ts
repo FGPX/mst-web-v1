@@ -1,4 +1,5 @@
 import { products } from "../data";
+import { asksForDetail, buildProductDetail, detailAspect, resolveProduct } from "./product-detail";
 import { productHasCategory, type Category } from "../types";
 import { advisorAnswerSchema, type AdvisorAnswer, type ConversationContext } from "./assistant-schemas";
 import {
@@ -23,7 +24,11 @@ const WANTS_OTHERS = /\b(?:another|different|else|replace|instead)\b/i;
 
 /** How many hard, measurable constraints the brief currently carries. */
 function hardConstraintCount(brief: CustomerBrief) {
-  return [brief.maxWidthMm, brief.maxDepthMm, brief.seatCount, brief.colors.length || undefined,
+  // An explicit sleeping size is two measurements and pins the choice down
+  // hard, so it counts as a complete brief on its own — asking "fabric or
+  // leather?" before showing anything would just be in the way.
+  const sleeping = brief.sleepingWidthMm && brief.sleepingLengthMm ? 2 : 0;
+  return sleeping + [brief.maxWidthMm, brief.maxDepthMm, brief.seatCount, brief.colors.length || undefined,
     brief.materialTypes.length || undefined, brief.layoutShapes.length || undefined,
     brief.easyCareRequired || undefined].filter(Boolean).length;
 }
@@ -60,6 +65,38 @@ const pluralise = (label: string) => label.endsWith("s") ? label : `${label}s`;
 const toNearestPayload = (entry: ScoredProduct) => ({ productId: entry.product.id, gaps: entry.gaps.slice(0, 3) });
 
 /**
+ * Renders a product's catalogue facts as a chat answer. Used when the customer
+ * is asking about a product they already have in front of them.
+ */
+function productDetailAnswer(productId: string, question: string, briefSummary: string[]): AdvisorAnswer {
+  const product = products.find((candidate) => candidate.id === productId)!;
+  const aspect = detailAspect(question);
+  const detail = buildProductDetail(product, aspect);
+  const body = detail.groups
+    .map((group) => `${group.title}\n${group.rows.map((row) => `- ${row.label}: ${row.value}`).join("\n")}`)
+    .join("\n\n");
+  const lead = aspect === "overview"
+    ? `${product.modelCode} — ${detail.headline}`
+    : `Here is what the catalogue publishes for ${product.modelCode}.`;
+  return advisorAnswerSchema.parse({
+    answer: body
+      ? `${lead}\n\n${body}\n\nStill with the retailer: ${detail.openPoints.join("; ")}.`
+      : `${lead}\n\nThe catalogue publishes no further detail for this product. Your retailer has the full specification.`,
+    answerType: "fact",
+    productIds: [product.id],
+    materialIds: [],
+    sources: ["Musterring product catalogue"],
+    proposedAction: null,
+    suggestedQuestions: [
+      `Save ${product.modelCode} to my project`,
+      `See ${product.modelCode} in my room`,
+      `Show me something similar`
+    ],
+    clarify: null, unmet: [], nearest: [], briefSummary
+  });
+}
+
+/**
  * Replaces the provider's free-text product selection with a deterministic,
  * constraint-checked one.
  *
@@ -72,10 +109,26 @@ export function groundAdvisorConversationTurn(question: string, context: Convers
   const brief = updateBrief({ ...emptyBrief, ...(context.approvedPreferences as Partial<CustomerBrief>) } as CustomerBrief, question);
   const briefSummary = summariseBrief(brief);
 
+  // A question about a product the customer already has in view must never be
+  // answered with a fresh wall of recommendations. "Continue with BARI" and
+  // "explain this bed's functions" are the same intent: tell me about THIS one.
+  const named = resolveProduct(question);
+  const focusId = named?.id
+    ?? (asksForDetail(question) && !WANTS_OTHERS.test(question)
+      ? brief.focusProductId ?? (context.currentProductId ?? undefined) ?? brief.shownProductIds.at(-1)
+      : undefined);
+  if (focusId && products.some((product) => product.id === focusId && product.active)
+    && (named || asksForDetail(question)) && !WANTS_OTHERS.test(question)) {
+    return productDetailAnswer(focusId, question, briefSummary);
+  }
+
   let categories = requestedCategories(question);
   const isFollowUp = FOLLOW_UP.test(question);
   if (!categories.length && isFollowUp && brief.lastCategory) categories = [brief.lastCategory];
-  if (!categories.length && brief.categories.length && DISCOVERY.test(question)) categories = brief.categories;
+  // Fall back to the piece the customer last named, not to everything they
+  // have ever mentioned — otherwise asking about a bed and later about a sofa
+  // returns both for the rest of the conversation.
+  if (!categories.length && brief.lastCategory && DISCOVERY.test(question)) categories = [brief.lastCategory];
   if (!categories.length || !DISCOVERY.test(question)) {
     return advisorAnswerSchema.parse({ ...generated, briefSummary });
   }
@@ -168,9 +221,16 @@ export function groundAdvisorConversationTurn(question: string, context: Convers
     : WANTS_OTHERS.test(question)
       ? `Of course — different ${plural}`
       : `Here are ${plural}`;
-  const answer = unverified.length
+  const body = unverified.length
     ? `${opener} that don't contradict anything you've told me${qualifiers ? ` (${qualifiers})` : ""}. Be aware: the catalogue does not publish ${unverified.slice(0, 3).join(", ")} for these, so I can't confirm those points — your retailer can.`
     : `${opener}${qualifiers ? ` ${qualifiers}` : ""}. Every one of them is verified against each requirement you've given me.`;
+  // Being honest that a requirement changed nothing is more useful than letting
+  // the customer believe the list was filtered by it.
+  const useless = [...new Map(results.flatMap(({ match }) => match.uninformative.map((entry) => [entry.key, entry]))).values()];
+  const uselessNote = useless.length
+    ? ` One thing worth knowing: ${useless.map((entry) => `you asked for ${entry.label}, and ${entry.note}`).join("; ")}.`
+    : "";
+  const answer = `${body}${uselessNote}`;
 
   return advisorAnswerSchema.parse({
     ...generated,

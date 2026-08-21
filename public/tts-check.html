@@ -1,0 +1,36 @@
+<!doctype html><meta charset="utf-8"><title>TTS check</title>
+<body style="font:15px/1.6 system-ui;padding:28px;max-width:620px">
+<h2>speechSynthesis diagnostic</h2>
+<p>Kliko butonin. Nëse s'dëgjon zë, teksti më poshtë tregon pse.</p>
+<button id="go" style="padding:12px 18px;font:600 14px system-ui">Speak test</button>
+<pre id="out" style="background:#f4f2ee;padding:14px;border-radius:8px;white-space:pre-wrap"></pre>
+<script>
+const out = document.getElementById("out");
+const log = (m) => { out.textContent += m + "\n"; };
+if (!window.speechSynthesis) log("FAIL: window.speechSynthesis is missing.");
+else {
+  log("speechSynthesis: present");
+  const show = () => log("voices loaded: " + speechSynthesis.getVoices().length);
+  show();
+  speechSynthesis.addEventListener("voiceschanged", show);
+}
+let held = null;
+document.getElementById("go").onclick = async () => {
+  out.textContent = "";
+  const s = speechSynthesis;
+  s.cancel();
+  const voices = s.getVoices();
+  log("voices at click: " + voices.length);
+  log(voices.slice(0,6).map(v => `  ${v.name} [${v.lang}]${v.default?" (default)":""}`).join("\n"));
+  await new Promise(r => setTimeout(r, 90));
+  const u = new SpeechSynthesisUtterance("Here are sofas that match your brief. That is JUSTB PM100, 268 by 232 centimetres.");
+  const v = voices.find(x => x.lang.toLowerCase().startsWith("en")) || voices[0];
+  if (v) { u.voice = v; u.lang = v.lang; log("using voice: " + v.name + " [" + v.lang + "]"); }
+  u.onstart = () => log("EVENT onstart -> audio should be playing now");
+  u.onend = () => log("EVENT onend");
+  u.onerror = (e) => log("EVENT onerror: " + e.error);
+  held = u;
+  s.speak(u);
+  setTimeout(() => log("after 500ms -> speaking=" + s.speaking + " pending=" + s.pending + " paused=" + s.paused), 500);
+};
+</script>
